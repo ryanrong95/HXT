@@ -1,0 +1,246 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>芯达通</title>
+    <link rel="stylesheet" type="text/css" href="css/common.css" />
+    <link rel="stylesheet" type="text/css" href="css/element.css" />
+    <link rel="stylesheet" type="text/css" href="css/page.css" />
+    <script type="text/javascript" src="js/jQuery-2.2.4.min.js"></script>
+    <script type="text/javascript" src="js/vue.js"></script>
+    <script type="text/javascript" src="js/xs.js"></script>
+    <script type="text/javascript" src="js/axios.min.js"></script>
+    <script type="text/javascript" src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript" src="js/element.js"></script>
+</head>
+<body>
+    <!-- 右侧边栏相关内容 -->
+    <div id="n_sideBar"></div>
+    <!--头部和banner部分-->
+    <div class="n_header">
+        <div class="n_lunbt" style="background-image:url(imgs/n_info_pic.png) ;"></div>
+        <div id="n_insert_nav"></div>
+    </div>
+    <!-- 中间不同内容 -->
+    <div class="n_mid n_assist_mid">
+        <div class="n_select n_assist_select">
+            <ul class="clearfix">
+                <li class="active">
+                    <a href="InfoQuery.html" class="n_mol_a">
+                        <i></i>
+                        <p>归类信息查询</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="rateQuery.html" class="n_mol_a">
+                        <i></i>
+                        <p>实时汇率查询</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="feeCount.html" class="n_mol_a">
+                        <i></i>
+                        <p>费用计算</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="downloadCenter.html" class="n_mol_a">
+                        <i></i>
+                        <p>下载中心</p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="n_assist_con" id="infoQuery">
+            <div class="n_custom_desc n_query_desc">
+                <div class="wrapper">
+                    <h3>归类信息查询</h3>
+                    <div class="clearfix input_jquery">
+                        <input type="text" placeholder="输入产品型号" id="partnumber" autofocus="autofocus" class="left n_model_query" @keyup.enter="searchResult"/>
+                        <button class="right n_info_search" @click="searchResult" @keyup.enter="searchResult">
+                            <img src="imgs/n_info_fdj.png" style="vertical-align:middle;">
+                        </button>
+                    </div>
+                    <div class="n_info_note">
+                        <p>非会员用户可以查询5个型号的归类信息，想要查询更多信息，快来注册会员吧</p>
+                        <p>会员用户不限次数查询</p>
+                    </div>
+                    <div class="n_info_result">
+                        <h2 v-show="resultStatus">您的产品[{{querystring}}]的归类查询结果：</h2>
+                        <div class="n_quto_table"  style="-border-left:1px solid #ddd\9;">
+                            <el-table ref="table" border highlight-current-row :data="QueryData" style="width: 100%">
+                                <el-table-column label="序号" type="index" width="70">
+                                </el-table-column>
+                                <el-table-column label="HS编码" prop="HSCode">
+                                </el-table-column>
+                                <el-table-column label="商品名称" prop="Name">
+                                </el-table-column>
+                                <el-table-column label="型号" prop="PartNumber">
+                                </el-table-column>
+                                <el-table-column label="第一法定单位" prop="LegalUnit1">
+                                </el-table-column>
+                                <el-table-column label="第二法定单位" prop="LegalUnit2">
+                                </el-table-column>
+                                <el-table-column label="监管条件" prop="SupervisionRequirements">
+                                </el-table-column>
+                                <el-table-column label="检验检疫" prop="CIQCode">
+                                </el-table-column>
+                                <el-table-column label="操作" width="100" align="center">
+                                    <template slot-scope="scope">
+                                        <el-button type="text" @click="toogleExpand(scope.row)">{{scope.row.Expansion ? '收起' : '详情'}}</el-button>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column type="expand" width="1">
+                                    <template slot-scope="props">
+                                        <el-form label-position="left" inline class="demo-table-expand">
+                                            <el-form-item label="">
+                                                <b>税率信息:</b>
+                                            </el-form-item>
+                                            <el-form-item label="进口最惠国税率:">
+                                                <span>{{ props.row.ImportPreferentialTaxRate }}</span>
+                                            </el-form-item>
+                                            <el-form-item label="普通税率:">
+                                                <span>{{ props.row.ImportGeneralTaxRate }}</span>
+                                            </el-form-item>
+                                            <el-form-item label="增值税率:">
+                                                <span>{{ props.row.VATRate }}</span>
+                                            </el-form-item>
+                                            <el-form-item label=" 消费税:">
+                                                <span>{{ props.row.ExciseTaxRate }}</span>
+                                            </el-form-item>
+                                            <el-form-item label="是否3C:">
+                                                <span>{{ props.row.Ccc }}</span>
+                                            </el-form-item>
+                                        </el-form>
+                                        <el-form label-position="left" inline class="demo-table-expand">
+                                            <el-form-item label="">
+                                                <b>申报要素:</b>
+                                                <span>{{ props.row.Elements }}</span>
+                                            </el-form-item>
+                                        </el-form>
+                                        <el-form label-position="left" inline class="demo-table-expand">
+                                            <el-form-item label="">
+                                                <b>CIQ代码（13位海关编码）:</b>
+                                                <span>{{ props.row.HSCode }}</span>
+                                            </el-form-item>
+                                        </el-form>
+                                        <el-form label-position="left" inline class="demo-table-expand n_hide">
+                                            <span @click="toogleExpand(props.row)">收起</span>
+                                            <el-form-item>
+                                                <span class="el-icon-arrow-up" style="color:#71c0f9;" @click="toogleExpand(props.row)"></span>
+                                            </el-form-item>
+                                        </el-form>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                        </div>
+                        <div class="re_error" style="display:none">您本次输入的型号数据库无法查询，请联系我们的在线客服人员解答您的问题。<i class="close"></i></div>
+                        <p class="n_result_note" v-show="resultStatus">注：该 HS 归类查询结果仅供参考</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 底部 -->
+    <div id="footer_zh"></div>
+    <script>
+        $("#n_sideBar").load("sideBar.html")
+		$("#n_insert_nav").load("header.html",function(){
+		    $("#footer_zh").load("footer.html");
+		    
+		    //导航中当前选中的项
+		    $(".n_nagivation>ul>li:nth-child(3)").addClass("hot");
+		    $(".n_nagivation>ul>li").hover(function () {
+		        $(".n_nagivation>ul>li:nth-child(3)").removeClass("hot");
+		    }, function () {
+		        $(".n_nagivation>ul>li:nth-child(3)").addClass("hot");
+		    })
+		});
+
+		$(function () {
+		    
+            $(".n_model_query").focus();
+            $('#partnumber').click(function() {
+                if (event.keyCode == "13") { 
+                    $(".right n_info_search").click();
+                }
+            });
+            scrollTo(0, 450);
+
+        });
+
+		var register = new Vue({
+			el: "#infoQuery",
+			data:{
+                QueryData: [],
+                loading: true,
+                querystring: "",
+				resultStatus:false,//搜索结果展示之前
+			},
+			methods:{
+				//点击搜索按钮展示搜索结果
+				searchResult:function(){
+					this.resultStatus = true;
+                    this.querystring =  $("#partnumber").val();
+                    var that = this;
+                    if (that.querystring == "" || that.querystring == null) {
+                        this.loading = false;
+                    } else {
+                        var that = this;
+                        axios({
+                            url: "/Home/QueryClassfiy",
+                            method: "post",
+                            data: {
+                                query: that.querystring,
+                            }
+                        }).then(function (response) {
+                            if (response.data.type == "success") {
+                                res = JSON.parse(response.data.data);
+                                if(res.count > 5){
+                                    that.onAlert("warning", "若要查询更多归类信息,请先登录或者注册!");
+                                } else {
+                                    if (res.data.length == 0) {
+                                        $(".re_error").show();
+                                    } else {
+                                        $(".re_error").hide();
+                                    }
+                                    that.QueryData = res.data;
+                                };
+                                that.loading = false;
+                            }
+                        }).catch(function (error) {
+                            that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                        });
+                    }
+                },
+                //消息提示框
+                onAlert: function (type, message) {
+                    this.$message({
+                        message: message,
+                        type: type
+                    });
+                },
+                //详情,收起
+                toogleExpand:function(row) {
+                    var $table = this.$refs.table;
+
+                    this.QueryData.map(function (item) {
+                        if (row.ID != item.ID) {
+                            $table.toggleRowExpansion(item, false);
+                            item.Expansion = false;
+                        }
+                        else {
+                            item.Expansion = !item.Expansion;
+                        }
+                    });
+
+                    $table.toggleRowExpansion(row);
+                },
+			}
+		});
+    </script>
+</body>
+</html>

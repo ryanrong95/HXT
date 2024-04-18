@@ -1,0 +1,372 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_LayoutOrder.cshtml";
+}
+
+<div v-cloak id="vReceiveApply" class="backshow">
+    <div class="breaklist">
+        <span class="fl first_title">代收申请</span>
+        <span class="fl second_title" v-on:click="history.back(-1)">返回</span>
+    </div>
+    <div class="order_detail">
+        <div class="order_content contentOrder">
+            <el-form :model="indexData" :rules="rules" ref="ruleForm" label-width="185px">
+                <div>
+                    <p class="title mb20">产品列表</p>
+                    <div class="product_content">
+                        <table border="0" cellspacing="0" cellpadding="0" style="word-wrap:break-word; word-break:break-all;">
+                            <tr>
+                                <th class="first_th" style="width:22px;">#</th>
+                                <th style="width:50px;">批号</th>
+                                <th style="width:110px;">品牌</th>
+                                <th style="width:120px;">型号</th>
+                                <th style="width:110px;">产地</th>
+                                <th style="width:50px;">数量</th>
+                                <th style="width:58px;">单位</th>
+                                <th style="width:50px;">进价总值</th>
+                                <th style="width:79px;">毛重(kg)</th>
+                                <th style="width:79px;">体积(m³)</th>
+                            </tr>
+                            <tr v-for="(item,index) in indexData.OrderItems">
+                                <td>{{index+1}}</td>
+                                <td>{{item.DateCode}}</td>
+                                <td style="word-wrap:break-word;word-break:break-all;padding:0 5px;">{{item.Manufacturer}}</td>
+                                <td style="word-wrap:break-word;word-break:break-all;padding:0 5px;">{{item.PartNumber}}</td>
+                                <td>{{item.OriginLabel}}</td>
+                                <td>{{item.Quantity}}</td>
+                                <td>{{item.UnitLabel}}</td>
+                                <td>{{item.TotalPrice}}</td>
+                                <td>{{item.GrossWeight}}</td>
+                                <td>{{item.Volume}}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="10">
+                                    <span class="txt1">订单总金额：</span><span class="txt2">{{indexData.TotalMoney}}</span><span class="txt1 mr38">{{indexData.Currency}}</span><br />
+                                    <span v-if="indexData.AppliedMoney>0"><span class="txt1">已申请代收货款金额：</span><span class="txt2">{{indexData.AppliedMoney}}</span><span class="txt1 mr38">{{indexData.Currency}}</span></span>
+
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                </div>
+
+                <div class="supplier mt40">
+                    <p class="title">代收款信息</p>
+                    <div class=" item_div overhide mt20">
+                        <div class="overhide">
+                            <div class="fl">
+                                <el-form-item label="客户付款人:" prop="PayerID" :rules="[{ required: true, message: '请选择供应商银行名称(英文)', trigger: 'change' }]">
+                                    <el-select v-model="indexData.PayerID" style="width:405px;" filterable clearable placeholder="请选择">
+                                        <el-option v-for="item in baseData.PayerOptions"
+                                                   :key="item.ID"
+                                                   :label="item.Name"
+                                                   :value="item.ID">
+                                        </el-option>
+                                    </el-select>
+                                    <br>
+                                </el-form-item>
+                            </div>
+                            <div class="fl"> <a v-on:click="addPayer" class="fl link_pay">+ 新增付款人</a></div>
+                        </div>
+                        <el-form-item label="付款人银行:">
+                            <el-input :disabled="true" v-model="Bank" style="width:405px;" auto-complete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="付款人银行账号:">
+                            <el-input :disabled="true" v-model="Account" style="width:405px;" auto-complete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="支付方式:">
+                            <el-input :disabled="true" v-model="PayType" style="width:405px;" auto-complete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="公司受益人:" prop="BankID" :rules="[{ required: true, message: '请选择公司受益人', trigger: 'change' }]">
+                            <el-select v-model="indexData.BankID" style="width:405px;" filterable clearable placeholder="请选择">
+                                <el-option v-for="item in baseData.BankOptions"
+                                           :key="item.ID"
+                                           :label="item.Account"
+                                           :value="item.ID">
+                                </el-option>
+                            </el-select>
+                            <br>
+                        </el-form-item>
+                        <el-form-item label="代收金额:" prop="ApplyMoney">
+                            <el-input v-model="indexData.ApplyMoney" style="width:405px;" auto-complete="off"></el-input>
+                        </el-form-item>
+                    </div>
+                </div>
+                <div class="uploadfiles ml185 mb30">
+                    <el-upload :http-request="httpRequestPay"
+                               ref="applyUpload"
+                               action="/Orders/UploadPickUpFile"
+                               :on-remove="handleRemoveApplyFiles"
+                               :file-list="indexData.ReceiveFile"
+                               accept="image/jpg, image/bmp, image/jpeg, image/gif, image/png, application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+                        <el-button size="small" class="el-icon-ump-upload" type="primary"> 上传代收货款委托书</el-button>
+                        <span class="file_tip ml30">仅限图片、PDF或Word文件，且文件不超过3M</span>
+                    </el-upload>
+                </div>
+                <div class="submit_btn_dec mt100">
+                    <div class="btn_dec_list">
+                        <el-button size="medium" type="warning" v-on:click="onSubmit" class="submit">提交申请</el-button>
+                    </div>
+                </div>
+            </el-form>
+        </div>
+    </div>
+    <el-dialog class="successdialog" title="代付货款申请提交成功" :lock-scroll="false" width="520px" :visible.sync="dialogSuccessVisible" :close-on-click-modal="false">
+        <div class="content">
+            <p>提交成功</p>
+            <div class="no_text">
+                <span>申请编号：</span><span class="red">{{applyID}}</span>
+            </div>
+            <div class="clientcode"><span>您的申请金额为：</span><span class="red mr10">{{indexData.ApplyMoney}}</span><span>{{indexData.Currency}}</span></div>
+        </div>
+        <div class="dialog_foot">
+            <el-button type="primary" class="fr mr50" v-on:click="history.back(-1)">返回</el-button>
+        </div>
+    </el-dialog>
+    <el-dialog title="新增付款人" :lock-scroll="false" width="40%" :visible.sync="dialogFormVisible" :close-on-click-modal="false">
+        <my-payer ref="header"></my-payer>
+        <div slot="footer" class="dialog-footer">
+            <el-button v-on:click="dialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" v-on:click="onSubmit_ruleForm()">确 定</el-button>
+        </div>
+    </el-dialog>
+</div>
+@{Html.RenderAction("_PartialPayer", "Orders");}
+<script>
+    var vReceiveApply = new Vue({
+        el: "#vReceiveApply",
+        data: function () {
+            var that = this;
+            var validateApplyMoney = function (rule, value, callback) {
+                if (value == '' || value == null) {
+                    callback(new Error('请输入代收金额'));
+                }
+                else if (!ValidDecimal(value)) {
+                    callback(new Error('请输入数字'));
+                } else {
+                    axios({
+                        url: "/Orders/CheckReceiveMoney",
+                        method: "post",
+                        data: {
+                            orderID: that.indexData.OrderID,
+                            applyMoney: that.indexData.ApplyMoney
+                        },
+                    }).then(function (res) {
+                        if (res.data.type == "error") {
+                            callback(new Error(res.data.msg));
+                        } else {
+                            callback();
+                        }
+                    }).catch(function (error) {
+                        that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                    });
+                }
+            };
+            return {
+                indexData:@Html.Raw(Json.Encode(Model)),
+                dialogSuccessVisible: false,
+
+                //验证规则
+                rules: {
+                    ApplyMoney: [{ required: true, validator: validateApplyMoney, trigger: 'blur' }],
+                },
+                applyID: "",
+                dialogFormVisible: false,
+                baseData: {},
+                Bank: "",
+                Account: "",
+                PayType:"",
+            }
+        },
+        mounted: function () {
+            this.baseData = @Html.Raw(Json.Encode(@ViewBag.Options));
+            this.getPayerOptions();
+        },
+        computed: {
+            PayerID: function () {
+                return this.indexData.PayerID;
+            }
+        },
+        watch: {
+            PayerID: function (value) {
+                this.Bank = "";
+                this.Account = "";
+                this.PayType = "";
+
+                var item = this.baseData.PayerOptions.filter(function (val) {
+                    if (val.ID == value) {
+                        return val;
+                    }
+                });
+                if (item.length != 0) {
+                    this.Bank = item[0].Bank;
+                    this.Account = item[0].Account;
+                    this.PayType = item[0].Methord;
+                }
+            },
+        },
+        methods: {
+            addPayer: function () {
+                var that = this;
+                that.dialogFormVisible = true;
+                setTimeout(function () {
+                    that.$refs.header.$refs.form1.resetFields();
+                    that.$refs.header.form1.Currency =  that.indexData.CurrencyID;
+                }, 0)
+            },
+            //付款人信息提交
+            onSubmit_ruleForm: function () {
+                var that = this;
+                this.$refs.header.$refs.form1.validate(function (valid) {
+                    if (valid) {
+                        that.dialogFormVisible = false;
+                        axios({
+                            url: "/Orders/SubmitPayer",
+                            method: "post",
+                            data: that.$refs.header.form1,
+                        }).then(function (response) {
+                            that.$refs.header.$refs.form1.resetFields();
+                            that.getPayerOptions(); //刷新列表
+                            that.onAlert(response.data.type, response.data.msg);
+                        }).catch(function (error) {
+                            supplier.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                        });
+                    } else {
+                        that.onAlert("warning", error);
+                    }
+                });
+
+            },
+            getPayerOptions: function () {
+                var that = this;
+                console.log()
+                axios({
+                    url: "/Orders/GetPayerOptions",
+                    method: "post",
+                    data: {
+                        currency: that.indexData.CurrencyID
+                    }
+                }).then(function (response) {
+                    that.baseData.PayerOptions = JSON.parse(response.data.data);
+                }).catch(function (error) {
+                    that.Alert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            handleRemoveApplyFiles: function (file, fileList) {
+                this.indexData.ReceiveFile = this.indexData.ReceiveFile.filter(function (value) {
+                    if (value.uid != file.uid) {
+                        return value;
+                    }
+                });
+            },
+            httpRequestPay: function (options) {
+                this.httpRequest(options, "applyUpload", "ReceiveFile", "/Orders/UploadPickUpFile", false)
+            },
+            onSubmit: function () {
+                var that = this;
+                that.$refs.ruleForm.validate(function (valid) {
+                    if (valid) {
+                        if (that.indexData.ReceiveFile.length == 0) {
+                            that.onAlert("error", "请上传代付货款委托书！");
+                            return;
+                        }
+                        const loading = that.$loading({
+                            lock: false,
+                            text: 'Loading',
+                            spinner: 'el-icon-loading',
+                            background: 'rgba(0, 0, 0, 0.7)'
+                        });
+                        var submitData = JSON.stringify(that.indexData);
+                        axios({
+                            url: "/Orders/ReceiveSubmit",
+                            method: "post",
+                            data: {
+                                data: submitData,
+                            },
+                        }).then(function (response) {
+                            loading.close();
+                            if (response.data.type == "error") {
+                                that.onAlert(response.data.type, response.data.msg);
+                            } else {
+                                that.applyID = response.data.data;
+                                that.dialogSuccessVisible = true;
+                            }
+                        }).catch(function (error) {
+                            that.onAlert("warning", error);
+                        });
+                    } else {
+                        setTimeout(function () {
+                            var isError = document.getElementsByClassName("is-error");
+                            isError[0].querySelector('input').focus();
+                        }, 1)
+                        return false;
+                    }
+                });
+            },
+            toFixed: function (num, val) {
+                return val.toFixed(num);
+            },
+            //上传请求
+            httpRequest: function (options, ref, column, uploadPath, isMuti) {
+                var that = this;
+                var file = options.file;
+                var size = file.size / 1024;
+                var imgArr = ["image/jpg", "image/bmp", "image/jpeg", "image/gif", "image/png"];
+                let config = {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                };
+                if (isMuti) {
+                    var arr = that.$refs[ref].uploadFiles;
+                    that.$refs[ref].uploadFiles = arr.filter(function (value) {
+                        if (value.uid != file.uid) {
+                            return value;
+                        }
+                    })
+                } else {
+                    that.indexData[column] = [];
+                }
+
+                if (imgArr.indexOf(file.type) > -1 && size > 500) { //大于500kb的图片压缩
+                    imageConversion.compressAccurately(file, 500).then(function (res) {
+                        var form = new FormData(); // FormData 对象
+                        form.append('file', res, file.name);
+                        axios.post(uploadPath, form, config)
+                            .then(function (response) {
+                                if (response.data.type != "error") {
+                                    that.indexData[column].push(JSON.parse(response.data.data));
+                                } else {
+                                    that.onAlert(response.data.type, response.data.msg);
+                                    return;
+                                }
+                            });
+                    });
+                } else if (imgArr.indexOf(file.type) <= -1 && size > 1024 * 3) {
+                    that.onAlert("error", "上传的文件大小不能大于3M");
+                    return;
+                } else {
+                    var form = new FormData(); // FormData 对象
+                    form.append("file", file); // 文件对象
+                    //添加请求头
+                    axios.post(uploadPath, form, config)
+                        .then(function (response) {
+                            if (response.data.type != "error") {
+                                that.indexData[column].push(JSON.parse(response.data.data));
+                            } else {
+                                that.onAlert(response.data.type, response.data.msg);
+                                return;
+                            }
+                        });
+                }
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                    offset: 200,
+                });
+            },
+        }
+    });
+</script>

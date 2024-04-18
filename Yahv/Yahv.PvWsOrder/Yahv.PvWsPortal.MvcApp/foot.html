@@ -1,0 +1,213 @@
+﻿<!--<i class="footer-top-i"></i>-->
+<footer id="footer" v-cloak>
+    <!--<div class="footer-top" @click="toTop">
+        <i></i>
+        <span>TOP</span>
+    </div>-->
+    <!--侧边栏-->
+    <div class="subnav">
+        <ul>
+            <li>
+                <img src="/Content/images/icon_wx.png">
+                <p>在线咨询</p>
+            </li>
+            <li>
+                <img src="/Content/images/icon_phone.png">
+                <p>服务电话</p>
+                <div class="menu">
+                    <p>咨询电话：<span>0755-83988698</span></p>
+                    <p>服务时段：周一至周日9:00-21:00</p>
+                </div>
+            </li>
+            <li>
+                <img src="/Content/images/icon_ewm.png">
+                <p>公众账号</p>
+                <div class="menu">
+                    <img src="/Content/images/ewm.png" />
+                    <div class="gzh">
+                        芯达通报关服务平台 <br />
+                        微信公众号
+                    </div>
+                </div>
+            </li>
+            <li @click="openSuggestions">
+                <img src="/Content/images/icon_fk.png">
+                <p>反馈建议</p>
+            </li>
+            <li @click="toTop">
+                <img src="/Content/images/icon_top.png">
+                <p>返回顶部</p>
+            </li>
+        </ul>
+    </div>
+    <div class="footer_content">
+        <div class="contactus">
+            <h4>联系我们</h4>
+            <div class="contactus_info">
+                <p>电话：（0755）83988698 </p>
+                <p>传真：（0755）83995933</p>
+                <p>网址：   www.for-ic.net</p>
+                <p> E-Mail: shenzhen@wl.net.cn</p>
+                <p>地址：深圳市龙岗区坂田吉华路393号英达丰科技园</p>
+                <p>邮编：518000</p>
+            </div>
+        </div>
+        <ul v-if="footerList.length" class="clearfix">
+            <li v-for="(item,index) in footerList" v-bind:class="[{'w98':index==5}]">
+                <h3>{{item.title}}</h3>
+                <div v-show="item.content">
+                    <div v-for="page,ind in item.content">
+                        <a v-show="(page.url&&page.text!='归类快速查询')||(!page.url&&page.text!='投诉建议'&&page.text!='归类快速查询')" v-bind:href="page.url" v-bind:class="{'mb0':ind==item.content.length-1}">{{page.text}}</a>
+                        <a v-show="!page.url&&page.text=='归类快速查询'&&isLogin==false" v-bind:class="{'mb0':ind==item.content.length-1}" @click="openLogin">{{page.text}}</a>
+                        <a v-show="page.url&&page.text=='归类快速查询'&&isLogin" v-bind:href="page.url" v-bind:class="{'mb0':ind==item.content.length-1}">{{page.text}}</a>
+                        <a v-show="!page.url&&page.text=='投诉建议'" v-bind:class="{'mb0':ind==item.content.length-1}" @click="openSuggestions">{{page.text}}</a>
+                    </div>
+                </div>
+                <div v-show="index==footerList.length-1" class="footer_QRCode">
+
+                    <img src="/Content/images/qrcode/qrcode_for_gh_797836e1a428_344.jpg" width="96" />
+                    <!--<img src="/Content/images/erweima.png" alt="Alternate Text" />-->
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="footer_text">
+        <p>禁限售规则 - 知识产权保护政策 - 隐私权政策 - 使用条款</p>
+        <p>©️2010-2020 深圳市芯达通供应链管理有限公司 版权所有</p>
+    </div>
+    <div class="suggestions" v-show="suggestions"></div>
+    <div class="login" v-show="loginStatus"></div>
+</footer>
+<script>
+    $(function () {
+        //侧边栏鼠标放上去显示与隐藏
+        $('.subnav li').hover(function () {
+            $(this).children('.menu').stop().show().end().siblings().children('.menu').stop().hide();
+        }, function () {
+            $(this).children('.menu').stop().hide();
+        })
+    })
+    var footer = new Vue({
+        el: '#footer',
+        data: {
+            footerList: [{
+                title: '关于我们',
+                content: [
+                    {
+                        text: '公司简介',
+                        url: '/About.html'
+                    },
+                    {
+                        text: '人才招聘',
+                        url: '/Recruitment.html'
+                    },
+                    {
+                        text: '联系我们',
+                        url: '/Contact.html'
+                    }
+                ]
+            },
+            {
+                title: '服务',
+                content: [
+                    {
+                        text: '进口报关',
+                        url: '/Service.html?activeName=S1'
+                    },
+                    {
+                        text: '付汇',
+                        url: '/Service.html?activeName=S2'
+                    },
+                    {
+                        text: '代收/发货',
+                        url: '/Service.html?activeName=S3'
+                    },
+                    {
+                        text: '代仓储',
+                        url: '/Service.html?activeName=S4'
+                    }
+                ]
+            },
+            {
+                title: '付款及配送',
+                content: [
+                    {
+                        text: '如何付款',
+                        url: '/FAQ/Payment.html'
+                    },
+                    {
+                        text: '收费标准',
+                        url: '/FAQ/ChargingStandard.html'
+                    },
+                    {
+                        text: '香港库房收货地址',
+                        url: '/FAQ/HKReceivingAddress.html'
+                    }
+
+                ]
+            },
+            {
+                title: '帮助',
+                content: [
+                    {
+                        text: '常见问题',
+                        url: '/FAQ.html'
+                    },
+                    {
+                        text: '报关流程',
+                        url: '/Procedure.html'
+                    },
+                    {
+                        text: '投诉建议'
+                    },
+                    {
+                        text: '新手入门',
+                        url: '/FAQ/RegistrationGuide.html'
+                    }
+                ]
+            },
+            {
+                title: '工具',
+                content: [
+                    {
+                        text: '归类快速查询',
+                        url: ''
+                    },
+                    {
+                        text: '资料下载',
+                        url: '/download.html'
+                    }
+                ]
+            },
+            {
+                title: '关注我们'
+            }
+            ],
+            suggestions: false,
+            loginStatus: false,//登录弹出框展示状态
+            isLogin: false
+        },
+        mounted: function () {
+            this.isLogin = header.isLogin;
+            console.log(this.isLogin);
+            this.loginStatus = header.loginStatus;
+            if (this.isLogin) {
+                this.footerList[4].content[0].url = '/Sort/Search.html'
+            }
+            $(".suggestions").load("/suggestions.html");
+            $(".login").load("/login.html");
+        },
+        methods: {
+            toTop: function () {
+                document.documentElement.scrollTop = document.body.scrollTop = 0;
+            },
+            openSuggestions: function () {
+                this.suggestions = true;
+            },
+            openLogin: function () {
+                header.loginStatus = true;
+                this.loginStatus = true;
+            }
+        }
+    })
+</script>

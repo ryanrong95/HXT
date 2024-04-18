@@ -1,0 +1,273 @@
+﻿<template id="sidebar">
+    <div class="sidebar">
+        <!--<div id="customer" v-cloak v-on:mouseover="toggleKFShow" v-on:mouseleave="toggleKFhide">
+            <a class="fr cus_icon cus_expand">专属客服</a>
+            <div class="fr cus_list" v-show="kfShow">
+                <ul style="display: inherit">
+                    <li class="first">
+                        <i></i>
+                        <span>1111 业务经理</span>
+                    </li>
+                    <li>
+                        <img src="~/Content/img/icon_email_wihte.png">
+                        <span>2222</span>
+                    </li>
+                    <li>
+                        <img src="~/Content/img/icon_phone_white.png">
+                        <span>3333</span>
+                    </li>
+                </ul>
+                <ul style="border-bottom: none;">
+                    <li class="first">
+                        <i></i>
+                        <span>" 跟单员" : ""</span>
+                    </li>
+                    <li style="position: relative;height:24px;">
+                        <div style="position: absolute; top: -10px; left: 33px;">
+                            <a href="http://wpa.qq.com/msgrd?v=1&uin=3004339541&site=b1b.com&menu=yes" style="color:white;">QQ1:3004339541</a>
+                        </div>
+                        <div style="position: absolute; top: 7px; left: 33px;">
+                            <a href="http://wpa.qq.com/msgrd?v=1&uin=3004302230&site=b1b.com&menu=yes" style="color:white;">QQ2:3004302230</a>
+                        </div>
+                    </li>
+                    <li>
+                        <img src="~/Content/img/icon_phone_white.png">
+                        <span>4444</span>
+                    </li>
+                </ul>
+            </div>
+        </div>-->
+        <div id="phone" v-cloak v-on:mouseover="togglePHShow" v-on:mouseleave="togglePHhide">
+            <a href="javascript:;" class="fr cus_icon">
+                <i class="n_sidebar_i"></i>
+                <p class="n_text">全国热线</p>
+            </a>
+            <div class="fr n_sidebar_expand cus_list" v-show="phShow">
+                <i class="n_se_arrow"></i>
+                <div class="n_se_con">
+                    <p>热线电话：</p>
+                    <span>400-833-8321</span>
+                </div>
+            </div>
+        </div>
+        <div id="wechat" v-cloak v-on:mouseover="toggleWCShow" v-on:mouseleave="toggleWChide">
+            <a href="javascript:;" class="fr cus_icon">
+                <i class="n_sidebar_i"></i>
+                <p class="n_text">公众号</p>
+            </a>
+            <div class="fr n_sidebar_expand n_se_gongzh cus_list" v-show="wcShow">
+                <i class="n_se_arrow"></i>
+                <div class="n_se_con">
+                    <img src="/Content/img/n_erweima.png" />
+                    <p>扫码关注官方微信</p>
+                    <span>芯达通</span>
+                </div>
+            </div>
+        </div>
+        <div id="advise">
+            <a href="@(ViewBag.OfficialWebsite)/?id=advise" target="_blank" class="fr cus_icon">
+                <i class="n_sidebar_i"></i>
+                <p class="n_text">意见反馈</p>
+            </a>
+        </div>
+        <div id="totop" v-on:click="return_top">
+            <a href="javascript:;" class="fr cus_icon">
+                <i class="n_sidebar_i"></i>
+                <p class="n_text">返回顶部</p>
+            </a>
+        </div>
+    </div>
+</template>
+<script>
+    Vue.component(
+        'staffsidebar',
+        {
+            template: "#sidebar",
+            data: function () {
+                return {
+                    kfNum: 0, //客服图标显示
+                    kfShow: false, //客服列表显示与隐藏
+                    phShow: false,
+                    wcShow: false
+                }
+            },
+            methods: {
+                toggleKFShow: function () {
+                    this.kfShow = true;
+                },
+                toggleKFhide: function () {
+                    this.kfShow = false;
+                },
+                togglePHShow: function () {
+                    this.phShow = true;
+                },
+                togglePHhide: function () {
+                    this.phShow = false;
+                },
+                toggleWCShow: function () {
+                    this.wcShow = true;
+                },
+                toggleWChide: function () {
+                    this.wcShow = false;
+                },
+                return_top: function () {
+                    $("body,html").animate({ scrollTop: 0 }, 500);
+                    return false;
+                }
+            },
+        });
+</script>
+<style>
+    .sidebar > div {
+        position: fixed;
+        right: 0;
+    }
+
+        .sidebar > div > div {
+            width: 130px;
+        }
+
+        .sidebar > div > a {
+            right: 0;
+            width: 70px;
+            height: 25px;
+            border: 1px solid #1796d9;
+            background: url(/Content/img/kefu.png) no-repeat center 10px;
+            text-align: center;
+            padding-top: 45px;
+            color: #1796d9;
+            cursor: pointer;
+        }
+
+    /* 客服 */
+    #customer {
+        top: 300px;
+    }
+
+        #customer > a {
+            background: url(/Content/img/kefu.png) no-repeat center 10px;
+        }
+
+            #customer > a:hover {
+                background-color: #1796d9;
+                color: #fff;
+                background-image: url(/Content/img/kefu_white.png);
+            }
+
+    #phone {
+        top: 374px;
+    }
+
+        #phone > div {
+            top: 74px;
+            text-align: center;
+        }
+
+        #phone > a {
+            background: url(/Content/img/tel.png) no-repeat center 10px;
+        }
+
+            #phone > a:hover {
+                background-color: #1796d9;
+                color: #fff;
+                background-image: url(/Content/img/tel_white.png);
+            }
+
+    #wechat {
+        top: 448px;
+    }
+
+        #wechat > div {
+            top: 148px;
+            text-align: center;
+        }
+
+        #wechat > a {
+            background: url(/Content/img/gzh.png) no-repeat center 10px;
+        }
+
+            #wechat > a:hover {
+                background-color: #1796d9;
+                color: #fff;
+                background-image: url(/Content/img/gzh_white.png);
+            }
+
+    #advise {
+        top: 522px;
+    }
+
+        #advise > a {
+            background: url(/Content/img/advice.png) no-repeat center 10px;
+        }
+
+            #advise > a:hover {
+                background-color: #1796d9;
+                color: #fff;
+                background-image: url(/Content/img/advice_white.png);
+            }
+
+    #totop {
+        top: 596px;
+    }
+
+        #totop > a {
+            background: url(/Content/img/return.png) no-repeat center 10px;
+        }
+
+            #totop > a:hover {
+                background-color: #1796d9;
+                color: #fff;
+                background-image: url(/Content/img/return_white.png);
+            }
+
+    .cus_icon {
+        right: 0;
+        width: 70px;
+        height: 25px;
+        border: 1px solid #1796d9;
+        text-align: center;
+        padding-top: 45px;
+        color: #1796d9;
+        cursor: pointer;
+    }
+
+    .cus_list {
+        right: 72px;
+        padding: 8px 12px;
+        background-color: #1796d9;
+        color: #fff;
+        margin-right: 3px;
+    }
+
+        .cus_list ul {
+            border-bottom: 1px solid #8bcbec;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+        }
+
+        .cus_list li {
+            line-height: 24px;
+        }
+
+            .cus_list li.first {
+                margin-bottom: 5px;
+            }
+
+            .cus_list li i {
+                display: inline-block;
+                width: 20px;
+                height: 22px;
+                background: url(/Content/img/kefu_staff.png) no-repeat;
+                vertical-align: middle;
+                overflow: hidden;
+                margin-right: 10px;
+            }
+
+            .cus_list li img {
+                margin: 0 12px 0 5px;
+            }
+
+            .cus_list li .img_change {
+                background-image: url(/Content/img/kefu_manager.png);
+            }
+</style>

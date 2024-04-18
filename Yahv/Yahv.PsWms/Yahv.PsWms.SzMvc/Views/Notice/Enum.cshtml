@@ -1,0 +1,76 @@
+﻿@{
+    Layout = "~/Views/Shared/_NoticeLayout.cshtml";
+}
+
+<div id="theenum" v-cloak style="margin-left: 2%; margin-top: 5px;">
+    <div style="margin-top: 10px;">
+        <div class="query_wrap" style="float: left; width: 20%; border: 1px solid #ffffff; height: 800px; overflow-y:scroll">
+            <div class="clearfix mt10" v-for="(item,index) in enums" style="float: left; width: 100%;">
+                <button v-on:click="showEnumValue(item.EnumName)" class="btn btn1 ml40">{{item.EnumName}}</button>
+            </div>
+        </div>
+        <div style="float: left; width: 72%; border: 1px solid #ffffff; margin-left: 2%;">
+            <div style="padding-top: 10px; padding-left: 20px;"><h3>{{currentEnum}}</h3></div>
+            <div class="tb_wrap" v-loading="loading">
+                <table class="common_tb1 mt30">
+                    <tr>
+                        <th width="36px">序号</th>
+                        <th width="150px">Name</th>
+                        <th width="150px">Value</th>
+                        <th width="300px">Description</th>
+                    </tr>
+                    <tr v-for="(item,index) in enumvalues">
+                        <td>{{index+1}}</td>
+                        <td align="left">{{item.Name}}</td>
+                        <td align="left">{{item.Value}}</td>
+                        <td align="left">{{item.Description}}</td>
+                    </tr>
+                    <tr v-if="enumvalues.length==0">
+                        <td colspan="8">暂无数据</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var theenum = new Vue({
+        el: "#theenum",
+        data: function () {
+            return {
+                loading: false,
+                enums: [],
+                enumvalues: [],
+                currentEnum: "",
+            }
+        },
+        methods: {
+            //显示枚举值
+            showEnumValue: function (enumname) {
+                var that = this;
+                that.currentEnum = enumname;
+                axios.get('/Notice/GetEnumValue?EnunName=' + enumname, { params: {} })
+                    .then(function (res) {
+                        if (res.data.type == "success") {
+                            that.enumvalues = res.data.data.EnumValues;
+                        }
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    });
+            },
+        },
+        created: function () {
+            var that = this;
+            axios.get('/Notice/GetEnums', { params: {} })
+                .then(function (res) {
+                    if (res.data.type == "success") {
+                        that.enums = res.data.data.EnumInfos;
+                    }
+                })
+                .catch(function (err) {
+                    console.log(err);
+                });
+        },
+    });
+</script>

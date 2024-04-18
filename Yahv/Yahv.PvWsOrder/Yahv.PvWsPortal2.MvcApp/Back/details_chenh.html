@@ -1,0 +1,129 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>芯达通</title>
+    <link rel="stylesheet" type="text/css" href="css/common.css" />
+    <link rel="stylesheet" type="text/css" href="css/page.css" />
+    <script type="text/javascript" src="js/jQuery-2.2.4.min.js"></script>
+    <script type="text/javascript" src="js/xs.js"></script>
+    <script type="text/javascript" src="js/common.js"></script>
+</head>
+
+<body>
+    <!-- 右侧定位 -->
+    <div id="right_bar"></div>
+    <!-- logo行 -->
+    <div id="header"></div>
+    <div class="sub_banner">
+        <p class="en">News</p>
+        <p class="china">新闻中心</p>
+    </div>
+    <!-- 内容 -->
+    <div class="clearfix wrapper sub_con">
+        <!-- 定位的图片 -->
+        <div class="plane">
+            <img src="imgs/plane.png" alt="">
+        </div>
+        <div class="chip">
+            <img src="imgs/chip.png" alt="">
+        </div>
+        <div class="chip2">
+            <img src="imgs/news_chip.png" alt="">
+        </div>
+        <div class="left sub_left">
+            <div class="sub_title">全部新闻</div>
+            <div class="sub_list">
+                <i class=deco></i>
+                <div class="sub_list_con">
+                    <ul>
+                        <li><a href="">业界新闻<i></i></a></li>
+                        <li><a href="">公司动态 <i></i></a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+        <div class="left sub_right notice_right">
+            <div class="right_bar notice_bar">
+                <i class="home"></i>
+                <a href="index.html">首页</a>
+                <i>-</i>
+                <a href="">通知公告</a>
+                <i>-</i>
+                <span>vivo联合国家无线电监测中心检测中心成立5G实验室</span>
+            </div>
+            <div class="all_notices">
+                <div>
+                    <h3>vivo联合国家无线电监测中心检测中心成立5G实验室</h3>
+                    <div class="data_extra">
+                        <span class="sign">业界新闻1</span>
+                        <span class="date">
+                            <i></i>
+                            <span>2019-07-08  16:58</span>
+                        </span>
+                    </div>
+                    <div class="notice_text">
+                        //新闻内容
+                    </div>
+                </div>
+                <!--<div class="more_news">
+                    <h4>更多公告</h4>
+                    <div class="mn_content">
+                        <ul>
+                            <li><a href=""><i>上一条：</i><span>京东方最快明年为iPhone供应OLED屏</span></a></li>
+                            <li><a href=""><i>下一条：</i><span>SK海力士宣布首款PCIe NVMe SSD：首次应用128层4D闪存</span></a></li>
+                        </ul>
+                    </div>
+                </div>-->
+            </div>
+        </div>
+    </div>
+    <!-- 底部 -->
+    <div id="footer_zh"></div>
+
+    <script>
+        $("#right_bar").load("rightBar.html");
+        $("#header").load("header.html", function () {
+            $("#footer_zh").load("footer.html");
+        });
+
+    </script>
+    <script src="News/news.js"></script>
+    <script>
+        //增加新闻内容
+        $(function () {
+
+            //选择新闻
+            var current = news[3];
+
+            //左侧 栏目
+            $('.sub_list_con ul li').each(function () {
+                var sender = $(this);
+                var context = $.trim(sender.text());
+                if (context == current.catalog) {
+                    sender.addClass('active');
+                }
+            });
+
+            //面包屑
+            $('.all_notices').prev().find('span:last').html(current.title);
+            //标题
+            $('.all_notices h3:first').html(current.title);
+            //时间
+            $('.date span').html(current.createDate);
+            //标志
+            $('.data_extra span:first').html(current.catalog);
+            //内容
+            $('.notice_text').load(current.fileName, function myfunction() {
+                $('p').css({ 'text-indent': '2em' });
+            });
+
+        });
+    </script>
+
+</body>
+
+</html>

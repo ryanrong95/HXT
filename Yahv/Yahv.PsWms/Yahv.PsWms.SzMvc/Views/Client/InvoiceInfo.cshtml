@@ -1,0 +1,328 @@
+﻿<div id="invoiceinfo" v-cloak>
+    <div class="query_wrap">
+        <button v-on:click="invoiceIsShow=false" class="btn btn1">修改</button>
+    </div>
+    <!-- 显示发票信息 -->
+    <div class="clearfix" style="width:100%;float:left;" v-if="invoiceIsShow">
+        <div class="mt20 font14 txt_grey1">
+            <span>开票名称：</span>
+            <span>{{theInvoiceInfo.InvoiceName}}</span>
+        </div>
+        <div class="mt20 font14 txt_grey1">
+            <span>纳税人识别号：</span>
+            <span>{{theInvoiceInfo.TaxNumber}}</span>
+        </div>
+        <div class="mt20 font14 txt_grey1">
+            <span>地址：</span>
+            <span>{{theInvoiceInfo.RegAddress}}</span>
+        </div>
+        <div class="mt20 font14 txt_grey1">
+            <span>电话：</span>
+            <span>{{theInvoiceInfo.CompanyTel}}</span>
+        </div>
+        <div class="mt20 font14 txt_grey1">
+            <span>开户行及账号：</span>
+            <span>{{theInvoiceInfo.BankName}} {{theInvoiceInfo.BankAccount}}</span>
+        </div>
+        <div class="mt20 font14 txt_grey1">
+            <span>发票交付方式：</span>
+            <span>{{theInvoiceInfo.DeliveryTypeName}}</span>
+        </div>
+        <div class="mt20 font14 txt_grey1">
+            <span>收票地址：</span>
+            <span>{{theInvoiceInfo.RevAddress}}</span>
+        </div>
+        <div class="mt20 font14 txt_grey1">
+            <span>联系人姓名：</span>
+            <span>{{theInvoiceInfo.Contact}}</span>
+        </div>
+
+        <div class="mt20 font14 txt_grey1">
+            <span>手机：</span>
+            <span>{{theInvoiceInfo.Phone}}</span>
+        </div>
+        <div class="mt20 font14 txt_grey1">
+            <span>邮箱：</span>
+            <span>{{theInvoiceInfo.Email}}</span>
+        </div>
+    </div>
+    <!-- 编辑发票信息 -->
+    <div v-if="!invoiceIsShow" class="mt10">
+        <el-form :model="theInvoiceInfo" :rules="invoiceRules" status-icon ref="theInvoiceInfo" label-width="130px" class="elform_padding">
+            <el-row>
+                <el-col :span="24">
+                    <el-form-item label="开票名称：" prop="InvoiceName">
+                        <el-input v-model="theInvoiceInfo.InvoiceName" size="mini" placeholder="请输入开票名称" readonly="true" style="width:60%" auto-complete="off"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="24">
+                    <el-form-item label="纳税人识别号：" prop="TaxNumber" :rules="[{required: true, message: '请输入纳税人识别号', trigger: 'blur'},{max:50, message: '纳税人识别号长度超过限制', trigger: 'blur' }]">
+                        <el-input v-model="theInvoiceInfo.TaxNumber" size="mini" placeholder="请输入纳税人识别号" style="width:60%" auto-complete="off"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="24">
+                    <el-form-item label="地址：" prop="RegAddress" :rules="[{required: true, message: '请输入地址', trigger: 'blur'},{max:200, message: '地址长度超过限制', trigger: 'blur' }]">
+                        <el-input v-model="theInvoiceInfo.RegAddress" size="mini" placeholder="请输入地址" style="width:60%" auto-complete="off"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="24">
+                    <el-form-item label="电话：" prop="CompanyTel" :rules="[{required: true, message: '请输入电话号码', trigger: 'blur'},{max:50, message: '电话号码长度超过限制', trigger: 'blur' }]">
+                        <el-input v-model="theInvoiceInfo.CompanyTel" size="mini" placeholder="请输入电话号码" style="width:60%" auto-complete="off"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="10">
+                    <el-form-item label="开户行及账号：" prop="BankName" :rules="[{required: true, message: '请输入开户行', trigger: 'blur'},{max:150, message: '开户行长度超过限制', trigger: 'blur' }]">
+                        <el-input v-model="theInvoiceInfo.BankName" size="mini" placeholder="请输入开户行" auto-complete="off"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="5">
+                    <el-form-item label="" label-width="10px" prop="BankAccount" :rules="[{required: true, message: '请输入账号', trigger: 'blur'},{max:100, message: '账号长度超过限制', trigger: 'blur' }]">
+                        <el-input v-model="theInvoiceInfo.BankAccount" size="mini" placeholder="请输入账号" auto-complete="off"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="24">
+                    <el-form-item label="发票交付方式：" prop="DeliveryTypeInt" :rules="[{required: true, message: '请选择发票交付方式', trigger: 'change'}]">
+                        <el-select v-model="theInvoiceInfo.DeliveryTypeInt" size="mini" clearable placeholder="请选择" style="width:30%;">
+                            <el-option v-for="item in invoiceDeliveryTypeOptions" :label="item.text" :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+
+            <el-row>
+                <el-col :span="24">
+                    <el-form-item label="发票收件地址：" prop="RevAddressArray" :rules="[{ required: true, message: '请选择地址', trigger: 'change' }]">
+                        <el-cascader style="width:60%" placeholder="请选择地址" size="mini" :props="cascaderConfig" :options="addresslists" v-model="theInvoiceInfo.RevAddressArray">
+                        </el-cascader>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="24">
+                    <el-form-item label="" prop="RevAddressDetail" :rules="[{ required: true, message: '请输入详细地址', trigger: 'blur' },{max:200, message: '地址长度超过限制', trigger: 'blur' }]">
+                        <el-input style="width:60%" size="mini" v-model="theInvoiceInfo.RevAddressDetail" type="textarea" placeholder="请输入详细的道路、楼宇、区号等名称"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+
+            <el-row>
+                <el-col :span="24">
+                    <el-form-item label="收件人姓名：" prop="Contact" :rules="[{required: true, message: '请输入收件人名称', trigger: 'blur'},{max:150, message: '收件人名称长度超过限制', trigger: 'blur' }]">
+                        <el-input v-model="theInvoiceInfo.Contact" size="mini" placeholder="请输入收件人名称" style="width:60%" auto-complete="off"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="24">
+                    <el-form-item label="手机：" prop="Phone">
+                        <el-input v-model="theInvoiceInfo.Phone" size="mini" placeholder="请输入手机号码" style="width:60%" auto-complete="off"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="24">
+                    <el-form-item label="邮箱：" prop="Email">
+                        <el-input v-model="theInvoiceInfo.Email" size="mini" placeholder="请输入邮箱" style="width:60%" auto-complete="off"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row class="btn_bottom">
+                <el-col :span="24">
+                    <el-form-item class="clearfix">
+                        <el-button v-on:click="submit()" class="btn2 ml12 fl ml0">保存</el-button>
+                        <el-button v-on:click="cancel()" class="btn1 fl ml20">取消</el-button>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+        </el-form>
+    </div>
+
+</div>
+<script>
+    var invoiceinfo = new Vue({
+        el: "#invoiceinfo",
+        data: function () {
+            var validateBankAccount = function(rule, value, callback){
+                if (value == '' || value == null) {
+                    callback(new Error('请输入银行账号'));
+                }
+                else if (value.toString().length >50) {
+                    callback(new Error('银行账号长度超过限制'));
+                }
+                callback();
+            };
+            //验证数字
+            var validateNumber =function (rule, value, callback){
+                if (value != '' && value != null) {
+                    if (!/^([0-9-]+)$/.test(value)) {
+                        callback(new Error('请输入数字'));
+                    }
+                }
+                callback();
+            };
+            //验证邮箱
+            var validateMail = function(rule, value, callback){
+                    if (value != '' && value != null) {
+                        var reg = new RegExp(/^([a-zA-Z0-9._-])+@{@Html.Raw("@");}([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/);
+                        if (!reg.test(value)) {
+                            callback(new Error('请输入正确的邮箱地址'));
+                        }
+                    }
+                    callback();
+                };
+            return {
+                clientName: '@(ViewBag.ClientName)',
+                invoiceIsShow: true, //是否显示开票信息查看
+                invoiceDeliveryTypeOptions: [], //发票交付方式选项
+                theInvoiceInfo: {
+                    InvoiceID: '',
+                    InvoiceName: '',
+                    TaxNumber: '',
+                    RegAddress: '',
+                    CompanyTel: '',
+                    BankName: '',
+                    BankAccount: '',
+                    DeliveryTypeInt: '',
+                    DeliveryTypeName: '',
+                    RevAddress: '',
+                    RevAddressArray: [],
+                    RevAddressDetail: '',
+                    Contact: '',
+                    Phone: '',
+                    Email: '',
+                },
+                invoiceRules: {
+                    Account: [{ required: true, validator: validateBankAccount, trigger: 'blur' }
+                        , { max: 50, message: '银行账号长度超过限制', trigger: 'blur' }],
+                    Phone: [{ max: 50, message: '手机号长度超过限制', trigger: 'blur' }],
+                    CompanyTel: [{ required: true, validator: validateNumber, trigger: 'blur' },
+                    { max: 50, message: '电话长度超过限制', trigger: 'blur' }],
+                    Email: [{ validator: validateMail, trigger: 'blur' },
+                    { max: 50, message: '邮箱地址长度超过限制', trigger: 'blur' }],
+                },
+                addresslists: [], //省市区三级联动数据
+                cascaderConfig: {
+                    label: 'n',
+                    value: 'n',
+                    children: 's'
+                },
+            };
+        },
+        created: function () {
+            var that = this;
+            //获取发票信息
+            that.getInvoiceInfo();
+            //获取联动地址数据
+            axios.get('/Content/json/area.json?timestamp=' + timestamp(), { params: {} })
+                .then(function (res) {
+                    that.addresslists = res.data[0].s;
+                })
+                .catch(function (err) {
+                    console.log(err);
+                });
+            //获取发票交付方式
+            var that = this;
+            axios.get('/Miscellaneous/InvoiceDeliveryType', { params: {} })
+                .then(function (res) {
+                    if (res.data.success == 200) {
+                        that.invoiceDeliveryTypeOptions = res.data.result;
+                    }
+                })
+                .catch(function (err) {
+                    console.log(err);
+                });
+        },
+        methods: {
+            //获取开票信息
+            getInvoiceInfo: function () {
+                var that = this;
+                axios.get('/Client/GetMyInvoice', { params: {} })
+                    .then(function (res) {
+                        if (res.data.type == "success" && res.data.result != null) {
+                            that.theInvoiceInfo.InvoiceID = res.data.result.InvoiceID;
+                            that.theInvoiceInfo.InvoiceName = res.data.result.InvoiceName;
+                            that.theInvoiceInfo.TaxNumber = res.data.result.TaxNumber;
+                            that.theInvoiceInfo.RegAddress = res.data.result.RegAddress;
+                            that.theInvoiceInfo.CompanyTel = res.data.result.CompanyTel;
+                            that.theInvoiceInfo.BankName = res.data.result.BankName;
+                            that.theInvoiceInfo.BankAccount = res.data.result.BankAccount;
+                            that.theInvoiceInfo.DeliveryTypeInt = res.data.result.DeliveryTypeInt;
+                            that.theInvoiceInfo.DeliveryTypeName = res.data.result.DeliveryTypeName;
+                            that.theInvoiceInfo.RevAddress = res.data.result.RevAddress;
+                            that.theInvoiceInfo.RevAddressArray = res.data.result.RevAddressArray;
+                            that.theInvoiceInfo.RevAddressDetail = res.data.result.RevAddressDetail;
+                            that.theInvoiceInfo.Contact = res.data.result.Contact;
+                            that.theInvoiceInfo.Phone = res.data.result.Phone;
+                            that.theInvoiceInfo.Email = res.data.result.Email;
+                        }
+
+                        if (that.theInvoiceInfo.InvoiceName == null || that.theInvoiceInfo.InvoiceName == "") {
+                            that.theInvoiceInfo.InvoiceName = that.clientName;
+                        }
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    });
+            },
+            //提交修改
+            submit: function () {
+                var that = this;
+                this.$refs.theInvoiceInfo.validate(function(valid) {
+                    if (valid) {
+                        axios({
+                            url: "/Client/InvoiceInfoSubmit",
+                            method: "post",
+                            data: {
+                                InvoiceID: that.theInvoiceInfo.InvoiceID,
+                                InvoiceName: that.theInvoiceInfo.InvoiceName,
+                                TaxNumber: that.theInvoiceInfo.TaxNumber,
+                                RegAddress: that.theInvoiceInfo.RegAddress,
+                                CompanyTel: that.theInvoiceInfo.CompanyTel,
+                                BankName: that.theInvoiceInfo.BankName,
+                                BankAccount: that.theInvoiceInfo.BankAccount,
+                                DeliveryTypeInt: that.theInvoiceInfo.DeliveryTypeInt,
+                                RevAddressArray: that.theInvoiceInfo.RevAddressArray,
+                                RevAddressDetail: that.theInvoiceInfo.RevAddressDetail,
+                                Contact: that.theInvoiceInfo.Contact,
+                                Phone: that.theInvoiceInfo.Phone,
+                                Email: that.theInvoiceInfo.Email,
+                            },
+                        }).then(function (response) {
+                            that.getInvoiceInfo();
+                            that.invoiceIsShow = true;
+                            that.onAlert(response.data.type, response.data.msg);
+                        }).catch(function (error) {
+                            that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                        });
+                    } else {
+                        //验证失败
+                        return false;
+                    }
+                });
+            },
+            //取消修改
+            cancel: function () {
+                this.getInvoiceInfo();
+                this.invoiceIsShow = true;
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type
+                });
+            },
+        },
+    });
+</script>

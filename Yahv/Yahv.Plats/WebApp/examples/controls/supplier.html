@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>供货商插件 - jQuery EasyUI plugin</title>
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/gray/easyui.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/standard-easyui/styles/plugin.css" rel="stylesheet" />
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.min.js"></script>
+    <link href="http://fixed2.b1b.com/Yahv/customs-easyui/Styles/reset.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/customs-easyui/Styles/main.css" rel="stylesheet" />
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.easyui.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/locale/easyui-lang-zh_CN.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/main.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/ajaxPrexUrl.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/standard-easyui/scripts/easyui.jl.js"></script>
+
+</head>
+<body>
+    <h1>供应商插件</h1>
+    <form id="ff" class="easyui-form" method="post" data-options="novalidate:true" onsubmit="return $(this).form('enableValidation').form('validate');">
+        <br />
+        原厂供应商：
+        <input id="factory" name="factory" class="easyui-factory" value="" style="width:300px" />
+        <br />
+        货代供应商：
+        <input id="forwarder" name="forwarder" class="easyui-forwarder" value="" style="width:300px" />
+        <br />
+        代理品牌:
+        <input id="agentBrand" name="agentBrand" class="easyui-agentBrand" value="" style="width:300px" />
+        <br />
+        品牌关系:<input id="agentMaps" name="agentMaps" class="easyui-agentMaps" value="" style="width:300px" />
+        <button onclick="aaa()">提交</button>
+        <br />
+
+        <div style="text-align:left; "></div>
+
+
+        <div class="agentBrands" style="text-align:left;">
+            <span><em style="display:inline-block; width:87px">品牌名称:</em>' + row.Name + '</span><br />
+            <span><em style="display:inline-block; width:87px">供应商名称:</em>' + row.SupplierName + '</span><br />
+            <span><em style="display:inline-block; width:87px">代理公司:</em>' + row.CompanyName + '</span><br />
+        </div>
+
+    </form>
+    <script>
+        $(function () {
+            $("#factory").factory('setValue', ':邱舜红');
+            $("#forwarder").forwarder('setValue', '深圳市赛新德电子有限公司');
+            $("#agentBrand").agentBrand('setValue', 'Brand202012091622');
+            $("#agentMaps").agentMaps('setValue', 'Brand202012091622');
+
+            //$("#supplier2").supplier({
+            //    required: true,
+            //    //target: "#supplierBeneficiary"
+            //})
+        })
+        function aaa() {
+            //console.log($('#supplier1').supplier('options'));
+            //console.log($('#supplier1').supplier('getVal'));
+            //console.log($('#supplier1').supplier('getResult'));
+            //console.log($('#supplier1').supplier('getAllData'));
+            //console.log($('#supplier1').supplier('getSupplierBeneficiary'));
+            console.log("------------");
+            //console.log($('#supplier2').supplier('options'));
+            //console.log($('#supplier2').supplier('getVal'));
+            //console.log($('#supplier2').supplier('getResult'));
+            //console.log($('#supplier2').supplier('getAllData'));
+            console.log($('#factory').factory('getData'));
+            console.log($('#factory').factory('getName'));
+            console.log($('#forwarder').forwarder('getData'));
+            console.log($('#forwarder').forwarder('getName'));
+            console.log($('#agentBrand').agentBrand('getData'));
+            console.log($('#agentBrand').agentBrand('getName'));
+            console.log($('#agentMaps').agentMaps('getData'));
+            console.log($('#agentMaps').agentMaps('getName'));
+        }
+    </script>
+</body>
+</html>

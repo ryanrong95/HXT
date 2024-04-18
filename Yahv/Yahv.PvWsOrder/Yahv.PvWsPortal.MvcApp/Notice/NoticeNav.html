@@ -1,0 +1,35 @@
+﻿<div id="NoticeNav">
+    <h2>{{NavLeftTitle}}</h2>
+    <ul>
+        <li v-for="item,index in NavLeftList" v-bind:class="{'active':index==status}">
+            <i></i>
+            <a v-on:click="NoticeID=item.NoticeID">{{item.text}}</a>
+        </li>
+    </ul>
+</div>
+<script type="text/javascript">
+    var NoticeNav = new Vue({
+        el: '#NoticeNav',
+        data: {
+            NavLeftTitle: '公告通知',
+            NoticeID:"",
+            NavLeftList: [
+                {
+                    text: '新系统上线通知',
+                    NoticeID: '1',
+                    Content:'新系统内容',
+                },
+                {
+                    text: '五一劳动节放假通知',
+                    NoticeID: '2',
+                    Content: '五一内容',
+                },
+                {
+                    text: '清明节放假通知',
+                    NoticeID: '3',
+                    Content: '清明节内容',
+                },
+            ],
+        },
+    })
+</script>

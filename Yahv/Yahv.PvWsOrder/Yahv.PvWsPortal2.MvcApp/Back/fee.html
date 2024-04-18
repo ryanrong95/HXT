@@ -1,0 +1,277 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>芯达通</title>
+    <link rel="stylesheet" type="text/css" href="css/common.css" />
+    <link rel="stylesheet" type="text/css" href="css/page.css" />
+
+    <script type="text/javascript" src="js/jQuery-2.2.4.min.js"></script>
+    <script type="text/javascript" src="js/vue.js"></script>
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript" src="js/axios.min.js"></script>
+</head>
+
+<body>
+    <!-- 右侧定位 -->
+    <div id="right_bar"></div>
+    <!-- logo行 -->
+    <div id="header"></div>
+    <div class="sub_banner">
+        <p class="en">Assistant / Help</p>
+        <p class="china">芯达通助手</p>
+    </div>
+    <
+    <!-- 内容 -->
+    <div class="clearfix wrapper sub_con">
+        <div class="left sub_left">
+            <div class="sub_title">芯达通助手</div>
+            <div class="sub_list">
+                <i class=deco></i>
+                <div class="sub_list_con">
+                    <ul>
+                        <li><a href="inquiry.html">归类信息查询 <i></i></a></li>
+                        <li><a href="rate.html">实时汇率查询<i></i></a></li>
+                        <li class="active"><a href="fee.html">费用计算<i></i></a></li>
+                        <li><a href="download.html">下载中心<i></i></a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+        <!-- 验证弹出 -->
+        <!--<div class="validate">
+        </div>-->
+        <div class="left sub_right">
+            <div class="right_bar">
+                <i class="home"></i>
+                <a href="index.html">首页</a>
+                <i>-</i>
+                <a href="">芯达通助手</a>
+                <i>-</i>
+                <a href="fee.html">费用计算</a>
+            </div>
+            <div class="con_title">
+                <img src="imgs/t_fee.png" alt="">
+            </div>
+            <div id="fee" class="fee_con re_fee_details">
+                <div class="fee_form">
+                    <div class="clearfix">
+                        <div class="left fee_left">
+                            <h5>请您填写：</h5>
+                            <div class="fee_left_form">
+                                <ul>
+                                    <li>
+                                        <label>美金货值</label>
+                                        <input type="text" name="" :class="{'error':formData.PriceUSDStatus ==0}" v-model.trim="formData.PriceUSD" @blur="changePriceUSD" placeholder="请输入…">
+                                        <span class="verify PriceUSD_verify"></span>
+                                    </li>
+                                    <li>
+                                        <label>实时汇率</label>
+                                        <input type="text" name="" :class="{'error':formData.CurrentRateStatus ==0}" v-model.trim="formData.CurrentRate" @blur="changeCurrentRate" placeholder="请输入…" disabled>
+                                    </li>
+                                    <li>
+                                        <label>代理费率(如：0.008)</label>
+                                        <input type="text" name="" :class="{'error':formData.AgentRateStatus ==0}" v-model.trim="formData.AgentRate" @blur="changeAgentRate" placeholder="请输入…">
+                                        <span class="verify AgentRate_verify"></span>
+                                    </li>
+                                    <li>
+                                        <label>关税率(如：0.05)</label>
+                                        <input type="text" name="" :class="{'error':formData.TariffRateStatus ==0}" v-model.trim="formData.TariffRate" @blur="changeTariffRate" placeholder="请输入…">
+                                        <span class="verify TariffRate_verify"></span>
+                                    </li>
+                                    <li>
+                                        <label>海关汇率</label>
+                                        <input type="text" name="" :class="{'error':formData.CustomRateStatus ==0}" v-model.trim="formData.CustomRate" @blur="changeCustomRate" placeholder="请输入…" disabled>
+                                    </li>
+                                    <li>
+                                        <label>海关增值税率</label>
+                                        <input type="text" name="" :class="{'error':formData.AddRateStatus == 0}" v-model.trim="formData.AddRate" @blur="changeAddRate" placeholder="请输入…">
+                                        <span class="verify AddRate_verify"></span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="left fee_mid">
+                            <img src="imgs/arrow.png" alt="">
+                        </div>
+                        <div class="left fee_left">
+                            <h5>计算结果：</h5>
+                            <div class="fee_left_form">
+                                <ul>
+                                    <li>
+                                        <label>货值</label>
+                                        <input type="text" name="" v-model.trim="PriceCHY" >
+                                    </li>
+                                    <li>
+                                        <label>代理费</label>
+                                        <input type="text" name="" v-model.trim="AgentPrice" >
+                                    </li>
+                                    <li>
+                                        <label>增值税</label>
+                                        <input type="text" name="" v-model.trim="AddTax" >
+                                    </li>
+                                    <li>
+                                        <label>关税</label>
+                                        <input type="text" name="" v-model.trim="TariffTax" >
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form_submit">
+                        <input type="button" value="计算" v-on:click="calValue">
+                        <input type="button" value="清空" v-on:click="clearValue">
+                    </div>
+                </div>
+                <div class="fee_desc">
+                    <h5>费用计算方式:</h5>
+                    <p>
+                        运保杂=0.002<br>
+                        1、货值=外币货值*实时汇率<br>
+                        2、代理费=外币货值*实时汇率*代理费率<br>
+                        <!--3、关税=保留2为小数(取整(保留2为小数(外币货值*(1+运保杂))*海关汇率) *关税率)<br>-->
+                        3、关税＝外币货值×1.002×海关汇率×关税率<br>
+                        <!--4、增值税=保留2位小数((取整(保留2位小数(外币货值*(1+运保杂))*海关汇率)+关税)*增值汇率)-->
+                        4、增值税＝外币货值×1.002×海关汇率×（1+关税率）×增值税率
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 底部 -->
+    <div id="footer_zh"></div>
+    <script>
+        $("#right_bar").load("rightBar.html");
+        $("#header").load("header.html", function () {
+            $("#footer_zh").load("footer.html");
+        });
+
+        var fee = new Vue({
+            el: "#fee",
+            data: {
+                formData: {
+                    PriceUSD: "",
+                    PriceUSDStatus: -1,
+                    PriceUSDText: "",
+                    CurrentRate: "",
+                    CurrentRateStatus: -1,
+                    CurrentRateText: "",
+                    AgentRate: "",
+                    AgentRateStatus: -1,
+                    AgentRateText: "",
+                    TariffRate: "",
+                    TariffRateStatus: -1,
+                    TariffRateText: "",
+                    CustomRate: "",
+                    CustomRateStatus: -1,
+                    CustomRateText: "",
+                    AddRate: 0.13,
+                    AddRateStatus: -1,
+                    AddRateText: "",
+                },
+                PriceCHY: "",
+                AgentPrice: "",
+                AddTax: "",
+                TariffTax: "",
+            },
+            mounted:function(){
+                var that = this;
+                axios({
+                    url: "/Home/GetRate",
+                    method: "post",
+                    data: {
+                        
+                    },
+                }).then(function (res) {
+                    if (res.data.type == "success") {
+                        var data = JSON.parse(res.data.data);
+                        that.formData.CurrentRate = data.rUSD;
+                        that.formData.CustomRate = data.cUSD;
+                    }
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            methods: {
+                clearValue: function () {
+                    this.clearComValue("PriceUSD");
+                    //this.clearComValue("CurrentRate");
+                    this.clearComValue("AgentRate");
+                    this.clearComValue("TariffRate");
+                    //this.clearComValue("CustomRate");
+                    this.clearComValue("AddRate");
+                    this.PriceCHY = "";
+                    this.AgentPrice = "";
+                    this.AddTax = "";
+                    this.TariffTax = "";
+                },
+                clearComValue: function (colunm) {
+                    this.formData[colunm] = "";
+                    this.formData[colunm + "Status"] = -1;
+                    this.formData[colunm + "Text"] = "";
+                },
+                changePriceUSD: function () {
+                    this.ValidValue("PriceUSD", "美金货值")
+                },
+                changeCurrentRate: function () {
+                    this.ValidValue("CurrentRate", "实时汇率")
+                },
+                changeAgentRate: function () {
+                    this.ValidValue("AgentRate", "代理费率")
+                },
+                changeTariffRate: function () {
+                    this.ValidValue("TariffRate", "关税率")
+                },
+                changeCustomRate: function () {
+                    this.ValidValue("CustomRate", "海关汇率")
+                },
+                changeAddRate: function () {
+                    this.ValidValue("AddRate", "海关增值税率")
+                },
+                ValidValue: function (column, name) {
+                    if (this.formData[column] == "") {
+                        this.formData[column + "Status"] = 0;
+                        this.formData[column + "Text"] = name + "不能为空";
+                        $("." + column + "_verify").stop().show().html(this.formData[column + "Text"]);
+                        return false;
+                    } else if (!this.ValidDecimal(this.formData[column])) {
+                        this.formData[column + "Status"] = 0;
+                        this.formData[column + "Text"] = "请输入正确格式的" + name;
+                        $("." + column + "_verify").stop().show().html(this.formData[column + "Text"]);
+                        return false;
+                    } else {
+                        this.formData[column + "Status"] = 1;
+                        $("." + column + "_verify").stop().hide();
+                        return true;
+                    }
+
+                },
+                calValue: function () {
+                    if (this.ValidValue("PriceUSD", "美金货值") && this.ValidValue("CurrentRate", "实时汇率") && this.ValidValue("AgentRate", "代理费率") && this.ValidValue("TariffRate", "关税率") && this.ValidValue("CustomRate", "海关汇率") && this.ValidValue("AddRate", "海关增值税率")) {
+                        var tariffTax = (Math.round((this.formData.PriceUSD * 1.002).toFixed(2) * this.formData.CustomRate) * this.formData.TariffRate).toFixed(2);                      
+                        
+                        this.PriceCHY = (this.formData.PriceUSD * this.formData.CurrentRate).toFixed(2);
+                        this.AgentPrice = (this.formData.PriceUSD * this.formData.CurrentRate * this.formData.AgentRate).toFixed(2);
+                        this.AddTax = ((Number(Math.round((this.formData.PriceUSD * 1.002).toFixed(2) * this.formData.CustomRate)) + Number(tariffTax)) * this.formData.AddRate ).toFixed(2);
+                        this.TariffTax = tariffTax;
+                    }
+                },
+                //验证整数和小数
+                ValidDecimal: function (str) {
+                    var reg = /^[0-9]+([.]{1}[0-9]+){0,1}$/;
+                    if (reg.test(str) === false) {
+                        return false;
+                    }
+                    return true;
+                }
+            }
+        });
+
+    </script>
+
+</body>
+
+</html>

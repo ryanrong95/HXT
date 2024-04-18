@@ -1,0 +1,254 @@
+﻿<template id="newoutstoragespecialrequire">
+    <div>
+        <div class="mt12">
+            <el-checkbox-group v-model="specialRequireValues">
+                <!-- 发货单上传文件 -->
+                <div class="mb10" style="width: 100%; height: 30px;">
+                    <el-checkbox :label="1" style="float: left; margin-top: 5px;">发货单格式</el-checkbox>
+
+                    <div class="btn-tb-list clearfix" id="FaHuoDanUpload" style="float: left;" v-show="isCheckFaHuoDan">
+                        <el-upload class="fl" action=""
+                                   :show-file-list="false"
+                                   :http-request="httpRequestFaHuoDan"
+                                   accept="image/jpg, image/bmp, image/jpeg, image/gif, image/png, application/pdf"
+                                   style="width: 82px; height: 30px;">
+                            <button style="margin-left: 24px;">上传附件</button>
+                        </el-upload>
+                    </div>
+
+                    <div v-show="fileInfoFaHuoDan.IsUploaded" style="height: 32px; float: left; margin-left: 40px;" id="FaHuoDanFileShow">
+                        <div class="file_icon fl"></div>
+                        <div class="fl c_right" style="height: 32px; margin-left: 3px; margin-top: 3px;">
+                            <p class="file_name" style="height: 16px; width: 100%; font-size: 10px;">{{fileInfoFaHuoDan.FileName}}</p>
+                            <a :href="fileInfoFaHuoDan.FileUrl" target="_blank" class="link" style="height: 16px; width: 30px; font-size: 10px;">预览</a>
+                            <a v-on:click="deleteFileFaHuoDan" target="_blank" class="link" style="height: 16px; width: 30px; font-size: 10px; margin-left: 15px;">删除</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 客户标签上传文件 -->
+                <div class="mb10" style="width: 100%; height: 30px;">
+                    <el-checkbox :label="2" style="float: left; margin-top: 5px;">客户标签格式</el-checkbox>
+
+                    <div class="btn-tb-list clearfix" id="KeHuBiaoQianUpload" style="float: left;" v-show="isCheckKeHuBiaoQian">
+                        <el-upload class="fl" action=""
+                                   :show-file-list="false"
+                                   :http-request="httpRequestKeHuBiaoQian"
+                                   accept="image/jpg, image/bmp, image/jpeg, image/gif, image/png, application/pdf"
+                                   style="width: 82px; height: 30px;">
+                            <button style="margin-left: 10px;">上传附件</button>
+                        </el-upload>
+                    </div>
+
+                    <div v-show="fileInfoKeHuBiaoQian.IsUploaded" style="height: 32px; float: left; margin-left: 26px;" id="KeHuBiaoQianFileShow">
+                        <div class="file_icon fl"></div>
+                        <div class="fl c_right" style="height: 32px; margin-left: 3px; margin-top: 3px;">
+                            <p class="file_name" style="height: 16px; width: 100%; font-size: 10px;">{{fileInfoKeHuBiaoQian.FileName}}</p>
+                            <a :href="fileInfoKeHuBiaoQian.FileUrl" target="_blank" class="link" style="height: 16px; width: 30px; font-size: 10px;">预览</a>
+                            <a v-on:click="deleteFileKeHuBiaoQian" target="_blank" class="link" style="height: 16px; width: 30px; font-size: 10px; margin-left: 15px;">删除</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 其他要求输入框 -->
+                <div class="mb10" style="width: 100%;">
+                    <el-checkbox :label="3" style="float: left; margin-top: 5px;">其他要求</el-checkbox>
+
+                    <div>
+                        <el-input size="mini" placeholder="" :disabled="otherRequireDisabled" v-model="otherRequire" style="width: 200px; margin-left: 38px;" auto-complete="off"></el-input>
+                    </div>
+                </div>
+            </el-checkbox-group>
+        </div>
+    </div>
+</template>
+<script>
+    Vue.component(
+        'newoutstoragespecialrequire',
+        {
+            template: "#newoutstoragespecialrequire",
+            data: function () {
+                return {
+                    specialRequireOptions: [], //入库订单特殊要求选项
+                    specialRequireValues: [], //入库订单特殊要求的值
+                    otherRequire: "", //其他要求的值
+                    otherRequireDisabled: true,
+
+                    //发货单文件信息
+                    fileInfoFaHuoDan: {
+                        IsUploaded: false, //是否上传
+                        FileUrl: "",
+                        URL: "",
+                        FileName: "",
+                        fileFormat: "",
+                    },
+                    //客户标签文件信息
+                    fileInfoKeHuBiaoQian: {
+                        IsUploaded: false, //是否上传
+                        FileUrl: "",
+                        URL: "",
+                        FileName: "",
+                        fileFormat: "",
+                    },
+
+                    isCheckFaHuoDan: false, //是否选择发货单格式
+                    isCheckKeHuBiaoQian: false, //是否选择客户标签格式
+                }
+            },
+            watch: {
+                specialRequireValues: function (newVal, oldVal) {
+                    //其他要求
+                    if (this.checkChange(newVal, oldVal, 3)) {
+                        if (newVal.indexOf(3) == -1) {
+                            //取消选择其他要求
+                            this.otherRequireDisabled = true;
+                            this.otherRequire = "";
+                        } else {
+                            //选择其他要求
+                            this.otherRequireDisabled = false;
+                        }
+                    }
+
+                    //发货单格式
+                    if (this.checkChange(newVal, oldVal, 1)) {
+                        if (newVal.indexOf(1) == -1) {
+                            //取消选择发货单格式
+                            this.isCheckFaHuoDan = false;
+                            this.deleteFileFaHuoDan();
+                        } else {
+                            //选择发货单格式
+                            this.isCheckFaHuoDan = true;
+                        }
+                    }
+
+                    //客户标签格式
+                    if (this.checkChange(newVal, oldVal, 2)) {
+                        if (newVal.indexOf(2) == -1) {
+                            //取消选择客户标签格式
+                            this.isCheckKeHuBiaoQian = false;
+                            this.deleteFileKeHuBiaoQian();
+                        } else {
+                            //选择客户标签格式
+                            this.isCheckKeHuBiaoQian = true;
+                        }
+                    }
+                },
+            },
+            methods: {
+                //检查数组中某个值是否有变化
+                checkChange(newVal, oldVal, targetVal) {
+                    if ((newVal.indexOf(targetVal) == -1) && (oldVal.indexOf(targetVal) == -1)) {
+                        //新的没有, 老的也没有, 没变化
+                        return false;
+                    }
+                    if ((newVal.indexOf(targetVal) > -1) && (oldVal.indexOf(targetVal) > -1)) {
+                        //新的有, 老的也有, 没变化
+                        return false;
+                    }
+                    //否则就是有变化
+                    return true;
+                },
+                //上传发货单附件
+                httpRequestFaHuoDan: function (options) {
+                    var that = this;
+                    UploadFile(options,
+                        '/Order/UploadFileFaHuoDan',
+                        function (res) {
+                            if (res.type) {
+                                var file = res.file;
+                                that.fileInfoFaHuoDan.IsUploaded = true;
+                                that.fileInfoFaHuoDan.FileUrl = file.fullURL;
+                                that.fileInfoFaHuoDan.URL = file.URL;
+                                that.fileInfoFaHuoDan.FileName = file.name;
+                                that.fileInfoFaHuoDan.fileFormat = file.fileFormat;
+                            } else {
+                                that.onAlert("error", res.msg);
+                            }
+                        });
+                },
+                //上传客户标签文件
+                httpRequestKeHuBiaoQian: function (options) {
+                    var that = this;
+                    UploadFile(options,
+                        '/Order/UploadFileKeHuBiaoQian',
+                        function (res) {
+                            if (res.type) {
+                                var file = res.file;
+                                that.fileInfoKeHuBiaoQian.IsUploaded = true;
+                                that.fileInfoKeHuBiaoQian.FileUrl = file.fullURL;
+                                that.fileInfoKeHuBiaoQian.URL = file.URL;
+                                that.fileInfoKeHuBiaoQian.FileName = file.name;
+                                that.fileInfoKeHuBiaoQian.fileFormat = file.fileFormat;
+                            } else {
+                                that.onAlert("error", res.msg);
+                            }
+                        });
+                },
+                //删除发货单格式文件
+                deleteFileFaHuoDan: function () {
+                    this.fileInfoFaHuoDan.IsUploaded = false;
+                    this.fileInfoFaHuoDan.FileUrl = "";
+                    this.fileInfoFaHuoDan.URL = "";
+                    this.fileInfoFaHuoDan.FileName = "";
+                    this.fileInfoFaHuoDan.fileFormat = "";
+
+                    var index = this.specialRequireValues.indexOf(1);
+                    if (index > -1) {
+                        this.specialRequireValues.splice(index, 1);
+                    }
+                    this.isCheckFaHuoDan = false;
+                },
+                //删除客户标签格式文件
+                deleteFileKeHuBiaoQian: function () {
+                    this.fileInfoKeHuBiaoQian.IsUploaded = false;
+                    this.fileInfoKeHuBiaoQian.FileUrl = "";
+                    this.fileInfoKeHuBiaoQian.URL = "";
+                    this.fileInfoKeHuBiaoQian.FileName = "";
+                    this.fileInfoKeHuBiaoQian.fileFormat = "";
+
+                    var index = this.specialRequireValues.indexOf(2);
+                    if (index > -1) {
+                        this.specialRequireValues.splice(index, 1);
+                    }
+                    this.isCheckKeHuBiaoQian = false;
+                },
+            },
+            mounted: function () {
+
+            },
+            created: function () {
+                //获取出库订单特殊要求选项
+                var that = this;
+                axios.get('/Miscellaneous/StorageOutSpecialRequires', { params: {} })
+                    .then(function (res) {
+                        if (res.data.success == 200) {
+                            that.specialRequireOptions = res.data.result;
+                        }
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    });
+            },
+        });
+</script>
+<style>
+    #FaHuoDanUpload button {
+        width: 82px;
+    }
+
+    #KeHuBiaoQianUpload button {
+        width: 82px;
+    }
+
+    #FaHuoDanFileShow .file_icon {
+        background: url(/Content/img/icon_file1.png);
+        width: 23px;
+        height: 26px;
+    }
+
+    #KeHuBiaoQianFileShow .file_icon {
+        background: url(/Content/img/icon_file1.png);
+        width: 23px;
+        height: 26px;
+    }
+</style>

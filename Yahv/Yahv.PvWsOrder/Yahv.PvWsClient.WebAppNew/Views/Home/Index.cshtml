@@ -1,0 +1,378 @@
+﻿@using Yahv.Underly
+
+@{
+    
+}
+<style>
+    .color_red {
+        color: red !important;
+    }
+</style>
+<div class="content" id="nr" v-cloak>
+    <!-- 公司名称 -->
+    <div class="clearfix">
+        <div class="fl clearfix company_info">
+            <div class="fl company_name">
+                <h2>{{UserName}}</h2>
+                <p>欢迎您在芯达通下单，我们竭诚为您服务！</p>
+            </div>
+            <div class="fl company_code">
+                <p>{{EnterCode}}</p>
+                <span>客户代码(入仓号)</span>
+
+            </div>
+        </div>
+        <div class="fl clearfix erweima">
+            <img src="~/Content/img/erweima.png" class="fl">
+            <div class="fl erweima_text">
+                <h4>关注芯达通微信</h4>
+                <p>微信扫一扫关注</p>
+                <p>轻松查询订单跟踪物流</p>
+            </div>
+        </div>
+    </div>
+    <!-- 未完善基本信息 -->
+    <div v-if="IsValid == '0'" id="tipTitle" style="border:1px solid #fdc9c9; background-color: #fdf3f3; border-radius: 5px; margin-top: 20px; height: 40px;">
+        <div class="sectitle" style="margin-top: 12px;">
+            <img src="~/Content/n_img/bell_min.png" style="float: left; padding-left: 40%; padding-top: 1px; padding-right: 10px;" />
+            <span style="color: #666666;">未完善基本信息！</span>
+            <a href="/Home/MemberInfo"><span style="color: #f33131;">去完善》</span></a>
+        </div>
+    </div>
+    <!-- 我的信用 -->
+    <div class="infos">
+        <table>
+            <tbody>
+                <tr class="first_tr">
+                    <td colspan="5">
+                        <span class="info_credit">我的信用额度</span>
+                        <span>总授信额度：<i class="price">¥{{indexData.TotalCredit.TotalCredit}}</i></span>
+                        <span>总消费额：<i class="price">¥{{indexData.TotalCredit.TotalCost}}</i></span>
+                    </td>
+                </tr>
+                @if ((ViewBag.ThePageIsCustoms == true && ViewBag.ThePageIsWarehouse == true) || (ViewBag.ThePageIsCustoms == true && ViewBag.ThePageIsWarehouse == false))
+                {
+                    <tr class="second_tr">
+                        <td>
+                            <h5>货款</h5>
+                            <p :class="isNegNum(indexData.GoodsData.total)">授信额度：￥{{indexData.GoodsData.total}}</p>
+                            <p :class="isNegNum(indexData.GoodsData.left)">可用额度：￥{{indexData.GoodsData.left}}</p>
+                        </td>
+                        <td>
+                            <h5>税款</h5>
+                            <p :class="isNegNum(indexData.TaxData.total)">授信额度：￥{{indexData.TaxData.total}}</p>
+                            <p :class="isNegNum(indexData.TaxData.left)">可用额度：￥{{indexData.TaxData.left}}</p>
+                        </td>
+                        <td>
+                            <h5>代理费</h5>
+                            <p :class="isNegNum(indexData.AgentData.total)">授信额度：￥{{indexData.AgentData.total}}</p>
+                            <p :class="isNegNum(indexData.AgentData.left)">可用额度：￥{{indexData.AgentData.left}}</p>
+                        </td>
+                        @if (ViewBag.ThePageIsWarehouse == true)
+                        {
+                            <td>
+                                <h5>香港支付额度</h5>
+                                <p :class="isNegNum(indexData.WareHouseData.total)">授信额度：$ {{indexData.WareHouseData.total}}</p>
+                                <p :class="isNegNum(indexData.WareHouseData.left)">可用额度：$ {{indexData.WareHouseData.left}}</p>
+                            </td>
+                        }
+                        <td>
+                            <h5>杂费</h5>
+                            <p :class="isNegNum(indexData.OtherData.total)">授信额度：￥{{indexData.OtherData.total}}</p>
+                            <p :class="isNegNum(indexData.OtherData.left)">可用额度：￥{{indexData.OtherData.left}}</p>
+                        </td>
+                    </tr>
+                    <tr class="first_tr">
+                        <td>待付款订单： {{indexData.UnPayOrders}}</td>
+                        <td>已完成订单：{{indexData.CompletedOrders}}</td>
+                        <td colspan="3">账户余额：(人民币) ¥{{indexData.TotalCredit.TotalLeft}} ;   (美元)${{indexData.TotalCredit.TotalLeftUSD}} </td>
+                    </tr>
+                    <tr class="first_tr fourth_tr">
+                        @if (ViewBag.ThePageIsCustoms == true && ViewBag.ThePageIsWarehouse == false)
+                        {
+                            <td colspan="5">
+                                <span>待确认订单： 代报关：<a href="/Declare/UnConfirmedDecList"><i>{{indexData.DeclareOrders}}</i></a></span>
+                            </td>
+                        }
+                        @if (ViewBag.ThePageIsCustoms == true && ViewBag.ThePageIsWarehouse == true)
+                        {
+                            <td colspan="2">
+                                <span>待确认订单： 代报关：<a href="/Declare/UnConfirmedDecList"><i>{{indexData.DeclareOrders}}</i></a></span>
+                                <span>代收货：<a href="/Orders/ReceivedList"><i>{{indexData.RecievedOrders}}</i></a></span>
+                                <span>代发货：<a href="/Orders/DeliveryList"><i>{{indexData.DeliveryOrders}}</i></a></span>
+                            </td>
+                            <td colspan="3">
+                                <span>待付款申请：<a href="/Orders/PrePayApplyList"><i>{{indexData.PayApplications}}</i></a></span>
+                            </td>
+                        }
+                    </tr>
+                }
+                @if (ViewBag.ThePageIsCustoms == false && ViewBag.ThePageIsWarehouse == false)
+                {
+                    <tr class="second_tr">
+                        <td>
+                            <h5>货款</h5>
+                            <p :class="isNegNum(indexData.GoodsData.total)">授信额度：￥{{indexData.GoodsData.total}}</p>
+                            <p :class="isNegNum(indexData.GoodsData.left)">可用额度：￥{{indexData.GoodsData.left}}</p>
+                        </td>
+                        <td>
+                            <h5>税款</h5>
+                            <p :class="isNegNum(indexData.TaxData.total)">授信额度：￥{{indexData.TaxData.total}}</p>
+                            <p :class="isNegNum(indexData.TaxData.left)">可用额度：￥{{indexData.TaxData.left}}</p>
+                        </td>
+                        <td>
+                            <h5>代理费</h5>
+                            <p :class="isNegNum(indexData.AgentData.total)">授信额度：￥{{indexData.AgentData.total}}</p>
+                            <p :class="isNegNum(indexData.AgentData.left)">可用额度：￥{{indexData.AgentData.left}}</p>
+                        </td>
+                        <td>
+                            <h5>香港支付额度</h5>
+                            <p :class="isNegNum(indexData.WareHouseData.total)">授信额度：$ {{indexData.WareHouseData.total}}</p>
+                            <p :class="isNegNum(indexData.WareHouseData.left)">可用额度：$ {{indexData.WareHouseData.left}}</p>
+                        </td>
+                        <td>
+                            <h5>杂费</h5>
+                            <p :class="isNegNum(indexData.OtherData.total)">授信额度：￥{{indexData.OtherData.total}}</p>
+                            <p :class="isNegNum(indexData.OtherData.left)">可用额度：￥{{indexData.OtherData.left}}</p>
+                        </td>
+                    </tr>
+                    <tr class="first_tr">
+                        <td>待付款订单： {{indexData.UnPayOrders}}</td>
+                        <td>已完成订单：{{indexData.CompletedOrders}}</td>
+                        <td colspan="3">账户余额：(人民币) ¥{{indexData.TotalCredit.TotalLeft}} ;   (美元)${{indexData.TotalCredit.TotalLeftUSD}} </td>
+                    </tr>
+                    <tr class="first_tr fourth_tr">
+                        <td colspan="2">
+                            <span>待确认订单： 代报关：<a href="/Declare/UnConfirmedDecList"><i>{{indexData.DeclareOrders}}</i></a></span>
+                            <span>代收货：<a href="/Orders/ReceivedList"><i>{{indexData.RecievedOrders}}</i></a></span>
+                            <span>代发货：<a href="/Orders/DeliveryList"><i>{{indexData.DeliveryOrders}}</i></a></span>
+                        </td>
+                        <td colspan="3">
+                            <span>待付款申请：<a href="/Orders/PrePayApplyList"><i>{{indexData.PayApplications}}</i></a></span>
+                        </td>
+                    </tr>
+                }
+                @if (ViewBag.ThePageIsCustoms == false && ViewBag.ThePageIsWarehouse == true)
+                {
+                    <tr class="second_tr" style="height: 46px;">
+                        <td colspan="5">
+                            <span><strong>香港支付额度</strong></span>
+                            <span :class="isNegNum(indexData.WareHouseData.total)" style="color: #999; margin-left: 140px;">授信额度：$ {{indexData.WareHouseData.total}}</span>
+                            <span :class="isNegNum(indexData.WareHouseData.left)" style="color: #999; margin-left: 140px;">可信额度：$ {{indexData.WareHouseData.left}}</span>
+                        </td>
+                    </tr>
+                    <tr class="first_tr fourth_tr" style="height: 46px;">
+                        <td colspan="5">
+                            <span>待付款申请：<a href="/Orders/PrePayApplyList"><i>{{indexData.PayApplications}}</i></a></span>
+                            <span>代收货：<a href="/Orders/ReceivedList"><i>{{indexData.RecievedOrders}}</i></a></span>
+                            <span>代发货：<a href="/Orders/DeliveryList"><i>{{indexData.DeliveryOrders}}</i></a></span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    @if ((ViewBag.ThePageIsCustoms == false && ViewBag.ThePageIsWarehouse == false) || (ViewBag.ThePageIsCustoms == true))
+    {
+        <!-- 报关订单状态 -->
+        <div class="dec-status">
+            <ul class="clearfix">
+                <li v-on:click="linkToDeclareList('@(CgOrderStatus.待审核.GetHashCode().ToString())')">
+                    <img class="dark" src="~/Content/images/dec_icon/dec_001.png" />
+                    <img class="light" src="~/Content/images/dec_icon/dec_001_light.png" />
+                    <div class="statusname dark">待审核</div>
+                    <div class="statusname light">待审核</div>
+                </li>
+                <li v-on:click="linkToDeclareList('@(CgOrderStatus.待确认.GetHashCode().ToString())')">
+                    <img class="dark" src="~/Content/images/dec_icon/dec_002.png" />
+                    <img class="light" src="~/Content/images/dec_icon/dec_002_light.png" />
+                    <div class="statusname dark">待确认</div>
+                    <div class="statusname light">待确认</div>
+                </li>
+                <li v-on:click="linkToDeclareList('@(CgOrderStatus.待交货.GetHashCode().ToString())')">
+                    <img class="dark" src="~/Content/images/dec_icon/dec_003.png" />
+                    <img class="light" src="~/Content/images/dec_icon/dec_003_light.png" />
+                    <div class="statusname dark">待交货</div>
+                    <div class="statusname light">待交货</div>
+                </li>
+                <li v-on:click="linkToDeclareList('@(CgOrderStatus.已装箱.GetHashCode().ToString())')">
+                    <img class="dark" src="~/Content/images/dec_icon/dec_008.png" />
+                    <img class="light" src="~/Content/images/dec_icon/dec_008_light.png" />
+                    <div class="statusname dark">已装箱</div>
+                    <div class="statusname light">已装箱</div>
+                </li>
+                <li v-on:click="linkToDeclareList('@(CgOrderStatus.待报关.GetHashCode().ToString())')">
+                    <img class="dark" src="~/Content/images/dec_icon/dec_004.png" />
+                    <img class="light" src="~/Content/images/dec_icon/dec_004_light.png" />
+                    <div class="statusname dark">待报关</div>
+                    <div class="statusname light">待报关</div>
+                </li>
+                <li v-on:click="linkToDeclareList('@(CgOrderStatus.待收货.GetHashCode().ToString())')">
+                    <img class="dark" src="~/Content/images/dec_icon/dec_005.png" />
+                    <img class="light" src="~/Content/images/dec_icon/dec_005_light.png" />
+                    <div class="statusname dark">待收货</div>
+                    <div class="statusname light">待收货</div>
+                </li>
+                <li v-on:click="linkToDeclareList('@(CgOrderStatus.客户已收货.GetHashCode().ToString())')">
+                    <img class="dark" src="~/Content/images/dec_icon/dec_006.png" />
+                    <img class="light" src="~/Content/images/dec_icon/dec_006_light.png" />
+                    <div class="statusname dark">已收货</div>
+                    <div class="statusname light">已收货</div>
+                </li>
+                <li v-on:click="linkToDeclareList('all')">
+                    <img class="dark" src="~/Content/images/dec_icon/dec_007.png" />
+                    <img class="light" src="~/Content/images/dec_icon/dec_007_light.png" />
+                    <div class="statusname dark">全部</div>
+                    <div class="statusname light">全部</div>
+                </li>
+            </ul>
+        </div>
+    }
+    <!-- 实时订单 -->
+    <div class="orders">
+        <h2>实时订单</h2>
+        <table>
+            <colgroup>
+                <col width="35">
+                <col width="230">
+                <col width="230">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>下单时间</th>
+                    <th>订单编号</th>
+                    <th>订单类型</th>
+                    <th>当前进度</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(item,index) in OrderList">
+                    <td>{{index+1}}</td>
+                    <td>{{item.CreateDate}}</td>
+                    <td><a class="link"><span v-on:click="detail(item)">{{item.ID}}</span></a></td>
+                    <td>{{item.TypeName}}</td>
+                    <td>{{item.MainStatus}}</td>
+                    <td><a class="link"><span v-on:click="detail(item)">查看详情</span></a></td>
+                </tr>
+                <tr v-if="OrderList.length==0">
+                    <td colspan="6">暂无数据</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- 便捷服务 -->
+    <div class="services">
+        <h2>便捷服务</h2>
+        <ul class="clearfix">
+            <li>
+                <a href="@System.Configuration.ConfigurationManager.AppSettings["DomainForIC"]/InfoQuery.html" target="_blank">
+                    <i></i>
+                    <p>归类在线查询</p>
+                </a>
+            </li>
+            <li>
+                <a href="@System.Configuration.ConfigurationManager.AppSettings["DomainForIC"]/feeCount.html" target="_blank">
+                    <i></i>
+                    <p>费用计算</p>
+                </a>
+            </li>
+            <li>
+                <a href="@System.Configuration.ConfigurationManager.AppSettings["DomainForIC"]/downloadCenter.html" target="_blank">
+                    <i></i>
+                    <p>下载中心</p>
+                </a>
+            </li>
+            <li>
+                <a href="@System.Configuration.ConfigurationManager.AppSettings["DomainForIC"]/rateQuery.html" target="_blank">
+                    <i></i>
+                    <p>实时汇率查询</p>
+                </a>
+            </li>
+
+        </ul>
+    </div>
+</div>
+
+<script>
+    var nr = new Vue({
+        el: "#nr",
+        data: function(){
+             return {
+                 indexData: {
+                     GoodsData: { total: "**", left: "**" },
+                     TaxData: { total: "**", left: "**" },
+                     AgentData: { total: "**", left: "**" },
+                     OtherData: { total: "**", left: "**" },
+                     WareHouseData: { total: "**", left: "**" },
+                     TotalCredit: {
+                         TotalCredit: "**", TotalCost: "**",
+                         TotalLeft: "**", TotalLeftUSD: "**"
+                     }, CompletedOrders: "**",
+                     UnPayOrders: "**",
+                     DeclareOrders: "**",
+                     RecievedOrders: "**",
+                     DeliveryOrders: "**",
+                     PayApplications: "**",
+
+                 },
+                 OrderList:  @Html.Raw(Json.Encode(@ViewBag.OrderList)),
+                 EnterCode: '@ViewBag.EnterCode',
+                 UserName: '@ViewBag.UserName',
+                 IsValid: '@ViewBag.IsValid',
+            }
+        },
+        created: function () {
+            this.init();
+        },
+        methods: {
+            detail: function (item) {
+                if (item.Type == "1") {
+                    commonSkip(item.ID, '/Orders/StorageDetail', -1, -1);
+                } else if (item.Type == "2") {
+                    commonSkip(item.ID, '/Orders/StorageTransDetail', -1, -1);
+                } else if (item.Type == "3") {
+                    commonSkip(item.ID, '/Orders/DeliveryDetail', -1, -1);
+                } else if (item.Type == "4") {
+                    commonSkip(item.ID, '/Declare/TransDecDetail', -1, -1);
+                } else if (item.Type == "5") {
+                    commonSkip(item.ID, '/Declare/DeclareDetail', -1, -1);
+                }
+            },
+            isNegNum:function(num) {
+                if (num.indexOf('-')>-1) {
+                    return 'color_red';
+                } else {
+                    return '';
+                }
+            },
+            init: function(init){
+                var that = this;
+                axios({
+                    url: "/Home/GetIndexData",
+                    method: "post"
+                }).then(function (res) {
+                    that.indexData = JSON.parse(res.data.data);
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            linkToDeclareList(dec_status) {
+                var param = JSON.stringify({ dec_status: dec_status, });
+                //JS模拟post提交
+                var REVQForm = document.createElement("form");
+                REVQForm.setAttribute("method", 'POST');
+                REVQForm.setAttribute("action", '/Declare/DeclareList');
+                REVQForm.innerHTML = "";
+                var stuAnswerInput = document.createElement("input");
+                stuAnswerInput.setAttribute("type", "hidden");
+                stuAnswerInput.setAttribute("name", 'param');
+                stuAnswerInput.setAttribute("value", param);
+                REVQForm.appendChild(stuAnswerInput);
+                document.body.appendChild(REVQForm);
+                REVQForm.submit();
+            },
+        }
+    })
+</script>

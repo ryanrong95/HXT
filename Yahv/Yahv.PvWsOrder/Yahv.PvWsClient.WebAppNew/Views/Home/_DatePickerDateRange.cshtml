@@ -1,0 +1,95 @@
+﻿<template id="datePicker_dateRange">
+    <div class="order-date">
+        <el-button class="unselected" type="text" v-on:click="orderDateSimpleBtnClicked('今日')" btn-type="今日">今日</el-button>
+        <el-button class="unselected" type="text" v-on:click="orderDateSimpleBtnClicked('七日')" btn-type="七日">七日</el-button>
+        <el-button class="unselected" type="text" v-on:click="orderDateSimpleBtnClicked('本月')" btn-type="本月">本月</el-button>
+        <el-button class="unselected" type="text" v-on:click="orderDateSimpleBtnClicked('自定义')" btn-type="自定义">自定义</el-button>
+        <div id="order-date-picker-container">
+            <el-date-picker class="ml6" style="width:250px;" size="small" v-model="dataValue"
+                            type="daterange"
+                            range-separator="至"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期">
+            </el-date-picker>
+        </div>
+    </div>
+</template>
+<style>
+    .order-date .el-button {
+        float: left;
+        margin: 6px 4px 0 4px;
+        padding: 0;
+        background-color: transparent !important;
+        border-color: transparent !important;
+        color: #409EFF;
+    }
+
+        .order-date .el-button.unselected,
+        .order-date .el-button.unselected:focus,
+        .order-date .el-button.unselected:hover {
+            color: #c0c4cc;
+        }
+
+    #order-date-picker-container {
+        float: left;
+        width: 260px;
+        display: none;
+        margin-left: 6px;
+    }
+</style>
+<script>
+    Vue.component(
+        'date-picker-daterange',
+        {
+            template: "#datePicker_dateRange",
+            data() {
+                return {
+                    dataValue: "",
+                }
+            },
+            methods: {
+                // 获取 dataValue, 就是该项目中大多数 el-date-picker(daterange) 的绑定值
+                getDataValue() {
+                    return this.dataValue;
+                },
+                // 下单日期简化按钮点击
+                orderDateSimpleBtnClicked(type) {
+                    $('.order-date .el-button').addClass('unselected');
+                    $('.order-date .el-button[btn-type="' + type + '"]').removeClass('unselected');
+                    var datePicker = $('#order-date-picker-container');
+                    switch (type) {
+                        case '今日':
+                            this.dataValue = [new Date(), new Date()];
+                            datePicker.hide();
+                            break;
+                        case '七日':
+                            var sevenDayAgoDateStamp = new Date().setDate((new Date().getDate() - 6));  // 包含今天就减6
+                            this.dataValue = [new Date(sevenDayAgoDateStamp), new Date()];
+                            datePicker.hide();
+                            break;
+                        case '本月':
+                            this.dataValue = [this.getNowMonthFirst(), this.getNowMonthLast()];
+                            datePicker.hide();
+                            break;
+                        case '自定义':
+                            datePicker.show();
+                            break;
+                        default:
+                            return;
+                    }
+                },
+                // 获取本月第一天
+                getNowMonthFirst() {
+                    const date = new Date();
+                    date.setDate(1);
+                    return date;
+                },
+                // 获取本月最后一天
+                getNowMonthLast() {
+                    const date = new Date();
+                    const enddate = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+                    return enddate;
+                },
+            },
+        });
+</script>

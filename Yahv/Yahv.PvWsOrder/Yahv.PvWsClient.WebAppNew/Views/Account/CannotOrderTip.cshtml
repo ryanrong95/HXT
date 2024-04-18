@@ -1,0 +1,51 @@
+﻿
+@{
+    ViewBag.title = "您暂时无法下单";
+}
+
+<style>
+    #tipTitle h2 {
+        font-size: 18px;
+        color: #dc5510;
+        margin-bottom: 12px;
+        font-weight: normal;
+        text-align: center;
+    }
+</style>
+
+<div id="cannotOrder" v-cloak>
+    <div id="tipTitle" style="        border: 1px solid #dc5510;
+        border-radius: 5px;">
+        <div class="sectitle">
+            <h2 style="margin: 12px; font-weight: 600;">您当前被评定为六级，不允许下单，请联系业务员！</h2>
+        </div>
+
+    </div>
+</div>
+<script>
+
+    var complete = new Vue({
+        el: "#cannotOrder",
+
+        data: function () {
+            return {
+
+            }
+        },
+
+        methods: {
+
+            toFixed: function (num, val) {
+                return val.toFixed(num);
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                    offset: 100
+                });
+            }
+        }
+    });
+</script>

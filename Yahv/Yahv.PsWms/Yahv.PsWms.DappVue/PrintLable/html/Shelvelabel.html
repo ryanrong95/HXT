@@ -1,0 +1,129 @@
+﻿<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>库位标签</title>
+    <script type="text/javascript" src="/PrintLable/js/jquery-1.3.2.min.js"></script>
+    <script type="text/javascript" src="/PrintLable/js/vue.js"></script>
+    <script type="text/javascript" src="/PrintLable/js/vue-barcode.js"></script>
+    <script type="text/javascript" src="/PrintLable/js/moment.js"></script>
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    body, html {
+        background: #ffffff;
+        width: 100%;
+        height: 100%;
+    }
+
+    #app {
+        width: 363px;
+        height: 363px;
+        margin: 0 auto;
+    }
+
+    .product {
+        width: 6cm;
+        height: 4cm;
+        /*overflow: hidden;*/
+        /*border: 1px solid #ddd;*/
+        font-size: 12px;
+        margin: 0 auto;
+    }
+
+    .boxprint {
+        margin: 0;
+        padding: 10px;
+    }
+
+    ul li {
+        list-style: none;
+        float: left;
+        width: 33%;
+    }
+
+    .setleft {
+        padding-left: 5px;
+        padding-top: 10px;
+        text-align: center;
+    }
+</style>
+
+<body>
+    <div id="app">
+        <div class="product">
+            <div v-if="listdata!=null">
+                <div class="barcodebox" style="text-align: center;;padding-top:5px">
+                    <barcode v-bind:value="barcodedata" v-bind:options="barcode_option" tag="svg"></barcode>
+                </div>
+                <p class="setleft">代仓储：{{listdata.Company}}</p>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+		$(function() {
+	           var  listdata = null;
+	          if (window['model']) {
+	              listdata = model.listdata;
+	          } else {
+	              listdata = null;
+	          }
+
+			var Vue = window.Vue;
+			var VueBarcode = window.VueBarcode;
+			Vue.component('barcode', VueBarcode);
+
+			new Vue({
+				el: '#app',
+				data: {
+					barcode_option: {
+						displayValue: true, //是否默认显示条形码数据
+						//textPosition  :'top', //条形码数据显示的位置
+						background: "#fff", //条形码背景颜色
+						valid: function(valid) {},
+						width: "1.7px", //单个条形码的宽度
+						height: "30px",
+						fontSize: "18px", //字体大小
+						fontFamily: "微软雅黑",
+						format: "CODE128", //选择要使用的条形码类型
+						margin: 2
+					},
+                    listdata: listdata,
+                    barcodedata:null
+
+				},
+				created() {
+
+				},
+                mounted() {
+                    this.barcodedata = 'SC:' + listdata.ShelveCode
+                },
+				filters: {
+					showDate: function(val) {
+						return moment(val).format('YYYY-MM-DD');
+					},
+					showboxcode: function(val) {
+						if(val != "" && val != null) {
+							if(val.indexOf("]") == -1) {
+								return val
+							} else {
+								if(val || "") {
+									var b = val.split("]")[1];
+									return b;
+								}
+							}
+						}
+					}
+				},
+			});
+		})
+</script>
+
+</html>

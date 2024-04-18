@@ -1,0 +1,164 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>芯达通</title>
+    <link rel="stylesheet" type="text/css" href="css/common.css"/>
+    <link rel="stylesheet" type="text/css" href="css/page.css"/>
+    <link href="css/element.css" rel="stylesheet"/>
+    <script type="text/javascript" src="js/jQuery-2.2.4.min.js"></script>
+    <script type="text/javascript" src="js/vue.js"></script>
+    <script type="text/javascript" src="js/xs.js"></script>
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript" src="js/axios.min.js"></script>
+    <script type="text/javascript" src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+    <script type="text/javascript" src="js/element.js"></script>
+</head>
+<body>
+<!-- 右侧边栏相关内容 -->
+<div id="n_sideBar"></div>
+<!--头部和banner部分-->
+<div class="n_header">
+    <div class="n_lunbt" style="background-image: url(imgs/n_info_pic.png);"></div>
+    <div id="n_insert_nav"></div>
+</div>
+<!-- 中间不同内容 -->
+<div class="n_mid n_assist_mid">
+    <div class="n_select n_assist_select">
+        <ul class="clearfix">
+            <li>
+                <a href="InfoQuery.html" class="n_mol_a">
+                    <i></i>
+                    <p>归类信息查询</p>
+                </a>
+            </li>
+            <li>
+                <a href="rateQuery.html" class="n_mol_a">
+                    <i></i>
+                    <p>实时汇率查询</p>
+                </a>
+            </li>
+            <li>
+                <a href="feeCount.html" class="n_mol_a">
+                    <i></i>
+                    <p>费用计算</p>
+                </a>
+            </li>
+            <li class="active">
+                <a href="downloadCenter.html" class="n_mol_a">
+                    <i></i>
+                    <p>下载中心</p>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="n_assist_con n_assist_rate_con" id="infoQuery">
+        <div class="n_custom_desc n_fee_desc">
+            <h3>下载中心</h3>
+            <div class="clearfix wrapper n_download_con">
+                <div class="left n_download_pic">
+                    <img src="imgs/n_download_pic.png">
+                </div>
+                <div class="left n_download_docs">
+                    <ul>
+                        <li class="clearfix">
+                            <i class="left"></i>
+                            <div class="left">
+                                <span class="left n_docs_name">1.代理报关协议</span>
+                                <a target="_blank" href="mslive.html?src=/Files/代理报关协议.docx">在线预览</a>
+                                <a href="/Files/代理报关协议.docx">下载文件</a>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <i class="left"></i>
+                            <div class="left">
+                                <span class="left n_docs_name">2.报关委托书模板</span>
+                                <a target="_blank" href="mslive.html?src=/Files/报关委托书模板.docx">在线预览</a>
+                                <a href="/Files/报关委托书模板.docx" download="">下载文件</a>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <i class="left"></i>
+                            <div class="left">
+                                <span class="left n_docs_name">3.香港库房库位租赁及仓储协议</span>
+                                <a target="_blank" href="mslive.html?src=/Files/香港库房库位租赁及仓储协议.doc">在线预览</a>
+                                <a href="/Files/香港库房库位租赁及仓储协议.doc">下载文件</a>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <i class="left"></i>
+                            <div class="left">
+                                <span class="left n_docs_name">4.香港本地交货协议</span>
+                                <a target="_blank" href="mslive.html?src=/Files/香港本地交货协议.docx">在线预览</a>
+                                <a href="/Files/香港本地交货协议.docx">下载文件</a>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <i class="left"></i>
+                            <div class="left">
+                                <span class="left n_docs_name">5.付汇委托书</span>
+                                <a target="_blank" href="mslive.html?src=/Files/付汇委托书.docx">在线预览</a>
+                                <a href="/Files/付汇委托书.docx">下载文件</a>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <i class="left"></i>
+                            <div class="left">
+                                <span class="left n_docs_name">6.深圳收款对公账户信息</span>
+                                <a target="_blank" href="mslive.html?src=/Files/芯达通对公账户.doc">在线预览</a>
+                                <a href="/Files/芯达通对公账户.doc">下载文件</a>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <i class="left"></i>
+                            <div class="left">
+                                <span class="left n_docs_name">7.香港付汇的美金账户信息</span>
+                                <a target="_blank" href="mslive.html?src=/Files/付汇美金账户信息.docx">在线预览</a>
+                                <a href="/Files/付汇美金账户信息.docx">下载文件</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+<!-- 底部 -->
+<div id="footer_zh"></div>
+<script>
+    $("#n_sideBar").load("sideBar.html");
+    $("#n_insert_nav").load("header.html",
+        function() {
+            $("#footer_zh").load("footer.html");
+            //导航中当前选中的项
+            $(".n_nagivation>ul>li:nth-child(3)").addClass("hot");
+            $(".n_nagivation>ul>li").hover(function() {
+                    $(".n_nagivation>ul>li:nth-child(3)").removeClass("hot");
+                },
+                function() {
+                    $(".n_nagivation>ul>li:nth-child(3)").addClass("hot");
+                });
+        });
+
+
+    var register = new Vue({
+        el: "#infoQuery",
+        data: {
+            resultStatus: false //搜索结果展示之前
+        },
+        methods: {
+            //点击搜索按钮展示搜索结果
+            searchResult: function() {
+                this.resultStatus = true;
+            }
+
+
+        }
+    });
+</script>
+</body>
+</html>

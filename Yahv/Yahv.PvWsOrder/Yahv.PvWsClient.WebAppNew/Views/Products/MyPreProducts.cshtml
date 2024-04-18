@@ -1,0 +1,572 @@
+﻿@{
+    ViewBag.title = "产品预归类";
+}
+<div id="preproduct" class="tab_content" v-cloak>
+    <div class="query_wrap" ref="viewBox1" v-on:scroll="ss('viewBox1')">
+        <div class="clearfix">
+            <div class="fl">
+                <div class="title label-style">品名:</div>
+                <el-input class="input-style" size="mini" @@keydown.native="enterQueryData" v-model="ProductName"></el-input>
+            </div>
+            <div class="fl ml20">
+                <div class="title label-style">型号:</div>
+                <el-input class="input-style" size="mini" @@keydown.native="enterQueryData" v-model="Model"></el-input>
+            </div>
+            <div class="fl ml20">
+                <div class="title label-style">品牌:</div>
+                <el-input class="input-style" size="mini" @@keydown.native="enterQueryData" v-model="Manufacturer"></el-input>
+            </div>
+
+            <div class="fr">
+                <button v-on:click="queryData" class="btn btn1">查询</button>
+                <button v-on:click="clearData" class="btn btn2 ml12">重置</button>
+            </div>
+        </div>
+        <div class="clearfix mt20">
+            <div class="fl">
+                <div class="title label-style">归类状态:</div>
+                <el-select style="width:180px;" class="mr16 input-style" size="small" v-model="classifyStatus" filterable clearable>
+                    <el-option v-for="item in ClassifyStatusOptions"
+                               :key="item.value"
+                               :label="item.text"
+                               :value="item.value">
+                    </el-option>
+                </el-select>
+            </div>
+        </div>
+    </div>
+    <div class="preproduct_wrap mt20">
+        <div class="content">
+            <div class="overhide query_wrap ">
+                <button v-on:click="add_preproduct" class="btn btn1 fl" v-if="@(ViewBag.ClientIsValid)">新增</button>
+
+                <el-button v-on:click="openUploadDialog" size="small" class="btn btn1 fl ml20" type="primary"> 批量导入<i class="el-icon-upload el-icon--right"></i></el-button>
+
+                @*<el-upload class="btn_upload ml20 fl"
+                           :before-upload="onBeforeUpload"
+                           action="/Files/UploadPreProduct"
+                           :on-success="uploadSuccess"
+                           accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                           :show-file-list="false"
+                           v-if="@(ViewBag.ClientIsValid)">
+                    <el-button size="small" class=" btn1" type="primary"> 导入数据<i class="el-icon-upload el-icon--right"></i></el-button>
+                </el-upload>
+                <el-button type="primary" v-on:click="downloadTemplates" class=" btn_data fl btn1">
+                    下载模板<i class="el-icon-download el-icon--right"></i>
+                </el-button>*@
+                <el-button type="primary" v-on:click="applyOrders" class="el-icon-ump-gouwuchekong fl btn1 ml20">
+                    报关下单<i class="el-icon-shopping-cart-2 el-icon--right"></i>
+                </el-button>
+            </div>
+            <div class="tb_wrap" v-loading="loading">
+                <table class="common_tb1 mt20">
+                    <tr>
+                        <th width="36px"> <el-checkbox v-model="allChecked" v-on:change="allCheck"></el-checkbox></th>
+                        <th width="36px">序号</th>
+                        <th width="70px">物料号</th>
+                        <th width="80px">品名</th>
+                        <th width="80px">型号</th>
+                        <th width="80px">品牌</th>
+                        <th width="50px">币种</th>
+                        <th width="80px">预计到货日期</th>
+                        <th width="50px">数量</th>
+                        <th width="70px">归类状态</th>
+                        <th width="80px">特殊类型</th>
+                        <th>操作</th>
+                    </tr>
+                    <tr v-for="(item,index) in dataList">
+                        <td colspan="12">
+                            <table class="inner_tb">
+                                <tr>
+                                    <td width="36px"><el-checkbox v-model="item.IsCheck"></el-checkbox></td>
+                                    <td width="37px">{{(pageIndex-1)*pageSize+index+1}}</td>
+                                    <td width="71px">{{item.UniqueCode}}</td>
+                                    <td width="81px">{{item.ProductName}}</td>
+                                    <td width="81px">{{item.Model}}</td>
+                                    <td width="81px">{{item.Manufacturer}}</td>
+                                    <td width="51px">{{item.Currency}}</td>
+                                    <td width="81px">{{item.DueDate}}</td>
+                                    <td width="51px">{{item.Qty}}</td>
+                                    <td width="71px">{{item.ClassifyStatus}}</td>
+                                    <td width="81px">{{item.Classified}}</td>
+                                    <td class="operate">
+                                        <a v-if="item.Isdetail" v-on:click="item.Isdetail=false">收起<i class="el-icon-arrow-up"></i></a>
+                                        <a v-else v-on:click="item.Isdetail=true">展开<i class="el-icon-arrow-down"></i></a>
+                                        <a v-on:click="edit_PreProduct(index,item)" v-if="item.IsUnClassified">编辑</a>
+                                        <a v-on:click="delete_Supperlier(index,item)">删除</a>
+                                    </td>
+                                </tr>
+                                <tr v-if="item.Isdetail">
+                                    <td colspan="12" class="detail">
+                                        <div class="wrap">
+                                            <p class="title">归类结果</p>
+                                            <div class="overhide">
+                                                <div class="con_left">
+                                                    <div class="wrap_data">
+                                                        <span class="name">海关编码：</span>
+                                                        <span class="content">{{item.HSCode}}</span>
+                                                    </div>
+                                                    <div class="wrap_data">
+                                                        <span class="name">税务编码：</span>
+                                                        <span class="content">{{item.TaxCode}}</span>
+                                                    </div>
+                                                    <div class="wrap_data">
+                                                        <span class="name">关税率：</span>
+                                                        <span class="content">{{item.TariffRate}}</span>
+                                                    </div>
+                                                    <div class="wrap_data">
+                                                        <span class="name">法定第一单位：</span>
+                                                        <span class="content">{{item.Unit1}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="con_right">
+                                                    <div class="wrap_data">
+                                                        <span class="name">报关品名：</span>
+                                                        <span class="content">{{item.ProductName}}</span>
+                                                    </div>
+                                                    <div class="wrap_data">
+                                                        <span class="name">税务名称：</span>
+                                                        <span class="content">{{item.TaxName}}</span>
+                                                    </div>
+                                                    <div class="wrap_data">
+                                                        <span class="name">增值税率：</span>
+                                                        <span class="content">{{item.AddedValueRate}}</span>
+                                                    </div>
+                                                    <div class="wrap_data">
+                                                        <span class="name">法定第二单位：</span>
+                                                        <span class="content">{{item.Unit2}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="wrap_data">
+                                                <span class="name">检验检疫编码：</span>
+                                                <span class="content">{{item.CIQCode}}</span>
+                                            </div>
+                                            <div class="wrap_data">
+                                                <span class="name">申报要素：</span>
+                                                <span class="content">{{item.Elements}}</span>
+                                            </div>
+                                            <div class="wrap_data">
+                                                <span class="name">特殊类型：</span>
+                                                <span class="spacialTypeTip" v-html="item.ClassifiedLabel"></span>
+                                                <span v-if="item.ClassifiedLabel==''" class='spacialTypeTip'>无</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+
+                    </tr>
+                    <tr v-if="dataList.length==0"><td colspan="12">暂无数据</td></tr>
+                </table>
+                <div class="foot">
+                    <el-pagination class="fr" style="margin-top:20px;" v-on:size-change="handleSizeChange"
+                                   v-on:current-change="handleCurrentChange"
+                                   :current-page="pageIndex"
+                                   :page-sizes="[5, 10, 20, 40]"
+                                   :page-size="pageSize"
+                                   layout="total, sizes, prev, pager, next, jumper"
+                                   :total="total">
+                    </el-pagination>
+                </div>
+            </div>
+
+        </div>
+        <el-dialog title="编辑产品预归类" :lock-scroll="false" width="30%" :visible.sync="preProductFormVisible" :close-on-click-modal="false">
+            <preproductinfo ref="header"></preproductinfo>
+            <div slot="footer" class="dialog-footer">
+                <button v-on:click="preProductFormVisible = false" class="btn1">取 消</button>
+                <button v-on:click="onSubmit_preProduct()" class="btn2 ml12">确 定</button>
+            </div>
+        </el-dialog>
+        <el-dialog title="新增产品预归类" :lock-scroll="false" width="30%" :visible.sync="add_preProductFormVisible" :close-on-click-modal="false">
+            <preproductinfonew ref="add_preproduct"></preproductinfonew>
+            <div slot="footer" class="dialog-footer">
+                <el-button v-on:click="add_preProductFormVisible = false">取 消</el-button>
+                <el-button type="primary" v-on:click="onSubmit_add_preProduct()">确 定</el-button>
+            </div>
+        </el-dialog>
+    </div>
+    <el-dialog title="批量导入" class="fh_file" :lock-scroll="false" width="25%" :visible.sync="dialogUploadVisible" :close-on-click-modal="false">
+        <div class="font12 txt_grey1 dialog_body txt_left">
+            <p class="mt10"><a class="txt_blue" style="cursor: pointer;" v-on:click="downloadTemplates">下载导入模板</a></p>
+            <div class="mt20 clearfix line30">
+                <span class="fl mr20">选择文件</span>
+                <div class="fl">
+                    <el-upload action="/Files/UploadPreProduct" ref="upload"
+                               :on-success="uploadSuccess"
+                               accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                               :show-file-list="false"
+                               :limit="1"
+                               :on-exceed="uploadExceed"
+                               :before-upload="uploadBefore"
+                               :auto-upload="false"
+                               :on-change="uploadChange">
+                        <el-button size="small" class="el-icon-plus btn1">添加文件</el-button>
+                    </el-upload>
+                </div>
+            </div>
+            <div class="mt10 clearfix line30">
+                <ul class="fl ml20">
+                    <li v-for="(item,index) in batchFile">
+                        <div class="file_item">
+                            <i class="file_icon"></i>
+                            <span class="file_name">{{item.name}}</span>
+                            <i class="file_del ml11" v-on:click="delBatchData"></i>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div slot="footer" class="dialog-footer">
+            <button v-on:click="dialogUploadVisible = false" class="btn1">取消</button>
+            <button v-on:click="onSubmit_upload" class="btn2 ml12" v-if="@(ViewBag.ClientIsValid)">提交</button>
+        </div>
+    </el-dialog>
+</div>
+<style>
+    .label-style {
+        width: 60px;
+        float: left;
+        margin-top: 6px;
+    }
+
+    .input-style {
+        width: 180px !important;
+    }
+</style>
+@{Html.RenderAction("_PartialProduct", "Products");}
+@{Html.RenderAction("_PartialPreProduct", "Products");}
+@{Html.RenderAction("_PartialPreProductNew", "Products");}
+<script>
+    var preproduct = new Vue({
+        el: "#preproduct",
+        data: function () {
+            return {
+                ProductName: "",
+                Model: "",
+                Manufacturer: "",
+
+
+                loading: true,
+                total: 0,
+                pageIndex: 1, //初始页
+                pageSize: 10,    //每页的数据
+                search_data: "",  //模糊查询的名称
+                preProductFormVisible: false,  // 编辑产品预归类 弹框
+                add_preProductFormVisible: false, // 新增产品预归类 弹框
+                dataList: [],  //表格真实数据
+                allChecked: false,
+                showID: "", //控制下拉显示的id
+                dialogFormVisible: false,
+
+                classifyStatus: '',
+                ClassifyStatusOptions: [],
+
+                dialogUploadVisible: false, // 导入数据弹窗
+                batchFile: [],
+            }
+        },
+        mounted: function () {
+            this.ClassifyStatusOptions = @Html.Raw(Json.Encode(@ViewBag.ClassifyStatusOptions));
+            this.paging();
+        },
+        methods: {
+            //查询数据
+            queryData: function () {
+                this.pageIndex = 1;
+                this.paging();
+            },
+            enterQueryData: function () {
+                if (event.keyCode == "13") {
+                    this.queryData();
+                }
+            },
+            //重置数据
+            clearData: function () {
+                this.ProductName = "";
+                this.Model = "";
+                this.Manufacturer = "";
+                this.classifyStatus = "";
+                this.pageIndex = 1;
+                this.pageSize = 10;
+                this.paging();
+            },
+            onBeforeUpload: function () {
+                this.loading = true;
+            },
+            // 产品上传成功后的回调
+            uploadSuccess: function (response, file, fileList) {
+                if (response.type == "error") {
+                    this.onAlert(response.type, response.msg);
+                    this.loading = false;
+                } else {
+                    this.onAlert(response.type, response.msg);
+                    this.paging();
+                }
+            },
+            //下载导入模板
+            downloadTemplates: function () {
+                location.href = "/Template/产品预归类导入模板.xlsx";
+            },
+            paging: function () {
+                var that = this;
+                that.loading = true;
+                that.allChecked = false;
+                axios({
+                    url: "/Products/GetPreProductsList",
+                    method: "post",
+                    data: {
+                        page: this.pageIndex,
+                        rows: this.pageSize,
+                        ProductName: this.ProductName.trim(),
+                        Model: this.Model.trim(),
+                        Manufacturer: this.Manufacturer.trim(),
+                        ClassifyStatus: this.classifyStatus,
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                    transformRequest: [function (data) {
+                        var ret = ''
+                        for (var it in data) {
+                            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&';
+                        }
+                        return ret;
+                    }]
+                }).then(function (response) {
+                    var data = JSON.parse(response.data.data);
+                    that.dataList = data.list;
+                    that.total = data.total;
+                    that.loading = false;
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            allCheck: function () {
+                this.dataList.forEach(function (val, index) {
+                    val.IsCheck = preproduct.allChecked;
+                });
+            },
+            //下单
+            applyOrders: function () {
+                var ids = []; //产品的id
+                var checklist = this.dataList.filter(function (value) {
+                    if (value.IsCheck) {
+                        return value;
+                    }
+                });
+                if (checklist.length == 0) {
+                    this.onAlert("error", "请选择预归类产品！");
+                    return;
+                }
+                var errModels = [];//管控产品model
+                var unclassfiyModels = [];//未归类的产品model
+                for (let i = 0; i < checklist.length; i++) {
+                    if (!checklist[i].IsClassified) {
+                        unclassfiyModels.push(checklist[i].Model);
+                    }
+                    if (checklist[0].Currency != checklist[i].Currency) {
+                        this.onAlert("error", "请选择同一币种的产品！");
+                        return;
+                    }
+                    if (!checklist[i].IsNomarl) {
+                        errModels.push(checklist[i].Model);
+
+                    }
+                    ids.push(checklist[i].ID);
+                }
+                if (unclassfiyModels.length > 0) {
+                    this.onAlert("error", "型号'" + unclassfiyModels.join(',') + "'未归类完成！");
+                    return;
+                }
+                if (errModels.length > 0) {
+                    this.onAlert("error", "型号'" + errModels.join(',') + "'是管控产品！");
+                    return;
+                }
+                this.commonSkip(ids.join(','), '/Declare/DeclareAdd');
+                // location.href = "/Orders/Add/" + ids.join(',');
+            },
+            commonSkip: function (ids, url) {
+                var stuAnswerArr = JSON.stringify(ids);//转成json字符串
+                //JS模拟post提交
+                var REVQForm = document.createElement("form");
+                REVQForm.setAttribute("method", 'POST');
+                REVQForm.setAttribute("action", url);
+                REVQForm.innerHTML = "";
+                var stuAnswerInput = document.createElement("input");
+                stuAnswerInput.setAttribute("type", "hidden");
+                stuAnswerInput.setAttribute("name", 'para');
+                stuAnswerInput.setAttribute("value", ids);
+                REVQForm.appendChild(stuAnswerInput);
+                document.body.appendChild(REVQForm);
+                REVQForm.submit();
+            },
+            //提交产品预归类
+            onSubmit_preProduct: function () {
+                this.$refs.header.$refs.form2.validate(function (valid) {
+                    if (valid) {
+                        preproduct.preProductFormVisible = false;
+                        axios({
+                            url: "/Products/_PartialPreProduct",
+                            method: "post",
+                            data: preproduct.$refs.header.form2
+                        }).then(function (response) {
+                            preproduct.$refs.header.$refs.form2.resetFields();
+                            preproduct.paging(); //刷新列表
+                            preproduct.onAlert(response.data.type, response.data.msg);
+                        }).catch(function (error) {
+                            preproduct.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                        });
+                    } else {
+                        //验证失败
+                    }
+                });
+            },
+            //编辑
+            edit_PreProduct: function (index, row) {
+                var that = this;
+                preproduct.preProductFormVisible = true;
+                setTimeout(function () {
+                    preproduct.$refs.header.$refs.form2.resetFields();
+                    preproduct.$refs.header.form2.ID = row.ID;
+                    preproduct.$refs.header.form2.Models = row.Model;
+                    preproduct.$refs.header.form2.Manufacturer = row.Manufacturer;
+                    preproduct.$refs.header.form2.Supplier = row.Supplier;
+                    preproduct.$refs.header.form2.ProductUnionCode = row.ProductUnionCode;
+                    preproduct.$refs.header.form2.Price = row.Price;
+                    preproduct.$refs.header.form2.Currency = row.CurrencyCode;
+                    if (row.DueDate1 != null) {
+                        that.GetDateFormat(row.DueDate)
+                        preproduct.$refs.header.form2.DueDate = that.GetDateFormat(row.DueDate1);
+                    }
+                    preproduct.$refs.header.form2.Qty = row.Qty;
+                    preproduct.$refs.header.isReadonly = true;
+                }, 0);
+            },
+            GetDateFormat: function (str) {
+                return new Date(str);
+            },
+            //删除
+            delete_Supperlier: function (index, row) {
+                var that = this;
+                this.$confirm('您确定要删除"' + row.Model + '"吗？', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                    lockScroll: false,
+                }).then(function () {
+                    axios({
+                        url: "/Products/DelPreProduct",
+                        method: "post",
+                        data: {
+                            id: row.ID
+                        }
+                    }).then(function (response) {
+                        that.paging();
+                        that.onAlert(response.data.type, response.data.msg);
+                    }).catch(function (error) {
+                        that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                    });
+                }).catch(function () {
+                    //取消
+                });
+            },
+            // 初始页currentPage、初始每页数据数pagesize和数据data
+            handleSizeChange: function (size) {
+                this.pageSize = size;
+                this.paging();
+            },
+            handleCurrentChange: function (currentPage) {
+                this.pageIndex = currentPage;
+                this.paging();
+            },
+            //弹框关闭后事件
+            dialog_Closed: function () {
+                //初始化列表值
+                this.$refs.header.$refs.form1.resetFields();
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                    offset: 300
+                });
+            },
+
+            // 打开新增产品预归类弹框
+            add_preproduct() {
+                var that = this;
+                that.add_preProductFormVisible = true;
+                setTimeout(function () {
+                    that.$refs.add_preproduct.$refs.form2.resetFields();
+                }, 0);
+            },
+            // 新增产品预归类 保存提交
+            onSubmit_add_preProduct() {
+                var that = this;
+                this.$refs.add_preproduct.$refs.form2.validate(function (valid) {
+                    if (valid) {
+                        that.add_preProductFormVisible = false;
+                        axios({
+                            url: "/Products/_PartialPreProduct",
+                            method: "post",
+                            data: that.$refs.add_preproduct.form2
+                        }).then(function (response) {
+                            that.$refs.add_preproduct.$refs.form2.resetFields();
+                            that.paging(); //刷新列表
+                            that.onAlert(response.data.type, response.data.msg);
+                        }).catch(function (error) {
+                            that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                        });
+                    } else {
+                        //验证失败
+                    }
+                });
+            },
+            // 提交导入数据
+            onSubmit_upload() {
+                if (this.batchFile.length <= 0) {
+                    this.onAlert("warning", "请选择文件");
+                    return;
+                }
+                this.dialogUploadVisible = false;
+                this.loading = true;
+                this.$refs.upload.submit();
+            },
+            uploadBefore: function (file) {
+                if (file == null) {
+                    return false;
+                } else if (file.type != "application/vnd.ms-excel" && file.type != "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
+                    // 若不符合excel类型，则让当前上传的文件去除掉即可，即从上传队列删除本次上传
+                    this.$refs.upload.abort(file);
+                    this.onAlert("error", "请选择正确的文件格式");
+                    return false;
+                }
+                return true;
+            },
+            openUploadDialog() {
+                if (this.$refs.upload != undefined) {
+                    this.$refs.upload.clearFiles();
+                }
+                this.batchFile = [];
+                this.dialogUploadVisible = true;
+            },
+            uploadExceed: function (files, fileList) {
+                this.onAlert("error", "只能上传一个文件");
+            },
+            uploadChange: function (file, fileList) {
+                this.batchFile = [];
+                this.batchFile.push({
+                    name: file.name,
+                });
+            },
+            delBatchData: function () {
+                this.$refs.upload.clearFiles();
+                this.batchFile = [];
+            },
+        }
+    });
+</script>

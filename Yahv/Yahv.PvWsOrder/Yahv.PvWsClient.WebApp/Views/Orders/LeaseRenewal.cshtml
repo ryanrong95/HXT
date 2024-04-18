@@ -1,0 +1,280 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_LayoutOrder.cshtml";
+    ViewBag.navid = "MyLeaseList";
+}
+<div v-cloak id="vLeaseRenewal" class="backshow">
+    <h2>库位续租</h2>
+    <div class="lease_content">
+        <p class="title mb24">续租申请</p>
+        <el-form ref="ruleForm" :model="formData" :rules="rules" label-width="100px">
+            @*<div class="overhide">
+                <el-form-item class="fl" label="开始时间:" :rules="[{ type: 'date', required: true, message: '请选择开始时间', trigger: 'change' }]" prop="StartDate">
+                    <el-date-picker type="date" v-model="formData.StartDate" :picker-options="pickerOptions1" v-on:blur="getTotalPrice" placeholder="开始时间" style="width:180px;"></el-date-picker>
+                </el-form-item>
+                <el-form-item class="fl ml70" label="租赁期限:" prop="MonthNum">
+                    <el-input placeholder="租赁期限" v-model="formData.MonthNum" style="width:80px;" v-on:blur="getTotalPrice" auto-complete="off"></el-input><span class="ml10">个月</span>
+                </el-form-item>
+            </div>*@
+            <div class="ls_info mb30">
+                <span class="mr200">开始时间: {{formData.StartDateStr}}</span>
+                <span>租赁期限: {{formData.MonthNum}}  个月</span>
+            </div>
+            <div class="btn_list overhide">
+                <el-button class="down_file fl mr60" type="primary" v-on:click="downoad_temp"><i></i>导出合同模板</el-button>
+                <el-upload class="upload fl"
+                           :http-request="httpRequestContractFile"
+                           ref="contractUpload"
+                           action="/Orders/UploadPickUpFile"
+                           :file-list="formData.ContractFile"
+                           accept="application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                           :show-file-list="false">
+                    <el-button type="primary" class=" fl"><i></i>上传合同</el-button>
+                </el-upload>
+                <div v-if="fileName!=''" class="fl file_information">
+                    <span class="f_name">{{fileName}}</span>
+                    <a v-on:click="delete_file">删除</a>
+                </div>
+            </div>
+            <table class="tb_2" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <th>库位</th>
+                    <th>承重(kg)</th>
+                    <th>容积(cm³)</th>
+                    <th>个数</th>
+                    <th>单价(元/月)</th>
+                    <th>租赁价格</th>
+                </tr>
+                <tr v-for="(item,index) in selectedData">
+                    <td>{{item.ProductID}}</td>
+                    <td>{{item.Load}}</td>
+                    <td>{{item.Volume}}</td>
+                    <td>{{item.Quantity}}</td>
+                    <td>{{item.UnitPrice}}</td>
+                    <td><p v-for="entity in item.LsProductPrice">{{entity.Month}}个月 {{entity.Price}}元/月</p></td>
+                </tr>
+                <tr class="total">
+                    <td colspan="6">合计：<span class="txt1">{{totalPrice}}</span>元</td>
+                </tr>
+            </table>
+        </el-form>
+            <button v-on:click="onSubmit" class="submit">提交申请</button>
+    </div>
+    <el-dialog class="successdialog" title="申请提交成功" :lock-scroll="false" width="520px" :visible.sync="dialogSuccessVisible" :close-on-click-modal="false">
+        <div class="content">
+            <p>续租申请提交成功</p>
+            <div class="no_text mt6">
+                <span>订单编号：</span><span class="red">{{orderid}}</span>
+            </div>
+            @*<div class="clientcode"><span>您的入仓号为：</span><span class="red">{{clientcode}}</span><span>，请务必将此编号填写到快递单或送货单上，否则将加收100元人民币的代理费。</span></div>*@
+        </div>
+        <div class="dialog_foot">
+            <el-button type="primary" class="ml150" v-on:click="btn_back">返回</el-button>
+        </div>
+    </el-dialog>
+</div>
+
+<script>
+    var vLeaseRenewal = new Vue({
+        el: "#vLeaseRenewal",
+        data: function () {
+            var validateMonth = function (rule, value, callback) {
+                if (value != '' && value != null) {
+                    if (!ValidNumber(value)) {
+                        callback(new Error('请输入数字'));
+                    } else if (value == 0) {
+                        callback(new Error('月数至少是1'));
+                    }
+                    callback();
+                } else {
+                    callback(new Error('请输入月数'));
+                }
+            };
+            return {
+                dialogSuccessVisible:false,
+                formData: @Html.Raw(Json.Encode(Model)),  //表单数据
+                pickerOptions1: {
+                    disabledDate: function (time) {
+                        var myDate = new Date();
+                        myDate.setDate(myDate.getDate() + 6);
+                        var today = new Date();
+                        today.setDate(today.getDate() - 1);
+                        return time > myDate || time < today;
+                    },
+                },
+                orderid:"",
+                //验证规则
+                rules: {
+                    MonthNum: [{ required: true, validator: validateMonth, trigger: 'blur' }],
+                },
+                totalPrice: 0,
+                selectedData: [],
+                fileName: "",
+            }
+        },
+        watch: {
+            StartDate: function (val) {
+                if (val != null && val != "") {
+                    this.formData.StartDateStr = this.dateToString(val);
+                }
+            },
+        },
+        computed: {
+            StartDate: function () {
+                return this.formData.StartDate;
+            },
+        },
+        mounted: function () {
+            this.selectedData =@Html.Raw(Json.Encode(@ViewBag.Product));
+            this.getTotalPrice();
+        },
+        methods: {
+            delete_file: function () {
+                this.formData.ContractFile = [];
+                this.fileName = "";
+            },
+            httpRequestContractFile: function (options) {
+                var that = this;
+                var file = options.file;
+                let config = {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                };
+                if (file.type != "application/vnd.openxmlformats-officedocument.wordprocessingml.document" && file.type != "application/msword") {
+                    that.formData.ContractFile = [];
+                    that.fileName = "";
+                    that.onAlert("error", "请上传Word文件");
+                    return;
+                }
+                that.formData.ContractFile = [];
+                var form = new FormData(); // FormData 对象
+                form.append("file", file); // 文件对象
+                //添加请求头
+                axios.post("/Orders/UploadPickUpFile", form, config)
+                    .then(function (response) {
+                        if (response.data.type != "error") {
+                            var data = JSON.parse(response.data.data);
+                            that.formData.ContractFile.push(data);
+                            that.fileName = data.name;
+                        } else {
+                            that.fileName = "";
+                            that.onAlert(response.data.type, response.data.msg);
+                            return;
+                        }
+                    });
+            },
+            downoad_temp: function () {
+                var that = this;
+                axios({
+                    url: "/Orders/ExportLeasingContract",
+                    method: "post",
+                    data: {
+                        //id: that.formData.ID
+                    }
+                }).then(function (response) {
+                    if (response.data.type == "error") {
+                        that.onAlert(response.data.type, response.data.msg);
+                    } else {
+                        $('#exportInfoForm').attr("href", response.data.data);
+                        $('#exportInfoForm').attr("target", "_blank");
+                        $('#ex-li').trigger("click");
+                    }
+                }).catch(function (error) {
+                    that.onAlert("warning", error);
+                });
+            },
+            getTotalPrice: function () {
+                var that = this;
+                var sum = 0;
+                if ((this.formData.MonthNum != null || this.formData.MonthNum != "") && ValidNumber(this.formData.MonthNum)) {
+                    var arr = this.selectedData.map(function (v, i) {
+                        v.UnitPrice = that.getUnitPrice(v.LsProductPrice, that.formData.MonthNum);
+                        sum += v.UnitPrice * v.Quantity*that.formData.MonthNum;
+                        return v;
+                    });
+                    that.totalPrice = sum;
+                }
+            },
+            btn_back: function () {
+                window.location.href = "/Orders/MyLeaseList";
+            },
+            transferData: function () {
+                var arr = [];
+                var data = this.selectedData;
+                for (var i = 0; i < data.length; i++) {
+                    var obj = {
+                        ID: "",
+                        ProductID: data[i].ProductID,
+                        Num: data[i].Quantity,
+                        UnitPrice:data[i].UnitPrice
+                    }
+                    arr.push(obj);
+                }
+                this.formData.LeaseData = arr;
+            },
+            onSubmit: function () {
+                var that = this;
+                that.$refs.ruleForm.validate(function (valid) {
+                    if (valid) {
+                        const loading = that.$loading({
+                            lock: false,
+                            text: 'Loading',
+                            spinner: 'el-icon-loading',
+                            background: 'rgba(0, 0, 0, 0.7)'
+                        });
+                        that.transferData();
+                        axios({
+                            url: "/Orders/LsOrderSubmit",
+                            method: "post",
+                            data: {
+                                data: JSON.stringify(that.formData),
+                            },
+                        }).then(function (response) {
+                            loading.close();
+                            if (response.data.type == "error") {
+                                that.onAlert(response.data.type, response.data.msg);
+                            } else {
+                                that.orderid = response.data.data;
+                                that.dialogSuccessVisible = true;
+                            }
+                        }).catch(function (error) {
+                            that.onAlert("warning", error);
+                        });
+                    }
+                });
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                    offset:300,
+                });
+            },
+            dateToString: function (date) {
+                var year = date.getFullYear();
+                var month = (date.getMonth() + 1).toString();
+                var day = (date.getDate()).toString();
+                if (month.length == 1) {
+                    month = "0" + month;
+                }
+                if (day.length == 1) {
+                    day = "0" + day;
+                }
+                var dateTime = year + "-" + month + "-" + day;
+                return dateTime;
+            },
+            //获取单价
+            getUnitPrice:function(arr,month) {
+                var price = 0;
+                var c_month = 0;
+                for (var i = 0; i < arr.length; i++) {
+                    if (arr[i].Month <= month && arr[i].Month>=c_month) {
+                        c_month = arr[i].Month;
+                        price = arr[i].Price;
+                    }
+                }
+                return price;
+            }
+        },
+    });
+</script>

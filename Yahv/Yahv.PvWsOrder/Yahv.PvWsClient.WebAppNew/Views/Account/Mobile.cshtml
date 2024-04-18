@@ -1,0 +1,147 @@
+﻿@{
+    ViewBag.subTitle = "手机号码";
+}
+<div id="mobile" v-cloak style="height: 600px;">
+    <div>
+        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" status-icon label-width="120px" class="elform_padding">
+            <el-row>
+                <el-col :span="12">
+                    <el-form-item label="原手机号码：">
+                        <el-input v-model="ruleForm.Phone" size="mini" auto-complete="off" readonly></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="12">
+                    <el-form-item label="新手机号码：" prop="NewPhone">
+                        <el-input v-model="ruleForm.NewPhone" size="mini" placeholder="请输入新手机号码" auto-complete="off"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="6">
+                    <el-form-item label="短信验证码：" prop="Code" :rules="[{required: true, message: '请输入短信验证码', trigger: 'blur'}]">
+                        <el-input v-model="ruleForm.Code" size="mini" placeholder="短信验证码" auto-complete="off"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="4">
+                    <el-form-item label="" label-width="10px">
+                        <el-button style="padding-left: 20px;" size="mini" :disabled="buttonDisable" type="primary" v-on:click="sendSms('ruleForm')">{{buttonTxt}}</el-button>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="12">
+                    <el-form-item class="btn_bottom">
+                        <el-button v-on:click="onSubmit" class="btn2 ml12 fl ml0">保存</el-button>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+        </el-form>
+    </div>
+</div>
+<script>
+    var mobile = new Vue({
+        el: "#mobile",
+        data: function() {
+            var validateMobile = function(rule, value, callback) {
+                if (value == '' || value == null) {
+                    callback(new Error('请输入手机号'));
+                } else {
+                    if (new RegExp("[^0-9]","g").test(value)) {
+                        callback(new Error('请输入正确的格式'));
+                    } else {
+                        axios({
+                            url: "/Account/CheckMobile",
+                            method: "post",
+                            data: {
+                                phone: mobile.ruleForm.NewPhone
+                            },
+                        }).then(function(response) {
+                            if (response.data.type == "error") {
+                                callback(new Error(response.data.msg));
+                            } else {
+                                callback();
+                            }
+                        }).catch(function(error) {
+                            mobile.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                        });
+                    }
+                }
+            };
+            return {
+                IsStop: false,
+                buttonDisable: false,
+                buttonTxt: "获取短信验证码",
+                ruleForm: @Html.Raw(Json.Encode(Model)),
+                rules: {
+                    NewPhone: [{ required: true, validator: validateMobile, trigger: 'blur' }]
+                }
+            }
+        },
+        methods: {
+            onSubmit: function() {
+                this.$refs.ruleForm.validate(function(valid) {
+                    if (valid) {
+                        axios({
+                            url: "/Account/Mobile",
+                            method: "post",
+                            data: mobile.ruleForm,
+                        }).then(function(response) {
+                            mobile.onAlert(response.data.type, response.data.msg);
+                            if (response.data.type == "error") {
+                                mobile.IsStop = true;
+                                mobile.ruleForm.Code = "";
+                            } else {
+                                setTimeout(function() { location.href = "/Account/Mobile" }, 1000);
+                            }
+                        }).catch(function(error) {
+                            mobile.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                        });
+                    } else {
+                        //验证失败
+                        return false;
+                    }
+                });
+            },
+            //发送短信
+            sendSms: function(ruleForm) {
+                this.$refs.ruleForm.validateField('NewPhone',
+                    function(data) {
+                        if (data == "") {
+                            mobile.buttonDisable = true;
+                            mobile.IsStop = false;
+                            var time = 60;
+                            axios({
+                                url: "/Account/SendCode",
+                                method: "post",
+                                data: {
+                                    phone: mobile.ruleForm.NewPhone
+                                },
+                            }).then(function(response) {
+                                var t = setInterval(function() {
+                                        time--;
+                                        mobile.buttonTxt = time + "秒后重新获取";
+                                        if (time == 0 || mobile.IsStop) {
+                                            clearInterval(t);
+                                            mobile.buttonTxt = "发送短信";
+                                            mobile.buttonDisable = false;
+                                        }
+                                    },
+                                    1000);
+                            }).catch(function(error) {
+                                mobile.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                            });
+                        }
+                    });
+            },
+            //消息提示框
+            onAlert: function(type, message) {
+                this.$message({
+                    message: message,
+                    type: type
+                });
+            },
+        },
+    });
+</script>

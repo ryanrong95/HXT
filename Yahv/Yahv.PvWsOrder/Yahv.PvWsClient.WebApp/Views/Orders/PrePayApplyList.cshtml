@@ -1,0 +1,189 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_LayoutBill.cshtml";
+    ViewBag.navid = "PrePayApplyList";
+}
+
+<div v-cloak id="vPrePayApply" class="backshow">
+    <h2>代付货款记录</h2>
+    <div class="order_list_view">
+        <div class="orderlist mt20" ref="viewBox1" v-on:scroll="ss('viewBox1')">
+            <div class="title">
+                <ul class="overhide">
+                    <li class="fl" style="width:263px">
+                        <span>申请编号</span>
+                    </li>
+                    <li class="fl" style="width:141px">
+                        <span>申请状态</span>
+                    </li>
+                    <li class="fl" style="width:143px">
+                        <span>支付方式</span>
+                    </li>
+                    <li class="fl" style="width:171px">
+                        <span>收款银行</span>
+                    </li>
+                    <li class="fl" style="width:195px">
+                        <span>操作</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="orderWrap" v-loading="indexData.loading">
+                <div class="order" v-if="!indexData.loading">
+                    <table class="myorder" border="0" cellspacing="0" cellpadding="0" v-for="item of indexData.curItems">
+                        <tr>
+                            <th class="overhide" colspan="6">
+                                <div class="fl">
+                                    <span class="lignt_text">
+                                        订单号：
+                                    </span>
+                                    <span>{{item.ID}}</span>
+                                </div>
+                                <div class="fl txtdate">
+                                    <span class="lignt_text">{{item.CreateDate}}</span>
+                                    <span class="ml14" v-html="item.specialTypeLabel"></span>
+                                </div>
+                                <div class="fr detail">
+                                    @*<a v-on:click="confirmBill(item.ID,'BillList')">对账单</a>
+                                    <a class="a_detail ml16" v-on:click="info(item.ID)">订单详情</a>*@
+                                </div>
+                            </th>
+                        </tr>
+                        <tr class="cell">
+                            <td style="width:215px;text-align:left">
+                                <div style="padding-left:60px;">
+                                    <p>交易币种 {{item.Currency}}</p>
+                                    @*<p>报关总价 11.00</p>*@
+                                </div>
+
+                            </td>
+                            <td style="width:114px">
+                                <span>{{item.Status}}</span><br />
+                            </td>
+                            <td style="width:116px">
+                                <p>{{item.PayType}}</p>
+                            </td>
+                            <td style="width:138px;">
+                                <p>{{item.Bank}}</p>
+                            </td>
+                            <td style="width:158px;padding:12px 0px" class="myOrderTd">
+                                <a v-on:click="info(item.ID)">查看详情</a>
+                                @*<el-button class="btn2"  v-if="item.IsConfirm" v-on:click="confirmBill(item.ID,'BillConfirm')">确认账单</el-button>*@
+                            </td>
+                        </tr>
+                    </table>
+                    <div v-if="indexData.curItems.length==0">
+                        <div class="nodata-container">
+                            <el-row class="nodata-row1">
+                                <img src="~/Content/img/nodata.png" />
+                            </el-row>
+                            <el-row class="nodata-row2">
+                                <span class="nodata-info">暂无数据！</span>
+                            </el-row>
+                        </div>
+                    </div>
+                </div>
+                <div class="foot" v-if="(!indexData.loading)&&indexData.curItems.length!=0">
+                    <el-pagination style="float:right" v-on:size-change="handleSizeChange"
+                                   v-on:current-change="handleCurrentChange"
+                                   :current-page="indexData.pageIndex"
+                                   :page-sizes="[5, 10, 20, 40]"
+                                   :page-size="indexData.pageSize"
+                                   layout="total, sizes, prev, pager, next, jumper"
+                                   :total="indexData.Total">
+                    </el-pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var vPrePayApply = new Vue({
+        el: "#vPrePayApply",
+        data: function () {
+            return {
+                indexData: {
+                    loading: true,
+                    curItems: [],
+                    pageIndex: 1, //初始页
+                    pageSize: 5,    //每页的数据
+                    Total: 0,
+                    scrollTop: 0, //滚动条位置
+                },
+            }
+        },
+        mounted: function () {
+            var that = this;
+            var userJsonStr = sessionStorage.getItem('PrePayApplyList');
+            userEntity = JSON.parse(userJsonStr);
+            if (userEntity == null) {
+                that.paging();
+            } else {
+                that.indexData = userEntity;
+                that.paging();
+                that.$nextTick(function () {
+                    that.$refs['viewBox1'].scrollTop = that.indexData.scrollTop;
+                })
+                sessionStorage.removeItem('PrePayApplyList');
+            }
+        },
+        methods: {
+            info: function (id) {
+                sessionStorage.setItem('PrePayApplyList', JSON.stringify(this.indexData));
+                commonSkip(id, '/Orders/ApplicationDetail', 'PrePayApplyList');
+            },
+            ss: function (ref) {
+                // 监听这个dom的scroll事件
+                var that = this;
+                this.$refs[ref].addEventListener('scroll', function () {
+                    that.indexData.scrollTop = that.$refs[ref].scrollTop;
+                }, false)
+            },
+            // 初始页currentPage、初始每页数据数pagesize和数据data
+            handleSizeChange: function (size) {
+                this.indexData.pageSize = size;
+                this.paging();
+            },
+            handleCurrentChange: function (currentPage) {
+                this.indexData.pageIndex = currentPage;
+                this.paging();
+            },
+            paging: function () {
+                var that = this;
+                that.indexData.loading = true;
+                axios({
+                    url: "/Orders/GetPrePayApplyList",
+                    method: "post",
+                    data: {
+                        page: this.indexData.pageIndex,
+                        rows: this.indexData.pageSize,
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                    transformRequest: [function (data) {
+                        var ret = ''
+                        for (var it in data) {
+                            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+                        }
+                        return ret;
+                    }],
+                }).then(function (response) {
+                    var data = JSON.parse(response.data.data);
+                    that.indexData.curItems = data.list;
+                    that.indexData.Total = data.total;
+                    that.indexData.loading = false;
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                });
+            },
+        }
+    });
+</script>

@@ -1,0 +1,309 @@
+﻿
+<template id="special">
+    <el-form :model="form1" :rules="rules1" status-icon ref="form1" label-width="130px">
+        <el-form-item label="选择服务项目：" prop="Type" :rules="[{ required: true, message: '选择服务项目', trigger: 'change' }]">
+            <el-select size="mini" style="width:50%" v-model="form1.Type" v-on:change="typeChange" filterable clearable placeholder="请选择">
+                <el-option v-for="item in baseData.SpecialTypeOptions"
+                           :key="item.value"
+                           :label="item.text"
+                           :value="item.value">
+                </el-option>
+            </el-select>
+        </el-form-item>
+        <div v-if="form1.Type=='1'">
+            <el-form-item label="操作类型:" prop="NameValue" :rules="[{ required: true, message: '选择操作类型', trigger: 'change' }]">
+                <el-radio-group v-model="form1.NameValue" v-on:change="labelChange">
+                    <el-radio v-for="item of baseData.LabelTypeOptions" :label=item.value>{{item.text}}</el-radio>
+                </el-radio-group>
+            </el-form-item>
+            <div v-if="form1.NameValue=='1'">
+                <el-form-item class="mt20" label="上传新标签:" prop="FileName" :rules="[{ required: true, message: '上传新标签', trigger: 'change' }]">
+                    <div class="  upload_wrap clearfix">
+                        <el-upload class="fl mr20" action="/PayExchanges/UploadOrderFile"
+                                   :show-file-list="false"
+                                   :http-request="httpRequest"
+                                   accept="image/jpg, image/bmp, image/jpeg, image/gif, image/png, application/pdf">
+                            <el-button size="small" class="btn_upload">+添加文件</el-button>
+                        </el-upload>
+                        <div class="file_item fl mt6" v-if="form1.FileName!=''&&form1.FileName!=null">
+                            <i class="file_icon"></i>
+                            <span class="file_name">{{form1.FileName}}</span>
+                            <i class="file_del ml11" v-on:click="del_file"></i>
+                        </div>
+                    </div>
+                </el-form-item>
+
+                <el-form-item class="mt20" label="标签个数:" prop="Quantity">
+                    <el-input size="mini" v-model="form1.Quantity" style="width:50%" v-on:blur="calTotalPrice" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="具体要求:" prop="Requirement">
+                    <el-input size="mini" v-model="form1.Requirement" type="textarea" style="width:70%" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="服务费总计:">
+                    <span class="txt_red">{{form1.TotalPrice}}(RMB)</span>
+                </el-form-item>
+            </div>
+            <div v-if="form1.NameValue=='2'">
+                <el-form-item class="mt20" label="标签个数:" prop="Quantity">
+                    <el-input size="mini" v-model="form1.Quantity" style="width:50%" v-on:blur="calTotalPrice" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="具体要求:" prop="Requirement">
+                    <el-input size="mini" v-model="form1.Requirement" type="textarea" style="width:70%" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="服务费总计:">
+                    <span class="txt_red">{{form1.TotalPrice}}(RMB)</span>
+                </el-form-item>
+            </div>
+            <div v-if="form1.NameValue=='3'">
+                <el-form-item class="mt20" label="上传新标签:" prop="FileName" :rules="[{ required: true, message: '上传新标签', trigger: 'change' }]">
+                    <div class="  upload_wrap clearfix">
+                        <el-upload class="fl mr20" action="/PayExchanges/UploadOrderFile"
+                                   :show-file-list="false"
+                                   :http-request="httpRequest"
+                                   accept="image/jpg, image/bmp, image/jpeg, image/gif, image/png, application/pdf">
+                            <el-button size="small" class="btn_upload">+添加文件</el-button>
+                        </el-upload>
+                        <div class="file_item fl mt6" v-if="form1.FileName!=''&&form1.FileName!=null">
+                            <i class="file_icon"></i>
+                            <span class="file_name">{{form1.FileName}}</span>
+                            <i class="file_del ml11" v-on:click="del_file"></i>
+                        </div>
+                    </div>
+                </el-form-item>
+                <el-form-item class="mt20" label="标签个数:" prop="Quantity">
+                    <el-input size="mini" v-model="form1.Quantity" style="width:50%" v-on:blur="calTotalPrice1" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="具体要求:" prop="Requirement">
+                    <el-input size="mini" v-model="form1.Requirement" type="textarea" style="width:70%" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="服务费总计:">
+                    <span class="txt_red">{{form1.TotalPrice}}(RMB)</span>
+                </el-form-item>
+            </div>
+        </div>
+        <div v-if="form1.Type=='2'">
+            <el-form-item class="mt20" label="上传换箱单文件:" prop="FileName" :rules="[{ required: true, message: '上传换箱单文件', trigger: 'change' }]">
+                <div class="  upload_wrap clearfix">
+                    <el-upload class="fl mr20" action="/PayExchanges/UploadOrderFile"
+                               :show-file-list="false"
+                               :http-request="httpRequest"
+                               accept="image/jpg, image/bmp, image/jpeg, image/gif, image/png, application/pdf">
+                        <el-button size="small" class="btn_upload">+添加文件</el-button>
+                    </el-upload>
+                    <div class="file_item fl mt6" v-if="form1.FileName!=''&&form1.FileName!=null">
+                        <i class="file_icon"></i>
+                        <span class="file_name">{{form1.FileName}}</span>
+                        <i class="file_del ml11" v-on:click="del_file"></i>
+                    </div>
+                </div>
+            </el-form-item>
+            <el-form-item class="mt20" label="个数:" prop="Quantity">
+                <el-input size="mini" v-model="form1.Quantity" style="width:50%" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="具体要求:" prop="Requirement">
+                <el-input size="mini" v-model="form1.Requirement" type="textarea" style="width:70%" auto-complete="off"></el-input>
+            </el-form-item>
+        </div>
+        <div v-if="form1.Type=='3'">
+            <el-form-item label="纸箱规格：" prop="NameValue" :rules="[{ required: true, message: '选择纸箱规格', trigger: 'change' }]">
+                <el-select size="mini" style="width:50%" v-model="form1.NameValue" v-on:change="boxChange" filterable clearable placeholder="请选择">
+                    <el-option v-for="item in boxTypeOptions"
+                               :key="item.value"
+                               :label="item.text"
+                               :value="item.value">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item class="mt20" label="纸箱个数:" prop="Quantity">
+                <el-input size="mini" v-model="form1.Quantity" style="width:50%" v-on:blur="calBoxPrice" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="具体要求:" prop="Requirement">
+                <el-input size="mini" v-model="form1.Requirement" type="textarea" style="width:70%" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="服务费总计:">
+                <span class="txt_red">{{form1.TotalPrice}}(RMB)</span>
+            </el-form-item>
+        </div>
+        <div v-if="form1.Type=='4'">
+            <el-form-item label="纸箱规格：" prop="NameValue" :rules="[{ required: false, message: '选择纸箱规格', trigger: 'change' }]">
+                <el-select size="mini" style="width:50%" v-model="form1.NameValue" v-on:change="boxChange" filterable clearable placeholder="请选择">
+                    <el-option v-for="item in boxTypeOptions"
+                               :key="item.value"
+                               :label="item.text"
+                               :value="item.value">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item class="mt20" label="纸箱个数:" prop="Quantity">
+                <el-input size="mini" v-model="form1.Quantity" style="width:50%" v-on:blur="calBoxPrice" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="具体要求:" prop="Requirement">
+                <el-input size="mini" v-model="form1.Requirement" type="textarea" style="width:70%" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="服务费总计:">
+                <span class="txt_red">{{form1.TotalPrice}}(RMB)</span>
+            </el-form-item>
+        </div>
+        <!-- 换卡板 -->
+        <div v-if="form1.Type=='5'">
+            <el-form-item class="mt20" label="个数:" prop="Quantity">
+                <el-input size="mini" v-model="form1.Quantity" style="width:50%" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="具体要求:" prop="Requirement">
+                <el-input size="mini" v-model="form1.Requirement" type="textarea" style="width:70%" auto-complete="off"></el-input>
+            </el-form-item>
+        </div>
+    </el-form>
+</template>
+<script>
+    Vue.component(
+        'my-goods',
+        {
+            template: "#special",
+            data: function () {
+                //验证件数
+                var validateNumber = function (rule, value, callback) {
+                    if (value != '' && value != null) {
+                        if (!ValidNumber(value)) {
+                            callback(new Error('请输入数字'));
+                        } 
+                        else if (value > 2147483647) {
+                            callback(new Error('输入数字超出限制'));
+                        }
+                    }
+                    callback();
+                };
+                return {
+                    form1: @Html.Raw(Json.Encode(Model)),
+                    rules1: {
+                        Quantity: [{ required: false, validator: validateNumber, trigger: 'blur' }],
+                    },
+                    baseData: {},
+                    boxTypeOptions: [{ value: "1", text: "大(70*40*40CM) 40元/个" }, { value: "2", text: "中(65*40*40CM) 30元/个" }, { value: "3", text: "小(45*45*30CM) 20元/个" }],
+                }
+            },
+            methods: {
+                //计算纸箱费用
+                calBoxPrice: function () {
+                    if (ValidNumber(this.form1.Quantity)) {
+                        if (this.form1.NameValue == '1') {
+                            this.form1.TotalPrice = 40 * this.form1.Quantity;
+                        } else if (this.form1.NameValue == '2') {
+                            this.form1.TotalPrice = this.form1.Quantity *30;
+                        } else if (this.form1.NameValue == '3') {
+                            this.form1.TotalPrice = this.form1.Quantity * 20;
+                        } else {
+                            this.form1.TotalPrice = 0;
+                        }
+                    }
+                },
+                //计算先撕后贴费用
+                calTotalPrice1: function () {
+                    if (ValidNumber(this.form1.Quantity)) {
+                        if (this.form1.Quantity == 0) {
+                            this.form1.TotalPrice = 0;
+                        }
+                       else if (this.form1.Quantity <= 10) {
+                            this.form1.TotalPrice = 100*2;
+                        } else if (this.form1.Quantity > 10){
+                            this.form1.TotalPrice = this.form1.Quantity * 5*2;
+                        }
+                    }
+                },
+                //计算贴标签总金额
+                calTotalPrice: function () {
+                    if (ValidNumber(this.form1.Quantity)) {
+                        if (this.form1.Quantity == 0) {
+                            this.form1.TotalPrice = 0;
+                        }
+                        else if (this.form1.Quantity <= 10) {
+                            this.form1.TotalPrice = 100;
+                        } else {
+                            this.form1.TotalPrice = this.form1.Quantity * 5;
+                        }
+                    }
+                },
+                //删除文件
+                del_file: function () {
+                    this.form1.FileName = "";
+                    this.form1.FileURL = "";
+                    this.form1.FileFullURL = "";
+                },
+                //文件上传
+                httpRequest: function (options) {
+                    var that = this;
+                    that.fileList = [];
+                    UploadFile(options, '/Files/UploadPickUpFile', function (res) {
+                        if (res.type) {
+                            var data = JSON.parse(res.file);
+                            that.form1.FileName = data.name;
+                            that.form1.FileURL = data.URL;
+                            that.form1.FileFullURL = data.fullURL;
+                            that.$refs.form1.validateField('FileName');
+                        } else {
+                            that.onAlert("error", res.msg)
+                        }
+                    });
+                },
+                //清空栏位
+                clearFileds: function () {
+                    this.form1.NameValue = "";
+                    this.form1.Name = "";
+                    this.form1.Quantity = 0;
+                    this.form1.UnitPrice = 0;
+                    this.form1.TotalPrice = 0;
+                    this.form1.Requirement = "";
+                    this.form1.FileName = "";
+                    this.form1.FileURL = "";
+                    this.form1.FileFullURL = "";
+                },
+                //类型改变
+                typeChange: function () {
+                    var that = this;
+                    this.baseData.SpecialTypeOptions.filter(function (v) {
+                        if (v.value == that.form1.Type) {
+                            that.form1.TypeName = v.text;
+                        }
+                    });
+                    that.clearFileds();
+                },
+                boxChange: function () {
+                    var that = this;
+                    that.form1.Name = '';
+                    that.boxTypeOptions.filter(function (v) {
+                        if (v.value == that.form1.NameValue) {
+                            that.form1.Name = v.text;
+                        }
+                    });
+                    that.calBoxPrice();
+                },
+                //标签选择改变
+                labelChange: function () {
+                    var that = this;
+                    that.baseData.LabelTypeOptions.filter(function (v) {
+                        if (v.value == that.form1.NameValue) {
+                            that.form1.Name = v.text;
+                        }
+                    });
+                    this.form1.Quantity = 0;
+                    this.form1.UnitPrice = 0;
+                    this.form1.TotalPrice = 0;
+                    this.form1.Requirement = "";
+                    this.form1.FileName = "";
+                    this.form1.FileURL = "";
+                    this.form1.FileFullURL = "";
+                },
+                //消息提示框
+                onAlert: function (type, message) {
+                    this.$message({
+                        message: message,
+                        type: type
+                    });
+                },
+            }, mounted: function () {
+                var options = @Html.Raw(Json.Encode(@ViewBag.Options)); //加载基础数据
+                this.baseData = options;
+            },
+        });
+</script>
+

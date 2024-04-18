@@ -1,0 +1,155 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>芯达通</title>
+    <link rel="stylesheet" type="text/css" href="css/common.css" />
+    <link rel="stylesheet" type="text/css" href="css/page.css" />
+    <link rel="stylesheet" href="css/element.css"  />
+    <script type="text/javascript" src="js/jQuery-2.2.4.min.js"></script>
+    <script type="text/javascript" src="js/axios.min.js"></script>
+    <script type="text/javascript" src="js/xs.js"></script>
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript" src="js/vue.js"></script>
+    <script type="text/javascript" src="js/element.js"></script>
+</head>
+
+<body>
+    <!-- 右侧定位 -->
+    <div id="right_bar"></div>
+    <!-- logo行 -->
+    <div id="header"></div>
+    <div class="sub_banner">
+        <p class="en">Contact</p>
+        <p class="china">关于芯达通</p>
+    </div>
+    <!-- 内容 -->
+    <div id="contact" class="clearfix wrapper sub_con">
+        <div class="left sub_left">
+            <div class="sub_title">加入我们</div>
+            <div class="sub_list">
+                <i class=deco></i>
+                <div class="sub_list_con">
+                    <ul>
+                        <li><a href="join.html">人才招聘<i></i></a></li>
+                        <li><a href="welfare.html">员工福利<i></i></a></li>
+                        <li class="active"><a href="contact.html">联系方式 <i></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="left sub_right contact_right">
+            <div class="right_bar">
+                <i class="home"></i>
+                <a href="index.html">首页</a>
+                <i>-</i>
+                <a href="contact.html">联系方式</a>
+            </div>
+            <div>
+                <div class="con_title">
+                    <img src="imgs/t_contact.png" alt="">
+                </div>
+                <div class="contact_address">
+                    <div class="c_name">
+                        <div class="company active"><i></i><span>深圳芯达通供应链管理有限公司</span></div>
+                        <div class="company"><i></i><span>香港暢運國際物流有限公司</span></div>
+                    </div>
+                    <!--<div class="clearfix contact_info">
+                        <ul>
+                            <li>联系人：张庆永</li>
+                            <li>电话：86-13825299878 / 86-0755- 83765188</li>
+                            <li>传真：86-0755-83995933</li>
+                            <li>网址：http://www.for-ic.net/</li>
+                        </ul>
+                        <ul>
+                            <li>聯繫人：林團裕</li>
+                            <li>電話：（852）31019258</li>
+                        </ul>
+                    </div>-->
+                </div>
+            </div>
+            <div class="advice">
+                <div class="con_title">
+                    <img src="imgs/t_message.png" alt="">
+                </div>
+                <div class="clearfix">
+                    <input type="text" id="Name" v-model.trim="Name" placeholder="如何称呼您？">
+                    <input type="text" id="Place" v-model.trim="Place" placeholder="您所在城市">
+                    <input type="text" id="Contact" v-model.trim="Contact" placeholder="您的联系方式">
+                    <div class="suggestion">
+                        <textarea id="Suggestion" cols="0" v-model.trim="Suggestion" placeholder="留下您宝贵的意见…"></textarea>
+                    </div>
+                    <input type="button" value="提交信息" class="right message_submit" v-on:click="submit" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 底部 -->
+    <div id="footer_zh"></div>
+    <script>
+        $("#right_bar").load("rightBar.html");
+        $("#header").load("header.html", function () {
+            $("#footer_zh").load("footer.html");
+        });
+
+        var contact = new Vue({
+            el: "#contact",
+            data: {
+                Name: "",
+                Place: "",
+                Contact: "",
+                Suggestion: "",
+            },
+            methods: {
+                submit: function () {
+                    if (this.Name == "" || this.Name == null) {
+                        this.onAlert("error", "请输入您的姓名");
+                        return false;
+                    } else if (this.Contact == "" || this.Contact == null) {
+                        this.onAlert("error", "请输入您的联系方式");
+                        return false;
+                    } else if (this.Suggestion == "" || this.Suggestion == null) {
+                        this.onAlert("error", "请输入您的宝贵建议");
+                        return false;
+                    } else {
+                        var that = this;
+                        axios({
+                            url: "/Home/SuggestionSubmit",
+                            method: "post",
+                            data: {
+                                Name: that.Name,
+                                Place: that.Place,
+                                Contact: that.Contact,
+                                Suggestion: that.Suggestion,
+                            }
+                        }).then(function (response) {
+                            if (response.data.type == "success") {
+                                that.$alert('保存成功！感谢您提出自己的宝贵建议', '提示', {
+                                    confirmButtonText: '关闭',
+                                    lockScroll: false,
+                                    confirmButtonClass: "el-button--warning",
+                                    callback: action => {
+                                        location.href = "/contact.html";
+                                    }
+                                });
+                            }
+                        }).catch(function (error) {
+                            that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                        });
+                    }
+                },
+                //消息提示框
+                onAlert: function (type, message) {
+                    this.$message({
+                        message: message,
+                        type: type
+                    });
+                },
+            },
+        });
+    </script>
+</body>
+
+</html>

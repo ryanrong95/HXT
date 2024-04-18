@@ -1,0 +1,184 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>POST Barcodes/Base64</title>
+    <link href="../../Content/bootstrap.css" rel="stylesheet" />
+    <link href="../../Content/site.css" rel="stylesheet" />
+
+    <script src="../../Scripts/modernizr-2.6.2.js"></script>
+
+</head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/"></a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="/"></a></li>
+                    <li><a href="/"></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+
+
+        <link type="text/css" href="../../Areas/HelpPage/HelpPage.css" rel="stylesheet" />
+        <div id="body" class="help-page">
+            <section class="content-wrapper main-content clear-fix">
+
+                <h1>POST Barcodes/Base64</h1>
+                <div>
+                    <p>根据条码号获取条形码</p>
+
+                    <h2>Request Information</h2>
+
+                    <h3>条形码类型说明</h3>
+                    <table class="help-page-table">
+                        <thead>
+                            <tr><th>Type</th><th>Code</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="parameter-name">1</td>
+                                <td class="parameter-type"><p>Codabar</p></td>
+                            </tr>
+                            <tr>
+                                <td class="parameter-name">2</td>
+                                <td class="parameter-type"><p>Code11</p></td>
+                            </tr>
+                            <tr>
+                                <td class="parameter-name">3</td>
+                                <td class="parameter-type"><p>Code25</p></td>
+                            </tr>
+                            <tr>
+                                <td class="parameter-name">4</td>
+                                <td class="parameter-type"><p>Interleaved25</p></td>
+                            </tr>
+                            <tr>
+                                <td class="parameter-name">5</td>
+                                <td class="parameter-type"><p>Code39</p></td>
+                            </tr>
+                            <tr>
+                                <td class="parameter-name">6</td>
+                                <td class="parameter-type"><p>Code39Extended</p></td>
+                            </tr>
+                            <tr>
+                                <td class="parameter-name">7</td>
+                                <td class="parameter-type"><p>Code93</p></td>
+                            </tr>
+                            <tr>
+                                <td class="parameter-name">8</td>
+                                <td class="parameter-type"><p>Code93Extended</p></td>
+                            </tr>
+                            <tr>
+                                <td class="parameter-name">9</td>
+                                <td class="parameter-type"><p>Code128</p></td>
+                            </tr>
+                            <tr>
+                                <td class="parameter-name">10</td>
+                                <td class="parameter-type"><p>EAN8</p></td>
+                            </tr>
+                            <tr>
+                                <td class="parameter-name">11</td>
+                                <td class="parameter-type"><p>EAN13</p></td>
+                            </tr>
+                            <tr>
+                                <td class="parameter-name">12</td>
+                                <td class="parameter-type"><p>EAN128</p></td>
+                            </tr>
+                            <tr>
+                                <td class="parameter-name">13</td>
+                                <td class="parameter-type"><p>EAN14</p></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p></p>
+
+                    <p>None.</p>
+
+                    <h3>Body Parameters</h3>
+
+                    <div>
+                        <h4 class="sample-header">application/json</h4>
+                        <div class="sample-content">
+                            <span><b>请求参数:</b></span>
+                            <pre class="wrapped">
+{
+    &quot;Data&quot;:&quot;opo:N202101130001&quot;, //用于渲染条形码的数据
+    &quot;Type&quot;:9, //条码类型,默认Code128
+    &quot;Width&quot;:200, //图片宽度,默认200
+    &quot;Height&quot;:50, //条码高度,默认50
+    &quot;ShowText&quot;:true //是否显示文本,默认true
+}
+</pre>
+                        </div>
+                    </div>
+
+                    <p></p>
+
+                    <p>None.</p>
+
+
+                    <h2>Response Information</h2>
+
+                    <h3>Resource Description</h3>
+
+                    <table class="help-page-table">
+                        <thead>
+                            <tr><th>Name</th><th>Description</th><th>Type</th></tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+
+                    <h3>Response Formats</h3>
+
+                    <div>
+                        <h4 class="sample-header">application/json</h4>
+                        <div class="sample-content">
+                            <span><b>正常响应:</b></span>
+                            <pre class="wrapped">
+{
+  &quot;success&quot;: true,
+  &quot;code&quot;: 200,
+  &quot;data&quot;: &quot;条形码数据&quot;
+}
+</pre>
+                            <span><b>错误异常:</b></span>
+<pre class="wrapped">
+{
+  &quot;success&quot;: false,
+  &quot;code&quot;: 400,
+  &quot;data&quot;: &quot;异常信息&quot;
+}
+</pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <hr />
+        <footer>
+            <p>&copy; 2020-07-03</p>
+        </footer>
+    </div>
+
+    <script src="../../Scripts/jquery-1.10.2.js"></script>
+    <script src="../../Scripts/bootstrap.js"></script>
+    <script src="../../Scripts/respond.js"></script>
+
+</body>
+</html>

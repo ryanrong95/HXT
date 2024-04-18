@@ -1,0 +1,235 @@
+﻿<template id="leftmenu">
+    <div class="left_list fl">
+        <div id="list" v-cloak>
+            <h2>
+                <a href="/Home/Index">会员中心</a>
+            </h2>
+            <div class="site_list">
+                <dl v-for="(item,index) in menulists">
+                    <dt class="clearfix" v-on:click="toggleList(item)">
+                        <i class="icon"></i>{{item.title}}
+                        <i class="fr icon_toggle" :class="{'icon_toggle_up':!item.isShow}"></i>
+                    </dt>
+                    <dd v-on:mouseenter="showNewList(i,opt)" v-on:mouseleave="hideNewList(opt)" :class="{'current':i==subIndex && index==menuIndex || opt.sonItems && opt.newStatus===i}"
+                        v-for="(opt,i) in item.options" v-show="item.isShow">
+                        <a :href="opt.url">{{opt.text}}</a>
+                        <ul class="list_add" v-if="opt.sonItems&&opt.newStatus===i">
+                            <li v-for="(m,n) in opt.sonItems">
+                                <a :href="m.url"><i></i>{{m.text}}</a>
+                            </li>
+                        </ul>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</template>
+<script>
+    Vue.component(
+        'leftmenu',
+        {
+            template: "#leftmenu",
+            data: function () {
+                return {
+                    
+                }
+            },
+            props: {
+                menuinfo: {
+                    type: Object,
+                    default: function () {
+                        return {
+                            menulists: [],
+                            subIndex: -1, //二级标题控制序号
+                            menuIndex: -1, // 一级标题控制序号
+                        };
+                    }
+                }
+            },
+            computed: {
+                menulists: function () {
+                    return this.menuinfo.menulists;
+                },
+                subIndex: function () {
+                    return this.menuinfo.subIndex;
+                },
+                menuIndex: function () {
+                    return this.menuinfo.menuIndex;
+                },
+            },
+            methods: {
+                //左侧列表小三角控制显示隐藏
+                toggleList: function (item) {
+                    item.isShow = !item.isShow;
+                },
+                showNewList: function (i, opt) {
+                    opt.newStatus = i;
+                },
+                hideNewList: function (opt) {
+                    opt.newStatus = -1;
+                },
+            },
+        });
+
+</script>
+<style>
+    .left_list {
+        width: 228px;
+        background-color: #fff;
+        border-radius: 6px;
+        box-shadow: 0 0;
+        box-shadow: 0 4px 6px #eee;
+    }
+
+        .left_list h2 {
+            padding: 16px 20px;
+            font-size: 16px;
+            font-weight: 700;
+            border-bottom: 1px solid #eee;
+        }
+
+            .left_list h2 a {
+                color: #323232;
+            }
+
+        .left_list .site_list {
+            padding: 20px 0;
+            margin-left: -6px;
+        }
+
+            .left_list .site_list dl {
+                margin-bottom: 16px;
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
+
+            .left_list .site_list dt {
+                color: #323232;
+                font-size: 14px;
+                font-weight: 700;
+                margin-bottom: 14px;
+                padding: 0 20px;
+                cursor: pointer;
+            }
+
+            .left_list .site_list dd {
+                position: relative;
+            }
+
+            .left_list .site_list dl dt .icon {
+                display: inline-block;
+                width: 18px;
+                height: 16px;
+                background: url(/Content/img/icon_1.png) no-repeat center center;
+                vertical-align: middle;
+                overflow: hidden;
+                margin: -2px 6px 0 0;
+            }
+
+            .left_list .site_list dl:nth-of-type(2) dt .icon {
+                background-image: url(/Content/img/icon_2.png);
+            }
+
+            .left_list .site_list dl:nth-of-type(3) dt .icon {
+                background-image: url(/Content/img/icon_3.png);
+            }
+
+            .left_list .site_list dl:nth-of-type(4) dt .icon {
+                background-image: url(/Content/img/icon_4.png);
+            }
+
+            .left_list .site_list dl:nth-of-type(5) dt .icon {
+                background-image: url(/Content/img/icon_5.png);
+            }
+
+            .left_list .site_list dl:nth-of-type(6) dt .icon {
+                background-image: url(/Content/img/icon_6.png);
+            }
+
+            .left_list .site_list dl:nth-of-type(7) dt .icon {
+                background-image: url(/Content/img/icon_7.png);
+            }
+
+            .left_list .site_list dt .icon_toggle {
+                display: inline-block;
+                width: 11px;
+                height: 7px;
+                background: url(/Content/img/arrow.png) no-repeat;
+                vertical-align: middle;
+                overflow: hidden;
+                margin: 7px 25px 0 0;
+            }
+
+            .left_list .site_list dt .icon_toggle_up {
+                background: url(/Content/img/arrow_hide.png) no-repeat;
+            }
+
+            .left_list .site_list dd a {
+                display: inline-block;
+                width: 200px;
+                height: 38px;
+                line-height: 33px;
+                padding: 0 20px 0 64px;
+                color: #666;
+                box-sizing: border-box;
+            }
+
+                .left_list .site_list dd a:hover {
+                    color: #1796d9;
+                }
+
+            .left_list .site_list dd.current > a {
+                background: url(/Content/img/selected.png) no-repeat;
+                color: #fff;
+            }
+
+            .left_list .site_list .list_add {
+                position: absolute;
+                left: 215px;
+                top: -19px;
+                width: 230px;
+                height: 256px;
+                padding: 40px 80px;
+                background: url(/Content/img/tanc_bg.png) no-repeat;
+                z-index: 2000;
+            }
+
+                .left_list .site_list .list_add li {
+                    margin-bottom: 25px;
+                }
+
+                    .left_list .site_list .list_add li a {
+                        display: block;
+                        width: 170px;
+                        height: 60px;
+                        line-height: 60px;
+                        border: 1px solid #dae5e8;
+                        background-color: #e9f2fb;
+                        border-radius: 6px;
+                        padding: 0 30px;
+                        text-align: center;
+                    }
+
+                    .left_list .site_list .list_add li i {
+                        display: inline-block;
+                        width: 26px;
+                        height: 23px;
+                        background: url(/Content/img/icon_sh.png) no-repeat;
+                        vertical-align: middle;
+                        overflow: hidden;
+                        margin-right: 10px;
+                    }
+
+                    .left_list .site_list .list_add li:nth-child(2) i {
+                        background-image: url(/Content/img/icon_fh.png);
+                        background-position: center center;
+                    }
+
+                    .left_list .site_list .list_add li:nth-child(3) i {
+                        background-image: url(/Content/img/icon_zl.png);
+                        background-position: center center;
+                    }
+</style>

@@ -1,0 +1,62 @@
+﻿
+@{Html.RenderAction("StorageListIn", "Order");}
+@{Html.RenderAction("StorageListOut", "Order");}
+
+<link href="~/Content/css/tab.css" rel="stylesheet" />
+
+<div id="storagelist" v-cloak class="tab_content">
+    <div class="clearfix tab_switch">
+        <ul>
+            <li :class="tabNo == 1 ? 'active' : ''">
+                <a href="javascript:void(0)" v-on:click="showStorageListIn()">入库订单<i></i></a>
+            </li>
+            <li :class="tabNo == 2 ? 'active' : ''">
+                <a href="javascript:void(0)" v-on:click="showStorageListOut()">出库订单<i></i></a>
+            </li>
+        </ul>
+    </div>
+
+    <div v-show="tabNo == 1">
+        <storagelistin ref="storagelistin"></storagelistin>
+    </div>
+    <div v-show="tabNo == 2">
+        <storagelistout ref="storagelistout"></storagelistout>
+    </div>
+</div>
+<script>
+    var storagelist = new Vue({
+        el: "#storagelist",
+        data: function () {
+            return {
+                tabNo: @(ViewBag.tabNo), //标签号, 从1开始
+            }
+        },
+        methods: {
+            //显示入库订单
+            showStorageListIn: function () {
+                this.tabNo = 1;
+                this.$refs.storagelistin.initPageParams();
+                this.$refs.storagelistin.paging();
+            },
+            //显示出库订单
+            showStorageListOut: function () {
+                this.tabNo = 2;
+                this.$refs.storagelistout.initPageParams();
+                this.$refs.storagelistout.paging();
+            },
+        },
+        mounted: function () {
+            switch (this.tabNo) {
+                case 1:
+                    this.$refs.storagelistin.initPageParams();
+                    this.$refs.storagelistin.paging();
+                    break;
+                case 2:
+                    this.$refs.storagelistout.initPageParams();
+                    this.$refs.storagelistout.paging();
+                    break;
+                default:
+            }
+        },
+    });
+</script>

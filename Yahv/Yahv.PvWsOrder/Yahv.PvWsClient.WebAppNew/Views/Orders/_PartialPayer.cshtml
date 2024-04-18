@@ -1,0 +1,125 @@
+﻿<template id="payer_info">
+    <el-form :model="form1" :rules="rules1" status-icon ref="form1" label-width="150px">
+        <el-form-item label="开户行" prop="Bank">
+            <el-input size="mini" style="width: 90%" v-model="form1.Bank" placeholder="请输入开户行" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="账号" prop="Account">
+            <el-input size="mini" style="width: 90%" v-model="form1.Account" placeholder="请输入账号" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="开户行地址" prop="BankAddress">
+            <el-input size="mini" style="width: 90%" v-model="form1.BankAddress" placeholder="请输入开户行地址" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="银行编码" prop="SwiftCode">
+            <el-input size="mini" style="width: 90%" v-model="form1.SwiftCode" placeholder="请输入银行编码" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="支付方式" prop="Methord" :rules="[{ required: true, message: '请选择支付方式', trigger: 'change' }]">
+            <el-select size="mini" style="width: 50%" v-model="form1.Methord" filterable clearable placeholder="请选择">
+                <el-option v-for="item in baseData.MethordOptions"
+                           :key="item.value"
+                           :label="item.text"
+                           :value="item.value">
+                </el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item label="支付币种" prop="Currency" :rules="[{ required: true, message: '请选择支付币种', trigger: 'change' }]">
+            <el-select size="mini" style="width: 50%" v-model="form1.Currency" filterable clearable placeholder="请选择">
+                <el-option v-for="item in baseData.CurrencyOptions"
+                           :key="item.value"
+                           :label="item.text"
+                           :value="item.value">
+                </el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item label="地区" prop="Place" :rules="[{ required: true, message: '请选择地区', trigger: 'change' }]">
+            <el-select size="mini" style="width: 50%" v-model="form1.Place" filterable clearable placeholder="请选择">
+                <el-option v-for="item in baseData.PlaceOptions"
+                           :key="item.value"
+                           :label="item.text"
+                           :value="item.value">
+                </el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item label="付款人" prop="Name">
+            <el-input size="mini" style="width: 90%" v-model="form1.Name" placeholder="请输入付款人" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="电话" prop="Tel">
+            <el-input size="mini" style="width: 90%" v-model="form1.Tel" placeholder="请输入电话" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="手机号" prop="Mobile">
+            <el-input size="mini" style="width: 90%" v-model="form1.Mobile" placeholder="请输入手机号" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱" prop="Email">
+            <el-input size="mini" style="width: 90%" v-model="form1.Email" placeholder="请输入邮箱" auto-complete="off"></el-input>
+        </el-form-item>
+    </el-form>
+</template>
+<script>
+    Vue.component(
+        'my-payer',
+        {
+            template: "#payer_info",
+            data: function() {
+                //银行账户验证
+                var validatorBankAccount = function(rule, value, callback) {
+                    if (value == "" || value == null) {
+                        callback(new Error('请输入银行账号'));
+                    } else if (!/^[a-zA-Z0-9\-]+$/.test(value)) {
+                        callback(new Error('银行账号只能为数字字母或-'));
+                    } else {
+                        callback();
+                    }
+                };
+                return {
+                    form1: @Html.Raw(Json.Encode(Model)),
+                    rules1: {
+                        Bank: [
+                            { required: true, message: '请输入开户行', trigger: 'blur' },
+                            { max: 150, message: '开户行长度超过限制', trigger: 'blur' }
+                        ],
+                        Account: [
+                            { required: true, validator: validatorBankAccount, trigger: 'blur' },
+                            { max: 50, message: '账号长度超过限制', trigger: 'blur' }
+                        ],
+                        BankAddress: [
+                            { required: false, message: '请输入开户行地址', trigger: 'blur' },
+                            { max: 200, message: '开户行地址长度超过限制', trigger: 'blur' }
+                        ],
+                        SwiftCode: [
+                            { required: false, message: '请输入银行编码', trigger: 'blur' },
+                            { max: 50, message: '银行编码长度超过限制', trigger: 'blur' }
+                        ],
+                        Name: [
+                            { required: true, message: '请输入付款人', trigger: 'blur' },
+                            { max: 50, message: '付款人长度超过限制', trigger: 'blur' }
+                        ],
+                        Tel: [
+                            { required: false, message: '请输入电话', trigger: 'blur' },
+                            { max: 50, message: '电话长度超过限制', trigger: 'blur' }
+                        ],
+                        Mobile: [
+                            { required: false, message: '请输入手机号', trigger: 'blur' },
+                            { max: 50, message: '手机号长度超过限制', trigger: 'blur' }
+                        ],
+                        Email: [
+                            { required: false, message: '请输入邮箱', trigger: 'blur' },
+                            { max: 50, message: '邮箱长度超过限制', trigger: 'blur' }
+                        ],
+                    },
+                    baseData: {}
+                }
+            },
+            methods: {
+                //消息提示框
+                onAlert: function(type, message) {
+                    this.$message({
+                        message: message,
+                        type: type
+                    });
+                },
+            },
+            mounted: function() {
+                var options = @Html.Raw(Json.Encode(@ViewBag.Options)); //加载基础数据
+                this.baseData = options;
+            },
+        });
+</script>

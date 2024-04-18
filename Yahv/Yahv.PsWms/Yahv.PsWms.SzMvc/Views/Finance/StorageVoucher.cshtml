@@ -1,0 +1,132 @@
+﻿
+<div id="storagevoucher" v-cloak class="tab_content">
+    <div class="query_wrap clearfix">
+        <div class="clearfix">
+            <div class="fl">
+                <span class="title">账单期号:</span>
+                <el-input style="width:180px;" size="mini" v-model="queryCutDateIndex" @@keyup.enter.native="queryData"></el-input>
+            </div>
+            <button v-on:click="doQuery()" class="btn btn1 ml40">查询</button>
+            <button v-on:click="clearQueryCondition()" class="btn btn2 ml12">重置</button>
+        </div>
+    </div>
+    <div class="tb_wrap" v-loading="loading">
+        <table class="common_tb1 mt30">
+            <tr>
+                <th width="36px">序号</th>
+                <th width="330">账单期号</th>
+                <th width="423">账单总金额</th>
+                <th width="110px">操作</th>
+            </tr>
+            <tr v-for="(item,index) in dataList">
+                <td>{{(pageIndex-1)*pageSize+index+1}}</td>
+                <td>{{item.CutDateIndex}}</td>
+                <td>{{item.TotalAmount}}</td>
+                <td class="operate">
+                    <a v-on:click="detail(item)">查看</a>
+                </td>
+            </tr>
+            <tr v-if="dataList.length==0">
+                <td colspan="8">暂无数据</td>
+            </tr>
+        </table>
+        <div class="foot">
+            <el-pagination class="fr" style="margin-top: 20px;" v-on:size-change="handleSizeChange"
+                           v-on:current-change="handleCurrentChange"
+                           :current-page="pageIndex"
+                           :page-sizes="[5, 10, 20, 40]"
+                           :page-size="pageSize"
+                           layout="total, sizes, prev, pager, next, jumper"
+                           :total="total">
+            </el-pagination>
+        </div>
+    </div>
+</div>
+<script>
+    var storagevoucher = new Vue({
+        el: "#storagevoucher",
+        data: function () {
+            return {
+                queryCutDateIndex: "", //查询条件-账单期号
+
+                loading: false,
+                dataList: [],
+                total: 0,
+                pageIndex: 1,
+                pageSize: 10,
+            }
+        },
+        methods: {
+            //查询按钮点击
+            doQuery: function () {
+                this.pageIndex = 1;
+                this.paging();
+            },
+            //重置查询条件
+            clearQueryCondition: function () {
+                this.queryCutDateIndex = "";
+                this.pageIndex = 1;
+                this.pageSize = 10;
+                this.paging();
+            },
+            //修改 pageSize
+            handleSizeChange: function (size) {
+                this.pageSize = size;
+                this.paging();
+            },
+            //修改 pageIndex
+            handleCurrentChange: function (currentPage) {
+                this.pageIndex = currentPage;
+                this.paging();
+            },
+            //执行分页查询
+            paging: function () {
+                var that = this;
+                that.loading = true;
+                axios({
+                    url: "/Finance/GetStorageVoucherList",
+                    method: "post",
+                    data: {
+                        page: this.pageIndex,
+                        rows: this.pageSize,
+                        CutDateIndex: this.queryCutDateIndex,
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                    transformRequest: [
+                        function (data) {
+                            var ret = '';
+                            for (var it in data) {
+                                ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&';
+                            }
+                            return ret;
+                        }
+                    ]
+                }).then(function (response) {
+                    that.dataList = response.data.data.list;
+                    that.total = response.data.data.total;
+                    that.loading = false;
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                    offset: 100
+                });
+            },
+
+            //查看
+            detail: function (item) {
+                commonSkipUrl(item.CutDateIndex, '/Finance/VoucherDetail', '/Finance/StorageVoucher');
+            },
+        },
+        mounted: function () {
+            this.paging();
+        },
+    });
+</script>

@@ -1,0 +1,110 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>指派 - jQuery EasyUI plugin</title>
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/gray/easyui.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/icon-yg-cool.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/standard-easyui/styles/plugin.css" rel="stylesheet" />
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.easyui.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/locale/easyui-lang-zh_CN.js"></script>
+    <script src="http://localhost:37003/Yahv/customs-easyui/Scripts/easyui.myDialog.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/standard-easyui/scripts/assignment-multiple-input.js"></script>
+</head>
+<body>
+    <h1>指派插件</h1>
+    <button onclick="ddd()" id="mm123">打开</button>
+    <script>
+        function getData1ByKey(key, cb) {
+            $.ajax({
+                type: "get",
+                url: "/rfqapi/offers/List?id=Inq201906030005&key=" + key,
+                dataType: "jsonp",
+                success: function (data) {
+                    cb(data);
+                },
+                error: function () {
+                    alert('接口异常，请求数据失败');
+                }
+            });
+        }
+        function ddd() {
+            var pendingData = [];
+            var selectedData = [];
+            $('#mm123').assignment({
+                title: "操作列表",//弹出框的标题
+                width: 700,
+                height: 500,
+                //待选择列表
+                pending: {
+                    url: '/rfqapi/offers/List?id=Inq201906030005',
+                    title: '待选择列表',
+                    Search: function (key) {// 搜索函数
+                        if (key && key != "") {
+                            getData1ByKey(key, function (data) {
+                                $("#mm123").assignment("searchInput", data);
+                            })
+                        }
+                        console.log($("#mm123").assignment("twoselectData"));
+                    }
+                },
+                //已选择列表
+                selected: {
+                    url: '/rfqapi/offers/offered?id=Inq201906030005',
+                    title: '已选择列表'
+                },
+                columns: [[
+                    { field: 'ck', checkbox: true },
+                    { field: 'ID', title: 'ID' },
+                    { field: 'UserName', title: '用户名' },
+                    { field: 'RealName', title: '真实姓名' },
+                ]],
+                selectitems: function (data) {
+                    var data1 = [];
+                    $.each(data, function (i, val) {
+                        data1.push(val.ID);
+                    })
+                    var data2 = data1.join(",");
+                    console.log(data2);
+                    $.ajax({
+                        type: "get",
+                        url: "/rfqapi/offers/Offer?id=Inq201906030005&items=" + data2,
+                        dataType: "jsonp",
+                        success: function (data3) {
+                            console.log(data3);
+                            if (data3.success) {
+                                $('#mm123').assignment('refresh');
+                            }
+                        },
+                        error: function (err) {
+                            console.log(err);
+                        }
+                    });
+                },
+                unSelectitems: function (data) {
+                    var data1 = [];
+                    $.each(data, function (i, val) {
+                        data1.push(val.ID);
+                    })
+                    var data2 = data1.join(",");
+                    console.log(data2);
+                    $.ajax({
+                        type: "get",
+                        url: "/rfqapi/offers/CancelOffer?id=Inq201906030005&items=" + data2,
+                        dataType: "jsonp",
+                        success: function (data3) {
+                            if (data3.success) {
+                                $('#mm123').assignment('refresh');
+                            }
+                        },
+                        error: function (err) {
+                            console.log(err);
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+</body>
+</html>

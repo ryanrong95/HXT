@@ -1,0 +1,290 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_NoticeLayout.cshtml";
+}
+
+<div id="deliverycompletelog" v-cloak style="margin-left: 2%; margin-top: 5px;">
+    <div class="tb_wrap" v-loading="loading">
+        <table class="common_tb1 mt30">
+            <tr>
+                <th width="36px">序号</th>
+                <th width="300px">BatchID</th>
+                <th width="300px">CreateDate</th>
+                <th width="110px">操作</th>
+            </tr>
+            <tr v-for="(item,index) in dataList">
+                <td>{{(pageIndex-1)*pageSize+index+1}}</td>
+                <td>{{item.BatchID}}</td>
+                <td>{{item.CreateDate}}</td>
+                <td class="operate">
+                    <a v-on:click="detail(item)">查看</a>
+                </td>
+            </tr>
+            <tr v-if="dataList.length==0">
+                <td colspan="8">暂无数据</td>
+            </tr>
+        </table>
+        <div class="foot">
+            <el-pagination class="fr" style="margin-top: 20px;" v-on:size-change="handleSizeChange"
+                           v-on:current-change="handleCurrentChange"
+                           :current-page="pageIndex"
+                           :page-sizes="[5, 10, 20, 40]"
+                           :page-size="pageSize"
+                           layout="total, sizes, prev, pager, next, jumper"
+                           :total="total">
+            </el-pagination>
+        </div>
+    </div>
+
+    <el-dialog title="详情" :lock-scroll="false" width="96%" :visible.sync="dialogDetailVisible" :close-on-click-modal="false">
+        <div>topview</div>
+        <table class="common_tb1 mt30">
+            <tr>
+                <th width="36px">序号</th>
+                <th width="300px">OrderItemID</th>
+                <th width="300px">OrderID</th>
+                <th width="300px">ProductID</th>
+                <th width="300px">CustomCode</th>
+                <th width="100px">StocktakingType</th>
+                <th width="100px">Mpq</th>
+                <th width="100px">PackageNumber</th>
+                <th width="100px">Total</th>
+                <th width="150px">CreateDate</th>
+                <th width="150px">ModifyDate</th>
+                <th width="100px">Status</th>
+                <th width="300px">BakPartnumber</th>
+                <th width="300px">BakBrand</th>
+                <th width="300px">BakPackage</th>
+                <th width="300px">BakDateCode</th>
+                <th width="300px">NoticeID</th>
+                <th width="300px">NoticeItemID</th>
+            </tr>
+            <tr v-for="(item,index) in topviewlist">
+                <td>{{index+1}}</td>
+                <td>{{item.OrderItemID}}</td>
+                <td>{{item.OrderID}}</td>
+                <td>{{item.ProductID}}</td>
+                <td>{{item.CustomCode}}</td>
+                <td>{{item.StocktakingTypeDes}}</td>
+                <td>{{item.Mpq}}</td>
+                <td>{{item.PackageNumber}}</td>
+                <td>{{item.Total}}</td>
+                <td>{{item.CreateDateDes}}</td>
+                <td>{{item.ModifyDateDes}}</td>
+                <td>{{item.StatusDes}}</td>
+                <td>{{item.BakPartnumber}}</td>
+                <td>{{item.BakBrand}}</td>
+                <td>{{item.BakPackage}}</td>
+                <td>{{item.BakDateCode}}</td>
+                <td>{{item.NoticeID}}</td>
+                <td>{{item.NoticeItemID}}</td>
+            </tr>
+            <tr v-if="topviewlist.length==0">
+                <td colspan="50">暂无数据</td>
+            </tr>
+        </table>
+
+        <div>origin</div>
+        <table class="common_tb1 mt30">
+            <tr>
+                <th width="36px">序号</th>
+                <th width="300px">OrderItemID</th>
+                <th width="300px">OrderID</th>
+                <th width="300px">ProductID</th>
+                <th width="300px">CustomCode</th>
+                <th width="100px">StocktakingType</th>
+                <th width="100px">Mpq</th>
+                <th width="100px">PackageNumber</th>
+                <th width="100px">Total</th>
+                <th width="150px">CreateDate</th>
+                <th width="150px">ModifyDate</th>
+                <th width="100px">Status</th>
+                <th width="300px">BakPartnumber</th>
+                <th width="300px">BakBrand</th>
+                <th width="300px">BakPackage</th>
+                <th width="300px">BakDateCode</th>
+                <th width="300px">NoticeID</th>
+                <th width="300px">NoticeItemID</th>
+            </tr>
+            <tr v-for="(item,index) in originlist">
+                <td>{{index+1}}</td>
+                <td>{{item.OrderItemID}}</td>
+                <td>{{item.OrderID}}</td>
+                <td>{{item.ProductID}}</td>
+                <td>{{item.CustomCode}}</td>
+                <td>{{item.StocktakingTypeDes}}</td>
+                <td>{{item.Mpq}}</td>
+                <td>{{item.PackageNumber}}</td>
+                <td>{{item.Total}}</td>
+                <td>{{item.CreateDateDes}}</td>
+                <td>{{item.ModifyDateDes}}</td>
+                <td>{{item.StatusDes}}</td>
+                <td>{{item.BakPartnumber}}</td>
+                <td>{{item.BakBrand}}</td>
+                <td>{{item.BakPackage}}</td>
+                <td>{{item.BakDateCode}}</td>
+                <td>{{item.NoticeID}}</td>
+                <td>{{item.NoticeItemID}}</td>
+            </tr>
+            <tr v-if="originlist.length==0">
+                <td colspan="50">暂无数据</td>
+            </tr>
+        </table>
+
+        <div>new</div>
+        <table class="common_tb1 mt30">
+            <tr>
+                <th width="36px">序号</th>
+                <th width="300px">OrderItemID</th>
+                <th width="300px">OrderID</th>
+                <th width="300px">ProductID</th>
+                <th width="300px">CustomCode</th>
+                <th width="100px">StocktakingType</th>
+                <th width="100px">Mpq</th>
+                <th width="100px">PackageNumber</th>
+                <th width="100px">Total</th>
+                <th width="150px">CreateDate</th>
+                <th width="150px">ModifyDate</th>
+                <th width="100px">Status</th>
+                <th width="300px">BakPartnumber</th>
+                <th width="300px">BakBrand</th>
+                <th width="300px">BakPackage</th>
+                <th width="300px">BakDateCode</th>
+                <th width="300px">NoticeID</th>
+                <th width="300px">NoticeItemID</th>
+            </tr>
+            <tr v-for="(item,index) in newlist">
+                <td>{{index+1}}</td>
+                <td>{{item.OrderItemID}}</td>
+                <td>{{item.OrderID}}</td>
+                <td>{{item.ProductID}}</td>
+                <td>{{item.CustomCode}}</td>
+                <td>{{item.StocktakingTypeDes}}</td>
+                <td>{{item.Mpq}}</td>
+                <td>{{item.PackageNumber}}</td>
+                <td>{{item.Total}}</td>
+                <td>{{item.CreateDateDes}}</td>
+                <td>{{item.ModifyDateDes}}</td>
+                <td>{{item.StatusDes}}</td>
+                <td>{{item.BakPartnumber}}</td>
+                <td>{{item.BakBrand}}</td>
+                <td>{{item.BakPackage}}</td>
+                <td>{{item.BakDateCode}}</td>
+                <td>{{item.NoticeID}}</td>
+                <td>{{item.NoticeItemID}}</td>
+            </tr>
+            <tr v-if="newlist.length==0">
+                <td colspan="50">暂无数据</td>
+            </tr>
+        </table>
+
+    </el-dialog>
+
+</div>
+<script>
+    var deliverycompletelog = new Vue({
+        el: "#deliverycompletelog",
+        data: function () {
+            return {
+                loading: false,
+
+                dataList: [],
+                total: 0,
+                pageIndex: 1,
+                pageSize: 10,
+
+                dialogDetailVisible: false,
+
+                topviewlist: [],
+                originlist: [],
+                newlist: [],
+            }
+        },
+        methods: {
+            //修改 pageSize
+            handleSizeChange: function (size) {
+                this.pageSize = size;
+                this.paging();
+            },
+            //修改 pageIndex
+            handleCurrentChange: function (currentPage) {
+                this.pageIndex = currentPage;
+                this.paging();
+            },
+            //执行分页查询
+            paging: function () {
+                var that = this;
+                that.loading = true;
+                axios({
+                    url: "/Notice/GetLogs",
+                    method: "post",
+                    data: {
+                        page: this.pageIndex,
+                        rows: this.pageSize,
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                    transformRequest: [
+                        function (data) {
+                            var ret = '';
+                            for (var it in data) {
+                                ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&';
+                            }
+                            return ret;
+                        }
+                    ]
+                }).then(function (response) {
+                    that.dataList = response.data.data.list;
+                    that.total = response.data.data.total;
+                    that.loading = false;
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                    offset: 100
+                });
+            },
+            //查看
+            detail: function (item) {
+                this.dialogDetailVisible = true;
+                var that = this;
+                that.loading = true;
+                axios({
+                    url: "/Notice/GetAllTypeOrderItem",
+                    method: "post",
+                    data: {
+                        BatchID: item.BatchID,
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                    transformRequest: [
+                        function (data) {
+                            var ret = '';
+                            for (var it in data) {
+                                ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&';
+                            }
+                            return ret;
+                        }
+                    ]
+                }).then(function (response) {
+                    that.topviewlist = response.data.data.topview;
+                    that.originlist = response.data.data.origin;
+                    that.newlist = response.data.data.new1;
+                    that.loading = false;
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+        },
+        mounted: function () {
+            this.paging();
+        },
+    });
+</script>

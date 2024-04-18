@@ -1,0 +1,193 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>芯达通供应链平台</title>
+    <script src="~/Content/script/vue.min.js"></script>
+    <script src="~/Content/script/vue-router.min.js"></script>
+    <script src="~/Content/script/vuex.js"></script>
+    <script src="~/Content/script/axios.min.js"></script>
+
+    <link href="~/Content/css/element.css" rel="stylesheet" />
+    <script src="~/Content/script/elementui.js"></script>
+
+    <script type="text/javascript" src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+
+    <script src="~/Content/script/common.js"></script>
+    <link href="~/Content/css/common.css" rel="stylesheet" />
+    <link href="~/Content/css/style.css" rel="stylesheet" />
+</head>
+<body>
+    @{Html.RenderAction("HomeHeader", "Layout");}
+    @{Html.RenderAction("StaffSideBar", "Layout");}
+    @{Html.RenderAction("HomeFooter", "Layout");}
+    @{Html.RenderAction("LeftMenu", "Layout");}
+    @{Html.RenderAction("BreadcrumbNav", "Layout");}
+
+    <div>
+        <!-- 客服侧边栏 -->
+        <div id="thelayout1">
+            <staffsidebar ref="staffsidebar"></staffsidebar>
+        </div>
+        <div>
+            <!-- 顶部标题栏 -->
+            <div id="thelayout2">
+                <homeheader :clientname="clientname"></homeheader>
+            </div>
+            <!-- 正文部分 -->
+            <div class="main_body w1200 clearfix">
+                <!-- 左侧菜单栏 -->
+                <div id="thelayout3">
+                    <leftmenu ref="leftmenu" v-bind:menuinfo="{ menulists, subIndex, menuIndex }"></leftmenu>
+                </div>
+                <!-- 主要内容页部分 -->
+                <div class="right_content fl" id="break_nav">
+                    <!--面包屑导航-->
+                    <div id="thelayout4">
+                        <breadcrumbnav v-bind:menuinfo="{ menulists, subIndex, menuIndex, subTitle }"></breadcrumbnav>
+                    </div>
+                    <!--正文-->
+                    <div class="p20">
+                        @RenderBody()
+                    </div>
+                </div>
+            </div>
+            <!--底部-->
+            <div id="thelayout5">
+                <homefooter></homefooter>
+            </div>
+        </div>
+    </div>
+    <script>
+        var thelayout1 = new Vue({
+            el: "#thelayout1",
+            data: function () {
+                return {
+
+                }
+            },
+        });
+
+        var thelayout2 = new Vue({
+            el: "#thelayout2",
+            data: function () {
+                return {
+                    clientname: '@(ViewBag.ClientName)',
+                }
+            },
+        });
+
+        var thelayout3 = new Vue({
+            el: "#thelayout3",
+            data: function () {
+                return {
+                    menulists: [],
+                    subIndex: -1, //二级标题控制序号
+                    menuIndex: -1, // 一级标题控制序号
+                    currenturl: '@(ViewBag.CurrentUrl)',
+                }
+            },
+            created: function () {
+
+            },
+            methods: {
+
+            }
+        });
+
+        var thelayout4 = new Vue({
+            el: "#thelayout4",
+            data: function () {
+                return {
+                    menulists: [],
+                    subIndex: -1, //二级标题控制序号
+                    menuIndex: -1, // 一级标题控制序号
+                    currenturl: '@(ViewBag.CurrentUrl)',
+                    lasturl: '@(ViewBag.LastUrl)',
+                    lasturlsubIndex: -1, //lasturl 二级标题控制序号
+                    lasturlmenuIndex: -1, //lasturl 一级标题控制序号
+                    subTitle: '@(ViewBag.SubTitle )',
+                }
+            },
+            created: function () {
+                //获取菜单
+                var that = this;
+                axios.get('/Content/json/menu.json?timestamp=' + timestamp(), { params: {} })
+                    .then(function (res) {
+                        that.menulists = res.data;
+                        that.setLightSerialNo();
+                        that.calcLastUrlSerialNo();
+
+                        thelayout3.menulists = that.menulists;
+                        thelayout3.subIndex = that.subIndex;
+                        thelayout3.menuIndex = that.menuIndex;
+                        thelayout3.currenturl = that.currenturl;
+
+                        if (that.subTitle != '') {
+                            that.subIndex = that.lasturlsubIndex;
+                            that.menuIndex = that.lasturlmenuIndex;
+                        }
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    });
+            },
+            methods: {
+                //设置高亮菜单序号
+                setLightSerialNo: function () {
+                    var bingo = 0;
+                    for (iaa = 0; iaa < this.menulists.length; iaa++) {
+                        for (jactive = 0; jactive < this.menulists[iaa].options.length; jactive++) {
+                            if (this.currenturl == this.menulists[iaa].options[jactive].url) {
+                                this.subIndex = jactive;
+                                this.menuIndex = iaa;
+                                bingo = 1;
+                                break;
+                            }
+                        }
+                        if (bingo == 1) {
+                            break;
+                        }
+                    }
+                    if (bingo == 0) {
+                        this.subIndex = -1;
+                        this.menuIndex = -1;
+                    }
+                },
+                //计算 lasturl 的序号
+                calcLastUrlSerialNo: function () {
+                    var bingo = 0;
+                    for (iaa = 0; iaa < this.menulists.length; iaa++) {
+                        for (jactive = 0; jactive < this.menulists[iaa].options.length; jactive++) {
+                            if (this.lasturl == this.menulists[iaa].options[jactive].url) {
+                                this.lasturlsubIndex = jactive;
+                                this.lasturlmenuIndex = iaa;
+                                bingo = 1;
+                                break;
+                            }
+                        }
+                        if (bingo == 1) {
+                            break;
+                        }
+                    }
+                    if (bingo == 0) {
+                        this.lasturlsubIndex = -1;
+                        this.lasturlmenuIndex = -1;
+                    }
+                },
+            }
+        });
+
+        var thelayout5 = new Vue({
+            el: "#thelayout5",
+            data: function () {
+                return {
+
+                }
+            },
+        });
+    </script>
+</body>
+</html>

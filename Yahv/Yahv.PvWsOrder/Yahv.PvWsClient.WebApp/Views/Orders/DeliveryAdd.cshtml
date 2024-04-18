@@ -1,0 +1,663 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_LayoutOrder.cshtml";
+    ViewBag.navid = "DeliveryList";
+}
+<div v-cloak id="vDeliveryAdd" class="backshow">
+    <h2>新增代发货</h2>
+    <div class="contentOrder">
+        <el-form ref="ruleForm" :model="formData" :rules="rules" label-width="120px">
+            <div class="divWrap">
+                <p class="divTitle">产品目录</p>
+                <div class="addtable">
+                    <div class="nav_list">
+                        <div class="currency fl">
+                            <el-form-item label="货值币种" prop="Currency" :rules="[{required: true, message: '请选择币种', trigger: 'change'}]">
+                                <el-select size="mini" v-model="formData.Currency" filterable clearable placeholder="请选择">
+                                    <el-option v-for="item in baseData.PayCurrencyOptions"
+                                               :key="item.value"
+                                               :label="item.text"
+                                               :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </div>
+                    </div>
+                    <el-table :data="formData.DeliveryItems" ref="addtable" class="tb-edit el-tb-edit"
+                              :summary-method="getSummaries"
+                              show-summary
+                              :header-cell-class-name="must"
+                              style="width: 100%" highlight-current-row>
+                        <el-table-column fixed="left" type="index" width="35">
+                        </el-table-column>
+                        <el-table-column label="批号">
+                            <template scope="scope">
+                                <span>{{scope.row.DateCode}}</span>
+                            </template>
+                        </el-table-column>
+
+                        <el-table-column label="品牌">
+                            <template scope="scope">
+                                <span>{{scope.row.Manufacturer}}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="型号">
+                            <template scope="scope">
+                                <span>{{scope.row.PartNumber}}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="产地">
+                            <template scope="scope">
+                                <span>{{scope.row.OriginName}}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="StockNum" label="库存">
+                            <template scope="scope">
+                                <span>{{scope.row.StockNum}}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="Quantity" label="数量">
+                            <template scope="scope">
+                                <el-input size="mini" v-model="scope.row.Quantity" v-on:blur="caculTotalPrice(scope.row)" v-on:input="validNumber(scope.row,'Quantity')"></el-input>
+                                <span>{{scope.row.Quantity}}</span>
+                            </template>
+                        </el-table-column>
+
+                        <el-table-column prop="SalePrice" label="销售单价">
+                            <template scope="scope">
+                                <el-input size="mini" v-model="scope.row.SalePrice" v-on:blur="validDecimal(scope.row,'SalePrice')"></el-input>
+                                <span>{{scope.row.SalePrice}}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="SaleTotalPrice" label="销售总价">
+                            <template scope="scope">
+                                <span>{{scope.row.SaleTotalPrice}}</span>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </div>
+            </div>
+            <div class="divWrap mt30">
+                <p class="divTitle">发货信息</p>
+                <div class="div_radio overhide mb20">
+                    <span class="title fl">发货类型</span>
+                    <div class="fl" style="line-height:36px;">
+                        <el-radio v-model="formData.DeliveryType" v-for="item of baseData.DeliveryTypeOptions" :label=item.value>{{item.text}}</el-radio>
+                    </div>
+                </div>
+                <div class="div_radio overhide mb16">
+                    <span class="title fl">是否代收货款</span>
+                    <div class="fl" style="line-height:36px;">
+                        <el-radio v-model="formData.IsBringPay" v-for="item of radioOptions" :label=item.value>{{item.text}}</el-radio>
+                    </div>
+                </div>
+                <el-form-item label="结算币种" prop="SettlementCurrency" :rules="[{required: true, message: '请选择币种', trigger: 'change'}]">
+                    <el-select v-model="formData.SettlementCurrency" filterable clearable placeholder="请选择">
+                        <el-option v-for="item in baseData.PayCurrencyOptions"
+                                   :key="item.value"
+                                   :label="item.text"
+                                   :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                @*<div v-if="formData.IsBringPay">
+            <el-form-item label="支付方式" prop="PayType" :rules="[{ required: true, message: '请选择支付方式', trigger: 'change' }]">
+                <el-select v-model="formData.PayType" style="width:288px;" filterable clearable placeholder="请选择">
+                    <el-option v-for="item in baseData.PayTypeOptions"
+                               :key="item.value"
+                               :label="item.text"
+                               :value="item.value">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+            <div class="uploadfiles ml120">
+                <el-upload
+                           :http-request="httpRequestEntrustFile"
+                           ref="entrustUpload"
+                           action="/Orders/UploadPickUpFile"
+                           :on-remove="handleRemoveEntrustFile"
+                           :file-list="formData.EntrustFile"
+                           accept="image/jpg, image/bmp, image/jpeg, image/gif, image/png, application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+                    <el-button size="small" class="el-icon-ump-upload" type="primary"> 代收款委托书</el-button>
+                    <span class="file_tip ml30">仅限图片、PDF或Word文件，且文件不超过3M</span>
+                </el-upload>
+            </div>
+        </div>*@
+                <div v-if="formData.DeliveryType=='1'">
+                    <div v-if="formData.DeliveryType=='1'" class="div_radio overhide mb16">
+                        <span class="title fl">送货方式</span>
+                        <div class="fl" style="line-height:36px;">
+                            <el-radio v-model="formData.ShippingMethod" v-for="item of baseData.ShippingMethodOptions" :label=item.value>{{item.text}}</el-radio>
+                        </div>
+                    </div>
+                    <div v-if="formData.ShippingMethod=='1'">
+                        <el-form-item label="提货时间" prop="TakingDate" :rules="[{ type: 'date', required: true, message: '请选择提货时间', trigger: 'change' }]">
+                            <el-date-picker type="date" :picker-options="pickerOptions1" placeholder="请选择提货时间" v-model="formData.TakingDate" style="width:288px;"></el-date-picker>
+                        </el-form-item>
+                        <el-form-item label="取货人姓名" prop="TakingContact" :rules="[{ required: true, message: '请输入取货人姓名', trigger: 'blur' },{max:50, message: '取货人姓名长度不超过50', trigger: 'blur' }]">
+                            <el-input v-model="formData.TakingContact" style="width:288px;" placeholder="请输入取货人" auto-complete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="联系电话" prop="TakingPhone" :rules="[{ required: true, message: '请输入联系电话', trigger: 'blur' },{max:50, message: '联系电话长度不超过50', trigger: 'blur' }]">
+                            <el-input v-model="formData.TakingPhone" placeholder="请输入联系电话" style="width:288px;" auto-complete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="证件类型" prop="CertificateType" :rules="[{ required: true, message: '请选择证件类型', trigger: 'change' }]">
+                            <el-select v-model="formData.CertificateType" style="width:288px;" filterable clearable placeholder="请选择">
+                                <el-option v-for="item in baseData.IDTypeOptions"
+                                           :key="item.value"
+                                           :label="item.text"
+                                           :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="证件号码" prop="Certificate">
+                            <el-input v-model="formData.Certificate" placeholder="请输入证件号码" style="width:288px;" auto-complete="off"></el-input>
+                        </el-form-item>
+                    </div>
+                    <div v-if="formData.ShippingMethod=='2'||formData.ShippingMethod=='3'">
+                        <el-form-item label="收货人姓名" prop="ReceivedContact" :rules="[{ required: true, message: '请输入收货人姓名', trigger: 'blur' },{max:50, message: '取货人姓名长度不超过50', trigger: 'blur' }]">
+                            <el-input v-model="formData.ReceivedContact" style="width:288px;" placeholder="请输入收货人姓名" auto-complete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="联系电话" prop="ReceivedPhone" :rules="[{ required: true, message: '请输入联系电话', trigger: 'blur' },{max:50, message: '联系电话长度不超过50', trigger: 'blur' }]">
+                            <el-input v-model="formData.ReceivedPhone" placeholder="请输入联系电话" style="width:288px;" auto-complete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="地址" prop="ReceivedAddress" :rules="[{ required: true, message: '请选择地址', trigger: 'change' }]">
+                            <el-cascader placeholder="请选择地址" :props="cascaderConfig" :options="AddressLists" v-model="formData.ReceivedAddress">
+                            </el-cascader>
+                        </el-form-item>
+                        <el-form-item label="详细地址" prop="ReceivedDetailAddress" :rules="[{ required: true, message: '请输入详细地址', trigger: 'blur' },{max:100, message: '详细地址长度不超过100', trigger: 'blur' }]">
+                            <el-input v-model="formData.ReceivedDetailAddress" style="width:288px;" type="textarea" placeholder="请输入详细的道路、楼字、区号等名称"></el-input>
+                        </el-form-item>
+                    </div>
+                    <div v-if="formData.ShippingMethod=='3'">
+                        <el-form-item label="承运商" prop="CarrierID" :rules="[{ required: true, message: '请选择承运商', trigger: 'change' }]">
+                            <el-select v-model="formData.CarrierID" style="width:288px;" filterable clearable placeholder="请选择">
+                                <el-option v-for="item in baseData.CarrierOptions"
+                                           :key="item.value"
+                                           :label="item.text"
+                                           :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="邮政编码" prop="PostCode" :rules="[{ required: false, message: '请输入邮政编码', trigger: 'blur' },{max:50, message: '邮政编码长度不超过50', trigger: 'blur' }]">
+                            <el-input v-model="formData.PostCode" style="width:288px;" placeholder="请输入邮政编码" auto-complete="off"></el-input>
+                        </el-form-item>
+                        <div class="div_radio overhide mb16">
+                            <span class="title fl">快递支付方式</span>
+                            <div class="fl" style="line-height:36px;">
+                                <el-radio v-model="formData.ExpressPaymentType" v-for="item of baseData.ExpressPayTypeOptions" :label=item.value>{{item.text}}</el-radio>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div v-else>
+                    <el-form-item label="收货人姓名" prop="ReceivedContact" :rules="[{ required: true, message: '请输入收货人姓名', trigger: 'blur' },{max:50, message: '取货人姓名长度不超过50', trigger: 'blur' }]">
+                        <el-input v-model="formData.ReceivedContact" style="width:288px;" placeholder="请输入收货人姓名" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="联系电话" prop="ReceivedPhone" :rules="[{ required: true, message: '请输入联系电话', trigger: 'blur' },{max:50, message: '联系电话长度不超过50', trigger: 'blur' }]">
+                        <el-input v-model="formData.ReceivedPhone" placeholder="请输入联系电话" style="width:288px;" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="区域" prop="InternationalAddress" :rules="[{ required: true, message: '请选择区域', trigger: 'change' }]">
+                        <el-select v-model="formData.InternationalAddress" style="width:288px;" filterable clearable placeholder="请选择">
+                            <el-option v-for="item in baseData.OriginOptions"
+                                       :key="item.value"
+                                       :label="item.text"
+                                       :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="详细地址" prop="ReceivedDetailAddress" :rules="[{ required: true, message: '请输入详细地址', trigger: 'blur' },{max:100, message: '详细地址长度不超过100', trigger: 'blur' }]">
+                        <el-input v-model="formData.ReceivedDetailAddress" style="width:288px;" type="textarea" placeholder="请输入详细的道路、楼字、区号等名称"></el-input>
+                    </el-form-item>
+                    <el-form-item label="承运商" prop="CarrierID" :rules="[{ required: true, message: '请选择承运商', trigger: 'change' }]">
+                        <el-select v-model="formData.CarrierID" style="width:288px;" filterable clearable placeholder="请选择">
+                            <el-option v-for="item in baseData.CarrierOptions"
+                                       :key="item.value"
+                                       :label="item.text"
+                                       :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="邮政编码" prop="PostCode" :rules="[{ required: false, message: '请输入邮政编码', trigger: 'blur' },{max:50, message: '邮政编码长度不超过50', trigger: 'blur' }]">
+                        <el-input v-model="formData.PostCode" style="width:288px;" placeholder="请输入邮政编码" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <div class="div_radio overhide mb16">
+                        <span class="title fl">快递支付方式</span>
+                        <div class="fl" style="line-height:36px;">
+                            <el-radio v-model="formData.ExpressPaymentType" v-for="item of baseData.ExpressPayTypeOptions" :label=item.value>{{item.text}}</el-radio>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="divWrap mt20">
+                <p class="divTitle">其他信息</p>
+                <div class="uploadfiles ml120">
+                    <el-upload ref="uploadAccompany"
+                               multiple
+                               :http-request="httpRequestAccompanyingFile"
+                               action="/Orders/UploadPickUpFile"
+                               :on-remove="handleRemoveAccompanyingFile"
+                               :file-list="formData.AccompanyingFile"
+                               accept="image/jpg, image/bmp, image/jpeg, image/gif, image/png, application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+                        <el-button size="small" class="el-icon-ump-upload" type="primary">随货文件</el-button>
+                        <span class="file_tip ml30">仅限图片、PDF或Word文件，且文件不超过3M</span>
+                    </el-upload>
+                </div>
+                <div class="uploadfiles ml120 mt20 mb20">
+                    <el-upload multiple
+                               ref="PIupload"
+                               :http-request="httpRequestPIFile"
+                               action="/Orders/UploadOrderFile"
+                               :on-remove="handleRemovePIFile"
+                               :file-list="formData.PIFile"
+                               accept="image/jpg, image/bmp, image/jpeg, image/gif, image/png, application/pdf">
+                        <el-button size="small" class="el-icon-ump-upload" type="primary">合同发票</el-button>
+                        <span class="file_tip ml30">仅限图片或PDF文件，且文件不超过3M</span>
+                    </el-upload>
+                </div>
+                <div class="overhide mt30">
+                    <div class=" fl div_radio overhide mb16">
+                        <span class="title fl">是否拆箱验货</span>
+                        <div class="fl" style="line-height:36px;">
+                            <el-radio v-model="formData.IsUnBoxed" v-for="item of radioOptions" :label=item.value>{{item.text}}</el-radio>
+                        </div>
+                    </div>
+                    <div class="ml60 fl div_radio overhide mb16">
+                        <span class="title fl">是否检测产品</span>
+                        <div class="fl" style="line-height:36px;">
+                            <el-radio v-model="formData.IsDetection" v-for="item of radioOptions" :label=item.value>{{item.text}}</el-radio>
+                        </div>
+                    </div>
+                </div>
+                <div class="overhide">
+                    <div class="fl div_radio overhide  mb16">
+                        <span class="title fl">是否重贴标签</span>
+                        <div class="fl" style="line-height:36px;">
+                            <el-radio v-model="formData.IsCustomLabel" v-for="item of radioOptions" :label=item.value>{{item.text}}</el-radio>
+                        </div>
+                    </div>
+                    <div class="ml60 fl div_radio overhide  mb16">
+                        <span class="title fl">是否重新包装</span>
+                        <div class="fl" style="line-height:36px;">
+                            <el-radio v-model="formData.IsRepackaging" v-for="item of radioOptions" :label=item.value>{{item.text}}</el-radio>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="div_radio overhide fl mb16">
+                        <span class="title fl">是否真空包装</span>
+                        <div class="fl" style="line-height:36px;">
+                            <el-radio v-model="formData.IsVacuumPackaging" v-for="item of radioOptions" :label=item.value>{{item.text}}</el-radio>
+                        </div>
+                    </div>
+                    <div class="div_radio overhide fl ml60 mb16">
+                        <span class="title fl">是否防水包装</span>
+                        <div class="fl" style="line-height:36px;">
+                            <el-radio v-model="formData.IsWaterproofPackaging" v-for="item of radioOptions" :label=item.value>{{item.text}}</el-radio>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="submit_btn mt100">
+                <el-button size="medium" v-on:click="submitForm()" type="warning" class="submit">保存订单</el-button>
+            </div>
+        </el-form>
+    </div>
+    <el-dialog class="successdialog" title="订单保存成功" :lock-scroll="false" width="520px" :visible.sync="dialogSuccessVisible" :close-on-click-modal="false">
+        <div class="content">
+            <p>订单保存成功</p>
+            <div class="no_text">
+                <span>订单编号：</span><span class="red">{{orderid}}</span>
+            </div>
+            @*<div class="clientcode"><span>您的入仓号为：</span><span class="red">{{clientcode}}</span><span>，请务必将此编号填写到快递单或送货单上，否则将加收100元人民币的代理费。</span></div>*@
+        </div>
+        <div class="dialog_foot">
+            <el-button type="primary" v-on:click="orderDetails">查看订单信息</el-button>
+            <el-button type="primary" v-on:click="btn_back">返回</el-button>
+        </div>
+    </el-dialog>
+    <el-dialog class="successdialog warningDialog" title="订单保存失败" :lock-scroll="false" width="520px" :visible.sync="dialogWarningVisible" :close-on-click-modal="false">
+        <div class="content">
+            <p>订单保存失败</p>
+            <div class="err_msg"><span>失败原因：{{errorMsg}}</span></div>
+        </div>
+        <div class="dialog_foot">
+            <el-button class="btn_re" type="primary" v-on:click="btn_back">返回</el-button>
+        </div>
+    </el-dialog>
+</div>
+<script src="~/Scripts/areaData.js"></script>
+<script>
+    var vDeliveryAdd = new Vue({
+        el: "#vDeliveryAdd",
+        data: function () {
+             //验证身份证
+            var validateIDNumber = function (rule, value, callback) {
+                if (value == '' || value == null) {
+                    callback(new Error('请输入证件号码'));
+                }
+                else if (!ValidIDNumber(value)) {
+                    callback(new Error('请输入正确的证件号码'));
+                }
+                callback();
+            };
+            return {
+                formData: @Html.Raw(Json.Encode(Model)),  //表单数据
+                baseData: {}, //基础数据
+                radioOptions: [{ value: false, text: "否" }, { value: true, text: "是" }],
+
+                deliveryOptions: [{ value: "1", text: "自提" }, { value: "2", text: "快递" }, { value: "3", text: "送货上门" }],
+                //验证规则
+                rules: {
+                     Certificate: [{ required: true, validator: validateIDNumber, trigger: 'blur' }],
+                },
+                dialogWarningVisible:false,
+                AddressLists: $.pccData[0].s.filter(function (data) { if (data.n == "香港") { return data } }), //省市区三级联动数据
+                pickerOptions1: {
+                    disabledDate: function (time) {
+                        var myDate = new Date();
+                        myDate.setDate(myDate.getDate() + 6);
+                        var today = new Date();
+                        today.setDate(today.getDate() - 1);
+                        return time > myDate || time < today;
+                    },
+                },
+                cascaderConfig: {
+                    label: 'n',
+                    value: 'n',
+                    children: 's'
+                },
+                orderid: "",
+                dialogSuccessVisible: false,
+                errorMsg:"",
+            }
+        },
+        watch: {
+            SZDeliveryType: function (val) {
+                this.$refs["ruleForm"].clearValidate();
+            },
+            HKDeliveryType: function (val) {
+                this.$refs["ruleForm"].clearValidate();
+            },
+            PickUpDateTime: function (val) {
+                if (val != null && val != "") {
+                    this.formData.TakingDateStr = this.dateToString(val);
+                }
+            },
+        },
+        computed: {
+            SZDeliveryType: function () {
+                return this.formData.SZDeliveryType;
+            },
+            HKDeliveryType: function () {
+                return this.formData.HKDeliveryType;
+            },
+            PickUpDateTime: function () {
+                return this.formData.TakingDate;
+            },
+        },
+        methods: {
+            must(obj) {
+                if (obj.columnIndex == 6) {
+                    return 'must';
+                }
+            },
+            //上传请求
+            httpRequest: function (options, ref, column, uploadPath, isMuti) {
+                var that = this;
+                var file = options.file;
+                var size = file.size / 1024;
+                var imgArr = ["image/jpg", "image/bmp", "image/jpeg", "image/gif", "image/png"];
+                let config = {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                };
+                if (isMuti) {
+                    var arr = that.$refs[ref].uploadFiles;
+                    that.$refs[ref].uploadFiles = arr.filter(function (value) {
+                        if (value.uid != file.uid) {
+                            return value;
+                        }
+                    })
+                } else {
+                    that.formData[column] = [];
+                }
+
+                if (imgArr.indexOf(file.type) > -1 && size > 500) { //大于500kb的图片压缩
+                    imageConversion.compressAccurately(file, 500).then(function (res) {
+                        var form = new FormData(); // FormData 对象
+                        form.append('file', res, file.name);
+                        axios.post(uploadPath, form, config)
+                            .then(function (response) {
+                                if (response.data.type != "error") {
+                                    that.formData[column].push(JSON.parse(response.data.data));
+                                } else {
+                                    that.onAlert(response.data.type, response.data.msg);
+                                    return;
+                                }
+                            });
+                    });
+                } else if (imgArr.indexOf(file.type) <= -1 && size > 1024 * 3) {
+                    that.onAlert("error", "上传的文件大小不能大于3M");
+                    return;
+                } else {
+                    var form = new FormData(); // FormData 对象
+                    form.append("file", file); // 文件对象
+                    //添加请求头
+                    axios.post(uploadPath, form, config)
+                        .then(function (response) {
+                            if (response.data.type != "error") {
+                                that.formData[column].push(JSON.parse(response.data.data));
+                            } else {
+                                that.onAlert(response.data.type, response.data.msg);
+                                return;
+                            }
+                        });
+                }
+            },
+            httpRequestAccompanyingFile: function (options) {
+                this.httpRequest(options, "uploadAccompany", "AccompanyingFile", "/Orders/UploadPickUpFile", true)
+            },
+            handleRemoveAccompanyingFile: function (file, fileList) {
+                this.formData.AccompanyingFile = fileList;
+            },
+            httpRequestPIFile: function (options) {
+                this.httpRequest(options, "PIupload", "PIFile", "/Orders/UploadOrderFile", true);
+            },
+            handleRemovePIFile: function (file, fileList) {
+                this.formData.PIFile = fileList;
+            },
+            httpRequestEntrustFile: function (options) {
+                this.httpRequest(options, "entrustUpload", "EntrustFile", "/Orders/UploadPickUpFile", false)
+            },
+            //删除委托书
+            handleRemoveEntrustFile: function (file, fileList) {
+                this.formData.EntrustFile = this.formData.EntrustFile.filter(function (value) {
+                    if (value.uid != file.uid) {
+                        return value;
+                    }
+                });
+            },
+            caculTotalPrice: function (row) {
+                if (row.StockNum < row.Quantity) {
+                    row.Quantity = row.StockNum;
+                }
+                row.SaleTotalPrice = (row.Quantity * row.SalePrice).toFixed(2);
+
+                if (row.Quantity == "" || row.Quantity == null || row.SalePrice == "" || row.SalePrice == null) {
+                    row.SaleTotalPrice = "";
+                }
+            },
+            //返回新增页面
+            btn_back: function () {
+                window.location.href = "/Orders/DeliveryList";
+            },
+            orderDetails: function () {
+                commonSkip(this.orderid, '/Orders/DeliveryDetail', 'DeliveryList');
+            },
+            dateToString: function (date) {
+                var year = date.getFullYear();
+                var month = (date.getMonth() + 1).toString();
+                var day = (date.getDate()).toString();
+                if (month.length == 1) {
+                    month = "0" + month;
+                }
+                if (day.length == 1) {
+                    day = "0" + day;
+                }
+                var dateTime = year + "-" + month + "-" + day;
+                return dateTime;
+            },
+            handSupplierChange: function () {
+                this.formData.SupplierBeneficiaryID = "";
+            },
+            getBenefitOptions: function (id) {
+                if (JSON.stringify(this.baseData) != "{}") {
+                    var arr = this.baseData.BeneficiariesOptions.filter(function (v, i) {
+                        if (v.supplierID == id) {
+                            return v;
+                        }
+                    });
+                    return arr;
+                }
+            },
+            downloadTemplates: function () {
+                location.href = "/Template/待收货产品导入模板.xlsx";
+            },
+            //获取下拉框的label
+            getOptionsLabel: function (row, label, value, list) {
+                if (value != null && value != "") {
+                    let obj = {};
+                    obj = list.find(function (item) {//这里的selectList就是上面遍历的数据源
+                        return item.value === value;//筛选出匹配数据
+                    });
+                    if (obj != null || obj != "") {
+                        row[label] = obj.text;
+                    }
+                }
+            },
+            //订单提交
+            submitForm: function () {
+                var that = this;
+                if (that.validProduct()) {
+                    that.$refs.ruleForm.validate(function (valid) {
+                        if (valid) {
+                            const loading = that.$loading({
+                                lock: false,
+                                text: 'Loading',
+                                spinner: 'el-icon-loading',
+                                background: 'rgba(0, 0, 0, 0.7)'
+                            });
+                            axios({
+                                url: "/Orders/DeliverySubmit",
+                                method: "post",
+                                data: {
+                                    data: JSON.stringify(that.formData),
+                                },
+                            }).then(function (response) {
+                                loading.close();
+                                if (response.data.type == "error") {
+                                    that.onAlert(response.data.type, response.data.msg);
+                                } else if (response.data.type == "warning") {
+                                    that.errorMsg = response.data.msg;
+                                    that.dialogWarningVisible = true;
+                                } else {
+                                    that.orderid = response.data.data;
+                                    that.dialogSuccessVisible = true;
+                                }
+                            }).catch(function (error) {
+                                that.onAlert("warning", error);
+                            });
+                        } else {
+                            setTimeout(function () {
+                                var isError = document.getElementsByClassName("is-error");
+                                isError[0].querySelector('input').focus();
+                            }, 1)
+                            return false;
+                        }
+                    });
+                }
+            },
+            //验证产品
+            validProduct: function () {
+                var items = this.formData.DeliveryItems;
+
+                var itemCount = 0;
+                for (var i = 0; i < items.length; i++) {
+                    itemCount++;
+                    if (items[i].Quantity == null || items[i].Quantity == "" || items[i].Quantity == 0) {
+                        this.onAlert("error", "请输入第" + (i + 1) + "行产品明细的发货数量");
+                        return;
+                    }
+                    else if ((items[i].SalePrice == null || items[i].SalePrice == "" || items[i].SalePrice <= 0) && this.formData.IsBringPay) {
+                        this.onAlert("error", "请输入第" + (i + 1) + "行产品明细的销售单价");
+                        return;
+                    }
+                }
+                if (itemCount > 50) {
+                    this.onAlert("产品明细不超过50条");
+                    return;
+                }
+                return true;
+            },
+            //合计计算
+            getSummaries: function (param) {
+                const columns = param.columns;
+                const data = param.data;
+                const sums = [];
+                columns.forEach(function (column, index) {
+                    if (index === 0) {
+                        sums[index] = '合计';
+                        return;
+                    } else if (index === 6 || index === 8) {
+                        const values = data.map(function (item) {
+                            return Number(item[column.property]);
+                        });
+                        sums[index] = values.reduce(function (prev, curr) {
+                            const value = Number(curr);
+                            if (!isNaN(value)) {
+                                return prev + curr;
+                            } else {
+                                return prev;
+                            }
+                        }, 0);
+                        sums[index] = sums[index].toFixed(2);
+                    }
+                });
+                return sums;
+            },
+            //验证整数
+            validNumber: function (row, valuetext) {
+                if (row[valuetext] != '' && row[valuetext] != null) {
+                    if (!ValidNumber(row[valuetext])) {
+                        this.$nextTick(function () {
+                            row[valuetext] = 0;
+                        })
+                    }
+                }
+            },
+            //验证整数和小数
+            validDecimal: function (row, valuetext) {
+                if (!ValidDecimal(row[valuetext])) {
+                        row[valuetext] = "";
+                }
+                this.caculTotalPrice(row);
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                    offset:200,
+                });
+            },
+            GetDateFormat: function (str) {
+                return new Date(parseInt(str.substr(6, 13)));
+            },
+        },
+        mounted: function () {
+            var options = @Html.Raw(Json.Encode(@ViewBag.Options)); //加载基础数据
+            this.baseData = options;
+            this.baseData.ShippingMethodOptions.push({value:"3",text:"快递"})
+        },
+    });
+</script>

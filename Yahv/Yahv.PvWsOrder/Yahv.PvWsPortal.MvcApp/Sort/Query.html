@@ -1,0 +1,137 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>归类查询-芯达通- 一站式报关服务平台</title>
+    <meta name="keywords" content="归类查询、海关归类、申报要素、创新恒远" />
+    <meta name="description" content="产品归类页面" />
+    <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
+    <!--[if lt IE 9]>
+      <script src="/Scripts/html5shiv.min.js"></script>
+      <script src="/Scripts/respond.min.js"></script>
+    <![endif]-->
+    <link rel="shortcut icon" href="/Content/images/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="/Content/element.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/common.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/style.css" />
+</head>
+<body class="gray">
+    <div class="header"></div>
+    <section class="w1200 content-boxShadow" id="Query" v-cloak v-loading="loading">
+        <h2 class="title">您的产品 <span>{{querystring}}</span> 的归类结果</h2>
+        <p>{{tipText}}</p>
+        <table >
+            <tr>
+                <th width="42">序号</th>
+                <th width="90">HS 编码</th>
+                <th width="278">商品名称</th>
+                <th width="200">型号</th>
+                <th width="">第一法定单位</th>
+                <th width="">第二法定单位</th>
+                <th width="">监管条件</th>
+                <th width="">检验检疫</th>
+                <th width="56">操作</th>
+            </tr>
+            <tr v-for="item,index in QueryData">
+                <td>{{index+1}}</td>
+                <td>{{item.HSCode}}</td>
+                <td>{{item.ProName}}</td>
+                <td>{{item.ProModel}}</td>
+                <td>{{item.FirstLegalUnit}}</td>
+                <td>{{item.SecondLegalUnit}}</td>
+                <td>{{item.monCon}}</td>
+                <td>{{item.InsQua}}</td>
+                <td><a v-on:click="openDetail(item.HSCode)" style="cursor:pointer">详情</a></td>
+            </tr>
+        </table>
+        <div class="Query-hint"><i class="waring"></i><span>该 HS 归类查询结果仅供参考</span></div>
+        <div class="btnClassfy">
+            <a class="btn button blue" href="/Sort/Search.html">上一步</a>
+            <a class="btn button blue" href="/Sort/Search.html">重新查询</a>
+        </div>
+    </section>
+    <div class="footer"></div>
+    <script src="/Scripts/jquery-3.3.1.min.js" type="text/javascript" charset="utf-8"></script>
+
+    <script src="/Scripts/vue.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/axios.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/element.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/common.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+
+        var aboutus = new Vue({
+            el: '#Query',
+            data: {
+                QueryData: [],
+                loading: true,
+                querystring: "",
+                tipText:"",
+            },
+            mounted: function () {
+                this.getQueryData()
+            },
+            methods: {
+                getQueryData: function () {
+                    this.querystring = localStorage["searchText"];
+                    var that = this;
+                    if (that.querystring == "" || that.querystring == null) {
+                        this.loading = false;
+                    } else {
+                        $.ajax({
+                            type: "Post",
+                            data: {
+                                query: that.querystring
+                            },
+                            url: "https://user.wl.net.cn/WebApi/Query",    //跨域url
+                            dataType: "jsonp",  //指定 jsonp 请求
+                            jsonpCallback: "queryJsonpCallback", // 指定回调函数
+                            error: function () {
+                                aboutus.onAlert("error", "请求失败！");
+                                setTimeout(function () { location.href = "/Index.html" }, 1000);
+                            },
+
+                        });
+                    }
+                },
+                openDetail: function (id) {
+                    if (window.localStorage) {
+                        localStorage.detailText = id;
+                        window.open("/Sort/QueryDetail.html");  
+
+                    } else {
+                        // alert("NOT SUPPORT");
+                    } 
+                },
+                getDataSucc: function (res) {
+                    var that = this;
+                    res = JSON.parse(res.Data);
+                    that.QueryData = res;
+                    if (res.length == 0) {
+                        this.tipText = "根据您提供的产品信息，未找到匹配的归类结果";
+                    }
+                    else {
+                        this.tipText = "根据您提供的产品信息，以下是最为匹配的"+res.length+"条归类结果";
+                    }
+                    
+                },
+                getDataFail: function (err) {
+                    console.log(err);
+                },
+                //消息提示框
+                onAlert: function (type, message) {
+                    this.$message({
+                        message: message,
+                        type: type
+                    });
+                },
+            }
+        });
+        function queryJsonpCallback(result) {
+            if (result.Type == "success") {
+                aboutus.getDataSucc(result)
+            }
+            aboutus.loading = false;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+﻿<template id="info">
+    <el-form :model="form1" :rules="rules1" status-icon ref="form1" label-width="150px">
+        <el-form-item label="供应商中文名称" prop="ChineseName">
+            <el-input v-model="form1.ChineseName" placeholder="请输入供应商中文名称" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="供应商英文名称" prop="EnglishName">
+            <el-input v-model="form1.EnglishName" placeholder="请输入供应商英文名称" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="法人" prop="Corporation" :rules="[{max:150, message: '法人长度不超过150', trigger: 'blur' }]">
+            <el-input v-model="form1.Corporation" placeholder="请输入法人" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="注册地址" prop="RegAddress" :rules="[{max:150, message: '注册地址长度不超过150', trigger: 'blur' }]">
+            <el-input v-model="form1.RegAddress" placeholder="请输入注册地址" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="统一社会信用代码" prop="Uscc" :rules="[{max:100, message: '统一社会信用代码长度不超过100', trigger: 'blur' }]">
+            <el-input v-model="form1.Uscc" placeholder="请输入统一社会信用代码" auto-complete="off"></el-input>
+        </el-form-item>
+    </el-form>
+</template>
+<script>
+    Vue.component(
+        'my-supplier',
+        {
+            template: "#info",
+            data: function () {
+                var that = this;
+                var validateName = function(rule, value, callback) {
+                    if (value == '' || value == null) {
+                        callback(new Error('供应商中文名称'));
+                    }
+                    axios({
+                        url: "/Account/CheckSupplierChineseName",
+                        method: "post",
+                        data: {
+                            ChineseName: value,
+                            ID: that.form1.ID
+                        },
+                    }).then(function (response) {
+                        if (response.data.type == "error") {
+                            callback(new Error(response.data.msg));
+                        } else {
+                            callback();
+                        }
+                    }).catch(function (error) {
+                        that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                    });
+                };
+                return {
+                    form1: @Html.Raw(Json.Encode(Model)),
+                    rules1: {
+                        ChineseName: [{ required: true, validator: validateName, trigger: 'blur' },
+                                { max: 150, message: '供应商中文名称长度不超过150', trigger: 'blur' }
+                            ],
+                        EnglishName: [{ required: true, message: '请输入联系人供应商英文名称', trigger: 'blur' },
+                                { max: 150, message: '供应商英文名称长度不超过150', trigger: 'blur' }
+                            ],
+                    }
+                }
+            },
+            methods: {
+                //消息提示框
+                onAlert: function (type, message) {
+                    this.$message({
+                        message: message,
+                        type: type
+                    });
+                },
+            },
+        });
+</script>

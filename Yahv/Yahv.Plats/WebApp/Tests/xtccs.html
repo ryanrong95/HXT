@@ -1,0 +1,202 @@
+﻿
+<!DOCTYPE html>
+
+<html>
+<head>
+    <script>var model = { "Grade": [{ "value": 1, "text": "<span class='level1'></span>" }, { "value": 2, "text": "<span class='level2'></span>" }, { "value": 3, "text": "<span class='level3'></span>" }, { "value": 4, "text": "<span class='level4'></span>" }, { "value": 5, "text": "<span class='level5'></span>" }, { "value": 6, "text": "<span class='level6'></span>" }, { "value": 7, "text": "<span class='level7'></span>" }, { "value": 8, "text": "<span class='level8'></span>" }, { "value": 9, "text": "<span class='level9'></span>" }], "Entity": null };</script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>
+
+    </title>
+
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/gray/easyui.css" rel="stylesheet" />
+
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/icon.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/icon-yg-cool.css" rel="stylesheet" />
+
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.min.js"></script>
+
+
+
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.easyui.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/patch.linkbutton.js"></script>
+
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/main.js"></script>
+
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/locale/easyui-lang-zh_CN.js"></script>
+
+
+
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/easyui.myDatagrid.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/easyui.myDialog.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/easyui.myWindow.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/easyui.myWindow.fuse.js"></script>
+
+
+
+    <link href="http://fixed2.b1b.com/Yahv/customs-easyui/fonts/iconfont.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/customs-easyui/Styles/reset.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/customs-easyui/Styles/main.css" rel="stylesheet" />
+
+
+    <link href="http://fixed2.b1b.com/Yahv/standard-easyui/styles/plugin.css" rel="stylesheet" />
+    <script src="http://fixed2.b1b.com/Yahv/ajaxPrexUrl.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/standard-easyui/scripts/easyui.jl.js"></script>
+
+    <script src="http://fixed2.b1b.com/Yahv/standard-easyui/scripts/easyui.jl.static.js"></script>
+
+    <style>
+        .textbox-label, .textbox-label-after { width: 75px; }
+    </style>
+    <script>
+        $(function () {
+            $("#grade").radio({
+                name: "Grade",//input统一的name值
+                data: model.Grade,//数据
+                valueField: 'value',//value值
+                labelField: 'text',//
+                labelWidth: 16,
+                checked: null, //选中的值为某一条的valueField
+            });
+            if (!jQuery.isEmptyObject(model.Entity)) {
+                $("#sTips").show();
+                $('#form1').form('load',
+                    {
+                        Name: model.Entity.ChineseName,
+                        EnglishName: model.Entity.EnglishName,
+                        Corporation: model.Entity.RealEnterprise.Corporation,//法人
+                        RegAddress: model.Entity.RealEnterprise.RegAddress,//注册地址
+                        Uscc: model.Entity.RealEnterprise.Uscc,//统一社会信用代码
+                        Summary: model.Entity.Summary,//备注
+                        Abbreviation: model.Entity.CHNabbreviation
+                    });
+                $('#txtEnglishName').textbox('readonly');
+                $('#selOrigin').originPlace('setVal', model.Entity.RealEnterprise.Place);
+                $("#grade").radio('setCheck', model.Entity.Grade);
+            }
+
+        })
+    </script>
+    <script>
+        $(function () {
+
+            var topid = '_909677696cd34f83a58194894bec9cbc';
+
+            var options = parent.$.myWindowFuse.options[parent.$.myWindowFuse.options.length - 1];
+            if (document.title.length > 0) {
+                options.title = document.title;
+            }
+            var x = Math.abs(parent.$(window).width() - parseInt(options.width)) / 2;
+            var y = Math.abs(parent.$(window).height() - parseInt(options.height)) / 2;
+
+            //alert([parent.$(window).width(), parseInt(options.width)]);
+            //alert([parent.$(window).height(), parseInt(options.height)]);
+
+            options.left = x + "px";
+            options.top = y + "px";
+
+            $(window).focus();
+
+            $('#' + topid).window(options);
+
+            $('*').keyup(function (e) {
+                if (e.keyCode == 27) {
+                    $('#' + topid).window('close');
+                }
+                return false;
+            });
+        });
+    </script>
+</head>
+<body class="easyui-layout">
+    <div id="_909677696cd34f83a58194894bec9cbc">
+        <form method="post" action="./Edit.aspx?clientid=97D43F32EBC092B417F4838771EA7F69&amp;mode=window" id="form1">
+            <div class="aspNetHidden">
+                <input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="dQu+CLLzf8gN9jS7VUGKHrcUD0ZQrq7EmeUYHcCvv2yEL6wLDsgkQhPVh6XoitLrxQiSWxiJRrUmVM9KNDAch6XCgsKPVcOMkahdKdU5Vac=" />
+            </div>
+
+
+            <div class="easyui-panel" id="tt" data-options="fit:true">
+                <div style="width: 600px">
+                    <div style="padding: 10px 60px 20px 60px;">
+                        <table class="liebiao">
+
+                            <tr>
+                                <td style="width: 100px">英文名称</td>
+                                <td colspan="3">
+                                    <input id="txtEnglishName" name="EnglishName" class="easyui-textbox readonly_style"
+                                           data-options="prompt:'',required:true,validType:'length[1,300]'" style="width: 350px;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 100px">中文名称</td>
+                                <td colspan="3">
+                                    <input id="txtName" name="Name" class="easyui-textbox"
+                                           data-options="validType:'length[1,150]',required:true" style="width: 350px;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 100px">中文简称</td>
+                                <td colspan="3">
+                                    <input id="txtAbbreviation" name="Abbreviation" class="easyui-textbox"
+                                           data-options="validType:'length[1,50]'" style="width: 350px;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 100px">级别</td>
+                                <td colspan="3">
+                                    <span id="grade"></span>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 100px">国家/地区</td>
+                                <td colspan="3">
+                                    <input id="selOrigin" class="easyui-originPlace" name="Place" data-options="required:true,width:350,valueField: 'abbreviation',textField: 'Name',isOnlySelectDropValue:true" value="" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 100px">法人</td>
+                                <td colspan="3">
+                                    <input id="txtCorporation" name="Corporation" class="easyui-textbox" style="width: 350px;" data-options="required:false,validType:'length[1,50]'">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 100px">注册地址</td>
+                                <td colspan="3">
+                                    <input id="txtRegaddress" name="RegAddress" class="easyui-textbox" style="width: 350px;" data-options="required:false,validType:'length[1,50]'">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 100px">统一社会信用代码</td>
+                                <td colspan="3">
+                                    <input id="txtUscc" name="Uscc" class="easyui-textbox" style="width: 350px;" data-options="required:false,validType:'length[1,50]'">
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td style="width: 100px">备注</td>
+                                <td colspan="3">
+                                    <input id="txtSummary" name="Summary" class="easyui-textbox" style="width: 350px;" data-options="required:false,validType:'length[1,100]'">
+                                </td>
+                            </tr>
+                        </table>
+                        <div style="text-align: center; padding: 5px">
+                            <input type="submit" name="ctl00$cphForm$btnSubmit" value="保存" id="btnSubmit" style="display: none;" />
+                            <a class="easyui-linkbutton" data-options="iconCls:'icon-yg-save'" onclick="$('#btnSubmit').click();">保存</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="aspNetHidden">
+
+                <input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="8C2A79BC" />
+                <input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="pwa3hTWz95D6rC8PI1r0zDRpdk+vZlxN5t828u3i09SgeAAggyF0BlcdPJJZ4LCLlrQvhY0BFj2E7yEwQSRJSlS4WuqXrizQEljc5hZd3Eto1iLUQT0BiMzr1+4cAROD" />
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>

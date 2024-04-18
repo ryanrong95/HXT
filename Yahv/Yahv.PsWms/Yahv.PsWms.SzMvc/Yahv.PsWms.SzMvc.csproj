@@ -1,0 +1,580 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{AF693A14-5C96-4C58-BD1B-2E1AD254CE11}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Yahv.PsWms.SzMvc</RootNamespace>
+    <AssemblyName>Yahv.PsWms.SzMvc</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <Use64BitIISExpress>true</Use64BitIISExpress>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="itextsharp, Version=5.5.4.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\iTextSharp.5.5.4\lib\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Web.Infrastructure">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NPOI, Version=2.4.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NPOI.2.4.1\lib\net45\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML, Version=2.4.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NPOI.2.4.1\lib\net45\NPOI.OOXML.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net, Version=2.4.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NPOI.2.4.1\lib\net45\NPOI.OpenXml4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats, Version=2.4.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NPOI.2.4.1\lib\net45\NPOI.OpenXmlFormats.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Utils\AddressExtend.cs" />
+    <Compile Include="App_Utils\NPOIHelper.cs" />
+    <Compile Include="Controllers\Attribute\DebugAttribute.cs" />
+    <Compile Include="Controllers\Attribute\UserAuthAttribute.cs" />
+    <Compile Include="Controllers\Client\InvoiceInfoController.cs" />
+    <Compile Include="Controllers\Client\MyAddressController.cs" />
+    <Compile Include="Controllers\Client\MyInfoController.cs" />
+    <Compile Include="Controllers\Finance\MyInvoiceController.cs" />
+    <Compile Include="Controllers\Finance\StorageVoucherController.cs" />
+    <Compile Include="Controllers\Home\BaseController.cs" />
+    <Compile Include="Controllers\Home\HomeController.cs" />
+    <Compile Include="Controllers\Home\LayoutController.cs" />
+    <Compile Include="Controllers\Home\LoginController.cs" />
+    <Compile Include="Controllers\Home\MiscellaneousController.cs" />
+    <Compile Include="Controllers\Notice\DeliveryCompleteLogController.cs" />
+    <Compile Include="Controllers\Notice\EnumController.cs" />
+    <Compile Include="Controllers\Notice\ForeignController.cs" />
+    <Compile Include="Controllers\Notice\LogController.cs" />
+    <Compile Include="Controllers\Notice\ManualController.cs" />
+    <Compile Include="Controllers\Notice\TestTableController.cs" />
+    <Compile Include="Models\Client\ConsigneeAddressViewModel.cs" />
+    <Compile Include="Models\Client\InvoiceInfoModel.cs" />
+    <Compile Include="Models\Finance\ExportBillModel.cs" />
+    <Compile Include="Models\Finance\GetBillFileInfoModel.cs" />
+    <Compile Include="Models\Finance\GetStorageVoucherListModel.cs" />
+    <Compile Include="Models\Finance\GetVoucherDetailListModel.cs" />
+    <Compile Include="Models\Home\ExpressMethodsModel.cs" />
+    <Compile Include="Models\Home\GetIndexDataModel.cs" />
+    <Compile Include="Models\Home\LoginPostModel.cs" />
+    <Compile Include="Models\Home\TakingInfosModel.cs" />
+    <Compile Include="Models\Notice\GetAllTypeOrderItemModel.cs" />
+    <Compile Include="Models\Notice\GetEnumsModel.cs" />
+    <Compile Include="Models\Notice\GetEnumValueModel.cs" />
+    <Compile Include="Models\Notice\GetLogDetailModel.cs" />
+    <Compile Include="Models\Notice\GetLogListModel.cs" />
+    <Compile Include="Models\Notice\GetLogsModel.cs" />
+    <Compile Include="Models\Notice\TestTableModel.cs" />
+    <Compile Include="Models\Order\DeleteTakingInfoModel.cs" />
+    <Compile Include="Models\Order\GetInStorageFeeListModel.cs" />
+    <Compile Include="Models\Order\GetOutStorageFeeListModel.cs" />
+    <Compile Include="Models\Order\GetStorageDetailInModel.cs" />
+    <Compile Include="Controllers\Order\NewInStorageController.cs" />
+    <Compile Include="Controllers\Order\NewOutStorageController.cs" />
+    <Compile Include="Controllers\Order\StorageDetailInController.cs" />
+    <Compile Include="Controllers\Order\StorageDetailOutController.cs" />
+    <Compile Include="Controllers\Order\StorageListController.cs" />
+    <Compile Include="Controllers\Report\MyStorageController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Client\ChangePasswordModel.cs" />
+    <Compile Include="Models\Order\GetStorageDetailOutModel.cs" />
+    <Compile Include="Models\Order\GetStorageListInModel.cs" />
+    <Compile Include="Models\Order\GetStorageListOutModel.cs" />
+    <Compile Include="Models\Order\InStorageBatchFileUploadModel.cs" />
+    <Compile Include="Models\Order\NewDeliveryInfoSubmitModel.cs" />
+    <Compile Include="Models\Order\NewInStorageSubmitModel.cs" />
+    <Compile Include="Models\Order\NewOutStorageModel.cs" />
+    <Compile Include="Models\Order\NewOutStorageSubmitModel.cs" />
+    <Compile Include="Models\Order\NewTakingInfoSubmitModel.cs" />
+    <Compile Include="Models\Order\StorageListModel.cs" />
+    <Compile Include="Models\Report\GetMyStorageListSearchModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\css\common.css" />
+    <Content Include="Content\css\element.css" />
+    <Content Include="Content\css\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\css\login.css" />
+    <Content Include="Content\css\n_common.css" />
+    <Content Include="Content\css\n_register.css" />
+    <Content Include="Content\css\Shopping.css" />
+    <Content Include="Content\css\style.css" />
+    <Content Include="Content\css\tab.css" />
+    <Content Include="Content\img\advice.png" />
+    <Content Include="Content\img\advice_white.png" />
+    <Content Include="Content\img\arrow.png" />
+    <Content Include="Content\img\arrow_hide.png" />
+    <Content Include="Content\img\back.png" />
+    <Content Include="Content\img\cd-icons-cart-close.svg" />
+    <Content Include="Content\img\erweima.png" />
+    <Content Include="Content\img\file_del.png" />
+    <Content Include="Content\img\file_icon.png" />
+    <Content Include="Content\img\gonganlogo.png" />
+    <Content Include="Content\img\gzh.png" />
+    <Content Include="Content\img\gzh_white.png" />
+    <Content Include="Content\img\header_bg.png" />
+    <Content Include="Content\img\icon_1.png" />
+    <Content Include="Content\img\icon_2.png" />
+    <Content Include="Content\img\icon_3.png" />
+    <Content Include="Content\img\icon_319.png" />
+    <Content Include="Content\img\icon_4.png" />
+    <Content Include="Content\img\icon_5.png" />
+    <Content Include="Content\img\icon_6.png" />
+    <Content Include="Content\img\icon_7.png" />
+    <Content Include="Content\img\icon_delete.png" />
+    <Content Include="Content\img\icon_delete1.png" />
+    <Content Include="Content\img\icon_email_wihte.png" />
+    <Content Include="Content\img\icon_file1.png" />
+    <Content Include="Content\img\icon_home.png" />
+    <Content Include="Content\img\icon_phone_white.png" />
+    <Content Include="Content\img\icon_upload1.png" />
+    <Content Include="Content\img\kefu.png" />
+    <Content Include="Content\img\kefu_staff.png" />
+    <Content Include="Content\img\kefu_white.png" />
+    <Content Include="Content\img\n_erweima.png" />
+    <Content Include="Content\img\qrcode_for_gh.jpg" />
+    <Content Include="Content\img\return.png" />
+    <Content Include="Content\img\return_white.png" />
+    <Content Include="Content\img\selected.png" />
+    <Content Include="Content\img\tel.png" />
+    <Content Include="Content\img\tel_white.png" />
+    <Content Include="Content\n_img\logo_n.png" />
+    <Content Include="Content\n_img\logo_white_n.png" />
+    <Content Include="Content\n_img\n_check_selected.png" />
+    <Content Include="Content\n_img\n_register_bg.png" />
+    <Content Include="Content\n_img\n_register_error.png" />
+    <Content Include="Content\n_img\xdtlogo.png" />
+    <Content Include="Content\n_img\农业银行二维码.png" />
+    <Content Include="Content\script\axios.min.js" />
+    <Content Include="Content\script\clipboard.min.js" />
+    <Content Include="Content\script\common.js" />
+    <Content Include="Content\script\elementui.js" />
+    <Content Include="Content\script\jquery-3.3.1.min.js" />
+    <Content Include="Content\script\vue-router.js" />
+    <Content Include="Content\script\vue-router.min.js" />
+    <Content Include="Content\script\vue.js" />
+    <Content Include="Content\script\vue.min.js" />
+    <Content Include="Content\script\vuex.js" />
+    <Content Include="favicon.ico" />
+    <Content Include="Global.asax" />
+    <Content Include="Web.config" />
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Content\json\Report\" />
+    <Folder Include="Files\" />
+    <Folder Include="Views\Foreign\" />
+    <Folder Include="Views\TestTable\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\_ViewStart.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\_Layout.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Solutions\Layers.Data\Layers.Data.csproj">
+      <Project>{fed16b15-565b-4ed6-a876-2146eb16b011}</Project>
+      <Name>Layers.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Layers.Linq\Layers.Linq.csproj">
+      <Project>{56c33683-ce9a-4cc5-9cef-92e03bc8f739}</Project>
+      <Name>Layers.Linq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Yahv.Linq\Yahv.Linq.csproj">
+      <Project>{c8c572df-2bba-4483-b332-2652805aef87}</Project>
+      <Name>Yahv.Linq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Yahv.Underly\Yahv.Underly.csproj">
+      <Project>{15b56201-a129-4396-9431-0e5f9da7d9f9}</Project>
+      <Name>Yahv.Underly</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Yahv.PsWms.SzMvc.Services\Yahv.PsWms.SzMvc.Services.csproj">
+      <Project>{b9bb75d7-9c50-40ac-b940-2653947caf4c}</Project>
+      <Name>Yahv.PsWms.SzMvc.Services</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Layout\HomeFooter.cshtml" />
+    <Content Include="Views\Layout\HomeHeader.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Layout\LeftMenu.cshtml" />
+    <Content Include="Views\Layout\StaffSideBar.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\json\menu.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\css\fonts\element-icons.ttf" />
+    <Content Include="Content\css\fonts\element-icons.woff" />
+    <Content Include="Content\css\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\css\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\css\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\css\fonts\glyphicons-halflings-regular.woff2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Layout\BreadcrumbNav.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Order\NewInStorage.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Order\NewOutStorage.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Order\StorageList.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Report\MyStorage.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Finance\StorageVoucher.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Finance\MyInvoice.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Client\MyInfo.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Client\MyAddress.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Order\NewInStorageBaseInfo.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Order\NewInStorageSpecialRequire.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Order\NewInStorageTransport.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Order\NewInStorageAttachment.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\json\Miscellaneous\StocktakingTypes.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Order\NewInStorageBatchAddOrderItem.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\json\Order\InStorageBatchFileUpload.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\json\Miscellaneous\TransportModes.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\json\Miscellaneous\ExpressCompanies.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\json\Miscellaneous\WareHouseInfo.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\json\Miscellaneous\ConsigneeMans.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Order\NewOutStorageBaseInfo.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Order\NewOutStorageSpecialRequire.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Order\NewOutStorageTransport.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Order\NewOutStorageStockImport.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\json\Miscellaneous\DeliverTargets.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\json\Miscellaneous\ExpressMethods.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\json\Miscellaneous\FreightPays.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\json\Miscellaneous\ProofTypes.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\json\Order\GetMyStorage.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Order\StorageListIn.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Order\StorageListOut.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\json\Order\GetStorageListIn.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\json\Order\GetStorageListOut.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Order\StorageDetailIn.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Order\StorageDetailInBaseInfo.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Order\StorageDetailInSpecialRequire.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Order\StorageDetailInTransport.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Order\StorageDetailInAttachment.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Order\StorageDetailInCostInfo.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Order\StorageDetailOut.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Order\StorageDetailOutBaseInfo.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Order\StorageDetailOutSpecialRequire.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Order\StorageDetailOutTransport.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Order\StorageDetailOutCostInfo.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Client\InvoiceInfo.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Client\Password.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\json\Order\GetStorageDetailIn.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\json\Miscellaneous\StorageInSpecialRequires.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\json\Miscellaneous\StorageOutSpecialRequires.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\json\Client\GetMyInfo.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\json\Client\GetMyInvoice.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\json\Order\GetStorageDetailOut.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\json\Finance\GetStorageVoucherList.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\json\Finance\GetMyInvoiceList.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\json\Miscellaneous\AddressCascade.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\Login.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Client\_PartialAddress.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Order\NewOutStorageEditDeliveryInfo.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\json\area.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Template\入库订单产品导入模板.xlsx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Finance\VoucherDetail.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Notice\Manual.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Order\NewOutStorageEditTakingInfo.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Notice\DeliveryCompleteLog.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Notice\Log.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Notice\Enum.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\_NoticeLayout.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="z_clearpublish.bat" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>3918</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:6662/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>这台计算机上缺少此项目引用的 NuGet 程序包。使用“NuGet 程序包还原”可下载这些程序包。有关更多信息，请参见 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的文件是 {0}。</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

@@ -1,0 +1,44 @@
+﻿﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>客户开票信息 - jQuery EasyUI plugin</title>
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/gray/easyui.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/standard-easyui/styles/plugin.css" rel="stylesheet" />
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.easyui.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/locale/easyui-lang-zh_CN.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/ajaxPrexUrl.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/standard-easyui/scripts/easyui.jl.js"></script>
+</head>
+<body>
+    <h1>客户开票信息</h1>
+    <form action="/" method="post" class="easyui-form" data-options="novalidate:true" onsubmit="return $(this).form('enableValidation').form('validate');">
+        <input name="cusBillInfo1" id="cusBillInfo1" />
+        <input name="cusBillInfo2" id="cusBillInfo2" />
+        <button onclick="aaa()">提交</button>
+    </form>
+
+    <script type="text/javascript">
+        $(function () {
+            $('#cusBillInfo1').cusBillInfo({
+                CustomerCompanyID: "DCC037B52BAA9BDC4C01A4691042E740"
+            });
+            $('#cusBillInfo2').cusBillInfo({
+                CustomerCompanyID: "DCC037B52BAA9BDC4C01A4691042E740"
+            });
+        })
+        function aaa() {
+            console.log($('#cusBillInfo1').cusBillInfo('options'));
+            console.log($('#cusBillInfo1').cusBillInfo('getVal'));
+            console.log($('#cusBillInfo1').cusBillInfo('getResult'));
+            console.log($('#cusBillInfo1').cusBillInfo('getAllData'));
+            console.log("------------");
+            console.log($('#cusBillInfo2').cusBillInfo('options'));
+            console.log($('#cusBillInfo2').cusBillInfo('getVal'));
+            console.log($('#cusBillInfo2').cusBillInfo('getResult'));
+            console.log($('#cusBillInfo2').cusBillInfo('getAllData'));
+        }
+    </script>
+</body>
+</html>

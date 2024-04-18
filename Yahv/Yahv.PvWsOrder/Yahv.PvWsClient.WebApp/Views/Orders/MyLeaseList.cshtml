@@ -1,0 +1,284 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_LayoutOrder.cshtml";
+    ViewBag.navid = "MyLeaseList";
+}
+
+<div v-cloak id="vLease" class="backshow">
+    <h2 class="test">我的租赁</h2>
+    <div class="order_list_view">
+        <div class="order_btn">
+            <button v-on:click="add" class="btnAdd"><i class="el-icon-plus"></i>新增租赁</button>
+        </div>
+        <div class="orderlist mt20" v-loading="indexData.loading" ref="viewBox1" v-on:scroll="ss('viewBox1')">
+            <div class="lsOrder" v-if="!indexData.loading">
+                <ul>
+                    <li v-on:click="indexData.activeItem=index" v-for="(item,index) in indexData.curItems" :class="[{active:index==indexData.activeItem}]" class="order_li">
+                        <span class="line"></span>
+                        <div class="row overhide mb6">
+                            <div class="fl div_order"><span class="c_title mr10">ID:</span>{{item.ID}}</div>
+                            <div class="fl div_order ml60"><span class="c_title mr10">开始日期:</span>{{item.StartDate}}</div>
+                            <div class="fl div_order ml30"><span class="c_title mr10">结束日期:</span>{{item.EndDate}}</div>
+                            <div class="fl ml30"><span class="c_title mr10">申请日期:</span>{{item.CreateDate}}</div>
+                        </div>
+                        <div class="row overhide">
+                            <div class="fl div_order"><span class="c_title mr10">申请/开票状态:</span><span class="txt_yellow">{{item.Status}}</span><span class="txt_yellow ml10">{{item.InvoiceStatus}}</span></div>
+                            <div class="fl div_order ml60"><span class="c_title mr10">总金额:</span>{{item.TotalMoney}}元</div>
+                            <div class="fr  ml30">
+                                <el-upload class="upload fl"
+                                           :http-request="(response) => httpRequestContractFile(response, item.ID)"
+                                           ref="contractUpload"
+                                           action="/Orders/UploadPickUpFile"
+                                           accept="application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                                           :show-file-list="false">
+                                    <span v-if="item.IsUpload" class="link ml20">上传合同</span>
+                                </el-upload>
+                                <span v-if="(item.FileUrl=='')&& (!item.IsClosed)" class="link ml20" v-on:click="export_file(item.ID)">合同模板</span>
+                                <span v-if="item.FileUrl!=''" class="link ml20" v-on:click="down_file(item.FileUrl)">下载合同</span>
+                                <span class="link ml20" v-on:click="checkInvoice(item.ID)">查看开票</span>
+                                <span v-if="item.IsCancel" class="link ml20" v-on:click="cancel(item.ID)">取消申请</span>
+                                <span v-if="item.IsRenewal" v-on:click="renewal(item.ID)" class="link ml20">续租</span>
+                            </div>
+                        </div>
+                        <div class="line_dashed"></div>
+                        <div class="order_item">
+                            <ul>
+                                <li v-for="entity in item.OrderItem" class="overhide">
+                                    <div class="fl div_item"><span class="c_title mr10">库位:</span>{{entity.SpecID}}</div>
+                                    <div class="fl div_item ml14"><span class="c_title mr10">承重(kg):</span>{{entity.Load}}</div>
+                                    <div class="fl div_item"><span class="c_title mr10">容积(cm³):</span>{{entity.Volume}}</div>
+                                    <div class="fl div_item ml80"><span class="c_title mr10">数量:</span>{{entity.Quantity}}</div>
+                                    <div class="fl"><span class="c_title mr10">单价:</span>{{entity.UnitPrice}}元</div>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="mb54" v-if="(!indexData.loading)&&indexData.curItems.length==0">
+                <div class="nodata-container">
+                    <el-row class="nodata-row1">
+                        <img src="~/Content/img/nodata.png" />
+                    </el-row>
+                    <el-row class="nodata-row2">
+                        <span class="nodata-info">暂无数据！</span>
+                    </el-row>
+                </div>
+            </div>
+            <a id="exportInfoForm" style="display:none" download><span id="ex-li" style="display:none"></span></a>
+            <div class="foot" v-if="!indexData.loading&&indexData.curItems.length>0">
+                <el-pagination style="float:right" v-on:size-change="handleSizeChange"
+                               v-on:current-change="handleCurrentChange"
+                               :current-page="indexData.pageIndex"
+                               :page-sizes="[5, 10, 20, 40]"
+                               :page-size="indexData.pageSize"
+                               layout="total, sizes, prev, pager, next, jumper"
+                               :total="indexData.Total">
+                </el-pagination>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var vLease = new Vue({
+        el: "#vLease",
+        data: function () {
+            return {
+                indexData: {
+                    loading: true,
+                    curItems: [],
+                    pageIndex: 1, //初始页
+                    pageSize: 5,    //每页的数据
+                    Total: 0,
+                    scrollTop: 0, //滚动条位置
+                    activeItem: -1,
+                },
+                file: null,
+            }
+        },
+        mounted: function () {
+            var that = this;
+            var userJsonStr = sessionStorage.getItem('MyLeaseList');
+            userEntity = JSON.parse(userJsonStr);
+            if (userEntity == null) {
+                that.paging();
+            } else {
+                that.indexData = userEntity;
+                that.paging();
+                that.$nextTick(function () {
+                    that.$refs['viewBox1'].scrollTop = that.indexData.scrollTop;
+                })
+                sessionStorage.removeItem('MyLeaseList');
+            }
+        },
+        methods: {
+            checkInvoice: function (id) {
+                sessionStorage.setItem('MyLeaseList', JSON.stringify(this.indexData));
+                location.href = "/Orders/LsInvoice/" + id;
+            },
+            saveFile: function (id) {
+                var that = this;
+                axios({
+                    url: "/Orders/UploadContract",
+                    method: "post",
+                    data: {
+                        FileName: that.file.name,
+                        URL: that.file.URL,
+                        ID:id,
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                    transformRequest: [function (data) {
+                        var ret = ''
+                        for (var it in data) {
+                            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+                        }
+                        return ret;
+                    }],
+                }).then(function (response) {
+                    that.onAlert(response.data.type, response.data.msg);
+                    that.paging();
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            httpRequestContractFile: function (options, id) {
+                var that = this;
+                var file = options.file;
+                let config = {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                };
+                if (file.type != "application/vnd.openxmlformats-officedocument.wordprocessingml.document" && file.type != "application/msword") {
+                    that.onAlert("error", "请上传Word文件");
+                    return;
+                }
+                var form = new FormData(); // FormData 对象
+                form.append("file", file); // 文件对象
+                //添加请求头
+                axios.post("/Orders/UploadPickUpFile", form, config)
+                    .then(function (response) {
+                        if (response.data.type != "error") {
+                            var data = JSON.parse(response.data.data);
+                            that.file = data;
+                            that.saveFile(id);
+                        } else {
+                            that.onAlert(response.data.type, response.data.msg);
+                            return;
+                        }
+                    });
+            },
+            down_file: function (path) {
+                $('#exportInfoForm').attr("href", path);
+                $('#exportInfoForm').attr("download", "true");
+                $('#ex-li').trigger("click");
+            },
+            export_file: function (id) {
+                var that = this;
+                axios({
+                    url: "/Orders/ExportLeasingContract",
+                    method: "post",
+                    data: {
+                        id: id
+                    }
+                }).then(function (response) {
+                    if (response.data.type == "error") {
+                        that.onAlert(response.data.type, response.data.msg);
+                    } else {
+                        $('#exportInfoForm').attr("href", response.data.data);
+                        $('#exportInfoForm').attr("target", "_blank");
+                        $('#ex-li').trigger("click");
+                    }
+                }).catch(function (error) {
+                    that.onAlert("warning", error);
+                });
+            },
+            cancel: function (id) {
+                var that = this;
+                this.$confirm('是否取消租赁申请?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                    lockScroll: false,
+                }).then(function () {
+                    axios({
+                        url: "/Orders/CancelLsOrder",
+                        method: "post",
+                        data: {
+                            id: id,
+                        },
+                    }).then(function (response) {
+                        that.paging();
+                        var data = response.data;
+                        that.onAlert(data.type, data.msg);
+                    }).catch(function (error) {
+                        that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                    });
+                }).catch(function () {
+                });
+            },
+            //续租
+            renewal: function (id) {
+                sessionStorage.setItem('MyLeaseList', JSON.stringify(this.indexData));
+                location.href = "/Orders/LeaseRenewal/" + id;
+            },
+            add: function () {
+                sessionStorage.setItem('MyLeaseList', JSON.stringify(this.indexData));
+                location.href = "/Orders/LeaseAdd";
+            },
+            ss: function (ref) {
+                // 监听这个dom的scroll事件
+                var that = this;
+                this.$refs[ref].addEventListener('scroll', function () {
+                    that.indexData.scrollTop = that.$refs[ref].scrollTop;
+                }, false)
+            },
+            // 初始页currentPage、初始每页数据数pagesize和数据data
+            handleSizeChange: function (size) {
+                this.indexData.pageSize = size;
+                this.paging();
+            },
+            handleCurrentChange: function (currentPage) {
+                this.indexData.pageIndex = currentPage;
+                this.paging();
+            },
+            paging: function () {
+                var that = this;
+                that.indexData.loading = true;
+                axios({
+                    url: "/Orders/GetLsOrderList",
+                    method: "post",
+                    data: {
+                        page: this.indexData.pageIndex,
+                        rows: this.indexData.pageSize,
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                    transformRequest: [function (data) {
+                        var ret = ''
+                        for (var it in data) {
+                            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+                        }
+                        return ret;
+                    }],
+                }).then(function (response) {
+                    var data = JSON.parse(response.data.data);
+                    that.indexData.curItems = data.list;
+                    that.indexData.Total = data.total;
+                    that.indexData.loading = false;
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                    offset: 300,
+                });
+            },
+        }
+    });
+</script>

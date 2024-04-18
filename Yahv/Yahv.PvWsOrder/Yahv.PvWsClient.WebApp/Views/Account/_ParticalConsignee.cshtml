@@ -1,0 +1,86 @@
+﻿<template id="consigneeinfo">
+    <el-form :model="form1" :rules="rules1" status-icon ref="form1" label-width="130px" style="margin:20px;">
+        <el-form-item label="收货单位：" prop="Title" :rules="[{ required: true, message: '请输入收货单位', trigger: 'blur' },{max:150, message: '收货单位长度不超过150', trigger: 'blur' }]">
+            <el-input v-model="form1.Title" placeholder="请输入收货单位" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="收货人：" prop="Name" :rules="[{ required: true, message: '请输入收货人', trigger: 'blur' },{max:150, message: '收货人长度不超过150', trigger: 'blur' }]">
+            <el-input v-model="form1.Name" placeholder="请输入收货人" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="地区：" prop="District" :rules="[{required: true, message: '请选择地区类型', trigger: 'change'}]">
+            <el-select v-model="form1.District" clearable placeholder="请选择" style="width:324px;">
+                <el-option v-for="item in baseData" :label="item.text" :value="item.value">
+                </el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item label="地址" prop="Address" :rules="[{ required: true, message: '请输入地址', trigger: 'blur' },{max:200, message: '地址长度不超过200', trigger: 'blur' }]">
+            <el-input v-model="form1.Address" type="textarea" placeholder="请输入详细的道路、楼字、区号等名称"></el-input>
+        </el-form-item>
+        <el-form-item label="电话：" prop="Tel">
+            <el-input v-model="form1.Tel" placeholder="请输入电话号码" style="width:70%" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="手机号码：" prop="Mobile">
+            <el-input v-model="form1.Mobile" placeholder="请输入手机号码" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="电子邮箱" prop="Email">
+            <el-input v-model="form1.Email" placeholder="请输入电子邮箱" auto-complete="off"></el-input>
+        </el-form-item>
+    </el-form>
+</template>
+<script src="~/Scripts/areaData.js"></script>
+<script>
+    Vue.component(
+        'my-consignee',
+        {
+            template: "#consigneeinfo",
+            data: function () {
+                //验证手机号
+                var validateMobile = function(rule, value, callback){
+                    if (value == '' || value == null) {
+                        callback(new Error('请输入手机号'));
+                    }
+                    else if (!ValidHKMobile(value)) {
+                        callback(new Error('请输入正确的手机号码'));
+                    }
+                    callback();
+                };
+                var validateMail = function(rule, value, callback){
+                    if (value != '' && value != null) {
+                        if (!ValidMail(value)) {
+                            callback(new Error('请输入正确的邮箱地址'));
+                        }
+                    }
+                    callback();
+                };
+                 //验证数字
+                var validateNumber =function (rule, value, callback){
+                    if (value != '' && value != null) {
+                        if (!/^[0-9]*$/.test(value)) {
+                            callback(new Error('请输入数字'));
+                        }
+                    }
+                    callback();
+                };
+                return {
+                    form1: @Html.Raw(Json.Encode(Model)),
+                    baseData: [], //基础数据
+                    AddressLists: $.pccData[0].s, //省市区三级联动数据
+                    rules1: {
+                        Email: [{ validator: validateMail, trigger: 'blur' },
+                        { max: 50, message: '邮箱地址长度不超过50', trigger: 'blur' }],
+                        Mobile: [{ required: true,validator: validateMobile, trigger: 'blur' }],
+                        Tel: [{ required: false, validator: validateNumber, trigger: 'blur' },
+                        { max: 50, message: '电话长度不超过50', trigger: 'blur' }],
+                    },
+                    cascaderConfig: {
+                        label: 'n',
+                        value: 'n',
+                        children: 's'
+                    }
+                }
+            },
+            mounted: function () {
+                var options = @Html.Raw(Json.Encode(@ViewBag.Options)); //加载基础数据
+                this.baseData = options;
+            },
+        });
+</script>

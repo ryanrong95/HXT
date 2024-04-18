@@ -1,0 +1,80 @@
+﻿<template id="storagedetailinbaseinfo">
+    <div>
+        <div class="clearfix mt20">
+            <div class="clearfix info_item">
+                <div class="info_title fl">订单号：</div>
+                <div class="info_content fl">{{baseinfo.OrderID}}</div>
+            </div>
+        </div>
+        <div class="tb_wrap">
+            <table class="common_tb1 common_tb">
+                <tr>
+                    <th width="36px">序号</th>
+                    <th width="100px">自定义编号</th>
+                    <th width="100px">型号</th>
+                    <th width="100px">品牌</th>
+                    <th width="100px">封装</th>
+                    <th width="100px">批次</th>
+                    <th width="100px">包装类型</th>
+                    <th width="70px">最小包装量</th>
+                    <th width="70px">数量</thwidth="70px">
+                    <th width="70px">总数</th>
+                </tr>
+                <tr v-if="(index<=1&&!isAll)||isAll" v-for="(item,index) in baseinfo.OrderItems">
+                    <td>{{index+1}}</td>
+                    <td>{{item.CustomCode}}</td>
+                    <td>{{item.PartNumber}}</td>
+                    <td>{{item.Brand}}</td>
+                    <td>{{item.Package}}</td>
+                    <td>{{item.DateCode}}</td>
+                    <td>{{item.StocktakingTypeDes}}</td>
+                    <td>{{item.Mpq}}</td>
+                    <td>{{item.PackageNumber}}</td>
+                    <td>{{item.ItemTotal}}</td>
+                </tr>
+                <tr v-if="baseinfo.OrderItems.length>0">
+                    <td colspan="8" class="text_center pr20  txt_tb_bottom">合计：</td>
+                    <td class="txt_tb_bottom">{{baseinfo.AllPackageNumber}}</td>
+                    <td class="txt_tb_bottom">{{baseinfo.AllItemTotal}}</td>
+                </tr>
+                <tr v-if="baseinfo.OrderItems.length==0"><td colspan="10">暂无数据</td></tr>
+                <tr v-if="baseinfo.OrderItems.length>2">
+                    <td colspan="10">
+                        <a v-on:click="isAll=!isAll">
+                            <span v-if="!isAll">查看全部<i class="el-icon-arrow-down ml4"></i></span>
+                            <span v-else>收起<i class="el-icon-arrow-up ml4"></i></span>
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</template>
+<script>
+    Vue.component(
+        'storagedetailinbaseinfo',
+        {
+            template: "#storagedetailinbaseinfo",
+            data: function () {
+                return {
+                    isAll: false,
+                }
+            },
+            props: {
+                baseinfo: {
+                    type: Object,
+                    default: function () {
+                        return {
+                            OrderID: '', //订单号
+                            OrderItems: [], //订单项
+                            AllPackageNumber: 0, //数量总和
+                            AllItemTotal: 0, //总数总和
+                        };
+                    }
+                }
+            },
+            methods: {
+
+            },
+        });
+</script>

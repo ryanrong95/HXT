@@ -1,0 +1,825 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7B5C7024-152C-4232-A3CF-49D6C7996547}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Yahv.PvWsClient.WebAppNew</RootNamespace>
+    <AssemblyName>Yahv.PvWsClient.WebAppNew</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <Use64BitIISExpress>true</Use64BitIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;TEST</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI, Version=2.4.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NPOI.2.4.1\lib\net45\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML, Version=2.4.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NPOI.2.4.1\lib\net45\NPOI.OOXML.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net, Version=2.4.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NPOI.2.4.1\lib\net45\NPOI.OpenXml4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats, Version=2.4.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NPOI.2.4.1\lib\net45\NPOI.OpenXmlFormats.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.4\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.4\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.4\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.4\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.4\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.4\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <Private>True</Private>
+      <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Diagnostics.DiagnosticSource">
+      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.4.1\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.TelemetryCorrelation">
+      <HintPath>..\packages\Microsoft.AspNet.TelemetryCorrelation.1.0.0\lib\net45\Microsoft.AspNet.TelemetryCorrelation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationInsights">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.2.5.1\lib\net46\Microsoft.ApplicationInsights.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.Agent.Intercept">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.4.0\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.DependencyCollector">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.5.1\lib\net45\Microsoft.AI.DependencyCollector.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.PerfCounterCollector">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.5.1\lib\net45\Microsoft.AI.PerfCounterCollector.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.ServerTelemetryChannel">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.5.1\lib\net45\Microsoft.AI.ServerTelemetryChannel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.WindowsServer">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.2.5.1\lib\net45\Microsoft.AI.WindowsServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.Web">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Web.2.5.1\lib\net45\Microsoft.AI.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Utils\AddressExtend.cs" />
+    <Compile Include="App_Utils\DecimalExtends.cs" />
+    <Compile Include="App_Utils\EnumHelper.cs" />
+    <Compile Include="App_Utils\FileDirectory.cs" />
+    <Compile Include="App_Utils\FileExtends.cs" />
+    <Compile Include="App_Utils\HttpFile.cs" />
+    <Compile Include="App_Utils\InputTextExtends.cs" />
+    <Compile Include="App_Utils\NPOIHelper.cs" />
+    <Compile Include="App_Utils\SmsContents.cs" />
+    <Compile Include="App_Utils\SmtpContext.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\Attribute\UserAuthorizeAttribute.cs" />
+    <Compile Include="Controllers\BillsController.cs" />
+    <Compile Include="Controllers\DeclareController.cs" />
+    <Compile Include="Controllers\FilesController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LsOrdersController.cs" />
+    <Compile Include="Controllers\OrdersController.cs" />
+    <Compile Include="Controllers\PayExchangeController.cs" />
+    <Compile Include="Controllers\ProductsController.cs" />
+    <Compile Include="Controllers\StoragesController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Initialize.cs" />
+    <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\DeclareModels.cs" />
+    <Compile Include="Models\FilesModels.cs" />
+    <Compile Include="Models\HomeModels.cs" />
+    <Compile Include="Models\OrdersModels.cs" />
+    <Compile Include="Models\PayExchangesModels.cs" />
+    <Compile Include="Models\ProductsModels.cs" />
+    <Compile Include="Models\SearchCompanyByKeywordModel.cs" />
+    <Compile Include="Models\SearchCompanyByNameModel.cs" />
+    <Compile Include="Models\SessionExtName.cs" />
+    <Compile Include="Models\StorageModels.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\SmsService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\css\accountSecurity.css" />
+    <Content Include="Content\css\n_common.css" />
+    <Content Include="Content\css\n_register.css" />
+    <Content Include="Content\css\Shopping.css" />
+    <Content Include="Content\css\tab.css" />
+    <Content Include="Content\images\dec_icon\dec_001.png" />
+    <Content Include="Content\images\dec_icon\dec_001_light.png" />
+    <Content Include="Content\images\dec_icon\dec_002.png" />
+    <Content Include="Content\images\dec_icon\dec_002_light.png" />
+    <Content Include="Content\images\dec_icon\dec_003.png" />
+    <Content Include="Content\images\dec_icon\dec_003_light.png" />
+    <Content Include="Content\images\dec_icon\dec_004.png" />
+    <Content Include="Content\images\dec_icon\dec_004_light.png" />
+    <Content Include="Content\images\dec_icon\dec_005.png" />
+    <Content Include="Content\images\dec_icon\dec_005_light.png" />
+    <Content Include="Content\images\dec_icon\dec_006.png" />
+    <Content Include="Content\images\dec_icon\dec_006_light.png" />
+    <Content Include="Content\images\dec_icon\dec_007.png" />
+    <Content Include="Content\images\dec_icon\dec_007_light.png" />
+    <Content Include="Content\images\dec_icon\dec_008.png" />
+    <Content Include="Content\images\dec_icon\dec_008_light.png" />
+    <Content Include="Content\images\verify\1.jpg" />
+    <Content Include="Content\images\verify\10.jpg" />
+    <Content Include="Content\images\verify\11.jpg" />
+    <Content Include="Content\images\verify\2.jpg" />
+    <Content Include="Content\images\verify\3.jpg" />
+    <Content Include="Content\images\verify\4.jpg" />
+    <Content Include="Content\images\verify\5.jpg" />
+    <Content Include="Content\images\verify\6.jpg" />
+    <Content Include="Content\images\verify\7.jpg" />
+    <Content Include="Content\images\verify\8.jpg" />
+    <Content Include="Content\images\verify\9.jpg" />
+    <Content Include="Content\images\verify\网址.txt" />
+    <Content Include="Content\images\上海比亿电子技术有限公司.png" />
+    <Content Include="Content\images\北京创新在线电子产品销售有限公司.png" />
+    <Content Include="Content\images\北京创新在线电子产品销售有限公司深圳分公司.png" />
+    <Content Include="Content\images\北京远大创新科技有限公司.png" />
+    <Content Include="Content\images\杭州比一比电子科技有限公司.png" />
+    <Content Include="Content\img\advice.png" />
+    <Content Include="Content\img\advice_white.png" />
+    <Content Include="Content\img\gonganlogo.png" />
+    <Content Include="Content\img\gzh.png" />
+    <Content Include="Content\img\gzh_white.png" />
+    <Content Include="Content\img\header_bg.png" />
+    <Content Include="Content\img\icon_qq_wihte.png" />
+    <Content Include="Content\img\n_erweima.png" />
+    <Content Include="Content\img\return.png" />
+    <Content Include="Content\img\return_white.png" />
+    <Content Include="Content\img\right_icon.png" />
+    <Content Include="Content\img\sidebar_small.png" />
+    <Content Include="Content\img\SZXDT.png" />
+    <Content Include="Content\img\tel.png" />
+    <Content Include="Content\img\tel_white.png" />
+    <Content Include="Content\img\wait_icon.png" />
+    <Content Include="Content\n_img\about_spirit_n.png" />
+    <Content Include="Content\n_img\arrow_blue_top_n.png" />
+    <Content Include="Content\n_img\arrow_grey_bottom_n.png" />
+    <Content Include="Content\n_img\arrow_white_bottom_n.png" />
+    <Content Include="Content\n_img\assistant_spirit_n.png" />
+    <Content Include="Content\n_img\banner_n.png" />
+    <Content Include="Content\n_img\bell_min.png" />
+    <Content Include="Content\n_img\contact_spirit_n.png" />
+    <Content Include="Content\n_img\cxy.png" />
+    <Content Include="Content\n_img\exclamatory_min.png" />
+    <Content Include="Content\n_img\info_spirit_n.png" />
+    <Content Include="Content\n_img\lock_login_n.png" />
+    <Content Include="Content\n_img\lock_login_white_n.png" />
+    <Content Include="Content\n_img\logo_n.png" />
+    <Content Include="Content\n_img\logo_white_n.png" />
+    <Content Include="Content\n_img\notice_white_n.png" />
+    <Content Include="Content\n_img\n_aboutus_bg.png" />
+    <Content Include="Content\n_img\n_aboutus_culture.png" />
+    <Content Include="Content\n_img\n_aboutus_culture_pic1.png" />
+    <Content Include="Content\n_img\n_aboutus_culture_pic2.png" />
+    <Content Include="Content\n_img\n_aboutus_culture_pic3.png" />
+    <Content Include="Content\n_img\n_aboutus_culture_pic4.png" />
+    <Content Include="Content\n_img\n_aboutus_partner.png" />
+    <Content Include="Content\n_img\n_aboutus_profile.png" />
+    <Content Include="Content\n_img\n_aboutus_profile_pic.png" />
+    <Content Include="Content\n_img\n_aboutus_profile_pic2.png" />
+    <Content Include="Content\n_img\n_advice_close.png" />
+    <Content Include="Content\n_img\n_assist_spirit_page.png" />
+    <Content Include="Content\n_img\n_assit_line.png" />
+    <Content Include="Content\n_img\n_check_selected.png" />
+    <Content Include="Content\n_img\n_culture_close.png" />
+    <Content Include="Content\n_img\n_culture_left.png" />
+    <Content Include="Content\n_img\n_culture_pic_big1.png" />
+    <Content Include="Content\n_img\n_culture_pic_big2.png" />
+    <Content Include="Content\n_img\n_culture_pic_big3.png" />
+    <Content Include="Content\n_img\n_culture_pic_big4.png" />
+    <Content Include="Content\n_img\n_culture_right.png" />
+    <Content Include="Content\n_img\n_custom_icon1.png" />
+    <Content Include="Content\n_img\n_custom_icon2.png" />
+    <Content Include="Content\n_img\n_custom_icon3.png" />
+    <Content Include="Content\n_img\n_custom_pic.png" />
+    <Content Include="Content\n_img\n_custom_pic2.png" />
+    <Content Include="Content\n_img\n_download_pic.png" />
+    <Content Include="Content\n_img\n_erweima.png" />
+    <Content Include="Content\n_img\n_express_arrow.png" />
+    <Content Include="Content\n_img\n_express_pic.png" />
+    <Content Include="Content\n_img\n_express_pic2.png" />
+    <Content Include="Content\n_img\n_express_pic3.png" />
+    <Content Include="Content\n_img\n_float_icon.png" />
+    <Content Include="Content\n_img\n_info_bg.png" />
+    <Content Include="Content\n_img\n_info_fdj.png" />
+    <Content Include="Content\n_img\n_info_pic.png" />
+    <Content Include="Content\n_img\n_info_pic1.png" />
+    <Content Include="Content\n_img\n_info_spirit.png" />
+    <Content Include="Content\n_img\n_joinus_walfare_bg.png" />
+    <Content Include="Content\n_img\n_joinus_walfare_pic.png" />
+    <Content Include="Content\n_img\n_join_bg.png" />
+    <Content Include="Content\n_img\n_join_zhaopin_bg.png" />
+    <Content Include="Content\n_img\n_join_zhaopin_icon.png" />
+    <Content Include="Content\n_img\n_js_contact_bg.png" />
+    <Content Include="Content\n_img\n_js_contact_map1.png" />
+    <Content Include="Content\n_img\n_js_contact_map2.png" />
+    <Content Include="Content\n_img\n_js_contact_map3.png" />
+    <Content Include="Content\n_img\n_js_contact_map4.png" />
+    <Content Include="Content\n_img\n_js_contact_phone.png" />
+    <Content Include="Content\n_img\n_js_msg_bg.png" />
+    <Content Include="Content\n_img\n_mol_assit_bg.png" />
+    <Content Include="Content\n_img\n_mol_assit_mbg.png" />
+    <Content Include="Content\n_img\n_mol_assit_spirit.png" />
+    <Content Include="Content\n_img\n_mol_p1.png" />
+    <Content Include="Content\n_img\n_mol_p2.png" />
+    <Content Include="Content\n_img\n_mol_p3.png" />
+    <Content Include="Content\n_img\n_mol_partner_bg.png" />
+    <Content Include="Content\n_img\n_mol_partner_imgs.png" />
+    <Content Include="Content\n_img\n_nav_lightblue_arrow.png" />
+    <Content Include="Content\n_img\n_news_bg.png" />
+    <Content Include="Content\n_img\n_news_img.png" />
+    <Content Include="Content\n_img\n_phone.png" />
+    <Content Include="Content\n_img\n_pic1.png" />
+    <Content Include="Content\n_img\n_pic2.png" />
+    <Content Include="Content\n_img\n_pic3.png" />
+    <Content Include="Content\n_img\n_psd_success.png" />
+    <Content Include="Content\n_img\n_rate_pic.png" />
+    <Content Include="Content\n_img\n_rate_zgbank.png" />
+    <Content Include="Content\n_img\n_register_bg.png" />
+    <Content Include="Content\n_img\n_register_error.png" />
+    <Content Include="Content\n_img\n_service_banner.png" />
+    <Content Include="Content\n_img\n_sidebar_spirit.png" />
+    <Content Include="Content\n_img\n_storage_pic.png" />
+    <Content Include="Content\n_img\n_storage_pic2.png" />
+    <Content Include="Content\n_img\n_storage_pic3.png" />
+    <Content Include="Content\n_img\n_storage_pic4.png" />
+    <Content Include="Content\n_img\qrcode_for_gh.jpg" />
+    <Content Include="Content\n_img\user_regis_n.png" />
+    <Content Include="Content\n_img\user_regis_white_n.png" />
+    <Content Include="Content\slidercaptcha.css" />
+    <Content Include="ResetPassword.html" />
+    <Content Include="Content\img\qrcode_for_gh.jpg" />
+    <Content Include="ForgetPassword.html" />
+    <Content Include="Content\css\common.css" />
+    <Content Include="Content\css\element.css" />
+    <Content Include="Content\css\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\css\login.css" />
+    <Content Include="Content\css\style.css" />
+    <Content Include="Content\icons-ump\iconfont.css" />
+    <Content Include="Content\icons-ump\iconfont.js" />
+    <Content Include="Content\icons-ump\iconfont.svg" />
+    <Content Include="Content\images\CutImages\深圳市芯达通供应链管理有限公司\10\0.png" />
+    <Content Include="Content\images\CutImages\深圳市芯达通供应链管理有限公司\10\1.png" />
+    <Content Include="Content\images\CutImages\深圳市芯达通供应链管理有限公司\10\2.png" />
+    <Content Include="Content\images\CutImages\深圳市芯达通供应链管理有限公司\10\3.png" />
+    <Content Include="Content\images\CutImages\深圳市芯达通供应链管理有限公司\10\4.png" />
+    <Content Include="Content\images\CutImages\深圳市芯达通供应链管理有限公司\10\5.png" />
+    <Content Include="Content\images\CutImages\深圳市芯达通供应链管理有限公司\10\6.png" />
+    <Content Include="Content\images\CutImages\深圳市芯达通供应链管理有限公司\10\7.png" />
+    <Content Include="Content\images\CutImages\深圳市芯达通供应链管理有限公司\10\8.png" />
+    <Content Include="Content\images\CutImages\深圳市芯达通供应链管理有限公司\10\9.png" />
+    <Content Include="Content\images\北京创新在线电子产品销售有限公司杭州分公司.png" />
+    <Content Include="Content\img\404background.png" />
+    <Content Include="Content\img\accountPic.png" />
+    <Content Include="Content\img\arrow.png" />
+    <Content Include="Content\img\arrow_down.png" />
+    <Content Include="Content\img\arrow_hide.png" />
+    <Content Include="Content\img\back.png" />
+    <Content Include="Content\img\banner.png" />
+    <Content Include="Content\img\blue-fujian.png" />
+    <Content Include="Content\img\cd-icon-arrow-next.svg" />
+    <Content Include="Content\img\cd-icon-select.svg" />
+    <Content Include="Content\img\cd-icons-cart-close.svg" />
+    <Content Include="Content\img\delete.png" />
+    <Content Include="Content\img\delete_c.png" />
+    <Content Include="Content\img\downloadCloud.png" />
+    <Content Include="Content\img\error_bg.png" />
+    <Content Include="Content\img\erweima.png" />
+    <Content Include="Content\img\exit.png" />
+    <Content Include="Content\img\file.png" />
+    <Content Include="Content\img\file_del.png" />
+    <Content Include="Content\img\file_icon.png" />
+    <Content Include="Content\img\grade1.png" />
+    <Content Include="Content\img\grade2.png" />
+    <Content Include="Content\img\grade3.png" />
+    <Content Include="Content\img\grade4.png" />
+    <Content Include="Content\img\header.png" />
+    <Content Include="Content\img\hui-fujian.png" />
+    <Content Include="Content\img\icon-主页.png" />
+    <Content Include="Content\img\icon-余额.png" />
+    <Content Include="Content\img\icon-实时汇率.png" />
+    <Content Include="Content\img\icon-归类查询.png" />
+    <Content Include="Content\img\icon-收费标准.png" />
+    <Content Include="Content\img\icon-海关汇率.png" />
+    <Content Include="Content\img\icon11-08-1.png" />
+    <Content Include="Content\img\icon11-08-2.png" />
+    <Content Include="Content\img\icon_1.png" />
+    <Content Include="Content\img\icon_11_12_1.png" />
+    <Content Include="Content\img\icon_11_12_2.png" />
+    <Content Include="Content\img\icon_11_12_3.png" />
+    <Content Include="Content\img\icon_11_12_4.png" />
+    <Content Include="Content\img\icon_11_12_5.png" />
+    <Content Include="Content\img\icon_11_13_1.png" />
+    <Content Include="Content\img\icon_11_13_2.png" />
+    <Content Include="Content\img\icon_2.png" />
+    <Content Include="Content\img\icon_3.png" />
+    <Content Include="Content\img\icon_319.png" />
+    <Content Include="Content\img\icon_4.png" />
+    <Content Include="Content\img\icon_5.png" />
+    <Content Include="Content\img\icon_6.png" />
+    <Content Include="Content\img\icon_7.png" />
+    <Content Include="Content\img\icon_bill.png" />
+    <Content Include="Content\img\icon_delete.png" />
+    <Content Include="Content\img\icon_delete1.png" />
+    <Content Include="Content\img\icon_download.png" />
+    <Content Include="Content\img\icon_email_wihte.png" />
+    <Content Include="Content\img\icon_fh.png" />
+    <Content Include="Content\img\icon_file1.png" />
+    <Content Include="Content\img\icon_home.png" />
+    <Content Include="Content\img\icon_phone_white.png" />
+    <Content Include="Content\img\icon_qiandaizi.png" />
+    <Content Include="Content\img\icon_services.png" />
+    <Content Include="Content\img\icon_services_blue.png" />
+    <Content Include="Content\img\icon_sh.png" />
+    <Content Include="Content\img\icon_tip.png" />
+    <Content Include="Content\img\icon_upload.png" />
+    <Content Include="Content\img\icon_upload1.png" />
+    <Content Include="Content\img\icon_xinyongka.png" />
+    <Content Include="Content\img\icon_zl.png" />
+    <Content Include="Content\img\icon提示 拷贝.png" />
+    <Content Include="Content\img\icon进度.png" />
+    <Content Include="Content\img\Index\2_u8469.png" />
+    <Content Include="Content\img\Index\2_u8469_selected.png" />
+    <Content Include="Content\img\Index\u5404.png" />
+    <Content Include="Content\img\Index\u8023.png" />
+    <Content Include="Content\img\Index\u8028.png" />
+    <Content Include="Content\img\Index\u8032.png" />
+    <Content Include="Content\img\Index\u8038.png" />
+    <Content Include="Content\img\Index\u8042.png" />
+    <Content Include="Content\img\Index\u8049.png" />
+    <Content Include="Content\img\Index\u8052.png" />
+    <Content Include="Content\img\Index\u8065.png" />
+    <Content Include="Content\img\Index\u8067.png" />
+    <Content Include="Content\img\Index\u8070.png" />
+    <Content Include="Content\img\Index\u8073.png" />
+    <Content Include="Content\img\Index\u8076.png" />
+    <Content Include="Content\img\Index\u8083.png" />
+    <Content Include="Content\img\Index\u8084.png" />
+    <Content Include="Content\img\Index\u8087.png" />
+    <Content Include="Content\img\Index\u8094.png" />
+    <Content Include="Content\img\Index\u8103.png" />
+    <Content Include="Content\img\Index\u8115.png" />
+    <Content Include="Content\img\Index\u8116.png" />
+    <Content Include="Content\img\Index\u8130.png" />
+    <Content Include="Content\img\Index\u8137.png" />
+    <Content Include="Content\img\Index\u8139.png" />
+    <Content Include="Content\img\Index\u8140.png" />
+    <Content Include="Content\img\Index\u8269.png" />
+    <Content Include="Content\img\Index\u8304.png" />
+    <Content Include="Content\img\Index\u8305.png" />
+    <Content Include="Content\img\Index\u8328.png" />
+    <Content Include="Content\img\Index\u8376.png" />
+    <Content Include="Content\img\Index\u8430.png" />
+    <Content Include="Content\img\Index\u8433.png" />
+    <Content Include="Content\img\Index\u8464.png" />
+    <Content Include="Content\img\Index\u8493.png" />
+    <Content Include="Content\img\Index\对账中心图标_u8477.png" />
+    <Content Include="Content\img\kefu.png" />
+    <Content Include="Content\img\kefu_manager.png" />
+    <Content Include="Content\img\kefu_staff.png" />
+    <Content Include="Content\img\kefu_white.png" />
+    <Content Include="Content\img\la.png" />
+    <Content Include="Content\img\line.png" />
+    <Content Include="Content\img\logo.png" />
+    <Content Include="Content\img\logo1.png" />
+    <Content Include="Content\img\logo2.png" />
+    <Content Include="Content\img\logo_old.png" />
+    <Content Include="Content\img\logo_old_big.png" />
+    <Content Include="Content\img\logo_XDT.png" />
+    <Content Include="Content\img\manager_icon.png" />
+    <Content Include="Content\img\nodata.png" />
+    <Content Include="Content\img\phone.png" />
+    <Content Include="Content\img\product-preview.png" />
+    <Content Include="Content\img\public.png" />
+    <Content Include="Content\img\selected.png" />
+    <Content Include="Content\img\sliderBg0.png" />
+    <Content Include="Content\img\sliderBg1.png" />
+    <Content Include="Content\img\sliderBg2.png" />
+    <Content Include="Content\img\sliderSm0.png" />
+    <Content Include="Content\img\sliderSm1.png" />
+    <Content Include="Content\img\sliderSm2.png" />
+    <Content Include="Content\img\SZHY.gif" />
+    <Content Include="Content\img\tanc_bg.png" />
+    <Content Include="Content\img\us2.png" />
+    <Content Include="Content\img\wenjian.png" />
+    <Content Include="Content\img\XDT_logo.png" />
+    <Content Include="Content\img\XDT_logo_white.png" />
+    <Content Include="Content\img\下单.png" />
+    <Content Include="Content\img\优惠券-灰色.png" />
+    <Content Include="Content\img\优惠券_蓝色.png" />
+    <Content Include="Content\img\图层 2.png" />
+    <Content Include="Content\img\图层 3.png" />
+    <Content Include="Content\img\图层 7.png" />
+    <Content Include="Content\img\图层 8.png" />
+    <Content Include="Content\img\图层 9.png" />
+    <Content Include="Content\img\圆角矩形 2.png" />
+    <Content Include="Content\img\圆角矩形136.png" />
+    <Content Include="Content\img\多边形 1.png" />
+    <Content Include="Content\img\已使用.png" />
+    <Content Include="Content\img\已失效.png" />
+    <Content Include="Content\img\服务.png" />
+    <Content Include="Content\img\组 19 拷贝.png" />
+    <Content Include="Content\img\组 36.png" />
+    <Content Include="favicon.ico" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Global.asax" />
+    <Content Include="ApplicationInsights.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resizePsdSuccess.html" />
+    <Content Include="Scripts\areaData.js" />
+    <Content Include="Scripts\areaDataChinaForApp.js" />
+    <Content Include="Scripts\axios.min.js" />
+    <Content Include="Scripts\clipboard.min.js" />
+    <Content Include="Scripts\directives.js" />
+    <Content Include="Scripts\elementui.js" />
+    <Content Include="Scripts\jquery-3.3.1.min.js" />
+    <Content Include="Scripts\jquery.cookie.js" />
+    <Content Include="Scripts\longbow.slidercaptcha.js" />
+    <Content Include="Scripts\Shared\Common.js" />
+    <Content Include="Scripts\simple.queue.js" />
+    <Content Include="Scripts\store.js" />
+    <Content Include="Scripts\vue.js" />
+    <Content Include="Scripts\vue.min.js" />
+    <Content Include="Scripts\vuex.js" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\PvWsClient.pubxml" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Views\Products\MyProducts.cshtml" />
+    <Content Include="Web References\SmsService\CRemain.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\SmsService\CSubmitState.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\SmsService\ErrorResult.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\SmsService\MsgPackageResult.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\SmsService\MsgSplitCalculateResult.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\SmsService\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </Content>
+    <Content Include="Views\Declare\DeclareDetail.cshtml" />
+    <Content Include="Views\Account\SupplierDetail.cshtml" />
+    <Content Include="Views\Account\_PartialSupplierBankInfo.cshtml" />
+    <Content Include="Views\Account\_PartialSupplierContactInfo.cshtml" />
+    <Content Include="Views\Declare\TransDecDetail.cshtml" />
+    <Content Include="Views\Orders\StorageAdd.cshtml" />
+    <Content Include="Views\Orders\_PartialPayer.cshtml" />
+    <Content Include="Views\Declare\UnConfirmedDecList.cshtml" />
+    <Content Include="Views\Orders\StorageDetail.cshtml" />
+    <Content Include="Views\Orders\StorageTransDetail.cshtml" />
+    <Content Include="Views\Orders\DeliveryAdd.cshtml" />
+    <Content Include="Views\Orders\DeliveryDetail.cshtml" />
+    <Content Include="Views\Declare\DeclareConfirm.cshtml" />
+    <Content Include="Views\Declare\TransDecConfirm.cshtml" />
+    <Content Include="Views\Declare\DecDeliveryList.cshtml" />
+    <Content Include="Views\Orders\DeliveryConfirm.cshtml" />
+    <Content Include="Views\Orders\StorageConfirm.cshtml" />
+    <Content Include="Views\Orders\StorageTransConfirm.cshtml" />
+    <Content Include="Views\LsOrders\Renewal.cshtml" />
+    <Content Include="Views\Declare\UnReceiptedList.cshtml" />
+    <Content Include="Views\Orders\_PartialSpecialRequirements.cshtml" />
+    <Content Include="Views\Orders\PrePayApply.cshtml" />
+    <Content Include="Views\Orders\ReceivedApply.cshtml" />
+    <Content Include="Views\Home\LoginOut.cshtml" />
+    <Content Include="Views\Home\MemberInfo.cshtml" />
+    <Content Include="Views\Declare\DeclareEdit.cshtml" />
+    <Content Include="Views\Products\MyPreProducts.cshtml" />
+    <Content Include="Views\Products\_PartialMyPreProducts.cshtml" />
+    <Content Include="Views\Products\_PartialPreProduct.cshtml" />
+    <Content Include="Views\Products\_PartialProduct.cshtml" />
+    <Content Include="Template\产品预归类导入模板.xlsx" />
+    <Content Include="Template\香港库房库位租赁及仓储协议.doc" />
+    <Content Include="Views\Account\SecurityCenter.cshtml" />
+    <Content Include="Views\Orders\ReceivedApplyList.cshtml" />
+    <Content Include="Views\Orders\DeliveryApplyList.cshtml" />
+    <Content Include="Views\Orders\_SimplePayer.cshtml" />
+    <Content Include="Views\Declare\DeclareListSimple.cshtml" />
+    <Content Include="Template\香港提送货委托书.xls" />
+    <Content Include="Views\Account\CompleteBaseInfoTip.cshtml" />
+    <Content Include="Views\Home\_PartialCompany.cshtml" />
+    <Content Include="Views\Account\PersonInvoice.cshtml" />
+    <Content Include="Views\Account\_ParticalPersonInvoiceEdit.cshtml" />
+    <Content Include="Views\Account\CannotOrderTip.cshtml" />
+    <Content Include="Views\Home\MoveNotice.cshtml" />
+    <Content Include="Views\Bills\MyCusInvoices.cshtml" />
+    <Content Include="Views\Home\_DatePickerDateRange.cshtml" />
+    <Content Include="Views\Products\_PartialPreProductNew.cshtml" />
+    <Content Include="Views\Home\_DatePickerDateRange2.cshtml" />
+    <Content Include="Views\Home\TestShowNoticeBoard.cshtml" />
+    <Content Include="Template\代收货产品导入模板.xlsx" />
+    <None Include="Web References\SmsService\Service.disco" />
+    <Content Include="Web.config" />
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\Login.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Web References\SmsService\SigleMsgInfo.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Content\images\CutImages\北京创新在线电子产品销售有限公司杭州分公司\10\" />
+    <Folder Include="Views\Files\" />
+    <Folder Include="Views\User\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\icons-ump\iconfont.eot" />
+    <Content Include="Content\icons-ump\iconfont.ttf" />
+    <Content Include="Content\icons-ump\iconfont.woff" />
+    <Content Include="Content\icons-ump\iconfont.woff2" />
+    <Content Include="Content\jsons\WLT.json" />
+    <Content Include="Content\jsons\XDT.json" />
+    <Content Include="Content\css\fonts\element-icons.ttf" />
+    <Content Include="Content\css\fonts\element-icons.woff" />
+    <Content Include="Content\css\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\css\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\css\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\css\fonts\glyphicons-halflings-regular.woff2" />
+    <None Include="packages.config" />
+    <Content Include="Views\Account\Agreement.cshtml" />
+    <Content Include="Views\Account\MySuppliers.cshtml" />
+    <Content Include="Views\PayExchange\MyApplies.cshtml" />
+    <Content Include="Views\Storages\InStorage.cshtml" />
+    <Content Include="Views\Storages\OutStorage.cshtml" />
+    <Content Include="Views\Storages\MyStorage.cshtml" />
+    <Content Include="Views\Bills\WarehouseBills.cshtml" />
+    <Content Include="Views\Bills\DeclareBills.cshtml" />
+    <Content Include="Views\Bills\MyInvoices.cshtml" />
+    <Content Include="Views\Bills\WarehouseBillDetail.cshtml" />
+    <Content Include="Views\Account\AddSupplier.cshtml" />
+    <Content Include="Views\PayExchange\UnPayExchange.cshtml" />
+    <Content Include="Views\Bills\InvoiceDetail.cshtml" />
+    <Content Include="Views\Bills\DeclareBillDetail.cshtml" />
+    <Content Include="Views\PayExchange\Apply.cshtml" />
+    <Content Include="Views\LsOrders\List.cshtml" />
+    <Content Include="Views\LsOrders\Add.cshtml" />
+    <Content Include="Views\LsOrders\Detail.cshtml" />
+    <Content Include="Views\Orders\PrePayApplyList.cshtml" />
+    <Content Include="Views\Orders\ReceivableList.cshtml" />
+    <Content Include="Views\PayExchange\ApplyInfo.cshtml" />
+    <Content Include="Views\Declare\DeclareAdd.cshtml" />
+    <Content Include="Views\Declare\DeclareList.cshtml" />
+    <Content Include="Template\进口报关产品明细模板.xls" />
+    <Content Include="Views\Storages\_PartialMyStorage.cshtml" />
+    <Content Include="Views\Account\BaseInformations.cshtml" />
+    <Content Include="Views\Account\InvoiceInfo.cshtml" />
+    <Content Include="Views\Account\MyConsignees.cshtml" />
+    <Content Include="Views\Account\_PartialSupplierInfo.cshtml" />
+    <Content Include="Views\Account\_PartialSupplierAddressInfo.cshtml" />
+    <Content Include="Views\Orders\DeliveryList.cshtml" />
+    <Content Include="Views\Orders\ReceivedList.cshtml" />
+    <Content Include="Views\Account\_ParticalConsignee.cshtml" />
+    <Content Include="Views\Account\Mobile.cshtml" />
+    <Content Include="Views\Account\Password.cshtml" />
+    <Content Include="Views\Account\Email.cshtml" />
+    <None Include="Web References\SmsService\Service.wsdl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Solutions\Layers.Data\Layers.Data.csproj">
+      <Project>{fed16b15-565b-4ed6-a876-2146eb16b011}</Project>
+      <Name>Layers.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Layers.Linq\Layers.Linq.csproj">
+      <Project>{56C33683-CE9A-4CC5-9CEF-92E03BC8F739}</Project>
+      <Name>Layers.Linq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Yahv.Linq\Yahv.Linq.csproj">
+      <Project>{c8c572df-2bba-4483-b332-2652805aef87}</Project>
+      <Name>Yahv.Linq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Yahv.Services\Yahv.Services.csproj">
+      <Project>{ef7c5b21-4ce2-454a-8719-70e6dadacb69}</Project>
+      <Name>Yahv.Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Yahv.Underly\Yahv.Underly.csproj">
+      <Project>{15b56201-a129-4396-9431-0e5f9da7d9f9}</Project>
+      <Name>Yahv.Underly</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Yahv.Utils\Yahv.Utils.csproj">
+      <Project>{870a94d5-f08e-481f-a7ae-b90b5c249882}</Project>
+      <Name>Yahv.Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Yahv.Csrm\ShencLibrary\ShencLibrary.csproj">
+      <Project>{c4fe49dc-0ab2-446a-96be-aae63e8079e1}</Project>
+      <Name>ShencLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Yahv.Csrm\Yahv.Payments\Yahv.Payments.csproj">
+      <Project>{66924e27-72e9-4c5a-8cf3-220de6519a1f}</Project>
+      <Name>Yahv.Payments</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Yahv.PvWsClient\Yahv.PvWsClient.csproj">
+      <Project>{ec33cdc2-63ed-4c50-8c59-d3377b273aa0}</Project>
+      <Name>Yahv.PvWsClient</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Yahv.PvWsOrder.Services\Yahv.PvWsOrder.Services.csproj">
+      <Project>{1579a49c-1dbf-4e41-8ba2-ce283eef7d83}</Project>
+      <Name>Yahv.PvWsOrder.Services</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferences Include="Web References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferenceUrl Include="http://cf.51welink.com/submitdata/Service.asmx">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\SmsService\</RelPath>
+      <UpdateFromURL>http://cf.51welink.com/submitdata/Service.asmx</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>Yahv_PvWsClient_WebAppNew_SmsService_Service1</CachedSettingsPropName>
+    </WebReferenceUrl>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>50024</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:50024/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>http://user2.for-ic.net/</CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>这台计算机上缺少此项目引用的 NuGet 程序包。使用“NuGet 程序包还原”可下载这些程序包。有关更多信息，请参见 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的文件是 {0}。</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

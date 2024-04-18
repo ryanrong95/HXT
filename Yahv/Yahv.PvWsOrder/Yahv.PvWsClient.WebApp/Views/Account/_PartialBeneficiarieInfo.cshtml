@@ -1,0 +1,125 @@
+﻿<div id="app1">
+    <el-form :model="form1" status-icon ref="form1" :rules="rules1" label-width="150px">
+        <el-form-item label="企业名称：" prop="RealName" :rules="[{max:150, message: '企业名称长度不超过150', trigger: 'blur' }]">
+            <el-input v-model="form1.RealName" placeholder="请输入企业名称" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="开户行：" prop="Bank" :rules="[{ required: true, message: '请输入开户行', trigger: 'blur' },{max:200, message: '开户行长度不超过200', trigger: 'blur' }]">
+            <el-input v-model="form1.Bank" placeholder="请输入开户行" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="银行账号：" prop="Account">
+            <el-input v-model="form1.Account" placeholder="请输入银行账号" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="开户行地址：" prop="BankAddress" :rules="[{ required: true, message: '请输入开户行地址', trigger: 'blur' },{max:200, message: '开户行地址长度不超过200', trigger: 'blur' }]">
+            <el-input v-model="form1.BankAddress" placeholder="请输入银行地址(英文)" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="银行代码：" prop="SwiftCode" :rules="[{ required: true, message: '请输入银行代码', trigger: 'blur' },{max:50, message: '银行代码长度不超过50', trigger: 'blur' }]">
+            <el-input v-model="form1.SwiftCode" placeholder="请输入银行代码" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="支付方式：" prop="Method">
+            <el-select v-model="form1.Method" clearable placeholder="请选择" style="width:324px;">
+                <el-option v-for="item in baseData.MethodData" :label="item.text" :value="item.value">
+                </el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item label="支付币种：" prop="Currency">
+            <el-select v-model="form1.Currency" clearable placeholder="请选择" style="width:324px;">
+                <el-option v-for="item in baseData.CurrencyData" :label="item.text" :value="item.value">
+                </el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item label="发票类型：" prop="InvoiceType">
+            <el-select v-model="form1.InvoiceType" clearable placeholder="请选择" style="width:324px;">
+                <el-option v-for="item in baseData.InvoiceTypeData" :label="item.text" :value="item.value">
+                </el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item label="联系人姓名：" prop="Name" :rules="[{max:50, message: '联系人姓名长度不超过50', trigger: 'blur' }]">
+            <el-input v-model="form1.Name" placeholder="请输入联系人姓名" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="电话：" prop="Tel" >
+            <el-input v-model="form1.Tel" placeholder="请输入电话" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="手机号：" prop="Mobile">
+            <el-input v-model="form1.Mobile" placeholder="请输入手机号" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱：" prop="Email">
+            <el-input v-model="form1.Email" placeholder="请输入邮箱" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="备注：" prop="Summary">
+            <el-input type="textarea" v-model="form1.Summary" :rules="[{max:250, message: '备注长度不超过250', trigger: 'blur' }]"></el-input>
+        </el-form-item>
+    </el-form>
+</div>
+<script>
+    Vue.component(
+        'my-component',
+        {
+            template: "#app1",
+            data: function () {
+                var validatorBankAccount = function(rule, value, callback){
+                    if (value == "" || value == null) {
+                        callback(new Error('请输入银行账号'));
+                    }
+                    else if (!/^[a-zA-Z0-9\-]+$/.test(value)) {
+                        callback(new Error('银行账号格式错误'));
+                    }
+                    else {
+                        callback();
+                    }
+                };
+                //验证手机号
+                var validateMobile = function(rule, value, callback){
+                    if (value != "" && value != null) {
+                        if (!/^1[3|4|5|7|8][0-9]\d{8}$/.test(value)) {
+                            callback(new Error('请输入正确的手机号码'));
+                        }
+                    }
+                    callback();
+                };
+                //验证数字
+                var validateNumber =function (rule, value, callback){
+                    if (value != "" && value != null) {
+                        if (!/^[0-9]*$/.test(value)) {
+                            callback(new Error('请输入数字'));
+                        }
+                    }
+                    callback();
+                };
+                //验证邮箱
+                var validateMail = function(rule, value, callback){
+                    if (value != '' && value != null) {
+                        var reg = new RegExp(/^([a-zA-Z0-9._-])+@{@Html.Raw("@");}([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/);
+                        if (!reg.test(value)) {
+                            callback(new Error('请输入正确的邮箱地址'));
+                        }
+                    }
+                    callback();
+                };
+                return {
+                    form1: @Html.Raw(Json.Encode(Model)),
+                    baseData: {},
+                    rules1: {
+                        Account: [{ required: true, validator: validatorBankAccount, trigger: 'blur' },
+                            { max: 50, message: '银行账号长度不超过50', trigger: 'blur' }],
+                        Mobile: [{  validator: validateMobile, trigger: 'blur' }],
+                        Tel: [{ validator: validateNumber, trigger: 'blur' }, { max: 50, message: '电话长度不超过50', trigger: 'blur' }],
+                        Email: [{ validator: validateMail, trigger: 'blur' }, { max: 50, message: '邮箱地址长度不超过50', trigger: 'blur' }],
+                    }
+                }
+            },
+            methods: {
+                //消息提示框
+                onAlert: function (type, message) {
+                    this.$message({
+                        message: message,
+                        type: type
+                    });
+                },
+            },
+            mounted: function () {
+                var options = @Html.Raw(Json.Encode(@ViewBag.Options)); //加载基础数据
+                this.baseData = options;
+            },
+        });
+</script>
+

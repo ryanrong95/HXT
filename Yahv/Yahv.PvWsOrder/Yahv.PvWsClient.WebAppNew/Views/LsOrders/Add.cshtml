@@ -1,0 +1,356 @@
+﻿@{
+    ViewBag.title = "新增租仓订单";
+}
+<div v-cloak id="vLeaseAdd" class="tab_content order_add">
+    <el-form ref="ruleForm" :model="formData" label-width="130px">
+        <div class="info_item_wrap">
+            <span class="icon_img">1</span>
+            <span class="title">选择仓位</span>
+        </div>
+        <div class="tb_wrap">
+            <table class="common_tb1 mt10 common_tb">
+                <tr>
+                    <th>库位</th>
+                    <th>承重(kg)</th>
+                    <th>容积(cm³)</th>
+                    <th>租赁价格(RMB)</th>
+                    <th>可用仓位数</th>
+                    <th>起租日期</th>
+                    <th>输入数量</th>
+                    <th>租期</th>
+                    <th>租赁费小计</th>
+                    <th>备注</th>
+                    <th>操作</th>
+                </tr>
+                <tr v-for="item in formData.Products">
+                    <td width="60px">{{item.SpecID}}</td>
+                    <td width="60px">{{item.Load}}</td>
+                    <td width="70px">{{item.Volume}}</td>
+                    <td width="140px">
+                        <p v-for="entity in item.LsPrices">{{entity.Month}}个月 {{entity.Price}}元/月</p>
+                    </td>
+                    <td width="70px">{{item.Quantity}}</td>
+                    <td width="100px">
+                        <el-date-picker style="width: 130px;" type="date" size="mini" :picker-options="pickerOptions" v-model="item.StartDate"></el-date-picker>
+                    </td>
+                    <td width="60px">
+                        <el-input size="mini" v-model="item.Amount" v-on:focus="clearZero(item,'Amount')" v-on:blur="calTotalPrice(item,'Amount')"></el-input>
+                    </td>
+                    <td width="100px"><el-input size="mini" v-model="item.Month" style="width: 60px" v-on:focus="clearZero(item,'Month')" v-on:blur="calTotalPrice(item,'Month')"></el-input>个月</td>
+                    <td width="80px">{{item.TotalPrice}}元</td>
+                    <td width="150px">
+                        <el-input size="mini" v-model="item.Summary" />
+                    </td>
+                    <td width="50px">
+                        <a class="btn" v-on:click="Add(item)">确定</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="info_item_wrap mt20">
+            <span class="icon_img">2</span>
+            <span class="title">确认仓位</span>
+        </div>
+        <div class="tb_wrap">
+            <table class="common_tb1 mt10 common_tb">
+                <tr>
+                    <th width="36px">序号</th>
+                    <th>库位类型</th>
+                    <th>承重(kg)</th>
+                    <th>容积(cm³)</th>
+                    <th>个数</th>
+                    <th>单价</th>
+                    <th>租期</th>
+                    <th>小计</th>
+                    <th>操作</th>
+                </tr>
+                <tr v-for="(item,index) in formData.Items">
+                    <td>{{index+1}}</td>
+                    <td>{{item.SpecID}}</td>
+                    <td>{{item.Load}}</td>
+                    <td>{{item.Volume}}</td>
+                    <td>{{item.Quantity}}</td>
+                    <td>{{item.UnitPrice}}</td>
+                    <td>{{item.Month}}</td>
+                    <td>{{item.TotalPrice}}元</td>
+                    <td>
+                        <a class="btn" v-on:click="handleSubItemDelete(index)">删除</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">租赁费合计:</td>
+                    <td colspan="5" class="text_left">{{TotalAmount}}</td>
+                </tr>
+            </table>
+        </div>
+    </el-form>
+    <div class="btn_bottom mt80 mb100">
+        <button class="btn2" v-on:click="onSubmit">确认提交</button>
+    </div>
+    @*<el-dialog class="dialog_success" :lock-scroll="false" width="520px" :before-close="back" :visible.sync="dialogSuccessVisible" :close-on-click-modal="false">
+        <div class="content text_center">
+                    <p class="txt_blue font16">仓储租赁成功</p>
+                    <div class="clearfix mt30">
+                        <button v-on:click="" class="btnexp">导出合同</button>
+                        <a id="exportInfoForm" style="display:none" download><span id="ex-li" style="display:none"></span></a>
+                    </div>
+                    <div class="clearfix mt30">
+                        <el-upload :show-file-list="false"
+                                   :http-request="httpRequestFile_agent"
+                                   accept="image/jpg, image/bmp, image/jpeg, image/gif, image/png, application/pdf">
+                            <button class="btnexp">上传合同</button>
+                        </el-upload>
+                    </div>
+                    <p class="tip mt20">仅限图片、PDF文件，且文件不超过3M</p>
+                </div>
+                <div class="el-dialog__footer pb30 mt20">
+                    <button class="btn2 ml12" v-on:click="back">返回</button>
+                </div>
+            </el-dialog>*@
+    <el-dialog title="仓储租赁成功" class="fh_file" :lock-scroll="false" width="500px" :visible.sync="dialogSuccessVisible" :close-on-click-modal="false" :before-close="back">
+        <div class="dialog_body">
+            <p class="ml6">订单编号：<span class="txt_blue">{{orderid}}</span></p>
+            <el-divider></el-divider>
+
+            <div class="mt20">
+                <el-button v-on:click="exportFile" class="el-icon-ump-xiazai btn">导出合同</el-button>
+                <a id="exportInfoForm" style="display: none" download>
+                    <span id="ex-li" style="display: none"></span>
+                </a>
+            </div>
+            <div class="mt12 mb8">
+                <el-upload :show-file-list="false" ref="upload"
+                           :http-request="httpRequestFile"
+                           limit="1"
+                           :on-exceed="uploadExceed"
+                           :before-upload="uploadBefore"
+                           accept="image/jpg, image/bmp, image/jpeg, image/gif, image/png, application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+                    <el-button size="small" class="el-icon-ump-upload btn">上传合同</el-button>
+                </el-upload>
+            </div>
+            <p class="txt txt2">仅限图片、PDF或Word文件，且文件不超过3M</p>
+            <ul class="mt20">
+                <li v-for="(item,index) in fileList">
+                    <div class="file_item">
+                        <i class="file_icon"></i>
+                        <span class="file_name">{{item.name}}</span>
+                        <i class="file_del ml11" v-on:click="del_file(index)"></i>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div slot="footer" class="dialog-footer">
+            <button v-on:click="back" class="btn1">返回</button>
+            <button v-on:click="onSubmit1" class="btn2 ml12">上传</button>
+        </div>
+    </el-dialog>
+</div>
+<script type="text/javascript">
+    var vLeaseAdd = new Vue({
+        el: "#vLeaseAdd",
+        data: function() {
+            return {
+                formData: @Html.Raw(Json.Encode(Model)),
+                dialogSuccessVisible: false,
+                TotalAmount: 0,
+                orderid: "",
+                pickerOptions: {
+                    disabledDate: function(time) {
+                        var today = new Date();
+                        today.setDate(today.getDate() - 1);
+                        return time < today;
+                    }
+                },
+                fileList: []
+            }
+        },
+        methods: {
+            exportFile:function() {
+                window.location.href='/Template/香港库房库位租赁及仓储协议.doc';
+            },
+            onSubmit1: function() {
+                var that = this;
+                if (that.fileList.length == 0) {
+                    that.onAlert("warning", "请上传租仓合同！");
+                } else {
+                    var list = that.fileList[0];
+                    axios({
+                        url: "/Files/UploadContract",
+                        method: "post",
+                        data: {
+                            id: that.orderid,
+                            filename: list.name,
+                            fileurl: list.URL,
+                        },
+                    }).then(function(response) {
+                        this.fileList = [];
+                        that.onAlert(response.data.type, response.data.msg);
+                        if (response.data.type != "error") {
+                            setTimeout(function() {
+                                    that.back();
+                                },
+                                1000);
+                        }
+
+                    }).catch(function(error) {
+                        that.onAlert("warning", error);
+                    });
+                }
+            },
+            httpRequestFile: function(options) {
+                var that = this;
+                UploadFile(options,
+                    '/Files/UploadPickUpFile',
+                    function(res) {
+                        if (res.type) {
+                            that.fileList.push(JSON.parse(res.file));
+                        } else {
+                            that.onAlert("error", res.msg);
+                        }
+                    });
+            },
+            //计算总价
+            calTotalPrice: function(row, valuetext) {
+                if (!ValidDecimal(row[valuetext])) {
+                    this.$nextTick(function() {
+                        row[valuetext] = 0;
+                    });
+                } else {
+                    row[valuetext] = parseInt(row[valuetext]);
+                }
+                if (row.Amount > 0 && row.Month > 0) {
+                    row.UnitPrice = row.LsPrices[0].Price;
+                    row.LsPrices.forEach(function(column, index) {
+                        if (row.Month >= column.Month) {
+                            row.UnitPrice = column.Price;
+                        };
+                    });
+                    row["TotalPrice"] = Number(row.Amount) * Number(row.Month) * row.UnitPrice;
+                };
+            },
+            Add: function(item) {
+                if (this.validProduct(item)) {
+                    var startdatestr = this.dateToString(item.StartDate);
+                    var obj = {
+                        Quantity: item.Amount,
+                        UnitPrice: item.UnitPrice,
+                        StartDate: startdatestr,
+                        ProductID: item.ID,
+                        Month: item.Month,
+                        TotalPrice: item.TotalPrice,
+                        SpecID: item.SpecID,
+                        Load: item.Load,
+                        Volume: item.Volume,
+                        Summary: item.Summary,
+                    };
+                    item.StartDate = null;
+                    this.formData.Items.push(obj);
+                    this.TotalAmount = this.TotalAmount + item.TotalPrice;
+                    item.Amount = 0;
+                    item.TotalPrice = 0;
+                    item.UnitPrice = 0;
+                    item.Month = 0;
+                };
+                return false;
+            },
+            clearZero: function(row, val) {
+                if (row[val] == "0") {
+                    row[val] = "";
+                }
+            },
+            del_file: function(i, column) {
+                this.$refs.upload.clearFiles();
+                this.fileList = [];
+            },
+            uploadBefore(file) {
+                if (file == null) {
+                    return false;
+                } else if (
+                    "image/jpg, image/bmp, image/jpeg, image/gif, image/png, application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                        .indexOf(file.type) == -1) {
+                    // 若不符合excel类型，则让当前上传的文件去除掉即可，即从上传队列删除本次上传
+                    this.$refs.upload.abort(file);
+                    this.onAlert("error", "请选择正确的文件格式");
+                    return false;
+                }
+                return true;
+            },
+            uploadExceed: function(files, fileList) {
+                this.onAlert("error", "只能上传一个文件");
+            },
+            validProduct: function(item) {
+                if (item.StartDate == null || item.StartDate == "") {
+                    this.onAlert("error", "请选择开始时间");
+                    return false;
+                };
+                if (parseFloat(item.Amount) == 0) {
+                    this.onAlert("error", "库位数量不能为0");
+                    return false;
+                };
+                if (parseFloat(item.Month) == 0) {
+                    this.onAlert("error", "租期不能为0");
+                    return false;
+                };
+                return true;
+            },
+            handleSubItemDelete: function(index) {
+                this.TotalAmount = this.TotalAmount - this.formData.Items[index].TotalPrice;
+                this.formData.Items.splice(index, 1);
+            },
+            dateToString: function(date) {
+                var year = date.getFullYear();
+                var month = (date.getMonth() + 1).toString();
+                var day = (date.getDate()).toString();
+                if (month.length == 1) {
+                    month = "0" + month;
+                }
+                if (day.length == 1) {
+                    day = "0" + day;
+                }
+                var dateTime = year + "-" + month + "-" + day;
+                return dateTime;
+            },
+            onSubmit: function() {
+                if (this.formData.Items.length == 0) {
+                    this.onAlert("error", "请选择要租赁的仓位！");
+                    return;
+                };
+                var that = this;
+                const loading = this.$loading({
+                    lock: false,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)'
+                });
+                axios({
+                    url: "/LsOrders/LsOrderSubmit",
+                    method: "post",
+                    data: {
+                        data: JSON.stringify(that.formData),
+                    },
+                }).then(function(response) {
+                    loading.close();
+                    if (response.data.type == "error") {
+                        that.onAlert(response.data.type, response.data.msg);
+                    } else {
+                        that.orderid = response.data.data;
+                        that.dialogSuccessVisible = true;
+                    }
+                }).catch(function(error) {
+                    that.onAlert("warning", error);
+                });
+            },
+            back: function() {
+                window.location.href = "/LsOrders/List";
+            },
+            //消息提示框
+            onAlert: function(type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                    offset: 100,
+                });
+            },
+        }
+    });
+</script>

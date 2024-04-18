@@ -1,0 +1,773 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="PvCenter" Class="SqlDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=172.30.10.49,6522;Initial Catalog=PvCenter;Persist Security Info=True;User ID=u_v0" SettingsObjectName="Layers.Data.Properties.Settings" SettingsPropertyName="PvCenterConnectionString2" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Deliveries" Member="Deliveries">
+    <Type Name="Deliveries">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="WayBillID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="InputID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CeateDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.XdtWaybillsTopView" Member="XdtWaybillsTopView">
+    <Type Name="XdtWaybillsTopView">
+      <Column Name="DecHeadID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ClientName" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="EnterCode" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CarrierID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CarrierName" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="TinyOrderID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="MainOrderId" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CreateTime" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="LotNumber" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CarNumber1" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CarNumber2" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Carload" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Driver" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PlanDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="DepartDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.FileProperties" Member="FileProperties">
+    <Type Name="FileProperties">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="FileID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Value" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.FilesDescription" Member="FilesDescription">
+    <Type Name="FilesDescription">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="WsOrderID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="LsOrderID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ApplicationID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="WaybillID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="NoticeID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="StorageID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="InputID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ClientID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ShipID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PayID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ErmApplicationID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="StaffID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CustomName" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Url" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.KdnRequests" Member="KdnRequests">
+    <Type Name="KdnRequests">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="OrderCode" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ShipperCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ExpType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PayType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="MonthCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="SenderAddress" Type="System.String" DbType="NVarChar(400) NOT NULL" CanBeNull="false" />
+      <Column Name="SenderCompany" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="SenderName" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="SenderMobile" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="SenderTel" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ReceiverAddress" Type="System.String" DbType="NVarChar(400) NOT NULL" CanBeNull="false" />
+      <Column Name="ReceiverCompany" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="ReceiverName" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="ReceiverMobile" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ReceiverTel" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Remark" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="Currency" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Cost" Type="System.Decimal" DbType="Decimal(18,7)" CanBeNull="true" />
+      <Column Name="OtherCost" Type="System.Decimal" DbType="Decimal(18,7)" CanBeNull="true" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.KdnResults" Member="KdnResults">
+    <Type Name="KdnResults">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="OrderCode" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="LogisticCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="KDNOrderCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="DestinatioCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="OriginCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ShipperCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Html" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Logs_Operating" Member="Logs_Operating">
+    <Type Name="Logs_Operating">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="MainID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Operation" Type="System.String" DbType="NVarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="Creator" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Logs_PvLsOrder" Member="Logs_PvLsOrder">
+    <Type Name="Logs_PvLsOrder">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="MainID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="CreatorID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="IsCurrent" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Logs_PvWsOrder" Member="Logs_PvWsOrder">
+    <Type Name="Logs_PvWsOrder">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="MainID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="CreatorID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="IsCurrent" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Logs_TaskPool" Member="Logs_TaskPool">
+    <Type Name="Logs_TaskPool">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="MainID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Context" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Logs_Waybills" Member="Logs_Waybills">
+    <Type Name="Logs_Waybills">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="MainID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="CreatorID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="IsCurrent" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PrimaryKeys" Member="PrimaryKeys">
+    <Type Name="PrimaryKeys">
+      <Column Name="Name" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Length" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Value" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Day" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Routes" Member="Routes">
+    <Type Name="Routes">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="WhID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TasksPool" Member="TasksPool">
+    <Type Name="TasksPool">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="MainID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Context" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Waybills" Member="Waybills">
+    <Type Name="Waybills">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="FatherID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Code" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Subcodes" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="CarrierID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ConsignorID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ConsigneeID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="FreightPayer" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TotalParts" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TotalWeight" Type="System.Decimal" DbType="Decimal(18,7)" CanBeNull="true" />
+      <Column Name="TotalVolume" Type="System.Decimal" DbType="Decimal(18,7)" CanBeNull="true" />
+      <Column Name="CarrierAccount" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="VoyageNumber" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Condition" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="ModifyDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="EnterCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreatorID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ModifierID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="TransferID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="IsClearance" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="Packaging" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Supplier" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="ExcuteStatus" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CuttingOrderStatus" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ConfirmReceiptStatus" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="AppointTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="OrderID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Source" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="NoticeType" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TempEnterCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Association Name="Waybills_WayCharges" Member="WayCharges" ThisKey="ID" OtherKey="ID" Type="WayCharges" Cardinality="One" />
+      <Association Name="Waybills_WayChcd" Member="WayChcd" ThisKey="ID" OtherKey="ID" Type="WayChcd" Cardinality="One" />
+      <Association Name="Waybills_WayLoadings" Member="WayLoadings" ThisKey="ID" OtherKey="ID" Type="WayLoadings" Cardinality="One" />
+      <Association Name="Waybills_WayExpress" Member="WayExpress" ThisKey="ID" OtherKey="ID" Type="WayExpress" Cardinality="One" />
+      <Association Name="WayParters_Waybills" Member="WayParters" ThisKey="ConsignorID" OtherKey="ID" Type="WayParters" IsForeignKey="true" />
+      <Association Name="WayParters_Waybills1" Member="WayParters1" ThisKey="ConsigneeID" OtherKey="ID" Type="WayParters" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.WayCharges" Member="WayCharges">
+    <Type Name="WayCharges">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Payer" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PayMethod" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Currency" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TotalPrice" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Association Name="Waybills_WayCharges" Member="Waybills" ThisKey="ID" OtherKey="ID" Type="Waybills" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.WayChcd" Member="WayChcd">
+    <Type Name="WayChcd">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="LotNumber" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CarNumber1" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CarNumber2" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Carload" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="IsOnevehicle" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="Driver" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Phone" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PlanDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="DepartDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="TotalQuantity" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DriverCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="VehicleType" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="HKPhone" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="DriverCardNo" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CustomsPort" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="VehicleSize" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="HKSealNumber" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Association Name="Waybills_WayChcd" Member="Waybills" ThisKey="ID" OtherKey="ID" Type="Waybills" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.WayCosts" Member="WayCosts">
+    <Type Name="WayCosts">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="WaybillID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Currency" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Price" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="CreatorID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.WayLoadings" Member="WayLoadings">
+    <Type Name="WayLoadings">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="TakingDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="TakingAddress" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="TakingContact" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="TakingPhone" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CarNumber1" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Driver" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Carload" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="ModifyDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="CreatorID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ModifierID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ExcuteStatus" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Carrier" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Association Name="Waybills_WayLoadings" Member="Waybills" ThisKey="ID" OtherKey="ID" Type="Waybills" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.WayParters" Member="WayParters">
+    <Type Name="WayParters">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Company" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Place" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Address" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Contact" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Phone" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Zipcode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Email" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="IDType" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="IDNumber" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Association Name="WayParters_Waybills" Member="Waybills" ThisKey="ID" OtherKey="ConsignorID" Type="Waybills" />
+      <Association Name="WayParters_Waybills1" Member="Waybills1" ThisKey="ID" OtherKey="ConsigneeID" Type="Waybills" />
+    </Type>
+  </Table>
+  <Table Name="dbo.WayRoute" Member="WayRoute">
+    <Type Name="WayRoute">
+      <Column Name="ID" Type="System.String" DbType="NChar(10)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ApplicationsTopView" Member="ApplicationsTopView">
+    <Type Name="ApplicationsTopView">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="OrderID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ClientID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="BeneficiaryID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PayerID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Price" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="ModifyDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ExcuteStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.CarriersTopView" Member="CarriersTopView">
+    <Type Name="CarriersTopView">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Code" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Icon" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="Creator" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="District" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="RegAddress" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="Uscc" Type="System.String" DbType="VarChar(150)" CanBeNull="true" />
+      <Column Name="Corporation" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Place" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IsInternational" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.CurrentWsOrderStatusTopView" Member="CurrentWsOrderStatusTopView">
+    <Type Name="CurrentWsOrderStatusTopView">
+      <Column Name="MainID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="MainStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PaymentStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="InvoiceStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="RemittanceStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.DriversTopView" Member="DriversTopView">
+    <Type Name="DriversTopView">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="EnterpriseID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="IDCard" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Mobile" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Mobile2" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CustomsCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CardCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PortCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="LBPassword" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.FilesDescriptionTopView" Member="FilesDescriptionTopView">
+    <Type Name="FilesDescriptionTopView">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="WsOrderID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="LsOrderID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ApplicationID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="WaybillID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="NoticeID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="StorageID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="InputID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ClientID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CustomName" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PayID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Url" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ErmApplicationID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="StaffID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ShipID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.KdnRequestsTopView" Member="KdnRequestsTopView">
+    <Type Name="KdnRequestsTopView">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="OrderCode" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ShipperCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ExpType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PayType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="MonthCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="SenderAddress" Type="System.String" DbType="NVarChar(400) NOT NULL" CanBeNull="false" />
+      <Column Name="SenderCompany" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="SenderName" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="SenderMobile" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="SenderTel" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ReceiverAddress" Type="System.String" DbType="NVarChar(400) NOT NULL" CanBeNull="false" />
+      <Column Name="ReceiverCompany" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="ReceiverName" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="ReceiverMobile" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ReceiverTel" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Remark" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="Currency" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Cost" Type="System.Decimal" DbType="Decimal(18,7)" CanBeNull="true" />
+      <Column Name="OtherCost" Type="System.Decimal" DbType="Decimal(18,7)" CanBeNull="true" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Logs_OperatingTopView" Member="Logs_OperatingTopView">
+    <Type Name="Logs_OperatingTopView">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="MainID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Operation" Type="System.String" DbType="NVarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="Creator" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Logs_PvLsOrderCurrentTopView" Member="Logs_PvLsOrderCurrentTopView">
+    <Type Name="Logs_PvLsOrderCurrentTopView">
+      <Column Name="MainID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="MainStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="InvoiceStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Logs_PvLsOrderTopView" Member="Logs_PvLsOrderTopView">
+    <Type Name="Logs_PvLsOrderTopView">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="MainID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="CreatorID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="IsCurrent" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Logs_PvWsOrderTopView" Member="Logs_PvWsOrderTopView">
+    <Type Name="Logs_PvWsOrderTopView">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="MainID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="CreatorID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="IsCurrent" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Logs_WaybillsTopView" Member="Logs_WaybillsTopView">
+    <Type Name="Logs_WaybillsTopView">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="MainID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="CreatorID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="IsCurrent" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PvWsOrderStatusTopView" Member="PvWsOrderStatusTopView">
+    <Type Name="PvWsOrderStatusTopView">
+      <Column Name="MainID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="IsCurrent" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TransportsTopView" Member="TransportsTopView">
+    <Type Name="TransportsTopView">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="EnterpriseID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CarNumber1" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CarNumber2" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Weight" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.WaybillsOriginView" Member="WaybillsOriginView">
+    <Type Name="WaybillsOriginView">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="FatherID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Code" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Subcodes" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="CarrierID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ConsignorID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ConsigneeID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="FreightPayer" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TotalParts" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TotalWeight" Type="System.Decimal" DbType="Decimal(18,7)" CanBeNull="true" />
+      <Column Name="TotalVolume" Type="System.Decimal" DbType="Decimal(18,7)" CanBeNull="true" />
+      <Column Name="CarrierAccount" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="VoyageNumber" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Condition" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="ModifyDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="EnterCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreatorID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ModifierID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="TransferID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="IsClearance" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="Packaging" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Supplier" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="ExcuteStatus" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CuttingOrderStatus" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ConfirmReceiptStatus" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="AppointTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="OrderID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Source" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="NoticeType" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TempEnterCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.WaybillsTopView" Member="WaybillsTopView">
+    <Type Name="WaybillsTopView">
+      <Column Name="wbID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="wbCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="wbType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="wbSubcodes" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="wbCarrierID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="wbConsignorID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="wbConsigneeID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="wbFreightPayer" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="wbCarrierAccount" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="wbVoyageNumber" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="wbCondition" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="wbCreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="wbModifyDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="wbEnterCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="wbStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="wbCreatorID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="wbModifierID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="wbTransferID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="wbIsClearance" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="corID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="corCompany" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="corPlace" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="corAddress" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="corContact" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="corPhone" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="corZipcode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="corEmail" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="corCreateDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="coeID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="coeCompany" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="coePlace" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="coeAddress" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="coeContact" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="coePhone" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="coeZipcode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="coeEmail" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="coeCreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="chcdID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="chcdLotNumber" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="chcdCarNumber1" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="chcdCarNumber2" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="chcdCarload" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="chcdIsOnevehicle" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="chcdDriver" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="chcdPlanDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="chcdDepartDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="chcdTotalQuantity" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="wldID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="wldTakingDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="wldTakingAddress" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="wldTakingContact" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="wldTakingPhone" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="wldCarNumber1" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="wldDriver" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="wldCarload" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="wldCreateDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="wldModifyDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="wldCreatorID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="wldModifierID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="wldCarrier" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="wbTotalParts" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="wbTotalWeight" Type="System.Decimal" DbType="Decimal(18,7)" CanBeNull="true" />
+      <Column Name="wbTotalVolume" Type="System.Decimal" DbType="Decimal(18,7)" CanBeNull="true" />
+      <Column Name="wbPackaging" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="chgID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="chgPayer" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="chgPayMethod" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="chgCurrency" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="chgTotalPrice" Type="System.Decimal" DbType="Decimal(18,7)" CanBeNull="true" />
+      <Column Name="wbFatherID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="wbSupplier" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="wbExcuteStatus" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="corIDType" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="corIDNumber" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="coeIDType" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="coeIDNumber" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="wbSummary" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="CuttingOrderStatus" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="chcdPhone" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="AppointTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ConfirmReceiptStatus" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="OrderID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Source" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="NoticeType" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TempEnterCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="loadExcuteStatus" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ExType" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ExPayType" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="chcdDriverCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="chcdVehicleType" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="chcdHKPhone" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="chcdDriverCardNo" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="chcdCustomsPort" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="chcdVehicleSize" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="chcdHKSealNumber" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.WayCostsTopView" Member="WayCostsTopView">
+    <Type Name="WayCostsTopView">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="WaybillID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Currency" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Price" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="CreatorID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.WayLoadingsTopView" Member="WayLoadingsTopView">
+    <Type Name="WayLoadingsTopView">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="TakingDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="TakingAddress" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="TakingContact" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="TakingPhone" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CarNumber1" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Driver" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Carload" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="ModifyDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="CreatorID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ModifierID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ExcuteStatus" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DriverName" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="transCarNumber1" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="transCarNumber2" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Carrier" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.WsOrderStatusTopView" Member="WsOrderStatusTopView">
+    <Type Name="WsOrderStatusTopView">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="MainID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="CreatorID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="IsCurrent" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.XdtDecHeadsTopView" Member="XdtDecHeadsTopView">
+    <Type Name="XdtDecHeadsTopView">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="TinyOrderID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="MainOrderID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="DDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="PackNo" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.XdtSzOutConsigneesTopView" Member="XdtSzOutConsigneesTopView">
+    <Type Name="XdtSzOutConsigneesTopView">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Mobile" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="IDType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IDNumber" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.XdtSzOutDeliversTopView" Member="XdtSzOutDeliversTopView">
+    <Type Name="XdtSzOutDeliversTopView">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="DriverID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="VehicleID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Contact" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Mobile" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Address" Type="System.String" DbType="NVarChar(250) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="CarrierID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="DriverName" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="DriverCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="DriverMobile" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="DriverLicense" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CarrierType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CarrierCode" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="CarrierName" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="VehicleType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="VehicleLicense" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="VehicleHKLicense" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.XdtSzOutExpressagesTopView" Member="XdtSzOutExpressagesTopView">
+    <Type Name="XdtSzOutExpressagesTopView">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Contact" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Mobile" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Address" Type="System.String" DbType="NVarChar(250) NOT NULL" CanBeNull="false" />
+      <Column Name="ExpressCompanyID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ExpressTypeID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PayType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="WaybillCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="CustomerName" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CustomerPwd" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="MonthCode" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="TypeName" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="TypeValue" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.XdtSzOutWaybillsTopView" Member="XdtSzOutWaybillsTopView">
+    <Type Name="XdtSzOutWaybillsTopView">
+      <Column Name="OrderID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ExitType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ExitNoticeStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="IsPrint" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="OutStockTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ExitNoticeID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Code" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="ConsigneeID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="DeliverID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ExpressageID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="DeliverDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="PackNo" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.WayRequirements" Member="WayRequirements">
+    <Type Name="WayRequirements">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="OrderRequirement" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="CheckRequirement" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="DelivaryOpportunity" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="IsPayCharge" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.WayExpress" Member="WayExpress">
+    <Type Name="WayExpress">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ExType" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ExPayType" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ThirdPartyCardNo" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Association Name="Waybills_WayExpress" Member="Waybills" ThisKey="ID" OtherKey="ID" Type="Waybills" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>

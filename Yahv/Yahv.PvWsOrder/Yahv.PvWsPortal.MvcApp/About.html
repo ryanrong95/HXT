@@ -1,0 +1,137 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>关于芯达通- 一站式报关服务平台</title>
+    <meta name="keywords" content="深圳市芯达通供应链管理有限公司" />
+    <meta name="description" content="深圳创新恒远供应链有限公司，专注芯片、电子元器件、集成电路进口报关" />
+    <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
+    <!--[if lt IE 9]>
+      <script src="/Scripts/html5shiv.min.js"></script>
+      <script src="/Scripts/respond.min.js"></script>
+    <![endif]-->
+    <link rel="shortcut icon" href="/Content/images/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="/Content/element.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/common.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/style.css" />
+</head>
+<body>
+    <div class="header"></div>
+    <section id="aboutus" v-cloak>
+        <div class="us-title">
+            <div class="us-title-text">
+                <h1><span class="us-title-text-en">ABOUT US/</span><span class="us-title-text-ch">关于我们</span></h1>
+                <p>我们提供专业报关服务，为您打造聚物流、商流、信息流、资金流综合型服务项目！</p>
+            </div>
+        </div>
+        <div class="abouts-company-box">
+            <div class="abouts-company clearfix">
+                <div class="abouts-company-left">
+                    <div class="h2">
+                        <div class="h2_line"></div>
+                        <h2 class="graycolor">OUR MISSION<span>公司简介</span></h2>
+                    </div>
+                    <p class="us-text">
+                        深圳市芯达通供应链管理有限公司成立于2006年，总部在深圳，在北京、上海、香港设有分公司，香港拥有中转货仓10000平方英尺，深圳有大型仓库10000平米，现有员工150多名。主要从事国际货代、仓储、货物配送、报关、IC代购代销代存、代收代付货款等服务业务。为客户量身打造的聚物流、商流、信息流、资金流综合一条龙的服务项目，公司各类人才集聚，有一个强大高素质的员工队伍，公司拥有自主研发的一套十分完善的服务管理系统，对物流各环节进行计划、协调、控制和优化，通过建立快速响应机制，灵活的服务产品组合，成功涉及的行业包括通讯、IT、网络、电子消费类产品、仪器仪表、光电设备、大型设备、医疗设备等相关行业，我们坚持以“诚信合法经营、发挥员工无限潜能、为客户创造无限价值、给社会带来无限效益。在管理、业务、流程及文化建设上持续创新，为客户提供更专业高效物流服务是我们矢志不渝的使命和追求。
+                    </p>
+                </div>
+                <div class="abouts-company-right"></div>
+                <div class="abouts-company-fixed">
+                    <ul class="proxy clearfix">
+                        <li v-for="item,index in proxyList" class="clearfix">
+                            <a v-bind:href="item.href">
+                                <div class="proxy_img" v-bind:class="item.imgClass"></div>
+                                <p>{{item.title}}</p>
+                            </a>
+                            <div class="proxy_line" v-show="index<proxyList.length-1"></div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="abouts-customer-box">
+            <div class="abouts-customer">
+                <div class="h2 h2_center">
+                    <div class="h2_line"></div>
+                    <h2>我们的客户</h2>
+                    <p>OUR CUSTOMER</p>
+                </div>
+                <ul class="abouts-customer-content" v-loading="loading">
+                    <li v-for="(item,index) in custImgList">
+                        <div class="custImg">
+                            <img v-bind:src="item.Url" v-bind:alt="item.alt" />
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="abouts-idea-box">
+            <div class="abouts-idea">
+                <div class="h2 h2_center">
+                    <div class="h2_line"></div>
+                    <h2>企业理念</h2>
+                    <p>OUR VISION</p>
+                </div>
+                <p class="us-text">
+                    创新恒远秉承着“创新无止境，服务恒久远”的企业理念，秉承“诚信，安全，专业，快捷” 服务宗旨，为客户提供一流的服务，让行业的发展展现新的格局,同时我们希望与客户、合作伙伴及我们的员工共同发展互利互惠，致力于成为全国乃至全球物流行业的领航者！
+                </p>
+            </div>
+        </div>
+    </section>
+    <div class="footer"></div>
+    <script src="/Scripts/jquery-3.3.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/vue.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/axios.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/element.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/common.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+        var aboutus = new Vue({
+            el: '#aboutus',
+            data: {
+                proxyList: [{
+                    imgClass: 'proxy_img1',
+                    title: '代报关',
+                    href: '/Service.html?activeName=S1'
+                },
+                {
+                    imgClass: 'proxy_img2',
+                    title: '代收货',
+                    href: '/Service.html?activeName=S2'
+                },
+                {
+                    imgClass: 'proxy_img3',
+                    title: '代发货',
+                    href: '/Service.html?activeName=S3'
+                },
+                {
+                    imgClass: 'proxy_img4',
+                    title: '代仓储',
+                    href: '/Service.html?activeName=S4'
+                }],
+                custImgList: [],
+                loading: true
+            },
+            mounted: function () {
+                this.getCustImgList();
+            },
+            methods: {
+                getCustImgList: function () {
+                    var that = this;
+                    this.loading = true;
+                    axios.get("/Mock/custImgList.json")
+                    .then(function (res) {
+                        res = res.data;
+                        if (res.ret && res.data) {
+                            that.custImgList = res.data.custImgList;
+                            that.loading = false;
+                        }
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    })
+                }
+            }
+        })
+    </script>
+</body>
+</html>

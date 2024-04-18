@@ -1,0 +1,123 @@
+﻿
+@{
+    ViewBag.SubTitle = "入库订单详情";
+}
+
+@{Html.RenderAction("StorageDetailInBaseInfo", "Order");}
+@{Html.RenderAction("StorageDetailInSpecialRequire", "Order");}
+@{Html.RenderAction("StorageDetailInTransport", "Order");}
+@{Html.RenderAction("StorageDetailInAttachment", "Order");}
+@{Html.RenderAction("StorageDetailInCostInfo", "Order");}
+
+<div id="storagedetailin" v-cloak class="order_detail">
+    <div class="info_item_wrap">
+        <span class="icon_img">1</span>
+        <span class="title">订单基本信息</span>
+    </div>
+    <storagedetailinbaseinfo ref="storagedetailinbaseinfo"
+                             v-bind:baseinfo="baseinfo"></storagedetailinbaseinfo>
+
+    <div class="info_item_wrap mt40">
+        <span class="icon_img">2</span>
+        <span class="title">特殊要求</span>
+    </div>
+    <storagedetailinspecialrequire ref="storagedetailinspecialrequire"
+                                   v-bind:specialrequire="specialrequire"></storagedetailinspecialrequire>
+
+    <div class="info_item_wrap mt40">
+        <span class="icon_img">3</span>
+        <span class="title">货运信息</span>
+    </div>
+    <storagedetailintransport ref="storagedetailintransport"
+                              v-bind:transport="transport"
+                              v-bind:storagetransportinfo="storagetransportinfo"></storagedetailintransport>
+
+    <div class="info_item_wrap mt40">
+        <span class="icon_img">4</span>
+        <span class="title">附件信息</span>
+    </div>
+    <storagedetailinattachment ref="storagedetailinattachment"
+                               v-bind:attachment="attachment"></storagedetailinattachment>
+
+    <div class="info_item_wrap mt40">
+        <span class="icon_img">5</span>
+        <span class="title">费用信息</span>
+    </div>
+    <storagedetailincostinfo ref="storagedetailincostinfo"
+                             v-bind:orderid="baseinfo.OrderID"></storagedetailincostinfo>
+</div>
+<script src="~/Content/script/clipboard.min.js"></script>
+<script>
+    var storagedetailin = new Vue({
+        el: "#storagedetailin",
+        data: function () {
+            return {
+                baseinfo: {
+                    OrderID: '@(ViewBag.id)', //订单号
+                    OrderItems: [], //订单项
+                    AllPackageNumber: 0, //数量总和
+                    AllItemTotal: 0, //总数总和
+                },
+                specialrequire: {
+                    SpecialRequires: [], //特殊要求
+                },
+                transport: {
+                    TransportModeInt: 0, //货运类型 Int
+                    TransportModeName: '', //货运类型名称
+                    ExpressCompanyName: '', //快递公司名称
+                    ExpressNumber: '', //快递单号
+                    TakingDate: '', //提货时间,
+                    TakingFiles: [], //提货单文件信息
+                    ConsigneeManName: '', //交货联系人姓名
+                    ConsigneeManTel: '', //交货联系人电话
+                    ConsigneeManAddress: '', //交货联系人地址
+                },
+                storagetransportinfo: {
+                    IsHasValue: false,
+                    TransportModeInt: 0, //货运类型
+                    CarrierName: '', //承运商名称
+                    WaybillCode: '', //运单号
+                },
+                attachment: {
+                    PackingFiles: [], //装箱单文件信息
+                },
+            }
+        },
+        methods: {
+
+        },
+        created: function () {
+            //获取入库订单信息
+            var that = this;
+            axios.get('/Order/GetStorageDetailIn?OrderID=' + that.baseinfo.OrderID, { params: { } })
+                .then(function (res) {
+                    if (res.data.success == 200) {
+                        that.baseinfo.OrderID = res.data.result.OrderID;
+                        that.baseinfo.OrderItems = res.data.result.OrderItems;
+                        that.baseinfo.AllPackageNumber = res.data.result.AllPackageNumber;
+                        that.baseinfo.AllItemTotal = res.data.result.AllItemTotal;
+                        that.specialrequire.SpecialRequires = res.data.result.SpecialRequires;
+                        that.transport.TransportModeInt = res.data.result.TransportModeInt;
+                        that.transport.TransportModeName = res.data.result.TransportModeName;
+                        that.transport.ExpressCompanyName = res.data.result.ExpressCompanyName;
+                        that.transport.ExpressNumber = res.data.result.ExpressNumber;
+                        that.transport.TakingDate = res.data.result.TakingDate;
+                        that.transport.TakingFiles = res.data.result.TakingFiles;
+                        that.transport.ConsigneeManName = res.data.result.ConsigneeManName;
+                        that.transport.ConsigneeManTel = res.data.result.ConsigneeManTel;
+                        that.transport.ConsigneeManAddress = res.data.result.ConsigneeManAddress;
+                        if (res.data.result.StorageTransportInfo != null) {
+                            that.storagetransportinfo.IsHasValue = true;
+                            that.storagetransportinfo.TransportModeInt = res.data.result.StorageTransportInfo.TransportModeInt;
+                            that.storagetransportinfo.CarrierName = res.data.result.StorageTransportInfo.CarrierName;
+                            that.storagetransportinfo.WaybillCode = res.data.result.StorageTransportInfo.WaybillCode;
+                        }                      
+                        that.attachment.PackingFiles = res.data.result.PackingFiles;
+                    }
+                })
+                .catch(function (err) {
+                    console.log(err);
+                });
+        },
+    });
+</script>

@@ -1,0 +1,143 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>出库标签</title>
+    <script type="text/javascript" src="/PrintLable/js/jquery-1.3.2.min.js"></script>
+    <script type="text/javascript" src="/PrintLable/js/vue.js"></script>
+    <script type="text/javascript" src="/PrintLable/js/vue-barcode.js"></script>
+    <script type="text/javascript" src="/PrintLable/js/moment.js"></script>
+</head>
+<style  type="text/css">
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    body,
+    html {
+        background: #ffffff;
+        width: 100%;
+        height: 100%;
+    }
+
+    #app {
+        width: 363px;
+        height: 363px;
+        margin: 0 auto;
+    }
+
+    .product {
+        width: 6cm;
+        height: 4cm;
+        /*overflow: hidden;*/
+        /*border: 1px solid #ddd;*/
+        font-size: 12px;
+        margin: 0 auto;
+    }
+
+    .barcode {
+        text-align: center;
+    }
+
+    .borderbox {
+        width: 100%;
+        text-align: center;
+        padding-top: 1mm;
+    }
+
+    .infobox {
+        padding: 35px 10px 10px 10px;
+    }
+
+        .infobox li {
+            line-height: 30px;
+            list-style: none;
+        }
+
+    .lable2 {
+        display: inline-block;
+        width: 44%;
+        text-indent: 0;
+    }
+
+    i {
+        font-style: normal
+    }
+</style>
+<body>
+    <div id="app">
+        <div class="product">
+            <div class="borderbox">
+                <barcode v-bind:value="listdata.Unique" v-bind:options="barcode_option" tag="svg" class="barcode"></barcode>
+            </div>
+            <div style="padding-left:20px">
+                <div><span class="titel">型号：</span>{{listdata.Partnumber}}</div>
+                <div><span class="titel">品牌：</span>{{listdata.Brand}}</div>
+                <div style="display: flex;"><span class="titel lable2">封装：{{listdata.Package}}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="titel lable2">批次：{{listdata.DateCode}}</span></div>
+                <div style="display: flex;"><span class="titel lable2">Mpq：{{listdata.Mpq}}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="titel lable2">出库数量：{{listdata.PackageNumber}}<i v-if="listdata.Mpq>1">件</i></span></div>
+                <div><span class="titel">所属库位：{{listdata.ShelveCode}}</span></div>
+                <div><span class="titel">备注：{{listdata.Summary}}</span></div>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+
+    $(function () {
+        var waybill = null;
+        var listdata = null;
+        if (window['model']) {
+            waybill = model.waybill;
+            listdata = model.listdata;
+        } else {
+            listdata = null;
+            waybill = null;
+        }
+        var Vue = window.Vue;
+        var VueBarcode = window.VueBarcode;
+        Vue.component('barcode', VueBarcode);
+
+        new Vue({
+            el: '#app',
+            data: {
+                barcode_option: {
+                    displayValue: true, //是否默认显示条形码数据
+                    //textPosition  :'top', //条形码数据显示的位置
+                    background: "#fff", //条形码背景颜色
+                    valid: function (valid) { },
+                    width: "1px", //单个条形码的宽度
+                    height: "28px",
+                    fontSize: "12px", //字体大小
+                    fontFamily: "微软雅黑",
+                    format: "CODE128", //选择要使用的条形码类型
+                    margin: 2
+                },
+                waybill: waybill,
+                listdata: listdata,
+            },
+            created() {
+
+            },
+            mounted() { },
+            filters: {
+                showDate: function (val) {
+                    return moment(val).format('YYYY-MM-DD');
+                },
+                showboxcode: function (val) {
+                    if (val != "" && val != null) {
+                        if (val.indexOf("]") == -1) {
+                            return val
+                        } else {
+                            if (val || "") {
+                                var b = val.split("]")[1];
+                                return b;
+                            }
+                        }
+                    }
+                }
+            },
+        });
+    })
+</script>
+</html>

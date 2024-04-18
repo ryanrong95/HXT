@@ -1,0 +1,273 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_LayoutBill.cshtml";
+    ViewBag.navid = "MyApplies";
+}
+
+<div v-cloak id="vApplyInfo" class="backshow">
+    <div class="breaklist">
+        <span class="fl first_title">付汇详情</span>
+        <span class="fl second_title" v-on:click="history.back(-1)">返回</span>
+    </div>
+    <div class="order_detail">
+        <div class="order_content">
+            <div class="products">
+                <table class="tb_common1" border="0" cellspacing="0" cellpadding="0" style="word-wrap:break-word; word-break:break-all;">
+                    <tr>
+                        <th class="first_th" style="width:22px;">#</th>
+                        <th style="width:79px;">订单编号</th>
+                        <th style="width:100px;">币种</th>
+                        <th style="width:100px;">报关总价</th>
+                        <th style="width:100px;">付汇金额</th>
+                    </tr>
+                    <tr v-for="(item,index) in indexData.ApplyItems">
+                        <td>{{index+1}}</td>
+                        <td>{{item.OrderID}}</td>
+                        <td>{{item.Currency}}</td>
+                        <td>{{toFixed(2,item.DeclarePrice)}}</td>
+                        <td>{{item.Amount}}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="bank_detail">
+                <p class="title mt30 mb20">银行账号信息</p>
+                <p>请于{{indexData.SettlementDate}}前向我司以下账号汇款：</p>
+                <p>开户行：{{indexData.Account}}</p>
+                <p>开户名：{{indexData.AgentName}}</p>
+                <p>账&nbsp;&nbsp;&nbsp;号：{{indexData.AccountID}}</p>
+            </div>
+            <p class="title mt30 mb20">付款信息</p>
+            <div class="info_content">
+                <div class="overhide mb10">
+                    <div class="fl overhide  mr88">
+                        <span class="i_title">供应商公司全称(英文)：</span>
+                        <span class="i_content ">{{indexData.SupplierEnglishName}}</span>
+                    </div>
+                    <div class="fl overhide">
+                        <span class="i_title">供应商银行名称(英文)：</span>
+                        <span class="i_content">{{indexData.BankName}}</span>
+                    </div>
+                </div>
+                <div class="overhide mb10">
+                    <div class="fl overhide  mr88">
+                        <span class="i_title">银行地址：</span>
+                        <span class="i_content ">{{indexData.BankAddress}}</span>
+                    </div>
+                    <div class="fl overhide">
+                        <span class="i_title">银行账号：</span>
+                        <span class="i_content">{{indexData.BankAccount}}</span>
+                    </div>
+                </div>
+                <div class="overhide mb10">
+                    <div class="fl overhide  mr88">
+                        <span class="i_title">银行代码：</span>
+                        <span class="i_content ">{{indexData.BankCode}}</span>
+                    </div>
+                    <div class="fl overhide">
+                        <span class="i_title">付款方式：</span>
+                        <span class="i_content">{{indexData.PaymentType}}</span>
+                    </div>
+                </div>
+                <div class="overhide mb10">
+                    <div class="fl overhide  mr88">
+                        <span class="i_title">付汇日期：</span>
+                        <span class="i_content ">{{indexData.PaymentDate}}</span>
+                    </div>
+                    <div class="fl overhide">
+                        <span class="i_title">其他相关资料：</span>
+                        <span class="i_content">{{indexData.Others}}</span>
+                    </div>
+                </div>
+                <div class="overhide mb10">
+                    <div class="fl overhide  mr88">
+                        <span class="i_title">备注：</span>
+                        <span class="i_content ">{{indexData.Summary}}</span>
+                    </div>
+                    <div class="fl overhide">
+                        <span class="i_title">币种：</span>
+                        <span class="i_content">{{indexData.Currency}}</span>
+                    </div>
+                </div>
+                <div class="overhide mb10">
+                    <div class="fl overhide  mr88">
+                        <span class="i_title">汇率：</span>
+                        <span class="i_content">{{indexData.ExchangeRateType}}<span class="txt_yellow ml40">{{indexData.ExchangeRate}}</span></span>
+                    </div>
+                    <div class="fl overhide">
+                        <span class="i_title">应付金额：</span>
+                        <span class="i_content txt_yellow">{{toFixed(2,indexData.TotalMoney)}}元（人民币）</span>
+                    </div>
+                </div>
+                <div class="overhide mb10">
+
+                </div>
+            </div>
+            <div class="file_content">
+                <div class="overhide">
+                    <div class="file_l fl">
+                        <p class="title mt30 mb20">合同发票</p>
+                        <div v-for="item in indexData.PIFiles" class="mb10">
+                            <i class="invoice_icon"></i>
+                            <span class="f_name">{{item.FileName}}</span>
+                            <a class="link1" :href="item.URL" target="_blank">下载</a>
+                        </div>
+                        <div v-if="indexData.PIFiles.length==0">
+                            <span class="txt_yellow">提示：未上传</span>
+                        </div>
+                    </div>
+                    <div class="file_r fl">
+                        <p class="title mt30 mb20">付汇委托书</p>
+                        <div v-if="fileUrl!=null" class="mb10">
+                            <i class="file_icon"></i>
+                            <span class="f_name">{{fileName}}</span>
+                            <a class="link1" :href="fileUrl" target="_blank">下载</a><span v-if="indexData.IsUpload" class="f_status ml10">(待审核)</span>
+                            <span v-if="!indexData.IsUpload" class="f_status ml10">(已审核)</span>
+                        </div>
+                        <div v-else>
+                            <span class="txt_yellow">提示：未上传</span>
+                        </div>
+                        <div v-if="indexData.IsUpload" class="common_upload_div  mb8 mt20">
+                            <div class="overhide">
+                                <div class="fl">
+                                    <el-button v-on:click="download_file" class="el-icon-ump-xiazai">导出</el-button>
+                                    <a id="exportInfoForm" style="display:none" download><span id="ex-li" style="display:none"></span></a>
+                                </div>
+                                <div class="fl">
+                                    <el-upload action="/PayExchange/UploadOrderFile"
+                                               :http-request="httpRequest"
+                                               :show-file-list="false"
+                                               accept="image/jpg, image/bmp, image/jpeg, image/gif, image/png, application/pdf">
+                                        <el-button class="el-icon-ump-upload" size="small">上传</el-button>
+                                    </el-upload>
+                                </div>
+                            </div>
+                            <div  class="file_tip mt20">仅限图片或PDF文件，且文件不超过3M</div>
+                        </div>
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var vApplyInfo = new Vue({
+        el: "#vApplyInfo",
+        data: function () {
+            return {
+                indexData:@Html.Raw(Json.Encode(Model)),
+                fileUrl: "",
+                URL: "",
+                fileName: "",
+                fileFormat: "",
+            }
+        }, mounted: function () {
+            if (this.indexData.AgentTrustInstrumentURL != "") {
+                this.fileUrl = this.indexData.AgentTrustInstrumentURL;
+                this.fileName = this.indexData.AgentTrustInstrumentName;
+            }
+        },
+        methods: {
+            httpRequest: function (options) {
+                var that = this;
+                var file = options.file;
+                var size = file.size / 1024;
+                var imgArr = ["image/jpg", "image/bmp", "image/jpeg", "image/gif", "image/png"];
+                let config = {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                };
+                if (imgArr.indexOf(file.type) > -1 && size > 500) { //大于500kb的图片压缩
+                    photoCompress(file, { quality: 0.8 }, function (base64Codes) {
+                        var bl = convertBase64UrlToBlob(base64Codes);
+                        var form = new FormData(); // FormData 对象
+                        form.append("file", bl, "file_" + Date.parse(new Date()) + ".jpg"); // 文件对象
+                        //添加请求头
+                        axios.post('/Orders/UploadOrderFile', form, config)
+                            .then(function (response) {
+                                var file = JSON.parse(response.data.data);
+                                if (response.data.type != "error") {
+                                    that.fileUrl = file.fullURL;
+                                    that.URL = file.URL;
+                                    that.fileName = file.name;
+                                    that.fileFormat = file.fileFormat;
+                                    that.saveFile();
+                                }
+                            });
+                    });
+                } else if (imgArr.indexOf(file.type) <= -1 && size > 1024 * 3) {
+                    that.onAlert("error", "上传的文件大小不能大于3M");
+                    return;
+                } else {
+                    var form = new FormData(); // FormData 对象
+                    form.append("file", file); // 文件对象
+                    //添加请求头
+                    axios.post('/Orders/UploadOrderFile', form, config)
+                        .then(function (response) {
+                            var file = JSON.parse(response.data.data);
+                            if (response.data.type != "error") {
+                                that.fileUrl = file.fullURL;
+                                that.URL = file.URL;
+                                that.fileName = file.name;
+                                that.fileFormat = file.fileFormat;
+                                that.saveFile();
+                            }
+                        });
+                }
+            },
+            saveFile: function () {
+                var that = this;
+                axios({
+                    url: "/PayExchange/SavePayProxy",
+                    method: "post",
+                    data: {
+                        id: that.indexData.ID,
+                        url: that.URL,
+                        filename: that.fileName,
+                        ext: that.fileFormat,
+                    },
+                }).then(function (response) {
+                    console.log(response)
+                    that.onAlert(response.data.type, response.data.msg);
+                    if (response.data.type == "success") {
+                        that.fileUrl = response.data.data;
+                    }
+                }).catch(function (error) {
+                    that.onAlert("warning", error);
+                });
+            },
+            download_file: function () {
+                var that = this;
+                axios({
+                    url: "/PayExchange/DownloadPayProxy",
+                    method: "post",
+                    data: {
+                        id: this.indexData.ID,
+                    },
+                }).then(function (response) {
+                    if (response.data.type == "error") {
+                        that.onAlert(response.data.type, response.data.msg);
+                    } else {
+                        $('#exportInfoForm').attr("href", response.data.data);
+                        $('#exportInfoForm').attr("target", "_blank");
+                        $('#ex-li').trigger("click");
+                    }
+                }).catch(function (error) {
+                    that.onAlert("warning", error);
+                });
+            },
+            toFixed: function (num, val) {
+                return val.toFixed(num);
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                    offset:300,
+                });
+            },
+        }
+    });
+</script>
+

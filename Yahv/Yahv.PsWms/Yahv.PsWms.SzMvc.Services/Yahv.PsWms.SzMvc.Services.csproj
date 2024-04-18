@@ -1,0 +1,190 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B9BB75D7-9C50-40AC-B940-2653947CAF4C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Yahv.PsWms.SzMvc.Services</RootNamespace>
+    <AssemblyName>Yahv.PsWms.SzMvc.Services</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="itextsharp">
+      <HintPath>..\packages\iTextSharp.5.5.4\lib\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ClientModels\Client\Address.cs" />
+    <Compile Include="ClientViews\Client\AddressView.cs" />
+    <Compile Include="Common\FileDirectory.cs" />
+    <Compile Include="Common\PdfHelper.cs" />
+    <Compile Include="Enums\Enum.AddressType.cs" />
+    <Compile Include="Enums\Enum.BakOrderItem.cs" />
+    <Compile Include="Enums\Enum.Express.cs" />
+    <Compile Include="Enums\Enum.ExpressMethod.cs" />
+    <Compile Include="Enums\Enum.FileType.cs" />
+    <Compile Include="Enums\Enum.FreightPayer.cs" />
+    <Compile Include="Enums\Enum.Voucher.cs" />
+    <Compile Include="Enums\Enum.IDType.cs" />
+    <Compile Include="Enums\Enum.InvoiceDeliveryType.cs" />
+    <Compile Include="Enums\Enum.LogAction.cs" />
+    <Compile Include="Enums\Enum.NoticeSource.cs" />
+    <Compile Include="Enums\Enum.NoticeType.cs" />
+    <Compile Include="Enums\Enum.OrderStatus.cs" />
+    <Compile Include="Enums\Enum.OrderType.cs" />
+    <Compile Include="Enums\Enum.PKeyType.cs" />
+    <Compile Include="Enums\Enum.SpecialRequire.cs" />
+    <Compile Include="Enums\Enum.StocktakingType.cs" />
+    <Compile Include="Enums\Enum.StorageType.cs" />
+    <Compile Include="Enums\Enum.TransportMode.cs" />
+    <Compile Include="Models\ClientSide\File\NewFile.cs" />
+    <Compile Include="Models\ClientSide\Finance\VoucherExport.cs" />
+    <Compile Include="Models\ClientSide\Login\Client.cs" />
+    <Compile Include="Models\ClientSide\Login\IUserSetting.cs" />
+    <Compile Include="Models\ClientSide\Login\SettingsManager.cs" />
+    <Compile Include="Models\ClientSide\Login\Siteuser.cs" />
+    <Compile Include="Models\ClientSide\Login\UserSetting.cs" />
+    <Compile Include="Models\ClientSide\OrderItem\OrderItemOrigin.cs" />
+    <Compile Include="Models\ClientSide\Order\DeliveryCompleteHandler.cs" />
+    <Compile Include="Models\ClientSide\Order\InStorage.cs" />
+    <Compile Include="Models\ClientSide\Order\NoticeTransportHandler.cs" />
+    <Compile Include="Models\ClientSide\Order\OutStorage.cs" />
+    <Compile Include="Models\Origin\Address.cs" />
+    <Compile Include="Models\Origin\Client.cs" />
+    <Compile Include="Models\Origin\InvoiceNotice.cs" />
+    <Compile Include="Models\Origin\InvoiceNoticeItem.cs" />
+    <Compile Include="Models\Origin\Log.cs" />
+    <Compile Include="Models\Origin\PayerLeft.cs" />
+    <Compile Include="Models\Origin\Product.cs" />
+    <Compile Include="Models\Origin\Invoice.cs" />
+    <Compile Include="Models\Origin\Order.cs" />
+    <Compile Include="Models\Origin\OrderItem.cs" />
+    <Compile Include="Models\Origin\OrderPermiun.cs" />
+    <Compile Include="Models\Origin\OrderTransport.cs" />
+    <Compile Include="Models\Origin\PayeeLeft.cs" />
+    <Compile Include="Models\Origin\PayeeRight.cs" />
+    <Compile Include="Models\Origin\PcFile.cs" />
+    <Compile Include="Models\Origin\Picker.cs" />
+    <Compile Include="Models\Origin\Require.cs" />
+    <Compile Include="Models\Origin\Siteuser.cs" />
+    <Compile Include="Models\Origin\StandardProduct.cs" />
+    <Compile Include="Models\Origin\Voucher.cs" />
+    <Compile Include="Notice\StorageNotice\StorageNoticeFileModel.cs" />
+    <Compile Include="Notice\StorageNotice\StorageNoticeModel.cs" />
+    <Compile Include="Notice\StorageNotice\StorageInNoticeService.cs" />
+    <Compile Include="Notice\StorageNotice\StorageNoticeModelNew.cs" />
+    <Compile Include="Notice\StorageNotice\StorageOutNoticeService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PvWsOrderApiSetting.cs" />
+    <Compile Include="Views\Alls\OrderItemsAll.cs" />
+    <Compile Include="Views\Alls\OrdersAll.cs" />
+    <Compile Include="Views\ClientSide\Finance\StorageVoucherListView.cs" />
+    <Compile Include="Views\ClientSide\Notice\LogListView.cs" />
+    <Compile Include="Views\ClientSide\Notice\ModifyOrderItemLogsView.cs" />
+    <Compile Include="Views\ClientSide\Order\AllStorageListView.cs" />
+    <Compile Include="Views\ClientSide\Order\FeeListInOrderView.cs" />
+    <Compile Include="Views\ClientSide\Order\InStorageListView.cs" />
+    <Compile Include="Views\ClientSide\Order\OutStorageListView.cs" />
+    <Compile Include="Views\ClientSide\Order\TransportInfoFromStorageView.cs" />
+    <Compile Include="Views\ClientSide\PcFilesView.cs" />
+    <Compile Include="Views\ClientSide\Storage\StorageListView.cs" />
+    <Compile Include="Views\ClientSide\Finance\VoucherDetailListView.cs" />
+    <Compile Include="Views\Origins\AddressesOrigin.cs" />
+    <Compile Include="Views\Origins\InvoiceNoticeItemsOrigin.cs" />
+    <Compile Include="Views\Origins\InvoiceNoticesOrigin.cs" />
+    <Compile Include="Views\Origins\PayerLeftsTopView.cs" />
+    <Compile Include="Views\Origins\PayeeLeftsOrigin.cs" />
+    <Compile Include="Views\Origins\VouchersOrigin.cs" />
+    <Compile Include="Views\Origins\PickersOrigin.cs" />
+    <Compile Include="Views\Origins\PcFilesOrigin.cs" />
+    <Compile Include="Views\Origins\RequiresOrigin.cs" />
+    <Compile Include="Views\Origins\OrderTransportsOrigin.cs" />
+    <Compile Include="Views\Origins\ProductsOrigin.cs" />
+    <Compile Include="Views\Origins\OrdersOrigin.cs" />
+    <Compile Include="Views\Origins\OrderItemsOrigin.cs" />
+    <Compile Include="Views\Origins\InvoicesOrigin.cs" />
+    <Compile Include="Views\Origins\SiteusersOrigin.cs" />
+    <Compile Include="Views\Origins\ClientsOrigin.cs" />
+    <Compile Include="Views\Roll\Invoices_Show_View.cs" />
+    <Compile Include="Views\Roll\Orders_Show_View.cs" />
+    <Compile Include="Views\Roll\Clients_Show_View.cs" />
+    <Compile Include="Views\Roll\ServiceManagerInfoView.cs" />
+    <Compile Include="Views\Roll\VoucherInfoView.cs" />
+    <Compile Include="Views\Roll\Vouchers_Show_View.cs" />
+    <Compile Include="Views\Roll\PayerLefts_Show_View.cs" />
+    <Compile Include="Views\Roll\PayeeLefts_Show_View.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Solutions\Layers.Data\Layers.Data.csproj">
+      <Project>{fed16b15-565b-4ed6-a876-2146eb16b011}</Project>
+      <Name>Layers.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Layers.Linq\Layers.Linq.csproj">
+      <Project>{56c33683-ce9a-4cc5-9cef-92e03bc8f739}</Project>
+      <Name>Layers.Linq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Yahv.Linq\Yahv.Linq.csproj">
+      <Project>{c8c572df-2bba-4483-b332-2652805aef87}</Project>
+      <Name>Yahv.Linq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Yahv.Underly\Yahv.Underly.csproj">
+      <Project>{15b56201-a129-4396-9431-0e5f9da7d9f9}</Project>
+      <Name>Yahv.Underly</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Yahv.Utils\Yahv.Utils.csproj">
+      <Project>{870a94d5-f08e-481f-a7ae-b90b5c249882}</Project>
+      <Name>Yahv.Utils</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

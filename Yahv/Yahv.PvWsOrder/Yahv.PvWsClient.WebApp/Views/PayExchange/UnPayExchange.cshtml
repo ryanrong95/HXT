@@ -1,0 +1,409 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_LayoutOrder.cshtml";
+    ViewBag.navid = "UnPayExchangeList";
+}
+
+<div v-cloak id="vUnPayExchange" class="backshow">
+    <h2>待付汇</h2>
+    <div class="order_list_view">
+        <div class="check">
+            <el-checkbox v-model="indexData.allChecked" v-on:change="allCheck">全选</el-checkbox>
+            <el-button v-on:click="applyOrders" type="primary">申请付汇</el-button>
+            <span class="txt_blue">如何选择？多个订单一起付汇，需要选择相同交易币种及供应商订单</span>
+        </div>
+        <div class="orderlist mt20" ref="viewBox1" v-on:scroll="ss('viewBox1')">
+            <div class="title">
+                <ul class="overhide">
+                    <li class="fl" style="width:244px">
+                        <el-dropdown v-on:command="currencyChange">
+                            <span class="el-dropdown-link">
+                                {{indexData.currencyName}}<i class="el-icon-arrow-down el-icon--right"></i>
+                            </span>
+                            <el-dropdown-menu slot="dropdown">
+                                <el-dropdown-item command="all">全部币种</el-dropdown-item>
+                                <el-dropdown-item v-for="item of currencyOptions" :command="item.text">{{item.text}}</el-dropdown-item>
+                            </el-dropdown-menu>
+                        </el-dropdown>
+                    </li>
+                    <li class="fl" style="width:126px">订单状态</li>
+                    <li class="fl" style="width:204px">供应商</li>
+                    <li class="fl" style="width:154px">付汇状态</li>
+                    <li class="fl" style="width:160px">操作</li>
+                </ul>
+            </div>
+            <div class="orderWrap" v-loading="indexData.loading">
+                <div class="order" v-if="!indexData.loading">
+                    <table class="myorder tb_multi" border="0" cellspacing="0" cellpadding="0" v-for="item of indexData.curItems">
+                        <tr>
+                            <th class="overhide" colspan="5">
+                                <div class="mian_order_row1 mian_order_row">
+                                    <span class="txt1 ml20 mr72">订单号：{{item.MainOrderID}}</span>
+                                    <span class="txt2">{{item.createTime}}</span>
+                                    <span v-if="item.isSplit" class="txt3">您订单中的产品因分批到货，拆分报关。</span>
+                                </div>
+                                <div class="mian_order_row2 mian_order_row">
+                                    <span class="ml20">交易币种：{{item.currency}}</span>
+                                    <span class="ml50">报关总价：{{item.declarePrice.toFixed(2)}}</span>
+                                    <span class="ml50">拆分状态：<span class="txt_yellow" v-if="item.isSplit">已拆分</span><span class="txt_yellow" v-if="!item.isSplit">未拆分</span></span>
+                                    <a class="a_detail fr mr20" v-on:click="info(item.MainOrderID)">订单详情</a>
+                                </div>
+                        </tr>
+                        <tr class="cell" v-for="sub in item.Orders">
+                            <td colspan="5">
+                                <div class="sub_order_row sub_order_row1">
+                                    <el-checkbox v-model="sub.IsCheck" v-on:change="singlecheck(sub.ID,sub.IsCheck)" class="ml20"></el-checkbox>
+                                    <span class="ml10">订单号：{{sub.ID}}</span>
+                                    <span class="fr mr200">报关总价：{{sub.DeclarePrice.toFixed(2)}} {{sub.Currency}}</span>
+                                </div>
+                                <div class="sub_order_row sub_order_row2 overhide">
+                                    <div style="width:125px;" class="colum fl">
+                                        <span>{{sub.OrderStatus}}<br /></span>
+                                        <a href="#">订单跟踪</a>
+                                    </div>
+                                    <div style="width:340px" class="colum fl">
+                                        <div style="text-align:left"><span v-for="(supply,index) in sub.PaySuppliersName">{{index + 1}}. {{supply}}<br /></span></div>
+                                    </div>
+                                    <div style="width:167px" class="colum fl">
+                                        <span>{{sub.PayExchangeType}}<br /></span>
+                                        <span>可付汇: {{sub.Remittance}}<br /></span>
+                                        <span>已付汇: {{sub.Remittanced}}</span>
+                                    </div>
+                                    <div style="width:112px" class="colum fl"><a v-on:click="payDetails(sub.ID)">查看付汇记录</a></div>
+                                    <div style="width:166px;" class="colum fl"><el-button class="confirm" v-on:click="applyOrder(sub.ID)">申请付汇</el-button></div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    <div v-if="indexData.curItems.length==0">
+                        <div class="nodata-container">
+                            <el-row class="nodata-row1">
+                                <img src="~/Content/img/nodata.png" />
+                            </el-row>
+                            <el-row class="nodata-row2">
+                                <span class="nodata-info">暂无数据！</span>
+                            </el-row>
+                        </div>
+                    </div>
+                </div>
+                <div class="foot" v-if="(!indexData.loading)&&indexData.curItems.length!=0">
+                    <el-pagination style="float:right" v-on:size-change="handleSizeChange"
+                                   v-on:current-change="handleCurrentChange"
+                                   :current-page="indexData.pageIndex"
+                                   :page-sizes="[5, 10, 20, 40]"
+                                   :page-size="indexData.pageSize"
+                                   layout="total, sizes, prev, pager, next, jumper"
+                                   :total="indexData.Total">
+                    </el-pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+    <el-dialog title="付汇记录" :lock-scroll="false" width="600px" :visible.sync="dialogFormVisible" :close-on-click-modal="false">
+        <el-table :data="tableData"
+                  border
+                  style="width: 100%">
+            <el-table-column label="#" type="index">
+            </el-table-column>
+            <el-table-column prop="ApplyTime" width="160px"
+                             label="申请时间">
+            </el-table-column>
+            <el-table-column prop="SupplierName"
+                             label="供应商">
+            </el-table-column>
+            <el-table-column prop="Amount"
+                             label="付汇金额">
+            </el-table-column>
+            <el-table-column prop="Status"
+                             label="状态">
+            </el-table-column>
+        </el-table>
+    </el-dialog>
+</div>
+
+<script>
+    var vUnPayExchange = new Vue({
+        el: "#vUnPayExchange",
+        data: function () {
+            return {
+                indexData: {
+                    loading: true,
+                    curItems: [],
+                    pageIndex: 1, //初始页
+                    pageSize: 5,    //每页的数据
+                    Total: 0,
+                    scrollTop: 0, //滚动条位置
+                    currencyName: "交易币种",
+                    allChecked: false,
+                    currency: "",
+                },
+                currencyOptions: [],
+                dialogFormVisible: false,
+                tableData: []
+            }
+        },
+        mounted: function () {
+            var that = this;
+            var userJsonStr = sessionStorage.getItem('UnPayExchangeList');
+            console.log(userJsonStr)
+            userEntity = JSON.parse(userJsonStr);
+            if (userEntity == null) {
+                that.paging();
+            } else {
+                that.indexData = userEntity;
+                that.paging();
+                that.$nextTick(function () {
+                    that.$refs['viewBox1'].scrollTop = that.indexData.scrollTop;
+                })
+                sessionStorage.removeItem('UnPayExchangeList');
+            }
+            this.currencyOptions = @Html.Raw(Json.Encode(@ViewBag.CurrencyOptions));
+        },
+        methods: {
+            info: function (id) {
+                var that = this;
+                var type = "";
+                axios({
+                    url: "/PayExchange/ReturnDetail",
+                    method: "post",
+                    data: {
+                        id: id,
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                    transformRequest: [function (data) {
+                        var ret = ''
+                        for (var it in data) {
+                            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+                        }
+                        return ret;
+                    }],
+                }).then(function (response) {
+                    var data = response.data;
+                    if (data.type == "error") {
+                        that.onAlert("error", data.msg);
+                        return;
+                    } else {
+                        type = data.data;
+                    }
+                    if (type != "") {
+                        sessionStorage.setItem('UnPayExchangeList', JSON.stringify(that.indexData));
+                        if (type == "4") {
+                            url = "/Orders/TransDecDetail"
+                        } else if (type == "5") {
+                            url = "/Declare/DeclareDetail"
+                        }
+                        commonSkip(id, url, 'UnPayExchangeList');
+                    }
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            commonSkip: function (ids, url) {
+                var stuAnswerArr = JSON.stringify(ids);//转成json字符串
+                //JS模拟post提交
+                var REVQForm = document.createElement("form");
+                REVQForm.setAttribute("method", 'POST');
+                REVQForm.setAttribute("action", url);
+                REVQForm.innerHTML = "";
+                var stuAnswerInput = document.createElement("input");
+                stuAnswerInput.setAttribute("type", "hidden");
+                stuAnswerInput.setAttribute("name", 'para');
+                stuAnswerInput.setAttribute("value", ids);
+                REVQForm.appendChild(stuAnswerInput);
+                document.body.appendChild(REVQForm);
+                REVQForm.submit();
+            },
+            //是否全选
+            isAllcheck: function () {
+                var flag = true;
+                this.indexData.curItems.forEach(function (val, index) {
+                    if (!val.IsCheck) {
+                        flag = false;
+                    }
+                });
+                this.indexData.allChecked = flag;
+            },
+            //付汇记录
+            payDetails: function (id) {
+                var that = this;
+                that.tableData = [];
+                axios({
+                    url: "/PayExchange/GetPayRecord",
+                    method: "post",
+                    data: { id: id },
+                }).then(function (res) {
+                    if (res.data.type == "success") {
+                        that.tableData = JSON.parse(res.data.data);
+                        that.dialogFormVisible = true;
+                    }
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            singlecheck: function (id, ischeck) {
+                this.indexData.curItems.filter(function (data) {
+                    if (data.ID == id) {
+                        data.IsCheck = ischeck;
+                    }
+                });
+                this.isAllcheck();
+            },
+            //货币变化
+            currencyChange: function (item) {
+                if (item == "all") {
+                    this.indexData.currencyName = "全部币种";
+                    this.indexData.currency = "all";
+                }
+                else {
+                    this.indexData.currencyName = item;
+                    this.indexData.currency = item;
+                }
+                this.paging();
+            },
+            //申请付汇
+            applyOrder: function (orderID) {
+                sessionStorage.setItem('UnPayExchangeList', JSON.stringify(this.indexData));
+                this.commonSkip(orderID, '/PayExchange/Apply')
+            },
+            //多选申请付汇
+            applyOrders: function () {
+                var ids = [];
+                var curency = [];
+                var supplier = [];
+                for (var i = 0; i < this.indexData.curItems.length; i++) {
+                    for (var j = 0; j < this.indexData.curItems[i].Orders.length; j++) {
+                        if (this.indexData.curItems[i].Orders[j].IsCheck) {
+                            ids.push(this.indexData.curItems[i].Orders[j].ID);
+                            curency.push(this.indexData.curItems[i].Orders[j].Currency);
+                            supplier.push(this.indexData.curItems[i].Orders[j].PaySuppliers);
+                        }
+                    }
+                }
+                if (ids.length == 0) {
+                    this.onAlert("error", "请选择订单！");
+                    return;
+                }
+                //货币去重
+                var uniqueCurrency = curency.filter(function (element, index, self) {
+                    return self.indexOf(element) === index;
+                });
+                if (uniqueCurrency.length != 1) {
+                    this.onAlert("error", "请选择相同的交易币种！");
+                    return;
+                }
+                var intersection = []; //供应商交集
+                for (var i = 0; i < supplier.length; i++) {
+                    if (i == 0) {
+                        intersection = supplier[i];
+                    } else {
+                        intersection = intersection.filter(function (v) {
+                            if (supplier[i].includes(v)) {
+                                return v;
+                            }
+                        });
+                        if (intersection.length == 0) {
+                            this.onAlert("error", "请选择相同的供应商。");
+                            return;
+                        }
+                    }
+                }
+                this.applyOrder(ids.join(','));
+            },
+            allCheck: function () {
+                var that = this;
+                this.indexData.curItems.forEach(function (val, index) {
+                    val.Orders.forEach(function (order, index) {
+                        order.IsCheck = that.indexData.allChecked;
+                    });
+                });
+            },
+            ss: function (ref) {
+                // 监听这个dom的scroll事件
+                var that = this;
+                this.$refs[ref].addEventListener('scroll', function () {
+                    that.indexData.scrollTop = that.$refs[ref].scrollTop;
+                }, false)
+            },
+            // 初始页currentPage、初始每页数据数pagesize和数据data
+            handleSizeChange: function (size) {
+                this.indexData.pageSize = size;
+                this.paging();
+            },
+            handleCurrentChange: function (currentPage) {
+                this.indexData.pageIndex = currentPage;
+                this.paging();
+            },
+            paging: function () {
+                var that = this;
+                that.indexData.loading = true;
+                axios({
+                    url: "/PayExchange/GetUnPayExchangeList",
+                    method: "post",
+                    data: {
+                        page: this.indexData.pageIndex,
+                        rows: this.indexData.pageSize,
+                        currency: this.indexData.currency
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                    transformRequest: [function (data) {
+                        var ret = ''
+                        for (var it in data) {
+                            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+                        }
+                        return ret;
+                    }],
+                }).then(function (response) {
+                    var data = JSON.parse(response.data.data);
+                    var MianIDs = [];
+                    var newData = [];
+                    for (var irow = 0; irow < data.list.length; irow++) {
+                        if (MianIDs.indexOf(data.list[irow].MainOrderID) < 0) {
+                            MianIDs.push(data.list[irow].MainOrderID);
+                        }
+                    }
+                    for (var i = 0; i < MianIDs.length; i++) {
+                        var d = [];
+                        var declarePrice = 0;
+                        for (var j = 0; j < data.list.length; j++) {
+                            if (data.list[j].MainOrderID == MianIDs[i]) {
+                                d.push(data.list[j]);
+
+                                declarePrice += data.list[j].DeclarePrice;
+                            }
+                        }
+                        var isSplit = false;
+                        if (d.length > 1) {
+                            isSplit = true;
+                        }
+                        newData.push(
+                            {
+                                MainOrderID: MianIDs[i],
+                                Orders: d,
+                                isSplit: isSplit,
+                                createTime: d[0].MainOrderCreateDate,
+                                currency: d[0].Currency,
+                                declarePrice: declarePrice
+                            })
+                    }
+                    that.indexData.curItems = newData;
+                    that.indexData.Total = data.total;
+                    that.indexData.loading = false;
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                    offset:200
+                });
+            },
+        }
+    });
+</script>

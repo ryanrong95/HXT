@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link href="http://fixed8.ic360.cn/Yahv/jquery-easyui-1.7.6/themes/metro/easyui.css" rel="stylesheet" />
+    <link href="http://fixed8.ic360.cn/Yahv/jquery-easyui-1.7.6/themes/metro/jl-cool.css" rel="stylesheet" />
+
+    <link href="http://fixed8.ic360.cn/Yahv/jquery-easyui-1.7.6/themes/icon.css" rel="stylesheet" />
+    <link href="http://fixed8.ic360.cn/Yahv/jquery-easyui-1.7.6/themes/icon-jl-cool.css" rel="stylesheet" />
+    <link href="http://fixed8.ic360.cn/Yahv/jquery-easyui-1.7.6/themes/icon-yg-cool.css" rel="stylesheet" />
+
+    <script src="http://fixed8.ic360.cn/Yahv/jquery-easyui-1.7.6/jquery.min.js"></script>
+    <script src="http://fixed8.ic360.cn/Yahv/jquery-easyui-1.7.6/jquery.easyui.min.js"></script>
+    <script src="http://fixed8.ic360.cn/Yahv/jquery-easyui-1.7.6/locale/easyui-lang-zh_CN.js"></script>
+
+    <link href="http://fixed8.ic360.cn/Yahv/customs-easyui/Styles/main.css" rel="stylesheet" />
+
+    <style>
+        * { margin: 0px; padding: 0px; }
+    </style>
+
+</head>
+<body>
+    <script>
+        $(function () {
+            var context = '[context]';
+            var title = '[title]';
+            var sign = '[sign]'.toLowerCase();
+            var url = '[url]';
+
+            var myAlert;
+
+            function getArgs(strParame) {
+                var args = new Object();
+                var query = location.search.substring(1); // Get query string
+                var pairs = query.split("&"); // Break at ampersand
+                for (var i = 0; i < pairs.length; i++) {
+                    var pos = pairs[i].indexOf('='); // Look for "name=value"
+                    if (pos == -1) continue; // If not found, skip
+                    var argname = pairs[i].substring(0, pos); // Extract the name
+                    var value = pairs[i].substring(pos + 1); // Extract the value
+                    value = decodeURIComponent(value); // Decode it, if needed
+                    args[argname] = value; // Store as a property
+                }
+                return args[strParame]; // Return the object
+            }
+
+            var myAlert;
+
+            var pagemode = getArgs('pagemode');
+            if (pagemode != null && pagemode.length > 0) {
+                myAlert = $.messager.alert;
+            } else {
+                myAlert = top.$.messager.alert;
+            }
+
+            if (context.length == 0
+                || title.length == 0
+                || sign.length == 0
+                || url.length == 0) {
+                location.replace(url);
+            } else {
+                myAlert(title, context, sign, function () {
+                    location.replace(url);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

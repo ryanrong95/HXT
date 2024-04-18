@@ -1,0 +1,37 @@
+﻿<template id="storagedetailinspecialrequire">
+    <div>
+        <div class="clearfix">
+            <div class="fl">
+                <div class="clearfix info_item" v-for="(item,index) in specialrequire.SpecialRequires" style="margin-bottom: 0; margin-top: 10px;">
+                    <div class="info_title fl">●&nbsp;{{item.Name}}</div>
+                    <div class="info_content fl" v-if="item.IsOtherRequire" style="padding-left: 10px;">{{item.OtherRequire}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+<script>
+    Vue.component(
+        'storagedetailinspecialrequire',
+        {
+            template: "#storagedetailinspecialrequire",
+            data: function () {
+                return {
+
+                }
+            },
+            props: {
+                specialrequire: {
+                    type: Object,
+                    default: function () {
+                        return {
+                            SpecialRequires: [], //特殊要求
+                        };
+                    }
+                }
+            },
+            methods: {
+
+            },
+        });
+</script>

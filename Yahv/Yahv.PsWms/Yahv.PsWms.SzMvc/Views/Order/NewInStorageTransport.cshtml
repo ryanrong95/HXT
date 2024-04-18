@@ -1,0 +1,262 @@
+﻿<template id="newinstoragetransport">
+    <div>
+        <el-form>
+            <div class="clearfix radio_wl mt20">
+                <span class="title fl w130 txt_wl"></span>
+                <div class="fl radio">
+                    <el-radio v-model="transportmode" v-for="item of transportModeOptions" :label=item.value>{{item.text}}</el-radio>
+                </div>
+            </div>
+            <!-- 快递 -->
+            <div v-if="transportmode == 2" class="mt20">
+                <el-form-item label="收货公司:" style="margin-bottom: -10px;">
+                    <span class="txt1">{{wareHouseInfo.WareHouseName}}</span>
+                    <el-button style="padding: 0px;" type="text" data-clipboard-action="copy" class="cobyOrderSn" :data-clipboard-text="wareHouseInfo.WareHouseInfoForCopy" v-on:click="copyWareHouseInfo">复制</el-button>
+                </el-form-item>
+                <el-form-item label="收货地址:" style="margin-bottom: -10px; margin-top: 10px;">
+                    <span class="txt1">{{wareHouseInfo.WareHouseAddress}}</span>
+                </el-form-item>
+                <el-form-item label="联系人:" style="margin-bottom: -10px; margin-top: 10px;">
+                    <p class="txt1">{{wareHouseInfo.WareHouseManName}}</p>
+                </el-form-item>
+                <el-form-item label="联系电话:" style="margin-top: 10px;">
+                    <p class="txt1">{{wareHouseInfo.WareHouseTel}}</p>
+                </el-form-item>
+                <el-form-item label="快递公司:" prop="expressCompanyValue" :rules="[{ required: false, message: '请选择快递公司', trigger: 'change' }]">
+                    <el-select size="mini" v-model="expressCompanyValue" style="width: 200px;" filterable clearable placeholder="请选择">
+                        <el-option v-for="item in expressCompanyOptions"
+                                   :key="item.value"
+                                   :label="item.text"
+                                   :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="快递单号:" prop="expressNumber" :rules="[{ required: false, message: '请输入快递单号', trigger: 'blur' },{max:50, message: '快递单号长度超过限制', trigger: 'blur' }]">
+                    <el-input size="mini" placeholder="请输入快递单号" v-model="expressNumber" style="width: 200px;" auto-complete="off"></el-input>
+                </el-form-item>
+            </div>
+            <!-- 送货上门 -->
+            <div v-if="transportmode == 3" class="mt20">
+                <el-form-item label="收货公司:" style="margin-bottom: -10px;">
+                    <span class="txt1">{{wareHouseInfo.WareHouseName}}</span>
+                    <el-button style="padding: 0px;" type="text" data-clipboard-action="copy" class="cobyOrderSn" :data-clipboard-text="wareHouseInfo.WareHouseInfoForCopy" v-on:click="copyWareHouseInfo">复制</el-button>
+                </el-form-item>
+                <el-form-item label="收货地址:" style="margin-bottom: -10px; margin-top: 10px;">
+                    <span class="txt1">{{wareHouseInfo.WareHouseAddress}}</span>
+                </el-form-item>
+                <el-form-item label="联系人:" style="margin-bottom: -10px; margin-top: 10px;">
+                    <p class="txt1">{{wareHouseInfo.WareHouseManName}}</p>
+                </el-form-item>
+                <el-form-item label="联系电话:" style="margin-top: 10px;">
+                    <p class="txt1">{{wareHouseInfo.WareHouseTel}}</p>
+                </el-form-item>
+            </div>
+            <!-- 自提 -->
+            <div v-if="transportmode == 1" class="mt20">
+                <el-form-item label="提货时间:" prop="takingDate" :rules="[{ type: 'date', required: false, message: '请选择提货时间', trigger: 'change' }]">
+                    <el-date-picker type="date" size="mini" :picker-options="pickerOptions2" placeholder="提货时间" v-model="takingDate" style="width: 200px; margin-left: 48px;"></el-date-picker>
+                </el-form-item>
+                <div class="clearfix">
+                    <div class="fl w130">
+                        <span class="fl txt2 el-form-item__label"><span class="txt_red mr4">*</span>提货单:</span>
+                    </div>
+                    <div class="fl upload_wrap mt6">
+                        <el-upload :http-request="((item)=>{httpRequestTakingFiles(item,'TakingFiles')})"
+                                   action="/Order/UploadTakingFiles"
+                                   :show-file-list="false"
+                                   multiple
+                                   accept="image/jpg, image/bmp, image/jpeg, image/gif, image/png, application/pdf">
+                            <el-button size="small" class="btn_upload " type="primary">+添加文件</el-button> <span class="txt_grey ml8">仅限图片或PDF文件，且文件不超过3M</span>
+                        </el-upload>
+                        <ul class="file_item_ul mt10">
+                            <li class="clearfix" v-for="(item,index) in takingFiles">
+                                <span class="icon1"></span>
+                                <a class="file_name ml6" :href="item.fullURL" target="_blank">{{item.name}}</a>
+                                <span class="icon2 fr" v-on:click="delTakingFiles(index)"></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <el-form-item style="margin-top: 20px; margin-bottom: 0;" label="交货联系人信息:" prop="consigneeManValue" :rules="[{ required: false, message: '请选择交货联系人信息', trigger: 'change' }]">
+                    <el-select size="mini" v-model="consigneeManValue" style="width: 200px; margin-left: 6px;" filterable clearable placeholder="请选择">
+                        <el-option v-for="item in consigneeManOptions"
+                                   :key="item.ConsigneeManID"
+                                   :label="item.ConsigneeManName"
+                                   :value="item.ConsigneeManID">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <div style="font-size: 14px; margin-left: 125px; margin-top: 5px;"
+                     v-if="consigneeManTelShow != null && consigneeManTelShow != undefined && consigneeManTelShow != ''">电话：&nbsp;{{consigneeManTelShow}}</div>
+                <div style="font-size: 14px; margin-left: 125px; margin-top: 5px;"
+                     v-if="consigneeManAddressShow != null && consigneeManAddressShow != undefined && consigneeManAddressShow != ''">地址：&nbsp;{{consigneeManAddressShow}}</div>
+            </div>
+        </el-form>
+    </div>
+</template>
+<script>
+    Vue.component(
+        'newinstoragetransport',
+        {
+            template: "#newinstoragetransport",
+            data: function () {
+                return {
+                    pickerOptions2: {
+                        disabledDate: function (time) {
+                            var today = new Date();
+                            today.setDate(today.getDate() - 1);
+                            return time < today;
+                        }
+                    }, //时间选择器
+                    transportmode: 2,
+                    transportModeOptions: [], //货运类型选项
+                    wareHouseInfo: {
+                        WareHouseName: '', //收货公司
+                        WareHouseAddress: '', //收货地址
+                        WareHouseManName: '', //联系人
+                        WareHouseTel: '', //联系电话
+                        WareHouseInfoForCopy: '', //用于复制的信息
+                    },
+                    expressCompanyOptions: [], //快递公司选项
+                    expressCompanyValue: '', //快递公司的值
+                    expressNumber: '', //快递单号
+                    takingDate: '', //提货时间
+                    takingFiles: [], //提货单
+                    consigneeManOptions: [], //交货联系人信息选项
+                    consigneeManValue: "", //交货联系人信息的值
+                    consigneeManTelShow: "", //显示交货联系人电话
+                    consigneeManAddressShow: "", //显示交货联系人地址
+                }
+            },
+            watch: {
+                consigneeManValue: function (newVal, oldVal) {
+                    this.consigneeManTelShow = "";
+                    this.consigneeManAddressShow = "";
+                    var theConsignee = this.consigneeManOptions.filter(function (item) {
+                        return item.ConsigneeManID == newVal;
+                    });
+                    if (theConsignee != null && theConsignee != undefined && theConsignee.length > 0) {
+                        this.consigneeManTelShow = theConsignee[0].ConsigneeManTel;
+                        this.consigneeManAddressShow = theConsignee[0].ConsigneeManAddress;
+                    }
+                },
+            },
+            methods: {
+                //复制库房信息
+                copyWareHouseInfo: function () {
+                    var that = this;
+                    var clipboard = new ClipboardJS(".cobyOrderSn");
+                    clipboard.on('success', function () {
+                        that.onAlert("success", "复制成功");
+                        clipboard.destroy();
+                    });
+                    clipboard.on('error', function () {
+                        that.onAlert("error", "复制失败");
+                        clipboard.destroy();
+                    });
+                },
+                //消息提示框
+                onAlert: function (type, message) {
+                    this.$message({
+                        message: message,
+                        type: type,
+                        offset: 100
+                    });
+                },
+                //上传提货单文件
+                httpRequestTakingFiles: function (options) {
+                    var that = this;
+                    UploadFile(options,
+                        '/Order/UploadTakingFiles',
+                        function (res) {
+                            if (res.type) {
+                                var list = res.file;
+                                that.takingFiles.push(list);
+                            } else {
+                                that.onAlert("error", res.msg);
+                            }
+                        });
+                },
+                //删除提货单文件
+                delTakingFiles: function (index) {
+                    this.takingFiles.splice(index, 1);
+                },
+            },
+            created: function () {
+                //获取货运类型选项
+                var that = this;
+                axios.get('/Miscellaneous/TransportModes', { params: {} })
+                    .then(function (res) {
+                        if (res.data.success == 200) {
+                            that.transportModeOptions = res.data.result;
+                        }
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    });
+                //获取快递公司选项
+                axios.get('/Miscellaneous/ExpressCompanies', { params: {} })
+                    .then(function (res) {
+                        if (res.data.success == 200) {
+                            that.expressCompanyOptions = res.data.result;
+                        }
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    });
+                //获取库房信息
+                axios.get('/Miscellaneous/WareHouseInfo', { params: {} })
+                    .then(function (res) {
+                        if (res.data.success == 200) {
+                            that.wareHouseInfo.WareHouseName = res.data.result.WareHouseName; //收货公司
+                            that.wareHouseInfo.WareHouseAddress = res.data.result.WareHouseAddress; //收货地址
+                            that.wareHouseInfo.WareHouseManName = res.data.result.WareHouseManName; //联系人
+                            that.wareHouseInfo.WareHouseTel = res.data.result.WareHouseTel; //联系电话
+                            that.wareHouseInfo.WareHouseInfoForCopy = res.data.result.WareHouseInfoForCopy; //用于复制的信息
+                        }
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    });
+                //获取交货联系人信息选项
+                axios.get('/Miscellaneous/ConsigneeMans', { params: {} })
+                    .then(function (res) {
+                        if (res.data.success == 200) {
+                            that.consigneeManOptions = res.data.result;
+                        }
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    });
+            }
+        });
+</script>
+<style>
+    /*label[for="expressCompanyValue"]::before {
+        content: '*';
+        color: #F56C6C;
+        margin-right: 4px;
+    }
+
+    label[for="expressNumber"]::before {
+        content: '*';
+        color: #F56C6C;
+        margin-right: 4px;
+    }*/
+
+    label[for="takingDate"]::before {
+        content: '*';
+        color: #F56C6C;
+        margin-right: 4px;
+    }
+
+    label[for="consigneeManValue"]::before {
+        content: '*';
+        color: #F56C6C;
+        margin-right: 4px;
+    }
+
+    .el-icon-date {
+        display: none;
+    }
+</style>

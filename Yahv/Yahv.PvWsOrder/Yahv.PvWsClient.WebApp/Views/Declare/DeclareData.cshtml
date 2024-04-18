@@ -1,0 +1,315 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_LayoutBill.cshtml";
+    ViewBag.navid = "DeclareData";
+}
+<div class="backshow" id="declareData" v-cloak>
+    <h2>报关数据<span class="title_tips">说明：仅显示订单开票类型为[服务费发票]的产品</span></h2>
+    <div class="declareData">
+        <div class="queryData">
+            <div>
+                <template>
+                    <el-radio v-model="indexData.exportDateType" label="month">报关月份</el-radio>
+                    <el-radio v-model="indexData.exportDateType" label="day">报关起始日期:</el-radio>
+                </template>
+                <el-date-picker class="c_month" size="small" v-model="indexData.dataValueMonth"
+                                type="month"
+                                placeholder="选择月"
+                                style="margin-left: 10px;"
+                                v-show="indexData.exportDateType=='month'">
+                </el-date-picker>
+                <el-date-picker size="small" v-model="indexData.dataValue"
+                                type="daterange"
+                                range-separator="至"
+                                start-placeholder="开始日期"
+                                end-placeholder="结束日期"
+                                style="margin-left: 10px;"
+                                v-show="indexData.exportDateType=='day'">
+                </el-date-picker>
+                <span v-if="showIndex==1" v-on:click="changeShowIndex" class="ml16 showtab">更多筛选条件<i class="el-icon-arrow-down"></i></span>
+                <span v-else v-on:click="changeShowIndex" class="ml16 showtab">精简筛选条件<i class="el-icon-arrow-up"></i></span>
+            </div>
+            <div class="mt20" v-if="showIndex==2">
+                <span class="title">合同号:</span>
+                <el-input size="small" style="width:288px;" auto-complete="off" v-model="indexData.contrNo"></el-input>
+                <span class="title ml10">订单编号:</span>
+                <el-input size="small" auto-complete="off" v-model="indexData.orderID"></el-input>
+            </div>
+            <div class="mt20" v-if="showIndex==2">
+                <span class="title">报关单号:</span>
+                <el-input size="small" auto-complete="off" v-model="indexData.decHeadID"></el-input>
+                <span class="title ml10">型号:</span>
+                <el-input size="small" auto-complete="off" v-model="indexData.models"></el-input>
+            </div>
+            <div>
+                <button class="btnQuery" v-on:click="queryData"><i></i>查询</button>
+                <button class="btnQuery ml12 el-icon-delete" v-on:click="clearData">清空</button>
+                <button class="download_cloud ml12" v-on:click="exportExcel"><i></i>导出Excel</button>
+                <a id="exportInfoForm" style="display:none" download><span id="ex-li" style="display:none"></span></a>
+            </div>
+        </div>
+        @*<div class="allTodo">
+
+                <button class="download_cloud" v-on:click="exportExcel"><i></i>导出Excel</button>
+                <a id="exportInfoForm" style="display:none" download><span id="ex-li" style="display:none"></span></a>
+            </div>*@
+        <div class="dataList mt12" v-loading="indexData.loading">
+            <div class="declistWrap">
+                <table  class="taxRecordTb" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <th width="40">序列</th>
+                        <th>报关日期</th>
+                        <th>合同号</th>
+                        <th>物料号</th>
+                        <th>商品编码</th>
+                        <th>规格型号</th>
+                        <th>成交数量</th>
+                        <th>单价</th>
+                        <th>总价</th>
+                        <th>币制</th>
+                        <th>品名</th>
+                        <th>海关汇率</th>
+                        <th>关税率</th>
+                        <th>报关总价</th>
+                        <th>应交关税</th>
+                        <th>实交增值税</th>
+                        <th>实交关税</th>
+                        <th>完税价格</th>
+                        <th>完税价格增值税</th>
+                        <th>开票公司</th>
+                        <th>订单编号</th>
+                        <th>报关单号</th>
+                        <th>税务名称</th>
+                        <th>税务编码</th>
+                        <th>关税发票号</th>
+                        <th>增值税发票号</th>
+                    </tr>
+                    <tr v-if="dataList.length>0" v-for="(item,index) of dataList">
+                        <td>{{(indexData.pageIndex - 1) * indexData.pageSize + index + 1}}</td>
+                        <td>{{item.CreateDate}}</td>
+                        <td>{{item.ContrNo}}</td>
+                        <td>{{item.ProductUniqueCode}}</td>
+                        <td>{{item.CodeTS}}</td>
+                        <td style="text-align:left;text-indent:5px">{{item.GoodsModel}}</td>
+                        <td>{{item.GQty}}</td>
+                        <td>{{item.DeclPrice}}</td>
+                        <td>{{item.DeclTotal}}</td>
+                        <td>{{item.TradeCurr}}</td>
+                        <td style="text-align:left;text-indent:5px">{{item.GName}}</td>
+                        <td>{{item.CustomsRate}}</td>
+                        <td>{{item.TariffRate}}</td>
+                        <td>{{item.DeclTotalRMB}}</td>
+                        <td>{{item.TariffPay}}</td>
+                        <td>{{item.ValueVat}}</td>
+                        <td>{{item.TariffPayed}}</td>
+                        <td>{{item.CustomsValue}}</td>
+                        <td>{{item.CustomsValueVat}}</td>
+                        <td>{{item.InvoiceCompany}}</td>
+                        <td>{{item.OrderID}}</td>
+                        <td>{{item.EntryId}}</td>
+                        <td style="text-align:left;text-indent:5px">{{item.TaxName}}</td>
+                        <td>{{item.TaxCode}}</td>
+                        <td>{{item.ImportTaxCode}}</td>
+                        <td>{{item.AddValueTaxCode}}</td>
+                    </tr>
+                    <tr v-if="dataList.length==0">
+                        <td colspan="26"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="foot" v-if="!indexData.loading">
+            <el-pagination style="float:right" v-on:size-change="handleSizeChange"
+                           v-on:current-change="handleCurrentChange"
+                           :current-page="indexData.pageIndex"
+                           :page-sizes="[5, 10, 20, 40]"
+                           :page-size="indexData.pageSize"
+                           layout="total, sizes, prev, pager, next, jumper"
+                           :total="indexData.total">
+            </el-pagination>
+        </div>
+    </div>
+</div>
+<script>
+    var declareData = new Vue({
+        el: "#declareData",
+        data: function () {
+            return {
+                dataList: [],
+                indexData: {
+                    loading: true,
+                    pageIndex: 1, //初始页
+                    pageSize: 10,    //每页的数据
+                    total: 0,
+                    allCheck: false,
+                    orderID: "",
+                    contrNo: "",
+                    decHeadID: "",
+                    models: "",
+                    startDate: "",
+                    endDate: "",
+                    dataValue: "",
+                    exportDateType: "month",
+                    dataValueMonth: new Date(),
+                    month: "",
+                },
+                showIndex: "1", //下拉标志
+            }
+        },
+        mounted: function () {
+            this.queryData();
+        },
+        methods: {
+            //导出Excel
+            exportExcel: function () {
+                var that = this;
+                if (this.dataList.length == 0) {
+                    this.onAlert("warning", "暂无报关数据！");
+                    return;
+                }
+                axios({
+                    url: "/Declare/ExportDecDataList",
+                    method: "post",
+                    data: {
+                        page: this.indexData.pageIndex,
+                        rows: this.indexData.pageSize,
+                        contrNo: this.indexData.contrNo,
+                        orderID: this.indexData.orderID,
+                        decHeadID: this.indexData.decHeadID,
+                        models: this.indexData.models,
+                        startDate: this.indexData.startDate,
+                        endDate: this.indexData.endDate,
+                        exportDateType: this.indexData.exportDateType,
+                        month: this.indexData.month,
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                    transformRequest: [function (data) {
+                        var ret = ''
+                        for (var it in data) {
+                            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+                        }
+                        return ret;
+                    }],
+                }).then(function (response) {
+                    if (response.data.type == "error") {
+                        that.onAlert(response.data.type, response.data.msg);
+                    } else {
+                        $('#exportInfoForm').attr("href", response.data.data);
+                        $('#exportInfoForm').attr("target", "_blank");
+                        $('#ex-li').trigger("click");
+                    }
+                }).catch(function (error) {
+                    that.onAlert("warning", error);
+                });
+            },
+            //清空数据
+            clearData: function () {
+                this.indexData.contrNo = "";
+                this.indexData.orderID = "";
+                this.indexData.decHeadID = "";
+                this.indexData.models = "";
+                this.indexData.startDate = "";
+                this.indexData.endDate = "";
+                this.indexData.dataValue = "";
+                this.indexData.pageIndex = 1;
+                this.indexData.dataValueMonth = "";
+                this.indexData.month = "";
+                this.paging();
+            },
+            //查询数据
+            queryData: function () {
+                if (this.indexData.dataValue != "" && this.indexData.dataValue != null) {
+                    var start = new Date(this.indexData.dataValue[0]);
+                    var startDate = start.getFullYear() + '-' + (start.getMonth() + 1) + '-' + start.getDate();
+                    var end = new Date(this.indexData.dataValue[1]);
+                    var endDate = end.getFullYear() + '-' + (end.getMonth() + 1) + '-' + end.getDate();
+                    this.indexData.startDate = startDate;
+                    this.indexData.endDate = endDate;
+                } else {
+                    this.indexData.startDate = "";
+                    this.indexData.endDate = "";
+                }
+
+                if (this.indexData.dataValueMonth != "" && this.indexData.dataValueMonth != null) {
+                    var month = new Date(this.indexData.dataValueMonth);
+                    var monthDate = month.getFullYear() + '-' + (month.getMonth() + 1);
+                    this.indexData.month = monthDate;
+                } else {
+                    this.indexData.month = "";
+                }
+
+                this.indexData.pageIndex = 1;
+                this.paging();
+            },
+            handleallCheck: function () {
+                var that = this;
+                this.dataList.forEach(function (val, index) {
+                    val.isCheck = that.indexData.allCheck;
+                });
+            },
+            // 初始页currentPage、初始每页数据数pagesize和数据data
+            handleSizeChange: function (size) {
+                this.indexData.pageSize = size;
+                this.paging();
+            },
+            handleCurrentChange: function (currentPage) {
+                this.indexData.pageIndex = currentPage;
+                this.paging();
+            },
+            paging: function () {
+                var that = this;
+                that.indexData.loading = true;
+                axios({
+                    url: "/Declare/GetDeclareData",
+                    method: "post",
+                    data: {
+                        page: this.indexData.pageIndex,
+                        rows: this.indexData.pageSize,
+                        contrNo: this.indexData.contrNo,
+                        orderID: this.indexData.orderID,
+                        decHeadID: this.indexData.decHeadID,
+                        models: this.indexData.models,
+                        startDate: this.indexData.startDate,
+                        endDate: this.indexData.endDate,
+                        exportDateType: this.indexData.exportDateType,
+                        month: this.indexData.month,
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                    transformRequest: [function (data) {
+                        var ret = ''
+                        for (var it in data) {
+                            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+                        }
+                        return ret;
+                    }],
+                }).then(function (response) {
+                    var data = JSON.parse(response.data.data);
+                    that.dataList = data.list;
+                    that.indexData.total = data.total;
+                    that.indexData.loading = false;
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                });
+            },
+            changeShowIndex: function () {
+                if (this.showIndex == "1") {
+                    this.showIndex = "2";
+                } else {
+                    this.showIndex = "1";
+                }
+            },
+        }
+    });
+</script>
+

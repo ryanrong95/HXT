@@ -1,0 +1,164 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_NoticeLayout.cshtml";
+}
+
+<div id="manual" v-cloak style="margin-left: 2%; margin-top: 5px;">
+    <div>
+        <div>
+            <div>SiteuserName：@(ViewBag.SiteuserName)</div>
+            <div>ClientName：@(ViewBag.ClientName)</div>
+            <div>TheClientID：@(Yahv.PsWms.SzMvc.SiteCoreInfo.Current.TheClientID)</div>
+        </div>
+    </div>
+    <div class="btn-tb-list clearfix mt10">
+        <el-input style="width: 250px;" size="mini" v-model="orderID"></el-input>
+        <el-button v-on:click="generateJson()" style="margin-left: 20px;">生成通知JSON</el-button>
+        <el-button v-on:click="send()" style="margin-left: 20px;">发送<i></i></el-button>
+        <el-button v-on:click="clear()" style="margin-left: 20px;">清空<i></i></el-button>
+    </div>
+    <div>Notice</div>
+    <div style="margin-top: 10px;">
+        <div style="float: left; width: 46%; border: 1px solid #ffffff;">
+            <textarea rows="30" style="width: 100%; resize: none;" v-model="leftarea"></textarea>
+        </div>
+        <div style="float: left; width: 46%; border: 1px solid #ffffff; margin-left: 2%;">
+            <textarea rows="30" style="width: 100%; resize: none;" v-model="rightarea"></textarea>
+        </div>
+    </div>
+
+    <div>File</div>
+    <div style="margin-top: 30px;">
+        <div style="margin-top: 30px; float: left; width: 46%; border: 1px solid #ffffff;">
+            <textarea rows="20" style="width: 100%; resize: none;" v-model="leftareaFile"></textarea>
+        </div>
+        <div style="margin-top: 30px; float: left; width: 46%; border: 1px solid #ffffff; margin-left: 2%;">
+            <textarea rows="20" style="width: 100%; resize: none;" v-model="rightareaFile"></textarea>
+        </div>
+    </div>
+</div>
+<script>
+    var manual = new Vue({
+        el: "#manual",
+        data: function () {
+            return {
+                orderID: '',
+                leftarea: '',
+                rightarea: '',
+
+                leftareaFile: '',
+                rightareaFile: '',
+            }
+        },
+        methods: {
+            //产生 Json
+            generateJson: function () {
+                var that = this;
+
+                that.leftarea = '';
+                that.rightarea = '';
+
+                axios({
+                    url: "/Notice/GetNoticeJsonFromCurrentData",
+                    method: "post",
+                    data: {
+                        OrderID: that.orderID,
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                    transformRequest: [
+                        function (data) {
+                            var ret = '';
+                            for (var it in data) {
+                                ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&';
+                            }
+                            return ret;
+                        }
+                    ]
+                }).then(function (response) {
+                    that.leftarea = JSON.stringify(response.data, null, "\t");
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+
+                //文件信息
+                that.leftareaFile = '';
+                that.rightareaFile = '';
+
+                axios({
+                    url: "/Notice/GetNoticeJsonFromCurrentDataFile",
+                    method: "post",
+                    data: {
+                        OrderID: that.orderID,
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                    transformRequest: [
+                        function (data) {
+                            var ret = '';
+                            for (var it in data) {
+                                ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&';
+                            }
+                            return ret;
+                        }
+                    ]
+                }).then(function (response) {
+                    that.leftareaFile = JSON.stringify(response.data, null, "\t");
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+
+            },
+            //发送
+            send: function () {
+                var that = this;
+
+                axios({
+                    url: "/Notice/SendNotice",
+                    method: "post",
+                    data: {
+                        OrderID: this.orderID,
+                        StrJson: this.leftarea,
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                    transformRequest: [
+                        function (data) {
+                            var ret = '';
+                            for (var it in data) {
+                                ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&';
+                            }
+                            return ret;
+                        }
+                    ]
+                }).then(function (response) {
+                    if (response.data.type == "success") {
+                        that.rightarea = JSON.stringify(response.data.msg, null, "\t");
+                    } else {
+                        that.rightarea = JSON.stringify(response.data, null, "\t");
+                    }
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //清空
+            clear: function () {
+                this.leftarea = '';
+                this.rightarea = '';
+                this.leftareaFile = '';
+                this.rightareaFile = '';
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                    offset: 100
+                });
+            },
+        },
+    });
+</script>

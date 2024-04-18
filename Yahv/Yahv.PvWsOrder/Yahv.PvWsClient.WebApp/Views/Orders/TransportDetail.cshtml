@@ -1,0 +1,332 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_LayoutOrder.cshtml";
+}
+
+<div v-cloak id="vTransportDetail" class="backshow">
+    <div class="breaklist">
+        <span class="fl first_title">订单详情</span>
+        <span class="fl second_title" v-on:click="history.back(-1)">返回</span>
+    </div>
+    <div class="order_detail">
+        <div class="order_title">
+            <span class="ml11">订单编号：<span class="txt1">{{indexData.ID}}</span></span>
+            <span class="ml157">订单状态：<span class="txt2">{{indexData.MainStatus}}</span></span>
+            <span class="ml142">下单日期：{{indexData.CreateDate}}</span>
+        </div>
+        <div class="order_content">
+            <div>
+                <p class="title mt30 mb20">基本信息</p>
+                <div class="info_content">
+                    <div class="overhide mb10">
+                        <div class="fl overhide  mr88">
+                            <span class="i_title">供应商：</span>
+                            <span class="i_content">{{indexData.SupplierName}}</span>
+                        </div>
+                        <div class="fl overhide">
+                            <span class="i_title">货值币种：</span>
+                            <span class="i_content">{{indexData.Currency}}</span>
+                        </div>
+                    </div>
+                    <div class="overhide mb10">
+                        <div class="fl overhide  mr88">
+                            <span class="i_title">结算币种：</span>
+                            <span class="i_content">{{indexData.SettlementCurrency}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="order_div"><span>有疑问请咨询：<span class="link">跟单员</span></span></div>
+            <div>
+                <p class="title mt30 mb20">交货信息</p>
+                <div class="info_content">
+                    <div class="overhide mb10">
+                        <div class="fl overhide  mr88">
+                            <span class="i_title">是否代付货款：</span>
+                            <span class="i_content">{{indexData.IsPayCharge}}</span>
+                        </div>
+                        <div class="fl overhide">
+                            <span class="i_title">发货地：</span>
+                            <span class="i_content">{{indexData.Origin}}</span>
+                        </div>
+                    </div>
+                    <div class="overhide mb10">
+                        <div class="fl overhide  mr88">
+                            <span class="i_title">交货方式：</span>
+                            <span class="i_content txt_yellow">{{indexData.InWaybillType}}</span>
+                        </div>
+                    </div>
+                    <div v-if="indexData.InDeliveryType=='1'">
+                        <div class="overhide mb10">
+                            <div class="fl overhide  mr88">
+                                <span class="i_title">提货时间：</span>
+                                <span class="i_content">{{indexData.TakingDate}}</span>
+                            </div>
+                            <div class="fl overhide">
+                                <span class="i_title">提货人姓名：</span>
+                                <span class="i_content">{{indexData.TakingContact}}</span>
+                            </div>
+                        </div>
+                        <div class="overhide mb10">
+                            <div class="fl overhide  mr88">
+                                <span class="i_title">联系电话：</span>
+                                <span class="i_content">{{indexData.TakingPhone}}</span>
+                            </div>
+                            <div class="fl overhide">
+                                <span class="i_title">地址：</span>
+                                <span class="i_content">{{indexData.TakingDetailAddress}}</span>
+                            </div>
+                        </div>
+                        <div class="overhide mb10">
+                            <div class="fl overhide  mr88">
+                                <span class="i_title">提货文件：</span>
+                                <span class="i_content"><a download class="file_link" v-if="indexData.DeliveryFile!=''" target="_blank" :href="indexData.DeliveryFile">查看提货文件</a></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-if="indexData.InDeliveryType=='2'">
+                        <div class="overhide mb10">
+                            <div class="fl overhide  mr88">
+                                <span class="i_title">是否垫付运费：</span>
+                                <span class="i_content">{{indexData.IsPayFreight}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-if="indexData.InDeliveryType=='3'||indexData.InDeliveryType=='4'">
+                        <div class="overhide mb10">
+                            <div class="fl overhide  mr88">
+                                <span class="i_title">是否垫付运费：</span>
+                                <span class="i_content">{{indexData.IsPayFreight}}</span>
+                            </div>
+                            <div class="fl overhide">
+                                <span class="i_title">运单号：</span>
+                                <span class="i_content">{{indexData.Code}}</span>
+                            </div>
+                        </div>
+                        <div class="overhide mb10">
+                            <div class="fl overhide  mr88">
+                                <span class="i_title">承运商：</span>
+                                <span class="i_content">{{indexData.InCarrierName}}</span>
+                            </div>
+                            <div class="fl overhide">
+                                <span class="i_title">件数：</span>
+                                <span class="i_content">{{indexData.PartsTotal}}</span>
+                            </div>
+                        </div>
+                        <div class="overhide mb10">
+                            <div class="fl overhide  mr88">
+                                <span class="i_title">子运单号：</span>
+                                <span class="i_content">{{indexData.Subcodes}}</span>
+                            </div>
+                            <div v-if="indexData.InDeliveryType=='4'" class="fl overhide">
+                                <span class="i_title">航次号：</span>
+                                <span class="i_content">{{indexData.VoyageNumber}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <p class="title mt30 mb20">交货服务要求</p>
+                <div class="info_content">
+                    <div class="overhide mb10">
+                        <div class="fl overhide  mr88">
+                            <span class="i_title">是否拆箱验货：</span>
+                            <span class="i_content">{{indexData.IsUnBoxed}}</span>
+                        </div>
+                        <div class="fl overhide">
+                            <span class="i_title">是否检测产品：</span>
+                            <span class="i_content">{{indexData.IsDetection}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <p class="title mt30 mb20">发货信息</p>
+                <div class="info_content">
+                    <div class="overhide mb10">
+                        <div class="fl overhide  mr88">
+                            <span class="i_title">送货方式：</span>
+                            <span class="i_content txt_yellow">{{indexData.OutWaybillType}}</span>
+                        </div>
+                        <div class="fl overhide">
+                            <span class="i_title">是否代收货款：</span>
+                            <span class="i_content">{{indexData.IsReciveCharge}}</span>
+                        </div>
+                    </div>
+                    <div v-if="indexData.OutDeliveryType=='1'">
+                        <div class="overhide mb10">
+                            <div class="fl overhide  mr88">
+                                <span class="i_title">提货时间：</span>
+                                <span class="i_content">{{indexData.OutTakingDate}}</span>
+                            </div>
+                            <div class="fl overhide">
+                                <span class="i_title">提货人姓名：</span>
+                                <span class="i_content">{{indexData.OutTakingContact}}</span>
+                            </div>
+                        </div>
+                        <div class="overhide mb10">
+                            <div class="fl overhide  mr88">
+                                <span class="i_title">联系电话：</span>
+                                <span class="i_content">{{indexData.OutTakingPhone}}</span>
+                            </div>
+                            <div class="fl overhide">
+                                <span class="i_title">证件类型：</span>
+                                <span class="i_content">{{indexData.CertificateType}}</span>
+                            </div>
+                        </div>
+                        <div class="overhide mb10">
+                            <div class="fl overhide  mr88">
+                                <span class="i_title">证件号码：</span>
+                                <span class="i_content">{{indexData.Certificate}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-if="indexData.OutDeliveryType=='2'">
+                        <div class="overhide mb10">
+                            <div class="fl overhide  mr88">
+                                <span class="i_title">收货人姓名：</span>
+                                <span class="i_content">{{indexData.ReceivedContact}}</span>
+                            </div>
+                            <div class="fl overhide">
+                                <span class="i_title">联系电话：</span>
+                                <span class="i_content">{{indexData.ReceivedPhone}}</span>
+                            </div>
+                        </div>
+                        <div class="overhide mb10">
+                            <div class="fl overhide  mr88">
+                                <span class="i_title">地址：</span>
+                                <span class="i_content">{{indexData.ReceivedAddress}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-if="indexData.OutDeliveryType=='4'||indexData.OutDeliveryType=='3'">
+                        <div class="overhide mb10">
+                            <div class="fl overhide  mr88">
+                                <span class="i_title">收货人姓名：</span>
+                                <span class="i_content">{{indexData.ReceivedContact}}</span>
+                            </div>
+                            <div class="fl overhide">
+                                <span class="i_title">联系电话：</span>
+                                <span class="i_content">{{indexData.ReceivedPhone}}</span>
+                            </div>
+                        </div>
+                        <div class="overhide mb10">
+                            <div class="fl overhide  mr88">
+                                <span class="i_title">地址：</span>
+                                <span class="i_content">{{indexData.ReceivedAddress}}</span>
+                            </div>
+                            <div class="fl overhide">
+                                <span class="i_title">承运商：</span>
+                                <span class="i_content">{{indexData.OutCarrierName}}</span>
+                            </div>
+                        </div>
+                        <div class="overhide mb10">
+                            <div class="fl overhide  mr88">
+                                <span class="i_title">快递支付方式：</span>
+                                <span class="i_content">{{indexData.OutIsPayFreight}}</span>
+                            </div>
+                            <div class="fl overhide">
+                                <span class="i_title">邮政编码：</span>
+                                <span class="i_content">{{indexData.Zipcode}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <p class="title mt30 mb20">发货服务要求</p>
+                <div class="info_content">
+                    <div class="overhide mb10">
+                        <div class="fl overhide  mr88">
+                            <span class="i_title">是否重贴标签：</span>
+                            <span class="i_content">{{indexData.IsCustomLabel}}</span>
+                        </div>
+                        <div class="fl overhide">
+                            <span class="i_title">是否重新包装：</span>
+                            <span class="i_content">{{indexData.IsRepackaging}}</span>
+                        </div>
+                    </div>
+                    <div class="overhide mb10">
+                        <div class="fl overhide  mr88">
+                            <span class="i_title">是否真空包装：</span>
+                            <span class="i_content">{{indexData.IsVacuumPackaging}}</span>
+                        </div>
+                        <div class="fl overhide">
+                            <span class="i_title">是否防水包装：</span>
+                            <span class="i_content">{{indexData.IsWaterproofPackaging}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="file_content">
+                <div class="overhide">
+                    <div class="file_l fl">
+                        <p class="title mt30 mb20">合同发票</p>
+                        <div v-for="item in indexData.PIFiles" class="mb10">
+                            <i class="invoice_icon"></i>
+                            <span class="f_name">{{item.Name}}</span>
+                            <a download class="link1" :href="item.Url" target="_blank">下载</a>
+                        </div>
+                        <div v-if="indexData.PIFiles.length==0">
+                            <span class="txt_yellow">提示：未上传</span>
+                        </div>
+                    </div>
+                    <div class="file_r fl">
+                        <p class="title mt30 mb20">随货文件</p>
+                        <div v-for="item in indexData.AccompanyFiles" class="mb10">
+                            <i class="invoice_icon"></i>
+                            <span class="f_name">{{item.Name}}</span>
+                            <a class="link1" :href="item.Url" target="_blank">下载</a>
+                        </div>
+                        <div v-if="indexData.AccompanyFiles.length==0">
+                            <span class="txt_yellow">提示：未上传</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="product_content">
+                <p class="title mt30 mb20">产品信息</p>
+                <table border="0" cellspacing="0" cellpadding="0" style="word-wrap:break-word; word-break:break-all;">
+                    <tr>
+                        <th class="first_th" style="width:22px;">#</th>
+                        <th style="width:50px;">批号</th>
+                        <th style="width:110px;">品牌</th>
+                        <th style="width:120px;">型号</th>
+                        <th style="width:110px;">产地</th>
+                        <th style="width:50px;">数量</th>
+                        <th style="width:58px;">单位</th>
+                        <th style="width:50px;">销售单价</th>
+                        <th style="width:50px;">销售总价</th>
+                    </tr>
+                    <tr v-for="(item,index) in indexData.OrderItems">
+                        <td>{{index+1}}</td>
+                        <td>{{item.DateCode}}</td>
+                        <td style="word-wrap:break-word;word-break:break-all;padding:0 5px;">{{item.Manufacturer}}</td>
+                        <td style="word-wrap:break-word;word-break:break-all;padding:0 5px;">{{item.PartNumber}}</td>
+                        <td>{{item.OriginLabel}}</td>
+                        <td>{{item.Quantity}}</td>
+                        <td>{{item.UnitLabel}}</td>
+                        <td>{{item.UnitPrice}}</td>
+                        <td>{{item.TotalPrice}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="10"><span class="txt1">订单总金额：</span><span class="txt2">{{indexData.TotalMoney}}</span></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var vTransportDetail = new Vue({
+        el: "#vTransportDetail",
+        data: function () {
+            return {
+                indexData:@Html.Raw(Json.Encode(Model)),
+            }
+        },
+    });
+</script>
+

@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="http://fixed2.b1b.com/Yahv/others/Arrays.js"></script>
+</head>
+<body>
+    <script>
+        var data = [
+            { source: 'test1', target: 'test1', value: 10 },
+            { source: 'test1', target: 'test1', value: 10 },
+            { source: 'test3', target: 'test1', value: 30 },
+            { source: 'test1', target: 'test3', value: 40 },
+            { source: 'test3', target: 'test4', value: 20 },
+            { source: 'test3', target: 'test4', value: 20 },
+            { source: 'test1', target: 'test4', value: 20 }
+        ];
+
+
+        var groups = data.groupBy(function (item) {
+            return item.source;
+        });
+        var wheres = data.where(function (item) {
+            return item.value <= 30;
+        })
+        var distincts = data.distinct(function (item) {
+            return {
+                source: item.source,
+                target: item.target,
+            };
+        });
+
+        //alert(JSON.stringify(groups));
+        //alert(data.any(function (item) {
+        //    return item.source == 'test2';
+        //}));
+        //alert(JSON.stringify(wheres));
+
+        //排重
+        alert('展示排重后的项目：' + JSON.stringify(distincts));
+        //重复项目判断
+        alert('是否存在重复项目（总项数' + '源长：' + data.length + '现长：' + distincts.length + '）：' + (distincts.length != data.length));
+
+
+        //alert(JSON.stringify(data.orderBy(function (item) {
+        //    return item.source;
+        //}).orderBy(function (item) {
+        //    return item.value;
+        //})));
+
+        //alert(JSON.stringify(data.orderByDescending(function (item) {
+        //    return item.source;
+        //})));
+
+
+    </script>
+</body>
+</html>

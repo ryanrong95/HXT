@@ -1,0 +1,151 @@
+﻿@{
+    /**/
+
+    ViewBag.Title = "修改邮箱";
+    Layout = "~/Views/Shared/_LayoutAccount.cshtml";
+    ViewBag.navid = "Email";
+}
+
+
+<div v-cloak id="email" class="backshow" style="height:600px;">
+    <h2>邮箱绑定</h2>
+    @*邮箱修改开始*@
+    <div>
+        <el-form  ref="form" :rules="rules" :model="form" status-icon label-width="120px" class="elform_padding">
+            <el-row>
+                <el-col :span="12">
+                    <el-form-item label="原邮箱：">
+                        <el-input v-model="form.Email" readonly></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="12">
+                    <el-form-item label="新邮箱：" prop="NewEmail">
+                        <el-input v-model="form.NewEmail"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="8">
+                    <el-form-item label="邮箱验证码：" prop="Code" :rules="[{required: true, message: '请输入邮箱验证码', trigger: 'blur'}]">
+                        <el-input v-model="form.Code" placeholder="邮箱验证码" auto-complete="off"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="4">
+                    <el-form-item label="" label-width="10px">
+                        <el-button style="padding-left:20px;" :disabled="buttonDisable" type="primary" size="medium" v-on:click="sendMail">{{buttonTxt}}</el-button>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="12">
+                    <el-form-item>
+                        <el-button type="primary" v-on:click="onSubmit">提交</el-button>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+        </el-form>
+    </div>
+    @*邮箱修改结束*@
+    
+</div>
+
+<script>
+    var email = new Vue({
+        el: "#email",
+        data: function () {
+            var validateMail = function(rule, value, callback){
+                var reg = new RegExp(/^([a-zA-Z0-9._-])+@{@Html.Raw("@");}([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/);
+                if (!reg.test(value)) {
+                    callback(new Error('请输入正确的邮箱地址'));
+                }
+                else {
+                    axios({
+                        url: "/Account/CheckEmail",
+                        method: "post",
+                        data: {
+                            email: value
+                        },
+                    }).then(function (response) {
+                        if (response.data.type == "error") {
+                            callback(new Error(response.data.msg));
+                        } else {
+                            callback();
+                        }
+                    }).catch(function (error) {
+                        app.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                    });
+                }
+            };
+            return {
+                form:@Html.Raw(Json.Encode(Model)),
+                rules: {
+                    NewEmail: [{ required: true, validator: validateMail, trigger: 'blur' },
+                    { min: 1, max: 50, message: '长度在 1 到 50个字符', trigger: 'blur' }],
+                },
+                buttonDisable: false,
+                buttonTxt:"发送验证码"
+            }
+        },
+        methods: {
+            //发送邮箱验证码
+            sendMail:function() {
+                this.$refs.form.validateField('NewEmail', function (data) {
+                    if (data == "") {
+                        email.buttonDisable = true;
+                        var time = 60;
+                        axios({
+                            url: "/Account/SendMail",
+                            method: "post",
+                            data: {
+                                email: email.form.NewEmail
+                            },
+                        }).then(function (response) {
+                            var t = setInterval(function () {
+                                time--;
+                                email.buttonTxt = time + "秒后重新获取";
+                                if (time == 0) {
+                                    clearInterval(t);
+                                    email.buttonTxt = "发送验证码";
+                                    email.buttonDisable = false;
+                                }
+                            }, 1000)
+                        }).catch(function (error) {
+                            email.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                        });
+                    }
+                });
+            },
+            //表单提交的事件
+            onSubmit: function () {
+                this.$refs.form.validate(function(valid){
+                    if (valid) {
+                        axios({
+                            url: "/Account/Email",
+                            method: "post",
+                            data: email.form,
+                        }).then(function (response) {
+                            if (response.data.type == "error") {
+                                email.onAlert(response.data.type, response.data.msg);
+                            }
+                            email.$refs.form.resetFields();
+                        }).catch(function (error) {
+                            email.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                        });
+                    } else {
+                        //验证失败
+                        return false;
+                    }
+                });
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type
+                });
+            }
+        }
+    });
+</script>

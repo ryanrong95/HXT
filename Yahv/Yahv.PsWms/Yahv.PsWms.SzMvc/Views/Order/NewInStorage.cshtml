@@ -1,0 +1,322 @@
+﻿
+@{Html.RenderAction("NewInStorageBaseInfo", "Order");}
+@{Html.RenderAction("NewInStorageSpecialRequire", "Order");}
+@{Html.RenderAction("NewInStorageTransport", "Order");}
+@{Html.RenderAction("NewInStorageAttachment", "Order");}
+@{Html.RenderAction("NewInStorageBatchAddOrderItem", "Order");}
+
+<div id="newinstorage" v-cloak class="tab_content order_add">
+    <div class="info_item_wrap">
+        <span class="icon_img">1</span>
+        <span class="title">订单基本信息</span>
+    </div>
+    <newinstoragebaseinfo ref="newinstoragebaseinfo"
+                          v-on:opendialogbatchaddorderitem="opendialogbatchaddorderitem"></newinstoragebaseinfo>
+    <newinstoragebatchaddorderitem ref="newinstoragebatchaddorderitem"
+                                   :dialogbatchaddorderitemvisible="dialogbatchaddorderitemvisible"
+                                   v-on:closedialogbatchaddorderitem="closedialogbatchaddorderitem"
+                                   v-on:addorderitemfrombatch="addorderitemfrombatch"
+                                   v-on:calcsuminfoafterbatchsubmit="calcsuminfoafterbatchsubmit"></newinstoragebatchaddorderitem>
+
+    <div class="info_item_wrap mt40">
+        <span class="icon_img">2</span>
+        <span class="title">特殊要求</span>
+    </div>
+    <newinstoragespecialrequire ref="newinstoragespecialrequire"></newinstoragespecialrequire>
+
+    <div class="info_item_wrap mt40">
+        <span class="icon_img">3</span>
+        <span class="title">货运信息</span>
+    </div>
+    <newinstoragetransport ref="newinstoragetransport"></newinstoragetransport>
+
+    <div class="info_item_wrap mt40">
+        <span class="icon_img">4</span>
+        <span class="title">附件信息</span>
+    </div>
+    <newinstorageattachment ref="newinstorageattachment"></newinstorageattachment>
+
+    <div class="btn_bottom mt80 mb100">
+        <button class="ml14 btn2 " v-on:click="submitReal()">提交</button>
+    </div>
+
+    <el-dialog title="" class="dialog_success" :lock-scroll="false" width="520px" :before-close="btn_back" :visible.sync="dialogSuccessVisible" :close-on-click-modal="false">
+        <div class="content" style="text-align: center">
+            <p class="title">订单提交成功</p>
+            <p class="mt30">订单编号：<span class="txt_blue">{{newOrderID}}</span></p>
+        </div>
+        <div class="el-dialog__footer pb30 mt30">
+            <button class="btn2" v-on:click="orderDetails">查看订单信息</button>
+            <button class="btn2 ml12" v-on:click="btn_back">返回</button>
+        </div>
+    </el-dialog>
+</div>
+
+<script src="~/Content/script/clipboard.min.js"></script>
+<script>
+    var newinstorage = new Vue({
+        el: "#newinstorage",
+        data: function () {
+            return {
+                dialogSuccessVisible: false, //新增订单成功弹窗显示标志
+                newOrderID: '', //新增成功后赋值
+
+                dialogbatchaddorderitemvisible: false, //批量导入弹窗显示标志
+            }
+        },
+        created: function () {
+
+        },
+        methods: {
+            //打开批量导入订单项窗口
+            opendialogbatchaddorderitem: function () {
+                this.dialogbatchaddorderitemvisible = true;
+            },
+            //关闭批量导入订单项窗口
+            closedialogbatchaddorderitem: function () {
+                this.dialogbatchaddorderitemvisible = false;
+            },
+            //从批量导入中加入订单项
+            addorderitemfrombatch: function (item) {
+                this.$refs.newinstoragebaseinfo.addoneorderitemfrombatch(item);
+            },
+            //在批量提交之后计算求和信息
+            calcsuminfoafterbatchsubmit: function () {
+                this.$refs.newinstoragebaseinfo.calcSumInfoAfterBatchSubmit();
+            },
+            //真正提交
+            submitReal: function () {
+                var that = this;
+                //校验基本信息
+                if (that.validBaseInfo() == false) {
+                    return;
+                }
+                //校验特殊要求
+                if (that.validSpecialRequire() == false) {
+                    return;
+                }
+                //校验货运信息
+                if (that.validTransport() == false) {
+                    return;
+                }
+                //校验附件信息
+                if (that.validAttachment() == false) {
+                    return;
+                }
+
+                const loading = that.$loading({
+                    lock: false,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)'
+                });
+                axios({
+                    url: "/Order/NewInStorageSubmit",
+                    method: "post",
+                    data: {
+                        OrderItems: that.$refs.newinstoragebaseinfo.orderItems, //订单项
+                        SpecialRequireValues: that.$refs.newinstoragespecialrequire.specialRequireValues, //特殊要求的值
+                        OtherRequire: that.$refs.newinstoragespecialrequire.otherRequire, //其他要求的值
+                        TransportModeInt: that.$refs.newinstoragetransport.transportmode, //货运类型
+                        ExpressCompanyValue: that.$refs.newinstoragetransport.expressCompanyValue, //快递公司的值
+                        ExpressNumber: that.$refs.newinstoragetransport.expressNumber, //快递单号
+                        TakingDate: that.$refs.newinstoragetransport.takingDate != undefined && that.$refs.newinstoragetransport.takingDate != "" ?
+                            this.dateToString(that.$refs.newinstoragetransport.takingDate) : "", //提货时间
+                        TakingFiles: that.$refs.newinstoragetransport.takingFiles, //提货单文件的值
+                        ConsigneeManValue: that.$refs.newinstoragetransport.consigneeManValue, //交货联系人信息的值
+                        PackingFiles: that.$refs.newinstorageattachment.packingFiles, //装箱单文件的值
+                    },
+                }).then(function (response) {
+                    loading.close();
+                    if (response.data.type == "error") {
+                        that.onAlert(response.data.type, response.data.msg);
+                    } else {
+                        that.newOrderID = response.data.data;
+                        that.dialogSuccessVisible = true;
+                    }
+                }).catch(function (error) {
+                    that.onAlert("warning", error);
+                });
+            },
+            //检验是否为空, false - 为空, true - 不为空
+            validFieldEmpty: function (field, tip) {
+                if (field == null || field == "") {
+                    this.onAlert("error", tip);
+                    return false;
+                }
+                return true;
+            },
+            //检验是否超长, false - 超长, true - 不超长
+            validFieldLength: function (field, length, tip) {
+                if (field != null && field.length > length) {
+                    this.onAlert("error", tip);
+                    return false;
+                }
+                return true;
+            },
+            //校验基本信息
+            validBaseInfo: function () {
+                var that = this;
+                var theOrderItems = that.$refs.newinstoragebaseinfo.orderItems;
+                if (theOrderItems.length == 0) {
+                    this.onAlert("error", "请添加产品信息");
+                    return false;
+                }
+                //if (theOrderItems.length > 100) {
+                //    this.onAlert("error", "产品明细不能超过100条");
+                //    return false;
+                //}
+
+                for (var i = 0; i < theOrderItems.length; i++) {
+                    //检查为空
+                    if (this.validFieldEmpty(theOrderItems[i].PartNumber, "第【" + (i + 1) + "】行产品明细的【型号】不能为空") == false) {
+                        return false;
+                    }
+                    if (this.validFieldEmpty(theOrderItems[i].Brand, "第【" + (i + 1) + "】行产品明细的【品牌】不能为空") == false) {
+                        return false;
+                    }
+                    if (this.validFieldEmpty(theOrderItems[i].StocktakingTypeInt, "第【" + (i + 1) + "】行产品明细的【包装类型】不能为空") == false) {
+                        return false;
+                    }
+
+                    //检查超长
+                    if (this.validFieldLength(theOrderItems[i].CustomCode, 100, "第【" + (i + 1) + "】行产品明细的【自定义编号】长度超过限制") == false) {
+                        return false;
+                    }
+                    if (this.validFieldLength(theOrderItems[i].PartNumber, 100, "第【" + (i + 1) + "】行产品明细的【型号】长度超过限制") == false) {
+                        return false;
+                    }
+                    if (this.validFieldLength(theOrderItems[i].Brand, 100, "第【" + (i + 1) + "】行产品明细的【品牌】长度超过限制") == false) {
+                        return false;
+                    }
+                    if (this.validFieldLength(theOrderItems[i].Package, 100, "第【" + (i + 1) + "】行产品明细的【封装】长度超过限制") == false) {
+                        return false;
+                    }
+                    if (this.validFieldLength(theOrderItems[i].DateCode, 100, "第【" + (i + 1) + "】行产品明细的【批次】长度超过限制") == false) {
+                        return false;
+                    }
+
+                    //检查数字
+                    if (parseFloat(theOrderItems[i].Mpq) == 0) {
+                        this.onAlert("error", "第【" + (i + 1) + "】行产品明细的【最小包装量】不能为0");
+                        return false;
+                    }
+                    if (parseFloat(theOrderItems[i].PackageNumber) == 0) {
+                        this.onAlert("error", "第【" + (i + 1) + "】行产品明细的【数量】不能为0");
+                        return false;
+                    }
+                    if (theOrderItems[i].Mpq == "") {
+                        this.onAlert("error", "第【" + (i + 1) + "】行产品明细的【最小包装量】不能为空");
+                        return false;
+                    }
+                    if (theOrderItems[i].PackageNumber == "") {
+                        this.onAlert("error", "第【" + (i + 1) + "】行产品明细的【数量】不能为空");
+                        return false;
+                    }
+                }
+
+                return true;
+            },
+            //校验特殊要求
+            validSpecialRequire: function () {
+                var that = this;
+                //检查其他要求的值
+                var theOtherRequireChoose = that.$refs.newinstoragespecialrequire.specialRequireValues.filter(function (item) {
+                    return item == "3";
+                });
+                if (theOtherRequireChoose != null && theOtherRequireChoose != undefined && theOtherRequireChoose.length > 0) {
+                    var otherRequire = that.$refs.newinstoragespecialrequire.otherRequire;
+                    if (that.validFieldEmpty(otherRequire, "其他要求不能为空") == false) {
+                        return false;
+                    }
+                    if (this.validFieldLength(otherRequire, 100, "其他要求长度超过限制") == false) {
+                        return false;
+                    }
+                }
+
+                return true;
+            },
+            //校验货运信息
+            validTransport: function () {
+                var that = this;
+                var transportModeInt = that.$refs.newinstoragetransport.transportmode;
+                if (transportModeInt == 2) {
+                    //快递
+                    //var expressCompanyValue = that.$refs.newinstoragetransport.expressCompanyValue;
+                    var expressNumber = that.$refs.newinstoragetransport.expressNumber;
+
+                    //if (that.validFieldEmpty(expressCompanyValue, "快递公司不能为空") == false) {
+                    //    return false;
+                    //}
+                    //if (that.validFieldEmpty(expressNumber, "快递单号不能为空") == false) {
+                    //    return false;
+                    //}
+
+                    if (that.validFieldLength(expressNumber, 100, "快递单号长度超过限制") == false) {
+                        return false;
+                    }
+
+                } else if (transportModeInt == 3) {
+                    //送货上门
+
+                } else if (transportModeInt == 1) {
+                    //自提
+                    var takingDate = that.$refs.newinstoragetransport.takingDate != undefined && that.$refs.newinstoragetransport.takingDate != "" ?
+                        this.dateToString(that.$refs.newinstoragetransport.takingDate) : ""; //提货时间
+                    var takingFiles = that.$refs.newinstoragetransport.takingFiles; //提货单文件的值
+                    var consigneeManValue = that.$refs.newinstoragetransport.consigneeManValue; //交货联系人信息的值
+
+                    if (that.validFieldEmpty(takingDate, "提货时间不能为空") == false) {
+                        return false;
+                    }
+                    if (takingFiles == null || takingFiles.length == 0) {
+                        that.onAlert("error", "请上传提货单文件");
+                        return false;
+                    }
+                    if (that.validFieldEmpty(consigneeManValue, "交货联系人信息不能为空") == false) {
+                        return false;
+                    }
+                }
+
+                return true;
+            },
+            //校验附件信息
+            validAttachment: function () {
+
+
+
+                return true;
+            },
+            //日期转字符串
+            dateToString: function (date) {
+                var year = date.getFullYear();
+                var month = (date.getMonth() + 1).toString();
+                var day = (date.getDate()).toString();
+                if (month.length == 1) {
+                    month = "0" + month;
+                }
+                if (day.length == 1) {
+                    day = "0" + day;
+                }
+                var dateTime = year + "-" + month + "-" + day;
+                return dateTime;
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                    offset: 100
+                });
+            },
+            //返回新增页面
+            btn_back: function () {
+                window.location.href = "/Order/NewInStorage";
+            },
+            //跳转到订单详情页面
+            orderDetails: function() {
+                commonSkipUrl(this.newOrderID, '/Order/StorageDetailIn', '/Order/StorageList');
+            },
+        }
+    });
+</script>

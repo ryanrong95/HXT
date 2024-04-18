@@ -1,0 +1,40 @@
+﻿
+<div id="myinfo" v-cloak>
+    <div class="mt10 Info_div clearfix ">
+        <div class="subtitle">
+            <span class="line"></span>
+            <span class="ml16 ">账户信息</span>
+        </div>
+        <div class="divice"></div>
+        <div class="content fl">
+            <div class="ml20 mt20 name">
+                <span class="w106 fl">登录账号：</span>
+                <em class="w250 fl">{{siteusername}}</em>
+            </div>
+            <div class="ml20 mt20 name">
+                <span class="w106 fl">客户名称：</span>
+                <em class="w250 fl">{{clientname}}</em>
+            </div>
+            <div class="ml20 mt20 name">
+                <span class="w106 fl ">密码：</span>
+                <em class="w250 fl">********</em>
+                <a href="/Client/Password" class="link ml20">修改密码</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var myinfo = new Vue({
+        el: "#myinfo",
+        data: function () {
+            return {
+                siteusername: '@(ViewBag.SiteuserName)',
+                clientname: '@(ViewBag.ClientName)',
+            };
+        },
+        created: function () {
+
+        },
+    });
+</script>
+

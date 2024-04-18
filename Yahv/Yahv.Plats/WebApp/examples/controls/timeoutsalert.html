@@ -1,0 +1,91 @@
+﻿﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>alert - jQuery EasyUI plugin</title>
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/gray/easyui.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/icon-yg-cool.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/standard-easyui/iconfont/iconfont.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/standard-easyui/styles/plugin.css" rel="stylesheet" />
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.easyui.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/locale/easyui-lang-zh_CN.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/standard-easyui/scripts/timeouts.js"></script>
+</head>
+<body>
+    <h1>alert</h1>
+    <button onclick="open2()">左上</button>
+    <button onclick="open3()">中上</button>
+    <button onclick="open1()">右上</button>
+    <button onclick="open4()">左下</button>
+    <button onclick="open5()">中下</button>
+    <button onclick="open6()">右下</button>
+    <button onclick="open7()">垂直居中</button>
+    <script>
+        var index = 0;
+        function open1() {
+            $.timeouts.alert({ type: "success", })
+        }
+        function open2() {
+            $.timeouts.alert({
+                position: "TL",
+                msg: "左上success" + index++,
+                has_close_btn: false,
+                has_icon: false,
+                type: "success",//info,error,info,question,warning
+                fn: function () {
+                    $.myDialog.close();
+                    $.myWindow.close();
+                }
+            })
+        }
+        function open3() {
+            $.timeouts.alert({
+                position: "TC",
+                msg: "中上warning中上warning中上warning中上warning中上warning中上warning中上warning中上warning中上warning中上warning中上warning中上warning中上warning中上warning中上warning中上warning中上warning中上warning中上warning中上warning中上warning中上warning中上warning中上warning中上warning中上warning中上warning中上warning中上warning中上warning中上warning中上warning中上warning中上warning中上warning中上warning中上warning中上warning中上warning中上warning中上warning中上warning中上warning中上warning中上warning中上warning中上warning中上warning",
+                has_close_btn: true,
+                has_icon: true,
+                type: "warning"//info,error,info,question,warning
+            })
+        }
+        function open4() {
+            $.timeouts.alert({
+                position: "BL",
+                msg: "左下error",
+                has_close_btn: true,
+                has_icon: true,
+                type: "error",//info,error,info,question,warning
+            })
+        }
+        function open5() {
+            $.timeouts.alert({
+                position: "BC",
+                msg: "中下warning",
+                has_close_btn: true,
+                has_icon: true,
+                type: "warning"//info,error,info,question,warning
+            })
+        }
+        function open6() {
+            $.timeouts.alert({
+                position: "BR",
+                msg: "右下warning",
+                has_close_btn: true,
+                has_icon: true,
+                spacing: 20,//弹出框之间的间距
+                type: "warning"//info,error,info,question,warning
+            })
+        }
+        function open7() {
+            $.timeouts.alert({
+                position: "CC",
+                msg: "垂直居中warning",
+                has_close_btn: true,
+                has_icon: true,
+                spacing: 20,//弹出框之间的间距
+                type: "warning"//info,error,info,question,warning
+            })
+        }
+    </script>
+</body>
+</html>

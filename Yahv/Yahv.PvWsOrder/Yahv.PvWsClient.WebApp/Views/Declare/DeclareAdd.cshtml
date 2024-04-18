@@ -1,0 +1,941 @@
+﻿                     
+
+@{
+    Layout = "~/Views/Shared/_LayoutOrder.cshtml";
+    ViewBag.navid = "DeclareList";
+}
+
+<div v-cloak id="vDeclareAdd" class="backshow">
+    <h2>新增进口报关</h2>
+    <div class="contentOrder">
+        <el-form ref="ruleForm" :model="formData" :rules="rules" label-width="120px">
+            <div class="divWrap">
+                <p class="divTitle">产品目录</p>
+                <div class="addtable">
+                    <div class="nav_list">
+                        <div class="currency fl">
+                            <el-form-item label="币种" prop="Currency" :rules="[{required: true, message: '请选择币种', trigger: 'change'}]">
+                                <el-select :disabled="formData.IsClssified" size="mini" v-model="formData.Currency" filterable clearable placeholder="请选择">
+                                    <el-option v-for="item in baseData.PayCurrencyOptions"
+                                               :key="item.value"
+                                               :label="item.text"
+                                               :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </div>
+                        <div class="buttonlist" v-if="!formData.IsClssified">
+                            <el-button size="small" v-on:click="downloadTemplates" class="el-icon-ump-xiazai fl">
+                                下载导入模板
+                            </el-button>
+                            <el-upload class="upload fl ml40"
+                                       action="/Declare/DeclareFileUpload"
+                                       :on-success="uploadSuccess"
+                                       accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                                       :show-file-list="false">
+                                <el-button size="small" class="el-icon-ump-upload" type="primary"> 上传产品明细</el-button>
+                            </el-upload>
+                            <el-button size="small" v-on:click="dialogProductVisible=true" class="el-icon-ump-gouwuchekong fl ml40">
+                                我的产品
+                            </el-button>
+                        </div>
+                    </div>
+                    <el-table :data="formData.OrderItems" ref="addtable" class="tb-edit el-tb-edit"
+                              :summary-method="getSummaries" v-on:row-click="handleRow"
+                              show-summary
+                              :header-cell-class-name="must"
+                              style="width: 100%" highlight-current-row>
+                        <el-table-column fixed="left" type="index" width="35">
+                        </el-table-column>
+                        <el-table-column label="批号" width="60">
+                            <template scope="scope">
+                                <el-input size="mini" v-model="scope.row.DateCode"></el-input>
+                                <span>{{scope.row.DateCode}}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="品名" width="80">
+                            <template scope="scope">
+                                <el-input size="mini" v-model="scope.row.Name"></el-input>
+                                <span>{{scope.row.Name}}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="品牌" width="80">
+                            <template scope="scope">
+                                <el-input size="mini" v-model="scope.row.Manufacturer"></el-input>
+                                <span>{{scope.row.Manufacturer}}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="型号" width="80">
+                            <template scope="scope">
+                                <el-input size="mini" v-model="scope.row.PartNumber"></el-input>
+                                <span>{{scope.row.PartNumber}}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="产地" width="100">
+                            <template scope="scope">
+                                <el-select size="mini" v-model="scope.row.Origin" v-on:focus="handleRow(scope.row)" filterable clearable v-on:change="getOptionsLabel(scope.row,'OriginLabel',scope.row.Origin,baseData.OriginOptions)">
+                                    <el-option v-for="item in scope.row.OriginOptions"
+                                               :key="item.value"
+                                               :label="item.text"
+                                               :value="item.value">
+                                    </el-option>
+                                </el-select>
+                                <span>{{scope.row.OriginLabel}}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="Quantity" label="数量" width="54">
+                            <template scope="scope">
+                                <el-input size="mini" v-model="scope.row.Quantity" v-on:blur="caculUnitPrice(scope.row)" v-on:input="validNumber(scope.row,'Quantity')"></el-input>
+                                <span>{{scope.row.Quantity}}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="单位" width="100">
+                            <template scope="scope">
+                                <el-select size="mini" v-model="scope.row.Unit" v-on:focus="handleRow(scope.row)" filterable clearable v-on:change="getOptionsLabel(scope.row,'UnitLabel',scope.row.Unit,baseData.UnitOptions)">
+                                    <el-option v-for="item in scope.row.UnitOptions"
+                                               :key="item.value"
+                                               :label="item.text"
+                                               :value="item.value">
+                                    </el-option>
+                                </el-select>
+                                <span>{{scope.row.UnitLabel}}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="UnitPrice" label="单价" width="60">
+                            <template scope="scope">
+                                <span>{{scope.row.UnitPrice}}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="TotalPrice" label="总价" width="60">
+                            <template scope="scope">
+                                <el-input size="mini" v-model="scope.row.TotalPrice" v-on:blur="validTotalPrice(scope.row,'TotalPrice')"></el-input>
+                                <span>{{scope.row.TotalPrice}}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="毛重(kg)" width="71">
+                            <template scope="scope">
+                                <el-input size="mini" v-model="scope.row.GrossWeight" v-on:blur="validDecimal(scope.row,'GrossWeight')"></el-input>
+                                <span>{{scope.row.GrossWeight}}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="体积(m³)" width="71">
+                            <template scope="scope">
+                                <el-input size="mini" v-model="scope.row.Volume" v-on:blur="validDecimal(scope.row,'Volume')"></el-input>
+                                <span>{{scope.row.Volume}}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column fixed="right" width="35">
+                            <template slot-scope="scope">
+                                <el-button class="item_delete" style="padding-left:2px" v-on:click.native.prevent="handleSubItemDelete(scope.$index)" type="text" icon="el-icon-delete"></el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                    <el-button class="add_single" v-on:click="addSubItems">+新增一行</el-button>
+                </div>
+            </div>
+            <div class="divWrap">
+                <p class="divTitle">香港交货方式</p>
+                <div class="div_radio overhide mb16">
+                    <span class="title fl">交货方式</span>
+                    <div class="fl" style="line-height:36px;">
+                        <el-radio v-model="formData.HKDeliveryType" v-for="item of baseData.HKDeliveryTypeOptions" :label=item.value>{{item.text}}</el-radio>
+                    </div>
+                </div>
+                <div v-if="formData.HKDeliveryType=='2'">
+                    <el-form-item label="物流单号" prop="WayBillNo" :rules="[{ required: false, message: '请输入物流单号', trigger: 'blur' },{max:50, message: '物流单号长度不超过50', trigger: 'blur' }]">
+                        <el-input v-model="formData.WayBillNo" placeholder="请输入物流单号" style="width:288px;" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="供应商" prop="SupplierID" :rules="[{ required: true, message: '请选择供应商', trigger: 'change' }]">
+                        <el-select v-on:change="handSupplierChange" v-model="formData.SupplierID" style="width:288px;" filterable clearable placeholder="请选择">
+                            <el-option v-for="item in baseData.SupplierOptions"
+                                       :key="item.value"
+                                       :label="item.text"
+                                       :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </div>
+                <div v-if="formData.HKDeliveryType=='1'">
+                    <el-form-item label="供应商" prop="SupplierID" :rules="[{ required: true, message: '请选择供应商', trigger: 'change' }]">
+                        <el-select v-on:change="handSupplierChange" v-model="formData.SupplierID" style="width:288px;" filterable clearable placeholder="请选择">
+                            <el-option v-for="item in baseData.SupplierOptions"
+                                       :key="item.value"
+                                       :label="item.text"
+                                       :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="提货地址" prop="SupplierAddress" :rules="[{ required: true, message: '请选择提货地址', trigger: 'change' }]">
+                        <el-radio-group class="SupplierAddressOptions" v-model="formData.SupplierAddress">
+                            <el-radio :title="item.text" :label=item.value v-for="item of supplierAddressOptions">{{item.text}}</el-radio>
+                        </el-radio-group>
+                    </el-form-item>
+                    <el-form-item label="提货时间" prop="PickupTime" :rules="[{ type: 'date', required: true, message: '请选择提货时间', trigger: 'change' }]">
+                        <el-date-picker type="date" :picker-options="pickerOptions1" placeholder="提货时间" v-model="formData.PickupTime" style="width:288px;"></el-date-picker>
+                    </el-form-item>
+                    <div class="uploadfiles ml120 mb30">
+                        <el-upload :http-request="httpRequestTake"
+                                   ref="takingUpload"
+                                   action="/Orders/UploadPickUpFile"
+                                   :on-remove="handleRemoveTakeFiles"
+                                   :file-list="formData.HKFiles"
+                                   accept="image/jpg, image/bmp, image/jpeg, image/gif, image/png, application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+                            <el-button size="small" class="el-icon-ump-upload" type="primary"> 上传提货文件</el-button>
+                            <span class="file_tip ml30">仅限图片、PDF或Word文件，且文件不超过3M</span>
+                        </el-upload>
+                    </div>
+                </div>
+            </div>
+            <div class="divWrap mt30">
+                <p class="divTitle">国内交货方式</p>
+                <div class="div_radio overhide mb16">
+                    <span class="title fl">交货方式</span>
+                    <div class="fl" style="line-height:36px;">
+                        <el-radio v-model="formData.SZDeliveryType" v-for="item of baseData.SZDeliveryTypeOptions" :label=item.value>{{item.text}}</el-radio>
+                    </div>
+                </div>
+                <div v-if="formData.SZDeliveryType=='1'">
+                    <div class=" item_div overhide">
+                        <el-form-item label="提货人" prop="ClientPicker" :rules="[{ required: true, message: '请输入提货人', trigger: 'blur' },{max:50, message: '提货人长度不超过150', trigger: 'blur' }]">
+                            <el-input placeholder="请输入提货人" v-model="formData.ClientPicker" style="width:288px;" auto-complete="off"></el-input>
+                        </el-form-item>
+                    </div>
+                    <div class=" item_div overhide">
+                        <el-form-item label="电话" prop="ClientPickerMobile">
+                            <el-input placeholder="请输入电话" v-model="formData.ClientPickerMobile" style="width:288px;" auto-complete="off"></el-input>
+                        </el-form-item>
+                    </div>
+                    <div class=" item_div overhide">
+                        <el-form-item label="证件类型" prop="IDType" :rules="[{ required: true, message: '请选择证件类型', trigger: 'change' }]">
+                            <el-select v-model="formData.IDType" style="width:288px;" clearable placeholder="请选择">
+                                <el-option v-for="item in baseData.IDTypeOptions"
+                                           :key="item.value"
+                                           :label="item.text"
+                                           :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </div>
+                    <div class=" item_div overhide">
+                        <el-form-item label="证件号码" prop="IDNumber">
+                            <el-input placeholder="请输入证件号码" v-model="formData.IDNumber" style="width:288px;" auto-complete="off"></el-input>
+                        </el-form-item>
+                    </div>
+                </div>
+                <div v-if="formData.SZDeliveryType=='2'||formData.SZDeliveryType=='3'">
+                    <el-form-item label="收货地址" prop="ClientConsignee" :rules="[{ required: true, message: '请选择收货地址', trigger: 'change' }]">
+                        <el-select v-model="formData.ClientConsignee" style="width:288px;" clearable placeholder="请选择">
+                            <el-option v-for="item in baseData.ReceiveOptions"
+                                       :key="item.value"
+                                       :label="item.text"
+                                       :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <p class="address_text ml120">联系人：{{formData.ClientConsigneeName}} 电话：{{formData.ClientContactMobile}} 地址：{{formData.ClientConsigneeAddress}}</p>
+                </div>
+            </div>
+            <div class="divWrap">
+                <div style="margin-bottom:20px;">
+                    <p class="divTitle">付汇供应商<span class="tip">提示：请选择付汇供应商，最多可选择3个，并确保与合同发票(INVOICE LIST)一致。</span></p>
+                </div>
+                <div class="supplier overhide">
+                    <div class="fl">
+                        <el-form-item label="供应商" prop="PayExchangeSupplier" :rules="[{required: true, message: '请选择供应商', trigger: 'change',type:'array' }]">
+                            <el-select v-model="formData.PayExchangeSupplier" multiple-limit="3" multiple style="width:288px;" placeholder="请选择">
+                                <el-option v-for="item in baseData.SupplierOptions"
+                                           :key="item.value"
+                                           :label="item.text"
+                                           :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </div>
+                </div>
+                <div class="item_div ml120">
+                    <el-upload multiple
+                               ref="PIupload"
+                               :http-request="httpRequestPIFile"
+                               action="/Orders/UploadOrderFile"
+                               :on-remove="handleRemovePIFile"
+                               :file-list="formData.PIFiles"
+                               accept="image/jpg, image/bmp, image/jpeg, image/gif, image/png, application/pdf">
+                        <el-button size="small" class="el-icon-ump-upload" type="primary">合同发票</el-button>
+                        <span class="file_tip ml30">仅限图片或PDF文件，且文件不超过3M</span>
+                    </el-upload>
+                </div>
+            </div>
+            <div class="divWrap mt20">
+                <p class="divTitle">其他信息</p>
+                <div class="div_radio overhide mt16 mb16">
+                    <span class="title fl">是否需要包车</span>
+                    <div class="fl" style="line-height:36px;">
+                        <el-radio v-model="formData.IsFullVehicle" v-for="item of radioOptions" :label=item.value>{{item.text}}</el-radio>
+                    </div>
+                </div>
+                <div class="div_radio overhide">
+                    <span class="title fl">是否代垫货款</span>
+                    <div class="fl" style="line-height:36px;">
+                        <el-radio v-model="formData.IsLoan" v-for="item of radioOptions" :label=item.value>{{item.text}}</el-radio>
+                    </div>
+                </div>
+                <el-form-item class="mt10" label="包装类型" prop="WrapType" :rules="[{ required: true, message: '请选择包装类型', trigger: 'change' }]">
+                    <el-select v-model="formData.WrapType" style="width:288px;" filterable clearable placeholder="请选择">
+                        <el-option v-for="item in baseData.PackTypeOptions"
+                                   :key="item.value"
+                                   :label="item.text"
+                                   :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="件数" prop="PackNo">
+                    <el-input placeholder="请输入件数" v-model="formData.PackNo" style="width:288px;" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="备注" prop="Summary" :rules="[{max:500, message: '备注长度不超过500', trigger: 'blur' }]">
+                    <el-input placeholder="请输入备注" type="textarea" v-model="formData.Summary" style="width:288px;" auto-complete="off"></el-input>
+                </el-form-item>
+            </div>
+            <div class="submit_btn_dec mt100">
+                <div class="btn_dec_list">
+                    <el-button size="medium" v-on:click="submitForm1()" type="warning" class="btn_dec">提交订单</el-button>
+                    <el-button size="medium" v-on:click="submitForm()" class="btn_dec">暂存订单</el-button>
+                </div>
+            </div>
+        </el-form>
+    </div>
+    <el-dialog class="successdialog" title="订单保存成功" :lock-scroll="false" width="520px" :visible.sync="dialogSuccessVisible" :close-on-click-modal="false">
+        <div class="content">
+            <p>订单保存成功</p>
+            <div class="no_text">
+                <span>订单编号：</span><span class="red">{{orderid}}</span>
+            </div>
+            <div class="clientcode"><span>您的入仓号为：</span><span class="red">{{formData.EnterCode}}</span><span>，请务必将此编号填写到快递单或送货单上，否则将加收100元人民币的代理费。</span></div>
+        </div>
+        <div class="dialog_foot">
+            <el-button type="primary" v-on:click="orderDetails">查看订单信息</el-button>
+            <el-button type="primary" v-on:click="btn_back">返回</el-button>
+        </div>
+    </el-dialog>
+    <el-dialog class="productdialog" title="我的产品" :lock-scroll="false" width="40%" :visible.sync="dialogProductVisible" :close-on-click-modal="false">
+        <myproduct ref="ref_product" v-on:child-say="listenToMyBoy"></myproduct>
+    </el-dialog>
+</div>
+@{Html.RenderAction("_PartialMyPreProducts", "Products");}
+<script src="~/Scripts/areaData.js"></script>
+<script>
+    var vDeclareAdd = new Vue({
+        el: "#vDeclareAdd",
+        data: function () {
+            var that = this;
+            //验证手机号
+            var validateMobile = function (rule, value, callback) {
+                if (value == '' || value == null) {
+                    callback(new Error('请输入手机号'));
+                }
+                else if (!ValidMobile(value)) {
+                    callback(new Error('请输入正确的手机号码'));
+                }
+                callback();
+            };
+            //验证身份证
+            var validateIDNumber = function (rule, value, callback) {
+                if (value == '' || value == null) {
+                    callback(new Error('请输入证件号码'));
+                }
+                else if (!ValidIDNumber(value)) {
+                    callback(new Error('请输入正确的证件号码'));
+                }
+                callback();
+            };
+            //验证件数
+            var validateNumber = function (rule, value, callback) {
+                if (value != '' && value != null) {
+                    if (!ValidNumber(value)) {
+                        callback(new Error('请输入数字'));
+                    }
+                    else if (value > 2147483647) {
+                        callback(new Error('输入数字超出限制'));
+                    }
+                }
+                callback();
+            };
+            return {
+                formData: @Html.Raw(Json.Encode(Model)),  //表单数据
+                submitData:null,
+                //验证规则
+                rules: {
+                        ClientPickerMobile: [{ required: true, validator: validateMobile, trigger: 'blur' }],
+                        IDNumber: [{ required: true, validator: validateIDNumber, trigger: 'blur' }],
+                        PackNo: [{ required: false, validator: validateNumber, trigger: 'blur' }],
+                },
+                radioOptions: [{ value: false, text: "否" }, { value: true, text: "是" }],
+                baseData: {}, //基础数据
+                pickerOptions1: {
+                    disabledDate: function (time) {
+                        var myDate = new Date();
+                        myDate.setDate(myDate.getDate() + 6);
+                        var today = new Date();
+                        today.setDate(today.getDate() - 1);
+                        return time > myDate || time < today;
+                    },
+                },
+                cascaderConfig: {
+                    label: 'n',
+                    value: 'n',
+                    children: 's'
+                },
+                orderid: "",
+                dialogSuccessVisible: false,
+                supplierAddressOptions: [],//供应商提货地址
+                submitData: null,
+                dialogProductVisible:false,
+            }
+        },
+        watch: {
+            //收货地址
+            ClientConsignee: function (val) {
+                var that = this;
+                this.baseData.ReceiveOptions.filter(function (value) {
+                    if (value.value == val) {
+                        that.formData.ClientConsigneeAddress = value.address;
+                        that.formData.ClientConsigneeName = value.name;
+                        that.formData.ClientContactMobile = value.mobile;
+                    }
+                });
+            },
+            PickupTime: function (val) {
+                if (val != null && val != "") {
+                    this.formData.PickupTimeStr = this.dateToString(val);
+                }
+            },
+            HKDeliveryType: function (val) {
+                this.$refs["ruleForm"].clearValidate();
+            },
+        },
+        computed: {
+            //收货地址
+            ClientConsignee: function () {
+                return this.formData.ClientConsignee;
+            },
+            PickupTime: function () {
+                return this.formData.PickupTime;
+            },
+            HKDeliveryType: function () {
+                return this.formData.HKDeliveryType;
+            },
+        },
+        methods: {
+            listenToMyBoy: function (list) {
+                var that = this;
+                that.dialogProductVisible = false;
+                if (list.length > 0) {
+                    $.each(that.formData.OrderItems, function (i, value) {
+                        if (value.DateCode == "" && value.Manufacturer == "" && value.Name == "" && value.PartNumber == "" && value.Origin == "" && value.Quantity == "0" && value.Unit == "" && value.TotalPrice == "0.00" && value.UnitPrice == "0.00" && value.GrossWeight == "" && value.Volume == "") {
+                            that.formData.OrderItems.splice(i, 1);
+                        }
+                    });
+                }
+                $.each(list, function (i, value) {
+                    var obj = {
+
+                        DateCode: value.Batch,
+                        Name: value.Name,
+                        Manufacturer: value.Manufacturer,
+                        PartNumber: value.Model,
+                        Origin: '',
+                        OriginLabel: '',
+                        Quantity: '0',
+                        Unit: 7,
+                        UnitLabel: '007 个',
+                        TotalPrice: '0',
+                        GrossWeight: "",
+                        Volume: '',
+                        OriginOptions: [],
+                        CurrencyOptions: [],
+                        UnitOptions: [],
+                        UnitPrice: '0.00',
+                        PreProcuctID:"",
+                    };
+                    that.formData.OrderItems.push(obj);
+                });
+            },
+            //是否提交
+            submitForm1: function () {
+                this.formData.IsSubmit = true;
+                this.submitForm();
+            },
+            //计算单价
+            caculUnitPrice: function (row) {
+                if (parseInt(row.Quantity) != 0) {
+                    this.$nextTick(function () {
+                        row.UnitPrice = (row.TotalPrice / row.Quantity).toFixed(4);
+                    })
+                }
+            },
+            //验证总价
+            validTotalPrice: function (row, valuetext) {
+                if (!ValidDecimal(row[valuetext])) {
+                    this.$nextTick(function () {
+                        row[valuetext] = "0";
+                    })
+                } else {
+                    row[valuetext] = parseFloat(row[valuetext]).toFixed(2);
+                    if (parseInt(row.Quantity) != 0) {
+                        this.$nextTick(function () {
+                            row.UnitPrice = (row.TotalPrice / row.Quantity).toFixed(4);
+                        })
+                    }
+                }
+            },
+            httpRequestPIFile: function (options) {
+                this.httpRequest(options, "PIupload", "PIFiles", "/Orders/UploadOrderFile", true);
+            },
+            handleRemovePIFile: function (file, fileList) {
+                this.formData.PIFile = fileList;
+            },
+            must(obj) {
+                if (obj.columnIndex == 2 || obj.columnIndex == 3 || obj.columnIndex == 4 || obj.columnIndex == 5 || obj.columnIndex == 6 || obj.columnIndex == 7 || obj.columnIndex ==9) {
+                    return 'must';
+                }
+            },
+            //上传请求
+            httpRequest: function (options,ref,column,uploadPath,isMuti) {
+                var that = this;
+                var file = options.file;
+                var size = file.size / 1024;
+                var imgArr = ["image/jpg", "image/bmp", "image/jpeg", "image/gif", "image/png"];
+                let config = {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                };
+                if (isMuti) {
+                    var arr = that.$refs[ref].uploadFiles;
+                    that.$refs[ref].uploadFiles = arr.filter(function (value) {
+                        if (value.uid != file.uid) {
+                            return value;
+                        }
+                    })
+                } else {
+                    that.formData[column] = [];
+                }
+
+                if (imgArr.indexOf(file.type) > -1 && size > 500) { //大于500kb的图片压缩
+                    imageConversion.compressAccurately(file, 500).then(function (res) {
+                        var form = new FormData(); // FormData 对象
+                        form.append('file', res, file.name);
+                        axios.post(uploadPath, form, config)
+                            .then(function (response) {
+                                if (response.data.type != "error") {
+                                    that.formData[column].push(JSON.parse(response.data.data));
+                                } else {
+                                    that.onAlert(response.data.type, response.data.msg);
+                                    return;
+                                }
+                            });
+                    });
+                } else if (imgArr.indexOf(file.type) <= -1 && size > 1024 * 3) {
+                    that.onAlert("error", "上传的文件大小不能大于3M");
+                    return;
+                } else {
+                    var form = new FormData(); // FormData 对象
+                    form.append("file", file); // 文件对象
+                    //添加请求头
+                    axios.post(uploadPath, form, config)
+                        .then(function (response) {
+                            if (response.data.type != "error") {
+                                that.formData[column].push(JSON.parse(response.data.data));
+                            } else {
+                                that.onAlert(response.data.type, response.data.msg);
+                                return;
+                            }
+                        });
+                }
+            },
+            //返回新增页面
+            btn_back: function () {
+                window.location.href = "/Declare/DeclareAdd";
+            },
+            orderDetails: function () {
+                commonSkip(this.orderid, '/Declare/DeclareDetail', 'DeclareList');
+            },
+            //单击行加载下拉框数据
+            handleRow: function (row, column, event) {
+                if (row.UnitOptions.length == 0) {
+                    row.UnitOptions = this.baseData.UnitOptions;
+                    row.OriginOptions = this.baseData.OriginOptions;
+                }
+            },
+            dateToString: function (date) {
+                var year = date.getFullYear();
+                var month = (date.getMonth() + 1).toString();
+                var day = (date.getDate()).toString();
+                if (month.length == 1) {
+                    month = "0" + month;
+                }
+                if (day.length == 1) {
+                    day = "0" + day;
+                }
+                var dateTime = year + "-" + month + "-" + day;
+                return dateTime;
+            },
+            handSupplierChange: function () {
+                var that = this;
+                axios({
+                    url: "/Declare/GetSupplierAddress",
+                    method: "post",
+                    data: {
+                        supplier: that.formData.SupplierID
+                    },
+                }).then(function (res) {
+                    that.supplierAddressOptions = [];
+                    that.formData.SupplierAddress = "";
+                    if (res.data.type == "success") {
+                        that.supplierAddressOptions = JSON.parse(res.data.data);
+                        if (that.supplierAddressOptions.length > 0) {
+                            that.formData.SupplierAddress = that.supplierAddressOptions[0].value;
+                        }
+                    }
+                    else {
+                        that.onAlert(res.data.type, res.data.msg);
+                    }
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            downloadTemplates: function () {
+                location.href = "/Template/进口报关产品明细模板.xls";
+            },
+            //获取下拉框的label
+            getOptionsLabel: function (row, label, value, list) {
+                if (value != null && value != "") {
+                    let obj = {};
+                    obj = list.find(function (item) {//这里的selectList就是上面遍历的数据源
+                        return item.value === value;//筛选出匹配数据
+                    });
+                    if (obj != null || obj != "") {
+                        row[label] = obj.text;
+                    }
+                }
+            },
+            //转换产品表
+            transData:function (){
+                var list = this.formData.OrderItems;
+                var arr = [];
+                for (var i = 0; i < list.length; i++) {
+                        var obj = {
+                            ID: list[i].ID,
+                            Name:list[i].Name,
+                            DateCode: list[i].DateCode,
+                            Manufacturer: list[i].Manufacturer,
+                            PartNumber: list[i].PartNumber,
+                            Origin: list[i].Origin,
+                            Quantity: list[i].Quantity,
+                            Unit: list[i].Unit,
+                            TotalPrice: list[i].TotalPrice,
+                            GrossWeight: list[i].GrossWeight,
+                            Volume: list[i].Volume,
+                            UnitPrice: list[i].UnitPrice,
+                            PreProcuctID: list[i].PreProcuctID,
+                        };
+                        arr.push(obj);
+                }
+                if (this.formData.WaybillType != "1") {
+                    this.formData.TakingFiles = [];
+                }
+                this.submitData = JSON.parse(JSON.stringify(this.formData));
+                this.submitData.OrderItems = arr;
+            },
+            //订单提交
+            submitForm: function () {
+                var that = this;
+                if (that.validProduct()) {
+                    that.$refs.ruleForm.validate(function (valid) {
+                        if (valid) {
+                            that.transData();
+                            const loading = that.$loading({
+                                lock: false,
+                                text: 'Loading',
+                                spinner: 'el-icon-loading',
+                                background: 'rgba(0, 0, 0, 0.7)'
+                            });
+                            var submitData = JSON.stringify(that.submitData);
+                            axios({
+                                url: "/Declare/DeclareSubmit",
+                                method: "post",
+                                data: {
+                                    data: submitData,
+                                },
+                            }).then(function (response) {
+                                loading.close();
+                                if (response.data.type == "error") {
+                                    that.onAlert(response.data.type, response.data.msg);
+                                } else {
+                                    that.orderid = response.data.data;
+                                    that.dialogSuccessVisible = true;
+                                }
+                            }).catch(function (error) {
+                                that.onAlert("warning", error);
+                            });
+                        } else {
+                            setTimeout(function () {
+                                var isError = document.getElementsByClassName("is-error");
+                                isError[0].querySelector('input').focus();
+                            }, 1)
+                            return false;
+                        }
+                    });
+                }
+            },
+            //验证产品
+            validProduct: function () {
+                var items = this.formData.OrderItems;
+                if (items.length > 20) {
+                    this.onAlert("error", "产品明细不超过20条");
+                    return;
+                }
+                for (var i = 0; i < items.length; i++) {
+                        if (items[i].DateCode != null && items[i].DateCode.length > 50) {
+                            this.onAlert("error", "第" + (i + 1) + "行产品明细的批次号长度不超过50");
+                            return;
+                        }
+                        else if (items[i].Name == null || items[i].Name == "") {
+                            this.onAlert("error", "第" + (i + 1) + "行产品明细的品名不能为空");
+                            return;
+                        }
+                        else if (items[i].Name != null && items[i].Name.length > 150) {
+                            this.onAlert("error", "第" + (i + 1) + "行产品明细的品名长度不超过150");
+                            return;
+                        }
+                        else if (items[i].Manufacturer == null || items[i].Manufacturer == "") {
+                            this.onAlert("error", "第" + (i + 1) + "行产品明细的品牌不能为空");
+                            return;
+                        }
+                        else if (items[i].Manufacturer != null && items[i].Manufacturer.length > 150) {
+                            this.onAlert("error", "第" + (i + 1) + "行产品明细的品牌长度不超过150");
+                            return;
+                        }
+                        else if (items[i].PartNumber == null || items[i].PartNumber=="") {
+                            this.onAlert("error", "第" + (i + 1) + "行产品明细的型号不能为空");
+                            return;
+                        } else if (items[i].Origin == null || items[i].Origin == "") {
+                            this.onAlert("error", "第" + (i + 1) + "行产品明细的产地不能为空");
+                            return;
+                        }
+                        else if (items[i].PartNumber != null && items[i].PartNumber.length > 150) {
+                            this.onAlert("error", "第" + (i + 1) + "行产品明细的型号长度不超过150");
+                            return;
+                        }
+                        else if (parseFloat(items[i].Quantity)==0) {
+                            this.onAlert("error", "第" + (i + 1) + "行产品明细的数量不能为0");
+                            return;
+                        }
+                        else if (items[i].Unit == null || items[i].Unit == "") {
+                            this.onAlert("error", "第" + (i + 1) + "行产品明细的单位不能为空");
+                            return;
+                        }
+                        else if (items[i].UnitPrice == null || items[i].UnitPrice == "") {
+                            this.onAlert("error", "第" + (i + 1) + "行产品明细的进单价不能为空");
+                            return;
+                        }
+                        else if (parseFloat(items[i].UnitPrice) == 0) {
+                            this.onAlert("error", "第" + (i + 1) + "行产品明细的单价不为零");
+                            return;
+                        }
+                        else if (items[i].GrossWeight != null && items[i].GrossWeight.length>18) {
+                            this.onAlert("error", "第" + (i + 1) + "行产品明细的毛重长度不超过18位");
+                            return;
+                        }
+                        else if (items[i].Volume != null && items[i].Volume.length > 18) {
+                            this.onAlert("error", "第" + (i + 1) + "行产品明细的体积长度不超过18位");
+                            return;
+                        }
+                }
+                if (this.formData.HKDeliveryType == '1' && this.formData.HKFiles.length==0) {
+                    this.onAlert("error","请上传提货文件");
+                    return;
+                }
+                return true;
+            },
+            //合计计算
+            getSummaries: function (param) {
+                const columns = param.columns;
+                const data = param.data;
+                const sums = [];
+                columns.forEach(function (column, index) {
+                    if (index === 0) {
+                        sums[index] = '合计';
+                        return;
+                    } else if (index === 6 || index === 9) {
+                        const values = data.map(function (item) {
+                            return Number(item[column.property]);
+                        });
+                        sums[index] = values.reduce(function (prev, curr) {
+                            const value = Number(curr);
+                            if (!isNaN(value)) {
+                                return prev + curr;
+                            } else {
+                                return prev;
+                            }
+                        }, 0);
+                        sums[index] = sums[index].toFixed(2);
+                    }
+                });
+                return sums;
+            },
+            handleRemoveTakeFiles: function (file, fileList) {
+                this.formData.TakingFiles = this.formData.TakingFiles.filter(function (value) {
+                    if (value.uid != file.uid) {
+                        return value;
+                    }
+                });
+            },
+            //上传提货文件
+            httpRequestTake: function (options) {
+                this.httpRequest(options, "takingUpload", "HKFiles","/Orders/UploadPickUpFile",false)
+            },
+            // 产品上传成功后的回调
+            uploadSuccess: function (response) {
+                var that = this;
+                if (response.type == "error") {
+                    that.onAlert(response.type, response.msg)
+                } else {
+                    var list = JSON.parse(response.data);
+                    $.each(that.formData.OrderItems, function (i, value) {
+                        if (value.DateCode == "" && value.Manufacturer == "" && value.Name == "" && value.PartNumber == "" && value.Origin == "" && value.Quantity == "0" && value.Unit == "" && value.TotalPrice == "0.00" && value.UnitPrice == "0.00" && value.GrossWeight == "" && value.Volume == "") {
+                            that.formData.OrderItems.splice(i, 1);
+                        }
+                    });
+                    $.each(list, function (i, value) {
+                        var obj = {
+                            ID:value.ID,
+                            DateCode: value.DateCode,
+                            Name:value.Name,
+                            Manufacturer: value.Manufacturer,
+                            PartNumber: value.PartNumber,
+                            Origin: value.Origin,
+                            OriginLabel: value.OriginLabel,
+                            Quantity: value.Quantity,
+                            Unit: value.Unit,
+                            UnitLabel: value.UnitLabel,
+                            TotalPrice: value.TotalPrice,
+                            GrossWeight: value.GrossWeight,
+                            Volume: value.Volume,
+                            OriginOptions: [],
+                            CurrencyOptions: [],
+                            UnitOptions: [],
+                            UnitPrice: value.UnitPrice,
+                            PreProcuctID:"",
+                        };
+                        that.formData.OrderItems.push(obj);
+                    });
+                }
+            },
+            addSubItems: function () {
+                var that = this;
+                var obj = {
+                    ID:"",
+                    DateCode: "",
+                    Name:"",
+                    Manufacturer: "",
+                    PartNumber: "",
+                    Origin: "",
+                    OriginLabel:"",
+                    Quantity: "0",
+                    Unit: "",
+                    UnitLabel:"",
+                    TotalPrice: "0.00",
+                    GrossWeight: "",
+                    Volume: "",
+                    OriginOptions: [],
+                    CurrencyOptions: [],
+                    UnitPrice: "0.00",
+                    UnitOptions: [],
+                    PreProcuctID:"",
+                };
+                that.formData.OrderItems.push(obj);
+
+                setTimeout(function () { that.$refs.addtable.setCurrentRow(obj); }, 10);//<==用于延时渲染后选中这行
+            },
+            //验证整数
+            validNumber: function (row, valuetext) {
+                if (row[valuetext] != '' && row[valuetext] != null) {
+                    if (!ValidNumber(row[valuetext])) {
+                        this.$nextTick(function () {
+                            row[valuetext] = "";
+                        })
+                    }
+                }
+            },
+            //验证整数和小数
+            validDecimal: function (row, valuetext) {
+                if (!ValidDecimal(row[valuetext])) {
+                    this.$nextTick(function () {
+                        var num = new Number(0);
+                        row[valuetext] = num.toFixed(2);
+                    })
+                }
+            },
+            //删除产品子项
+            handleSubItemDelete: function (index) {
+                if (this.formData.OrderItems.length == 1) {
+                    return this.onAlert("error", "产品明细至少为1条");
+                }
+                this.formData.OrderItems.splice(index, 1);
+            },
+            transferOriginData(arr) {
+                var dest = [];
+                for (var i = 0; i < arr.length; i++) {
+                    var ai = arr[i];
+                    var product = {
+                        ID:ai.ID,
+                        DateCode: ai.DateCode,
+                        Manufacturer: ai.Manufacturer,
+                        Name: ai.Name,
+                        PartNumber: ai.PartNumber,
+                        Origin: ai.Origin,
+                        OriginLabel: ai.OriginLabel,
+                        OriginOptions: [],
+                        UnitOptions:[],
+                        Quantity: ai.Quantity,
+                        Unit: ai.Unit,
+                        UnitLabel: ai.UnitLabel,
+                        TotalPrice: ai.TotalPrice,
+                        GrossWeight: ai.GrossWeight,
+                        Volume: ai.Volume,
+                        UnitPrice: ai.UnitPrice,
+                        PreProcuctID: ai.PreProcuctID,
+                    };
+                    dest.push(product);
+                }
+                this.formData.OrderItems = dest.reverse();
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                    offset: 200,
+                });
+            },
+            GetDateFormat: function (str) {
+                return new Date(parseInt(str.substr(6, 13)));
+            }
+        },
+        mounted: function () {
+            var options = @Html.Raw(Json.Encode(@ViewBag.Options)); //加载基础数据
+            this.baseData = options;
+            this.baseData.SZDeliveryTypeOptions.push({ value: "3", text: "快递" })
+            if (this.formData.OrderItems.length == 0) {
+                this.addSubItems();
+            } else {
+                this.transferOriginData(this.formData.OrderItems);
+            }
+            this.supplierAddressOptions = JSON.parse(this.formData.SupplierAddressOptions);
+            if (this.formData.PickupTime != null) {
+                this.formData.PickupTime = this.GetDateFormat(this.formData.PickupTime);
+            }
+            if (this.formData.SupplierID != "" && this.formData.SupplierID != null) {
+                this.handSupplierChange();
+            }
+        },
+    });
+</script>

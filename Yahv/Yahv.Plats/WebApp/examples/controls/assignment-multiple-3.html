@@ -1,0 +1,227 @@
+﻿﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>单个指派（不是插件）</title>
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/gray/easyui.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/icon-yg-cool.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/standard-easyui/styles/plugin.css" rel="stylesheet" />
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.easyui.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/locale/easyui-lang-zh_CN.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/main.js"></script>
+    <style>
+        /*html,body{width:100%; height:100%;}*/
+    </style>
+</head>
+<body>
+    <div class="easyui-layout" style="width: 100%; height: 100%;" id="assginment_box" data-options="fit:true">
+        <div data-options="region:'west',collapsible:false," title="待选择列表" style="width: 50%;">
+            <table id="assginment_tab1"></table>
+            <div id="pendtoolbar" style='padding: 5px; height: auto'>
+                <input id="pendtoolbar_input">
+                <button style="margin-left: 5px; margin-right: 5px;" id="pendtoolbar_search">筛选</button>
+                <button style="margin-left: 5px; margin-right: 5px;" id="pendtoolbar_cancelsearch">取消筛选</button>
+                <button id="pendtoolbar_sureselect">确认选择</button>
+            </div>
+        </div>
+        <div data-options="region:'center',collapsible:false" title="已选择列表">
+            <table id="assginment_tab2"></table>
+            <div id="selectedtoolbar" style='padding: 5px; height: auto'>
+                <button id="selectedtoolbar_cancelselect">取消已选择项</button>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        //获取url的参数值
+        function getUrl(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var reg_rewrite = new RegExp("(^|/)" + name + "/([^/]*)(/|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            var q = window.location.pathname.substr(1).match(reg_rewrite);
+            if (r != null) {
+                return unescape(r[2]);
+            } else if (q != null) {
+                return unescape(q[2]);
+            } else {
+                return null;
+            }
+        }
+
+        function load(url, cb) {
+            $.ajax({
+                type: "get",
+                url: url,
+                dataType: "jsonp",
+                success: function (data) {
+                    cb(data);
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+        }
+
+        function getData1ByKey(key, cb) {
+            $.ajax({
+                type: "get",
+                url: "/rfqapi/offers/List?id=" + idVal + "&key=" + key,
+                dataType: "jsonp",
+                success: function (data) {
+                    cb(data);
+                },
+                error: function () {
+                    alert('接口异常，请求数据失败');
+                }
+            });
+        }
+        var idVal = getUrl("id");
+        var selectPendingData = [];
+        var selectselectedData = [];
+        $(function () {
+            var col_pending = [[
+                    { field: 'ck', checkbox: true },
+                    { field: 'ID', title: 'ID' },
+                    { field: 'UserName', title: '用户名' },
+                    { field: 'RealName', title: '真实姓名' }
+            ]];
+            $("#assginment_tab1").datagrid({
+                height: '100%',
+                fitColumns: true,
+                loader: function (param, success, error) {
+                    load("/rfqapi/offers/List?id=" + idVal, function (data) {
+                        success(data);
+                    });
+                },
+                columns: col_pending,
+                rownumbers: true,
+                singleSelect: false,
+                toolbar: '#pendtoolbar',
+                onSelect: function (index, row) {
+                    selectPendingData.push(row);
+                },
+                onUnselect: function (index, row) {
+                    var selectPendingData2 = [];
+                    for (var i = 0; i < selectPendingData.length; i++) {
+                        if (selectPendingData[i].ID != row.ID) {
+                            selectPendingData2.push(selectPendingData[i]);
+                        }
+                    }
+                    selectPendingData = selectPendingData2;
+                },
+                onSelectAll: function (rows) {
+                    selectPendingData = rows;
+                },
+                onUnselectAll: function (rows) {
+                    selectPendingData = [];
+                }
+            })
+            $("#assginment_tab2").datagrid({
+                fitColumns: true,
+                columns: col_pending,
+                rownumbers: true,
+                singleSelect: false,
+                loader: function (param, success, error) {
+                    load('/rfqapi/offers/offered?id=' + idVal, function (data) {
+                        success(data);
+                    });
+                },
+                toolbar: '#selectedtoolbar',
+                onSelect: function (index, row) {
+                    selectselectedData.push(row);
+                },
+                onUnselect: function (index, row) {
+                    var selectselectedData2 = [];
+                    for (var i = 0; i < selectselectedData.length; i++) {
+                        if (selectselectedData[i].ID != row.ID) {
+                            selectselectedData2.push(selectselectedData[i]);
+                        }
+                    }
+                    selectselectedData = selectselectedData2;
+                },
+                onSelectAll: function (rows) {
+                    selectselectedData = rows;
+                },
+                onUnselectAll: function (rows) {
+                    selectselectedData = [];
+                }
+            })
+            $("#pendtoolbar_input").textbox({ prompt: "请输入用户名或者真实姓名", width: 180 });
+            $("#pendtoolbar_search").linkbutton({
+                iconCls: 'icon-yg-search',
+                onClick: function () {
+                    var key = $("#pendtoolbar_input").textbox('getValue');
+                    if (key && key != "") {
+                        getData1ByKey(key, function (data) {
+                            $("#assginment_tab1").datagrid('loadData', data);
+                        })
+                    }
+                }
+            });
+            $("#pendtoolbar_cancelsearch").linkbutton({
+                onClick: function () {
+                    $("#pendtoolbar_input").textbox("setValue", "");
+                    $("#assginment_tab1").datagrid('load');
+                }
+            });
+            $("#pendtoolbar_sureselect").linkbutton({
+                onClick: function () {
+                    var data = $("#assginment_tab1").datagrid("getSelections");
+                    if (data.length == 0) {
+                        $.messager.alert('警告', '请选择待选择列表中的数据');
+                    } else {
+                        var data1 = [];
+                        $.each(data, function (i, val) {
+                            data1.push(val.ID);
+                        })
+                        var data2 = data1.join(",");
+                        $.ajax({
+                            type: "get",
+                            url: "/rfqapi/offers/Offer?id=" + idVal + "&items=" + data2,
+                            dataType: "jsonp",
+                            success: function (data3) {
+                                if (data3.success) {
+                                    $("#assginment_tab1").datagrid('load');
+                                    $("#assginment_tab2").datagrid('load');
+                                }
+                            },
+                            error: function (err) {
+                                console.log(err);
+                            }
+                        });
+                    }
+                }
+            });
+            $("#selectedtoolbar_cancelselect").linkbutton({
+                onClick: function () {
+                    var data = $("#assginment_tab2").datagrid("getSelections");
+                    if (data.length == 0) {
+                        $.messager.alert('警告', '请选择已选择列表中的数据');
+                    } else {
+                        var data1 = [];
+                        $.each(data, function (i, val) {
+                            data1.push(val.ID);
+                        })
+                        var data2 = data1.join(",");
+                        $.ajax({
+                            type: "get",
+                            url: "/rfqapi/offers/CancelOffer?id=" + idVal + "&items=" + data2,
+                            dataType: "jsonp",
+                            success: function (data3) {
+                                if (data3.success) {
+                                    $("#assginment_tab1").datagrid('load');
+                                    $("#assginment_tab2").datagrid('load');
+                                }
+                            },
+                            error: function (err) {
+                                console.log(err);
+                            }
+                        });
+                    }
+                }
+            });
+        })
+    </script>
+</body>
+</html>

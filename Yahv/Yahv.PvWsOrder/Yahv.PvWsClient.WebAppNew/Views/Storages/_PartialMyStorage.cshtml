@@ -1,0 +1,228 @@
+﻿
+@{ 
+    string numTitle = "数量";
+    object fromPage = ViewData["frompage"];
+    if (fromPage != null)
+    {
+        switch (fromPage)
+        {
+            case "Delivery":
+                numTitle = "发货数量";
+                break;
+            case "Declare":
+                numTitle = "申报数量";
+                break;
+            default:
+                numTitle = "数量";
+                break;
+        }
+    }
+}
+
+<template id="vMyStorages" v-cloak>
+    <div>
+        <div class="query_wrap">
+            <div class="clearfix">
+                <div class="fl">
+                    <span class="title">型号:</span>
+                    <el-input style="width: 120px;" size="mini" v-model="partNumber"></el-input>
+                </div>
+                <div class="fl ml30">
+                    <span class="title">供应商:</span>
+                    <el-input style="width: 120px;" size="mini" v-model="supplierName"></el-input>
+                </div>
+
+                <button v-on:click="query()" class="btn btn1 ml30">查询</button>
+                <button v-on:click="clearData" class="btn btn2 ml12">重置</button>
+            </div>
+            @*<div class="clearfix mt20">
+               
+            </div>*@
+        </div>
+        <div class="tb_wrap" v-loading="loading">
+            <table class="common_tb1 mt30 common_tb">
+                <tr>
+                    <th width="36px">
+                        <el-checkbox v-model="allChecked" v-on:change="allCheck"></el-checkbox>
+                    </th>
+                    <th>型号</th>
+                    <th>品名</th>
+                    <th>品牌</th>
+                    <th>供应商</th>
+                    <th>币种</th>
+                    <th>单价</th>
+                    <th>产地</th>
+                    <th>库存数量</th>
+                    <th>@(numTitle)</th>
+                    <th>库房</th>
+                </tr>
+                <tr v-for="(item,index) in dataList">
+                    <td>
+                        <el-checkbox v-model="item.IsCheck"></el-checkbox>
+                    </td>
+                    <td>{{item.PartNumber}}</td>
+                    <td>{{item.CustomsName}}</td>
+                    <td>{{item.Manufacturer}}</td>
+                    <td>{{item.Supplier}}</td>
+                    <td>{{item.Currency}}</td>
+                    <td>{{item.UnitPrice}}</td>
+                    <td>{{item.Origin}}</td>
+                    <td>{{item.Quantity}}</td>
+                    <td width="100px" style="padding: 0 4px;">
+                        <el-input size="mini" v-model="item.Num"></el-input>
+                    </td>
+                    <td>{{item.WareHouseName}}</td>
+                </tr>
+                <tr v-if="dataList.length==0">
+                    <td colspan="10">暂无数据</td>
+                </tr>
+            </table>
+            <div class="foot clearfix">
+                <el-pagination class="fr" style="margin-top: 20px;" v-on:size-change="handleSizeChange"
+                               v-on:current-change="handleCurrentChange"
+                               :current-page="pageIndex"
+                               :page-sizes="[5, 10, 20, 40]"
+                               :page-size="pageSize"
+                               layout="total, sizes, prev, pager, next, jumper"
+                               :total="total">
+                </el-pagination>
+            </div>
+        </div>
+        <div slot="footer" class="el-dialog__footer mt20 pb0">
+            <button v-on:click="onSubmit" class="btn2">确定</button>
+        </div>
+    </div>
+</template>
+<script>
+    Vue.component(
+        'myproduct',
+        {
+            template: "#vMyStorages",
+            data: function() {
+                return {
+                    partNumber: "",
+                    supplierName: "",
+                    dataList: [],
+                    total: 0,
+                    loading: true,
+                    pageIndex: 1,
+                    pageSize: 5,
+                    allChecked: false, //全选
+                }
+            },
+            mounted: function() {
+                this.paging();
+            },
+            methods: {
+                query: function() {
+                    this.pageIndex = 1;
+                    this.paging();
+                },
+                validNum: function (item) {
+                    if (!ValidNumber(item.Num) || isNaN(parseFloat(item.Num))) {
+                        this.onAlert("error", "型号【" + item.PartNumber + "】本次@(numTitle)填写错误");
+                        return false;
+                    } else if (parseFloat(item.Num) <= 0) {
+                        this.onAlert("error", "型号【" + item.PartNumber + "】本次@(numTitle)应大于0");
+                        return false;
+                    } else if (parseFloat(item.Num) > parseFloat(item.Quantity)) {
+                        this.onAlert("error", "型号【" + item.PartNumber + "】本次@(numTitle)不能大于库存数量");
+                        return false;
+                    }
+                    return true;
+                },
+                onSubmit: function() {
+                    var that = this;
+                    var flag = false;
+                    var list = this.dataList.filter(function(value) {
+                        if (value.IsCheck) {
+                            flag = false;
+                            if (!that.validNum(value)) {
+                                flag = true;
+                                return;
+                            }
+                            return value;
+                        }
+                    });
+                    if (!flag) {
+                        if (list.length == 0) {
+                            this.onAlert("error", "请勾选库存产品");
+                            return;
+                        }
+                        this.$emit('child-say', list);
+                    }
+                },
+                allCheck: function() {
+                    var that = this;
+                    this.dataList.forEach(function(val, index) {
+                        val.IsCheck = that.allChecked;
+                    });
+                },
+                //初始页currentPage、初始每页数据数pagesize和数据data
+                handleSizeChange: function(size) {
+                    this.pageSize = size;
+                    this.paging();
+                },
+                handleCurrentChange: function(currentPage) {
+                    this.pageIndex = currentPage;
+                    this.paging();
+                },
+                paging: function() {
+                    var that = this;
+                    that.loading = true;
+                    that.allChecked = false;
+                    axios({
+                        url: "/Storages/GetMyStorage",
+                        method: "post",
+                        data: {
+                            page: this.pageIndex,
+                            rows: this.pageSize,
+                            PartNumber: this.partNumber,
+                            Supplier: this.supplierName
+                        },
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                        },
+                        transformRequest: [
+                            function(data) {
+                                var ret = '';
+                                for (var it in data) {
+                                    ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&';
+                                }
+                                return ret;
+                            }
+                        ]
+                    }).then(function(response) {
+                        var data = JSON.parse(response.data.data);
+                        that.dataList = data.list;
+
+                        if (that.dataList != null && that.dataList.length > 0) {
+                            for (var i = 0; i < that.dataList.length; i++) {
+                                that.dataList[i].Num = '';
+                            }
+                        }
+
+                        that.total = data.total;
+                        that.loading = false;
+                    }).catch(function(error) {
+                        that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                    });
+                },
+                clearData: function() {
+                    this.partNumber = "";
+                    this.supplierName = "";
+                    this.pageIndex = 1;
+                    this.pageSize = 10;
+                    this.paging();
+                },
+                //消息提示框
+                onAlert: function(type, message) {
+                    this.$message({
+                        message: message,
+                        type: type,
+                        offset: 100
+                    });
+                }
+            }
+        });
+</script>

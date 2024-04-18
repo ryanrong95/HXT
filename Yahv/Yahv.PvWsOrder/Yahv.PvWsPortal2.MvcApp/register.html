@@ -1,0 +1,659 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>芯达通</title>
+    <link rel="stylesheet" type="text/css" href="css/element.css"/>
+    <link rel="stylesheet" type="text/css" href="css/common.css"/>
+    <link rel="stylesheet" type="text/css" href="css/register.css"/>
+    <script type="text/javascript" src="js/jQuery-2.2.4.min.js"></script>
+    <script src="/Scripts/jquery.cookie.js"></script>
+    <script type="text/javascript" src="js/vue.js"></script>
+    <script type="text/javascript" src="js/element.js"></script>
+    <script type="text/javascript" src="js/axios.min.js"></script>
+    <script type="text/javascript" src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+    <script type="text/javascript" src="js/slider.js"></script>
+    <script type="text/javascript" src="js/areaDate.js"></script>
+    <script type="text/javascript" src="js/common.js"></script>
+    <!--拖动滑块图片拼图验证码插件-->
+    <script src="Scripts/longbow.slidercaptcha.js"></script>
+    <!--框架样式-->
+    <link href="Content/bootstrap.min.css" rel="stylesheet">
+    <!--图标样式-->
+    <link href="https://cdn.bootcss.com/font-awesome/5.7.2/css/all.min.css" rel="stylesheet">
+    <!--主要样式-->
+    <link href="Content/slidercaptcha.css" rel="stylesheet"/>
+    <style type="text/css">
+        .el-message--warning { top: 108px !important; }
+
+        .slidercaptcha {
+            margin: 0 auto;
+            width: 314px;
+            height: 286px;
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.125);
+        }
+
+        .slidercaptcha .card-body { padding: 1rem; }
+
+        .slidercaptcha canvas:first-child {
+            border-radius: 4px;
+            border: 1px solid #e6e8eb;
+        }
+
+        .slidercaptcha.card .card-header {
+            background-image: none;
+            background-color: rgba(0, 0, 0, 0.03);
+        }
+
+        .refreshIcon { top: -54px; }
+
+        .n_register_error { width: 364px !important; }
+
+        .el-dialog__header { padding: 0 !important; }
+         /*解决elementui中弹出消息框图标和文字不在一行的问题*/
+       .el-message .el-message__content{
+            display: inline-block\0;
+        }
+       /*修改复选框样式*/
+       input[type="radio"], input[type="checkbox"]{
+           margin:-1px 5px 0 20px;
+       }
+    </style>
+</head>
+
+<body>
+<!-- 头部 -->
+<div class="n_register_top">
+    <div class="wrapper">
+        <div class="left n_register_logo">
+            <h1>
+                <a href="/"></a>
+            </h1>
+        </div>
+        <p class="right n_register_phone">热线电话：400-833-8321</p>
+    </div>
+</div>
+
+<!-- 弹出协议内容 -->
+<div class="protocol">
+    <div class="protocol_title">
+        <h2>注册协议<i class="close"></i></h2>
+    </div>
+    <div class="protocol_con">
+        <p>
+            芯达通供应链，网址：http://www.for-ic.net,是深圳市芯达通供应链管理有限公司 （以下简称芯达通）独立开发、 运营的电子商务专用平台。若用户使用芯达通平台（包括但不限于以任何形式接通、进入、或者使用平台的各项服务、功能等）， 使用行为将被视为对本用户协议全部内容的知晓、认可与同意遵守。
+        </p>
+        <dl>
+            <dt>一、定义：</dt>
+            <dd>
+                如无特别说明，下列术语在本注册声明中的含义为：<br/>
+                “公司”：指深圳市芯达通供应链管理有限公司；<br/>
+                “平台”：指芯达通平台，网址：http://www.for-ic.net<br/>
+                “用户”：指使用芯达通平台的所有注册用户；<br/>
+                “会员”：指使用芯达通平台的正式会员；<br/>
+                “服务条款”：指本注册声明所列明的所有服务和约定内容。
+            </dd>
+        </dl>
+        <dl>
+            <dt>二、协议</dt>
+            <dd>
+                本协议内容包括协议正文及所有平台已经发布的或将来可能发布的各类规则。所有规则为本协议不可分割的组成部分， 与协议正文具有同等法律效力。除另行明确声明外，任何芯达通平台及其关联公司提供的服务均受本协议约束。<br/>
+                您应当在使用芯达通平台服务之前认真阅读全部协议内容，如您对协议有任何疑问的，应向芯达通咨询。 但无论您事实上是否在使用芯达通平台服务之前认真阅读了本协议内容，只要您使芯达通平台服务，则本协议即对您产生约束， 届时您不应以未阅读本协议的内容或者未获得芯达通对您问询的解答等理由，主张本协议无效，或要求撤销本协议。<br/>
+                您承诺接收并遵守本协议的约定。如果您不同意本协议的约定，您应立即停止注册程序或停止使用平台服务。<br/>
+                芯达通有权根据需要不时地制订、修改本协议及/或各类规则，本协议的每次更新都会在平台即刻发布，不再单独通知您。 变更后的协议和规则一经在平台公布后，立即自动生效。如您不同意相关变更，应当立即停止使用平台服务。 您继续使用平台服务的，即表示您接受经修订的协议。<br/>
+                芯达通保留对网站结构、服务、功能等进行调整的权利。除非特别声明，新功能、新服务将适用本协议。
+            </dd>
+        </dl>
+        <dl>
+            <dt>三、用户</dt>
+            <dd>
+                芯达通平台的用户必须为能够承担法律责任的法人。若您不具备此资格，请不要使用芯达通平台。<br />
+                芯达通平台禁止被永久取消用户资格的法人再次使用芯达通平台。<br />
+                在您签署本协议，完成注册程序时，芯达通会向您提供唯一编号的账户。<br />
+                您可以对账户设置会员名和密码，通过该会员名密码登录芯达通平台。您设置的会员名不得侵犯或涉嫌侵犯他人合法权益。<br />
+                您应对您的账户（会员名）和密码的安全，以及对通过您的账户（会员名）和密码实施的行为负责。除非有法律规定或司法裁定， 且征得芯达通的同意，否则，账户（会员名）和密码不得以任何方式转让、赠与或继承（与账户相关的财产权益除外）。 如果发现任何人不当使用您的账户或有任何其他可能危及您的账户安全的情形时，应立即修改账户密码并妥善保管。 如有必要，请您以有效方式通知芯达通，要求芯达通暂停相关服务。您理解芯达通对您的请求采取行动需要合理时间， 芯达通对在采取行动前已经产生的后果（包括但不限于您的任何损失）不承担任何责任。<br />
+                您有权利拥有自己在芯达通平台的会员名及交易密码，并有权利使用自己的会员名及密码随时登录芯达通平台进行委托下单操作, 所下委托单后续环节相关单据数据将体现在芯达通平台。
+            </dd>
+        </dl>
+        <dl>
+            <dt>四、注册条款</dt>
+            <dd>
+                若您在使用芯达通平台的过程中注册成为会员，您必须同意：<br/>
+                申请会员时，根据芯达通平台的要求，提供真实、准确、即时、完整的法人信息， 包括但不限于企业法人营业执照以及企业联系人的姓、联系地址、联系电话、电子邮箱地址等；<br/>
+                用户有义务维护并及时更新网站注册信息以保持其真实、准确、即时、完整。如有合理理由怀疑您提供的资料错误、不实、 过时或不完整的，芯达通有权向您发出询问及/或要求改正的通知，并有权直接做出删除相应资料的处理，直至中止、 终止对您提供部分或全部芯达通平台服务芯达通对此不承担任何责任，您将承担因此产生的任何直接或间接支出。<br/>
+                如您代表您所在的法人组织在芯达通平台上注册会员，则您声明并保证，您已获得授权并有权使前述法律主体受本协议 的约束。
+            </dd>
+        </dl>
+        <dl>
+            <dt>五、信息收集</dt>
+            <dd>
+                当您在芯达通平台注册成为会员时，芯达通平台需要收集您的姓名、电子邮箱（Email）地址等信息。当您浏芯达通平台时， 服务器会自动收集您的IP地址及浏览页面等信息。<br/>
+                除非事先获得用户的明确授权、根据有关的法律法规要求、按照相关政府主管部门的要求、为维护社会公众的利益， 芯达通平台不会泄露与某一用户直接相关的上述信息。<br/>
+                在您成功注册并使用芯达通平台进行业务操作，即同意并授权芯达通平台对您的企业信息（包括但不限于工商、税务、银行、海关等方面） 进行查询核实。
+            </dd>
+        </dl>
+        <dl>
+            <dt>六、纠纷、争议及投诉处理</dt>
+            <dd>
+                芯达通与用户双方应本着诚实信用的原则认真履行本协议项下的各项义务，及时通报有关情况和磋商解决问题的办法。 出现损失的，由过错方承担责任；如属双方过错，则应根据各自的过错大小分别承担相应的责任。<br/>
+                芯达通与用户双方同意，在执行本协议过程中所发生的纠纷应首先通过友好协商解决；协商不成的， 任何一方均可向龙岗区人民法院起诉。
+            </dd>
+        </dl>
+        <dl>
+            <dt>七、中止与终止</dt>
+            <dd>
+                对于用户的以下行为，芯达通有权在告知或未告知的情况下中止或终止其相关服务或者拒绝其以任何形式使用芯达通平台， 且不对因此给您造成的服务减少等承担任何责任，并保留追究您法律责任的权利：<br/>
+                会员的营业执照等证照信息与注册信息不一致时，未及时更新注册信息，或实际经营信息与证照信息不一致时， 未及时更新证照信息；<br/>
+                计划破坏、攻击芯达通平台网站电脑系统、网络的完整性，或者试图擅自进入芯达通平台网站电脑系统、网络；<br/>
+                使用或提供含有毁坏、干扰、截取或侵占任何系统、数据或个人资料的任何电脑病毒、伪装破坏程序、电脑蠕虫、 定时程序炸弹或其他破坏性程序；<br/>
+                盗用他人在芯达通平台上的登录名和/或密码；<br/>
+                未经芯达通同意的帐号出售或授权使用行为；<br/>
+                通过芯达通平台进行欺诈活动或从事涉及芯达通平台的欺诈活动；<br/>
+                通过芯达通平台进行知识产权侵权行为或从事涉及芯达通平台的知识产权侵权行为；<br/>
+                违反国家法律法规、规章制度、芯达通平台有关协议、规定、规则、程序和惯例的其他行为。
+            </dd>
+        </dl>
+        <dl>
+            <dt>八、责任声明</dt>
+            <dd>
+                芯达通平台不保证网站是不受干扰的、没有故障的，也不对使用效果做任何保证。芯达通平台不对因人为或非人为因素造成 的用户与芯达通平台服务器之间的连接受阻而无法访问负责。您同意独立承担因网站意外中断、操作或传输的迟延、电脑病毒、 网络连接故障、未经授权的进入等引起的损失。<br/>
+                因不可抗力（包括但不限于自然灾害、罢工或骚乱、暴动、战争行为、政府行为、以及因互联网的特殊性而产生的包括黑客攻击、 互联网连通中断或者系统故障、电信部门技术调整导致的影响、政府管制而造成的暂时性关闭在内的任何影响网络正常运营的因素） 等非芯达通平台原因，致使芯达通平台履行迟延或不能履行的，芯达通平台不承担任何责任。<br/>
+                用户在使用芯达通平台过程中，产生的权利义务以芯达通平台数据为准，用户有真实有效的相反证据除外。 对由于用户在使用芯达通平台的过程中，违反本协议或通过提及而纳入本协议的条款和规则或用户违反任何法律 或第三方的权利而产生或引起的每一种类和性质的任何索赔、要求、诉讼、损失和损害（实际、特别及后果性的）而言， 无论是已知或未知的，包括合理的律师费，用户同意就此对深圳市芯达通供应链有限公司、芯达通平台、员工、所有者及 代理人进行补偿并使其免受损害。
+            </dd>
+        </dl>
+        <dl>
+            <dt>九、知识产权</dt>
+            <dd>
+                芯达通平台上所有内容的选材、整理、编排、排版、汇编，以及由芯达通平台创作的文字、图片等作品的著作权， 无论是否明示，均属芯达通所有。任何自然人、法人及其他组织未经书面授权或许可，不得修改、出版、传播、参与传播、 销售、制作衍生作品，或以其他任何方式使用整体或部分的芯达通平台上的内容，包括但不限于公司信息、产品信息， 芯达通将保留追究其法律责任的权利。<br/>
+                未经芯达通授权，任何人不得使用包括但不限于芯达通平台设计、使用、所有的商标。<br/>
+                芯达通对其开发或者合作开发的系统等享有知识产权。芯达通平台的所有权利受法律保护。<br/>
+                芯达通平台上所有可阅读的资料都受到《中华人民共和国著作权法》、《中华人民共和国商标法》等的法律保护。 芯达通尊重和保护他人的知识产权，不允许在没有著作权、商标权或其他专有权权利人明确许可的情况下，发布或者传播任何 可能侵犯他人权利的信息、图片，否则，行为人承担由此产生的全部责任。
+            </dd>
+        </dl>
+        <dl>
+            <dt>十、法律适用及管辖</dt>
+            <dd>
+                本协议的订立、变更、执行和解释，以及与本协议有关的争议解决，均应适用中华人民共和国法律。如与本协议有关的某一 特定事项缺乏明确法律规定，则应参照通用的国际商业惯例和行业惯例。<br/>
+                如因本协议内容或其执行发生争议，双方应友好协商解决；协商不成时，任何一方均可向龙岗区人民法院提起诉讼。
+            </dd>
+        </dl>
+        <dl>
+            <dt>十一、其他</dt>
+            <dd>
+                您使用平台相关服务时，亦应知晓、认可并同意遵守相关服务的额外条款及条件。<br/>
+                如本协议中的任何条款无论因何种原因完全或部分无效或不具有执行力，本协议的其余条款仍应有效并且有约束力。<br/>
+                本协议解释权及修订权归深圳市芯达通供应链管理有限公司所有。
+            </dd>
+        </dl>
+        <dl class="protocol_btn">
+            <dd>
+                <button type="button" class="cancel">关闭</button>
+                <!--<a href="Files/芯达通注册与使用协议.docx" download="" class="download_protocol">下载协议</a>
+                <button type="button" class="continue">同意并继续</button>-->
+            </dd>
+        </dl>
+    </div>
+</div>
+
+<div class="n_register_mid" id="register">
+    <div class="n_register_mod">
+        <h3>注册申请</h3>
+        <!--<div class="n_register_input">
+            <span>企业名称:</span>
+            <input type="text" :class="{'n_input_error':CompanyStatus==0}" v-model.trim="CompanyVal" @blur="changeCompany">
+            <span class="n_register_error" id="company_verify" v-show="CompanyStatus==0"></span>
+        </div>-->
+        <div class="n_register_input">
+            <span>用户名:</span>
+            <input type="text" :class="{'n_input_error':UserStatus==0}" v-model.trim="UserVal" @blur="changeUser">
+            <span class="n_register_error" id="user_verify" v-show="UserStatus==0"></span>
+        </div>
+        <div class="n_register_input">
+            <span>登录密码:</span>
+            <input type="password" :class="{'n_input_error':NewPasswordStatus==0}" v-model.trim="NewPasswordVal" @blur="changeNewPassword">
+            <span class="n_register_error" id="newpassword_verify" v-show="NewPasswordStatus==0"></span>
+        </div>
+        <div class="n_register_input">
+            <span>确认密码:</span>
+            <input type="password" :class="{'n_input_error':SecondPasswordStatus==0}" v-model.trim="SecondPasswordVal" @blur="changeSecondPassword">
+            <span class="n_register_error" id="secondpassword_verify" v-show="SecondPasswordStatus==0"></span>
+        </div>
+        <!--<div class="n_register_input">
+            <span>联系人:</span>
+            <input type="text" :class="{'n_input_error':ContactStatus==0}" v-model.trim="ContactVal" @blur="changeContact">
+            <span class="n_register_error " id="contact_verify" v-show="ContactStatus==0"></span>
+        </div>-->
+        <div class="n_register_input">
+            <span>手机号码:</span>
+            <input type="text" id="phone" :class="{'n_input_error':PhoneStatus==0}" v-model.trim="PhoneVal" @blur="changePhone">
+            <span class="n_register_error " id="phone_verify" v-show="PhoneStatus==0"></span>
+        </div>
+        <div class="n_register_input">
+            <span>验证码:</span>
+            <input type="text" class="n_code" v-model.trim="CodeVal" :class="{'n_input_error':CodeStatus==0}">
+            <button class="getCode" class="{'code_disabled':codeActive==-1}" @click="verifyCode" :disabled="codeAbled">获取验证码</button>
+            <span class="n_register_error" id="code_verify" v-show="CodeStatus==0"></span>
+        </div>
+        <div class="n_login_check n_register_check">
+            <i><input type="checkbox" :class="{'selected':isChecked}" @click="changeCheck" />我已阅读并同意<a href="#" class="check_protocol">《注册与使用手册》</a></i>
+        </div>
+        <div class="n_register_button">
+            <button type="button" v-on:click="apply">立即注册</button>
+        </div>
+        <div class="return_login">
+            已经拥有账号？
+            <a id="tologin" href="javascript:;">返回登录</a>
+        </div>
+    </div>
+    <!-- 图片拖动验证 -->
+    <el-dialog :lock-scroll="false" width="45%" :visible.sync="dialogSliderCaptcha" :close-on-click-modal="false">
+        <div class="slidercaptcha card">
+            <div class="card-header">
+                <span>请完成安全验证</span>
+            </div>
+            <div class="card-body">
+                <div id="captcha"></div>
+            </div>
+        </div>
+    </el-dialog>
+</div>
+<!-- 底部 -->
+<div class="n_register_bottom">
+    <p>
+        <span>禁限售规则 - 知识产权保护政策 - 隐私权政策 - 使用条款</span>
+    </p>
+    <p>
+        <div style="display: flex; align-items: center; width: 460px; line-height: 30px; margin: 0 auto;">
+            <span>©️2010-2020 北京创新在线 版权所有 |&nbsp;</span>
+            <img src="/imgs/gonganlogo.png" style="margin-top: -3px;"/>
+            <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44030702003264" target="_blank" style="color: #333;">粤公网安备 44030702003264号</a>
+        </div>
+    </p>
+    <p>
+        <a href="https://beian.miit.gov.cn/#/Integrated/index" target="_blank" style="color: #333;">粤ICP备20066739号-3</a>
+    </p>
+</div>
+<script type="text/javascript">
+    var clock = '';
+    var domainClient = '';
+    $("#header").load("header.html",
+        function() {
+            $("#footer_zh").load("footer.html");
+        });
+    //注册登录轮播图
+    $('#extrance_dh').flexslider({
+        animation: "slide",
+        direction: "horizontal",
+        easing: "swing"
+    });
+    $(function() {
+        axios({
+            url: "/Home/GetDomainClient",
+            method: "post",
+            data: {}
+        }).then(function(response) {
+            domainClient = response.data;
+            $("#tologin").attr('href', response.data);
+        }).catch(function(error) {
+            that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+        });
+        //弹出协议弹出内容
+        $(".check_protocol").click(function() {
+            $(".protocol").stop().show();
+        });
+        //关闭协议弹出内容
+        $(".close").click(function() {
+            $(".protocol").stop().hide();
+        });
+        $(".cancel").click(function() {
+            $(".close").trigger("click");
+        });
+    });
+    var register = new Vue({
+        el: '#register',
+        data: function() {
+            return{
+                isChecked: false,
+                //企业名称
+                //CompanyVal: '',
+                CompanyStatus: -1,
+                //用户名称
+                UserVal: '',
+                UserStatus: -1,
+                //新密码
+                NewPasswordVal: '',
+                NewPasswordStatus: -1,
+                //验证密码
+                SecondPasswordVal: '',
+                SecondPasswordStatus: -1,
+                //联系人
+                //ContactVal: '',
+                ContactStatus: -1,
+                //手机号码
+                PhoneVal: '',
+                PhoneStatus: -1,
+                codeAbled: true,
+                //验证码
+                CodeVal: '',
+                CodeStatus: -1,
+                codeActive: true,
+                Messagecode: '',
+                dialogSliderCaptcha: false
+            }
+        },
+        mounted: function() {
+            //倒计时允许刷新重置 2020年9月11日
+            $.cookie('Register', new Date('2020-01-01'));
+            //验证码倒计时防刷新
+            clock = setInterval(this.setTime, 1000);
+        },
+        methods: {
+            verifyCode: function() {
+                if (this.changePhone()) {
+                    this.dialogSliderCaptcha = true;
+                    //弹出图片滑动验证码
+                    this.$nextTick(function () {
+                        $('.refreshIcon').click();
+                        $('#captcha').sliderCaptcha({
+                            repeatIcon: 'fa fa-redo',
+                            setSrc: function() {
+                                return '';
+                            },
+                            onSuccess: function() {
+                                register.sendSms();
+                                register.dialogSliderCaptcha = false;
+                            }
+                        });
+                    });
+                }
+            },
+            //发送短信
+            sendSms: function(ruleForm) {
+                var that = this;
+                axios({
+                    url: "/Home/SendCode",
+                    method: "post",
+                    data: {
+                        phone: that.PhoneVal
+                    }
+                }).then(function(response) {
+                    that.Messagecode = response.data.data; //后台传过来的二维码
+                    //记录发送短信时的时间
+                    $.cookie('Register', new Date());
+                    clock = setInterval(that.setTime, 1000);
+                }).catch(function(error) {
+                    mobile.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            setTime: function() {
+                var time = 60 - Math.round((new Date() - new Date($.cookie('Register'))) / 1000);
+                if (time > 0) {
+                    $('.getCode').text("(" + time + "s)后再次发送");
+                    this.codeActive = true;
+                    this.codeAbled = true;
+                } else {
+                    clearInterval(clock);
+                    $('.getCode').text("获取验证码");
+                    this.codeActive = false;
+                    this.codeAbled = false;
+                }
+            },
+            changeCheck: function() {
+                this.isChecked = !this.isChecked;
+            },
+            //填写用户名称
+            changeUser: function() {
+                var reg1 = /^[\u4E00-\u9FA5a-zA-Z\d(（_）)]{4,50}$/;
+                var reg2 = /^[^(（_）)]\S+[^(（_）)]$/;
+                if (this.UserVal == "") {
+                    this.UserStatus = 0;
+                    this.UserText = "用户名称不能为空";
+                    $("#user_verify").stop().show().html(this.UserText);
+                    return false;
+                } else if (!reg1.test(this.UserVal)) {
+                    this.UserStatus = 0;
+                    this.UserText = "用户名只能是4~50位的中文、字母、数字、下划线和左右括号";
+                    $("#user_verify").show().html(this.UserText);
+                    return false;
+                } else if (!reg2.test(this.UserVal)) {
+                    this.UserStatus = 0;
+                    this.UserText = "下划线、括号不能在开头和结尾";
+                    $("#user_verify").show().html(this.UserText);
+                    return false;
+                } else {
+                    return this.checkUser();
+                }
+            },
+            //验证用户
+            checkUser: function() {
+                var that = this;
+                axios({
+                    url: "/Home/CheckUserName",
+                    method: "post",
+                    data: {
+                        name: that.UserVal
+                    }
+                }).then(function(response) {
+                    if (response.data.type == "error") {
+                        that.UserStatus = 0;
+                        that.UserText = "该用户名已经注册，不可使用";
+                        $("#user_verify").show().html(that.UserText);
+                        return false;
+                    } else {
+                        that.UserStatus = 1;
+                        $("#user_verify").hide();
+                        return true;
+                    }
+                }).catch(function(error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //填写企业名称
+            changeCompany: function() {
+                if (this.CompanyVal == "") {
+                    this.CompanyStatus = 0;
+                    this.CompanyText = "企业名称不能为空";
+                    $("#company_verify").stop().show().html(this.CompanyText);
+                    return false;
+                } else if (this.checkCompany()) {
+                    this.CompanyStatus = 1;
+                    $("#company_verify").stop().hide();
+                    $(".get_code").removeClass("code_disabled").addClass("code_disabled");
+                    return true;
+                }
+            },
+            //验证企业
+            checkCompany: function() {
+                var that = this;
+                axios({
+                    url: "/Home/CheckCompanyName",
+                    method: "post",
+                    data: {
+                        name: that.CompanyVal
+                    }
+                }).then(function(response) {
+                    if (response.data.type == "error") {
+                        that.CompanyStatus = 0;
+                        $("#company_verify").stop().show().html("该企业名已经注册，不可使用");
+                        return false;
+                    } else {
+                        that.CompanyStatus = 1;
+                        $("#company_verify").stop().hide();
+                        $(".get_code").removeClass("code_disabled").addClass("code_disabled");
+                        return true;
+                    }
+                }).catch(function(error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //验证新密码
+            changeNewPassword: function() {
+                if (this.NewPasswordVal == "") {
+                    this.NewPasswordStatus = 0;
+                    $("#newpassword_verify").show().html("新密码不能为空");
+                    return false;
+                } else {
+                    var success = this.ValidPassword(this.NewPasswordVal, $("#newpassword_verify"));
+                    if (success) {
+                        this.NewPasswordStatus = 1;
+                    } else {
+                        this.NewPasswordStatus = 0;
+                    }
+                    return success;
+                }
+            },
+            //验证确认密码
+            changeSecondPassword: function() {
+                if (this.SecondPasswordVal == "") {
+                    this.SecondPasswordStatus = 0;
+                    $("#secondpassword_verify").show().html("确认密码不能为空");
+                    return false;
+                } else if (this.SecondPasswordVal != this.NewPasswordVal) {
+                    this.SecondPasswordStatus = 0;
+                    $("#secondpassword_verify").show().html("两次密码输入不一致");
+                    return false;
+                } else {
+                    var success = this.ValidPassword(this.SecondPasswordVal, $("#secondpassword_verify"));
+                    if (success) {
+                        this.SecondPasswordStatus = 1;
+                    } else {
+                        this.SecondPasswordStatus = 0;
+                    }
+                    return success;
+                }
+            },
+            //验证联系人
+            changeContact: function() {
+                if (this.ContactVal == "") {
+                    this.ContactStatus = 0;
+                    $("#contact_verify").stop().show().html("联系人不能为空");
+                    return false;
+                } else {
+                    this.ContactStatus = 1;
+                    $("#contact_verify").stop().hide();
+                    $(".get_code").removeClass("code_disabled").addClass("code_disabled");
+                    return true;
+                }
+            },
+            //填写手机
+            changePhone: function() {
+                if (this.PhoneVal == "") {
+                    this.PhoneStatus = 0;
+                    $("#phone_verify").stop().show().html("手机号码不能为空");
+                    return false;
+                } else if (!(/^1[3456789]\d{9}$/.test(this.PhoneVal))) {
+                    this.PhoneStatus = 0;
+                    $("#phone_verify").stop().show().html("手机号码有误，请重填");
+                    return false;
+                } else {
+                    this.PhoneStatus = 1;
+                    $("#phone_verify").stop().hide();
+                    $(".get_code").removeClass("code_disabled").addClass("code_disabled");
+                    return true;
+                }
+            },
+            //填写验证码
+            changeCode: function() {
+                if (this.CodeVal == "") {
+                    this.CodeStatus = 0;
+                    $("#code_verify").stop().show().html("验证码不能为空");
+                    return false;
+                } else {
+                    this.CodeStatus = 1;
+                    $("#code_verify").stop().hide();
+                    $(".get_code").removeClass("code_disabled").addClass("code_disabled");
+                    return true;
+                }
+            },
+            checkVal: function() {
+                if (this.Messagecode != "88888888" && this.CodeVal != this.Messagecode) {
+                    this.onAlert("warning", "验证码错误！");
+                    return false;
+                } else if (this.UserStatus != 1) {
+                    this.changeUser();
+                    return false;
+                } else if (this.changeNewPassword() &&
+                    this.changeSecondPassword() &&
+                    this.changeContact() &&
+                    this.changePhone() &&
+                    this.changeCode()) {
+                    return true;
+                } else {
+                    return false;
+                }
+            },
+            apply: function() {
+                var that = this;
+                if (!this.isChecked) {
+                    that.onAlert("warning", "请选择同意《注册与使用手册》");
+                } else if (this.checkVal()) {
+                    var loading = that.$loading({
+                        lock: false,
+                        text: 'Loading',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.7)'
+                    });
+                    axios({
+                        url: "/Home/RegisterApply2",
+                        method: "post",
+                        data: {
+                            //Company: that.CompanyVal,
+                            User: that.UserVal,
+                            Password: that.NewPasswordVal,
+                            //Contact: that.ContactVal,
+                            Phone: that.PhoneVal,
+                            Code: that.CodeVal
+                        }
+                    }).then(function(response) {
+                        loading.close();
+                        if (response.data.type == "success") {
+                            that.$alert('注册成功！点击确定跳转到登录页面。',
+                                '提示',
+                                {
+                                    confirmButtonText: '确定',
+                                    lockScroll: false,
+                                    confirmButtonClass: "el-button--warning",
+                                    callback: function(action) {
+                                        location.href = domainClient;
+                                    }
+                                });
+                        } else {
+                            that.onAlert("error", response.data.msg);
+                        }
+                    }).catch(function(error) {
+                        that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                    });
+                }
+            },
+            //验证密码
+            ValidPassword: function(str, $tips) {
+                var reg1 = /^([a-zA-Z]|\d|[@!#$%^&*.~+=]){8,32}$/;
+                var reg2 = /^(?![a-zA-Z]+$)(?!\d+$)(?![@!#$%^&*.~+=]+$)\S/;
+                if (!reg1.test(str)) {
+                    $tips.show().html("请输入8-32位的字母、数字与字符[@!#$%^&*.~+=]");
+                    return false;
+                } else if (!reg2.test(str)) {
+                    $tips.show().html("密码不能全部为字母、数字或特殊字符");
+                    return false;
+                }
+                $tips.hide();
+                return true;
+            },
+            //消息提示框
+            onAlert: function(type, message) {
+                this.$message({
+                    message: message,
+                    type: type
+                });
+            }
+        }
+    });
+
+</script>
+
+</body>
+
+</html>

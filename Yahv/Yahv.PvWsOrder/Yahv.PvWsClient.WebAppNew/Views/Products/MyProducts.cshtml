@@ -1,0 +1,307 @@
+﻿@{
+    ViewBag.title = "我的产品";
+}
+<div id="product" v-cloak class="tab_content">
+    <div class="query_wrap" ref="viewBox1" v-on:scroll="ss('viewBox1')">
+        <div class="clearfix">
+            <div class="fl">
+                <span class="title">品名:</span>
+                <el-input style="width:130px;" size="mini" v-model="Name" @@keyup.enter.native="queryData"></el-input>
+            </div>
+            <div class="fl ml30">
+                <span class="title">型号:</span>
+                <el-input style="width:130px;" size="mini" v-model="Model" @@keyup.enter.native="queryData"></el-input>
+            </div>
+            <div class="fl ml30">
+                <span class="title">品牌:</span>
+                <el-input style="width:150px;" size="mini" v-model="Manufacturer" @@keyup.enter.native="queryData"></el-input>
+            </div>
+        </div>
+        <div class="clearfix mt20">
+            <button v-on:click="add_product" class="btn btn1" v-if="@(ViewBag.ClientIsValid)">新增</button>
+            <button v-on:click="queryData" class="btn btn2 ml12">查询</button>
+            <button v-on:click="clearData" class="btn btn2 ml12">重置</button>
+        </div>
+    </div>
+    <div class="tb_wrap" v-loading="loading">
+        <table class="common_tb1 mt30">
+            <tr>
+                <th width="36px">序号</th>
+                <th>品名</th>
+                <th>型号</th>
+                <th>品牌</th>
+                <th>批号</th>
+                <th>操作</th>
+            </tr>
+            <tr v-for="(item,index) in indexData.dataList">
+                <td>{{(indexData.pageIndex-1)*indexData.pageSize+index+1}}</td>
+                <td>{{item.Name}}</td>
+                <td>{{item.Model}}</td>
+                <td>{{item.Manufacturer}}</td>
+                <td>{{item.Batch}}</td>
+                <td class="operate">
+                    <a v-on:click="joinPreProduct(item)">加入预归类</a>
+                    <a v-on:click="edit_product(item.ID)">编辑</a>
+                    <a v-on:click="delete_product(item)">删除</a>
+                </td>
+            </tr>
+            <tr v-if="indexData.dataList.length==0"><td colspan="6">暂无数据</td></tr>
+        </table>
+        <div class="foot">
+            <el-pagination class="fr" style="margin-top:20px;" v-on:size-change="handleSizeChange"
+                           v-on:current-change="handleCurrentChange"
+                           :current-page="indexData.pageIndex"
+                           :page-sizes="[5, 10, 20, 40]"
+                           :page-size="indexData.pageSize"
+                           layout="total, sizes, prev, pager, next, jumper"
+                           :total="indexData.total">
+            </el-pagination>
+        </div>
+    </div>
+    <el-dialog :title="dialogFormName" :lock-scroll="false" width="40%" :visible.sync="dialogFormVisible" v-on:close="dialog_Closed"  :close-on-click-modal="false">
+        <my-info ref="header"></my-info>
+        <div slot="footer" class="dialog-footer">
+            <el-button v-on:click="dialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" v-on:click="onSubmit_ruleForm()">确 定</el-button>
+        </div>
+    </el-dialog>
+    <el-dialog title="加入产品预归类" :lock-scroll="false" width="40%" :visible.sync="preProductFormVisible" :close-on-click-modal="false">
+        <preproductinfo ref="preproduct"></preproductinfo>
+        <div slot="footer" class="dialog-footer">
+            <el-button v-on:click="preProductFormVisible = false">取 消</el-button>
+            <el-button type="primary" v-on:click="onSubmit_preProduct()">确 定</el-button>
+        </div>
+    </el-dialog>
+</div>
+@{Html.RenderAction("_PartialProduct", "Products");}
+@{Html.RenderAction("_PartialPreProduct", "Products");}
+<script>
+    var product = new Vue({
+        el: "#product",
+        data: function () {
+            return {
+                loading: false,
+                indexData: {
+                    pageIndex: 1, //初始页
+                    pageSize: 10,    //每页的数据
+                    total: 0,
+                    scrollTop: 0, //滚动条位置
+                    dataList: [],
+                },
+                Name: "",     //品名
+                Model: "",    //型号
+                Manufacturer: "", //品牌
+                dialogFormVisible: false,  //弹框
+                preProductFormVisible:false,
+                dialogFormName: "",  //弹框名称
+            }
+        },
+        mounted: function () {
+            this.paging();
+        },
+        methods: {
+            init: function () {
+                var that = this;
+                var userJsonStr = sessionStorage.getItem('vDeclareList');
+                userEntity = JSON.parse(userJsonStr);
+                if (userEntity == null) {
+                    that.paging();
+                } else {
+                    that.indexData = userEntity;
+                    that.paging();
+                    that.$nextTick(function () {
+                        that.$refs['viewBox1'].scrollTop = that.indexData.scrollTop;
+                    })
+                    sessionStorage.removeItem('vDeclareList');
+                }
+            },
+            ss: function (ref) {
+                // 监听这个dom的scroll事件
+                var that = this;
+                this.$refs[ref].addEventListener('scroll', function () {
+                    that.indexData.scrollTop = that.$refs[ref].scrollTop;
+                }, false)
+            },
+            //查询数据
+            paging: function () {
+                var that = this;
+                that.loading = true;
+                axios({
+                    url: "/Products/GetMyProducts",
+                    method: "post",
+                    data: {
+                        page: this.indexData.pageIndex,
+                        rows: this.indexData.pageSize,
+                        Name: this.Name,
+                        Model: this.Model,
+                        Manufacturer: this.Manufacturer,
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                    transformRequest: [function (data) {
+                        var ret = ''
+                        for (var it in data) {
+                            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+                        }
+                        return ret;
+                    }],
+                }).then(function (response) {
+                    var data = JSON.parse(response.data.data);
+                    that.indexData.dataList = data.list;
+                    that.indexData.total = data.total;
+                    that.loading = false;
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //提交
+            onSubmit_ruleForm: function () {
+                this.$refs.header.$refs.form1.validate(function(valid){
+                    if (valid) {
+                        product.dialogFormVisible = false;
+                        axios({
+                            url: "/Products/ProductSubmit",
+                            method: "post",
+                            data: product.$refs.header.form1
+                        }).then(function (response) {
+                            product.$refs.header.$refs.form1.resetFields();
+                            product.paging(); //刷新列表
+                            product.onAlert(response.data.type, response.data.msg);
+                        }).catch(function (error) {
+                            product.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                        });
+                    } else {
+                        //验证失败
+                    }
+                });
+            },
+            //提交产品预归类
+            onSubmit_preProduct: function () {
+                var that = this;
+                this.$refs.preproduct.$refs.form2.validate(function(valid){
+                    if (valid) {
+                        product.preProductFormVisible = false;
+                        axios({
+                            url: "/Products/_PartialPreProduct",
+                            method: "post",
+                            data: that.$refs.preproduct.form2
+                        }).then(function (response) {
+                            that.$refs.preproduct.$refs.form2.resetFields();
+                            that.paging(); //刷新列表
+                            that.onAlert(response.data.type, response.data.msg);
+                        }).catch(function (error) {
+                            that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                        });
+                    } else {
+                        //验证失败
+                    }
+                });
+            },
+            //加入产品预归类
+            joinPreProduct: function (row) {
+                var that = this;
+                that.preProductFormVisible = true;
+                setTimeout(function(){
+                    that.$refs.preproduct.$refs.form2.resetFields();
+                    that.$refs.preproduct.form2.Manufacturer = row.Manufacturer;
+                    that.$refs.preproduct.form2.Models = row.Model;
+                    that.$refs.preproduct.form2.ProductName = row.Name;
+                }, 0)
+            },
+            //新增
+            add_product: function () {
+                var that = this;
+                this.dialogFormName = "新增产品";
+                this.dialogFormVisible = true;
+                setTimeout(function() {
+                    that.$refs.header.$refs.form1.resetFields();
+                    that.$refs.header.form1.ID = "";
+                }, 0)
+            },
+            //编辑
+            edit_product: function (id) {
+                var that = this;
+                axios({
+                    url: "/Products/GetProductInfo",
+                    method: "post",
+                    data: {
+                        id: id
+                    }
+                }).then(function (res) {
+                    that.dialogFormName = "编辑产品";
+                    that.dialogFormVisible = true;
+                        setTimeout(function () {
+                            that.$refs.header.$refs.form1.resetFields();
+                            that.$refs.header.form1 = JSON.parse(res.data.data);
+                        }, 0);
+                    }).catch(function (err) {
+                        that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //删除
+            delete_product: function (row) {
+                var that = this;
+                this.$confirm('您确定要删除"' + row.Name+'"吗？', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                    lockScroll: false,
+                }).then(function(){
+                    axios({
+                        url: "/Products/DelProduct",
+                        method: "post",
+                        data: {
+                            id: row.ID
+                        }
+                    }).then(function (response) {
+                        that.paging();
+                        that.onAlert(response.data.type, response.data.msg);
+                    }).catch(function (error) {
+                        that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                    });
+                }).catch(function(){
+                    //取消
+                });
+            },
+            //查询数据
+            queryData: function () {
+                this.paging();
+            },
+            //重置数据
+            clearData: function () {
+                this.Name = "";
+                this.Model = "";
+                this.Manufacturer = "";
+                this.indexData.pageIndex = 1;
+                this.indexData.pageSize = 10;
+                this.paging();
+            },
+            //初始页currentPage、初始每页数据数pagesize和数据data
+            handleSizeChange: function (size) {
+                this.indexData.pageSize = size;
+                this.paging();
+            },
+            handleCurrentChange: function (currentPage) {
+                this.indexData.pageIndex = currentPage;
+                this.paging();
+            },
+            //弹框关闭后事件
+            dialog_Closed: function () {
+                //初始化列表值
+                product.$refs.header.$refs.form1.resetFields();
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                    offset: 300,
+                });
+            },
+        }
+    });
+</script>
+

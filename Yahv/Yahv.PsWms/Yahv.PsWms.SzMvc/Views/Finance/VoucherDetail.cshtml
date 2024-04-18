@@ -1,0 +1,300 @@
+﻿
+@{
+    ViewBag.SubTitle = "账单详情";
+}
+
+<div id="voucherdetail" v-cloak class="order_detail">
+    <div class="order_head" style="height:110px">
+        <p class="font16 font_bold mb10">账单期号：{{cutDateIndex}}</p>
+        <div>
+            <div class="btn-tb-list clearfix" style="float: left; margin-top: 15px;">
+                <el-button class="fl" v-on:click="exportBill">导出账单</el-button>
+                <a id="exportInfoForm" style="display:none" download>
+                    <span id="ex-li" style="display:none"></span>
+                </a>
+            </div>
+            <div class="btn-tb-list clearfix" style="float: left; margin-top: 15px;">
+                <el-upload class="fl" action=""
+                           :show-file-list="false"
+                           :http-request="httpRequestBill"
+                           accept="image/jpg, image/bmp, image/jpeg, image/gif, image/png, application/pdf"
+                           style="width: 82px; height: 30px;">
+                    <button style="margin-left: 24px;width: 90px;">上传账单</button>
+                </el-upload>
+            </div>
+            <div class="clearfix mt16" style="width: 450px; float: left; border-left: 1px solid #323232; margin-left: 50px;">
+                <!--<div class="info_title txt_grey fl">附件：</div>-->
+                <div v-if="true" class="upload_wrap1 ml20">
+                    <div class="file_icon fl"></div>
+                    <div class="fl c_right">
+                        <p class="file_name txt_grey">
+                            {{billFile.fileName}}
+                            <span v-if="billFile.fileName != null && billFile.fileName != undefined && billFile.fileName != ''" class="label2 ml12">已审核</span>
+                            <span v-else class="label2 ml12">未上传</span>
+                        </p>
+                        <a v-if="billFile.fileName != null && billFile.fileName != undefined && billFile.fileName != ''"
+                           :href="billFile.fileUrl" target="_blank" class="link">预览</a>
+                    </div>
+                </div>
+                <span v-else>无</span>
+            </div>
+        </div>
+    </div>
+    <div class="info_item_wrap mt40">
+        <span class="icon_img">1</span>
+        <span class="title">账单明细</span>
+    </div>
+    <div class="clearfix">
+        <div class="tb_wrap">
+            <table class="common_tb1 mt10">
+                <tr>
+                    <th width="36px">序号</th>
+                    <th width="94px">发生日期</th>
+                    <th width="150px">订单编号</th>
+                    <th width="94px">订单日期</th>
+                    <th width="80px">订单状态</th>
+                    <th width="80px">所属业务</th>
+                    <th width="150px">科目</th>
+                    <th width="120px">单价</th>
+                    <th width="110px">数量</th>
+                    <th width="140px">金额</th>
+                </tr>
+                <tr v-if="(index<=1&&!isAll)||isAll" v-for="(item,index) in items">
+                    <td>{{index+1}}</td>
+                    <td>{{item.PayeeLeftCreateDateDes}}</td>
+                    <td>{{item.OrderID}}</td>
+                    <td>{{item.OrderCreateDateDes}}</td>
+                    <td>{{item.OrderStatusDes}}</td>
+                    <td>{{item.ConductDes}}</td>
+                    <td>{{item.Subject}}</td>
+                    <td>{{item.UnitPriceDes}}</td>
+                    <td>{{item.Quantity}}</td>
+                    <td>{{item.Total}}</td>
+                </tr>
+                <tr>
+                    <td colspan="9">合计：</td>
+                    <td>{{totalsum}}</td>
+                </tr>
+                <tr v-if="items.length==0"><td colspan="20">暂无数据</td></tr>
+                <tr v-if="items.length>2">
+                    <td colspan="20">
+                        <a v-on:click="isAll=!isAll">
+                            <span v-if="!isAll">查看全部<i class="el-icon-arrow-down ml4"></i></span>
+                            <span v-else>收起<i class="el-icon-arrow-up ml4"></i></span>
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+
+    <div class="info_item_wrap mt40">
+        <span class="icon_img">2</span>
+        <span class="title">付款账户</span>
+    </div>
+    <div class="clearfix mt12">
+        <div class="fl">
+            <div class="clearfix info_item">
+                <div class="info_title font_bold fl">开户行：</div>
+                <div class="info_content fl">{{paymentAccount.BankName}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix">
+        <div class="fl">
+            <div class="clearfix info_item">
+                <div class="info_title font_bold fl">账号：</div>
+                <div class="info_content fl" style="margin-left: 12px;">{{paymentAccount.BankAccount}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix">
+        <div class="fl">
+            <div class="clearfix info_item">
+                <div class="info_title font_bold fl">开户名：</div>
+                <div class="info_content fl">{{paymentAccount.AccountName}}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="info_item_wrap mt40">
+        <span class="icon_img">3</span>
+        <span class="title">备注</span>
+    </div>
+    <div class=" mt12">
+        <div class="clearfix info_item round_li">
+            <i>1</i>
+            <span>
+                此对账单仅包含对账期内发生的款项（不包括对账日期之后），如果错漏，请及时与我司联系。
+            </span>
+        </div>
+        <div class="clearfix info_item round_li">
+            <i>2</i>
+            <span>收到此对账单核对无误后请及时确认并反馈我司。如在收到上述对账单后三日内未反馈我司，视同确认。</span>
+        </div>
+        <div class="clearfix info_item round_li">
+            <i>3</i>
+            <span>请贵司核对无误后及时安排付款。</span>
+        </div>
+    </div>
+</div>
+
+<script src="~/Content/script/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+    var voucherdetail = new Vue({
+        el: "#voucherdetail",
+        data: function () {
+            return {
+                cutDateIndex: '@(ViewBag.id)',
+                isAll: false,
+                items: [],
+                totalsum: '',
+                billFile: {
+                    fileName: '',
+                    fileUrl: '',
+                },
+                //上传的账单信息
+                fileInfoBill: {
+                    FileUrl: "",
+                    URL: "",
+                    FileName: "",
+                    fileFormat: "",
+                },
+                //付款账户
+                paymentAccount: {
+                    BankName: "",
+                    BankAccount: "",
+                    AccountName: "",
+                },
+            }
+        },
+        methods: {
+            GetBillFileInfo: function () {
+                var that = this;
+                that.loading = true;
+                axios({
+                    url: "/Finance/GetBillFileInfo",
+                    method: "post",
+                    data: {
+                        CutDateIndex: this.cutDateIndex,
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                    transformRequest: [
+                        function (data) {
+                            var ret = '';
+                            for (var it in data) {
+                                ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&';
+                            }
+                            return ret;
+                        }
+                    ]
+                }).then(function (response) {
+                    that.billFile.fileName = response.data.data.fileName;
+                    that.billFile.fileUrl = response.data.data.fileUrl;
+                    that.loading = false;
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            getVoucherDetailList: function () {
+                var that = this;
+                that.loading = true;
+                axios({
+                    url: "/Finance/GetVoucherDetailList",
+                    method: "post",
+                    data: {
+                        CutDateIndex: this.cutDateIndex,
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                    transformRequest: [
+                        function (data) {
+                            var ret = '';
+                            for (var it in data) {
+                                ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&';
+                            }
+                            return ret;
+                        }
+                    ]
+                }).then(function (response) {
+                    that.items = response.data.data.list;
+                    that.totalsum = response.data.data.totalsum;
+                    that.loading = false;
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                    offset: 100
+                });
+            },
+            //导出账单
+            exportBill: function (id) {
+                var that = this;
+                axios({
+                    url: "/Finance/ExportBill",
+                    method: "post",
+                    data: {
+                        CutDateIndex: this.cutDateIndex,
+                    },
+                }).then(function (response) {
+                    if (response.data.type == "error") {
+                        that.onAlert(response.data.type, response.data.msg);
+                    } else {
+                        $('#exportInfoForm').attr("href", response.data.httpfilePath);
+                        $('#exportInfoForm').attr("target", "_blank");
+                        $('#ex-li').trigger("click");
+                    }
+                }).catch(function (error) {
+                    that.onAlert("warning", error);
+                });
+            },
+            //上传账单
+            httpRequestBill: function (options) {
+                var that = this;
+                UploadFile(options,
+                    '/Finance/UploadFileBill?CutDateIndex=' + that.cutDateIndex,
+                    function (res) {
+                        if (res.type) {
+                            var file = res.file;
+                            that.fileInfoBill.FileUrl = file.fullURL;
+                            that.fileInfoBill.URL = file.URL;
+                            that.fileInfoBill.FileName = file.name;
+                            that.fileInfoBill.fileFormat = file.fileFormat;
+
+                            that.GetBillFileInfo();
+                        } else {
+                            that.onAlert("error", res.msg);
+                        }
+                    });
+            },
+        },
+        mounted: function () {
+            this.GetBillFileInfo();
+            this.getVoucherDetailList();
+        },
+        created: function () {
+            var that = this;
+            //获取付款账户信息
+            axios.get('/Miscellaneous/OurCompanyAccount', { params: {} })
+                .then(function (res) {
+                    if (res.data.success == 200) {
+                        that.paymentAccount.BankName = res.data.result.OurBankName;
+                        that.paymentAccount.BankAccount = res.data.result.OurBankAccount;
+                        that.paymentAccount.AccountName = res.data.result.OurAccountName;
+                    }
+                })
+                .catch(function (err) {
+                    console.log(err);
+                });
+        },
+    });
+</script>

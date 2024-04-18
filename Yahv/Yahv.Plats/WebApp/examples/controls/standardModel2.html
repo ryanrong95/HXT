@@ -1,0 +1,73 @@
+﻿﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>标准型号名称补齐 - jQuery EasyUI plugin</title>
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/gray/easyui.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/standard-easyui/styles/plugin.css" rel="stylesheet" />
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.easyui.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/main.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/locale/easyui-lang-zh_CN.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/ajaxPrexUrl.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/standard-easyui/scripts/easyui.jl.js"></script>
+</head>
+<body>
+    <h1>标准型号名称补齐</h1>
+    <form id="ff" class="easyui-form" method="post" data-options="novalidate:true" onsubmit="return $(this).form('enableValidation').form('validate');">
+        <input id="standardModel" class="easyui-standardModel" name="model" value="" />
+        <div id="TariffRate">关税率:<span></span></div>
+        <input id="standardModel2" class="easyui-standardModel" name="model2" value="" />
+        <button onclick="aaa()">提交</button>
+    </form>
+
+    <table>
+        <tr>
+            <td><span class="icon-CCC" title="CCC"></span>3C</td>
+            <td><span class="icon-embargo" title="禁运"></span>禁运</td>
+            <td><span class="icon-CIQ" title="CIQ"></span>CIQ</td>
+            <td><span class="icon-tariff" title="关税"></span>关税</td>
+            <td><span class="icon-AddedTariffs" title="额外关税"></span>额外关税</td>
+        </tr>
+    </table>
+
+    <!--<label class="icon-CCC"></label>
+    <span class="icon-CCC"></span>-->
+    <!--<input class="icon-CCC" />-->
+    <!--<div>fdsfdasfff</div>
+    <div class="icon-CCC">gdfssssssss</div>
+    <div class="icon-CIQ">gdfssssssss</div>
+    <div class="icon-embargo">gdfssssssss</div>
+    <div class="icon-CCC icon-CIQ">gdfssssssss</div>
+    <div class="icon-CCC icon-embargo">1111111111111</div>
+    <div class="icon-CIQ icon-embargo">gdfssssssss</div>
+    <div class="icon-embargo icon-CIQ">53245325</div>
+    <div class="icon-CCC icon-CIQ icon-embargo">gdfssssssss</div>
+    <div class="icon-CIQ icon-embargo icon-CCC">4234321432</div>-->
+    <script>
+      $(function () {
+          $('#standardModel').standardModel({
+              target: function (data) {
+                  if (typeof (data) != "undefined") {
+                      //$("#TariffRate span").html(JSON.stringify(data));
+                      $("#TariffRate span").html(data);
+                  } else if(typeof(data)=="undefined"){
+                      $("#TariffRate span").html("");
+                  }
+              }
+          })
+      })
+      function aaa() {
+          console.log($('#standardModel').standardModel('options'));
+          console.log($('#standardModel').standardModel('getVal'));
+          console.log($('#standardModel').standardModel('getResult'));
+          console.log($('#standardModel').standardModel('getAllData'));
+          console.log("------------");
+          console.log($('#standardModel2').standardModel('options'));
+          console.log($('#standardModel2').standardModel('getVal'));
+          console.log($('#standardModel2').standardModel('getResult'));
+          console.log($('#standardModel2').standardModel('getAllData'));
+      }
+    </script>
+</body>
+</html>

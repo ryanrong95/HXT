@@ -1,0 +1,125 @@
+﻿﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>指派 - jQuery EasyUI plugin</title>
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/gray/easyui.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/icon-yg-cool.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/standard-easyui/styles/plugin.css" rel="stylesheet" />
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.easyui.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/locale/easyui-lang-zh_CN.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/main.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/easyui.myDialog.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/standard-easyui/scripts/assignment-multiple.js"></script>
+</head>
+<body>
+    <script>
+        //获取url的参数值
+         function getUrl(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var reg_rewrite = new RegExp("(^|/)" + name + "/([^/]*)(/|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            var q = window.location.pathname.substr(1).match(reg_rewrite);
+            if (r != null) {
+                return unescape(r[2]);
+            } else if (q != null) {
+                return unescape(q[2]);
+            } else {
+                return null;
+            }
+         }
+         var idVal = getUrl("id");
+         //idVal = "Inq201907160009";
+        function getData1ByKey(key, cb) {
+            $.ajax({
+                type: "get",
+                url: "/rfqapi/offers/List?id="+idVal+"&key=" + key,
+                dataType: "jsonp",
+                success: function (data) {
+                    cb(data);
+                },
+                error: function () {
+                    alert('接口异常，请求数据失败');
+                }
+            });
+        }
+        function ddd() {
+            var pendingData = [];
+            var selectedData = [];
+            $('body').assignment({
+                //待选择列表
+                pending: {
+                    url: '/rfqapi/offers/List?id='+idVal,
+                    title: '待选择列表',
+                    Search: function (key) {// 搜索函数
+                        if (key && key != "") {
+                            getData1ByKey(key, function (data) {
+                                $('body').assignment("searchInput", data);
+                            })
+                        }
+                        console.log($('body').assignment("twoselectData"));
+                    }
+                },
+                //已选择列表
+                selected: {
+                    url: '/rfqapi/offers/offered?id='+idVal,
+                    title: '已选择列表'
+                },
+                columns: [[
+                    { field: 'ck', checkbox: true },
+                    { field: 'ID', title: 'ID' },
+                    { field: 'UserName', title: '用户名' },
+                    { field: 'RealName', title: '真实姓名' },
+                ]],
+                selectitems: function (data) {
+                    var data1 = [];
+                    $.each(data, function (i, val) {
+                        data1.push(val.ID);
+                    })
+                    var data2 = data1.join(",");
+                    console.log(data2);
+                    $.ajax({
+                        type: "get",
+                        url: "/rfqapi/offers/Offer?id=" + idVal + "&items=" + data2,
+                        dataType: "jsonp",
+                        success: function (data3) {
+                            console.log(data3);
+                            if (data3.success) {
+                                $('body').assignment('refresh');
+                            }
+                        },
+                        error: function (err) {
+                            console.log(err);
+                        }
+                    });
+                },
+                unSelectitems: function (data) {
+                    var data1 = [];
+                    $.each(data, function (i, val) {
+                        data1.push(val.ID);
+                    })
+                    var data2 = data1.join(",");
+                    console.log(data2);
+                    $.ajax({
+                        type: "get",
+                        url: "/rfqapi/offers/CancelOffer?id=" + idVal + "&items=" + data2,
+                        dataType: "jsonp",
+                        success: function (data3) {
+                            if (data3.success) {
+                                $('body').assignment('refresh');
+                            }
+                        },
+                        error: function (err) {
+                            console.log(err);
+                        }
+                    });
+                }
+            });
+        }
+        $(function () {
+            ddd();
+        })
+    </script>
+</body>
+</html>

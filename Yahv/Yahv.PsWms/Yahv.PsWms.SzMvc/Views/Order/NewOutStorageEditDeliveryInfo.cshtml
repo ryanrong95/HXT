@@ -1,0 +1,191 @@
+﻿<template id="newoutstorageeditdeliveryinfo">
+    <el-dialog title="新增送货地址" :lock-scroll="false" width="40%" :visible.sync="dialogdeliveryinfovisible"
+               :close-on-click-modal="false" v-on:close="closeeditdeliveryinfowindow()">
+        <el-form v-if="dialogdeliveryinfovisible">
+            <el-form-item label="单位：" prop="title" :rules="[{ required: false, message: '请输入送货单位', trigger: 'blur' },{max:150, message: '送货单位长度超过限制', trigger: 'blur' }]"
+                          style="margin-left: 10px;">
+                <el-input size="mini" v-model="title" placeholder="请输入送货单位" style="width: 80%; margin-left: 14px;" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="联系人：" prop="contact" :rules="[{ required: false, message: '请输入联系人', trigger: 'blur' },{max:150, message: '收货人长度超过限制', trigger: 'blur' }]">
+                <el-input size="mini" v-model="contact" placeholder="请输入联系人" style="width: 80%" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="电话：" prop="phone">
+                <el-input size="mini" v-model="phone" placeholder="请输入电话" style="width: 80%; margin-left: 14px;" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="地址：" prop="address" :rules="[{ required: false, message: '请选择地址', trigger: 'change' }]">
+                <el-cascader placeholder="请选择地址" style="width: 80%; margin-left: 14px;" size="mini" :props="cascaderConfig" :options="addresslists" v-model="address">
+                </el-cascader>
+            </el-form-item>
+            <el-form-item label="" prop="addressdetail" :rules="[{ required: false, message: '请输入详细地址', trigger: 'blur' },{max:200, message: '地址长度超过限制', trigger: 'blur' }]">
+                <el-input size="mini" v-model="addressdetail" style="width: 80%; margin-left: 78px;" type="textarea" resize="none" :rows="4" placeholder="请输入详细的道路、楼宇、区号等名称"></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <button v-on:click="closeeditdeliveryinfowindow()" class="btn1">取 消</button>
+            <button v-on:click="submitDeliveryInfo()" class="btn2 ml12">确 定</button>
+        </div>
+    </el-dialog>
+</template>
+<script>
+    Vue.component(
+        'newoutstorageeditdeliveryinfo',
+        {
+            template: "#newoutstorageeditdeliveryinfo",
+            data: function () {
+                return {
+                    title: '', //单位
+                    contact: '', //联系人
+                    phone: '', //电话
+                    cascaderConfig: {
+                        label: 'n',
+                        value: 'n',
+                        children: 's'
+                    },
+                    addresslists: [], //联动地址数据
+                    address: '', //地址的值
+                    addressdetail: '', //详细地址的值
+                }
+            },
+            props: {
+                dialogdeliveryinfovisible: {
+                    type: Boolean,
+                    required: true,
+                    default: false,
+                },
+            },
+            methods: {
+                //检验是否为空, false - 为空, true - 不为空
+                validFieldEmpty: function (field, tip) {
+                    if (field == null || field == "") {
+                        this.onAlert("error", tip);
+                        return false;
+                    }
+                    return true;
+                },
+                //检验是否超长, false - 超长, true - 不超长
+                validFieldLength: function (field, length, tip) {
+                    if (field != null && field.length > length) {
+                        this.onAlert("error", tip);
+                        return false;
+                    }
+                    return true;
+                },
+                //初始化参数
+                initParams: function () {
+                    this.title = '';
+                    this.contact = '';
+                    this.phone = '';
+                    this.address = '';
+                    this.addressdetail = '';
+                },
+                //关闭窗口
+                closeeditdeliveryinfowindow: function () {
+                    this.dialogdeliveryinfovisible = false;
+                    this.$emit("closeeditdeliveryinfowindow");
+                },
+                //提交送货地址信息
+                submitDeliveryInfo: function () {
+                    var that = this;
+
+                    //检查是否为空
+                    if (that.validFieldEmpty(that.contact, "联系人不能为空") == false) {
+                        return false;
+                    }
+                    if (that.validFieldEmpty(that.phone, "电话不能为空") == false) {
+                        return false;
+                    }
+                    if (that.address.length == 0) {
+                        this.onAlert("error", "请选择地址");
+                        return false;
+                    }
+                    if (that.validFieldEmpty(that.addressdetail, "详细地址不能为空") == false) {
+                        return false;
+                    }
+
+                    //检查是否超长
+                    if (this.validFieldLength(that.contact, 100, "联系人长度超过限制") == false) {
+                        return false;
+                    }
+                    if (this.validFieldLength(that.phone, 50, "电话长度超过限制") == false) {
+                        return false;
+                    }
+                    if (this.validFieldLength(that.addressdetail, 100, "详细地址长度超过限制") == false) {
+                        return false;
+                    }
+
+                    axios({
+                        url: "/Order/NewDeliveryInfoSubmit",
+                        method: "post",
+                        data: {
+                            Title: that.title,
+                            Contact: that.contact,
+                            Phone: that.phone,
+                            Address: that.address,
+                            AddressDetail: that.addressdetail,
+                        },
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                        },
+                        transformRequest: [
+                            function (data) {
+                                var ret = '';
+                                for (var it in data) {
+                                    ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&';
+                                }
+                                return ret;
+                            }
+                        ]
+                    }).then(function (response) {
+                        if (response.data.type == "success") {
+                            that.$emit("getdelivertargetoptions"); //获取送货地址选项
+                            that.closeeditdeliveryinfowindow(); //关闭窗口
+                            that.onAlert("success", "添加成功");
+                        }
+                    }).catch(function (error) {
+                        that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                    });
+                },
+                //消息提示框
+                onAlert: function (type, message) {
+                    this.$message({
+                        message: message,
+                        type: type,
+                        offset: 100
+                    });
+                },
+            },
+            mounted: function () {
+
+            },
+            created: function () {
+                //获取联动地址数据
+                var that = this;
+                axios.get('/Content/json/area.json?timestamp=' + timestamp(), { params: {} })
+                    .then(function (res) {
+                        that.addresslists = res.data[0].s;
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    });
+            },
+        });
+</script>
+<style>
+    label[for="contact"]::before {
+        content: '*';
+        color: #F56C6C;
+        margin-right: 4px;
+    }
+
+    label[for="phone"]::before {
+        content: '*';
+        color: #F56C6C;
+        margin-right: 4px;
+    }
+
+    label[for="address"]::before {
+        content: '*';
+        color: #F56C6C;
+        margin-right: 4px;
+    }
+</style>

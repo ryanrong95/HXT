@@ -1,0 +1,112 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>芯达通</title>
+    <link rel="stylesheet" type="text/css" href="css/common.css" />
+    <link rel="stylesheet" type="text/css" href="css/page.css" />
+    <link rel="stylesheet" type="text/css" href="css/element.css" />
+    <script type="text/javascript" src="js/jQuery-2.2.4.min.js"></script>
+    <script type="text/javascript" src="js/vue.js"></script>
+    <script type="text/javascript" src="js/element.js"></script>
+    <script type="text/javascript" src="js/axios.min.js"></script>
+    <script type="text/javascript" src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+    <script type="text/javascript" src="js/xs.js"></script>
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript" src="js/extends.js"></script>
+</head>
+
+<body>
+    <!-- 右侧边栏相关内容 -->
+    <div id="n_sideBar"></div>
+    <!--头部和banner部分-->
+    <div class="n_header n_news_header">
+        <div class="n_lunbt" style="background-image:url(imgs/n_news_bg.png) ;"></div>
+        <div id="n_insert_nav"></div>
+    </div>
+    <!-- 中间不同内容 -->
+    <div id="infodetail" class="n_news_mid">
+        <div class="n_news_title">
+            <h3>{{indexData.Title}}</h3>
+            <p><span>{{indexData.createDate}}</span><span>标签：{{indexData.CatalogName}}</span></p>
+        </div>
+        <div class="n_news_details">
+            <!--<div class="n_news_img">
+                <img src="imgs/n_news_img.png">
+            </div>-->
+            <div class="n_news_text" v-html="indexData.Context">
+                <!--<p>
+                    根据《中华人民共和国海关行业标准管理办法》和国家标准化管理委员会《推荐性标准集中复审工作方案》的相关规定及要求，
+                    海关总署经复审决定废止《海关信息系统软、硬件环境规范》（HS\/T 19-2006）等4项信息化推荐性行业标准，
+                    废止决定自公布之日起生效。
+                </p>
+                <div class="n_news_link">
+                    <p class="n_news_attachment"><a href="">附件： 废止4项推荐性行业标准目录.doc</a></p>
+                    <p>海关总署</p>
+                    <p>2019年6月28日</p>
+                    <div id="">
+                        <p>公告正文下载链接：</p>
+                        <ul>
+                            <li><a href="">海关总署关于废止《海关信息系统软、硬件环境规范》（HST 19-2006）等4项信息化推荐性行业标准的公告.doc</a></li>
+                            <li><a href="">海关总署关于废止《海关信息系统软、硬件环境规范》（HST 19-2006）等4项信息化推荐性行业标准的公告.pdf（海关总署网站）</a></li>
+                        </ul>
+                    </div>
+                </div>-->
+            </div>
+        </div>
+    </div>
+    <!-- 底部 -->
+    <div id="footer_zh"></div>
+    <script>
+		$("#n_sideBar").load("sideBar.html")
+		$("#n_insert_nav").load("header.html", function() {
+			$("#footer_zh").load("footer.html");
+			//导航中当前选中的项
+			$(".n_nagivation>ul>li:nth-child(4)").addClass("hot");
+			$(".n_nagivation>ul>li").hover(function() {
+				$(".n_nagivation>ul>li:nth-child(4)").removeClass("hot");
+			}, function() {
+				$(".n_nagivation>ul>li:nth-child(4)").addClass("hot");
+			})
+		});
+
+        var infodetail = new Vue({
+            el: "#infodetail",
+            data: {
+                indexData:"",
+            },
+            mounted: function () {
+                this.getindexData();
+            },
+            methods: {
+                getindexData: function () {
+                    var that = this;
+                    axios({
+                        url: "/Home/GetDocumentDetail",
+                        method: "post",
+                        data: {
+                            id: getQueryString("ID"),
+                        },
+                    }).then(function (response) {
+                        if (response.data.type == "success") {
+                            res = JSON.parse(response.data.data);
+                            that.indexData = res;
+                        }
+                    }).catch(function (error) {
+                        that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                    });
+                },
+                //消息提示框
+                onAlert: function (type, message) {
+                    this.$message({
+                        message: message,
+                        type: type
+                    });
+                },
+            }
+        });
+    </script>
+</body>
+</html>

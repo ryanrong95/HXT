@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>归类查询-创新恒远- 一站式报关服务平台</title>
+    <meta name="keywords" content="归类查询、海关归类、海关编码查询、申报要素" />
+    <meta name="description" content="芯达通，专业电子元器件海关归类，2000万条型号海关归类数据。" />
+    <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
+    <!--[if lt IE 9]>
+      <script src="/Scripts/html5shiv.min.js"></script>
+      <script src="/Scripts/respond.min.js"></script>
+    <![endif]-->
+    <link rel="shortcut icon" href="/Content/images/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="/Content/common.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/style.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/element.css" />
+</head>
+<body class="gray">
+    <div class="header"></div>
+    <section class="w1200 content-boxShadow" id="Search" v-cloak>
+        <h2 class="title">请输入产品准确的中文品名</h2>
+        <div class="input-content clearfix">
+            <label for="proName"><em>*</em>产品品名</label>
+            <div class="input_list_right">
+                <input type="text" name="" id="proName" value="" placeholder="请输入产品/型号" class="btn btn_line" v-model="searchVal" @keyup="searchValChange">
+            </div>
+        </div>
+        <div class="btnClassfy">
+            <button type="button" class="btn button blue" v-bind:disabled="disabledFlag" @click="handleClickNext">下一步</button>
+        </div>
+    </section>
+    <div class="footer"></div>
+    <script src="/Scripts/jquery-3.3.1.min.js" type="text/javascript" charset="utf-8"></script>
+
+    <script src="/Scripts/vue.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/common.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/element.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+        var aboutus = new Vue({
+            el: '#Search',
+            data: {
+                searchVal: '',
+                disabledFlag: true
+            },
+            methods: {
+                searchValChange: function () {
+                    if (this.searchVal != '') {
+                        this.disabledFlag = false;
+                    } else {
+                        this.disabledFlag = true;
+                    }
+                },
+                handleClickNext: function () {
+                    if (window.localStorage) {
+                        localStorage.searchText = this.searchVal;
+                        location.href = '/Sort/Query.html';
+
+                    } else {
+                        // alert("NOT SUPPORT");
+
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+</html>

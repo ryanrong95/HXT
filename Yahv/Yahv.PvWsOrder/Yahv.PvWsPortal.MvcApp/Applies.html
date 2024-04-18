@@ -1,0 +1,355 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>服务申请 - 一站式报关服务平台</title>
+    <meta name="keywords" content="报关申请、代理报关服务申请" />
+    <meta name="description" content="芯达通- 一站式报关服务平台" />
+    <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
+    <!--[if lt IE 9]>
+      <script src="/Scripts/html5shiv.min.js"></script>
+      <script src="/Scripts/respond.min.js"></script>
+    <![endif]-->
+    <link rel="shortcut icon" href="/Content/images/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="/Content/element.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/common.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/style.css" />
+</head>
+<body class="gray">
+    <div class="header"></div>
+    <section class="w1200 content-boxShadow" id="Applies" v-cloak>
+        <h2 class="title">报名申请</h2>
+        <div class="Applies-content clearfix">
+            <div class="Applies-content-left">
+                <div class="Applies-content-left-hint">
+                    <i class="waring"></i>
+                    <div class="hint-text">
+                        <p>若您已有创新恒远账号，请直接登录。<a href="http://user.for-ic.net/Home/Login">马上登录</a></p>
+                        <p>请您尽可能规范填写以下信息，以确保我司及时与您取得联系，早日达成合作。</p>
+                    </div>
+                </div>
+                <ul class="input_list">
+                    <li class="clearfix" v-bind:class="{'mb0':contactMailboxStatus==0}">
+                        <label for="contactMailbox"><em>*</em>联系人邮箱</label>
+                        <div class="input_list_right" v-bind:class="[{'input_error':contactMailboxStatus==0},{'input_correct':contactMailboxStatus==1}]">
+                            <input type="text" name="" id="contactMailbox" value="" placeholder="请填写联系人邮箱" class="btn btn_line" v-model.trim="contactMailboxVal" @keyup='changeContactMailbox' />
+                            <i class="input_correct_i"></i>
+                            <div class="input_error_hint">
+                                <i></i>
+                                <span v-text="contactMailboxHint"></span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="clearfix" v-bind:class="{'mb0':companyNameStatus==0}">
+                        <label for="companyName"><em>*</em>企业名称</label>
+                        <div class="input_list_right" v-bind:class="[{'input_error':companyNameStatus==0},{'input_correct':companyNameStatus==1}]">
+                            <input type="text" name="" id="companyName" value="" placeholder="请填写企业名称" class="btn btn_line" v-model.trim="companyNameVal" @keyup='changeCompanyName' />
+                            <i class="input_correct_i"></i>
+                            <div class="input_error_hint">
+                                <i></i>
+                                <span v-text="companyNameHint"></span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="clearfix" v-bind:class="{'mb0':AddressStatus==0}">
+                        <label for=""><em>*</em>企业所在地</label>
+                        <div class="input_list_right" v-bind:class="[{'input_error':AddressStatus==0},{'input_correct':AddressStatus==1}]">
+                            <el-cascader placeholder="请填写您公司营业执照上的联系地址" v-bind:options="AddressLists" v-model="selectedAddress" :props="cascaderConfig" @change="ChangeAddress">
+                            </el-cascader>
+                            <i class="input_correct_i"></i>
+                            <div class="input_error_hint">
+                                <i></i>
+                                <span>企业所在地不能为空</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="clearfix" v-bind:class="{'mb0':detailAddressStatus==0}">
+                        <label for="CustomsCode"><em>*</em>区/县、镇</label>
+                        <div class="input_list_right" v-bind:class="[{'input_error':detailAddressStatus==0},{'input_correct':detailAddressStatus==1}]">
+                            <input id="CustomsCode" class="btn btn_line" type="text" name="" v-model="detailAddressVal" value="" placeholder="请尽量填写详细，否则可能会报名失败" @keyup='changeDetailAddress' />
+                            <i class="input_correct_i"></i>
+                            <div class="input_error_hint">
+                                <i></i>
+                                <span>详细地址不能为空</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="clearfix" v-bind:class="{'mb0':ContactStatus==0}">
+                        <label for="Contact"><em>*</em>联系人</label>
+                        <div class="input_list_right" v-bind:class="[{'input_error':ContactStatus==0},{'input_correct':ContactStatus==1}]">
+                            <input type="text" name="" id="Contact" value="" placeholder="请填写联系人" class="btn btn_line" v-model.trim="ContactVal" @keyup='changeContact' />
+                            <i class="input_correct_i"></i>
+                            <div class="input_error_hint">
+                                <i></i>
+                                <span>联系人不能为空</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="clearfix" v-bind:class="{'mb0':cellphoneNOStatus==0}">
+                        <label for="cellphoneNO"><em>*</em>手机</label>
+                        <div class="input_list_right" v-bind:class="[{'input_error':cellphoneNOStatus==0},{'input_correct':cellphoneNOStatus==1}]">
+                            <input type="text" name="" id="cellphoneNO" value="" placeholder="请填写手机" class="btn btn_line" v-model.trim="cellphoneNOVal" @keyup='changeCellphoneNO' />
+                            <i class="input_correct_i"></i>
+                            <div class="input_error_hint">
+                                <i></i>
+                                <span v-text="cellphoneNOHint"></span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="clearfix" v-bind:class="{'mb0':PhoneStatus==0}">
+                        <label for="phoneNO"><em>*</em>固定电话</label>
+                        <div class="input_list_right" v-bind:class="[{'input_error':PhoneStatus==0},{'input_correct':PhoneStatus==1}]">
+                            <input type="text" name="" id="phoneNO" value="" placeholder="电话号码" class="btn btn_line" v-model="Phone" @keyup='changePhone' />
+                            <i class="input_correct_i"></i>
+                            <div class="input_error_hint">
+                                <i></i>
+                                <span v-text="PhoneHint"></span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="clearfix mb54">
+                        <div class="input_list_right">
+                            <label></label>
+                            <div class="input_list_right checkbox">
+                                <i class="checked_no noselect" v-bind:class="{'checked_yes':checkedflag}" @click="selectRemember"></i>
+                                <input type="hidden" name="1" id="1" value="">
+                                <label for="1" @click="selectRemember" class="noselect">我已确认<a href="" target="_blank">《 创新恒远进口协议书 》</a></label>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="clearfix mb54">
+                        <div class="input_list_right">
+                            <label></label>
+                            <button class="btn button blue btn_big" v-bind:disabled="!submitComStatus" @click="submitComInfo" id="comInfoSubmit">立即报名</button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="Applies-content-right">
+                <h2>创新恒远 服务优势</h2>
+                <p>本地化专业服务</p>
+                <p>增加利润</p>
+                <p>进口便利</p>
+                <p>节约成本</p>
+            </div>
+        </div>
+    </section>
+    <div class="footer"></div>
+    <script src="/Scripts/jquery-3.3.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/vue.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/axios.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/element.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/common.js" type="text/javascript" charset="utf-8"></script>
+    <script src="Scripts/areaData.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+        var aboutus = new Vue({
+            el: '#Applies',
+            data: {
+                //选择企业所在地
+                AddressLists: $.pccData[0].s, //省市区三级联动数据
+                selectedAddress: [], //已选择的地址
+                AddressStatus: -1,
+
+                //联系人邮箱数据
+                contactMailboxVal: '',
+                contactMailboxStatus: -1,
+                contactMailboxHint: '',
+
+                //企业名称数据
+                companyNameVal: '',
+                companyNameStatus: -1,
+                companyNameHint:'',
+
+                //详细地址数据
+                detailAddressVal: '',
+                detailAddressStatus: -1,
+
+                //联系人数据
+                ContactVal: '',
+                ContactStatus: -1, //联系人填写状态
+
+                //手机数据
+                cellphoneNOVal: '',
+                cellphoneNOStatus: -1, //手机号码填写状态
+                cellphoneNOHint: "", //手机号码错误提示信息
+
+
+                //固定电话
+                Phone: '',
+                PhoneStatus: -1,
+                PhoneHint: '',
+
+                submitComStatus: false, //公司信息提交状态
+                checkedflag: false,//是否确认《 芯达通进口协议书 》的标志
+                cascaderConfig: {
+                    label: 'n',
+                    value: 'n',
+                    children: 's'
+                }
+            },
+            methods: {
+                //改变地址
+                ChangeAddress: function (value) {
+                    if (this.selectedAddress.length>0) {
+                        this.AddressStatus = 1;
+                    } else {
+                        this.AddressStatus = 0;
+                    }
+                    this.changeSubComStus();
+                },
+                //判断填写内容是否为空
+                changeVal: function (x, y) {
+                    if (x != '') {
+                        y = 1;
+                    } else {
+                        y = 0;
+                    }
+                    return y;
+                },
+
+                //判断联系人邮箱
+                changeContactMailbox: function () {
+                    if (this.contactMailboxVal == '') {
+                        this.contactMailboxStatus = 0;
+                        this.contactMailboxHint = "联系人邮箱不能为空";
+                    } else {
+                        if (/(^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$)/i.test(this.contactMailboxVal) == false) {
+                            this.contactMailboxStatus = 0;
+                            this.contactMailboxHint = "联系人邮箱格式不正确";
+                        } else {
+                            this.contactMailboxStatus = 1;
+                            this.contactMailboxHint = ""
+                        }
+                    }
+                    this.changeSubComStus();
+                },
+
+                //判断企业名称
+                changeCompanyName: function () {
+                    if (this.companyNameVal == '') {
+                        this.companyNameStatus = 0;
+                        this.companyNameHint = "企业名称不能为空";
+                    } else {
+                        if (this.companyNameVal.length>150) {
+                            this.companyNameStatus = 0;
+                            this.companyNameHint = "企业名称长度不能超过150";
+                        } else {
+                            this.companyNameStatus = 1;
+                            this.companyNameHint = ""
+                        }
+                    }
+                    this.changeSubComStus();
+                },
+
+                //判断详细地址
+                changeDetailAddress: function () {
+                    this.detailAddressStatus = this.changeVal(this.detailAddressVal, this.detailAddressStatus);
+                    this.changeSubComStus();
+                },
+
+                //判断联系人
+                changeContact: function () {
+                    this.ContactStatus = this.changeVal(this.ContactVal, this.ContactStatus);
+                    this.changeSubComStus();
+                },
+
+                //判断手机
+                changeCellphoneNO: function () {
+                    if (this.cellphoneNOVal == '') {
+                        this.cellphoneNOStatus = 0;
+                        this.cellphoneNOHint = "手机号码不能为空";
+                    } else {
+                        if (/^1[3|4|5|7|8|9][0-9]\d{8}$/.test(this.cellphoneNOVal) == false) {
+                            this.cellphoneNOStatus = 0;
+                            this.cellphoneNOHint = "手机号码格式不正确";
+                        } else {
+                            this.cellphoneNOStatus = 1;
+                            this.cellphoneNOHint = ""
+                        }
+                    }
+                    this.changeSubComStus();
+                },
+
+                //判断固定电话号码
+                changePhone: function () {
+                    this.Phone = this.Phone.replace(/\D/g, '');
+                    if (this.Phone == '') {
+                        this.PhoneStatus = 0;
+                        this.PhoneHint = "电话号码不能为空";
+                    } else {
+                        this.PhoneStatus = 1;
+                    }
+                    this.changeSubComStus();
+                },
+
+                //选择确认或者不确认
+                selectRemember: function () {
+                    this.checkedflag = !this.checkedflag;
+                    this.changeSubComStus();
+                },
+
+                //判断如果所有内容填写正确，则提交按钮改变状态
+                changeSubComStus: function () {
+                    console.log(this.selectedAddress.length)
+                    if (this.contactMailboxStatus == 1
+                        && this.companyNameStatus == 1
+                        && this.selectedAddress.length >0
+                        && this.detailAddressStatus == 1
+                        && this.ContactStatus == 1
+                        && this.cellphoneNOStatus == 1
+                        && this.checkedflag
+                        && this.PhoneStatus == 1) {
+                        this.submitComStatus = true;
+                    } else {
+                        this.submitComStatus = false;
+                    }
+                },
+                submitComInfo: function () {
+                    var that = this;
+                    var AllAddress = that.selectedAddress.join(" ") + " " + that.detailAddressVal;
+                    var format = {
+                        Address: AllAddress,
+                        Email: that.contactMailboxVal,
+                        Company_Name: that.companyNameVal,
+                        Contacts: that.ContactVal,
+                        Contacts_Moblie: that.cellphoneNOVal,
+                        Phone: that.Phone
+                    }
+                    $.ajax({
+                        type: "Post",
+                        data: format,
+                        url: "http://user.for-ic.net/WebApi/Apply",    //跨域url
+                        dataType: "jsonp",  //指定 jsonp 请求
+                        jsonpCallback: "applyJsonpCallback", // 指定回调函数
+                        error: function () {
+                            aboutus.onAlert("error", "请求失败！");
+                            setTimeout(function () { location.href = "/Index.html" }, 1000);
+                        }
+                    });
+                },
+                //消息提示框
+                onAlert: function (type, message) {
+                    this.$message({
+                        message: message,
+                        type: type
+                    });
+                },
+            }
+        })
+        function applyJsonpCallback(result) {
+            if (result.Type == "success") {
+                aboutus.$alert('报名申请成功！工作人员会仔细审核您的信息，请耐心等待，保持电话畅通。', '提示', {
+                    confirmButtonText: '返回主页',
+                    lockScroll: false,
+                    confirmButtonClass: "el-button--warning",
+                    callback: action => {
+                        location.href = "/Index.html";
+                    }
+                });
+            } else {
+                aboutus.onAlert(result.Type, result.Msg);
+            }
+        }
+    </script>
+</body>
+</html>

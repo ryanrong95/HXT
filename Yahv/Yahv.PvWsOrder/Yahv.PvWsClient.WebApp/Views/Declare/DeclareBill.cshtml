@@ -1,0 +1,276 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_LayoutOrder.cshtml";
+}
+
+<div v-cloak id="vDeclareBill" class="backshow">
+    <div class="breaklist">
+        <span class="fl first_title">对账单</span>
+        <span class="fl second_title" v-on:click="history.back(-1)">返回</span>
+    </div>
+    <div class="order_detail pt0">
+        <div class="order_content contentOrder">
+            <div class="file_content">
+                <p class="title mt30 mb20">文件</p>
+                <div v-if="fileUrl!=''" class="mb10">
+                    <i class="file_icon"></i>
+                    <span class="f_name">{{fileName}}</span>
+                    <a class="link1" :href="fileUrl" target="_blank">下载</a><span v-if="!indexData.IsChecked" class="f_status ml10">(待审核)</span>
+                    <span v-if="indexData.IsChecked" class="f_status ml10">(已审核)</span>
+                </div>
+                <div v-else>
+                    <span class="txt_yellow">提示：未上传</span>
+                </div>
+                <div v-if="!indexData.IsChecked" class="common_upload_div  mb8 mt20">
+                    <div class="overhide">
+                        <div class="fl">
+                            <el-button v-on:click="download_file" class="el-icon-ump-xiazai">导出</el-button>
+                            <a id="exportInfoForm" style="display:none" download><span id="ex-li" style="display:none"></span></a>
+                        </div>
+                        <div class="fl">
+                            <el-upload action="/PayExchange/UploadOrderFile"
+                                       :http-request="httpRequest"
+                                       :show-file-list="false"
+                                       accept="image/jpg, image/bmp, image/jpeg, image/gif, image/png, application/pdf">
+                                <el-button class="el-icon-ump-upload" size="small">上传</el-button>
+                            </el-upload>
+                        </div>
+                    </div>
+                    <div class="file_tip mt20">仅限图片或PDF文件，且文件不超过3M</div>
+                </div>
+            </div>
+        </div>
+        <span class="txt_id">订单号：{{indexData.ID}}<span class="ml10">实时汇率：{{indexData.RealExchangeRate}}</span><span class="ml10">海关汇率：{{indexData.CustomsExchangeRate}}</span></span>
+        <div class="products mt10">
+            <div style="" class="productWrap">
+                <table class="tb_product" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <th class="first_th" style="width:30px;">#</th>
+                        <th style="width:110px;">规格型号</th>
+                        <th style="width:110px;">品名</th>
+                        <th style="width:90px;">品牌</th>
+                        <th style="width:70px;">数量</th>
+                        <th style="width:100px;">报关单价({{indexData.CurrencyCode}})</th>
+                        <th style="width:100px;">报关总价({{indexData.CurrencyCode}})</th>
+                        <th style="width:70px;">关税率</th>
+                        <th style="width:110px;">报关货值(CNY)</th>
+                        <th style="width:80px;">关税(CNY)</th>
+                        <th style="width:80px;">增值税(CNY)</th>
+                        <th style="width:80px;">代理费(CNY)</th>
+                        <th style="width:80px;">杂费(CNY)</th>
+                        <th style="width:110px;">税费合计(CNY)</th>
+                        <th>报关总金额</th>
+                    </tr>
+                    <tr v-for="(item,index) in indexData.OrderItem">
+                        <td>{{index+1}}</td>
+                        <td style="word-wrap:break-word;word-break:break-all;padding:0 5px;text-align:left">
+                            {{item.Model}} <p v-if="item.ItemCategoryTypes.length>0 && item.ItemCategoryTypes[0]!=''"> <span class="spacialTip" v-for="sub_item in item.ItemCategoryTypes">{{sub_item}}</span></p>
+                        </td>
+                        <td style="word-wrap:break-word;word-break:break-all;padding:0 5px;text-align:left">{{item.Name}}</td>
+                        <td>{{item.Manufacturer}}</td>
+                        <td>{{item.Quantity}}</td>
+                        <td>{{toFixed(4,item.UnitPrice)}}</td>
+                        <td>{{toFixed(2,item.TotalPrice)}}</td>
+                        <td>{{toFixed(2,item.TraiffRate)}}</td>
+                        <td>{{toFixed(2,item.DeclareValue)}}</td>
+                        <td>{{toFixed(2,item.Traiff)}}</td>
+                        <td>{{toFixed(2,item.AddTax)}}</td>
+                        <td>{{toFixed(2,item.AgencyFee)}}</td>
+                        <td>{{toFixed(2,item.InspectionFee)}}</td>
+                        <td>{{toFixed(2,item.TotalTaxFee)}}</td>
+                        <td>{{toFixed(2,item.TotalDeclareValue)}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">合计</td>
+                        <td>{{indexData.Products_Num}}</td>
+                        <td></td>
+                        <td>{{toFixed(2,indexData.Products_TotalPrice)}}</td>
+                        <td></td>
+                        <td>{{toFixed(2,indexData.Products_DeclareValue)}}</td>
+                        <td>{{toFixed(2,indexData.Products_Traiff)}}</td>
+                        <td>{{toFixed(2,indexData.Products_AddTax)}}</td>
+                        <td>{{toFixed(2,indexData.Products_AgencyFee)}}</td>
+                        <td>{{toFixed(2,indexData.Products_InspectionFee)}}</td>
+                        <td>{{toFixed(2,indexData.Products_TotalTaxFee)}}</td>
+                        <td>{{toFixed(2,indexData.Products_TotalDeclareValue)}}</td>
+                    </tr>
+                </table>
+            </div>
+            <table class="tb_sum">
+                <tr class="sum_content" style="width:916px;">
+                    <td colspan="16">
+                        <div class="sum_title fl">
+                            <p>货值小计：</p>
+                            <p>税代费小计(CNY)：</p>
+                            <p>应收总额合计(CNY)：</p>
+                        </div>
+                        <div class="sum_result fl">
+                            <p style="margin-bottom:0px;position:relative;top:-5px;">{{toFixed(2,indexData.Products_TotalPrice)}}({{indexData.CurrencyCode}})<br />{{toFixed(2,indexData.Products_DeclareValue)}}(CNY)</p>
+                            <p class="mb0"><span>{{toFixed(2,indexData.Products_TotalTaxFee)}}</span><br /><span class="txt_yellow">已支付：{{indexData.TotalRight}}元</span></p>
+                            <p class="total_Price">{{toFixed(2,indexData.Products_TotalTaxFee+indexData.Products_DeclareValue)}}</p>
+                        </div>
+                        <el-button size="medium" v-if="indexData.IsPay" v-on:click="pay" type="warning" class="mb10">信用支付</el-button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="order_content contentOrder">
+            <div class="conpany_info">
+                <p class="title mt30 mb16">公司信息</p>
+                <p>公司名称：{{indexData.AgentName}}</p>
+                <p>地址：{{indexData.AgentAddress}}</p>
+                <p>公司电话及传真：{{indexData.AgentTel}}&nbsp;&nbsp;{{indexData.AgentFax}}</p>
+                <p class="title  mb16 mt20">付款账户</p>
+                <p>开户行及账号：{{indexData.Bank}}、{{indexData.AccountId}}</p>
+                <p>开户名：{{indexData.AgentName}}</p>
+                <p class="title mb16 mt20">备注</p>
+                @*<p class="tips" v-if="!indexData.IsLoan">1.我司{{indexData.AgentName}}为委托方代垫本金(0.00元)+关税({{toFixed(2,parseFloat(indexData.Products_Traiff))}}元)+增值税({{toFixed(2,parseFloat(indexData.Products_AddTax))}}元)+代理费({{toFixed(2,parseFloat(indexData.Products_AgencyFee))}}元)+杂费({{toFixed(2,parseFloat(indexData.Products_InspectionFee))}}元),共计应收人民币({{toFixed(2,parseFloat(indexData.Products_TotalTaxFee))}}元)，委托方需在({{indexData.DueDate}})前与我方结清所有欠款，逾期未结款的，按日加收千分之一的滞纳金。 </p>
+        <p class="tips" v-else>1.我司{{indexData.AgentName}}为委托方代垫本金({{toFixed(2,parseFloat(indexData.Products_DeclareValue))}}元)+关税({{toFixed(2,parseFloat(indexData.Products_Traiff))}}元)+增值税({{toFixed(2,parseFloat(indexData.Products_AddTax))}}元)+代理费({{toFixed(2,parseFloat(indexData.Products_AgencyFee))}}元)+杂费({{toFixed(2,parseFloat(indexData.Products_InspectionFee))}}元),共计应收人民币({{toFixed(2,parseFloat(indexData.Products_TotalDeclareValue))}}元)，委托方需在({{indexData.DueDate}})前与我方结清所有欠款，逾期未结款的，按日加收千分之一的滞纳金。 </p>
+        <p class="tips">2.客户在90天内完成付汇手续，付汇汇率为实际付汇当天的中国银行上午十点后的第一个现汇卖出价</p>*@
+                <p class="tips">1.委托方需在报关协议约定的付款日前与我方结清所有欠款，逾期未结款的，按日加收万分之五的滞纳金。 </p>
+                <p class="tips">2.委托方在90天内完成付汇，付汇汇率为报关协议约定的实际付汇当天的汇率。 </p>
+                <p class="tips">3.委托方应在收到帐单之日起二个工作日内签字和盖章确认回传。 </p>
+                <p class="tips">4.此传真件、扫描件、复印件与原件具有同等法律效力。 </p>
+                <p class="tips">5.如若对此帐单有发生争议的，双方应友好协商解决，如协商不成的，可通过被委托方所在地人民法院提起诉讼解决。</p>
+            </div>
+        </div>
+
+    </div>
+    <el-dialog class="successdialog" title="信用支付" :lock-scroll="false" width="520px" :visible.sync="dialogSuccessVisible" :close-on-click-modal="false">
+        <div class="content">
+            <p>信用支付成功</p>
+        </div>
+        <div class="dialog_foot ml142">
+            <el-button type="primary" v-on:click="history.back(-1)">返回</el-button>
+        </div>
+    </el-dialog>
+</div>
+
+<script>
+    var vDeclareBill = new Vue({
+        el: "#vDeclareBill",
+        data: function () {
+            return {
+                indexData:@Html.Raw(Json.Encode(Model)),
+                fileUrl: "",
+                URL: "",
+                fileName: "",
+                fileFormat: "",
+                dialogSuccessVisible:false,
+            }
+        }, mounted: function () {
+            if (this.indexData.Bill_URL != "") {
+                this.fileUrl = this.indexData.Bill_URL;
+                this.fileName = this.indexData.Bill_Name;
+            }
+        },
+        methods: {
+            pay: function () {
+                var that = this;
+                const loading = that.$loading({
+                    lock: false,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)'
+                });
+                axios({
+                    url: "/Declare/PayBill",
+                    method: "post",
+                    data: {
+                        id: this.indexData.ID
+                    },
+                }).then(function (response) {
+                    loading.close();
+                    if (response.data.type == "error") {
+                        that.onAlert(response.data.type, response.data.msg);
+                    } else {
+                        that.dialogSuccessVisible = true;
+                    }
+                }).catch(function (error) {
+                    that.onAlert("warning", error);
+                });
+            },
+            download_file: function () {
+                var that = this;
+                axios({
+                    url: "/Declare/ExportBill",
+                    method: "post",
+                    data: {
+                        id: this.indexData.ID
+                    },
+                }).then(function (response) {
+                    if (response.data.type == "error") {
+                        that.onAlert(res.data.type, res.data.msg);
+                    } else {
+                        $('#exportInfoForm').attr("href", response.data.data);
+                        $('#exportInfoForm').attr("target", "_blank");
+                        $('#ex-li').trigger("click");
+                    }
+                }).catch(function (error) {
+                    that.onAlert("warning", error);
+                });
+            },
+            httpRequest: function (options) {
+                var that = this;
+                var file = options.file;
+                var size = file.size / 1024;
+                var imgArr = ["image/jpg", "image/bmp", "image/jpeg", "image/gif", "image/png"];
+                let config = {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                };
+                if (imgArr.indexOf(file.type) > -1 && size > 500) { //大于500kb的图片压缩
+                    photoCompress(file, { quality: 0.8 }, function (base64Codes) {
+                        var bl = convertBase64UrlToBlob(base64Codes);
+                        var form = new FormData(); // FormData 对象
+                        form.append("file", bl, "file_" + Date.parse(new Date()) + ".jpg"); // 文件对象
+                        form.append("type","1");
+                        form.append("orderID", that.indexData.ID);
+                        //添加请求头
+                        axios.post('/Declare/UploadDeclareFile', form, config)
+                            .then(function (response) {
+                                var file = JSON.parse(response.data.data);
+                                if (response.data.type != "error") {
+                                    that.fileUrl = file.fullURL;
+                                    that.URL = file.URL;
+                                    that.fileName = file.name;
+                                    that.fileFormat = file.fileFormat;
+                                }
+                            });
+                    });
+                } else if (imgArr.indexOf(file.type) <= -1 && size > 1024 * 3) {
+                    that.onAlert("error", "上传的文件大小不能大于3M");
+                    return;
+                } else {
+                    var form = new FormData(); // FormData 对象
+                    form.append("file", file); // 文件对象
+                    form.append("type", "1");
+                    form.append("orderID", that.indexData.ID);
+                    //添加请求头
+                    axios.post('/Declare/UploadDeclareFile', form, config)
+                        .then(function (response) {
+                            var file = JSON.parse(response.data.data);
+                            if (response.data.type != "error") {
+                                that.fileUrl = file.fullURL;
+                                that.URL = file.URL;
+                                that.fileName = file.name;
+                                that.fileFormat = file.fileFormat;
+                                console.log(that.fileUrl)
+                            }
+                        });
+                }
+            },
+            toFixed: function (num, val) {
+                return val.toFixed(num);
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                });
+            },
+        }
+    });
+</script>
+
+

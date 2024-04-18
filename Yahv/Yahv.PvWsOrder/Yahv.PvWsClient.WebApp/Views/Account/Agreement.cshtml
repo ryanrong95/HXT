@@ -1,0 +1,117 @@
+﻿@{
+    ViewBag.Title = "协议条款";
+    Layout = "~/Views/Shared/_LayoutAccount.cshtml";
+    ViewBag.navid = "Agreement";
+}
+
+<div id="agree" v-cloak class="backshow">
+    <h2>协议条款</h2>
+    <div class="content">
+        <fieldset class="layui-elem-field">
+            <legend>协议起始日期</legend>
+            <div class="layui-field-box">
+                <div class="layui-row layui-col-space10">
+                    <div class="pl40 cl">
+                        <span class="sp_text">协议开始日期：{{agreeData.StartDate}}</span>
+                        <span class="sp_text">协议结束日期：{{agreeData.EndDate}}</span>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset class="layui-elem-field">
+            <legend>代理费</legend>
+            <div class="layui-field-box">
+                <div class="layui-row layui-col-space10">
+                    <div class="pl40 cl">
+                        <span class="sp_text">代理费率：{{agreeData.AgencyRate}}</span>
+                        <span class="sp_text">最低代理费（元）：{{agreeData.MinAgencyFee}}</span>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset class="layui-elem-field">
+            <legend>货款条款</legend>
+            <div class="layui-field-box">
+                <div class="layui-row layui-col-space10 overhide">
+                    <div class="fl pl40" style="width:300px">
+                        <span class="sp_text">换汇方式：{{agreeData.IsPrePayExchange}}</span>
+                        <span class="sp_text">结算方式：{{agreeData.GoodsPeriodType}}</span>
+                        <span v-if="agreeData.isGoodsAgreedPeriod" class="sp_text">约定期限(天)：{{agreeData.GoodsDaysLimit}}</span>
+                        <span v-if="agreeData.isGoodsMonthly" class="sp_text">结算日期(次月)：{{agreeData.GoodsMonthlyDay}}</span>
+                        <span class="sp_text">汇率类型：{{agreeData.GoodsExchangeRateType}}</span>
+                    </div>
+                    <div class="fl" style="width:50%">
+                        <span v-if="!agreeData.isGoodsPrePaid" class="sp_text">垫款上限（元）：{{agreeData.GoodsUpperLimit}}</span>
+                        <span v-if="agreeData.isGoodsAgreed" class="sp_text">约定汇率：{{agreeData.GoodsExchangeRateValue}}</span>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset class="layui-elem-field">
+            <legend>税款条款</legend>
+            <div class="layui-field-box">
+                <div class="fl pl40" style="width:300px">
+                    <span class="sp_text">结算方式：{{agreeData.TaxPeriodType}}</span>
+                    <span v-if="agreeData.isTaxAgreedPeriod" class="sp_text">约定期限(天)：{{agreeData.TaxDaysLimit}}</span>
+                    <span v-if="agreeData.isTaxMonthly" class="sp_text">结算日期(次月)：{{agreeData.TaxMonthlyDay}}</span>
+                    <span class="sp_text">汇率类型：{{agreeData.TaxExchangeRateType}}</span>
+                </div>
+                <div class="fl" style="width:50%">
+                    <span v-if="!agreeData.isTaxPrePaid" class="sp_text">垫款上限（元）：{{agreeData.TaxUpperLimit}}</span>
+                    <span v-if="agreeData.isTaxAgreed" class="sp_text">约定汇率：{{agreeData.TaxExchangeRateValue}}</span>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset class="layui-elem-field">
+            <legend>代理费条款</legend>
+            <div class="layui-field-box">
+                <div class="fl pl40" style="width:300px">
+                    <span class="sp_text">结算方式：{{agreeData.AgencyFeePeriodType}}</span>
+                    <span v-if="agreeData.isAgencyAgreedPeriod" class="sp_text">约定期限(天)：{{agreeData.AgencyDaysLimit}}</span>
+                    <span v-if="agreeData.isAgencyMonthly" class="sp_text">结算日期(次月)：{{agreeData.AgencyMonthlyDay}}</span>
+                    <span class="sp_text">汇率类型：{{agreeData.AgencyFeeExchangeRateType}}</span>
+                </div>
+                <div class="fl" style="width:50%">
+                    <span v-if="!agreeData.isAgencyPrePaid" class="sp_text">垫款上限（元）：{{agreeData.AgencyFeeUpperLimit}}</span>
+                    <span v-if="agreeData.isAgencyAgreed" class="sp_text">约定汇率：{{agreeData.AgencyExchangeRateValue}}</span>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset class="layui-elem-field">
+            <legend>杂费条款</legend>
+            <div class="layui-field-box">
+                <div class="fl pl40" style="width:300px">
+                    <span class="sp_text">结算方式：{{agreeData.IncidentalPeriodType}}</span>
+                    <span v-if="agreeData.isIncidentalAgreedPeriod" class="sp_text">约定期限(天)：{{agreeData.IncidentalDaysLimit}}</span>
+                    <span v-if="agreeData.isIncidentalMonthly" class="sp_text">结算日期(次月)：{{agreeData.IncidentalMonthlyDay}}</span>
+                    <span class="sp_text">汇率类型：{{agreeData.IncidentalExchangeRateType}}</span>
+                </div>
+                <div class="fl" style="width:50%">
+                    <span v-if="!agreeData.isIncidentalPrePaid" class="sp_text">垫款上限（元）：{{agreeData.IncidentalUpperLimit}}</span>
+                    <span v-if="agreeData.isIncidentalAgreed" class="sp_text">约定汇率：{{agreeData.IncidentalExchangeRateValue}}</span>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset class="layui-elem-field">
+            <legend>开票类型/税率</legend>
+            <div class="layui-field-box">
+                <div class="layui-row layui-col-space10">
+                    <div class="pl40 cl">
+                        <span class="sp_text">开票类型：{{agreeData.InvoiceType}}</span>
+                        <span class="sp_text">税率：{{agreeData.InvoiceRate}}</span>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</div>
+<script>
+    var agree = new Vue({
+        el: "#agree",
+        data:function() {
+            return {
+                agreeData:@Html.Raw(Json.Encode(Model)),
+            }
+        }
+    });
+</script>

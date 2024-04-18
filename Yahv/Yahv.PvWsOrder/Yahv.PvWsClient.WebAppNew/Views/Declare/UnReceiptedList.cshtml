@@ -1,0 +1,293 @@
+﻿@using Yahv.PvWsOrder.Services.ClientViews;
+
+@{
+    ViewBag.title = "待收货订单";
+}
+<div id="vUnReceiptedList" v-cloak class="tab_content">
+    <div class="query_wrap" ref="viewBox1" v-on:scroll="ss('viewBox1')">
+        <div class="clearfix">
+            <div class="fl">
+                <div class="title label-style">订单号:</div>
+                <el-input class="input-style" size="mini" v-model="OrderID" @@keyup.enter.native="queryData"></el-input>
+            </div>
+            <div class="fl ml20">
+                <div class="title label-style">确认状态:</div>
+                <el-select style="width:180px;" class="mr16 input-style" size="small" v-model="confirmReceiptStatus" filterable clearable>
+                    <el-option v-for="item in ConfirmReceiptStatusOptions"
+                               :key="item.value"
+                               :label="item.text"
+                               :value="item.value">
+                    </el-option>
+                </el-select>
+            </div>
+            <div class="fl ml20">
+                <div class="title label-style">下单日期:</div>
+                <date-picker-daterange ref="datePickerDaterange" class="fl"></date-picker-daterange>
+            </div>
+
+            <div class="fr">
+                <button v-on:click="doDearch" class="btn btn1">查询</button>
+                <button v-on:click="clearData" class="btn btn2 ml12">重置</button>
+            </div>
+        </div>
+        <div class="clearfix mt20">
+            <div class="fl">
+                <div class="title label-style">配送方式:</div>
+                <el-select style="width:180px;" class="mr16 input-style" size="small" v-model="waybillType" filterable clearable>
+                    <el-option v-for="item in WaybillTypeOptions"
+                               :key="item.value"
+                               :label="item.text"
+                               :value="item.value">
+                    </el-option>
+                </el-select>
+            </div>
+        </div>
+    </div>
+    <div class="tb_wrap" v-loading="loading">
+        <table class="common_tb1 mt30">
+            <tr>
+                <th width="36px">序号</th>
+                <th width="75px">下单日期</th>
+                <th width="131px">订单编号</th>
+                @*<th width="141px">运单编号</th>*@
+                <th width="75px">出库日期</th>
+                <th width="55px">配送方式</th>
+                <th width="119px">快递单号</th>
+                @*<th width="52px">收件人</th>*@
+                @*<th>收件公司</th>*@
+                <th width="55px">操作</th>
+            </tr>
+            <template v-for="(item,index) in indexData.dataList">
+                <tr v-for="(m,i) in item.Waybills">
+                    <td>{{index+1}}</td>
+                    <td v-if="i==0" :rowspan="item.Waybills.length">
+                        <div>{{item.CreateDateDateString}}</div>
+                        @*<div>{{item.CreateDateTimeString}}</div>*@
+                    </td>
+                    <td v-if="i==0" :rowspan="item.Waybills.length">{{item.OrderID}}<br /><a v-on:click="detail(item)">查看详情</a></td>
+                    @*<td>{{m.ID}}</td>*@
+                    <td>
+                        <div>{{m.CreateDateDateString}}</div>
+                        @*<div>{{m.CreateDateTimeString}}</div>*@
+                    </td>
+                    <td>{{m.Type}}</td>
+                    <td>{{m.Code}}</td>
+                    @*<td>{{m.consigneeName}}</td>*@
+                    @*<td>{{m.consigneeCompany}}</td>*@
+                    <td class="operate"><a v-on:click="confirm(item.OrderID,m.ID)" v-if="m.confirmReceiptStatus == @(ConfirmReceiptStatus.UnConfirm.GetHashCode())">确认收货</a></td>
+                </tr>
+            </template>
+            <tr v-if="indexData.dataList.length==0"><td colspan="11">暂无数据</td></tr>
+        </table>
+        <div class="foot">
+            <el-pagination class="fr" style="margin-top:20px;" v-on:size-change="handleSizeChange"
+                           v-on:current-change="handleCurrentChange"
+                           :current-page="indexData.pageIndex"
+                           :page-sizes="[5, 10, 20, 40]"
+                           :page-size="indexData.pageSize"
+                           layout="total, sizes, prev, pager, next, jumper"
+                           :total="indexData.total">
+            </el-pagination>
+        </div>
+    </div>
+</div>
+<style>
+    .label-style {
+        width: 60px;
+        float: left;
+        margin-top: 6px;
+    }
+
+    .input-style {
+        width: 180px !important;
+    }
+</style>
+@{Html.RenderAction("_DatePickerDateRange", "Home");}
+<script type="text/javascript">
+    var vUnReceiptedList = new Vue({
+        el: "#vUnReceiptedList",
+        data: function () {
+            return {
+                indexData: {
+                    pageIndex: 1, //初始页
+                    pageSize: 10,    //每页的数据
+                    total: 0,
+                    scrollTop: 0, //滚动条位置
+                    dataList: [],
+                },
+                dataValue: "",
+                startDate: "",
+                endDate: "",
+                OrderID: "",
+                confirmReceiptStatus: '@(ViewBag.ConfirmReceiptStatusDefaultValue)',
+                waybillType: '',
+                ConfirmReceiptStatusOptions: [],
+                WaybillTypeOptions: [],
+                loading:false,
+            }
+        },
+        mounted: function () {
+            this.ConfirmReceiptStatusOptions = @Html.Raw(Json.Encode(@ViewBag.ConfirmReceiptStatusOptions));
+            this.WaybillTypeOptions = @Html.Raw(Json.Encode(@ViewBag.WaybillTypeOptions));
+            this.$refs.datePickerDaterange.orderDateSimpleBtnClicked('全部');
+            this.init();
+        },
+        methods: {
+            init: function () {
+                var that = this;
+                var userJsonStr = sessionStorage.getItem('vUnReceiptedList');
+                userEntity = JSON.parse(userJsonStr);
+                if (userEntity == null) {
+                    that.queryData(); // that.paging();
+                } else {
+                    that.indexData = userEntity;
+                    that.queryData(); // that.paging();
+                    that.$nextTick(function () {
+                        that.$refs['viewBox1'].scrollTop = that.indexData.scrollTop;
+                    })
+                    sessionStorage.removeItem('vUnReceiptedList');
+                }
+            },
+            ss: function (ref) {
+                // 监听这个dom的scroll事件
+                var that = this;
+                this.$refs[ref].addEventListener('scroll', function () {
+                    that.indexData.scrollTop = that.$refs[ref].scrollTop;
+                }, false)
+            },
+            //查看详情
+            detail: function (item) {
+                sessionStorage.setItem('vUnReceiptedList', JSON.stringify(this.indexData));
+                if (item.Type == "4") {
+                    commonSkipUrl(item.OrderID, '/Declare/TransDecDetail', "/" + "@(ViewContext.RouteData.Values["controller"].ToString())"
+                                                                         + "/" + "@(ViewContext.RouteData.Values["action"].ToString())");
+                } else {
+                    commonSkipUrl(item.OrderID, '/Declare/DeclareDetail', "/" + "@(ViewContext.RouteData.Values["controller"].ToString())"
+                                                                        + "/" + "@(ViewContext.RouteData.Values["action"].ToString())");
+                }
+            },
+            confirm: function(orderid,id){
+                var that = this;
+
+                //this.$confirm('是否确认收货?', '提示', {
+                //    confirmButtonText: '确定',
+                //    cancelButtonText: '取消',
+                //    type: 'warning',
+                //    lockScroll: false
+                //}).then(function () {
+
+                const loading = that.$loading({
+                    lock: false,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)'
+                });
+                axios({
+                    url: "/Declare/ReceiptedOrder",
+                    method: "post",
+                    data: {
+                        OrderID: orderid,
+                        WaybillID: id,
+                    },
+                }).then(function (response) {
+                    that.queryData(); // that.paging();
+                    loading.close();
+                    var data = response.data;
+                    that.onAlert(data.type, data.msg);
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+
+                //}).catch(function () {
+                //});
+            },
+            // 点击查询按钮
+            doDearch: function () {
+                this.indexData.pageIndex = 1;
+                this.queryData();
+            },
+            //查询数据
+            queryData: function () {
+                this.dataValue = this.$refs.datePickerDaterange.getDataValue();
+                if (this.dataValue != "" && this.dataValue != null) {
+                    var start = new Date(this.dataValue[0]);
+                    var startDate = start.getFullYear() + '-' + (start.getMonth() + 1) + '-' + start.getDate();
+                    var end = new Date(this.dataValue[1]);
+                    var endDate = end.getFullYear() + '-' + (end.getMonth() + 1) + '-' + end.getDate();
+                    this.startDate = startDate;
+                    this.endDate = endDate;
+                } else {
+                    this.startDate = "";
+                    this.endDate = "";
+                }
+                // this.indexData.pageIndex = 1;
+                this.paging();
+            },
+            //重置数据
+            clearData: function () {
+                this.$refs.datePickerDaterange.orderDateSimpleBtnClicked('全部');
+                // this.dataValue = "";
+                this.startDate = "";
+                this.endDate = "";
+                this.OrderID = "";
+                this.confirmReceiptStatus = "@(ViewBag.ConfirmReceiptStatusDefaultValue)";
+                this.waybillType = "";
+                this.indexData.pageIndex = 1;
+                this.indexData.pageSize = 10;
+                this.queryData(); // this.paging();
+            },
+            //初始页currentPage、初始每页数据数pagesize和数据data
+            handleSizeChange: function (size) {
+                this.indexData.pageSize = size;
+                this.paging();
+            },
+            handleCurrentChange: function (currentPage) {
+                this.indexData.pageIndex = currentPage;
+                this.paging();
+            },
+            paging: function () {
+                var that = this;
+                that.loading = true;
+                axios({
+                    url: "/Declare/GetUnReceiptedList",
+                    method: "post",
+                    data: {
+                        page: this.indexData.pageIndex,
+                        rows: this.indexData.pageSize,
+                        startDate: this.startDate,
+                        endDate: this.endDate,
+                        OrderID: this.OrderID,
+                        confirmReceiptStatus: this.confirmReceiptStatus,
+                        waybillType: this.waybillType,
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                    transformRequest: [function (data) {
+                        var ret = ''
+                        for (var it in data) {
+                            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+                        }
+                        return ret;
+                    }],
+                }).then(function (response) {
+                    var data = JSON.parse(response.data.data);
+                    that.indexData.dataList = data.list;
+                    that.indexData.total = data.total;
+                    that.loading = false;
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                    offset:100,
+                });
+            },
+        }
+    });
+
+</script>

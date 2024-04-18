@@ -1,0 +1,44 @@
+﻿﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>客户收货地址 - jQuery EasyUI plugin</title>
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/gray/easyui.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/standard-easyui/styles/plugin.css" rel="stylesheet" />
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.easyui.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/locale/easyui-lang-zh_CN.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/main.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/ajaxPrexUrl.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/standard-easyui/scripts/easyui.jl.js"></script>
+</head>
+<body>
+    <h1>客户收货地址</h1>
+    <form action="/" method="post" class="easyui-form" onsubmit="return $(this).form('enableValidation').form('validate');">
+        <input name="cusRecAddress1" id="cusRecAddress1" class="easyui-cusRecAddress" />
+        <!--<input name="cusRecAddress2" id="cusRecAddress2" class="easyui-cusRecAddress" />-->
+        <button onclick="aaa()">提交</button>
+    </form>
+    <script type="text/javascript">
+        $(function () {
+            $('#cusRecAddress1').cusRecAddress({
+                CustomerCompanyID: "DCC037B52BAA9BDC4C01A4691042E740"
+            });
+            //$('#cusRecAddress2').cusRecAddress({
+            //    CustomerCompanyID: "A46C3B54F2C9871CD81DAF7A932499C0"
+            //});
+        })
+        function aaa() {
+            console.log($('#cusRecAddress1').cusRecAddress('options'));
+            console.log($('#cusRecAddress1').cusRecAddress('getVal'));
+            console.log($('#cusRecAddress1').cusRecAddress('getResult'));
+            console.log($('#cusRecAddress1').cusRecAddress('getAllData'));
+            //console.log("------------");
+            //console.log($('#cusRecAddress2').cusRecAddress('options'));
+            //console.log($('#cusRecAddress2').cusRecAddress('getVal'));
+            //console.log($('#cusRecAddress2').cusRecAddress('getResult'));
+            //console.log($('#cusRecAddress2').cusRecAddress('getAllData'));
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1577 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>预归类编辑</title>
+    <meta charset="utf-8" />
+    <link href="http://fixed2.b1b.com/Content/themes/default/easyui.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/icon.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/icon-yg-cool.css" rel="stylesheet" />
+
+    <link href="http://fixed2.b1b.com/Yahv/customs-easyui/fonts/iconfont.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/customs-easyui/Styles/reset.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/customs-easyui/Styles/main.css" rel="stylesheet" />
+
+    <link href="http://fixed2.b1b.com/Yahv/standard-easyui/iconfont/iconfont.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/standard-easyui/styles/plugin.css" rel="stylesheet" />
+    <link href="../Styles/pvdata.css" rel="stylesheet" />
+
+    <style>
+        .liebiao {
+            border: 1px solid #ddd;
+        }
+
+            .liebiao tr td {
+                padding: 4px;
+                border: 1px solid #ddd;
+            }
+
+        tr td.lbl {
+            padding-right: 3px;
+            text-align: right;
+        }
+
+        .red {
+            color: red;
+        }
+
+        .ml10 {
+            margin-left: 10px !important;
+        }
+
+        .ml30 {
+            margin-left: 30px !important;
+        }
+
+        .clock {
+            background: url(../Content/Images/clock.png);
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            background-size: cover;
+            margin-left: 5px;
+            position: relative;
+            top: 2px;
+            cursor: pointer;
+        }
+
+        .combo-arrow {
+            background: url(../Content/Images/clock.png) no-repeat center center;
+        }
+
+        .textbox-addon a {
+            cursor: pointer;
+        }
+
+        .combo-arrow:hover {
+            background-color: #fff;
+            cursor: pointer;
+        }
+
+        .textbox-icon:hover {
+            opacity: 1;
+        }
+
+        #unitPrice + .combo {
+            border: 0px;
+        }
+
+        #unitPrice + .textbox-focused {
+            box-shadow: none;
+        }
+
+        #unitPrice + .combo .textbox-text {
+            color: transparent;
+            text-shadow: 0 0 0 #000;
+        }
+
+        .fileUl {
+            max-height: 72px;
+            margin-top: 0;
+        }
+
+            .fileUl li span {
+                float: none;
+                color: #2196F3;
+                margin-left: 10px;
+                cursor: pointer;
+            }
+
+        #upload {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <form id="form1">
+        <div style="margin-bottom: 5px">
+            <table class="liebiao" style="margin: 0 auto; width: 95%;" id="list">
+                <tr>
+                    <th style="width: 10%"></th>
+                    <th style="width: 40%"></th>
+                    <th style="width: 10%"></th>
+                    <th style="width: 40%"></th>
+                </tr>
+                <tr>
+                    <td class="lbl">客户编号:</td>
+                    <td>
+                        <span id="clientCode"></span><span class="ml10" id="clientName"></span>
+                    </td>
+                    <td class="lbl">单据号:</td>
+                    <td colspan="3">
+                        <span id="ProductUnionCode"></span>
+                    </td>
+                </tr>
+                <tr id="pis">
+                    <td class="lbl">合同发票:</td>
+                    <td>
+                        <p id="unUpload">未上传</p>
+                        <ul class="fileUl" id="upload"></ul>
+                    </td>
+                    <td class="lbl">供应商:</td>
+                    <td>
+                        <span id="supplierName"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lbl"></td>
+                    <td>
+                    </td>
+                    <td class="lbl">Eccn编码:</td>
+                    <td>
+                        <span id="eccnCode"></span>
+                        <span style="float:right;"><a id="hkcontrol" href="#" class="easyui-linkbutton" style="height:22px;" onclick="QueryHkControl()" data-options="iconCls:'icon-yg-search'">香港管制查询</a></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lbl">品牌:</td>
+                    <td>
+                        <input class="easyui-textbox" id="manufacturer" name="manufacturer" data-options="events:{blur:mfrChanged},required:true,validType:'length[1,50]',missingMessage:'请输入品牌'" style="width: 100%; height:22px" />
+                        <div style="color:red;margin-top:5px;display:none;" id="MfrChange"></div>
+                    </td>
+                    <td class="lbl">型号:</td>
+                    <td>
+                        <input id="partNumber" name="partNumber" style="width: 100%; height:22px" readonly />
+                        <div style="color:red;margin-top:5px;display:none;" id="PartNumberChange"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lbl">原产地:</td>
+                    <td>
+                        <input class="easyui-textbox" id="origin" name="origin" readonly="readonly" style="width: 100%; height:22px" />
+                    </td>
+                    <td class="lbl">单价:</td>
+                    <td>
+                        <input id="unitPrice" name="unitPrice" style="width: 100px; height:22px" />
+                        <span class="ml30">数量:</span>
+                        <span id="quantity"></span>
+                        <span class="ml30">币种:</span>
+                        <span id="currency" class="red"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lbl">海关编码:</td>
+                    <td>
+                        <input id="hsCode" name="hsCode" style="width: 59%; height:22px" />
+                        <a id="btnHSCode" href="javascript:void(0);" class="easyui-linkbutton" style="width: 40%; height:22px" onclick="elementsQuery()">
+                            <span class='l-btn-icon-left'><span class="l-btn-icon icon-search"></span><span>申报要素查询</span></span>
+                        </a>
+                        <div style="color:red;margin-top:5px;display:none;" id="HsCodeChange"></div>
+                    </td>
+                    <td class="lbl">报关品名:</td>
+                    <td>
+                        <input id="tariffName" name="tariffName" style="width: 100%; height:22px" />
+                        <div style="color:red;margin-top:5px;display:none;" id="TariffNameChange"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lbl">税务编码:</td>
+                    <td>
+                        <input class="easyui-textbox" id="taxCode" name="taxCode" data-options="required:true,validType:'length[1,50]',missingMessage:'请输入税务编码'" style="width: 100%; height:22px" />
+                    </td>
+                    <td class="lbl">税务名称:</td>
+                    <td>
+                        <input class="easyui-textbox" id="taxName" name="taxName" data-options="required:true,validType:['taxName','length[1,50]'],missingMessage:'请输入税务名称'" style="width: 100%; height:22px" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lbl">优惠税率%:</td>
+                    <td>
+                        <input id="importPreferentialTaxRate" name="importPreferentialTaxRate" style="width: 100%; height:22px" />
+                    </td>
+                    <td class="lbl">增值税率%:</td>
+                    <td>
+                        <input id="vatRate" name="vatRate" style="width: 100%; height:22px" />
+                    </td>
+
+                </tr>
+                <tr>
+                    <td class="lbl">加征税率%:</td>
+                    <td>
+                        <input id="originATRate" name="originATRate" style="width: 100%; height:22px" />
+                    </td>
+                    <td class="lbl">消费税率%:</td>
+                    <td>
+                        <input id="ExciseTaxRate" name="ExciseTaxRate" style="width: 100%; height:22px" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lbl">法定第一单位:</td>
+                    <td>
+                        <input class="easyui-textbox" id="legalUnit1" name="legalUnit1" data-options="required:true,validType:'length[1,50]',missingMessage:'请输入法定第一单位'" style="width: 100%; height:22px" />
+                    </td>
+                    <td class="lbl">法定第二单位:</td>
+                    <td>
+                        <input class="easyui-textbox" id="legalUnit2" name="legalUnit2" data-options="validType:'length[1,50]'" style="width: 100%; height:22px" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lbl">检验检疫编码:</td>
+                    <td>
+                        <select class="easyui-combobox" id="ciqCode" name="ciqCode" data-options="required:true,editable:false,hasDownArrow:false,missingMessage:'请选择检验检疫编码'" style="width: 100%; height:22px">
+                            <option value="101">101</option>
+                            <option value="102">102</option>
+                            <option value="103">103</option>
+                            <option value="104">104</option>
+                            <option value="105">105</option>
+                            <option value="106">106</option>
+                            <option value="150">150</option>
+                            <option value="302">302</option>
+                            <option value="304">304</option>
+                            <option value="999">999</option>
+                        </select>
+                    </td>
+                    <td class="lbl">摘要备注:</td>
+                    <td>
+                        <input class="easyui-textbox" id="summary" name="summary" data-options="validType:'length[1,250]'" style="width: 100%; height:22px" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lbl">申报要素:</td>
+                    <td colspan="3">
+                        <input class="easyui-textbox" id="elements" name="elements" data-options="multiline:true,required:true" readonly="readonly" style="width: 100%; height: 40px" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lbl">特殊类型:</td>
+                    <td colspan="3">
+                        <input type="checkbox" id="isCiq" name="isCiq" class="checkbox" onclick="return false;" /><label for="isCiq" style="margin-right: 20px">商检</label>
+                        <input id="ciqPrice" name="ciqPrice" style="height: 30px" />
+                        <input type="checkbox" id="isCoo" name="isCoo" class="checkbox" /><label for="isCoo" style="margin-left: 20px; margin-right: 20px">原产地证明</label>
+                        <input type="checkbox" id="isCcc" name="isCcc" class="checkbox" /><label for="isCcc" style="margin-right: 20px">CCC认证</label>
+                        <input type="checkbox" id="isHighPrice" name="isHighPrice" class="checkbox" /><label for="isHighPrice" style="margin-right: 20px">高价值产品</label>
+                        <input type="checkbox" id="isEmbargo" name="isEmbargo" class="checkbox" /><label for="isEmbargo" style="margin-right: 20px">禁运</label>
+                        <input type="checkbox" id="isHkControl" name="isHkControl" class="checkbox" /><label for="isHkControl" style="margin-right: 20px">香港管制</label>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="lbl"></td>
+                    <td colspan="3" id="specialTips">
+                        <div id="embargo" style="font-size: 14px; color: red; display: none">该型号为禁运型号，请仔细核实！</div>
+                        <div id="ccc" style="font-size: 14px; color: red; display: none">该型号需Ccc认证，请仔细核实！</div>
+                        <div id="mfrVerify" style="font-size: 14px; color: red;display: none">客户填写的品牌与申报要素中的品牌不一致，请仔细核对！</div>
+                        <div id="unitPriceWarning" style="font-size: 14px; color: red;display: none">该产品可能属于高价值产品，请仔细核对！</div>
+                        <div id="remark" style="font-size: 14px; color: red;display: none">归类历史数据备注信息！</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lbl"></td>
+                    <td colspan="3">
+                        <div id="divSave">
+                            <a id="btnConfirm" href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-yg-confirm'" onclick="classify()">确认归类</a>
+                            <a id="btnReturn" href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-yg-cancel'" onclick="closeSelf()" style="margin-left: 8px;">关闭</a>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div id="classifyOperatingLogs" class="easyui-panel" title="产品归类记录" style="margin-bottom: 5px">
+        </div>
+        <div id="classifyModifiedLogs" title="产品归类变更记录" class="easyui-panel">
+        </div>
+
+        <div id="classifySuccess-dialog" class="easyui-dialog" data-options="resizable:false, modal:true, closed: true, closable: false,">
+            <div id="classifySuccess-dialog-content" style="margin: 15px 15px 15px 15px;"></div>
+        </div>
+
+        <div id="viewFileDialog" class="easyui-window" title="查看合同" data-options="iconCls:'pag-list',modal:true,collapsible:false,minimizable:false,maximizable:true,resizable:true,closed:true" style="width: 800px; height: 400px;">
+            <img id="viewfileImg" src="" style="width: auto; height: auto; max-width: 100%; max-height: 100%;" />
+            <iframe id="viewfilePdf" src="" width="100%" height="100%" frameborder="0" scroll="no"></iframe>
+        </div>
+
+    </form>
+
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.easyui.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/locale/easyui-lang-zh_CN.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-extension/datagrid-dnd.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/extends.js"></script>
+
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/easyui.myDatagrid.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/easyui.myDialog.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/easyui.myWindow.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/easyui.tabExtend.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/main.js"></script>
+
+    <script src="http://fixed2.b1b.com/Yahv/standard-easyui/scripts/timeouts.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/standard-easyui/scripts/preclassify.ajax.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/standard-easyui/scripts/mylogs.js"></script>
+
+    <script src="../Scripts/pvdata.js"></script>
+
+    <script>
+        //为Easy-ui的只读输入框设置背景色
+        function SetReadonlyBgColor(className, color) {
+            $('.' + className).each(function () {
+                if ($(this).attr('readonly')) {
+                    if (className == 'easyui-textbox') {
+                        $(this).textbox('textbox').css('background', color);
+                    } else if (className == 'easyui-numberbox') {
+                        $(this).numberbox('textbox').css('background', color);
+                    } else if (className == 'easyui-combogrid') {
+                        $(this).combogrid('textbox').css('background', color);
+                    }
+                }
+            });
+        }
+        //获取数据的接口
+        var PvDataApiUrl = '';
+        var CallBackApiUrl = '';
+        //记录当前的海关编码，用于比较输入框中的海关编码是否发生了变化
+        var global_curHSCode = '';
+        //系统判断是否是禁运产品
+        var global_isSysEmbargo = false;
+        //系统判断是否是Ccc产品
+        var global_isSysCcc = false;
+        //是否需要消毒/检疫
+        var global_isDisinfected = false;
+        //是否修改了品牌
+        var global_isMfrChanged = false;
+        //是否属于海关验估编码
+        var global_isCustomsInspection = false;
+        //计时器
+        var global_interval = null;
+        //归类产品数据
+        var preProduct;
+
+        $(function () {
+            //初始化产品型号下拉框
+            $('#partNumber').combogrid({
+                idField: 'ID',
+                textField: 'PartNumber',
+                nowrap: false,
+                panelWidth: $("input[name=partNumber]").parent().width(),
+                fitColumns: true,
+                required: true,
+                hasDownArrow: false,
+                mode: "local",
+                validType: 'length[1,75]',
+                readonly: true,
+                columns: [[
+                    { field: 'PartNumber', title: '型号', width: 100, align: 'left' },
+                    { field: 'Name', title: '报关品名', width: 100, align: 'left' },
+                    { field: 'HSCode', title: '海关编码', width: 100, align: 'left' },
+                    { field: 'Elements', title: '申报要素', width: 200, align: 'left' },
+                ]],
+                onChange: function (newValue, oldValue) {
+                    var grid = $('#partNumber').combogrid('grid');
+                    var row = grid.datagrid('getSelected');
+                    var partNumber = $("#partNumber").combogrid("getText");
+                    if (row == null || row.partNumber != partNumber) {
+                        getDataFun(PvDataApiUrl + 'Classify/GetClassifiedPartNumberLogs', { partNumber: partNumber }, {
+                            success: function (res) {
+                                var dataForamt = [];
+                                if (res.data && res.data.length) {
+                                    dataForamt = res.data;
+                                    for (var i = 0; i < dataForamt.length; i++) {
+                                        if (dataForamt[i].ExciseTaxRate == 0) {
+                                            dataForamt[i].ExciseTaxRate = '';
+                                        }
+                                        if (dataForamt[i].ImportPreferentialTaxRate == 0) {
+                                            dataForamt[i].ImportPreferentialTaxRate = '';
+                                        }
+                                        if (dataForamt[i].OriginATRate == 0) {
+                                            dataForamt[i].OriginATRate = '';
+                                        }
+                                        if (dataForamt[i].VATRate == 0) {
+                                            dataForamt[i].VATRate = '';
+                                        }
+                                    }
+                                }
+                                $("#partNumber").combogrid("grid").datagrid("loadData", dataForamt);
+                                $("#importPreferentialTaxRate").combogrid("grid").datagrid("loadData", dataForamt);
+                                $("#originATRate").combogrid("grid").datagrid("loadData", dataForamt);
+                                $("#vatRate").combogrid("grid").datagrid("loadData", dataForamt);
+                                $("#ExciseTaxRate").combogrid("grid").datagrid("loadData", dataForamt);
+                                $("#ciqPrice").combogrid("grid").datagrid("loadData", dataForamt);
+                                //$("#unitPrice").combogrid("grid").datagrid("loadData", dataForamt);
+                                //unitPriceTip(preProduct['UnitPrice'], res.avgUnitPrice);
+                            }
+                        })
+                    }
+                },
+                onSelect: function () {
+                    var grid = $('#partNumber').combogrid('grid');
+                    var row = grid.datagrid('getSelected');
+                    $('#tariffName').combogrid('setValue', row.Name);
+                    setHSCode(row.HSCode);
+                    $('#elements').textbox('setValue', row.Elements);
+                    verifyManufacturer();
+                }
+            });
+            $('#partNumber').combogrid('textbox').bind('focus', function () {
+                $('#partNumber').combogrid('showPanel');
+            });
+
+            //初始化海关编码下拉框
+            $('#hsCode').combogrid({
+                idField: 'ID',
+                textField: 'HSCode',
+                nowrap: false,
+                panelWidth: 400,
+                fitColumns: true,
+                required: true,
+                hasDownArrow: false,
+                mode: "remote",
+                missingMessage: '请输入海关编码',
+                columns: [[
+                    { field: 'HSCode', title: '海关编码', width: 100, align: 'left' },
+                    { field: 'Name', title: '报关品名', width: 300, align: 'left' },
+                ]],
+                onChange: function (record) {
+                    var grid = $("#hsCode").combogrid('grid');
+                    var row = grid.datagrid('getSelected');
+                    var hsCode = $("#hsCode").combogrid("getText");
+
+                    checkHighVlaueShowTip($("#tariffName").combogrid("getText"), record);
+                    if (row == null || row.HSCode != hsCode) {
+                        getDataFun(PvDataApiUrl + 'Classify/GetMatchedHSCodes', { hsCode: record }, {
+                            success: function (res) {
+                                if (res.data) {
+                                    $("#hsCode").combogrid("grid").datagrid("loadData", res.data);
+                                    $.map(res.data, function (item, index) {
+                                        if ($.trim(item.HSCode) == $.trim(record)) {
+                                            global_isCustomsInspection = item.IsCustomsInspection;
+                                        }
+                                    });
+                                } else {
+                                    $("#hsCode").combogrid("grid").datagrid("loadData", []);
+                                }
+                            }
+                        });
+                    }
+                },
+                onSelect: function () {
+                    var grid = $('#hsCode').combogrid('grid');
+                    var row = grid.datagrid('getSelected');
+                    global_isCustomsInspection = row.IsCustomsInspection;
+                    checkHighVlaueShowTip($("#tariffName").combogrid("getText"), row.HSCode);
+                    elementsQuery();
+                },
+            });
+            $('#hsCode').combogrid('textbox').bind('focus', function () {
+                $('#hsCode').combogrid('showPanel');
+            });
+
+            //初始化报关品名下拉框
+            $("#tariffName").combogrid({
+                idField: "ID",
+                textField: "Name",
+                nowrap: false,
+                panelWidth: $("input[name=tariffName]").parent().width(),
+                fitColumns: true,
+                required: true,
+                hasDownArrow: false,
+                mode: "remote",
+                validType: 'length[1,250]',
+                missingMessage: '请输入报关品名',
+                columns: [[
+                    { field: 'Name', title: '报关品名', width: 150, align: 'left' },
+                    { field: 'PartNumber', title: '型号', align: 'left', hidden: true },
+                    { field: 'TaxCode', title: '税务编码', width: 150, align: 'left' },
+                    { field: 'TaxName', title: '税务名称', width: 180, align: 'left' },
+                ]],
+                onChange: function () {
+                    var grid = $("#tariffName").combogrid('grid');
+                    var row = grid.datagrid('getSelected');
+                    var name = $("#tariffName").combogrid("getText");
+
+                    //判断高价值提示显示
+                    checkHighVlaueShowTip(name, $('#hsCode').combogrid('getText'));
+                    if (row == null || row.Name != name) {
+                        getDataFun(PvDataApiUrl + 'Classify/GetClassifiedTaxLogs', { name: name }, {
+                            success: function (res) {
+                                if (res.data) {
+                                    $("#tariffName").combogrid("grid").datagrid("loadData", res.data);
+                                } else {
+                                    $("#tariffName").combogrid("grid").datagrid("loadData", []);
+                                }
+                            }
+                        })
+                    }
+                },
+                onSelect: function () {
+                    var grid = $("#tariffName").combogrid('grid');
+                    var row = grid.datagrid('getSelected');
+                    $('#taxCode').textbox('setValue', row.TaxCode);
+                    $('#taxName').textbox('setValue', row.TaxName);
+
+                    if (row != null) {
+                        //判断高价值提示显示
+                        checkHighVlaueShowTip(row.Name, $('#hsCode').combogrid('getText'));
+                    }
+                }
+            });
+            $('#tariffName').combogrid('textbox').bind('focus', function () {
+                $('#tariffName').combogrid('showPanel');
+            });
+
+            //优惠税率历史记录
+            $("#importPreferentialTaxRate").combogrid({
+                idField: "ID",
+                textField: "ImportPreferentialTaxRate",
+                panelWidth: 400,
+                fitColumns: true,
+                //required: true,
+                hasDownArrow: false,
+                missingMessage: '请输入优惠税率',
+                mode: "local",
+                columns: [[
+                    { field: 'ImportPreferentialTaxRate', title: '优惠税率', width: 100, align: 'left' },
+                    { field: 'PartNumber', title: '型号', align: 'left', hidden: true },
+                    { field: 'CreateDate', title: '归类时间', width: 200, align: 'left' },
+                    { field: 'Quantity', title: '数量', width: 100, align: 'left' },
+                ]],
+                onSelect: function () {
+                    var value = $("#importPreferentialTaxRate").combogrid("getValue");
+                    var text = $("#importPreferentialTaxRate").combogrid("getText");
+                    if (value == text) {
+                        $("#importPreferentialTaxRate").combogrid("setValue", '');
+                    }
+                }
+            });
+            $('#importPreferentialTaxRate').combogrid('textbox').bind('focus', function () {
+                $('#importPreferentialTaxRate').combogrid('showPanel');
+            });
+
+            //加征税率历史记录
+            $("#originATRate").combogrid({
+                idField: "ID",
+                textField: "OriginATRate",
+                panelWidth: 400,
+                fitColumns: true,
+                //required: true,
+                hasDownArrow: false,
+                missingMessage: '请输入加征税率',
+                mode: "local",
+                columns: [[
+                    { field: 'OriginATRate', title: '加征税率', width: 100, align: 'left' },
+                    { field: 'PartNumber', title: '型号', align: 'left', hidden: true },
+                    { field: 'CreateDate', title: '归类时间', width: 200, align: 'left' },
+                    { field: 'Quantity', title: '数量', width: 100, align: 'left' },
+                ]],
+                onSelect: function () {
+                    var value = $("#originATRate").combogrid("getValue");
+                    var text = $("#originATRate").combogrid("getText");
+                    if (value == text) {
+                        $("#originATRate").combogrid("setValue", '');
+                    }
+                }
+            });
+            $('#originATRate').combogrid('textbox').bind('focus', function () {
+                $('#originATRate').combogrid('showPanel');
+            });
+
+            //增值税率历史记录
+            $("#vatRate").combogrid({
+                idField: "ID",
+                textField: "VATRate",
+                panelWidth: 400,
+                fitColumns: true,
+                //required: true,
+                hasDownArrow: false,
+                missingMessage: '请输入增值税率',
+                mode: "local",
+                columns: [[
+                    { field: 'VATRate', title: '增值税率', width: 100, align: 'left' },
+                    { field: 'PartNumber', title: '型号', align: 'left', hidden: true },
+                    { field: 'CreateDate', title: '归类时间', width: 200, align: 'left' },
+                    { field: 'Quantity', title: '数量', width: 100, align: 'left' },
+                ]],
+                onSelect: function () {
+                    var value = $("#vatRate").combogrid("getValue");
+                    var text = $("#vatRate").combogrid("getText");
+                    if (value == text) {
+                        $("#vatRate").combogrid("setValue", '');
+                    }
+                }
+            });
+            $('#vatRate').combogrid('textbox').bind('focus', function () {
+                $('#vatRate').combogrid('showPanel');
+            });
+
+            //消费税率历史记录
+            $("#ExciseTaxRate").combogrid({
+                idField: "ID",
+                textField: "ExciseTaxRate",
+                panelWidth: 400,
+                fitColumns: true,
+                //required: true,
+                hasDownArrow: false,
+                missingMessage: '请输入消费税率',
+                mode: "local",
+                columns: [[
+                    { field: 'ExciseTaxRate', title: '消费税率', width: 100, align: 'left' },
+                    { field: 'PartNumber', title: '型号', align: 'left', hidden: true },
+                    { field: 'CreateDate', title: '归类时间', width: 200, align: 'left' },
+                    { field: 'Quantity', title: '数量', width: 100, align: 'left' },
+                ]],
+                onSelect: function () {
+                    var value = $("#ExciseTaxRate").combogrid("getValue");
+                    var text = $("#ExciseTaxRate").combogrid("getText");
+                    if (value == text) {
+                        $("#ExciseTaxRate").combogrid("setValue", '');
+                    }
+                }
+            });
+            $('#ExciseTaxRate').combogrid('textbox').bind('focus', function () {
+                $('#ExciseTaxRate').combogrid('showPanel');
+            });
+
+            //单价历史记录
+            $("#unitPrice").combogrid({
+                idField: "ID",
+                textField: "UnitPrice",
+                panelWidth: 550,
+                fitColumns: true,
+                required: true,
+                hasDownArrow: true,
+                mode: "local",
+                columns: [[
+                    { field: 'UnitPrice', title: '单价', width: 100, align: 'left' },
+                    { field: 'Currency', title: '币种', width: 50, align: 'left' },
+                    { field: 'Quantity', title: '数量', width: 50, align: 'left' },
+                    { field: 'ClientName', title: '客户名称', width: 200, align: 'left' },
+                    { field: 'CreateDate', title: '创建时间', width: 150, align: 'left' },
+                ]],
+                onChange: function (newValue, oldValue) {
+                    var partNumber = $("#partNumber").combogrid("getText");
+                    var manufacturer = $('#manufacturer').textbox('getValue')
+                    getDataFun(CallBackApiUrl + 'Classify/GetUnitPriceLogs', { partNumber: partNumber, manufacturer: manufacturer }, {
+                        noDataFun: function (res) {
+                            $("input[name^='unitPrice']").prev().css('color', 'red');
+                        },
+                        success: function (res) {
+                            $("#unitPrice").combogrid("grid").datagrid("loadData", res.data);
+                            unitPriceTip(preProduct['UnitPrice'], res.avgUnitPrice);
+                        }
+                    })
+                },
+                onSelect: function () {
+                    $('#unitPrice').combogrid('setValue', preProduct['UnitPrice']);
+                }
+            });
+            $('#unitPrice').combogrid('textbox').bind('focus', function () {
+                $('#unitPrice').combogrid('showPanel');
+            });
+
+            //商检费历史记录
+            $("#ciqPrice").combogrid({
+                idField: "ID",
+                textField: "CIQprice",
+                panelWidth: 400,
+                fitColumns: true,
+                hasDownArrow: false,
+                mode: "local",
+                min: 0,
+                precision: '4',
+                prompt: '输入商检费...',
+                columns: [[
+                    { field: 'PartNumber', title: '型号', width: 200, align: 'left' },
+                    { field: 'CIQ', title: '是否商检', width: 100, align: 'left' },
+                    { field: 'CIQprice', title: '商检费用', width: 100, align: 'left' },
+                ]],
+                onSelect: function () {
+                    var grid = $("#ciqPrice").combogrid('grid');
+                    var row = grid.datagrid('getSelected');
+                    if (row.CIQ == '否') {
+                        $('#ciqPrice').combogrid('setValue', null);
+                        $('#isCiq').prop('checked', false);
+                    } else {
+                        $('#isCiq').prop('checked', true);
+                    }
+                    var value = $("#ciqPrice").combogrid("getValue");
+                    var text = $("#ciqPrice").combogrid("getText");
+                    if (value == text) {
+                        $("#ciqPrice").combogrid("setValue", '');
+                    }
+
+                }
+            });
+            $('#ciqPrice').combogrid('textbox').bind('focus', function () {
+                $('#ciqPrice').combogrid('showPanel');
+            });
+
+            //是否商检valuechange事件
+            $('#isCiq').change(function () {
+                if (this.checked) {
+                    $('#ciqPrice').combogrid('textbox').css('background', 'white');
+                    $('#ciqPrice').combogrid('textbox').attr('readonly', false);
+                } else {
+                    $('#ciqPrice').combogrid('textbox').css('background', '#EBEBE4');
+                    $('#ciqPrice').combogrid('textbox').attr('readonly', true);
+                    //清除商检费的输入框
+                    $("#ciqPrice").textbox("setValue", '');
+                }
+            });
+            preProduct = top.window['topdata'];
+
+            if (preProduct != null) {
+                if (preProduct.Step == 8 || preProduct.Step == 10) {
+                    if (preProduct.PIs != '') {
+                        var PIs = JSON.parse(preProduct.PIs);
+                        if (PIs.length == 0) {
+                            $("#unUpload").show();
+                            $("#upload").hide();
+                        } else if (PIs.length > 0) {
+                            $("#unUpload").hide();
+                            $("#upload").show();
+                            for (var i = 0; i < PIs.length; i++) {
+                                var $li = $("<li><i class='iconfont icon-wenjian'></i><em>" + PIs[i]["FileName"] + "</em> <span onclick='ViewPIs(\"" + PIs[i]["Url"] + "\")'>查看</span></li>");
+                                $('#upload').append($li);
+                            }
+                        }
+                    }
+                    if (preProduct.Supplier != '') {
+                        var supplier = JSON.parse(preProduct.Supplier);
+                        $('#supplierName').html(supplier.ChineseName);
+                    }
+                } else {
+                    $('#pis').hide();
+                }
+
+                PvDataApiUrl = preProduct['PvDataApiUrl'];
+                CallBackApiUrl = preProduct['CallBackUrl'].split('PreClassify')[0];
+
+                $('#ProductUnionCode').html(preProduct['ProductUnionCode']);
+                $('#clientName').html(preProduct['ClientName']);
+                $('#clientCode').html(preProduct['ClientCode']);
+                $('#manufacturer').textbox('setValue', preProduct['Manufacturer']);
+                $('#partNumber').combogrid('setValue', preProduct['PartNumber']);
+                $('#origin').textbox('setValue', preProduct['Origin']);
+                $('#currency').html(preProduct['Currency']);
+                $('#taxCode').textbox('setValue', preProduct['TaxCode']);
+                $('#taxName').textbox('setValue', preProduct['TaxName']);
+                $('#hsCode').combogrid('setValue', preProduct['HSCode']);
+                setHSCode(preProduct['HSCode']);
+                $('#tariffName').combogrid('setValue', preProduct['TariffName']);
+                $('#importPreferentialTaxRate').combogrid('setValue', parseFloat(preProduct['ImportPreferentialTaxRate']) == 0 ? '' : preProduct['ImportPreferentialTaxRate']);
+                $('#originATRate').combogrid('setValue', parseFloat(preProduct['OriginATRate']) == 0 ? '' : preProduct['OriginATRate']);
+                $('#vatRate').combogrid('setValue', parseFloat(preProduct['VATRate']) == 0 ? '' : preProduct['VATRate']);
+                $('#ExciseTaxRate').combogrid('setValue', parseFloat(preProduct['ExciseTaxRate']) == 0 ? '' : preProduct['ExciseTaxRate']);
+                $('#quantity').html(preProduct['Quantity']);
+                $('#unitPrice').combogrid('setValue', preProduct['UnitPrice']);
+                $('#totalPrice').html(preProduct['TotalPrice']);
+                $('#legalUnit1').textbox('setValue', preProduct['LegalUnit1']);
+                $('#legalUnit2').textbox('setValue', preProduct['LegalUnit2'])
+                $('#ciqCode').combobox('setValue', preProduct['CIQCode']);
+                $('#elements').textbox('setValue', preProduct['Elements']);
+
+                var isCcc = preProduct['Ccc'];
+                var isEmbargo = preProduct['Embargo'];
+                var isHkControl = preProduct['HkControl'];
+                var isCoo = preProduct['Coo'];
+                var isCiq = preProduct['CIQ'];
+                var isHighPrice = preProduct['IsHighPrice'];
+
+                if (isCcc) {
+                    $('#isCcc').prop('checked', true);
+                } else {
+                    $('#isCcc').prop('checked', false);
+                }
+                if (isEmbargo) {
+                    $('#isEmbargo').prop('checked', true);
+                } else {
+                    $('#isEmbargo').prop('checked', false);
+                }
+                if (isHkControl) {
+                    $('#isHkControl').prop('checked', true);
+                } else {
+                    $('#isHkControl').prop('checked', false);
+                }
+                if (isCoo) {
+                    $('#isCoo').prop('checked', true);
+                } else {
+                    $('#isCoo').prop('checked', false);
+                }
+                if (isCiq) {
+                    $('#isCiq').prop('checked', true);
+                    $('#ciqPrice').combogrid('setValue', preProduct['CIQprice']);
+                } else {
+                    $('#isCiq').prop('checked', false);
+                    $('#ciqPrice').combogrid('textbox').css('background', '#EBEBE4');
+                    $('#ciqPrice').combogrid('textbox').attr('readonly', true);
+                }
+                if (isHighPrice) {
+                    $('#isHighPrice').prop('checked', true);
+                } else {
+                    $('#isHighPrice').prop('checked', false);
+                }
+                //验证客户填写品牌与申报要素品牌是否一致
+                verifyManufacturer();
+
+                //显示单价的输入框始终是不可编辑状态PvDataApiUrl
+                $("input[name^='unitPrice']").prev().prop('disabled', true);
+
+                var itemId = preProduct['MainID'];
+                if (preProduct.Step != 1) {
+                    //获取summary
+                    getDataFun(PvDataApiUrl + 'PreClassify/GetClassified', { mainId: itemId }, {
+                        success: function (res) {
+                            if (res.data && res.data.Summary) {
+                                $('#summary').textbox('setValue', res.data.Summary);
+                            }
+                        }
+                    });
+                }
+
+                //产品归类操作日志
+                getDataFun(PvDataApiUrl + 'Classify/GetClassifyOperatingLogs', { itemId: itemId }, {
+                    noDataFun: function () {
+                        $('#classifyOperatingLogs').append('<div style="margin:10px"><p style="margin:5px">无产品归类操作记录</p></div>');
+                    },
+                    success: function (res) {
+                        $('#classifyOperatingLogs').mylogs({ data: res.data });
+                    }
+                });
+                //产品归类变更日志
+                getDataFun(PvDataApiUrl + 'Classify/GetClassifyModifiedLogs', { partNumber: preProduct['PartNumber'] }, {
+                    noDataFun: function () {
+                        $('#classifyModifiedLogs').append('<div style="margin:10px"><p style="margin:5px">无产品归类变更记录</p></div>');
+                    },
+                    success: function (res) {
+                        $('#classifyModifiedLogs').mylogs({ data: res.data });
+                    }
+                });
+
+                //获取产品管控信息
+                getDataFun(PvDataApiUrl + 'Classify/GetSysControls', { partNumber: preProduct['PartNumber'] }, {
+                    success: function (res) {
+                        if (res.data) {
+                            if (res.data.IsSysEmbargo) {
+                                setIsSysEmbargo(res.data.IsSysEmbargo);
+                            }
+                            if (res.data.IsSysCcc) {
+                                setIsSysCcc(res.data.IsSysCcc);
+                                if (preProduct && preProduct.Step == 6) {
+                                    $('#isCcc').prop('checked', true);
+                                }
+                            }
+                        } else {
+                            setIsSysEmbargo(global_isSysEmbargo);
+                            setIsSysCcc(global_isSysCcc);
+                        }
+                    }
+                });
+
+                //获取消毒/检疫
+                getDataFun(PvDataApiUrl + 'Classify/GetOriginDisinfection', { origin: preProduct['Origin'] }, {
+                    success: function (res) {
+                        if (res.data) {
+                            if (res.data.IsDisinfected) {
+                                global_isDisinfected = res.data.IsDisinfected;
+                            }
+                        }
+                    }
+                });
+
+                //获取归类历史数据备注信息
+                postDataFun(PvDataApiUrl + 'Classify/GetRemark', {
+                    partNumber: preProduct['PartNumber'],
+                    manufacturer: preProduct['Manufacturer']
+                }, {
+                    success: function (res) {
+                        $('#remark').html('归类历史数据备注信息：' + res.data);
+                        $('#remark').css('display', 'block');
+                    }
+                });
+
+                //获取Eccn信息
+                postDataFun(PvDataApiUrl + 'Data/Eccn', {
+                    partNumber: preProduct['PartNumber']
+                }, {
+                    success: function (res) {
+                        $('#eccnCode').html(res.data.Code);
+                    }
+                });
+            }
+            $.parser.parse('#list');
+            if (preProduct && preProduct.Step == 8) {
+                setDisable();
+            }
+            //设置只读输入框背景色
+            setReadonlyBgColor('easyui-textbox', '#EBEBE4');
+            setReadonlyBgColor('easyui-combogrid', '#EBEBE4');
+            $('#partNumber').combogrid('textbox').css('background', '#EBEBE4');
+            $('#ciqCode').combobox('setValue', preProduct['CIQCode']);
+            var url = location.pathname.replace(/Edit.aspx/ig, 'Edit.aspx');
+
+
+        });
+        //管制查询
+        function QueryHkControl() {
+            var url = location.pathname.replace(/Edit.html/ig, '../HKControl/List.aspx');
+            top.$.myWindow({
+                iconCls: "",
+                url: url,
+                noheader: false,
+                title: '香港管制信息查询',
+                width: '80%',
+                height: '600px',
+                onClose: function () {
+                }
+            });
+
+
+        }
+        //合同展示
+        function ViewPIs(url) {
+            $('#viewfileImg').css('display', 'none');
+            $('#viewfilePdf').css('display', 'none');
+            if (url.toLowerCase().indexOf('pdf') > 0) {
+                $('#viewfilePdf').attr('src', url);
+                $('#viewfilePdf').css("display", "block");
+            }
+            else {
+                $('#viewfileImg').attr('src', url);
+                $('#viewfileImg').css("display", "block");
+            }
+            $('#viewFileDialog').window('open').window('center');
+        }
+
+        //在已完成页面展示时变为不可编辑状态
+        function setDisable() {
+            $('#btnHSCode').hide();
+            $("#btnConfirm").css("display", "none");
+            $('input[class*=textbox-text]').prop('disabled', true);
+            $('input[class*=combobox]').prop('disabled', true);
+            $('input[class*=combogrid]').prop('disabled', true);
+            $('#isCiq').prop('disabled', true);
+            $('#isCoo').prop('disabled', true);
+            $('#isCcc').prop('disabled', true);
+            $('#isHighPrice').prop('disabled', true);
+            $('#isEmbargo').prop('disabled', true);
+            $('#isHkControl').prop('disabled', true);
+
+            //咨询完成 & 咨询人 不要看到特殊类型红字提示 20220125
+            if (preProduct.Source == '采购咨询查看') {
+                $('#specialTips').children('*').css('display', 'none');
+            }
+        }
+
+        //申报要素查询
+        function elementsQuery() {
+            var elementsWin = preProduct['SetWindow'] + '_elements_' + Math.floor(Math.random() * 10000);
+            $.myDialog.setMyDialog(elementsWin, window);
+
+            var hsCode = $('#hsCode').combogrid('getText');
+            var isHSCodeChanged = false;
+            if (hsCode != global_curHSCode) {
+                isHSCodeChanged = true;
+            }
+            if (hsCode == null || hsCode == undefined || hsCode == '') {
+                $.messager.alert('提示', '请输入海关编码！');
+                return;
+            } else {
+                var url = location.pathname.replace(/Edit.html/ig, '../ElementsQuery/Edit.html') + '?IsHSCodeChanged=' + isHSCodeChanged;
+                $.myDialog({
+                    url: url + '&setwindow=' + elementsWin + '&PvDataApiUrl=' + preProduct['PvDataApiUrl'],
+                    noheader: false,
+                    title: '申报要素查询',
+                    closable: true,
+                    width: '1100px',
+                    height: '500px',
+                    onClose: function () {
+
+                    }
+                });
+            }
+        }
+
+        //设置海关编码
+        function setHSCode(hsCode) {
+            $('#hsCode').combogrid('setValue', hsCode);
+            global_curHSCode = hsCode;
+        }
+
+        //系统判断是否需要商检
+        function setIsSysCiq(isCiq) {
+            if (isCiq) {
+                $('#isCiq').prop('checked', true);
+                $('#ciqPrice').combogrid('textbox').css('background', 'white');
+                $('#ciqPrice').combogrid('textbox').attr('readonly', false);
+            } else {
+                $('#isCiq').prop('checked', false);
+                $('#ciqPrice').combogrid('textbox').css('background', '#EBEBE4');
+                $('#ciqPrice').combogrid('textbox').attr('readonly', true);
+            }
+        }
+
+        //系统判断是否需要原产地证明
+        function setIsSysCoo(isCoo) {
+            if (isCoo) {
+                $('#isCoo').prop('checked', true);
+            } else {
+                $('#isCoo').prop('checked', false);
+            }
+        }
+
+        //系统判断是否是禁运产品
+        function setIsSysEmbargo(isEmbargo) {
+            if (isEmbargo) {
+                global_isSysEmbargo = true;
+                $('#embargo').css('display', 'block');
+                //$('#isEmbargo').prop('checked', true);
+                //$('#isEmbargo').prop('disabled', true);
+            } else {
+                global_isSysEmbargo = false;
+                $('#embargo').css('display', 'none');
+            }
+        }
+
+        //系统判断是否需要Ccc认证
+        function setIsSysCcc(isCcc) {
+            if (isCcc) {
+                global_isSysCcc = true;
+                $('#ccc').css('display', 'block');
+            } else {
+                global_isSysCcc = false;
+                $('#ccc').css('display', 'none');
+            }
+        }
+
+        //品牌变更
+        function mfrChanged() {
+            global_isMfrChanged = true;
+            verifyManufacturer();
+        }
+
+        //高价值产品提示
+        function checkHighVlaueShowTip(currentValue, HsCode) {
+            if (((preProduct['UnitPrice'] > 10) && (currentValue.indexOf("二极管") >= 0 || currentValue.indexOf("三极管") >= 0 || currentValue.indexOf("二極管") >= 0 || currentValue.indexOf("三極管") >= 0)) || ((preProduct['UnitPrice'] > 20) && (HsCode.indexOf("8533") >= 0 || HsCode.indexOf("8532") >= 0))) {
+                $('#unitPriceWarning').css('display', 'block');
+            } else {
+                $('#unitPriceWarning').css('display', 'none');
+            }
+        }
+
+        //单价与历史价格浮动超过10%，需要有明显的提示
+        function unitPriceTip(strCurrentUnitPrice, strHistoryAvgUnitPrice) {
+            var currentUnitPrice = Number(strCurrentUnitPrice);
+            var historyAvgUnitPrice = Number(strHistoryAvgUnitPrice);
+
+            if (historyAvgUnitPrice <= 0) {
+                return;
+            }
+            if (currentUnitPrice >= historyAvgUnitPrice * 0.9 && currentUnitPrice <= historyAvgUnitPrice * 1.1) {
+                return;
+            }
+
+            $("input[name^='unitPrice']").prev().css('color', 'red');
+        }
+
+        //验证客户填写的品牌与申报要素中的品牌是否一致
+        function verifyManufacturer() {
+            if ($('#elements').val() != '') {
+                var hsCode = $('#hsCode').combogrid('getText');
+                getDataFun(PvDataApiUrl + 'Classify/GetElementsFormat', {
+                    hsCode: hsCode
+                }, {
+                    success: function (res) {
+                        var data = res.data;
+                        if (data && data != null && data != '') {
+                            var array = data.split(';');
+                            var elementsArray = $('#elements').val().split('|');
+                            var isContainMfr = false;
+                            for (var i = 0; i < array.length; i++) {
+                                var arr = array[i].split(':');
+                                var element = elementsArray[i];
+
+                                if (arr[1] == '品牌' || arr[1] == '品牌（中文或外文名称）') {
+                                    isContainMfr = true;
+                                    var mfr = $.trim($('#manufacturer').textbox('getValue'));
+                                    var elementMfr = $.trim(element.split('牌')[0]);
+                                    if ((mfr.toLowerCase()) == elementMfr.toLowerCase()) {
+                                        $('#mfrVerify').css('display', 'none');
+                                    } else {
+                                        if (global_isMfrChanged) {
+                                            elementsArray[i] = mfr + '牌';
+                                            $('#elements').textbox('setValue', elementsArray.join('|'));
+                                            $('#mfrVerify').css('display', 'none');
+                                            global_isMfrChanged = false;
+                                        } else {
+                                            $('#mfrVerify').css('display', 'block');
+                                        }
+                                    }
+                                }
+                                if (arr[1] == '品牌（中文及外文名称）') {
+                                    isContainMfr = true;
+                                    var index = element.indexOf('/') + 1;
+                                    var elementMfr = element.substr(index, element.length - index - 1);
+                                    var mfr = $.trim($('#manufacturer').textbox('getValue'));
+                                    if ((mfr.toLowerCase()) == elementMfr.toLowerCase()) {
+                                        $('#mfrVerify').css('display', 'none');
+                                    } else {
+                                        if (global_isMfrChanged) {
+                                            var currentIndex = i;
+                                            postDataFun(PvDataApiUrl + 'Classify/GetElementsManufaturer', {
+                                                manufacturer: mfr
+                                            }, {
+                                                noDataFun: function () {
+                                                    $.messager.alert('提示', '品牌【' + mfr + '】未在系统中配置中文及外文名称，请在系统添加相关配置！');
+                                                },
+                                                success: function (res) {
+                                                    elementsArray[currentIndex] = res.data.CnEn;
+                                                    $('#elements').textbox('setValue', elementsArray.join('|'));
+                                                    $('#mfrVerify').css('display', 'none');
+                                                    global_isMfrChanged = false;
+                                                }
+                                            });
+                                        } else {
+                                            $('#mfrVerify').css('display', 'block');
+                                        }
+                                    }
+                                }
+                            }
+                            if (!isContainMfr) {
+                                $('#mfrVerify').css('display', 'none');
+                            }
+                        }
+                    }
+                })
+            } else {
+                $('#mfrVerify').css('display', 'none');
+            }
+        }
+
+        //================================================= 归类信息提交 Begin ===================================================
+
+        function getDomData() {
+            return {
+                CreatorID: preProduct['CreatorID'],
+                CreatorName: preProduct['CreatorName'],
+                ProductUnionCode: preProduct['ProductUnionCode'],
+                MainID: preProduct['MainID'],
+                ClientName: preProduct['ClientName'],
+                ClientCode: preProduct['ClientCode'],
+                CallBackUrl: preProduct['CallBackUrl'],
+
+                PartNumber: $("#partNumber").combogrid('getText'),
+                Manufacturer: $("#manufacturer").textbox('getText'),
+                Origin: $("#origin").textbox('getText'),
+                UnitPrice: $('#unitPrice').combogrid('getText'),
+                Quantity: $('#quantity').text(),
+                Currency: $('#currency').text(),
+                HSCode: $("#hsCode").combogrid('getText'),
+                TariffName: $("#tariffName").combogrid('getText'),
+                TaxCode: $("#taxCode").textbox('getText'),
+                TaxName: $("#taxName").textbox('getText'),
+                ImportPreferentialTaxRate: isNaN(parseFloat($("#importPreferentialTaxRate").combogrid("getText"))) == true ? 0 : $("#importPreferentialTaxRate").combogrid("getText"),
+                OriginRate: isNaN(parseFloat($("#originATRate").combogrid("getText"))) == true ? 0 : $("#originATRate").combogrid("getText"),
+                VATRate: isNaN(parseFloat($("#vatRate").combogrid("getText"))) == true ? 0 : $("#vatRate").combogrid("getText"),
+                ExciseTaxRate: isNaN(parseFloat($("#ExciseTaxRate").combogrid("getText"))) == true ? 0 : $("#ExciseTaxRate").combogrid("getText"),
+                LegalUnit1: $("#legalUnit1").textbox('getText'),
+                LegalUnit2: $("#legalUnit2").textbox('getText'),
+                CIQCode: $('#ciqCode').combobox('getText'),
+                Elements: $('#elements').textbox('getText'),
+                Summary: $('#summary').textbox('getText'),
+
+                CIQ: $('#isCiq').prop('checked'),
+                CIQprice: $("#ciqPrice").combogrid('getText'),
+                Ccc: $('#isCcc').prop('checked'),
+                Embargo: $('#isEmbargo').prop('checked'),
+                HkControl: $('#isHkControl').prop('checked'),
+                Coo: $('#isCoo').prop('checked'),
+                IsHighPrice: $('#isHighPrice').prop('checked')
+            }
+        }
+
+        function initClassifySuccessDialog() {
+            $("#classifySuccess-dialog-content").html('归类成功');
+
+            $('#classifySuccess-dialog').dialog({
+                title: '提示',
+                width: 350,
+                height: 180,
+                closed: true,
+                //cache: false,
+                modal: true,
+                buttons: [{
+                    id: 'btn-classifySuccess-ok',
+                    text: '确定',
+                    width: 70,
+                    handler: function () {
+                        $('#classifySuccess-dialog').dialog('close');
+                        $.myWindow.close();
+                    }
+                }, {
+                    id: 'btn-classifySuccess-continueClassify',
+                    text: '继续归类',
+                    width: 70,
+                    handler: function () {
+                        $('#classifySuccess-dialog').dialog('close');
+                        ajaxLoading();
+                        getDataFun(preProduct['NextUrl'], {
+                            Step: preProduct.Step,
+                            CreatorID: preProduct.CreatorID,
+                            UseType: preProduct.UseType,
+                        }, {
+                            noDataFun: function () {
+                                ajaxLoadEnd();
+                                $.messager.alert('提示', '没有需要归类的产品了！', 'info', function () {
+                                    $.myWindow.close();
+                                });
+                            },
+                            success: function (res) {
+                                var ewindow = $.myWindow.getMyWindow(preProduct['SetWindow']);
+                                $.myWindow.setMyWindow(preProduct['SetWindow'], ewindow);
+
+                                var dataN = res.data;
+                                dataN['SetWindow'] = preProduct['SetWindow'];
+
+                                ewindow.doClassify(dataN, {
+                                    openTimes: 'more',
+                                    xdt: true
+                                });
+                                ajaxLoadEnd();
+                            },
+                            exceptionFun: function (res) {
+                                ajaxLoadEnd();
+                                $.messager.alert('提示', res.data, 'info', function () {
+                                    $.myWindow.close();
+                                });
+                            }
+                        });
+
+                    }
+                }],
+            });
+            $('#classifySuccess-dialog').window('center'); //dialog 居中
+        }
+        function initClassifySuccessDialog2() {
+            $("#classifySuccess-dialog-content").html('归类成功');
+
+            $('#classifySuccess-dialog').dialog({
+                title: '提示',
+                width: 350,
+                height: 180,
+                closed: true,
+                //cache: false,
+                modal: true,
+                buttons: [{
+                    id: 'btn-classifySuccess-ok',
+                    text: '确定',
+                    width: 70,
+                    handler: function () {
+                        $('#classifySuccess-dialog').dialog('close');
+                        $.myWindow.close();
+                    }
+                }],
+            });
+            $('#classifySuccess-dialog').window('center'); //dialog 居中
+        }
+        //归类提交
+        function classify() {
+
+            //验证表单数据
+            var isValid = $('#form1').form('enableValidation').form('validate');
+            if (!isValid) {
+                return;
+            }
+
+            //验证税务名称
+            var taxName = $('#taxName').textbox('getValue');
+            var tariffName = $("#tariffName").combogrid("getText");
+            if (taxName.split('*')[2] != tariffName) {
+                $.messager.alert('提示', '税务名称第二个*号后的内容必须与报关品名一致！');
+                return;
+            }
+
+            //数值验证
+            var rate1 = parseFloat($("#importPreferentialTaxRate").combogrid("getText"));
+            if (!isNaN(parseFloat(rate1)) && (rate1 < 0 || rate1 > 1)) {
+                $.messager.alert('提示', '优惠税率应为0~1之间的小数！');
+                return;
+            }
+            var rate2 = parseFloat($("#vatRate").combogrid("getText"));
+            if (!isNaN(parseFloat(rate2)) && (rate2 < 0 || rate2 > 1)) {
+                $.messager.alert('提示', '增值税率应为0~1之间的小数！');
+                return;
+            }
+            var rate3 = parseFloat($("#originATRate").combogrid("getText"));
+            if (!isNaN(parseFloat(rate3)) && (rate3 < 0 || rate3 > 1)) {
+                $.messager.alert('提示', '加征税率应为0~1之间的小数！');
+                return;
+            }
+            var rate4 = parseFloat($("#ExciseTaxRate").combogrid("getText"));
+            if (!isNaN(parseFloat(rate4)) && (rate4 < 0 || rate4 > 1)) {
+                $.messager.alert('提示', '消费税率应为0~1之间的小数！');
+                return;
+            }
+
+            //如果需要商检，必须填写商检费
+            var isCiq = $('#isCiq').prop('checked');
+            if (isCiq) {
+                if (IsNotFloat($("#ciqPrice").combogrid("getText"))) {
+                    $.messager.alert('提示', '请输入正确的商检费！');
+                    return;
+                }
+            }
+
+            ajaxLoading();
+            //归类提交时，需要验证型号、品牌与申报要素中是否一致
+            var hsCode = $('#hsCode').combogrid('getText');
+            getDataFun(PvDataApiUrl + '/Classify/GetElementsFormat', {
+                hsCode: hsCode
+            }, {
+                success: function (res) {
+                    ajaxLoadEnd();
+
+                    var data = res.data;
+                    if (data && data != null && data != '') {
+                        var array = data.split(';');
+                        var elementsArray = $('#elements').val().split('|');
+                        var isPassed = true;
+                        for (var i = 0; i < array.length; i++) {
+                            var arr = array[i].split(':');
+                            var element = elementsArray[i];
+
+                            if (arr[1] == '品牌' || arr[1] == '品牌（中文或外文名称）') {
+                                var mfr = $.trim($('#manufacturer').textbox('getValue'));
+                                var elementMfr = $.trim(element.split('牌')[0]);
+                                if ((mfr.toLowerCase()) != elementMfr.toLowerCase()) {
+                                    isPassed = false;
+                                    $.messager.alert('提示', '品牌与申报要素中不一致！');
+                                    break;
+                                }
+                            }
+                            if (arr[1] == '品牌（中文及外文名称）') {
+                                var index = element.indexOf('/') + 1;
+                                //不符合2021年海关税则的申报要素的格式要求
+                                if (index == 0) {
+                                    isPassed = false;
+                                    $.messager.alert('提示', '申报要素中品牌需要包含中文及外文名称！');
+                                    break;
+                                }
+
+                                var elementMfr = element.substr(index, element.length - index - 1);
+                                var mfr = $.trim($('#manufacturer').textbox('getValue'));
+                                if ((mfr.toLowerCase()) != elementMfr.toLowerCase()) {
+                                    isPassed = false;
+                                    $.messager.alert('提示', '品牌与申报要素中不一致！');
+                                    break;
+                                }
+                            }
+                            if (arr[1] == '型号') {
+                                var partNumber = $.trim($('#partNumber').combogrid('getText'));
+                                if ((partNumber.toLowerCase()) != elementsArray[i].toLowerCase()) {
+                                    isPassed = false;
+                                    $.messager.alert('提示', '型号与申报要素中不一致！');
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (isPassed) {
+                            //验证归类的结果
+                            var dataAll = getDomData();
+                            var data0 = {
+                                ProductUnionCode: dataAll.ProductUnionCode,
+                                MainID: dataAll.MainID,
+                                PartNumber: dataAll.PartNumber,
+                                Manufacturer: dataAll.Manufacturer,
+                                UnitPrice: dataAll.UnitPrice,
+                                Currency: dataAll.Currency,
+                                Quantity: dataAll.Quantity,
+                                HSCode: dataAll.HSCode,
+                                TariffName: dataAll.TariffName,
+                                TaxCode: dataAll.TaxCode,
+                                TaxName: dataAll.TaxName,
+                                ImportPreferentialTaxRate: dataAll.ImportPreferentialTaxRate,
+                                VATRate: dataAll.VATRate,
+                                ExciseTaxRate: dataAll.ExciseTaxRate,
+                                LegalUnit1: dataAll.LegalUnit1,
+                                LegalUnit2: dataAll.LegalUnit2,
+                                CIQCode: dataAll.CIQCode,
+                                Elements: dataAll.Elements,
+                                OriginRate: dataAll.OriginRate,
+                                CIQ: dataAll.CIQ,
+                                CIQprice: dataAll.CIQprice,
+                                Ccc: dataAll.Ccc,
+                                Embargo: dataAll.Embargo,
+                                HkControl: dataAll.HkControl,
+                                Coo: dataAll.Coo,
+                                IsHighPrice: dataAll.IsHighPrice,
+                            }
+
+                            ajaxLoading();
+                            //验证归类结果
+                            postDataFun(PvDataApiUrl + 'Classify/ValidateClassified', data0, {
+                                noDataFun: function () {
+                                    ajaxLoadEnd();
+                                    postData();
+                                },
+                                success: function (res) {
+                                    ajaxLoadEnd();
+                                    $.messager.confirm({
+                                        width: 700,
+                                        title: '提示',
+                                        msg: res.data,
+                                        fn: function (success) {
+                                            if (success) {
+                                                postData();
+                                            }
+                                        }
+                                    });
+                                },
+                                exceptionFun: function (res) {
+                                    ajaxLoadEnd();
+                                    $.messager.alert('提示', res.data);
+                                }
+                            });
+                        }
+                    }
+                }
+            });
+        }
+
+        //提交至中心数据的数据,提交至子系统的数据
+        function postData() {
+            var dataAll = getDomData();
+            //提交至中心数据的数据
+            var data1 = {
+                ProductUnionCode: dataAll.ProductUnionCode,
+                MainID: dataAll.MainID,
+                ClientName: dataAll.ClientName,
+                ClientCode: dataAll.ClientCode,
+                CallBackUrl: dataAll.CallBackUrl,
+
+                PartNumber: dataAll.PartNumber,
+                Manufacturer: dataAll.Manufacturer,
+                Origin: dataAll.Origin,
+                UnitPrice: dataAll.UnitPrice,
+                Quantity: dataAll.Quantity,
+                Currency: dataAll.Currency,
+                HSCode: dataAll.HSCode,
+                TariffName: dataAll.TariffName,
+                TaxCode: dataAll.TaxCode,
+                TaxName: dataAll.TaxName,
+                ImportPreferentialTaxRate: dataAll.ImportPreferentialTaxRate,
+                VATRate: dataAll.VATRate,
+                ExciseTaxRate: dataAll.ExciseTaxRate,
+                LegalUnit1: dataAll.LegalUnit1,
+                LegalUnit2: dataAll.LegalUnit2,
+                CIQCode: dataAll.CIQCode,
+                Elements: dataAll.Elements,
+                Summary: dataAll.Summary,
+                OriginRate: dataAll.OriginRate,
+
+                CIQ: dataAll.CIQ,
+                CIQprice: dataAll.CIQprice,
+                Ccc: dataAll.Ccc,
+                Embargo: dataAll.Embargo,
+                HkControl: dataAll.HkControl,
+                Coo: dataAll.Coo,
+                IsHighPrice: dataAll.IsHighPrice,
+                IsDisinfected: global_isDisinfected,
+                IsSysCcc: global_isSysCcc,
+                IsSysEmbargo: global_isSysEmbargo,
+                IsCustomsInspection: global_isCustomsInspection,
+
+                Step: preProduct.Step,
+                CreatorID: preProduct.CreatorID,
+                CreatorName: preProduct.CreatorName,
+                Role: preProduct.Role
+            }
+
+            ajaxLoading();
+            //提交至中心数据
+            postDataFun(PvDataApiUrl + 'PreClassify/SubmitClassified', data1, {
+                success: function (res) {
+                    //成功之后,提交至子系统
+                    var data2 = {
+                        MainID: dataAll.MainID,
+                        ProductID: res.data.ProductID,
+
+                        HSCodeID: res.data.HSCodeID,
+                        Step: preProduct.Step,
+                        CreatorID: preProduct.CreatorID,
+
+                        PartNumber: dataAll.PartNumber,
+                        Manufacturer: dataAll.Manufacturer,
+                        Origin: dataAll.Origin,
+                        Quantity: dataAll.Quantity,
+                        UnitPrice: dataAll.UnitPrice,
+                        Currency: dataAll.Currency,
+                        HSCode: dataAll.HSCode,
+                        TariffName: dataAll.TariffName,
+                        TaxCode: dataAll.TaxCode,
+                        TaxName: dataAll.TaxName,
+                        ImportPreferentialTaxRate: dataAll.ImportPreferentialTaxRate,
+                        VATRate: dataAll.VATRate,
+                        ExciseTaxRate: dataAll.ExciseTaxRate,
+                        Unit: dataAll.Unit,
+                        LegalUnit1: dataAll.LegalUnit1,
+                        LegalUnit2: dataAll.LegalUnit2,
+                        CIQCode: dataAll.CIQCode,
+                        Elements: dataAll.Elements,
+
+                        Summary: dataAll.Summary,
+                        OriginRate: dataAll.OriginRate,
+                        FVARate: res.data.FVARate,
+                        CIQ: dataAll.CIQ,
+                        CIQprice: dataAll.CIQprice,
+                        Ccc: dataAll.Ccc,
+                        Embargo: dataAll.Embargo,
+                        HkControl: dataAll.HkControl,
+                        Coo: dataAll.Coo,
+                        IsHighPrice: dataAll.IsHighPrice,
+                        IsSysCcc: global_isSysCcc,
+                        IsDisinfected: global_isDisinfected,
+                        IsSysEmbargo: global_isSysEmbargo,
+                        IsCustomsInspection: global_isCustomsInspection,
+                    }
+                    postDataFun(preProduct['CallBackUrl'], data2, {
+                        success: function () {
+                            ajaxLoadEnd();
+                            if (preProduct && (preProduct.Step == 6 || preProduct.Step == 7)) {
+                                initClassifySuccessDialog();
+                            } else {
+                                initClassifySuccessDialog2();
+                            }
+                            $('#classifySuccess-dialog').dialog('open');
+                        },
+                        exceptionFun: function (res) {
+                            ajaxLoadEnd();
+                            $.messager.alert('提示', res.data);
+                        }
+                    })
+                },
+                exceptionFun: function (res) {
+                    ajaxLoadEnd();
+                    $.messager.alert('提示', res.data);
+                }
+            })
+        }
+
+        //================================================= 归类信息提交 End =====================================================
+
+        //关闭页面
+        function closeSelf() {
+            $.myWindow.close();
+        }
+    </script>
+</body>
+</html>

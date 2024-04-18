@@ -1,0 +1,399 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{EF7C5B21-4CE2-454A-8719-70E6DADACB69}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Yahv.Services</RootNamespace>
+    <AssemblyName>Yahv.Services</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;TEST</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ProductionVersion|AnyCPU'">
+    <OutputPath>bin\ProductionVersion\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ProductionVersion|x64'">
+    <OutputPath>bin\x64\ProductionVersion\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Yahv.Erm\Yahv.Erm.WebApp\Bin\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CheckPrimaryKey.cs" />
+    <Compile Include="Enums\Enum.SourceType.cs" />
+    <Compile Include="Events\ConfirmedEventArgs.cs" />
+    <Compile Include="Events\LsPayConfirmedEventArgs.cs" />
+    <Compile Include="Events\OrderEventArgs.cs" />
+    <Compile Include="Events\WhsPayConfirmedEventArgs.cs" />
+    <Compile Include="Extends\ToLinqExtends.cs" />
+    <Compile Include="Models\Agent\nBrand.cs" />
+    <Compile Include="Models\Agent\vBrand.cs" />
+    <Compile Include="Models\AnonymousEnterprise.cs" />
+    <Compile Include="Models\Carrier\Carrier.cs" />
+    <Compile Include="Models\Carrier\Driver.cs" />
+    <Compile Include="Models\Carrier\Transport.cs" />
+    <Compile Include="Models\Consignor.cs" />
+    <Compile Include="Models\Contract.cs" />
+    <Compile Include="Models\DeclarationApply.cs" />
+    <Compile Include="Models\PvbErm\WorkCity.cs" />
+    <Compile Include="Models\PveCrm\Client.cs" />
+    <Compile Include="Models\PveCrm\Company.cs" />
+    <Compile Include="Models\PveCrm\Consignee.cs" />
+    <Compile Include="Models\PveCrm\Enterprise.cs" />
+    <Compile Include="Models\PveCrm\Invoice.cs" />
+    <Compile Include="Models\PveCrm\Organization.cs" />
+    <Compile Include="Models\PveCrm\Supplier.cs" />
+    <Compile Include="Models\PveCrm\WareHouse.cs" />
+    <Compile Include="Models\PvFinance\AccountWorksStatistic.cs" />
+    <Compile Include="Models\PvRoute\FaceOrder.cs" />
+    <Compile Include="Models\vInvoice.cs" />
+    <Compile Include="Models\n\Commons.cs" />
+    <Compile Include="Models\n\wsnSupplierConsignor.cs" />
+    <Compile Include="Models\n\wsnSupplierPayee.cs" />
+    <Compile Include="Models\n\wsnSupplierContact.cs" />
+    <Compile Include="Models\n\wsnSuppliers.cs" />
+    <Compile Include="Models\n\wsPayee.cs" />
+    <Compile Include="Models\n\wsPayer.cs" />
+    <Compile Include="Models\Payer.cs" />
+    <Compile Include="Models\Payment\CouponStatistic.cs" />
+    <Compile Include="Models\Payment\CreditsStatistic.cs" />
+    <Compile Include="Models\Payment\FlowAccountsStatistic.cs" />
+    <Compile Include="Models\Payment\Payment.cs" />
+    <Compile Include="Models\Payment\VoucherCnyStatistic.cs" />
+    <Compile Include="Models\PvbCrm\ApplicationFile.cs" />
+    <Compile Include="Models\PvCenter\Voyage.cs" />
+    <Compile Include="Models\PvCenter\WaybillEnter.cs" />
+    <Compile Include="Models\PvData\Eccn.cs" />
+    <Compile Include="Models\PvData\XbjInfo.cs" />
+    <Compile Include="Models\PvWsOrderInsApiModel.cs" />
+    <Compile Include="Models\SiteUser.cs" />
+    <Compile Include="Models\StoreInventory.cs" />
+    <Compile Include="Models\TempInventory.cs" />
+    <Compile Include="Models\Warehouse\InsideOrdersWaybill.cs" />
+    <Compile Include="Models\Warehouse\LockStoreParam.cs" />
+    <Compile Include="Models\ClientProduct.cs" />
+    <Compile Include="Models\Warehouse\Sorting.cs" />
+    <Compile Include="Models\WsOrderDto.cs" />
+    <Compile Include="Models\Payee.cs" />
+    <Compile Include="PlatNotice.cs" />
+    <Compile Include="Properties\Resource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Agent\nBrandsTopView.cs" />
+    <Compile Include="Views\Agent\vBrandsTopView.cs" />
+    <Compile Include="Views\CreditsUsdStatisticsView.cs" />
+    <Compile Include="Views\PvbErm\WorkCitiesTopView.cs" />
+    <Compile Include="Views\PveCrm\BeneficiariesTopView.cs" />
+    <Compile Include="Views\PveCrm\ClientsAll.cs" />
+    <Compile Include="Views\PveCrm\CompaniesTopView.cs" />
+    <Compile Include="Views\PveCrm\ConsigneesTopView.cs" />
+    <Compile Include="Views\PveCrm\ContactsTopView.cs" />
+    <Compile Include="Views\PveCrm\EnterprisesTopView.cs" />
+    <Compile Include="Views\PveCrm\InvoicesTopView.cs" />
+    <Compile Include="Views\PveCrm\nBrandsTopView.cs" />
+    <Compile Include="Views\PveCrm\SuppliersTopView.cs" />
+    <Compile Include="Views\PveCrm\vBrandsTopView.cs" />
+    <Compile Include="Views\PveCrm\WarehousesTopView.cs" />
+    <Compile Include="Views\PvFinance\AccountWorksStatisticsView.cs" />
+    <Compile Include="Views\PvRoute\FaceOrdersTopView.cs" />
+    <Compile Include="Views\vInvoicesTopView.cs" />
+    <Compile Include="Views\n\wsnSupplierContactsTopView.cs" />
+    <Compile Include="Views\n\wsnSupplierConsignorsTopView.cs" />
+    <Compile Include="Views\n\wsnSupplierPayeesTopView.cs" />
+    <Compile Include="Views\n\wsnSuppliersTopView.cs" />
+    <Compile Include="Views\n\wsPayeesTopView.cs" />
+    <Compile Include="Views\n\wsPayersTopView.cs" />
+    <Compile Include="Views\PvbCrm\ApplicationFilesTopView.cs" />
+    <Compile Include="Views\PvbCrm\VouchersCnyStatisticsView.cs" />
+    <Compile Include="Views\PvWms\chonggou\CgDeliveriesTopView.cs" />
+    <Compile Include="Views\PvWms\chonggou\CgStoragesTopView.cs" />
+    <Compile Include="Views\PvWms\chonggou\CgTempStoragesTopView.cs" />
+    <Compile Include="Views\FlowAccountsStatisticsView.cs" />
+    <Compile Include="Views\PayeesTopView.cs" />
+    <Compile Include="Views\PayersTopView.cs" />
+    <Compile Include="Views\PvData\EccnsTopView.cs" />
+    <Compile Include="Views\PvData\XbjsTopView.cs" />
+    <Compile Include="Views\PvWms\AdminsView.cs" />
+    <Compile Include="Views\PvWms\chonggou\CgReportsView.cs" />
+    <Compile Include="Views\PvWms\ClientNoticesView.cs" />
+    <Compile Include="Views\PvWms\PickingNoticesView.cs" />
+    <Compile Include="ReceivedBase.cs" />
+    <Compile Include="Enums\Enum.LogType.cs" />
+    <Compile Include="Extends\CenterFileExtend.cs" />
+    <Compile Include="Models\AdminInfo.cs" />
+    <Compile Include="Models\Balance.cs" />
+    <Compile Include="Models\Payment\CreditStatistic.cs" />
+    <Compile Include="Models\InvoiceFile.cs" />
+    <Compile Include="Models\Log_Operating.cs" />
+    <Compile Include="Models\LsOrder\LsOrder.cs" />
+    <Compile Include="Models\LsOrder\LsOrderItem.cs" />
+    <Compile Include="Models\LsOrder\LsProducts.cs" />
+    <Compile Include="Models\Payment\PaymentsStatistic.cs" />
+    <Compile Include="Models\PvCenter\CenterFileDescription.cs" />
+    <Compile Include="Models\PvCenter\CenterFileMessage.cs" />
+    <Compile Include="Models\PvCenter\Logs_PvLsOrder.cs" />
+    <Compile Include="Models\PvCenter\UplaodResult.cs" />
+    <Compile Include="Models\PvCenter\KdnRequest.cs" />
+    <Compile Include="Models\PvCenter\KdnResult.cs" />
+    <Compile Include="Models\Payment\Received.cs" />
+    <Compile Include="Models\Payment\Vouchers.cs" />
+    <Compile Include="Models\Warehouse\LsNotice.cs" />
+    <Compile Include="OperatingLogger.cs" />
+    <Compile Include="Initializers.cs" />
+    <Compile Include="Enums\Enum.File.cs" />
+    <Compile Include="Enums\Enum.FormStatus.cs" />
+    <Compile Include="Models\CustomsRecord.cs" />
+    <Compile Include="Json\AdminJson.cs" />
+    <Compile Include="Json\RoleJson.cs" />
+    <Compile Include="Models\Account.cs" />
+    <Compile Include="Models\Beneficiary.cs" />
+    <Compile Include="Models\PvData\CenterProduct.cs" />
+    <Compile Include="Models\Payment\DebtTerm.cs" />
+    <Compile Include="Models\Payment\FlowAccount.cs" />
+    <Compile Include="Models\PvCenter\Logs_Waybills.cs" />
+    <Compile Include="Models\WarehousePlate.cs" />
+    <Compile Include="Models\Warehouse\Form.cs" />
+    <Compile Include="Models\Warehouse\Input.cs" />
+    <Compile Include="Models\Warehouse\Notice.cs" />
+    <Compile Include="Models\Warehouse\Output.cs" />
+    <Compile Include="Models\Storage.cs" />
+    <Compile Include="Models\Payment\VoucherStatistic.cs" />
+    <Compile Include="Models\Warehouse\Picking.cs" />
+    <Compile Include="Models\Warehouse\PickingWaybill.cs" />
+    <Compile Include="Models\PvCenter\WayCondition.cs" />
+    <Compile Include="Models\PvCenter\WayParter.cs" />
+    <Compile Include="Models\PvCenter\WayLoading.cs" />
+    <Compile Include="Models\PvCenter\WayCost.cs" />
+    <Compile Include="Models\PvCenter\WayChcd.cs" />
+    <Compile Include="Models\PvCenter\WayCharge.cs" />
+    <Compile Include="Models\PvCenter\Waybill.cs" />
+    <Compile Include="Models\Consignee.cs" />
+    <Compile Include="Models\Contact.cs" />
+    <Compile Include="Models\Invoice.cs" />
+    <Compile Include="Models\AdminWarehouse.cs" />
+    <Compile Include="Models\Menu.cs" />
+    <Compile Include="Models\RoleMenu.cs" />
+    <Compile Include="Models\Staff.cs" />
+    <Compile Include="Models\Plate.cs" />
+    <Compile Include="Models\WsClient.cs" />
+    <Compile Include="Models\WsOrderInput.cs" />
+    <Compile Include="Models\PvCenter\Logs_PvWsOrder.cs" />
+    <Compile Include="Models\WsOrder.cs" />
+    <Compile Include="Models\WsOrderOutput.cs" />
+    <Compile Include="Models\WsSupplier.cs" />
+    <Compile Include="ViewFactory.cs" />
+    <Compile Include="Models\AdminAdvantage.cs" />
+    <Compile Include="Models\Manufacturer.cs" />
+    <Compile Include="Models\Role.cs" />
+    <Compile Include="Models\Warehouse.cs" />
+    <Compile Include="Models\Client.cs" />
+    <Compile Include="Models\Company.cs" />
+    <Compile Include="Models\Enterprise.cs" />
+    <Compile Include="Models\Supplier.cs" />
+    <Compile Include="Models\Admin.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\AccountsPayableTopView.cs" />
+    <Compile Include="Views\AdminAdvantagesTopView.cs" />
+    <Compile Include="Views\AdminsInfoTopView.cs" />
+    <Compile Include="Views\BalancesTopView.cs" />
+    <Compile Include="Views\Carriers\CarriersTopView.cs" />
+    <Compile Include="Views\Carriers\DriversTopView.cs" />
+    <Compile Include="Views\Carriers\TransportTopView.cs" />
+    <Compile Include="Views\ConsignorsTopView.cs" />
+    <Compile Include="Views\CouponStatisticsTopView.cs" />
+    <Compile Include="Views\CreditsRepayStatisticsView.cs" />
+    <Compile Include="Views\InvoiceFilesTopView.cs" />
+    <Compile Include="Views\PvWms\LsNoticeView.cs" />
+    <Compile Include="Views\LsOrder\LsOrderItemTopView.cs" />
+    <Compile Include="Views\LsOrder\LsProductPriceTopView.cs" />
+    <Compile Include="Views\LsOrder\LsProductTopView.cs" />
+    <Compile Include="Views\LsOrder\LsOrderTopView.cs" />
+    <Compile Include="Views\ClientProductsTopView.cs" />
+    <Compile Include="Views\Payment\CashRecordsTopView.cs" />
+    <Compile Include="Views\Payment\CreditRecordsTopView.cs" />
+    <Compile Include="Views\Payment\PaymentsTopView.cs" />
+    <Compile Include="Views\PvCenter\KdnResultTopView.cs" />
+    <Compile Include="Views\PvCenter\KdnRequestTopView.cs" />
+    <Compile Include="Views\PvCenter\MultFile.cs" />
+    <Compile Include="Views\PvCenter\Logs_PvLsOrderTopView.cs" />
+    <Compile Include="Views\ReceivedsTopView.cs" />
+    <Compile Include="Views\PvWms\SortingNoticesView.cs" />
+    <Compile Include="Views\SiteUsersTopView.cs" />
+    <Compile Include="Views\Tradings\TradingBeneficiaries.cs" />
+    <Compile Include="Views\Tradings\TradingClients.cs" />
+    <Compile Include="Views\Tradings\TradingConsignees.cs" />
+    <Compile Include="Views\Tradings\TradingContacts.cs" />
+    <Compile Include="Views\Tradings\TradingInvoices.cs" />
+    <Compile Include="Views\Tradings\TradingSuppliers.cs" />
+    <Compile Include="Views\VouchersTopView.cs" />
+    <Compile Include="Views\CreditsStatisticsView.cs" />
+    <Compile Include="Views\CustomsRecordsTopView.cs" />
+    <Compile Include="Views\DebtTermsTopView.cs" />
+    <Compile Include="Views\EnterprisesTopView.cs" />
+    <Compile Include="Views\FlowAccountsTopView.cs" />
+    <Compile Include="Views\InvoicesTopView.cs" />
+    <Compile Include="Views\Logs_OperatingView.cs" />
+    <Compile Include="Views\PaymentsStatisticsView.cs" />
+    <Compile Include="Views\PvCenter\CenterFilesTopView.cs" />
+    <Compile Include="Views\WarehousePlatesTopView.cs" />
+    <Compile Include="Views\WarehouseServicings\ContractsTopView.cs" />
+    <Compile Include="Views\WarehouseServicings\WsAdminsTopView.cs" />
+    <Compile Include="Views\WarehouseServicings\WsBeneficiaries.cs" />
+    <Compile Include="Views\WarehouseServicings\WsConsignees.cs" />
+    <Compile Include="Views\WarehouseServicings\WsConsignors.cs" />
+    <Compile Include="Views\WarehouseServicings\WsContacts.cs" />
+    <Compile Include="Views\WarehouseServicings\WsInvoices.cs" />
+    <Compile Include="Views\PvWms\SortingsView.cs" />
+    <Compile Include="Views\WsOrderStatusTopView.cs" />
+    <Compile Include="Views\WsOrdersTopView.cs" />
+    <Compile Include="Views\PvData\ProductsTopView.cs" />
+    <Compile Include="Views\StaffsTopView.cs" />
+    <Compile Include="Views\AdminsBusiness.cs" />
+    <Compile Include="Views\BeneficiariesTopView.cs" />
+    <Compile Include="Views\CompaniesTopView.cs" />
+    <Compile Include="Views\ConsigneesTopView.cs" />
+    <Compile Include="Views\ContactsTopView.cs" />
+    <Compile Include="Views\ManufacturersTopView.cs" />
+    <Compile Include="Views\StoragesTopView.cs" />
+    <Compile Include="Views\PlateTopView.cs" />
+    <Compile Include="Views\WarehouseServicings\TrackerWsClients.cs" />
+    <Compile Include="Views\VouchersStatisticsView.cs" />
+    <Compile Include="Views\WaybillsTopView.cs" />
+    <Compile Include="Views\WarehousesTopView.cs" />
+    <Compile Include="Views\SuppliersTopView.cs" />
+    <Compile Include="Views\ClientsAll.cs" />
+    <Compile Include="Views\MyAdmins.cs" />
+    <Compile Include="Views\AdminsAll.cs" />
+    <Compile Include="Views\WarehouseServicings\WsClientsTopView.cs" />
+    <Compile Include="Views\WarehouseServicings\WsSuppliersTopView.cs" />
+    <Compile Include="WhSettings.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Layers.Data\Layers.Data.csproj">
+      <Project>{FED16B15-565B-4ED6-A876-2146EB16B011}</Project>
+      <Name>Layers.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Layers.Linq\Layers.Linq.csproj">
+      <Project>{56c33683-ce9a-4cc5-9cef-92e03bc8f739}</Project>
+      <Name>Layers.Linq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Yahv.Linq\Yahv.Linq.csproj">
+      <Project>{C8C572DF-2BBA-4483-B332-2652805AEF87}</Project>
+      <Name>Yahv.Linq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Yahv.Underly\Yahv.Underly.csproj">
+      <Project>{15B56201-A129-4396-9431-0E5F9DA7D9F9}</Project>
+      <Name>Yahv.Underly</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Yahv.Usually\Yahv.Usually.csproj">
+      <Project>{FA84A973-FC0B-4A57-9C6A-9212392F2D1C}</Project>
+      <Name>Yahv.Usually</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Yahv.Utils\Yahv.Utils.csproj">
+      <Project>{870a94d5-f08e-481f-a7ae-b90b5c249882}</Project>
+      <Name>Yahv.Utils</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Enums\Enum.Notices.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Enums\Enum.SysBusiness.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\PvCenter\原信息化开发File的字段的示例.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Enums\Enum.LsNotice.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="Enums\Enum.DataProcessing.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\WhMenu-bak.json" />
+    <None Include="Properties\WhMenu.json" />
+    <EmbeddedResource Include="Properties\Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,202 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>指派 - jQuery EasyUI plugin</title>
+     <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/gray/easyui.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/icon-yg-cool.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/standard-easyui/styles/plugin.css" rel="stylesheet" />
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.easyui.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/locale/easyui-lang-zh_CN.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/standard-easyui/scripts/noNeed/assignment.js"></script>
+</head>
+<body>
+    <h1>指派插件</h1>
+    <button onclick="ddd()" id="mm123">打开</button>
+    <button onclick="eee()" id="mm456">打开</button>
+    <script>
+        function getData1ByKey(key, cb) {
+            $.ajax({
+                type: "get",
+                url: "/rfqapi/offers/List?id=Inq201907160009&key=" + key,
+                dataType: "jsonp",
+                success: function (data) {
+                    cb(data);
+                },
+                error: function () {
+                    alert('接口异常，请求数据失败');
+                }
+            });
+        }
+        function getData2ByKey(key, cb) {
+            $.ajax({
+                type: "get",
+                url: "/rfqapi/offers/List?id=Inq201907160009&key=" + key,
+                dataType: "jsonp",
+                success: function (data) {
+                    cb(data);
+                },
+                error: function () {
+                    alert('接口异常，请求数据失败');
+                }
+            });
+        }
+        function ddd() {
+            //var pendingData = [{ "ID": "Admin00013", "RealName": "产品经理1", "UserName": "pm1" }, { "ID": "Admin00014", "RealName": "产品经理助理", "UserName": "pma1" }, { "ID": "Admin00015", "RealName": "采购员2", "UserName": "purchaser2" }];
+            //var selectedData = [{ "ID": "Admin00012", "RealName": "采购员1", "UserName": "purchaser1" }];
+            var pendingData = [];
+            var selectedData = [];
+            //$.ajax({
+            //    type: "get",
+            //    url: "/rfqapi/offers/List?id=Inq201905280005",
+            //    dataType: "jsonp",
+            //    success: function (data) {
+            //        pendingData = data;
+            //    },
+            //    error: function () {
+            //        alert('接口异常，请求数据失败');
+            //    }
+            //});
+            //$.ajax({
+            //    type: "get",
+            //    url: "/rfqapi/offers/offered?id=Inq201905280005",
+            //    dataType: "jsonp",
+            //    success: function (data) {
+            //        selectedData = data;
+            //    },
+            //    error: function () {
+            //        alert('接口异常，请求数据失败');
+            //    }
+            //});
+            $('#mm123').assignment({
+                title: "操作列表",//弹出框的标题
+                width: 700,
+                height: 500,
+                //待选择列表
+                pending: {
+                    url: '/rfqapi/offers/List?id=Inq201907160009',
+                    title: '待选择列表',
+                    //data: pendingData,
+                    onClick: function (row, index) {
+                        console.log(row);
+                        console.log(index);
+                        $.ajax({
+                            type: "get",
+                            url: "/rfqapi/offers/Offer?id=Inq201907160009&items=" + row.ID,
+                            dataType: "jsonp",
+                            success: function (data) {
+                                console.log(data);
+                                if (data.success) {
+                                    $('#mm123').assignment('refresh');
+                                }
+                            },
+                            error: function (err) {
+                                console.log(err);
+                            }
+                        });
+                    }, // 选择按钮函数
+                    Search: function (key) {
+                        if (key && key != "") {
+                            getData1ByKey(key, function (data) {
+                                $("#mm123").assignment("searchInput", data);
+                            })
+                        }
+                    } // 搜索函数
+                },
+                //已选择列表
+                selected: {
+                    url: '/rfqapi/offers/offered?id=Inq201907160009',
+                    title: '已选择列表',
+                    //data: selectedData,
+                    onClick: function (row, index) {
+                        console.log(row);
+                        console.log(index);
+                        $.ajax({
+                            type: "get",
+                            url: "/rfqapi/offers/CancelOffer?id=Inq201907160009&items=" + row.ID,
+                            dataType: "jsonp",
+                            success: function (data) {
+                                if (data.success) {
+                                    $('#mm123').assignment('refresh');
+                                }
+                            },
+                            error: function (err) {
+                                console.log(err);
+                            }
+                        });
+                    } // 选择按钮函数
+                },
+                columns: [[
+                    { field: 'ID', title: 'ID', width: "100px" },
+                    { field: 'UserName', title: '用户名', width: "80px" },
+                    { field: 'RealName', title: '真实姓名', width: "90px" },
+                ]],
+            });
+        }
+        function eee() {
+            $('#mm456').assignment({
+                title: "操作列表",//弹出框的标题
+                width: 700,
+                height: 500,
+                //待选择列表
+                pending: {
+                    url: '/rfqapi/offers/List?id=Inq201907160009',
+                    title: '待选择列表',
+                    onClick: function (row, index) {
+                        console.log(row);
+                        console.log(index);
+                        $.ajax({
+                            type: "get",
+                            url: "/rfqapi/offers/Offer?id=Inq201907160009&items=" + row.ID,
+                            dataType: "jsonp",
+                            success: function (data) {
+                                if (data.success) {
+                                    $('#mm456').assignment('refresh');
+                                }
+                            },
+                            error: function (err) {
+                                console.log(err);
+                            }
+                        });
+                    }, // 选择按钮函数
+                    Search: function (key) {
+                        if (key && key != "") {
+                            getData2ByKey(key, function (data) {
+                                $("#mm456").assignment("searchInput", data);
+                            })
+                        }
+                    } // 搜索函数
+                },
+                //已选择列表
+                selected: {
+                    url: '/rfqapi/offers/offered?id=Inq201907160009',
+                    title: '已选择列表',
+                    onClick: function (row, index) {
+                        console.log(row);
+                        console.log(index);
+                        $.ajax({
+                            type: "get",
+                            url: "/rfqapi/offers/CancelOffer?id=Inq201907160009&items=" + row.ID,
+                            dataType: "jsonp",
+                            success: function (data) {
+                                if (data.success) {
+                                    $('#mm456').assignment('refresh');
+                                }
+                            },
+                            error: function (err) {
+                                console.log(err);
+                            }
+                        });
+                    } // 选择按钮函数
+                },
+                columns: [[
+                    { field: 'ID', title: 'ID', width: "100px" },
+                    { field: 'UserName', title: '用户名', width: "80px" },
+                    { field: 'RealName', title: '真实姓名', width: "90px" },
+                ]],
+            });
+        }
+    </script>
+</body>
+</html>

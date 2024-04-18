@@ -1,0 +1,42 @@
+﻿<template id="storagedetailinattachment">
+    <div>
+        <div class="clearfix mt20">
+            <div class="fl" style="width: 90px;">
+                <span class="fl txt2 el-form-item__label">装箱单:</span>
+            </div>
+            <div class="fl upload_wrap mt6">
+                <ul class="file_item_ul">
+                    <li class="clearfix" v-for="(item,index) in attachment.PackingFiles">
+                        <span class="icon1"></span>
+                        <a class="file_name ml6" :href="item.fullURL" target="_blank">{{item.name}}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</template>
+<script>
+    Vue.component(
+        'storagedetailinattachment',
+        {
+            template: "#storagedetailinattachment",
+            data: function () {
+                return {
+
+                }
+            },
+            props: {
+                attachment: {
+                    type: Object,
+                    default: function () {
+                        return {
+                            PackingFiles: [], //装箱单文件信息
+                        };
+                    }
+                }
+            },
+            methods: {
+
+            },
+        });
+</script>

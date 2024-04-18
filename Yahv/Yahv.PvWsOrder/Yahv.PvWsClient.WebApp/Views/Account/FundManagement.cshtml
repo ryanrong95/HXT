@@ -1,0 +1,414 @@
+﻿@{
+    ViewBag.Title = "修改手机绑定";
+    Layout = "~/Views/Shared/_LayoutAccount.cshtml";
+    ViewBag.navid = "FundManagement";
+}
+
+<div id="vfundManage" v-cloak>
+    <div class="overhide mb20">
+        <div class="fund_left fund_wrap fl mr20">
+            <div class="title_top"><i></i><span>信用额度</span></div>
+            <div class="wrap1 overhide mt26">
+                <div class="in_l fl">
+                    <p class="title">我的总额度</p>
+                    <p class="money">人民币（CNY）{{formData.MytotalCredit.TotalCredit}}</p>
+                </div>
+                <div class="in_r fl">
+                    <p class="title">待还信用</p>
+                    <p class="money">人民币（CNY）{{formData.MytotalCredit.TotalCost}}</p>
+                    <p v-show="formData.OriginalDate!=null" class="tip">还款日 {{formData.OriginalDate}}</p>
+                </div>
+            </div>
+            <el-tabs class="money_tab" v-model="activeName">
+                <el-tab-pane label="报关业务" name="first">
+                    <div class="overhide">
+                        <div class="ul_l fl"><span>人民币</span></br><span>(CNY)</span></div>
+                        <ul class="fl overhide">
+                            <li class="fl">
+                                <p class="title">货款</p>
+                                <div class="money_wrap">
+                                    <p>信用额度: {{formData.myCreaditData.EntryGoods.total}}</p>
+                                    <p>可用信用: {{formData.myCreaditData.EntryGoods.left}}</p>
+                                </div>
+                            </li>
+                            <li class="fl">
+                                <p class="title">税款</p>
+                                <div class="money_wrap">
+                                    <p>信用额度: {{formData.myCreaditData.EntryTax.total}}</p>
+                                    <p>可用信用: {{formData.myCreaditData.EntryTax.left}}</p>
+                                </div>
+                            </li>
+                            <li class="fl">
+                                <p class="title">代理费</p>
+                                <div class="money_wrap">
+                                    <p>信用额度: {{formData.myCreaditData.EntryAgent.total}}</p>
+                                    <p>可用信用: {{formData.myCreaditData.EntryAgent.left}}</p>
+                                </div>
+                            </li>
+                            <li class="fl">
+                                <p class="title">杂费</p>
+                                <div class="money_wrap">
+                                    <p>信用额度: {{formData.myCreaditData.EntryOther.total}}</p>
+                                    <p>可用信用: {{formData.myCreaditData.EntryOther.left}}</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="con_b"><span>待付小计:</span><span class="m_tt">人民币（CNY）{{formData.EntryReceive.EntryTotalVouchers}}</span></div>
+                </el-tab-pane>
+                <el-tab-pane label="代仓储" name="second">
+                    <div class="overhide">
+                        <div class="ul_l fl"><span>人民币</span></br><span>(CNY)</span></div>
+                        <ul class="fl overhide">
+                            <li class="fl">
+                                <p class="title">货款</p>
+                                <div class="money_wrap">
+                                    <p>信用额度: {{formData.myCreaditData.GoodsData.total}}</p>
+                                    <p>可用信用: {{formData.myCreaditData.GoodsData.left}}</p>
+                                </div>
+                            </li>
+                            <li class="fl">
+                                <p class="title">税款</p>
+                                <div class="money_wrap">
+                                    <p>信用额度: {{formData.myCreaditData.TaxData.total}}</p>
+                                    <p>可用信用: {{formData.myCreaditData.TaxData.left}}</p>
+                                </div>
+                            </li>
+                            <li class="fl">
+                                <p class="title">代理费</p>
+                                <div class="money_wrap">
+                                    <p>信用额度: {{formData.myCreaditData.AgentData.total}}</p>
+                                    <p>可用信用: {{formData.myCreaditData.AgentData.left}}</p>
+                                </div>
+                            </li>
+                            <li class="fl">
+                                <p class="title">杂费</p>
+                                <div class="money_wrap">
+                                    <p>信用额度: {{formData.myCreaditData.OtherData.total}}</p>
+                                    <p>可用信用: {{formData.myCreaditData.OtherData.left}}</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="con_b"><span>待付小计:</span><span class="m_tt">人民币（CNY）{{formData.HKReceive.TotalVouchersHK}}</span></div>
+                </el-tab-pane>
+            </el-tabs>
+        </div>
+        <div class="fund_right fund_wrap fl">
+            <div class="title_top"><i></i><span>账户余额</span></div>
+            <div class="mt20">
+                <p class="title1">香港账户（含代收货款）：</p>
+                <div class="overhide mt12">
+                    <p class="title2 fl">港 币（HKD)</p>
+                    <p class="fr money">{{formData.MyBalance_HK}}</p>
+                </div>
+                <div class="overhide">
+                    <p class="title2 fl">美 元（USD))</p>
+                    <p class="fr money">{{formData.MyBalance_USD}}</p>
+                </div>
+            </div>
+            <div class="mt30">
+                <p class="title1">内地账户（付汇账户）：</p>
+                <div class="overhide mt12">
+                    <p class="title2 fl">人民币（CNY))</p>
+                    <p class="fr money">{{formData.MyBalance_CNY}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="fund_wrap fund_bottom">
+        <div class="title_top"><i></i><span>明细查询</span></div>
+        <el-tabs class="money_tab" v-model="activeName1">
+            <el-tab-pane label="信用明细" name="first">
+                <div class="queryData">
+                    <div class="overhide">
+                        <div class="fl">
+                            <span class="title">时间：</span>
+                            <el-date-picker style="width:280px;" size="small" v-model="formData.QDate1"
+                                            v-on:change="search1"
+                                            type="daterange"
+                                            align="right"
+                                            unlink-panels
+                                            range-separator="至"
+                                            start-placeholder="开始日期"
+                                            end-placeholder="结束日期"
+                                            :picker-options="pickerOptions">
+                            </el-date-picker>
+                        </div>
+                    </div>
+                    <div class="overhide mt17">
+                        <div class="fl">
+                            <span class="title">类型：</span>
+                            <button v-on:click="search1('payStatus1','')" :class="[{active:payStatus1==''}]">全部</button>
+                            <button v-on:click="search1('payStatus1','1')" :class="[{active:payStatus1=='1'}]">支出</button>
+                            <button v-on:click="search1('payStatus1','2')" :class="[{active:payStatus1=='2'}]">还款</button>
+                        </div>
+                        <div class="fl ml53">
+                            <span class="title">币种：</span>
+                            <button v-on:click="search1('currency1','')" :class="[{active:currency1==''}]">全部</button>
+                            <button v-on:click="search1('currency1','1')" :class="[{active:currency1=='1'}]">人民币</button>
+                            <button v-on:click="search1('currency1','2')" :class="[{active:currency1=='2'}]">美元</button>
+                        </div>
+                    </div>
+                </div>
+                <table class="tb1 mt36 mb30 tb_common1" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <th>流水号</th>
+                        <th>时间</th>
+                        <th>币种</th>
+                        <th>支出</th>
+                        <th>还款</th>
+                        <th>用途</th>
+                    </tr>
+                    <tr v-for="item in datalist1">
+                        <td>{{item.ID}}</td>
+                        <td>{{item.CreateDate}}</td>
+                        <td>{{item.Currency}}</td>
+                        <td class="font_y">{{item.Pay}}</td>
+                        <td class="font_g">{{item.Repayment}}</td>
+                        <td>{{item.Subject}}，订单ID：<br />{{item.OrderID}}</td>
+                    </tr>
+                </table>
+                <el-pagination  style="float:right" v-on:size-change="handleSizeChange1"
+                               v-on:current-change="handleCurrentChange1"
+                               :current-page="pageIndex1"
+                               :page-sizes="[5, 10, 20, 40]"
+                               :page-size="pageSize1"
+                               layout="total, sizes, prev, pager, next, jumper"
+                               :total="Total1">
+                </el-pagination>
+            </el-tab-pane>
+            <el-tab-pane label="余额明细" name="second">
+                <div class="queryData">
+                    <div class="overhide">
+                        <div class="fl">
+                            <span class="title">时间：</span>
+                            <el-date-picker style="width:280px;" size="small" v-model="formData.QDate2"
+                                            v-on:change="search2"
+                                            type="daterange"
+                                            align="right"
+                                            unlink-panels
+                                            range-separator="至"
+                                            start-placeholder="开始日期"
+                                            end-placeholder="结束日期"
+                                            :picker-options="pickerOptions">
+                            </el-date-picker>
+                        </div>
+
+                    </div>
+                    <div class="overhide mt17">
+                        <div class="fl  ml53">
+                            <span class="title">类型：</span>
+                            <button v-on:click="search2('payStatus2','')" :class="[{active:payStatus2==''}]">全部</button>
+                            <button v-on:click="search2('payStatus2','1')" :class="[{active:payStatus2=='1'}]">支出</button>
+                            <button v-on:click="search2('payStatus2','2')" :class="[{active:payStatus2=='2'}]">还款</button>
+                        </div>
+                        <div class="fl ml53">
+                            <span class="title">币种：</span>
+                            <button v-on:click="search2('currency2','')" :class="[{active:currency2==''}]">全部</button>
+                            <button v-on:click="search2('currency2','1')" :class="[{active:currency2=='1'}]">人民币</button>
+                            <button v-on:click="search2('currency2','2')" :class="[{active:currency2=='2'}]">美元</button>
+                        </div>
+                    </div>
+                </div>
+                <table class="tb1 mt36 mb30 tb_common1" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <th>流水号</th>
+                        <th>时间</th>
+                        <th>币种</th>
+                        <th>支出</th>
+                        <th>收入</th>
+                        @*<th>余额</th>*@
+                        <th>用途</th>
+                    </tr>
+                    <tr v-for="item in datalist2">
+                        <td>{{item.ID}}</td>
+                        <td>{{item.CreateDate}}</td>
+                        <td>{{item.Currency}}</td>
+                        <td class="font_y">{{item.Pay}}</td>
+                        <td class="font_g">{{item.Repayment}}</td>
+                        <td>{{item.Subject}}，订单ID：<br />{{item.OrderID}}</td>
+                    </tr>
+                </table>
+                <el-pagination style="float:right" v-on:size-change="handleSizeChange2"
+                               v-on:current-change="handleCurrentChange2"
+                               :current-page="pageIndex2"
+                               :page-sizes="[5, 10, 20, 40]"
+                               :page-size="pageSize2"
+                               layout="total, sizes, prev, pager, next, jumper"
+                               :total="Total2">
+                </el-pagination>
+            </el-tab-pane>
+        </el-tabs>
+    </div>
+</div>
+<script>
+    var vfundManage = new Vue({
+        el: "#vfundManage",
+        data: function () {
+            return {
+                formData:@Html.Raw(Json.Encode(Model)),
+                activeName: 'first',
+                activeName1: 'first',
+                payStatus1: "",
+                payStatus2: "",
+                startDate1: "",
+                endDate1: "",
+                startDate2: "",
+                endDate2: "",
+                currency1: "",
+                currency2: "",
+                pageIndex1: 1, //初始页
+                pageSize1: 5,    //每页的数据
+                Total1: 0,
+                pageIndex2: 1, //初始页
+                pageSize2: 5,    //每页的数据
+                Total2: 0,
+                datalist1: [],
+                datalist2:[],
+                pickerOptions: {
+                    shortcuts: [{
+                        text: '最近一周',
+                        onClick(picker) {
+                            const end = new Date();
+                            const start = new Date();
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }, {
+                        text: '最近一个月',
+                        onClick(picker) {
+                            const end = new Date();
+                            const start = new Date();
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }, {
+                        text: '最近三个月',
+                        onClick(picker) {
+                            const end = new Date();
+                            const start = new Date();
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }]
+                },
+            }
+        },
+         mounted: function () {
+             this.search1();
+             this.search2();
+        },
+        methods: {
+            handleSizeChange1: function (size) {
+                this.pageSize1 = size;
+                this.paging1();
+            },
+            handleCurrentChange1: function (currentPage) {
+                this.pageIndex1 = currentPage;
+                this.paging1();
+            },
+            search1: function (column, value) {
+                if (this.formData.QDate!= "" && this.formData.QDate1 != null) {
+                    var start = new Date(this.formData.QDate1[0]);
+                    var startDate = start.getFullYear() + '-' + (start.getMonth() + 1) + '-' + start.getDate();
+                    var end = new Date(this.formData.QDate1[1]);
+                    var endDate = end.getFullYear() + '-' + (end.getMonth() + 1) + '-' + end.getDate();
+                    this.startDate1 = startDate;
+                    this.endDate1 = endDate;
+                } else {
+                    this.startDate1 = "";
+                    this.endDate1 = "";
+                }
+                this[column] = value;
+                this.paging1();
+            },
+            paging1: function () {
+                var that = this;
+                axios({
+                    url: "/Account/GetCreditRecordList",
+                    method: "post",
+                    data: {
+                        page: this.pageIndex1,
+                        rows: this.pageSize1,
+                        startDate: this.startDate1,
+                        endDate: this.endDate1,
+                        payStatus: this.payStatus1,
+                        currency: this.currency1
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                    transformRequest: [function (data) {
+                        var ret = ''
+                        for (var it in data) {
+                            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+                        }
+                        return ret;
+                    }],
+                }).then(function (response) {
+                    var data = JSON.parse(response.data.data);
+                    that.datalist1 = data.list;
+                    that.Total1 = data.total;
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            handleSizeChange2: function (size) {
+                this.pageSize2 = size;
+                this.paging2();
+            },
+            handleCurrentChange2: function (currentPage) {
+                this.pageIndex2 = currentPage;
+                this.paging2();
+            },
+            search2: function (column, value) {
+                if (this.formData.QDate!= "" && this.formData.QDate2 != null) {
+                    var start = new Date(this.formData.QDate1[0]);
+                    var startDate = start.getFullYear() + '-' + (start.getMonth() + 1) + '-' + start.getDate();
+                    var end = new Date(this.formData.QDate1[1]);
+                    var endDate = end.getFullYear() + '-' + (end.getMonth() + 1) + '-' + end.getDate();
+                    this.startDate2 = startDate;
+                    this.endDate2 = endDate;
+                } else {
+                    this.startDate2 = "";
+                    this.endDate2 = "";
+                }
+                this[column] = value;
+                this.paging2();
+            },
+            paging2: function () {
+                var that = this;
+                axios({
+                    url: "/Account/GetCashRecordList",
+                    method: "post",
+                    data: {
+                        page: this.pageIndex2,
+                        rows: this.pageSize2,
+                        startDate: this.startDate2,
+                        endDate: this.endDate2,
+                        payStatus: this.payStatus2,
+                        currency: this.currency2
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                    transformRequest: [function (data) {
+                        var ret = ''
+                        for (var it in data) {
+                            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+                        }
+                        return ret;
+                    }],
+                }).then(function (response) {
+                    var data = JSON.parse(response.data.data);
+                    that.datalist2 = data.list;
+                    that.Total2 = data.total;
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+        },
+    });
+</script>
+

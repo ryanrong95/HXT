@@ -1,0 +1,142 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>芯达通</title>
+    <link rel="stylesheet" type="text/css" href="css/common.css" />
+    <link rel="stylesheet" type="text/css" href="css/page.css" />
+    <link href="css/element.css" rel="stylesheet" />
+    <script type="text/javascript" src="js/jQuery-2.2.4.min.js"></script>
+    <script type="text/javascript" src="js/vue.js"></script>
+    <script src="js/axios.min.js"></script>
+    <script type="text/javascript" src="js/xs.js"></script>
+    <script type="text/javascript" src="js/common.js"></script>
+    <script src="js/element.js"></script>
+</head>
+
+<body>
+    <!-- 右侧定位 -->
+    <div id="right_bar"></div>
+    <!-- logo行 -->
+    <div id="header"></div>
+    <div class="sub_banner">
+        <p class="en">Assistant / Help</p>
+        <p class="china">芯达通助手</p>
+    </div>
+    <!-- 内容 -->
+    <div class="clearfix wrapper sub_con">
+        <div class="left sub_left">
+            <div class="sub_title">芯达通助手</div>
+            <div class="sub_list">
+                <i class=deco></i>
+                <div class="sub_list_con">
+                    <ul>
+                        <li><a href="inquiry.html">归类信息查询 <i></i></a></li>
+                        <li class="active"><a href="rate.html">实时汇率查询<i></i></a></li>
+                        <li><a href="fee.html">费用计算<i></i></a></li>
+                        <li><a href="download.html">下载中心<i></i></a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+        <div id="rate" class="left sub_right">
+            <div class="right_bar">
+                <i class="home"></i>
+                <a href="index.html">首页</a>
+                <i>-</i>
+                <a href="">芯达通助手</a>
+                <i>-</i>
+                <a href="rate.html">实时汇率查询</a>
+            </div>
+            <div class="con_title">
+                <img src="imgs/t_rate.png" alt="">
+            </div>
+            <div class="rate_con">
+                <div class="desc">
+
+                    <p>
+                        <a style="color:white" target="_blank" href="https://www.boc.cn/sourcedb/whpj/">www.bankofchina.com</a>
+                    </p> 中国银行外汇牌价格表
+
+                    <!--<p>www.zhongguoyinhangwaiguiwang.com </p> (中国银行外汇牌价格表)-->
+                </div>
+                <div class="rate_list">
+                    <div class="rate_table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>汇率类型</th>
+                                    <th>货币名称</th>
+                                    <th>现汇买入价</th>
+                                    <th>现钞买入价</th>
+                                    <th>现汇卖出价</th>
+                                    <th>现钞卖出价</th>
+                                    <th>中行折算价</th>
+                                    <th>发布时间</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="item in list">
+                                    <td>{{item.Type}}</td>
+                                    <td>{{item.Currency}}</td>
+                                    <td>{{item.Xhmr}}</td>
+                                    <td>{{item.Xcmr}}</td>
+                                    <td>{{item.Xhmc}}</td>
+                                    <td>{{item.Xcmc}}</td>
+                                    <td>{{item.Zhzsj}}</td>
+                                    <td>{{item.PublishDate}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 底部 -->
+    <div id="footer_zh"></div>
+    <script>
+        $("#right_bar").load("rightBar.html");
+        $("#header").load("header.html", function () {
+            $("#footer_zh").load("footer.html");
+        });
+        var rate = new Vue({
+            el: "#rate",
+            data: {
+                list:[],
+            },
+            mounted: function () {
+                this.getRateData();
+            },
+            methods: {
+                getRateData: function () {
+                    var that = this;
+                    axios({
+                        url: "/Home/GetRateData",
+                        method: "post",
+                    }).then(function (response) {
+                        if (response.data.type == "success") {
+                            res = JSON.parse(response.data.data);
+                            that.list = res;
+                        }
+                    }).catch(function (error) {
+                        that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                    });
+                },
+                //消息提示框
+                onAlert: function (type, message) {
+                    this.$message({
+                        message: message,
+                        type: type
+                    });
+                },
+            }
+        });
+    </script>
+
+</body>
+
+</html>

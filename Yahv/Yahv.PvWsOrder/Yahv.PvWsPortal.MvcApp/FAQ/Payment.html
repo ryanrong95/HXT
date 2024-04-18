@@ -1,0 +1,105 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>创新恒远- 一站式报关服务平台</title>
+    <meta name="keywords" content="创新恒远、报关常见问题、如何代进口报关、创新恒远" />
+    <meta name="description" content="账号的密码如何修改？" />
+    <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
+    <!--[if lt IE 9]>
+      <script src="/Scripts/html5shiv.min.js"></script>
+      <script src="/Scripts/respond.min.js"></script>
+    <![endif]-->
+    <link rel="shortcut icon" href="/Content/images/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="/Content/common.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/style.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/element.css" />
+</head>
+<body class="gray">
+    <div class="header"></div>
+    <section id="AccountSecurity" class="grayBg">
+        <div class="w1200 clearfix">
+            <div class="content-left content-boxShadow">
+            </div>
+            <div id="AccSecContent" v-cloak class="content-right content-boxShadow">
+                <h1>如何付款</h1>
+                <p class="mt34" style="font-weight:bold;color:#323232">银行转账</p>
+                <p class="mb34 ">国内用户可以通过全国任何一家银行，向以下对公帐户进行汇款，账户信息如下：</p>
+                <div class="account">
+                    <p>公司名称：深圳市芯达通供应链管理有限公司</p>
+                    <p>公司地址：深圳市福田区华强北街道振华路中航苑鼎诚大厦1920</p>
+                    <p>公司电话：0755-83768329</p>
+
+                    <p>开&nbsp;&nbsp;户&nbsp;&nbsp;行：中国银行股份有限公司深圳罗岗支行</p>
+                    <p>账&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号：764071904447</p>
+                    <!--<p class="mt20">开&nbsp;&nbsp;户&nbsp;&nbsp;行：平安银行深圳东乐支行</p>
+                    <p>账&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号：11012581098202</p>-->
+
+                    <!--<p>开&nbsp;&nbsp;户&nbsp;&nbsp;行：交通银行深圳金田支行</p>
+                    <p>账&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号：443066302018010113213</p>
+                    <p class="mt20">开&nbsp;&nbsp;户&nbsp;&nbsp;行：平安银行深圳东乐支行</p>
+                    <p>账&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号：11012581098202</p>-->
+                </div>
+
+                <!--<div class="payment">
+                    <table style="width:50%">
+                        <tr>
+                            <td width="100px">开户行</td>
+                            <td class="align_left" width="100px">平安银行深圳东乐支行</td>
+                        </tr>
+                        <tr>
+                            <td>开户名</td>
+                            <td class="align_left">深圳市芯达通供应链管理有限公司</td>
+                        </tr>
+                        <tr>
+                            <td>账号</td>
+                            <td class="align_left">11012581098202</td>
+                        </tr>
+                    </table>
+                </div>-->
+            </div>
+        </div>
+    </section>
+    <div class="footer"></div>
+    <script src="/Scripts/jquery-3.3.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/vue.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/axios.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/common.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/element.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+        var RegistGuideContent = new Vue({
+            el: '#AccSecContent',
+            beforeMount: function () {
+                $(".content-left").load("/FAQNav.html", function () {
+                    //可以通过改变status的值来改变导航条哪个显示活动状态
+                    FAQNav.status = 2;
+                });
+            },
+            data: {
+                selectItem: -1,//选择是否解决
+            },
+            methods: {
+                selectSolve: function (index) {
+                    this.selectItem = index;
+                },
+                submitselectSolve: function () {
+                    console.log(this.selectItem);
+                    if (this.selectItem != -1) {
+                        //后台提交代码
+                        //axios.post("")
+                        //.then(function (res) {
+
+                        //})
+                        //.catch(function (err) {
+
+                        //})
+                    } else {
+                        alert("您还没有勾选")
+                    }
+
+                }
+            }
+        })
+    </script>
+</body>
+</html>

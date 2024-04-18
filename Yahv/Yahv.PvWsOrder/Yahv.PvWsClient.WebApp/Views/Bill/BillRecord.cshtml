@@ -1,0 +1,305 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutBill.cshtml";
+    ViewBag.navid = "BillRecord";
+}
+<div v-cloak id="vBillRecord" class="backshow">
+    <div class="breaklist">
+        <span class="fl first_title">我的账单</span>
+    </div>
+    <div class="bill_content">
+        <div class="queryData">
+            <div class="overhide">
+                <div class="fl">
+                    <span class="title">时间：</span>
+                    <el-date-picker style="width:280px;" size="small" v-model="formData.QDate"
+                                    v-on:change="search"
+                                    type="daterange"
+                                    align="right"
+                                    unlink-panels
+                                    range-separator="至"
+                                    start-placeholder="开始日期"
+                                    end-placeholder="结束日期"
+                                    :picker-options="pickerOptions">
+                    </el-date-picker>
+                </div>
+            </div>
+            <div class="overhide mt17">
+                <div class="fl">
+                    <span class="title">支付方式：</span>
+                    <button v-on:click="search('payType','')" :class="[{active:payType==''}]">全部</button>
+                    <button v-on:click="search('payType','1')" :class="[{active:payType=='1'}]">银行打款</button>
+                    <button v-on:click="search('payType','2')" :class="[{active:payType=='2'}]">信用</button>
+                </div>
+                <div class="fl ml53">
+                    <span class="title">订单类型：</span>
+                    <button v-on:click="changeOrderType('')" :class="[{active:orderType.length==0}]">全部</button>
+                    <button v-on:click="changeOrderType('5')" :class="[{active:orderType.indexOf('5')>-1}]">代报关</button>
+                    <button v-on:click="changeOrderType('4')" :class="[{active:orderType.indexOf('4')>-1}]">转报关</button>
+                    <button v-on:click="changeOrderType('1')" :class="[{active:orderType.indexOf('1')>-1}]">仓储收货</button>
+                    <button v-on:click="changeOrderType('2')" :class="[{active:orderType.indexOf('2')>-1}]">即收即发</button>
+                    <button v-on:click="changeOrderType('3')" :class="[{active:orderType.indexOf('3')>-1}]">代发</button>
+                </div>
+            </div>
+        </div>
+        <div class="divice"></div>
+        <div class="overhide m_sum mt26">
+            <div class="fl"><span class="txt_yellow">注：本页不对货款进行对账</span></div>
+            <div class="fr mr60"><span class="txt3">未支付金额合计：</span><span class="txt2">{{formData.Total_Remains}}</span></div>
+        </div>
+
+        <div style="min-height:100px;">
+            <div>
+                <div class="preproduct">
+                    <ul class="title">
+                        <li style="width:245px">订单号</li>
+                        <li style="width:195px">下单时间</li>
+                        <li style="width:135px">应付金额(单位: 元）</li>
+                        <li style="width:135px">实付金额(单位: 元）</li>
+                        <li style="width:135px">未付金额(单位: 元）</li>
+                    </ul>
+                    <div>
+                        <ul class="content">
+                            <li v-for="(item,index) in datalist">
+                                <table border="0" cellspacing="0" cellpadding="0">
+                                    <tr class="data">
+                                        <td width="220px">{{item.ID}}<span class="order_type_label" v-bind:class="{'state_color1':item.Type=='1','state_color2':item.Type=='2','state_color3':item.Type=='3','state_color4':item.Type=='4','state_color5':item.Type=='5'}">{{item.TypeName}}</span></td>
+                                        <td width="150px">{{item.CreateDate}}</td>
+                                        <td class="text_right" width="150px"><span class="pr20">{{item.LeftTotalPrice}}</span><br /><span v-if="item.CouponPrice!='0.00'" class="txt_yellow pr20">共优惠{{item.CouponPrice}}</span></td>
+                                        <td class="text_right" width="150px"><span class="pr20">{{item.RightTotalPrice}}</span></td>
+                                        <td class="text_right" width="150px">
+                                            <span :class="{'txt_red':item.Remains!='0.00'}">{{item.Remains}}</span>
+                                            <a class="mr20 icon_arrow" v-if="vBillRecord.showID==item.ID" v-on:click="closeItem(item.ID)"><i class="el-icon-arrow-up"></i></a>
+                                            <a class="mr20 icon_arrow" v-else v-on:click="getDetail(item.ID,index)"><i class="el-icon-arrow-down"></i></a>
+                                        </td>
+                                    </tr>
+                                    <tr class="detail" v-if="vBillRecord.showID==item.ID">
+                                        <td width="100%" colspan="10" style="background-color:#fff">
+                                            <div class="wrap">
+                                                <table class="tb_common1" border="0" cellspacing="0" cellpadding="0">
+                                                    <tr>
+                                                        <th>科目分类</th>
+                                                        <th>科目</th>
+                                                        <th>单价(单位: 元)×数量</th>
+                                                        <th>应付小计(单位: 元)</th>
+                                                        <th>实付金额(单位: 元)</th>
+                                                        <th>未付金额 (单位: 元)</th>
+                                                    </tr>
+                                                    <tr v-if="item.DetailList.length==0"><td colspan="7">暂无数据</td></tr>
+                                                    <template v-for="(item1,index1) in item.DetailList">
+                                                        <tr v-for="(item2,index2) in item1.Node">
+                                                            <td v-if="index2==0" class="td_rowspan" :rowspan="item1.Node.length"><span>{{item2.Catalog}}</span></td>
+                                                            <td>{{item2.Subject}}</td>
+                                                            <td>{{item2.LeftPrice}}×1</td>
+                                                            <td>{{item2.LeftPrice}}</td>
+                                                            <td>{{item2.RightPrice}}<br /><span v-if="item2.CouponPrice!='0.00'" class="txt_yellow">共优惠{{item2.CouponPrice}}</span></td>
+                                                            <td><span :class="{'txt_red':item2.Remains!='0.00'}">{{item2.Remains}}</span></td>
+                                                        </tr>
+                                                    </template>
+                                                </table>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="overhide">
+            <el-pagination class="fr" style="margin-top:20px;margin-bottom:30px" v-on:size-change="handleSizeChange"
+                           v-on:current-change="handleCurrentChange"
+                           :current-page="pageIndex"
+                           :page-sizes="[5, 10, 20, 40]"
+                           :page-size="pageSize"
+                           layout="total, sizes, prev, pager, next, jumper"
+                           :total="total">
+            </el-pagination>
+        </div>
+    </div>
+</div>
+<script>
+    var vBillRecord = new Vue({
+        el: "#vBillRecord",
+        data:function() {
+            return{
+                formData: @Html.Raw(Json.Encode(Model)),  //表单数据
+                datalist:[],
+                payType: "",
+                orderType: [],
+                showID: "",
+                pageIndex: 1, //初始页
+                pageSize: 5,    //每页的数据
+                total: 0,
+                startDate: "",
+                endDate: "",
+                pickerOptions: {
+                    shortcuts: [{
+                        text: '最近一周',
+                        onClick(picker) {
+                            const end = new Date();
+                            const start = new Date();
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }, {
+                        text: '最近一个月',
+                        onClick(picker) {
+                            const end = new Date();
+                            const start = new Date();
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }, {
+                        text: '最近三个月',
+                        onClick(picker) {
+                            const end = new Date();
+                            const start = new Date();
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }]
+                },
+            }
+        },
+        methods: {
+            getDetail: function (id,index) {
+                var that = this;
+                this.closeItem(id);
+                if (that.datalist[index].DetailList.length == 0) {
+                    axios({
+                        url: "/Bill/GetBillByID",
+                        method: "post",
+                        data: {
+                            orderID: id,
+                        },
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                        },
+                        transformRequest: [function (data) {
+                            var ret = ''
+                            for (var it in data) {
+                                ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+                            }
+                            return ret;
+                        }],
+                    }).then(function (response) {
+                        var data = JSON.parse(response.data.data);
+                        var mergeData = that.mergeData(data);
+                        that.datalist[index].DetailList = mergeData;
+                    }).catch(function (error) {
+                        that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                    });
+                }
+            },
+            mergeData: function (data) {
+                var arr = [];
+                var newObj = {};
+                for (var i = 0; i < data.length; i++) {
+                    if (!newObj[data[i].Catalog]) {
+                        var obj = {
+                            Catalog: data[i].Catalog,
+                            Node: []
+                        };
+                        obj.Node.push(data[i]);
+                        arr.push(obj);
+                        newObj[data[i].Catalog] = true;
+                    } else {
+                        for (var j = 0; j < arr.length; j++) {
+                            if (arr[j].Catalog == data[i].Catalog) {
+                                arr[j].Node.push(data[i])
+                            }
+                        }
+                    }
+                }
+                return arr;
+                //this.formData.bill = arr;
+            },
+            search: function () {
+                if (this.formData.QDate != "" && this.formData.QDate != null) {
+                    var start = new Date(this.formData.QDate[0]);
+                    var startDate = start.getFullYear() + '-' + (start.getMonth() + 1) + '-' + start.getDate();
+                    var end = new Date(this.formData.QDate[1]);
+                    var endDate = end.getFullYear() + '-' + (end.getMonth() + 1) + '-' + end.getDate();
+                    this.startDate = startDate;
+                    this.endDate = endDate;
+                } else {
+                    this.startDate = "";
+                    this.endDate = "";
+                }
+                this.paging();
+            },
+            // 初始页currentPage、初始每页数据数pagesize和数据data
+            handleSizeChange: function (size) {
+                this.pageSize = size;
+                this.paging();
+            },
+            handleCurrentChange: function (currentPage) {
+                this.pageIndex = currentPage;
+                this.paging();
+            },
+            closeItem: function (id) {
+                if (this.showID == id) {
+                    this.showID = "";
+                } else {
+                    this.showID = id;
+                }
+            },
+            changeOrderType: function (index) {
+                if (index == '') {
+                    this.orderType = [];
+                } else {
+                    var i = this.orderType.indexOf(index)
+                    if (i > -1) {
+                        this.orderType.splice(i, 1);
+                    } else {
+                        this.orderType.push(index);
+                    }
+                }
+                this.search();
+            },
+            paging: function () {
+                var that = this;
+                axios({
+                    url: "/Bill/GetBillRecord",
+                    method: "post",
+                    data: {
+                        page: this.pageIndex,
+                        rows: this.pageSize,
+                        orderStatus: JSON.stringify(this.orderType),
+                        startDate: this.startDate,
+                        endDate: this.endDate,
+                        //query: this.search_data
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                    transformRequest: [function (data) {
+                        var ret = ''
+                        for (var it in data) {
+                            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+                        }
+                        return ret;
+                    }],
+                }).then(function (response) {
+                    var data = JSON.parse(response.data.data);
+                    that.datalist = data.list;
+                    that.total = data.total;
+                    //that.loading = false;
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                });
+            },
+        },
+        mounted: function () {
+            this.search();
+        },
+    })
+</script>

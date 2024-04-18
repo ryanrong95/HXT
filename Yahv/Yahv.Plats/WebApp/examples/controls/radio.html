@@ -1,0 +1,41 @@
+﻿﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>单选 - jQuery EasyUI plugin</title>
+
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/gray/easyui.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/icon-yg-cool.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/standard-easyui/iconfont/iconfont.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/standard-easyui/styles/plugin.css" rel="stylesheet" />
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.easyui.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/locale/easyui-lang-zh_CN.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/standard-easyui/scripts/radio.js"></script>
+</head>
+<body>
+    <h1>单选</h1>
+    <form id="ff" class="easyui-form" method="post" data-options="novalidate:true" onsubmit="return $(this).form('enableValidation').form('validate');">
+        <span id="wjl"></span>
+        <div onclick="aa()">ff</div>
+        <button class="upload">提交</button>
+    </form>
+    <script>
+        var data = [{ "ID": "9EB6F00D0788E54BD758BBD324D91D58", "Name": "北京库房", "District": 0, "Address": "中国,华北区,北京英赛尔", "DyjCode": "123", "Grade": 1, "DistrictDes": "未知", "GradeDes": "等级一" }, { "ID": "E032579C3D91217B1A6C09EDD973A073", "Name": "上海库房", "District": 0, "Address": "中国,华北区,北京英赛尔", "DyjCode": "113", "Grade": 4, "DistrictDes": "未知", "GradeDes": "等级四" }, { "ID": "7EFFF748C595C7426E64BDEA05E92FD0", "Name": "深圳库房", "District": 0, "Address": "中国,华北区,北京英赛尔", "DyjCode": "102", "Grade": 2, "DistrictDes": "未知", "GradeDes": "等级二" }, { "ID": "A881537F107EFED80F17D963088F0535", "Name": "香港库房", "District": 0, "Address": "中国,华北区,北京英赛尔", "DyjCode": "110", "Grade": 2, "DistrictDes": "未知", "GradeDes": "等级二" }]
+        $(function () {
+            $("#wjl").radio({
+                name: "xx",//input统一的name值
+                data: data,//数据
+                //url:'/csrmapi/WareHouses',
+                valueField: "ID",//value值
+                labelField: "Name",//展示label的属性
+                //checked: "9EB6F00D0788E54BD758BBD324D91D58"//选中的值为某一条的valueField
+            })
+        })
+        function aa() {
+            $("#wjl").radio("setCheck", "E032579C3D91217B1A6C09EDD973A073");
+        }
+    </script>
+</body>
+</html>

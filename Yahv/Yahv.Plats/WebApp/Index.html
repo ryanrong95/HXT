@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>跳转专用</title>
+    <style>
+        button:focus{outline:0;}
+        button:hover{
+            opacity:0.9
+        }
+    </style>
+    <!--<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>-->
+    <script>
+            function newopen() {
+                newWindow = window.open('/Login.aspx', '_blank', 'height=' +
+                        screen.availHeight +
+                        ', width=' +
+                        screen.availWidth +
+                        ', top=0, left=0, toolbar=no, menubar=no, scrollbars=no,resizable=no,location=no, status=no')
+               
+                if (newWindow) {
+                    window.opener = null;
+                    window.location.href = "about:blank";
+                    window.open("", "_self",'')
+                    window.close()
+                }                
+            }
+
+            setTimeout('newopen()', 100);
+
+            window.onload = function () {
+                var btn = document.getElementById("newpage");
+                btn.onclick = function () {
+                    newopen()                    
+                }
+            }           
+        
+        //location.replace('/Login.aspx');
+    </script>
+</head>
+<body style="background-color:white">
+    <div style="text-align:center;margin-top:100px;">
+        <h3>该网站将在新的窗口中打开</h3>
+        <p style="color:#666;font-size:14px;">如果没有弹出新窗口，请在浏览器中允许弹出新窗口或点击下面的按钮跳转页面！</p>
+        <button id="newpage" style="padding:6px 15px;background:none;border:none;border:1px solid #0094ff;color:#0094ff;border-radius:4px;cursor:pointer;">跳转页面</button>
+    </div>
+</body>
+</html>

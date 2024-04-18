@@ -1,0 +1,273 @@
+﻿@{
+    ViewBag.subTitle = "发货订单";
+}
+<link href="~/Content/css/tab.css" rel="stylesheet" />
+<!-- tab start-->
+<div class="clearfix tab_switch">
+    <ul>
+        <li>
+            <a href="/Orders/ReceivedList">收货订单<i></i></a>
+        </li>
+        @*<li>
+                <a href="/Orders/ReceivedApplyList">代付款申请<i></i></a>
+            </li>*@
+        <li class="active">
+            <a href="/Orders/DeliveryList">发货订单<i></i></a>
+        </li>
+        @*<li>
+                <a href="/Orders/DeliveryApplyList">代收款申请<i></i></a>
+            </li>*@
+        <li>
+            <a href="/LsOrders/List">仓位租赁订单<i></i></a>
+        </li>
+    </ul>
+</div>
+<!-- tab end -->
+<div id="vDeliveryList" v-cloak class="tab_content">
+    <div class="query_wrap" ref="viewBox1" v-on:scroll="ss('viewBox1')">
+        <div class="clearfix">
+            <div class="fl">
+                <div class="title label-style">型号:</div>
+                <el-input class="input-style" style="width: 150px;" size="mini" v-model="PartNumber" @@keyup.enter.native="queryData"></el-input>
+            </div>
+            <div class="fl ml8">
+                <div class="title label-style">订单号:</div>
+                <el-input class="input-style" style="width: 120px;" size="mini" v-model="OrderID" @@keyup.enter.native="queryData"></el-input>
+            </div>
+            <div class="fl ml8">
+                <div class="title label-style">供应商:</div>
+                <el-input class="input-style" style="width: 120px;" size="mini" v-model="Supplier" @@keyup.enter.native="queryData"></el-input>
+            </div>
+
+            <div class="fr">
+                <button v-on:click="queryData" class="btn btn1">查询</button>
+                <button v-on:click="clearData" class="btn btn2 ml12">重置</button>
+            </div>
+        </div>
+        <div class="clearfix mt20">
+            <div class="fl">
+                <div class="title label-style">订单状态:</div>
+                <el-select style="width: 110px;" class="mr16 input-style" size="small" v-model="OrderStatus" filterable clearable>
+                    <el-option v-for="item in OrderStatusOptions"
+                               :key="item.value"
+                               :label="item.text"
+                               :value="item.value">
+                    </el-option>
+                </el-select>
+            </div>
+            <div class="fl ml8">
+                <div class="title label-style">下单日期:</div>
+                @*<el-date-picker style="width: 250px;" size="small" v-model="dataValue"
+                        type="daterange"
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期">
+                </el-date-picker>*@
+                <date-picker-daterange ref="datePickerDaterange" class="fl"></date-picker-daterange>
+            </div>
+        </div>
+    </div>
+    <div class="tb_wrap" v-loading="loading">
+        <table class="common_tb1 mt30">
+            <tr>
+                <th width="36px">序号</th>
+                <th>发货日期</th>
+                <th>订单编号</th>
+                <th>交货方式</th>
+                <th>订单状态</th>
+                <th>操作</th>
+            </tr>
+            <tr v-for="(item,index) in indexData.dataList">
+                <td>{{(indexData.pageIndex-1)*indexData.pageSize+index+1}}</td>
+                <td>{{item.CreateDateDateString}}</td>
+                <td>{{item.ID}}</td>
+                <td>{{item.WaybillType}}</td>
+                <td>{{item.OrderStatus}}</td>
+                <td class="operate">
+                    <a v-on:click="detail(item.ID)">查看</a>
+                    <a v-if="item.IsConfirm && !item.IsCancel" v-on:click="confirm(item.ID)">确认</a>
+                </td>
+            </tr>
+            <tr v-if="indexData.dataList.length==0">
+                <td colspan="8">暂无数据</td>
+            </tr>
+        </table>
+        <div class="foot">
+            <el-pagination class="fr" style="margin-top: 20px;" v-on:size-change="handleSizeChange"
+                           v-on:current-change="handleCurrentChange"
+                           :current-page="indexData.pageIndex"
+                           :page-sizes="[5, 10, 20, 40]"
+                           :page-size="indexData.pageSize"
+                           layout="total, sizes, prev, pager, next, jumper"
+                           :total="indexData.total">
+            </el-pagination>
+        </div>
+    </div>
+</div>
+<style>
+    .label-style {
+        width: 60px;
+        float: left;
+        margin-top: 6px;
+    }
+
+    .input-style {
+        width: 180px !important;
+    }
+</style>
+@{Html.RenderAction("_DatePickerDateRange", "Home");}
+<script>
+    var vDeliveryList = new Vue({
+        el: "#vDeliveryList",
+        data: function() {
+            return {
+                indexData: {
+                    pageIndex: 1, //初始页
+                    pageSize: 10, //每页的数据
+                    total: 0,
+                    scrollTop: 0, //滚动条位置
+                    dataList: []
+                },
+                dataValue: "",
+                startDate: "",
+                endDate: "",
+                OrderStatus: "",
+                OrderID: "",
+                Supplier: "",
+                PartNumber: "",
+                OrderStatusOptions: [],
+                loading: false
+            }
+        },
+        mounted: function() {
+            this.OrderStatusOptions = @Html.Raw(Json.Encode(@ViewBag.OrderStatusOptions));
+            this.$refs.datePickerDaterange.orderDateSimpleBtnClicked('7天');
+            this.init();
+        },
+        methods: {
+            receive: function(id) {
+                commonSkipUrl(id, '/Orders/ReceivedApply', "/" + "@(ViewContext.RouteData.Values["controller"].ToString())"
+                                                         + "/" + "@(ViewContext.RouteData.Values["action"].ToString())");
+            },
+            init: function() {
+                var that = this;
+                var userJsonStr = sessionStorage.getItem('vDeliveryList');
+                userEntity = JSON.parse(userJsonStr);
+                if (userEntity == null) {
+                    that.queryData(); // that.paging();
+                } else {
+                    that.indexData = userEntity;
+                    that.queryData(); // that.paging();
+                    that.$nextTick(function() {
+                        that.$refs['viewBox1'].scrollTop = that.indexData.scrollTop;
+                    });
+                    sessionStorage.removeItem('vDeliveryList');
+                }
+            },
+            ss: function(ref) {
+                // 监听这个dom的scroll事件
+                var that = this;
+                this.$refs[ref].addEventListener('scroll',
+                    function() {
+                        that.indexData.scrollTop = that.$refs[ref].scrollTop;
+                    },
+                    false);
+            },
+            //收货订单详情
+            detail: function(id) {
+                commonSkipUrl(id, '/Orders/DeliveryDetail', "/" + "@(ViewContext.RouteData.Values["controller"].ToString())"
+                                                          + "/" + "@(ViewContext.RouteData.Values["action"].ToString())");
+            },
+            //收货订单确认详情
+            confirm: function(id) {
+                commonSkipUrl(id, '/Orders/DeliveryConfirm', "/" + "@(ViewContext.RouteData.Values["controller"].ToString())"
+                                                           + "/" + "@(ViewContext.RouteData.Values["action"].ToString())");
+            },
+            //查询数据
+            queryData: function () {
+                this.dataValue = this.$refs.datePickerDaterange.getDataValue();
+                if (this.dataValue != "" && this.dataValue != null) {
+                    var start = new Date(this.dataValue[0]);
+                    var startDate = start.getFullYear() + '-' + (start.getMonth() + 1) + '-' + start.getDate();
+                    var end = new Date(this.dataValue[1]);
+                    var endDate = end.getFullYear() + '-' + (end.getMonth() + 1) + '-' + end.getDate();
+                    this.startDate = startDate;
+                    this.endDate = endDate;
+                } else {
+                    this.startDate = "";
+                    this.endDate = "";
+                }
+                this.indexData.pageIndex = 1;
+                this.paging();
+            },
+            //重置数据
+            clearData: function () {
+                this.$refs.datePickerDaterange.orderDateSimpleBtnClicked('7天');
+                // this.dataValue = "";
+                this.startDate = "";
+                this.endDate = "";
+                this.OrderStatus = "";
+                this.OrderID = "";
+                this.Supplier = "";
+                this.PartNumber = "";
+                this.indexData.pageIndex = 1;
+                this.indexData.pageSize = 10;
+                this.queryData(); // this.paging();
+            },
+            // 初始页currentPage、初始每页数据数pagesize和数据data
+            handleSizeChange: function(size) {
+                this.indexData.pageSize = size;
+                this.paging();
+            },
+            handleCurrentChange: function(currentPage) {
+                this.indexData.pageIndex = currentPage;
+                this.paging();
+            },
+            paging: function() {
+                var that = this;
+                that.loading = true;
+                axios({
+                    url: "/Orders/GetDeliveryList",
+                    method: "post",
+                    data: {
+                        page: this.indexData.pageIndex,
+                        rows: this.indexData.pageSize,
+                        startDate: this.startDate,
+                        endDate: this.endDate,
+                        OrderStatus: this.OrderStatus,
+                        OrderID: this.OrderID,
+                        Supplier: this.Supplier,
+                        PartNumber: this.PartNumber
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                    transformRequest: [
+                        function(data) {
+                            var ret = '';
+                            for (var it in data) {
+                                ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&';
+                            }
+                            return ret;
+                        }
+                    ],
+                }).then(function(response) {
+                    var data = JSON.parse(response.data.data);
+                    that.indexData.dataList = data.list;
+                    that.indexData.total = data.total;
+                    that.loading = false;
+                }).catch(function(error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //消息提示框
+            onAlert: function(type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                    offset: 100
+                });
+            }
+        }
+    });
+</script>

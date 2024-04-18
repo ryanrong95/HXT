@@ -1,0 +1,367 @@
+﻿
+@{
+                /**/
+
+                ViewBag.Title = "首页";
+                Layout = "~/Views/Shared/_Layout.cshtml";
+                ViewBag.navid = "Index";
+}
+<div id="vIndex" v-cloak class="w1200">
+    <div class="overhide">
+        <div class="fl account box">
+            <div class="top_content">
+                <img src="~/Content/img/icon-余额.png" />
+                <span class="title">我的余额</span>
+                <a href="/Account/FundManagement" class="link">资金管理></a>
+            </div>
+            <div class="center_content overhide">
+                <div class="fl mr17">
+                    <p class="title">可用信用（元）</p>
+                    <p class="contents">{{formData.MytotalCredit.TotalLeft}}</p>
+                </div>
+                <div class="fl">
+                    <p class="title">待还信用（元）</p>
+                    <p class="contents">{{formData.MytotalCredit.TotalCost}}</p>
+                </div>
+            </div>
+            <div class="bottom_content">
+                <p class="font1 mb6">账户余额（待支付货款/代收货款）</p>
+                <div class="overhide">
+                    <span class="fl">人民币（CNY）</span>
+                    <span class="fl">{{formData.MyBalance_CNY}}</span>
+                </div>
+                <div class="overhide">
+                    <span class="fl mr20">港币（HKD）</span>
+                    <span class="fl ">0</span>  <!--TODO 待开发，等待王辉接口-->
+                </div>
+            </div>
+        </div>
+        <div class="fl bill box">
+            <div class="top_nav overhide">
+                <div :class="['btn1' ,'fl' ,{active:!flag}]" v-on:click="flag=false">
+                    报关应付款
+                </div>
+                <div :class="['btn2','fl',{active:flag}]" v-on:click="flag=true">本港服务应付款</div>
+                <div class="btn3 fl">
+                    <span>应付款总计：</span>
+                    <span class="font3">{{formData.TotalPayable}}</span>
+                    <a href="/Bill/BillRecord">对账明细></a>
+                </div>
+            </div>
+            <div v-if="!flag">
+                <div class="static_content">
+                    <ul>
+                        <li>
+                            <p class="m1">{{formData.EntryReceive.EntrygoodsVouchers}}</p>
+                            <p class="m2">货款</p>
+                            <div class="s_box">
+                                <div class="s_1">
+                                    <p class="m3">信用额度：{{formData.myCreaditData.EntryGoods.total}}</p>
+                                    <p class="m3">可用信用：{{formData.myCreaditData.EntryGoods.left}}</p>
+                                </div>
+
+                            </div>
+                        </li>
+                        <li>
+                            <p class="m1">{{formData.EntryReceive.EntrytaxVouchers}}</p>
+                            <p class="m2">税款</p>
+                            <div class="s_box">
+                                <div class="s_1">
+                                    <p class="m3">信用额度：{{formData.myCreaditData.EntryTax.total}}</p>
+                                    <p class="m3">可用信用：{{formData.myCreaditData.EntryTax.left}}</p>
+                                </div>
+
+                            </div>
+                        </li>
+                        <li>
+                            <p class="m1">{{formData.EntryReceive.EntryagentVouchers}}</p>
+                            <p class="m2">代理费</p>
+                            <div class="s_box">
+                                <div class="s_1">
+                                    <p class="m3">信用额度：{{formData.myCreaditData.EntryAgent.total}}</p>
+                                    <p class="m3">可用信用：{{formData.myCreaditData.EntryAgent.left}}</p>
+                                </div>
+
+                            </div>
+                        </li>
+                        <li>
+                            <p class="m1">{{formData.EntryReceive.EntryotherVouchers}}</p>
+                            <p class="m2">杂费</p>
+                            <div class="s_box">
+                                <div class="s_1">
+                                    <p class="m3">信用额度：{{formData.myCreaditData.EntryOther.total}}</p>
+                                    <p class="m3">可用信用：{{formData.myCreaditData.EntryOther.left}}</p>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="b_bottom overhide">
+                    <span class="font2">应付小计：</span><span class="font3">{{formData.EntryReceive.EntryTotalVouchers}}</span><a class="link fr" href="#">我的优惠信息></a>
+                </div>
+            </div>
+            <div v-else>
+                <div class="static_content">
+                    <ul>
+                        <li>
+                            <p class="m1">{{formData.HKReceive.goodsVouchersHK}}</p>
+                            <p class="m2">货款</p>
+                            <div class="s_box">
+                                <div class="s_1">
+                                    <p class="m3">信用额度：{{formData.myCreaditData.GoodsData.total}}</p>
+                                    <p class="m3">可用信用：{{formData.myCreaditData.GoodsData.left}}</p>
+                                </div>
+
+                            </div>
+                        </li>
+                        <li>
+                            <p class="m1">{{formData.HKReceive.taxVouchersHK}}</p>
+                            <p class="m2">税款</p>
+                            <div class="s_box">
+                                <div class="s_1">
+                                    <p class="m3">信用额度：{{formData.myCreaditData.TaxData.total}}</p>
+                                    <p class="m3">可用信用：{{formData.myCreaditData.TaxData.left}}</p>
+                                </div>
+
+                            </div>
+                        </li>
+                        <li>
+                            <p class="m1">{{formData.HKReceive.agentVouchersHK}}</p>
+                            <p class="m2">代理费</p>
+                            <div class="s_box">
+                                <div class="s_1">
+                                    <p class="m3">信用额度：{{formData.myCreaditData.AgentData.total}}</p>
+                                    <p class="m3">可用信用：{{formData.myCreaditData.AgentData.left}}</p>
+                                </div>
+
+                            </div>
+                        </li>
+                        <li>
+                            <p class="m1">{{formData.HKReceive.otherVouchersHK}}</p>
+                            <p class="m2">杂费</p>
+                            <div class="s_box">
+                                <div class="s_1">
+                                    <p class="m3">信用额度：{{formData.myCreaditData.OtherData.total}}</p>
+                                    <p class="m3">可用信用：{{formData.myCreaditData.OtherData.left}}</p>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="b_bottom overhide">
+                    <span class="font2">应付小计：</span><span class="font3">{{formData.HKReceive.TotalVouchersHK}}</span><a class="link fr" href="/Account/MyCoupon">我的优惠信息></a>
+                </div>
+            </div>
+        </div>
+        <div class="fl fast_order box">
+            <div class="btn_list">
+                <button v-on:click="declareAdd">
+                    报关下单<i class="icon_plus"></i>
+                </button>
+                <div class="btn_transfer">
+                    <button class="mt16">
+                        本港代收发<img class="arrow" src="/Content/img/arrow_down.png" alt="">
+                    </button>
+                    <div class="ware_item_ul_box">
+                        <ul class="ware_item_ul">
+                            <li><a href="/Orders/StorageAdd">代收货</a></li>
+                            <li><a href="/Orders/DeliveryList">代发货</a></li>
+                            <li><a href="/Orders/TransportAdd">即收即发</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="user_content overhide">
+                <div class="d_logo fl">
+                    <div class="txt1">
+                        <p>客户企业</p>
+                        <p>LOGO</p>
+                    </div>
+                </div>
+                <div class="d_content fl">
+                    <p class="c_name">{{formData.Company}}</p>
+                    <p class="c_code">
+                        入仓号：{{formData.EnterCode}}
+                        <el-tooltip class="item" popper-class="tip_content" effect="dark" content="入仓号是您的货物进入我们仓库的唯一标识，是我司确认货物的唯一途径，请务必将您的入仓号填写在运单或外包装上。" placement="top">
+                            <i class="tip"></i>
+                        </el-tooltip>
+                    </p>
+                    <p class="c_phone font2 mt6">手机号：{{formData.Mobile}}</p>
+                    <p class="c_email font2 mt6">邮箱：{{formData.Email}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="overhide">
+        <div class="merge_wrap fl">
+            <div class="announce box">
+                <div class="top_content">
+                    <img src="~/Content/img/组 36.png" />
+                    <span class="title">平台公告</span>
+                    @*<a href="#" class="link">查看更多></a>*@
+                </div>
+                <div class="main_content">
+                    <div v-for="item in formData.NoticeList" class="a_item">
+                        <span class="a_content"><a :href="item.URL" target="_blank">{{item.Title}}</a></span>
+                        <span class="a_date">{{item.CreateDate}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="convenient_service box">
+                <div class="top_content">
+                    <img src="~/Content/img/服务.png" />
+                    <span class="title">便捷服务</span>
+                </div>
+                <div class="icon_list">
+                    <ul>
+                        <li v-on:click="link1" class="mr16">
+                            <img src="~/Content/img/icon-实时汇率.png" />
+                            <span>实时汇率</span>
+                        </li>
+                        <li v-on:click="unDevelop" class="mr16">
+                            <img src="~/Content/img/icon-海关汇率.png" />
+                            <span>海关汇率</span>
+                        </li>
+                        <li v-on:click="unDevelop" class="mr16">
+                            <img src="~/Content/img/icon-归类查询.png" />
+                            <span>归类查询</span>
+                        </li>
+                        <li v-on:click="unDevelop">
+                            <img src="~/Content/img/icon-收费标准.png" />
+                            <span>收费标准</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="order_list fl box">
+            <div class="top_content">
+                <img src="~/Content/img/icon进度.png" />
+                <span class="title">最新进展</span>
+                <a href="/Orders/MyOrdersList" class="link">查看更多></a>
+            </div>
+            <div class="scrollbar_div">
+                <el-scrollbar style="height: 100%;">
+                    <ul>
+                        <li v-for="item,index in formData.OrderList">
+                            <div class="c_top">
+                                #<span class="c_id">{{item.OrderID}}</span>
+                                <span class="status_tip state_color" v-bind:class="{'state_color1':item.Type=='1','state_color2':item.Type=='2','state_color3':item.Type=='3','state_color4':item.Type=='4','state_color5':item.Type=='5'}">{{item.TypeName}}</span>
+                                <span class="c_date">{{item.CreateDate}}</span>
+                            </div>
+                            <div class="c_bottom overhide">
+                                <div class="fl b_status">{{item.Logs}}</div>
+                                <div class="fr b_btns">
+                                    <button v-on:click="detail(item.OrderID,item.Type)">订单详情</button>
+                                    <button v-if="item.IsConfirm" v-on:click="confirm(item.OrderID,item.Type)"><i class="warning"></i>账单确认</button>
+                                    @*<button v-on:click="unDevelop">申请付汇</button>*@
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </el-scrollbar><!-- /滚动条 -->
+            </div>
+        </div>
+        <div class="service fl box">
+            <div class="top_content">
+                <img src="~/Content/img/phone.png" />
+                <span class="title">联系我们</span>
+            </div>
+            <div class="center_content overhide">
+                <div class="fl p_left p_info">
+                    <div>
+                        <i></i>
+                        <span class="font1">{{formData.ServiceManager.Name}}</span>
+                    </div>
+                    <p>报关跟单员</p>
+                    <p>{{formData.ServiceManager.Phone}}</p>
+                    <p :title="formData.ServiceManager.Email">{{formData.ServiceManager.Email}}</p>
+                </div>
+                <div class="fl p_right p_info">
+                    <div>
+                        <i></i>
+                        <span class="font1">{{formData.Merchandiser.Name}}</span>
+                    </div>
+                    <p>本港服务跟单员</p>
+                    <p>{{formData.Merchandiser.Phone}}</p>
+                    <p :title="formData.Merchandiser.Email">{{formData.Merchandiser.Email}}</p>
+                </div>
+            </div>
+            <div class="bottom_content">
+                <div>
+                    <i class="m1 "></i>
+                    <span class="font1">业务经理</span>
+                </div>
+                <div class="p_info mt10">
+                    <i class="m2 p_icon"></i>
+                    <span class="font2">姓名：{{formData.Manager.Name}}</span>
+                </div>
+                <div class="p_info">
+                    <i class="m3 p_icon"></i>
+                    <span class="font2">手机号：{{formData.Manager.Phone}}</span>
+                </div>
+                <div class="p_info">
+                    <i class="m4 p_icon"></i>
+                    <span class="font2">邮箱：{{formData.Manager.Email}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#indexCur").addClass("active").prev("a").addClass("active");
+    var vIndex = new Vue({
+        el: "#vIndex",
+        data: function () {
+            return {
+                formData:@Html.Raw(Json.Encode(Model)),
+                flag:false,
+            }
+        },
+        methods: {
+            declareAdd: function () {
+                location.href ="/Declare/DeclareAdd"
+            },
+            confirm: function (id, type) {
+                commonSkip(id, '/Bill/BillConfirm', this.getNavid(type)[0]);
+            },
+            unDevelop: function () {
+                this.$message({
+                    showClose: true,
+                    message: '提示：正在开发中',
+                    type: 'warning',
+                    offset:300,
+                });
+            },
+            link1: function () {
+                window.open("http://www.boc.cn/sourcedb/whpj/","_blank");
+            },
+            detail: function (id, type) {
+                var arr = this.getNavid(type);
+                commonSkip(id, arr[1], arr[0]);
+            },
+            getNavid: function (type) {
+                var navid = "";
+                var url = "";
+                if (type == "1") {
+                    navid = "StorageList";
+                    url ="/Orders/StorageDetail"
+                } else if (type == "2") {
+                    navid = "TransportList";
+                    url = "/Orders/TransportDetail"
+                } else if (type == "3") {
+                    navid = "DeliveryList";
+                    url = "/Orders/DeliveryDetail"
+                } else if (type == "4") {
+                    navid = "TransferDeclareList";
+                    url = "/Orders/TransDecDetail"
+                }else if (type == "5") {
+                    navid = "DeclareList";
+                    url = "/Declare/DeclareDetail"
+                }
+                return new Array(navid, url);
+            },
+        }
+    });
+</script>

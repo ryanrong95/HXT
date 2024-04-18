@@ -1,0 +1,165 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>芯达通</title>
+    <link rel="stylesheet" type="text/css" href="css/common.css" />
+    <link rel="stylesheet" type="text/css" href="css/page.css" />
+    <link rel="stylesheet" type="text/css" href="css/element.css" />
+    <script type="text/javascript" src="js/jQuery-2.2.4.min.js"></script>
+    <script type="text/javascript" src="js/vue.js"></script>
+    <script type="text/javascript" src="js/element.js"></script>
+    <script type="text/javascript" src="js/axios.min.js"></script>
+    <script type="text/javascript" src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+    <script type="text/javascript" src="js/xs.js"></script>
+    <script type="text/javascript" src="js/common.js"></script>
+</head>
+
+<body>
+    <!-- 右侧边栏相关内容 -->
+    <div id="n_sideBar"></div>
+    <!--头部和banner部分-->
+    <div class="n_header">
+        <div class="n_lunbt" style="background-image:url(imgs/n_info_bg.png) ;"></div>
+        <div id="n_insert_nav"></div>
+    </div>
+    <!-- 中间不同内容 -->
+    <div id="CompanyInfo" class="n_mid n_assist_mid n_info_mid">
+        <div class="n_select n_assist_select n_info_select">
+            <ul class="clearfix">
+                <li class="active">
+                    <a href="CompanyInfo.html">
+                        <i></i>
+                        <p>公司动态</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="IndustryInfo.html">
+                        <i></i>
+                        <p>行业信息</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="CustomsInfo.html">
+                        <i></i>
+                        <p>海关信息</p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="n_info_con">
+            <h4>最新发布</h4>
+            <div class="n_info_news">
+                <ul>
+                    <li v-for="(item,index) in indexData.dataList">
+                        <a class="clearfix"  :href="'CustomsInfoDetails.html?ID='+item.ID" target="_blank" >
+                            <img src="imgs/n_info_pic1.png" class="left">
+                            <div class="right n_info_news_details">
+                                <h3>{{item.title}}</h3>
+                                <div class="n_info_news_desc n_notice" v-html="item.noticeText"></div>
+                                <p><span>{{item.createDate}} </span> <span>标签：{{item.catalog}}</span> </p>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="wrapper n_page">
+                <!--<a v-on:click="First()">首页</a>-->
+                <el-pagination style="text-align:center" v-on:size-change="handleSizeChange"
+                               v-on:current-change="handleCurrentChange"
+                               :current-page="indexData.pageIndex"
+                               :page-size="indexData.pageSize"
+                               background
+                               layout="pager"
+                               :total="indexData.total">
+                </el-pagination>
+                <!--<a v-on:click="Last()">末页</a>-->
+            </div>
+        </div>
+    </div>
+    <!-- 底部 -->
+    <div id="footer_zh"></div>
+    <script>
+		$("#n_sideBar").load("sideBar.html")
+		$("#n_insert_nav").load("header.html", function() {
+			$("#footer_zh").load("footer.html");
+			//导航中当前选中的项
+			$(".n_nagivation>ul>li:nth-child(4)").addClass("hot");
+			$(".n_nagivation>ul>li").hover(function() {
+				$(".n_nagivation>ul>li:nth-child(4)").removeClass("hot");
+			}, function() {
+				$(".n_nagivation>ul>li:nth-child(4)").addClass("hot");
+			})
+		});
+
+        var CompanyInfo = new Vue({
+            el: "#CompanyInfo",
+            data: {
+                indexData: {
+                    pageIndex: 1, //初始页
+                    pageSize: 5,    //每页的数据
+                    total: 0,
+                    scrollTop: 0, //滚动条位置
+                    dataList:[],
+                },
+            },
+            mounted: function () {
+                this.getNewsData();
+            },
+            methods: {
+                getNewsData: function () {
+                    var that = this;
+                    that.loading = true;
+                    axios({
+                        url: "/Home/GetDocuments",
+                        method: "post",
+                        data: {
+                            page: that.indexData.pageIndex,
+                            rows: that.indexData.pageSize,
+                            catalogID: "CXdt003",
+                        },
+                    }).then(function (response) {
+                        if (response.data.type == "success") {
+                            var data = JSON.parse(response.data.data);
+                            that.indexData.dataList = data.list;
+                            that.indexData.total = data.total;
+                            that.loading = false;
+                        }
+                    }).catch(function (error) {
+                        that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                    });
+                },
+                //点击新闻列表另外打开新闻详情
+                //showDetail: function (ID) {
+                //    window.location.href = "CustomsInfoDetails.html?ID=" + ID;
+                //},
+                // 初始页currentPage、初始每页数据数pagesize和数据data
+                handleSizeChange: function (size) {
+                    this.indexData.pageSize = size;
+                    this.getNewsData();
+                },
+                handleCurrentChange: function (currentPage) {
+                    this.indexData.pageIndex = currentPage;
+                    this.getNewsData();
+                },
+                First: function (){
+                    this.indexData.pageIndex = 1;
+                    this.getNewsData();
+                },
+                Last: function (){
+                    this.indexData.pageIndex = 1;
+                },
+                //消息提示框
+                onAlert: function (type, message) {
+                    this.$message({
+                        message: message,
+                        type: type
+                    });
+                },
+            }
+        });
+    </script>
+</body>
+</html>

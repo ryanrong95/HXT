@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>bom - jQuery EasyUI plugin</title>
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/gray/easyui.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/icon-yg-cool.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/customs-easyui/Styles/reset.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/customs-easyui/Styles/main.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/standard-easyui/styles/plugin.css" rel="stylesheet" />
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.easyui.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/locale/easyui-lang-zh_CN.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/main.js"></script>
+</head>
+<body>
+    <table class="easyui-datagrid" id="dg" title="Aligning Columns in DataGrid" style="width:740px;height:420px">
+        <thead>
+            <tr>
+                <th data-options="field:'ck',checkbox:true"></th>
+                <th data-options="field:'itemid',width:80,halign:'center'">Item ID</th>
+                <th data-options="field:'productid',width:100,halign:'center'">Product</th>
+                <th data-options="field:'listprice',width:80,align:'right',halign:'center'">List Price</th>
+                <th data-options="field:'unitcost',width:80,align:'right',halign:'center'">Unit Cost</th>
+                <th data-options="field:'attr1',width:250,halign:'center'">Attribute</th>
+                <th data-options="field:'status',width:60,align:'center',halign:'center'">Status</th>
+            </tr>
+        </thead>
+    </table>
+    <div id="buttons">价格为：<span>0.00</span></div>
+    <script>
+        $(function () {
+            $('#dg').datagrid({
+                collapsible: true,
+                url: '/examples/controls/datagrid_data1.json',
+                method: 'get',
+                rownumbers: true,
+                singleSelect: false,
+                autoRowHeight: false,
+                pagination: true,
+                idField: 'productid',
+                onSelect: function (index, row) {
+                    computePrice()
+                },
+                onUnselect: function (index, row) {
+                    computePrice()
+                },
+                onSelectAll: function (rows) {
+                    computePrice()
+                },
+                onUnselectAll: function (rows) {
+                    computePrice()
+                },
+                onLoadSuccess: function (data) {
+                    $('#dg').datagrid('unselectAll');
+                    $('#buttons').find('span').text("0.00")
+                }
+            })
+            var pager = $('#dg').datagrid().datagrid('getPager');	// get the pager of datagrid
+            pager.pagination({
+                buttons: $('#buttons'),
+                onChangePageSize: function (pageSize) {
+                    computePrice()
+                }
+            })
+        })
+
+        function computePrice() {
+            var datas = $('#dg').datagrid('getSelections');
+            var nums = 0;
+            for (let i = 0; i < datas.length; i++) {
+                nums += toDecimal(parseFloat(datas[i].listprice), 2)
+            }
+            $('#buttons').find('span').text(nums.toFixed(2))
+        }
+    </script>
+</body>
+</html>

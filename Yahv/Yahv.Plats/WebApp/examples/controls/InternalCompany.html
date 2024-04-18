@@ -1,0 +1,52 @@
+﻿﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>内部公司插件和内部公司受益人插件 - jQuery EasyUI plugin</title>
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/gray/easyui.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/standard-easyui/styles/plugin.css" rel="stylesheet" />
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.easyui.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/locale/easyui-lang-zh_CN.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/main.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/ajaxPrexUrl.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/standard-easyui/scripts/easyui.jl.js"></script>
+</head>
+<body>
+    <h1>内部公司插件和内部公司受益人插件</h1>
+    <form id="ff" class="easyui-form" method="post" data-options="novalidate:true" onsubmit="return $(this).form('enableValidation').form('validate');">
+        <input id="InternalCompany1" name="InternalCompany1" value="" />
+        <!--<input id="InternalCompany2" class="easyui-InternalCompany" name="InternalCompany2" value="" />-->
+        <input id="InternalCompanyBeneficiary" name="InternalCompanyBeneficiary" class="easyui-InternalCompanyBeneficiary" value="" />
+        <div onclick="c()">点击设置setvalNull</div>
+        <button onclick="aaa()">提交</button>
+    </form>
+    <script>
+            $(function () {
+                $("#InternalCompany1").InternalCompany({
+                    target: "#InternalCompanyBeneficiary",
+                    onDoChange: function (data) {
+                    }
+                })
+            })
+            function c() {
+                $("#InternalCompany1").InternalCompany('setVal', null)
+                console.log($('#InternalCompany1').InternalCompany('getVal'));
+                console.log($('#InternalCompany1').InternalCompany('getResult'));
+                console.log($('#InternalCompany1').InternalCompany('getAllData'));
+            }
+            function aaa() {
+                console.log($('#InternalCompany1').InternalCompany('options'));
+                console.log($('#InternalCompany1').InternalCompany('getVal'));
+                console.log($('#InternalCompany1').InternalCompany('getResult'));
+                console.log($('#InternalCompany1').InternalCompany('getAllData'));
+                console.log("------------");
+                console.log($('#InternalCompany2').InternalCompany('options'));
+                console.log($('#InternalCompany2').InternalCompany('getVal'));
+                console.log($('#InternalCompany2').InternalCompany('getResult'));
+                console.log($('#InternalCompany2').InternalCompany('getAllData'));
+            }
+    </script>
+</body>
+</html>
+

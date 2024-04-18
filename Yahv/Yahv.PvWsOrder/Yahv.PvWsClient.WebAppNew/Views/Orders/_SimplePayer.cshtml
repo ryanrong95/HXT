@@ -1,0 +1,72 @@
+﻿<template id="payer_info">
+    <el-form :model="form1" :rules="rules1" status-icon ref="form1" label-width="150px">
+        <el-form-item label="付款人" prop="Name">
+            <el-input size="mini" style="width: 90%" v-model="form1.Name" placeholder="请输入付款人" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="付款方式" prop="Methord" :rules="[{ required: true, message: '请选择付款方式', trigger: 'change' }]" v-show="!useDefaultMethord">
+            <el-select size="mini" style="width: 90%" v-model="form1.Methord" filterable clearable placeholder="请选择">
+                <el-option v-for="item in UseMethordOptions"
+                           :key="item.value"
+                           :label="item.text"
+                           :value="item.value">
+                </el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item label="付款币种" prop="Currency" :rules="[{ required: true, message: '请选择付款人币种', trigger: 'change' }]" v-show="!useDefaultCurrency">
+            <el-select size="mini" style="width: 90%" v-model="form1.Currency" filterable clearable placeholder="请选择">
+                <el-option v-for="item in baseData.CurrencyOptions"
+                           :key="item.value"
+                           :label="item.text"
+                           :value="item.value">
+                </el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item label="国家/地区" prop="Place" :rules="[{ required: true, message: '请选择国家/地区', trigger: 'change' }]">
+            <el-select size="mini" style="width: 90%" v-model="form1.Place" filterable clearable placeholder="请选择">
+                <el-option v-for="item in baseData.PlaceOptions"
+                           :key="item.value"
+                           :label="item.text"
+                           :value="item.value">
+                </el-option>
+            </el-select>
+        </el-form-item>
+    </el-form>
+</template>
+<script>
+    Vue.component(
+        'my-payer-mini',
+        {
+            template: "#payer_info",
+            data: function() {
+                return {
+                    form1: @Html.Raw(Json.Encode(Model)),
+                    rules1: {
+                        Name: [
+                            { required: true, message: '请输入付款人', trigger: 'blur' },
+                            { max: 50, message: '付款人长度超过限制', trigger: 'blur' }
+                        ]
+                    },
+                    baseData: {},
+                    UseMethordOptions: [],
+
+                    useDefaultMethord: @Html.Raw(Json.Encode(ViewBag.UseDefaultMethord)),
+                    useDefaultCurrency: @Html.Raw(Json.Encode(ViewBag.useDefaultCurrency)),
+                }
+            },
+            methods: {
+                //消息提示框
+                onAlert: function(type, message) {
+                    this.$message({
+                        message: message,
+                        type: type
+                    });
+                }
+            },
+            mounted: function() {
+                var options = @Html.Raw(Json.Encode(@ViewBag.Options)); //加载基础数据
+                this.baseData = options;
+                this.form1.Bank = new Date();
+                this.form1.Account = this.form1.Bank;
+            }
+        });
+</script>

@@ -1,0 +1,229 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>芯达通供应链平台</title>
+    <script src="~/Scripts/vue.min.js"></script>
+    <script src="~/Scripts/axios.min.js"></script>
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <link href="~/Content/css/element.css" rel="stylesheet" />
+    <script src="~/Scripts/elementui.js"></script>
+    <script type="text/javascript" src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="~/Content/css/n_common.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/css/n_register.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/css/login.css" />
+</head>
+<body>
+    <!-- 头部 -->
+    <div class="n_register_top">
+        <div class="wrapper">
+            <div class="left n_register_logo">
+                <h1>
+                    <a href="@System.Configuration.ConfigurationManager.AppSettings["DomainForIC"]"></a>
+                </h1>
+            </div>
+            <p class="right n_register_phone">热线电话：400-833-8321</p>
+        </div>
+    </div>
+    <!-- 中间部分 -->
+    <div class="n_register_mid" id="login">
+        <div class="wrapper">
+            <!-- 登录 -->
+            <div class="n_login_mod" style="padding-top: 45px;">
+                <h3 style="margin-bottom: 35px;">账户登录</h3>
+                <div class="n_login_input">
+                    <div class="clearfix">
+                        <span class="left">用户名:</span>
+                        <input type="text" class="left" :class="{'n_login_error':userStatus}" v-model="form.UserName" v-on:blur="vertifyUser" />
+                    </div>
+                    <p class="n_login_error" v-show="userStatus" id="uservertify"></p>
+                </div>
+                <div class="n_login_input">
+                    <div class="clearfix">
+                        <span class="left">密码:</span>
+                        <input type="password" class="left" :class="{'n_input_error':psdStatus}" v-model.trim="form.Password" v-on:blur="vertifyPsd" />
+                    </div>
+                    <p class="n_login_error" v-show="psdStatus" id="psdvertify"></p>
+                </div>
+                <div class="n_login_check">
+                    <input type="checkbox" :class="{'selected':checkStatus}" v-on:click="selectCheck" />
+                    <i>记住账号和密码</i>
+                </div>
+                <div class="n_login_button" style="margin-top: 23px;">
+                    <button type="button" v-on:click="submitData">登录</button>
+                </div>
+                <div class="clearfix n_login_link">
+                    <a href="/ForgetPassword.html" class="left">忘记密码</a>
+                    <a href="@System.Configuration.ConfigurationManager.AppSettings["DomainForIC"]/register.html" class="right">注册新用户</a>
+                </div>
+
+                @*<div style="margin-left: -35px; border-top: 1px solid #eee; margin-top: 20px; width: 366px;">
+                    <div style="margin-top: 11px; margin-left: 38px;">
+                        <span style="float: left; color: #323232;">其它方式登录：</span>
+                        <span>
+                            <a href="javascript:void(0);" class="left" v-on:click="">
+                                <img src="~/Content/n_img/cxy.png" style="float: left;" />
+                                <span style="margin-left: 4px; color: #666;">创新云</span>
+                            </a>
+                        </span>
+                    </div>
+                </div>*@
+
+            </div>
+        </div>
+    </div>
+    <!-- 底部 -->
+    <div class="n_register_bottom">
+        <p>
+            <span>禁限售规则 - 知识产权保护政策 - 隐私权政策 - 使用条款</span>
+        </p>
+        <p>
+            <div style="display: flex; align-items: center; width: 515px; line-height: 30px; margin: 0 auto;">
+                <span>©️2010-2023 深圳市芯达通供应链管理有限公司 版权所有 |&nbsp;</span>
+                <img src="/Content/img/gonganlogo.png" style="margin-top: -3px;" />
+                <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44030702003264" target="_blank" style="color: #333;">粤公网安备 44030702003264号</a>
+            </div>
+        </p>
+        <p>
+            <a href="https://beian.miit.gov.cn/#/Integrated/index" target="_blank" style="color: #333;">粤ICP备20066739号</a>
+        </p>
+    </div>
+    <script>
+        //定义了一个获取元素的方法
+        function getEle(selector) {
+            return document.querySelector(selector);
+        }
+
+        //定义一个获取鼠标当前需要移动多少距离的方法
+        function getOffsetX(offset, min, max) {
+            if (offset < min) {
+                offset = min;
+            } else if (offset > max) {
+                offset = max;
+            }
+            return offset;
+        }
+
+        //生成0~n随机数的方法
+        function rand(n) {
+            return (Math.floor(Math.random() * n));
+        }
+
+        var login = new Vue({
+            el: "#login",
+            data: function() {
+                return {
+                    form: @Html.Raw(Json.Encode(Model)),
+                    userStatus: false,
+                    psdStatus: false,
+                    checkStatus: false,
+                }
+            },
+            created: function() {
+                if (this.form.RemberMe) {
+                    this.checkStatus = true;
+                }
+            },
+            computed: {
+                UserName: function() {
+                    return this.form.UserName;
+                },
+                Password: function() {
+                    return this.form.Password;
+                },
+            },
+            methods: {
+                // 选中多选框
+                selectCheck: function() {
+                    this.checkStatus = !this.checkStatus;
+                    this.form.RemberMe = this.checkStatus;
+                },
+                //验证用户名
+                vertifyUser: function() {
+                    if (this.form.UserName == "") {
+                        this.userStatus = true;
+                        $("#uservertify").stop().show().html("用户名不能为空");
+                        return false;
+                    } else {
+                        this.userStatus = false;
+                        $("#uservertify").stop().hide();
+                        return true;
+                    }
+                },
+                //验证密码
+                vertifyPsd: function() {
+                    if (this.form.Password == "") {
+                        this.psdStatus = true;
+                        $("#psdvertify").stop().show().html("密码不能为空");
+                        return false;
+                    } else {
+                        this.psdStatus = false;
+                        $("#psdvertify").stop().hide();
+                        return true;
+                    }
+                },
+                checkVal: function() {
+                    if (this.vertifyUser() && this.vertifyPsd()) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                },
+                submitData: function() {
+                    var that = this;
+                    if (this.checkVal()) {
+                        axios({
+                            url: "/Home/Login",
+                            method: "post",
+                            data: that.form,
+                        }).then(function(response) {
+                            if (response.data.type == "success") {
+                                //if (that.form.ReturnUrl != null) {
+                                //    window.location.href = that.form.ReturnUrl;
+                                //} else {
+                                //    window.location.href = "/Home/Index";
+                                //}
+                                setTimeout(function () {
+                                    if (that.form.ReturnUrl != null) {
+                                        window.location.href = that.form.ReturnUrl;
+                                    } else {
+                                        window.location.href = "/Home/Index";
+                                    }
+                                },200);
+
+                            } else {
+                                that.onAlert("warning", "用户名或密码不正确！");
+                            }
+                        }).catch(function(error) {
+                            that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                        });
+                    }
+                },
+                //消息提示框
+                onAlert: function(type, message) {
+                    this.$message({
+                        message: message,
+                        type: type,
+                        offset: 300
+                    });
+                },
+                cxylogin: function() {
+                    var screenWidth = window.screen.width;
+                    var screenHeight = window.screen.height;
+                    var left = screenWidth / 2 - 500 / 2;
+                    var top = screenHeight / 2 - 345 / 2 - 150;
+                    if(top < 0) top = 0;
+                    var url = 'https://cxybeta.k0v.cn:8000/api/o/authorize/?client_id=ltLaW1p1uS9QUJ6fQ6gmm3Q4nP5MrvEefALAAmvu&response_type=code';
+                    window.open(url, "_blank", "scrollbars=yes,resizable=0,modal=false,alwaysRaised=yes,height=345,width=500,left=" + left + ",location=no,menubar=no,toolbar=no,top=" + top);
+                },
+            }
+        });
+    </script>
+</body>
+</html>

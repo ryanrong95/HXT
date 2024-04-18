@@ -1,0 +1,457 @@
+﻿@{
+    ViewBag.subTitle = "订单详情";
+}
+<div id="vTransDecDetail" v-cloak class="order_detail">
+    <div class="order_head">
+        <p class="font16 font_bold mb10">订单编号：{{indexData.ID}}</p>
+        <span class="txt_grey mr140">下单时间：{{indexData.CreateDate}}</span>
+        <span class="font14 txt_black mr140">报关总价：<span class="txt_red">{{indexData.TotalMoney}}</span></span>
+        <span class="font14 txt_black">订单状态：<span class="txt_yellow">{{indexData.MainStatus}}</span></span>
+    </div>
+    <div class="info_item_wrap mt40">
+        <span class="icon_img">1</span>
+        <span class="title">附件</span>
+    </div>
+    <div class="file_model">
+        <ul class="clearfix">
+            <li class="file-li-wrap fl">
+                <p class="font16 txt_black1 mt26">代理报关委托书</p>
+                <div class="upload_wrap2 mt20">
+                    <p v-if="agentUrl==''" class="tip mt16">提示：未上传</p>
+                    <div v-else class="upload_wrap1 mt20">
+                        <ul>
+                            <li class="clearfix">
+                                <div class="file_icon fl"></div>
+                                <div class="fl c_right">
+                                    <p class="file_name">{{agentName}}</p>
+                                    <a :href="agentUrl" target="_blank" class="link">预览</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div v-if="indexData.IsUploadOrderAgent">
+                        <div class="clearfix mt26">
+                            <button v-on:click="download_file('/Files/ExportAgent')" class="fl">导出</button>
+                            <a id="exportInfoForm" style="display:none" download><span id="ex-li" style="display:none"></span></a>
+                            <el-upload class="fl" action="/PayExchanges/UploadOrderFile"
+                                       :show-file-list="false"
+                                       :http-request="httpRequestFile_agent"
+                                       accept="image/jpg, image/bmp, image/jpeg, image/gif, image/png, application/pdf">
+                                <button class="ml14">上传</button>
+                            </el-upload>
+                        </div>
+                        <p class="tip mt10">仅限图片、PDF文件，且文件不超过3M</p>
+                    </div>
+                </div>
+            </li>
+            <li class="file-li-wrap fl">
+                <p class="font16 txt_black1 mt26">合同发票({{indexData.PIFiles.length}}个)</p>
+                <div class="upload_wrap2 mt20">
+                    <p v-if="indexData.PIFiles.length==0" class="tip mt16">提示：未上传</p>
+                    <div v-else class="upload_wrap1 mt20">
+                        <ul>
+                            <li class="clearfix" v-for="item in indexData.PIFiles">
+                                <div class="file_icon fl"></div>
+                                <div class="fl c_right">
+                                    <p class="file_name">{{item.Name}}</p>
+                                    <a :href="item.Url" target="_blank" class="link">预览</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
+            <li class="file-li-wrap fl">
+                <p class="font16 txt_black1 mt26">对账单</p>
+                <div class="upload_wrap2 mt20">
+                    <p v-if="billUrl==''" class="tip mt16">提示：未上传</p>
+                    <div v-else class="upload_wrap1 mt20">
+                        <ul>
+                            <li class="clearfix">
+                                <div class="file_icon fl"></div>
+                                <div class="fl c_right">
+                                    <p class="file_name">{{billName}}</p>
+                                    <a :href="billUrl" target="_blank" class="link">预览</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div v-if="indexData.IsUploadOrderBill">
+                        <div class="clearfix mt26">
+                            <button v-on:click="download_file('/Files/ExportBill')" class="fl">导出</button>
+                            <a id="exportInfoForm" style="display:none" download><span id="ex-li" style="display:none"></span></a>
+                            <el-upload class="fl" action="/PayExchanges/UploadOrderFile"
+                                       :show-file-list="false"
+                                       :http-request="httpRequestFile_bill"
+                                       accept="image/jpg, image/bmp, image/jpeg, image/gif, image/png, application/pdf">
+                                <button class="ml14">上传</button>
+                            </el-upload>
+                        </div>
+                        <p class="tip mt10">仅限图片、PDF文件，且文件不超过3M</p>
+                    </div>
+                </div>
+            </li>
+            <li v-if="indexData.XDTInvoiceType==0" class="file-li-wrap fl">
+                <p class="font16 txt_black1 mt26">销售合同</p>
+                <div class="upload_wrap2 mt20">
+                    <p v-if="salesUrl==''" class="tip mt16">提示：未上传</p>
+                    <div v-else class="upload_wrap1 mt20">
+                        <ul>
+                            <li class="clearfix">
+                                <div class="file_icon fl"></div>
+                                <div class="fl c_right">
+                                    <p class="file_name">{{salesName}}</p>
+                                    <a :href="salesUrl" target="_blank" class="link">预览</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div v-if="indexData.IsUploadOrderSales">
+                        <div class="clearfix mt26">
+                            <button v-on:click="download_file('/Files/DownloadOrderSales')" class="fl">导出</button>
+                            <a id="exportInfoForm" style="display:none" download><span id="ex-li" style="display:none"></span></a>
+                            <el-upload class="fl"
+                                       :show-file-list="false"
+                                       :http-request="httpRequestFile_sales"
+                                       accept="image/jpg, image/bmp, image/jpeg, image/gif, image/png, application/pdf">
+                                <button class="ml14">上传</button>
+                            </el-upload>
+                        </div>
+                        <p class="tip mt10">仅限图片、PDF文件，且文件不超过3M</p>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        @*<ul class="clearfix">
+            <li class="file-li-wrap fl">
+                <p class="font16 txt_black1 mt26">装箱单</p>
+                <div class="upload_wrap2 mt20">
+                    <p v-if="indexData.PackingFiles.length==0" class="tip mt16">提示：未上传</p>
+                    <div v-else class="upload_wrap1 mt20">
+                        <ul>
+                            <li class="clearfix" v-for="item in indexData.PackingFiles">
+                                <div class="file_icon fl"></div>
+                                <div class="fl c_right">
+                                    <p class="file_name">{{item.Name}}</p>
+                                    <a :href="item.Url" target="_blank" class="link">预览</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
+        </ul>*@
+    </div>
+    <div class="info_item_wrap mt40">
+        <span class="icon_img">2</span>
+        <span class="title">产品明细</span>
+    </div>
+    <div class="tb_wrap">
+        <table class="common_tb1 mt20">
+            <tr>
+                <th width="36px">序号</th>
+                <th>型号</th>
+                <th>品名</th>
+                <th>品牌</th>
+                <th>单位</th>
+                <th>数量</th>
+                <th>单价</th>
+                <th>产地</th>
+            </tr>
+            <tr v-if="(index<=1&&!isAll)||isAll" v-for="(item,index) in indexData.OrderItems">
+                <td>{{index+1}}</td>
+                <td>{{item.PartNumber}}</td>
+                <td>{{item.Name}}</td>
+                <td>{{item.Manufacturer}}</td>
+                <td>{{item.UnitLabel}}</td>
+                <td>{{item.Quantity}}</td>
+                <td>{{item.UnitPrice}}</td>
+                <td>{{item.OriginLabel}}</td>
+            </tr>
+            <tr v-if="indexData.OrderItems.length>2"><td colspan="8"><a v-on:click="isAll=!isAll"><span v-if="!isAll">查看全部<i class="el-icon-arrow-down ml4"></i></span><span v-else>收起<i class="el-icon-arrow-up ml4"></i></span></a></tr>
+        </table>
+    </div>
+    <div class="order_info">
+        <div class="info_item_wrap mt40 mb20">
+            <span class="icon_img">3</span>
+            <span class="title">订单信息</span>
+        </div>
+        <div class="clearfix mt12">
+            <div class="fl wp50">
+                <div class="clearfix info_item">
+                    <div class="info_title fl">订单编号：</div>
+                    <div class="info_content fl">{{indexData.ID}}</div>
+                </div>
+            </div>
+            <div class="fl">
+                <div class="clearfix info_item">
+                    <div class="info_title fl">报关总价：</div>
+                    <div class="info_content fl">{{indexData.TotalMoney}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix mt12">
+            <div class="fl wp50">
+                <div class="clearfix info_item">
+                    <div class="info_title fl">币种：</div>
+                    <div class="info_content fl">{{indexData.Currency}}</div>
+                </div>
+            </div>
+            <div class="fl">
+                <div class="clearfix info_item">
+                    <div class="info_title fl">是否包车：</div>
+                    <div class="info_content fl">{{indexData.IsFullVehicle}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix mt12">
+            <div class="fl wp50">
+                <div class="clearfix info_item">
+                    <div class="info_title fl">下单日期：</div>
+                    <div class="info_content fl">{{indexData.CreateDate}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="info_item_wrap mt40 mb20">
+            <span class="icon_img">4</span>
+            <span class="title">国内交货方式</span>
+        </div>
+        <div v-if="indexData.SZDeliveryType=='1'">
+            <div class="clearfix mt12">
+                <div class="fl wp50">
+                    <div class="clearfix info_item">
+                        <div class="info_title fl">交货方式：</div>
+                        <div class="info_content fl">{{indexData.SZDeliveryTypeName}}</div>
+                    </div>
+                </div>
+                <div class="fl">
+                    <div class="clearfix info_item">
+                        <div class="info_title fl">提货日期：</div>
+                        <div class="info_content fl">{{indexData.SZTakingDate}}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix mt12">
+                <div class="fl wp50">
+                    <div class="clearfix info_item">
+                        <div class="info_title fl">提货地址：</div>
+                        <div class="info_content fl">{{indexData.SZTakingDetailAddress}}</div>
+                    </div>
+                </div>
+                <div class="fl">
+                    <div class="clearfix info_item">
+                        <div class="info_title fl">联系人：</div>
+                        <div class="info_content fl">{{indexData.OutTakingContact}}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix mt12">
+                <div class="fl wp50">
+                    <div class="clearfix info_item">
+                        <div class="info_title fl">手机：</div>
+                        <div class="info_content fl">{{indexData.OutTakingPhone}}</div>
+                    </div>
+                </div>
+                <div class="fl">
+                    <div class="clearfix info_item">
+                        <div class="info_title fl">证件类型：</div>
+                        <div class="info_content fl">{{indexData.CertificateType}}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix mt12">
+                <div class="fl wp50">
+                    <div class="clearfix info_item">
+                        <div class="info_title fl">证件号码：</div>
+                        <div class="info_content fl">{{indexData.Certificate}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+  
+        <div v-if="indexData.SZDeliveryType=='2'||indexData.SZDeliveryType=='3'">
+            <div class="clearfix mt12">
+                <div class="fl wp50">
+                    <div class="clearfix info_item">
+                        <div class="info_title fl">交货方式：</div>
+                        <div class="info_content fl">{{indexData.SZDeliveryTypeName}}</div>
+                    </div>
+                </div>
+                <div v-if="indexData.OutWaybillCode!=''" class="fl">
+                    <div class="clearfix info_item">
+                        <div class="info_title fl">快递单号：</div>
+                        <div class="info_content fl">{{indexData.OutWaybillCode}}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix mt12">
+                <div class="fl wp50">
+                    <div class="clearfix info_item">
+                        <div class="info_title fl">联系人：</div>
+                        <div class="info_content fl">{{indexData.ReceivedContact}}</div>
+                    </div>
+                </div>
+                <div class="fl">
+                    <div class="clearfix info_item">
+                        <div class="info_title fl">电话：</div>
+                        <div class="info_content fl">{{indexData.ReceivedPhone}}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix mt12">
+                <div class="fl wp50">
+                    <div class="clearfix info_item">
+                        <div class="info_title fl">地址：</div>
+                        <div class="info_content fl">{{indexData.ReceivedAddress}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="info_item_wrap mt40 mb20">
+            <span class="icon_img">5</span>
+            <span class="title">付汇供应商</span>
+        </div>
+        <div class="clearfix mt12">
+            <div class="fl wp50">
+                <div class="pay_supplier" v-for="(item,index) in indexData.PayExchangeSupplier">
+                    <i>{{index+1}}</i>
+                    <span>{{item}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var vTransDecDetail = new Vue({
+        el: "#vTransDecDetail",
+        data:function() {
+            return {
+                indexData:@Html.Raw(Json.Encode(Model)),
+                agentName: "",
+                agentUrl: "",
+                salesName: "",
+                salesUrl: "",
+                billName: "",
+                billUrl: "",
+                isAll:false,
+            }
+        },
+        mounted: function () {
+            if (this.indexData.OrderBillURL != "") {
+                this.billUrl = this.indexData.OrderBillURL;
+                this.billName = this.indexData.OrderBillName;
+            }
+            if (this.indexData.OrderAgentURL != "") {
+                this.agentUrl = this.indexData.OrderAgentURL;
+                this.agentName = this.indexData.OrderAgentName;
+            }
+            if (this.indexData.OrderSalesURL != "") {
+                this.salesUrl = this.indexData.OrderSalesURL;
+                this.salesName = this.indexData.OrderSalesName;
+            }
+            if (this.indexData.XDTInvoiceType == 0) {
+                $('li.file-li-wrap').css('width', '50%');
+            }
+        },
+        methods: {
+            //导出文件
+            download_file: function (url) {
+                var that = this;
+                axios({
+                    url: url,
+                    method: "post",
+                    data: {
+                        id: this.indexData.ID
+                    }
+                }).then(function (response) {
+                    if (response.data.type == "error") {
+                        that.onAlert(res.data.type, res.data.msg);
+                    } else {
+                        $('#exportInfoForm').attr("href", response.data.data);
+                        $('#exportInfoForm').attr("target", "_blank");
+                        $('#ex-li').trigger("click");
+                    }
+                }).catch(function (error) {
+                    that.onAlert("warning", error);
+                });
+            },
+            //保存芯达通文件
+            saveFile: function (url, id, fileUrl, filename, ext, column,type) {
+                var that = this;
+                axios({
+                    url: url,
+                    method: "post",
+                    data: {
+                        id: id,
+                        type:type,
+                        filename: filename,
+                        fileurl: fileUrl,
+                    },
+                }).then(function (response) {
+                    that.onAlert(response.data.type, response.data.msg);
+                }).catch(function (error) {
+                    that.onAlert("warning", error);
+                });
+            },
+            httpRequestFile_agent: function (options, column) {
+                var that = this;
+                UploadFile(options, '/Files/UploadPickUpFile', function (res) {
+                    if (res.type) {
+                        var file = JSON.parse(res.file);
+                        that.agentUrl = file.fullURL;
+                        that.agentName = file.name;
+                        that.saveFile('/Files/UploadDeclareFile', that.indexData.ID, file.URL, file.name, file.fileFormat,'agentUrl',3);
+                    } else {
+                        that.onAlert("error", res.msg);
+                    }
+                });
+            },
+            httpRequestFile_sales: function (options, column) {
+                var that = this;
+                UploadFile(options, '/Files/UploadPickUpFile', function (res) {
+                    if (res.type) {
+                        var file = JSON.parse(res.file);
+                        that.salesUrl = file.fullURL;
+                        that.salesName = file.name;
+                        that.saveFile('/Files/UploadDeclareFile', that.indexData.ID, file.URL, file.name, file.fileFormat,'salesUrl',50);
+                    } else {
+                        that.onAlert("error", res.msg);
+                    }
+                });
+            },
+            httpRequestFile_bill: function (options, column) {
+                var that = this;
+                UploadFile(options, '/Files/UploadPickUpFile', function (res) {
+                    if (res.type) {
+                        var file = JSON.parse(res.file);
+                        that.billUrl = file.fullURL;
+                        that.billName = file.name;
+                        that.saveFile('/Files/UploadDeclareFile', that.indexData.ID, file.URL, file.name, file.fileFormat, 'billUrl', 1);
+                    } else {
+                        that.onAlert("error", res.msg);
+                    }
+                });
+            },
+            //上传多文件
+            httpRequestFiles: function (options, column) {
+                var that = this;
+                UploadFile(options, '/Files/UploadOrderFile', function (res) {
+                    if (res.type) {
+                        var list = JSON.parse(res.file);
+                        that.formData[column].push(list);
+                    } else {
+                        that.onAlert("error", res.msg)
+                    }
+                });
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                    offset: 100,
+                });
+            },
+        }
+    });
+</script>

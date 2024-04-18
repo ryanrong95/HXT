@@ -1,0 +1,71 @@
+﻿<template id="contactinfo">
+    <el-form :model="form1" :rules="rules" status-icon ref="form1" label-width="140px">
+        <el-form-item label="联系人：" prop="Name" :rules="[{ required: true, message: '请输入联系人', trigger: 'blur' },{max:150, message: '联系人长度超过限制', trigger: 'blur' }]">
+            <el-input style="width:90%;" size="mini" v-model="form1.Name" placeholder="请输入联系人" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="手机号：" prop="Mobile" :rules="[{ required: true, message: '请输入手机号', trigger: 'blur' },{max:20, message: '手机号长度超过限制', trigger: 'blur' }]">
+            <el-input style="width:90%;" size="mini" v-model="form1.Mobile" placeholder="请输入联系电话" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="联系电话：" prop="Tel">
+            <el-input style="width:90%;" size="mini" v-model="form1.Tel" placeholder="请输入联系电话" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="Email：" prop="Email">
+            <el-input style="width:90%;" size="mini" v-model="form1.Email" placeholder="请输入邮编" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="QQ：" prop="QQ">
+            <el-input style="width:90%;" size="mini" v-model="form1.QQ" placeholder="请输入QQ号:" auto-complete="off"></el-input>
+        </el-form-item>
+    </el-form>
+</template>
+<script src="~/Scripts/areaData.js"></script>
+<script>
+    Vue.component(
+        'my-contact',
+        {
+            template: "#contactinfo",
+            data: function () {
+                //验证数字
+                var validateNumber =function (rule, value, callback){
+                    if (value != '' && value != null) {
+                        if (!/^[0-9]*$/.test(value)) {
+                            callback(new Error('请输入数字'));
+                        }
+                    }
+                    callback();
+                };
+                var validateMail = function(rule, value, callback){
+                    if (value != "" && value != null) {
+                        var reg = new RegExp(/^([a-zA-Z0-9._-])+@{@Html.Raw("@");}([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/);
+                        if (!reg.test(value)) {
+                            callback(new Error('请输入正确的邮箱地址'));
+                        }
+                    }
+                    callback();
+                };
+                return {
+                    form1: @Html.Raw(Json.Encode(Model)),
+                    AddressLists: $.pccData[0].s.filter(function (data) { if (data.n == "香港") { return data} }), //省市区三级联动数据
+                    cascaderConfig: {
+                        label: 'n',
+                        value: 'n',
+                        children: 's'
+                    },
+                    rules: {
+                        Tel: [{ validator: validateNumber, trigger: 'blur' }, { max: 20, message: '电话长度超过限制', trigger: 'blur' }],
+                        QQ: [ { max: 20, message: 'QQ长度超过限制', trigger: 'blur' }],
+                        Email:[{ validator: validateMail, trigger: 'blur' }, { max: 50, message: '邮编长度超过限制', trigger: 'blur' }],
+                    },
+                }
+            },
+            methods: {
+                //消息提示框
+                onAlert: function (type, message) {
+                    this.$message({
+                        message: message,
+                        type: type
+                    });
+                },
+            },
+        });
+</script>
+

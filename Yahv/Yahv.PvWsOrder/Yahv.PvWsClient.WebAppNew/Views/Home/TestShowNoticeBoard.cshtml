@@ -1,0 +1,73 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>TestShowNoticeBoard</title>
+    <style>
+        .container {
+            
+            float: left;
+            width: 390px;
+            height: 744px;
+            
+        }
+
+        .my-iframe {
+            overflow-x: hidden;
+            width: 390px;
+            height: 744px;
+            margin: 35px;
+        }
+    </style>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $.post("/Home/GetNoticeBoards", { page: 1, rows: 20 }, function (result) {
+                var data = JSON.parse(result.data);
+                //console.log(data);
+
+                for (var i = 0; i < data.list.length && i < 20; i++) {
+                    document.getElementById('render' + i).srcdoc = data.list[i].Content;
+                }
+
+                //// 测试 encodeURIComponent  decodeURIComponent
+                //var originString = data.list[1].Content;
+                //var encodeString = encodeURIComponent(originString);
+                //var decodeString = decodeURIComponent(encodeString);
+                //console.log(decodeString);
+
+            });
+        });
+    </script>
+</head>
+<body>
+    <div>
+        <iframe id="render0" class="my-iframe"></iframe>
+        <iframe id="render1" class="my-iframe"></iframe>
+        <iframe id="render2" class="my-iframe"></iframe>
+        <iframe id="render3" class="my-iframe"></iframe>
+        <iframe id="render4" class="my-iframe"></iframe>
+        <iframe id="render5" class="my-iframe"></iframe>
+        <iframe id="render6" class="my-iframe"></iframe>
+        <iframe id="render7" class="my-iframe"></iframe>
+        <iframe id="render8" class="my-iframe"></iframe>
+        <iframe id="render9" class="my-iframe"></iframe>
+        <iframe id="render10" class="my-iframe"></iframe>
+        <iframe id="render11" class="my-iframe"></iframe>
+        <iframe id="render12" class="my-iframe"></iframe>
+        <iframe id="render13" class="my-iframe"></iframe>
+        <iframe id="render14" class="my-iframe"></iframe>
+        <iframe id="render15" class="my-iframe"></iframe>
+        <iframe id="render16" class="my-iframe"></iframe>
+        <iframe id="render17" class="my-iframe"></iframe>
+        <iframe id="render18" class="my-iframe"></iframe>
+        <iframe id="render19" class="my-iframe"></iframe>
+    </div>
+</body>
+</html>

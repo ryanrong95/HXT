@@ -1,0 +1,208 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_LayoutOrder.cshtml";
+    ViewBag.navid = "UnReceivedList";
+}
+
+<div v-cloak id="vUnReceivedList" class="backshow">
+    <h2>代发货</h2>
+    <div class="order_list_view">
+        <div class="orderlist mt20" ref="viewBox1" v-on:scroll="ss('viewBox1')">
+            <div class="title">
+                <ul class="overhide">
+                    <li class="fl" style="width:303px">
+                        <span>送/提货单号</span>
+                    </li>
+                    <li class="fl" style="width:171px">
+                        <span>交货方式</span>
+                    </li>
+                    <li class="fl" style="width:244px">
+                        <span>收件人/提货人</span>
+                    </li>
+                    @*<li class="fl" style="width:171px">
+                        <span>收件人</span>
+                    </li>*@
+                    <li class="fl" style="width:195px">
+                        <span>操作</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="orderWrap" v-loading="indexData.loading">
+                <div class="order" v-if="!indexData.loading">
+                    <table class="myorder" border="0" cellspacing="0" cellpadding="0" v-for="item of indexData.curItems">
+                        <tr>
+                            <th class="overhide" colspan="6">
+                                <div class="fl">
+                                    <span class="lignt_text">
+                                        主订单号：
+                                    </span>
+                                    <span>{{item.ID}}</span>
+                                </div>
+                                <div class="fl txtdate">
+                                    <span class="lignt_text">{{item.CreateDate}}</span>
+                                </div>
+                                <div class="fr detail">
+                                    <a class="a_detail ml16" v-on:click="info(item.ID)">订单详情</a>
+                                </div>
+                            </th>
+                        </tr>
+                        <tr class="cell">
+                            <td style="width:245px;text-align:left">
+                                <div style="padding-left:60px;">
+                                    <p>单号： {{item.WayBillID}}</p>
+                                    <p>制单时间： {{item.WayBillCreateDate}}</p>
+                                </div>
+                            </td>
+                            <td style="width:171px">
+                                <span>{{item.Type}}</span><br />
+                            </td>
+                            <td style="width:244px">
+                                <p>{{item.InvoiceStatus}}</p>
+                                <p>{{item.InvoiceStatus}}</p>
+                            </td>
+                            <td style="width:171px;padding:12px 0px" class="myOrderTd">
+                                <el-button class="btn2"  v-on:click="confirm(item.WayBillID)">确认收货</el-button>
+                            </td>
+                        </tr>
+                    </table>
+                    <div v-if="indexData.curItems.length==0">
+                        <div class="nodata-container">
+                            <el-row class="nodata-row1">
+                                <img src="~/Content/img/nodata.png" />
+                            </el-row>
+                            <el-row class="nodata-row2">
+                                <span class="nodata-info">暂无数据！</span>
+                            </el-row>
+                        </div>
+                    </div>
+                </div>
+                <div class="foot" v-if="(!indexData.loading)&&indexData.curItems.length!=0">
+                    <el-pagination style="float:right" v-on:size-change="handleSizeChange"
+                                   v-on:current-change="handleCurrentChange"
+                                   :current-page="indexData.pageIndex"
+                                   :page-sizes="[5, 10, 20, 40]"
+                                   :page-size="indexData.pageSize"
+                                   layout="total, sizes, prev, pager, next, jumper"
+                                   :total="indexData.Total">
+                    </el-pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var vUnReceivedList = new Vue({
+        el: "#vUnReceivedList",
+        data: function () {
+            return {
+                indexData: {
+                    loading: true,
+                    curItems: [],
+                    pageIndex: 1, //初始页
+                    pageSize: 5,    //每页的数据
+                    Total: 0,
+                    scrollTop: 0, //滚动条位置
+                },
+            }
+        },
+        mounted: function () {
+            var that = this;
+            var userJsonStr = sessionStorage.getItem('vUnReceivedList');
+            userEntity = JSON.parse(userJsonStr);
+            if (userEntity == null) {
+                that.paging();
+            } else {
+                that.indexData = userEntity;
+                that.paging();
+                that.$nextTick(function () {
+                    that.$refs['viewBox1'].scrollTop = that.indexData.scrollTop;
+                })
+                sessionStorage.removeItem('vUnReceivedList');
+            }
+        },
+        methods: {
+            confirm: function (id) {
+                var that = this;
+                this.$confirm('是否确认收货(包括分批送货)?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                    lockScroll: false,
+                }).then(function () {
+                    axios({
+                        url: "/Declare/ConfirmReceived",
+                        method: "post",
+                        data: {
+                            wayBillID: id,
+                        }
+                    }).then(function (response) {
+                        if (response.data.type != "error") {
+                            that.paging();
+                        }
+                        that.onAlert(response.data.type, response.data.msg);
+                    }).catch(function (error) {
+                        that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                    });
+                }).catch(function () {
+                });
+            },
+            info: function (id) {
+                sessionStorage.setItem('DeliveryList', JSON.stringify(this.indexData));
+                commonSkip(id, '/Orders/DeliveryDetail', 'DeliveryList');
+            },
+            ss: function (ref) {
+                // 监听这个dom的scroll事件
+                var that = this;
+                this.$refs[ref].addEventListener('scroll', function () {
+                    that.indexData.scrollTop = that.$refs[ref].scrollTop;
+                }, false)
+            },
+            // 初始页currentPage、初始每页数据数pagesize和数据data
+            handleSizeChange: function (size) {
+                this.indexData.pageSize = size;
+                this.paging();
+            },
+            handleCurrentChange: function (currentPage) {
+                this.indexData.pageIndex = currentPage;
+                this.paging();
+            },
+            paging: function () {
+                var that = this;
+                that.indexData.loading = true;
+                axios({
+                    url: "/Declare/GetUnReceivedList",
+                    method: "post",
+                    data: {
+                        page: this.indexData.pageIndex,
+                        rows: this.indexData.pageSize,
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                    transformRequest: [function (data) {
+                        var ret = ''
+                        for (var it in data) {
+                            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+                        }
+                        return ret;
+                    }],
+                }).then(function (response) {
+                    var data = JSON.parse(response.data.data);
+                    that.indexData.curItems = data.list;
+                    that.indexData.Total = data.total;
+                    that.indexData.loading = false;
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                });
+            },
+        }
+    });
+</script>

@@ -1,0 +1,327 @@
+﻿<template id="newoutstoragestockimport">
+    <el-dialog title="我的库存" class="fh_file" :lock-scroll="false" width="60%" :visible.sync="dialogstockimportvisible"
+               :close-on-click-modal="false" v-on:close="closestockimportwindow()">
+        <div class="query_wrap">
+            <div class="clearfix">
+                <div class="fl">
+                    <span class="title">型号：</span>
+                    <el-input style="width: 120px;" size="mini" v-model="queryPartNumber"></el-input>
+                </div>
+
+                <button v-on:click="doQuery()" class="btn btn1 ml30">查询</button>
+                <button v-on:click="clearQueryCondition()" class="btn btn2 ml12">重置</button>
+            </div>
+        </div>
+        <div class="tb_wrap" v-loading="loading">
+            <table class="common_tb1 mt30 common_tb">
+                <tr>
+                    <th width="36px">
+                        <el-checkbox v-model="allChecked" v-on:change="allCheck"></el-checkbox>
+                    </th>
+                    <th width="140px">型号</th>
+                    <th width="100px">品牌</th>
+                    <th width="50px">包装类型</th>
+                    <th width="90px">最小包装量</th>
+                    <th width="90px">库存数量</th>
+                    <th width="100px">数量</th>
+                    <th width="100px">库位号</th>
+                </tr>
+                <tr v-for="(item,index) in dataList">
+                    <td>
+                        <el-checkbox v-model="item.IsCheck" v-on:change="oneCheck(item)"></el-checkbox>
+                    </td>
+                    <td>{{item.PartNumber}}</td>
+                    <td>{{item.Brand}}</td>
+                    <td>{{item.StocktakingTypeName}}</td>
+                    <td>{{item.Mpq}}</td>
+                    <td>{{item.PackageNumber}}</td>
+                    <td>
+                        <el-input size="mini" v-model="item.NeedPackageNumber" v-on:input="changeNeedPackageNumber(item)"></el-input>
+                    </td>
+                    <td>{{item.LocationNo}}</td>
+                </tr>
+                <tr v-if="dataList.length==0">
+                    <td colspan="10">暂无数据</td>
+                </tr>
+            </table>
+            <div class="foot clearfix">
+                <el-pagination class="fr" style="margin-top: 20px;" v-on:size-change="handleSizeChange"
+                               v-on:current-change="handleCurrentChange"
+                               :current-page="pageIndex"
+                               :page-sizes="[5, 10, 20, 40]"
+                               :page-size="pageSize"
+                               layout="total, sizes, prev, pager, next, jumper"
+                               :total="total">
+                </el-pagination>
+            </div>
+        </div>
+        <div id="stockimportfooter" slot="footer" class="el-dialog__footer pb0">
+            <button v-on:click="onSubmit" class="btn2">确定</button>
+        </div>
+    </el-dialog>
+</template>
+<script>
+    Vue.component(
+        'newoutstoragestockimport',
+        {
+            template: "#newoutstoragestockimport",
+            data: function () {
+                return {
+                    queryPartNumber: "", //查询条件型号
+                    loading: false,
+
+                    dataList: [],
+                    total: 0,
+                    pageIndex: 1,
+                    pageSize: 5,
+
+                    allChecked: false,
+
+                    addedInfos: [], //已经添加的信息
+
+                    checkedCities: [],
+                    checkboxZhanWei: '', //checkbox占位
+                }
+            },
+            props: {
+                dialogstockimportvisible: {
+                    type: Boolean,
+                    required: true,
+                    default: false,
+                },
+            },
+            watch: {
+
+            },
+            methods: {
+                //初始化页面参数
+                initPageParams: function (paramAddedInfos) {
+                    this.addedInfos = paramAddedInfos;
+
+                    this.queryPartNumber = "";
+                    this.loading = false;
+
+                    this.dataList = [];
+                    this.total = 0;
+                    this.pageIndex = 1;
+                    this.pageSize = 5;
+
+                    this.allChecked = false;
+                },
+                //关闭窗口
+                closestockimportwindow: function () {
+                    this.dialogstockimportvisible = false;
+                    this.$emit("closestockimportwindow");
+                },
+                //查询
+                doQuery: function () {
+                    this.pageIndex = 1;
+                    this.paging();
+                },
+                //重置
+                clearQueryCondition: function () {
+                    this.queryPartNumber = "";
+                    this.pageIndex = 1;
+                    this.paging();
+                },
+                handleOneLine: function (item) {
+                    if (item.IsCheck) {
+                        //点击后选中
+                        //加入 addedInfos(StorageID, PackageNumber), PackageNumber 使用当前 NeedPackageNumber
+                        this.addedInfos.push({
+                            StorageID: item.StorageID,
+                            PackageNumber: item.NeedPackageNumber,
+                        });
+                    } else {
+                        //点击后未选中
+                        //从 addedInfos 中移除
+                        var ino = -1;
+                        for (var i = 0; i < this.addedInfos.length; i++) {
+                            if (this.addedInfos[i].StorageID == item.StorageID) {
+                                ino = i;
+                                break;
+                            }
+                        }
+                        if (ino >= 0) {
+                            this.addedInfos.splice(ino, 1);
+                        }
+                    }
+                },
+                //点击全选/全部选按钮
+                allCheck: function () {
+                    //用当前 allChecked 与每一行的 IsCheck 比较,
+                    //如果相同, 则无动作
+                    //如果不同, 则赋值给每一行的 IsCheck; 然后处理每一行的数据 (不能直接调用 oneCheck 函数)
+                    var that = this;
+                    for (var i = 0; i < that.dataList.length; i++) {
+                        if (that.dataList[i].IsCheck != that.allChecked) {
+                            that.dataList[i].IsCheck = that.allChecked;
+                            that.handleOneLine(that.dataList[i]);
+                        }
+                    }
+                },
+                //点击单个选择按钮
+                oneCheck: function (item) {
+                    this.handleOneLine(item);
+
+                    //检查本页每一行 IsCheck, 如果全是 true, 则 allChecked 置为 true; 否则 allChecked 置为 false
+                    if (this.dataList != null && this.dataList.length > 0) {
+                        var isThisPageAllCheck = true;
+                        for (var i = 0; i < this.dataList.length; i++) {
+                            if (this.dataList[i].IsCheck == false) {
+                                isThisPageAllCheck = false;
+                                break;
+                            }
+                        }
+                        this.allChecked = isThisPageAllCheck;
+                    } else {
+                        this.allChecked = false;
+                    }
+                },
+                //修改需要的数量
+                changeNeedPackageNumber: function (item) {
+                    //首先做数字检查
+                    if (!ValidDecimal(item.NeedPackageNumber)) {
+                        //如果不是数字
+                        item.NeedPackageNumber = item.NeedPackageNumber.replace(/[^0-9]/g, '').replace(/\b(0+)/gi, "");
+                    } else {
+                        //如果是数字
+                        item.NeedPackageNumber = parseInt(item.NeedPackageNumber);
+                        if (item.NeedPackageNumber > item.PackageNumber) {
+                            item.NeedPackageNumber = item.PackageNumber;
+                        }
+                    }
+
+                    if (typeof (item.NeedPackageNumber) == "string") {
+                        item.NeedPackageNumber = item.NeedPackageNumber.trim();
+                    }
+
+                    if (item.NeedPackageNumber == "") {
+                        item.NeedPackageNumber = 0;
+                    }
+
+                    //如果选中了, 修改 addedInfos 中的值
+                    if (item.IsCheck) {
+                        var ino = -1;
+                        for (var i = 0; i < this.addedInfos.length; i++) {
+                            if (this.addedInfos[i].StorageID == item.StorageID) {
+                                ino = i;
+                                break;
+                            }
+                        }
+                        if (ino >= 0) {
+                            this.addedInfos[i].PackageNumber = parseInt(item.NeedPackageNumber);
+                        }
+                    }
+                },
+                //修改 pageSize
+                handleSizeChange: function (size) {
+                    this.pageSize = size;
+                    this.paging();
+                },
+                //修改 pageIndex
+                handleCurrentChange: function (currentPage) {
+                    this.pageIndex = currentPage;
+                    this.paging();
+                },
+                //执行分页查询
+                paging: function () {
+                    var that = this;
+                    that.loading = true;
+                    axios({
+                        url: "/Order/GetMyStorage",
+                        method: "post",
+                        data: {
+                            page: this.pageIndex,
+                            rows: this.pageSize,
+                            PartNumber: this.queryPartNumber
+                        },
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                        },
+                        transformRequest: [
+                            function (data) {
+                                var ret = '';
+                                for (var it in data) {
+                                    ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&';
+                                }
+                                return ret;
+                            }
+                        ]
+                    }).then(function (response) {
+                        that.dataList = response.data.data.list;
+                        that.total = response.data.data.total;
+                        that.loading = false;
+                        //将已添加的型号打勾 begin
+                        var addedStorageIDs = [];
+                        that.addedInfos.forEach(function (item, i) {
+                            addedStorageIDs.push(item.StorageID);
+                        });
+                        for (var i = 0; i < that.dataList.length; i++) {
+                            that.dataList[i].NeedPackageNumber = that.dataList[i].PackageNumber;
+                            if (addedStorageIDs.indexOf(that.dataList[i].StorageID) >= 0) {
+                                that.dataList[i].IsCheck = true;
+                                var theAddedInfo = that.addedInfos.filter(function (one) { return one.StorageID == that.dataList[i].StorageID; })[0];
+                                that.dataList[i].NeedPackageNumber = theAddedInfo.PackageNumber;
+                            } else {
+                                that.dataList[i].IsCheck = false;
+                            }
+                        }
+                        //将已添加的型号打勾 end
+
+                        //如果这一页的型号的 IsCheck 都是 true, 则将全选的按钮 (allChecked 变量) 置为 true
+                        var isThisPageAllCheck = false;
+                        if (that.dataList != null && that.dataList.length > 0) {
+                            isThisPageAllCheck = true;
+                            for (var i = 0; i < that.dataList.length; i++) {
+                                if (that.dataList[i].IsCheck == false) {
+                                    isThisPageAllCheck = false;
+                                    break;
+                                }
+                            }
+                        }
+                        that.allChecked = isThisPageAllCheck;
+                    }).catch(function (error) {
+                        that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                    });
+                },
+                //确定
+                onSubmit: function () {
+                    var that = this;
+                    axios({
+                        url: "/Order/GetAppointedStorage",
+                        method: "post",
+                        data: {
+                            AddedInfos: JSON.stringify(that.addedInfos),
+                        },
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                        },
+                        transformRequest: [
+                            function (data) {
+                                var ret = '';
+                                for (var it in data) {
+                                    ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&';
+                                }
+                                return ret;
+                            }
+                        ]
+                    }).then(function (response) {
+                        var chuanDiOrderItems = response.data.data.list;
+                        that.$emit("addorderitemsfromstock", chuanDiOrderItems); //传递 chuanDiOrderItems
+                        that.closestockimportwindow(); //关闭窗口
+                    }).catch(function (error) {
+                        that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                    });
+                },
+                //消息提示框
+                onAlert: function (type, message) {
+                    this.$message({
+                        message: message,
+                        type: type,
+                        offset: 100
+                    });
+                },
+            },
+        });
+</script>

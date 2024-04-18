@@ -1,0 +1,153 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>芯达通</title>
+    <link rel="stylesheet" type="text/css" href="css/common.css" />
+    <link rel="stylesheet" type="text/css" href="css/page.css" />
+    <link rel="stylesheet" href="css/element.css" />
+    <script type="text/javascript" src="js/jQuery-2.2.4.min.js"></script>
+    <script type="text/javascript" src="js/vue.js"></script>
+    <script type="text/javascript" src="js/xs.js"></script>
+    <script type="text/javascript" src="js/axios.min.js"></script>
+    <script type="text/javascript" src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript" src="js/element.js"></script>
+</head>
+
+<body>
+    <!-- 右侧边栏相关内容 -->
+    <div id="n_sideBar"></div>
+    <!--头部和banner部分-->
+    <div class="n_header">
+        <div class="n_lunbt" style="background-image:url(imgs/n_info_pic.png) ;"></div>
+        <div id="n_insert_nav"></div>
+    </div>
+    <!-- 中间不同内容 -->
+    <div class="n_mid n_assist_mid">
+        <div class="n_select n_assist_select">
+            <ul class="clearfix">
+                <li>
+                    <a href="InfoQuery.html" class="n_mol_a">
+                        <i></i>
+                        <p>归类信息查询</p>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="rateQuery.html" class="n_mol_a">
+                        <i></i>
+                        <p>实时汇率查询</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="feeCount.html" class="n_mol_a">
+                        <i></i>
+                        <p>费用计算</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="downloadCenter.html" class="n_mol_a">
+                        <i></i>
+                        <p>下载中心</p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="n_assist_con n_assist_rate_con" id="rate">
+            <div class="n_custom_desc n_rate_desc">
+                <h3>关于实时汇率查询</h3>
+                <div class="n_info_note n_rate_note">
+                    <p>中国银行外汇牌价格表，<a target="_blank" href="https://www.boc.cn/sourcedb/whpj/">www.bankofchina.com</a></p>
+                </div>
+                <div class="n_rate_result">
+                    <div class="wrapper">
+                        <div class="n_rate_table">
+                            <img src="imgs/n_rate_zgbank.png">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>汇率类型</th>
+                                        <th>货币名称</th>
+                                        <th>现汇买入价</th>
+                                        <th>现钞买入价</th>
+                                        <th>现汇卖出价</th>
+                                        <th>现钞卖出价</th>
+                                        <th>中行折算价</th>
+                                        <th>发布时间</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="item in list">
+                                        <td>{{item.Type}}</td>
+                                        <td>{{item.Currency}}</td>
+                                        <td>{{item.Xhmr}}</td>
+                                        <td>{{item.Xcmr}}</td>
+                                        <td>{{item.Xhmc}}</td>
+                                        <td>{{item.Xcmc}}</td>
+                                        <td>{{item.Zhzsj}}</td>
+                                        <td>{{item.PublishDate}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="n_rate_more"><a target="_blank" href="https://www.boc.cn/sourcedb/whpj/">查看更多》</a></p>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    <!-- 底部 -->
+    <div id="footer_zh"></div>
+    <script>
+        $("#n_sideBar").load("sideBar.html")
+        $("#n_insert_nav").load("header.html",function(){
+            $("#footer_zh").load("footer.html");
+            //导航中当前选中的项
+            $(".n_nagivation>ul>li:nth-child(3)").addClass("hot");
+            $(".n_nagivation>ul>li").hover(function () {
+                $(".n_nagivation>ul>li:nth-child(3)").removeClass("hot");
+            }, function () {
+                $(".n_nagivation>ul>li:nth-child(3)").addClass("hot");
+            })
+		});
+		
+
+		var rate = new Vue({
+            el: "#rate",
+            data: {
+                list:[],
+            },
+            mounted: function () {
+                this.getRateData();
+            },
+            methods: {
+                getRateData: function () {
+                    var that = this;
+                    axios({
+                        url: "/Home/GetRateData",
+                        method: "post"
+                    }).then(function (response) {
+                        if (response.data.type == "success") {
+                            res = JSON.parse(response.data.data);
+                            that.list = res;
+                        }
+                    }).catch(function (error) {
+                        that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                    });
+                },
+                //消息提示框
+                onAlert: function (type, message) {
+                    this.$message({
+                        message: message,
+                        type: type
+                    });
+                },
+            }
+        });
+    </script>
+</body>
+</html>

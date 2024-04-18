@@ -1,0 +1,55 @@
+﻿<template id="newinstoragespecialrequire">
+    <div>
+        <div class="mt12">
+            <el-checkbox-group v-model="specialRequireValues">
+                <div v-for="item in specialRequireOptions" class="mb10">
+                    <el-checkbox :label="item.value">{{item.text}}</el-checkbox>
+                    <span v-if="item.value == '3'">
+                        <el-input size="mini" placeholder="" :disabled="otherRequireDisabled" v-model="otherRequire" style="width: 200px; margin-left: 10px;" auto-complete="off"></el-input>
+                    </span>
+                </div>
+            </el-checkbox-group>
+        </div>
+    </div>
+</template>
+<script>
+    Vue.component(
+        'newinstoragespecialrequire',
+        {
+            template: "#newinstoragespecialrequire",
+            data: function () {
+                return {
+                    specialRequireOptions: [], //入库订单特殊要求选项
+                    specialRequireValues: [], //入库订单特殊要求的值
+                    otherRequire: "", //其他要求的值
+                    otherRequireDisabled: true,
+                }
+            },
+            watch: {
+                specialRequireValues: function (newVal, oldVal) {
+                    if (newVal.indexOf('3') == -1) {
+                        this.otherRequireDisabled = true;
+                        this.otherRequire = "";
+                    } else {
+                        this.otherRequireDisabled = false;
+                    }
+                },
+            },
+            methods: {
+
+            },
+            created: function () {
+                //获取入库订单特殊要求选项
+                var that = this;
+                axios.get('/Miscellaneous/StorageInSpecialRequires', { params: {} })
+                    .then(function (res) {
+                        if (res.data.success == 200) {
+                            that.specialRequireOptions = res.data.result;
+                        }
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    });
+            },
+        });
+</script>

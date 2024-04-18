@@ -1,0 +1,85 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<section class="accountSetting clearfix">
+    <div class="w1200 clearfix">
+        <div class="memberCenter_left">
+            <h2 id="mem_center">会员中心</h2>
+            <div class="member_left_list">
+                <p>报关服务</p>
+                <ul id="nav_left">
+                    <li id="DeclareList">
+                        <i></i>
+                        <a href="/Declare/DeclareList">进口报关</a>
+                    </li>
+                    <li id="TransferDeclareList">
+                        <i></i>
+                        <a href="/Orders/TransferDeclarationList">转报关</a>
+                    </li>
+                    <li id="PreConfirmList">
+                        <i></i>
+                        <a href="/Declare/PreConfirmList">待确认</a>
+                    </li>
+                    <li id="UnPayExchangeList">
+                        <i></i>
+                        <a href="/PayExchange/UnPayExchange">待付汇</a>
+                    </li>
+                    <li id="UnReceivedList">
+                        <i></i>
+                        <a href="/Declare/UnReceivedList">待收货</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="member_left_list">
+                <p>本港服务</p> <ul>
+                    <li id="StorageList" class="">
+                        <i></i>
+                        <a href="/Orders/StorageList">代收货</a>
+                    </li>
+                    <li id="DeliveryList" class="">
+                        <i></i>
+                        <a href="/Orders/DeliveryList">代发货</a>
+                    </li>
+                    <li id="TransportList" class="">
+                        <i></i>
+                        <a href="/Orders/TransportList">即收即发</a>
+                    </li>
+                    <li id="MyStockList" class="">
+                        <i></i>
+                        <a href="/Orders/MyStockList">我的库存</a>
+                    </li>
+                    <li id="MyLeaseList" class="">
+                        <i></i>
+                        <a href="/Orders/MyLeaseList">我的租赁</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="member_left_list">
+                <p>订单管理</p> <ul>
+                    <li id="MyOrdersList" class="">
+                        <i></i>
+                        <a href="/Orders/MyOrdersList">全部订单</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="memberCenter_right">
+            @RenderBody()
+        </div>
+    </div>
+</section>
+
+<script>
+    var id = '@ViewBag.navid';
+    if (id != "" && id != null) {
+        $("#" + id).addClass("active");
+    }
+    else {
+        $("#BasicInfo").addClass("active");
+    }
+    $("#declareCur").addClass("active").prev("a").addClass("active");
+    $("#mem_center").click(function () {
+        location.href = "/Home/Index";
+    })
+</script>
+

@@ -1,0 +1,143 @@
+﻿<template id="storagedetailouttransport">
+    <div>
+        <el-form>
+            <div class="mt20">
+                <div style="font-size: 14px; color: #666666;">● {{transport.TransportModeName}}</div>
+            </div>
+            <!-- 快递 -->
+            <div v-if="transport.TransportModeInt == 2" class="mt20">
+                <el-form-item label="送货地址:" style="margin-bottom: -10px; margin-top: 10px;">
+                    <span class="txt1">联系人：{{transport.DeliverTargetManShow}}</span>
+                    <span class="txt1" style="margin-left: 30px;">电话：{{transport.DeliverTargetTelShow}}</span>
+                </el-form-item>
+                <el-form-item label="" style="margin-bottom: -10px;">
+                    <span class="txt1">地址：{{transport.DeliverTargetAddressShow}}</span>
+                </el-form-item>
+                <el-form-item label="快递公司:" style="margin-bottom: -10px; margin-top: 10px;">
+                    <p class="txt1">
+                        <span>{{transport.ExpressCompanyShow}}</span>
+                        <span v-if="storagetransportinfo.IsHasValue == true
+                                 && storagetransportinfo.TransportModeInt == 2
+                                 && transport.ExpressCompanyShow != storagetransportinfo.CarrierName">
+                            (修改为：{{storagetransportinfo.CarrierName}})
+                        </span>
+                    </p>
+                </el-form-item>
+                <el-form-item label="快递方式:" style="margin-bottom: -10px; margin-top: 10px;">
+                    <p class="txt1">
+                        <span>{{transport.ExpressMethodShow}}</span>
+                        <span v-if="storagetransportinfo.IsHasValue == true
+                                 && storagetransportinfo.TransportModeInt == 2
+                                 && transport.ExpressMethodShow != storagetransportinfo.ExpressTransportShow">
+                            (修改为：{{storagetransportinfo.ExpressTransportShow}})
+                        </span>
+                    </p>
+                </el-form-item>
+                <el-form-item label="运费支付:" style="margin-bottom: -10px; margin-top: 10px;">
+                    <p class="txt1">
+                        <span>{{transport.FreightPayShow}}</span>
+                        <span v-if="storagetransportinfo.IsHasValue == true
+                                 && storagetransportinfo.TransportModeInt == 2
+                                 && transport.FreightPayInt != storagetransportinfo.ExpressPayerInt">
+                            (修改为：{{storagetransportinfo.ExpressPayerShow}})
+                        </span>
+                    </p>
+                </el-form-item>
+                <el-form-item v-if="transport.FreightPayInt == '3'" label="月结账号:" style="margin-bottom: -10px; margin-top: 10px;">
+                    <p class="txt1">{{transport.ThirdParty}}</p>
+                </el-form-item>
+                <el-form-item v-if="storagetransportinfo.IsHasValue == true
+                                 && storagetransportinfo.TransportModeInt == 2
+                                 && storagetransportinfo.WaybillCode != null
+                                 && storagetransportinfo.WaybillCode != ''"
+                              label="快递单号:" style="margin-bottom: -10px; margin-top: 10px;">
+                    <p class="txt1">{{storagetransportinfo.WaybillCode}}</p>
+                </el-form-item>
+            </div>
+            <!-- 送货上门 -->
+            <div v-if="transport.TransportModeInt == 3" class="mt20">
+                <el-form-item label="送货地址:" style="margin-bottom: -10px; margin-top: 10px;">
+                    <span class="txt1">联系人：{{transport.DeliverTargetMan2Show}}</span>
+                    <span class="txt1" style="margin-left: 30px;">电话：{{transport.DeliverTargetTel2Show}}</span>
+                </el-form-item>
+                <el-form-item label="" style="margin-bottom: -10px;">
+                    <span class="txt1">地址：{{transport.DeliverTargetAddress2Show}}</span>
+                </el-form-item>
+            </div>
+            <!-- 自提 -->
+            <div v-if="transport.TransportModeInt == 1" class="mt20">
+                <el-form-item label="提货时间:" style="margin-bottom: -10px; margin-top: 10px;">
+                    <span class="txt1">{{transport.TakingDate}}</span>
+                </el-form-item>
+                <el-form-item label="提货人:" style="margin-bottom: -10px; margin-top: 10px;">
+                    <span class="txt1" style="margin-left: 14px;">{{transport.TakingMan}}</span>
+                </el-form-item>
+                <el-form-item label="电话:" style="margin-bottom: -10px; margin-top: 10px;">
+                    <span class="txt1" style="margin-left: 27px;">{{transport.TakingTel}}</span>
+                </el-form-item>
+                <el-form-item label="证件类型:" style="margin-bottom: -10px; margin-top: 10px;">
+                    <span class="txt1">{{transport.ProofTypeShow}}</span>
+                </el-form-item>
+                <el-form-item label="证件号码:" style="margin-top: 10px;">
+                    <span class="txt1">{{transport.ProofNumber}}</span>
+                </el-form-item>
+            </div>
+        </el-form>
+    </div>
+</template>
+<script>
+    Vue.component(
+        'storagedetailouttransport',
+        {
+            template: "#storagedetailouttransport",
+            data: function () {
+                return {
+
+                }
+            },
+            props: {
+                transport: {
+                    type: Object,
+                    default: function () {
+                        return {
+                            TransportModeInt: 0, //货运类型 Int
+                            TransportModeName: '', //货运类型名称
+                            DeliverTargetManShow: '', //送货地址联系人显示(快递)
+                            DeliverTargetTelShow: '', //送货地址电话显示(快递)
+                            DeliverTargetAddressShow: '', //送货地址地址显示(快递)
+                            DeliverTargetMan2Show: '', //送货地址联系人显示(送货上门)
+                            DeliverTargetTel2Show: '', //送货地址电话显示(送货上门)
+                            DeliverTargetAddress2Show: '', //送货地址地址显示(送货上门)
+                            ExpressCompanyShow: '', //快递公司显示
+                            ExpressMethodShow: '', //快递方式显示
+                            FreightPayInt: '', //运费支付 Int
+                            FreightPayShow: '', //运费支付显示
+                            ThirdParty: '', //月结账号显示
+                            TakingDate: '', //提货时间
+                            TakingMan: '', //提货人
+                            TakingTel: '', //提货人电话
+                            ProofTypeShow: '', //证件类型显示
+                            ProofNumber: '' //证件号码
+                        };
+                    }
+                },
+                storagetransportinfo: {
+                    type: Object,
+                    default: function () {
+                        return {
+                            IsHasValue: false,
+                            TransportModeInt: 0, //货运类型
+                            CarrierName: '', //承运商名称
+                            WaybillCode: '', //运单号
+                            ExpressPayerInt: 0, //支付方式 Int
+                            ExpressPayerShow: '', //支付方式显示
+                            ExpressTransportShow: '', //快递方式显示
+                        }
+                    }
+                }
+            },
+            methods: {
+
+            },
+        });
+</script>

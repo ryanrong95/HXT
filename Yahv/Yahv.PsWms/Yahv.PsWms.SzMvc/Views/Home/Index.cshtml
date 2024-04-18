@@ -1,0 +1,97 @@
+﻿
+<div class="content" id="homeindex" v-cloak>
+    <!-- 公司名称 -->
+    <div class="clearfix">
+        <div class="fl clearfix company_info">
+            <div class="fl company_name">
+                <h2>{{clientname}}</h2>
+                <p>欢迎您在芯达通下单，我们竭诚为您服务！</p>
+            </div>
+            <!--<div class="fl company_code">
+                <p></p>
+                <span>客户代码(入仓号)</span>
+            </div>-->
+        </div>
+        <div class="fl clearfix erweima">
+            <img src="~/Content/img/erweima.png" class="fl">
+            <div class="fl erweima_text">
+                <h4>关注芯达通微信</h4>
+                <p>微信扫一扫关注</p>
+                <p>轻松查询订单跟踪物流</p>
+            </div>
+        </div>
+    </div>
+    <!-- 实时订单 -->
+    <div class="orders">
+        <h2>实时订单</h2>
+        <table>
+            <colgroup>
+                <col width="35">
+                <col width="230">
+                <col width="230">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>下单时间</th>
+                    <th>订单编号</th>
+                    <th>订单类型</th>
+                    <th>当前进度</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(item,index) in orderlist">
+                    <td>{{index+1}}</td>
+                    <td>{{item.CreateDateDes}}</td>
+                    <td><a class="link"><span v-on:click="orderdetail(item)">{{item.OrderID}}</span></a></td>
+                    <td>{{item.OrderTypeDes}}</td>
+                    <td>{{item.OrderStatusDes}}</td>
+                    <td><a class="link"><span v-on:click="orderdetail(item)">查看详情</span></a></td>
+                </tr>
+                <tr v-if="orderlist.length==0">
+                    <td colspan="6">暂无数据</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    var homeindex = new Vue({
+        el: "#homeindex",
+        data: function(){
+             return {
+                 clientname: '@(ViewBag.ClientName)', //客户名称
+                 orderlist: [], //订单列表
+             }
+        },
+        methods: {
+            //查看订单详情
+            orderdetail: function (item) {
+                commonSkipUrl(item.OrderID, '/Order/StorageDetailIn', '/Order/StorageList');
+            },
+        },
+        created: function () {
+            //获取首页信息
+            var that = this;
+            axios.get('/Home/GetIndexData', { params: {} })
+                .then(function (res) {
+                    if (res.data.type == "success") {
+                        that.orderlist = res.data.data.Orders;
+                    }
+                })
+                .catch(function (err) {
+                    console.log(err);
+                });
+        },
+    });
+</script>
+<style>
+    .color_red {
+        color: red !important;
+    }
+
+    .orders {
+        margin-top: 22px;
+    }
+</style>

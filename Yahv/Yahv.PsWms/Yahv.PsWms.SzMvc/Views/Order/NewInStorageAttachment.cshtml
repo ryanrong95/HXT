@@ -1,0 +1,67 @@
+﻿<template id="newinstorageattachment">
+    <div>
+        <div class="clearfix mt20">
+            <div class="fl w130">
+                <span class="fl txt2 el-form-item__label">装箱单:</span>
+            </div>
+            <div class="fl upload_wrap mt6">
+                <el-upload multiple
+                           ref="PIupload"
+                           :http-request="((item)=>{httpRequestPackingFiles(item)})"
+                           action="/Order/UploadPackingFiles"
+                           :show-file-list="false"
+                           accept="image/jpg, image/bmp, image/jpeg, image/gif, image/png, application/pdf">
+                    <el-button size="small" class="btn_upload " type="primary">+添加文件</el-button>
+                    <span class="txt_grey ml8">仅限图片或PDF文件，且文件不超过3M</span>
+                </el-upload>
+                <ul class="file_item_ul mt10">
+                    <li class="clearfix" v-for="(item,index) in packingFiles">
+                        <span class="icon1"></span>
+                        <a class="file_name ml6" :href="item.fullURL" target="_blank">{{item.name}}</a>
+                        <span class="icon2 fr" v-on:click="delPackingFiles(index)"></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</template>
+<script>
+    Vue.component(
+        'newinstorageattachment',
+        {
+            template: "#newinstorageattachment",
+            data: function () {
+                return {
+                    packingFiles: [], //装箱单文件的值
+                }
+            },
+            methods: {
+                //上传装箱单文件
+                httpRequestPackingFiles: function (options) {
+                    var that = this;
+                    UploadFile(options,
+                        '/Order/UploadPackingFiles',
+                        function (res) {
+                            if (res.type) {
+                                var list = res.file;
+                                that.packingFiles.push(list);
+                            } else {
+                                that.onAlert("error", res.msg);
+                            }
+                        });
+                },
+                //删除装箱单文件
+                delPackingFiles: function (index) {
+                    this.packingFiles.splice(index, 1);
+                },
+                //消息提示框
+                onAlert: function (type, message) {
+                    this.$message({
+                        message: message,
+                        type: type,
+                        offset: 100
+                    });
+                },
+            },
+        });
+</script>

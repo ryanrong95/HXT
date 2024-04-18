@@ -1,0 +1,50 @@
+﻿<template id="storagedetailoutspecialrequire">
+    <div>
+        <div class="clearfix">
+            <div class="fl" id="OutSpecialRequireShow" style="width: 98%;">
+                <div class="clearfix info_item" v-for="(item,index) in specialrequire.SpecialRequires" style="margin-bottom: 0; margin-top: 10px;">
+                    <div v-if="!item.IsHasFile" class="info_title fl">●&nbsp;{{item.Name}}</div>
+                    <div v-if="item.IsHasFile" class="info_title fl" style="width: 100px;">●&nbsp;{{item.Name}}</div>
+
+                    <div class="info_content fl" v-if="item.IsOtherRequire" style="padding-left: 10px;">{{item.OtherRequire}}</div>
+                    <div v-if="item.IsHasFile">
+                        <div class="file_icon fl" style="margin-top: -5px; margin-left: 10px;"></div>
+                        <a :href="item.fullURL" target="_blank" class="link" style="margin-left: 3px;">{{item.filename}}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+<script>
+    Vue.component(
+        'storagedetailoutspecialrequire',
+        {
+            template: "#storagedetailoutspecialrequire",
+            data: function () {
+                return {
+
+                }
+            },
+            props: {
+                specialrequire: {
+                    type: Object,
+                    default: function () {
+                        return {
+                            SpecialRequires: [], //特殊要求
+                        };
+                    }
+                }
+            },
+            methods: {
+
+            },
+        });
+</script>
+<style>
+    #OutSpecialRequireShow .file_icon {
+        background: url(/Content/img/icon_file1.png);
+        width: 23px;
+        height: 26px;
+    }
+</style>

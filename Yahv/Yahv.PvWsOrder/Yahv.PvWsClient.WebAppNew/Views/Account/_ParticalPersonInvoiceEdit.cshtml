@@ -1,0 +1,163 @@
+﻿<template id="personinvoiceinfo">
+    <el-form :model="form1" :rules="rules1" status-icon ref="form1" label-width="130px">
+        <el-form-item label="个人/企业：" prop="IsPersonalVal" :rules="[{ required: true, message: '请选择个人/企业', trigger: 'change' }]">
+            <el-select size="mini" v-model="form1.IsPersonalVal" placeholder="请选择" style="width: 90%;">
+                <el-option v-for="item in IsPersonalOptions" :label="item.text" :value="item.value">
+                </el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item label="发票类型：" prop="InvoiceTypeInt" :rules="[{ required: true, message: '请选择发票类型', trigger: 'change' }]">
+            <el-select size="mini" v-model="form1.InvoiceTypeInt" filterable clearable placeholder="请选择" style="width: 90%;">
+                <el-option v-for="item in InvoiceTypeOptions" :label="item.text" :value="item.value">
+                </el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item label="发票抬头：" prop="Title" :rules="[{ required: true, message: '请输入发票抬头', trigger: 'blur' },{max:150, message: '发票抬头长度超过限制', trigger: 'blur' }]">
+            <el-input size="mini" v-model="form1.Title" placeholder="请输入发票抬头" style="width: 90%" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="纳税人识别号：" prop="TaxNumber" :rules="[{ required: false, message: '请输入纳税人识别号', trigger: 'blur' },{max:50, message: '纳税人识别号长度超过限制', trigger: 'blur' }]">
+            <el-input size="mini" v-model="form1.TaxNumber" placeholder="请输入纳税人识别号" style="width: 90%" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="企业注册地址：" prop="RegAddress" :rules="[{ required: false, message: '请输入企业注册地址', trigger: 'blur' },{max:150, message: '企业注册地址长度超过限制', trigger: 'blur' }]">
+            <el-input size="mini" v-model="form1.RegAddress" placeholder="请输入企业注册地址" style="width: 90%" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="电话：" prop="Tel">
+            <el-input size="mini" v-model="form1.Tel" placeholder="请输入电话号码" style="width: 90%" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="开户银行：" prop="BankName" :rules="[{ required: false, message: '请输入开户银行', trigger: 'blur' },{max:100, message: '开户银行长度超过限制', trigger: 'blur' }]">
+            <el-input size="mini" v-model="form1.BankName" placeholder="请输入开户银行" style="width: 90%" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="银行账号：" prop="BankAccount" :rules="[{ required: false, message: '请输入银行账号', trigger: 'blur' },{max:50, message: '银行账号长度超过限制', trigger: 'blur' }]">
+            <el-input size="mini" v-model="form1.BankAccount" placeholder="请输入银行账号" style="width: 90%" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="收票地址：" prop="PostAddress" :rules="[{ required: false, message: '请输入收票地址', trigger: 'blur' },{max:150, message: '收票地址长度超过限制', trigger: 'blur' }]">
+            <el-input size="mini" v-model="form1.PostAddress" placeholder="请输入收票地址" style="width: 90%" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="收票人：" prop="PostRecipient" :rules="[{ required: false, message: '请输入收票人', trigger: 'blur' },{max:50, message: '收票人长度超过限制', trigger: 'blur' }]">
+            <el-input size="mini" v-model="form1.PostRecipient" placeholder="请输入收票人" style="width: 90%" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="收票人联系电话：" prop="PostTel">
+            <el-input size="mini" v-model="form1.PostTel" placeholder="请输入收票人联系电话号码" style="width: 90%" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="邮编：" prop="PostZipCode" :rules="[{ required: false, message: '请输入邮编', trigger: 'blur' },{max:50, message: '邮编长度超过限制', trigger: 'blur' }]">
+            <el-input size="mini" v-model="form1.PostZipCode" placeholder="请输入邮编" style="width: 90%" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="交付方式：" prop="DeliveryTypeInt" :rules="[{ required: true, message: '请选择交付方式', trigger: 'change' }]">
+            <el-select size="mini" v-model="form1.DeliveryTypeInt" filterable clearable placeholder="请选择" style="width: 90%;">
+                <el-option v-for="item in DeliveryTypeOptions" :label="item.text" :value="item.value">
+                </el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item label="是否默认：" prop="IsDefaultVal" :rules="[{ required: true, message: '请选择是否', trigger: 'change' }]">
+            <el-select size="mini" v-model="form1.IsDefaultVal" placeholder="请选择" style="width: 90%;">
+                <el-option v-for="item in YesNoOptions" :label="item.text" :value="item.value">
+                </el-option>
+            </el-select>
+        </el-form-item>
+    </el-form>
+</template>
+<style>
+    #vPersonInvoice .el-form-item {
+        margin-bottom: 10px;
+    }
+
+    #vPersonInvoice .el-form-item__error {
+        padding-top: 0;
+    }
+
+    #vPersonInvoice .el-dialog__body {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    #vPersonInvoice .el-form {
+        margin-left: 20px;
+        margin-right: 20px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    #vPersonInvoice .el-dialog__footer {
+        padding-bottom: 15px;
+    }
+</style>
+<script>
+    Vue.component(
+        'my-personinvoice',
+        {
+            template: "#personinvoiceinfo",
+            data: function() {
+                var validateMail = function(rule, value, callback) {
+                    if (value != '' && value != null) {
+                        if (!ValidMail(value)) {
+                            callback(new Error('请输入正确的邮箱地址'));
+                        }
+                    }
+                    callback();
+                };
+                //验证数字
+                var validateNumber = function(rule, value, callback) {
+                    if (value != '' && value != null) {
+                        if (!/^([0-9-]+)$/.test(value)) {
+                            callback(new Error('手机号只能是数字'));
+                        }
+                    }
+                    callback();
+                };
+                return {
+                    form1: @Html.Raw(Json.Encode(Model)),
+                    rules1: {
+                        Email: [
+                            { validator: validateMail, trigger: 'blur' },
+                            { max: 50, message: '邮箱地址长度超过限制', trigger: 'blur' }
+                        ],
+                        Mobile: [
+                            { required: true, message: '手机号不能为空', trigger: 'blur' },
+                            { validator: validateNumber, trigger: 'blur' },
+                            { max: 20, message: '手机号超过限制', trigger: 'blur' }
+                        ],
+                        Tel: [
+                            { required: false, validator: validateNumber, trigger: 'blur' },
+                            { max: 50, message: '电话长度超过限制', trigger: 'blur' }
+                        ],
+                        PostTel: [
+                            { required: false, validator: validateNumber, trigger: 'blur' },
+                            { max: 50, message: '收票人联系电话长度超过限制', trigger: 'blur' }
+                        ],
+                    },
+                    IsPersonalOptions: [{
+                        text: '个人',
+                        value: '1'
+                    }, {
+                        text: '企业',
+                        value: '2'
+                    }],
+                    InvoiceTypeOptions: [],
+                    DeliveryTypeOptions: [],
+                    YesNoOptions: [{
+                        text: '是',
+                        value: '1'
+                    }, {
+                        text: '否',
+                        value: '2'
+                    }],
+
+
+
+
+                }
+
+
+            },
+            mounted: function() {
+                this.InvoiceTypeOptions = @Html.Raw(Json.Encode(@ViewBag.InvoiceTypeOptions));
+                this.DeliveryTypeOptions = @Html.Raw(Json.Encode(@ViewBag.DeliveryTypeOptions));
+            },
+            methods: {
+
+
+
+
+            },
+        });
+</script>

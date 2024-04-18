@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <meta charset="utf-8" />
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"
+            integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+            crossorigin="anonymous"></script>
+    <style>
+        .row { border: 1px dashed red; }
+    </style>
+</head>
+<body>
+
+    <div class="row">
+        输入测试： <input id="input1" /><br />
+        称重测试： <input class="cz" />
+    </div>
+    <div class="row">
+        输入测试： <input /><br />
+        称重测试： <input class="cz" />
+    </div>
+
+
+    <script>
+        var tempstring = '';
+        $(function () {
+
+            var czSender;
+
+            $('.row').click(function () {
+                czSender = $(this).find('.cz');
+            });
+
+            $(window).keypress(function (e) {
+                if (e.keyCode == 13) {
+                    if (tempstring.length == 7 && /\s.*\d\.\d/ig.test(tempstring)) {
+
+                        //在点击一行数据后(本例是div)，可以把当前的称重字段的作为称重的填充目标
+                        if (!czSender) {
+                            alert('请点击一个称重对象！');
+                            return;
+                        }
+                        czSender.val($.trim(tempstring));
+
+                        //$('.cz').filter(function () {
+                        //    return $(this).val() == "";
+                        //}).first().val($.trim(tempstring));
+
+                    }
+                    tempstring = '';
+                }
+                tempstring += e.key;
+                if (tempstring.length > 7) {
+                    tempstring = tempstring.substring(tempstring.length - 7);
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

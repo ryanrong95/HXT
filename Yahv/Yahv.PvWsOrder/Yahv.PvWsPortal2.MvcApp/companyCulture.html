@@ -1,0 +1,311 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>芯达通</title>
+    <link rel="stylesheet" type="text/css" href="css/common.css" />
+    <!--<link rel="stylesheet" type="text/css" href="css/swiper-bundle.min.css" />-->
+    <link rel="stylesheet" type="text/css" href="css/page.css" />
+    <link rel="stylesheet" type="text/css" href="css/aboutus.css" />
+    <link rel="stylesheet" type="text/css" href="css/element.css" />
+    <script type="text/javascript" src="js/jQuery-2.2.4.min.js"></script>
+    <script type="text/javascript" src="js/vue.js"></script>
+    <script type="text/javascript" src="js/element.js"></script>
+    <script type="text/javascript" src="js/axios.min.js"></script>
+    <!--<script type="text/javascript" src="js/swiper-bundle.min.js"></script>-->
+    <script type="text/javascript" src="js/ppt.js"></script>
+    <script type="text/javascript" src="js/culture2.js"></script>
+    <script type="text/javascript" src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+    <script type="text/javascript" src="js/xs.js"></script>
+    <script type="text/javascript" src="js/common.js"></script>
+    <style>
+      
+      .out{
+          width:100%;
+          height:600px;
+          background:#fff;
+          overflow:hidden;
+      }
+      
+      .out .btn {
+				position: absolute;
+				top: 50%;
+				width: 30px;
+				height: 60px;
+				margin-top: -30px;
+				background: rgba(0,0,0,.5);
+				color: #fff;
+				text-align: center;
+				line-height: 60px;
+				font-size: 40px;
+				display: none;
+			}
+			.out:hover .btn{ 
+				display: block;
+				cursor: pointer;
+			}
+			.out .left { left: 0;}
+			.out .right { right: 0;}
+            .out .num {
+				position: absolute; 
+				bottom: 0;
+				left: -3px;
+				font-size: 0;
+				width: 100%;
+				text-align: center;
+			}
+			.out .num li {
+				width: 100%;
+				height: 46px;
+                line-height:46px;
+				display: inline-block;
+				font-size: 14px;
+				background-color: #666;
+				color: #fff;
+				text-align: center;
+				margin: 0 3px;
+				cursor: pointer;
+				display: none;
+			}
+			.out .num li.active { background-color:rgba(0,0,0,0.3);display: inline-block;}
+
+            .close{
+                display: inline-block;
+	            width: 20px;
+	            height: 20px;
+	            background: url(../imgs/n_culture_close.png) no-repeat;
+	            position: absolute;
+	            right: 20px;
+	            top: 20px;
+	            cursor: pointer;
+	            z-index: 100;
+            }
+    </style>
+</head>
+
+<body>
+    <!-- 企业文化的遮罩层 -->
+    <div class="mask"></div>
+    <div class="bigImgs">
+        <!-- 第1个轮播图 -->
+       
+        <div class="mod">
+            <div class="out out1">
+                <ul class="img">
+                    <li><img src="imgs/n_culture_pic_big1.png" /></li>
+                    <li><img src="imgs/n_culture_pic_big2.png" /></li>
+                    <!--<li><img src="imgs/n_culture_pic_big4.png" /></li>-->
+                </ul>
+                <ul class="num">
+                    <li>业务培训 1/2</li>
+                    <li>业务培训 2/2</li>
+                    <!--<li>业务培训 3/3</li>-->
+                </ul>
+                <div class="left btn"><</div>
+                <div class="right btn">></div>
+                <div class="close"></div>
+            </div>
+        </div>
+       
+        <!-- 第3个轮播图 -->
+        
+
+        <div class="mod">
+            <div class="out out2">
+                <ul class="img">
+                    <li><img src="imgs/n_culture_pic_big3.png" /></li>
+                    <li><img src="imgs/n_culture_pic_big3_c4.png" /></li>
+                    <li><img src="imgs/n_culture_pic_big3_c3.png" /></li>
+                    <li><img src="imgs/n_culture_pic_big3_c1.png" /></li>
+                    <li><img src="imgs/n_culture_pic_big3_c5.png" /></li>
+                </ul>
+                <ul class="num">
+                    <li>年会活动 1/5</li>
+                    <li>年会活动 2/5</li>
+                    <li>年会活动 3/5</li>
+                    <li>年会活动 4/5</li>
+                    <li>年会活动 5/5</li>
+                </ul>
+                <div class="left btn"><</div>
+                <div class="right btn">></div>
+                <div class="close"></div>
+            </div>
+        </div>
+
+
+
+
+
+        <!-- 第4个轮播图 -->
+
+        <div class="mod">
+            <div class="out out3">
+                <ul class="img">
+                    <li><img src="imgs/n_culture_care1.png" /></li>
+                    <li><img src="imgs/n_culture_care2.png" /></li>
+                    <li><img src="imgs/n_culture_care3.png" /></li>
+                    <li><img src="imgs/n_culture_care4.png" /></li>
+                </ul>
+                <ul class="num">
+                    <li>领导关怀 1/4</li>
+                    <li>领导关怀 2/4</li>
+                    <li>领导关怀 3/4</li>
+                    <li>领导关怀 4/4</li>
+                </ul>
+                <div class="left btn"><</div>
+                <div class="right btn">></div>
+                <div class="close"></div>
+            </div>
+        </div>
+
+
+
+       
+    </div>
+
+    <!-- 右侧边栏相关内容 -->
+    <div id="n_sideBar"></div>
+    <!--头部和banner部分-->
+    <div class="n_header">
+        <div class="n_lunbt" style="background-image:url(imgs/n_aboutus_bg.png);"></div>
+        <div id="n_insert_nav"></div>
+    </div>
+    <!-- 中间不同内容 -->
+    <div id="CompanyInfo" class="n_mid n_assist_mid n_info_mid">
+        <div class="n_select n_assist_select n_info_select n_aboutxdt_select">
+            <ul class="clearfix">
+                <li>
+                    <a href="aboutUs.html">
+                        <i></i>
+                        <p>企业简介</p>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="companyCulture.html">
+                        <i></i>
+                        <p>企业文化</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="Partners.html">
+                        <i></i>
+                        <p>合作伙伴</p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="n_culture_items">
+           <div class="wrapper">
+               <h2>关于企业文化</h2>
+               <ul class="clearfix">
+                   <li>
+                       <img src="imgs/n_culture_img1.png"/>
+                       <h4>企业使命</h4>
+                       <p>为客户创造无限价值,</p>
+                       <p>给社会带来无限效益</p>
+                   </li>
+                   <li>
+                       <img src="imgs/n_culture_img2.png" />
+                       <h4>经营理念</h4>
+                       <p>诚信经营，专业高效</p>
+                   </li>
+                   <li>
+                       <img src="imgs/n_culture_img3.png" />
+                       <h4>企业价值观</h4>
+                       <p>诚实守信，求真务实，</p>
+                       <p>创新引领，开放共赢</p>
+                   </li>
+                   <li>
+                       <img src="imgs/n_culture_img4.png" />
+                       <h4>企业精神</h4>
+                       <p>用芯服务，通达天下</p>
+                   </li>
+               </ul>
+           </div>
+        </div>
+        <!-- 企业文化 -->
+        <div class="n_aboutus_mol n_culture_mol" id="n_culture">
+            <!--<div class="n_aboutus_title n_culture_title">
+                <i></i>
+                企业文化
+            </div>-->
+            <div class="wrapper">
+                <div id="picSlideWrap" class="clearfix"  style="margin-top:0;">
+
+                    <div class="imgnav" id="imgnav">
+                        <div id="cbtn">
+                            <div id="cSlideUl" class="n_culture_imgs">
+                                <ul class="clearfix" style="margin:0 92px;">
+                                    <li>
+                                        <img src="imgs/n_aboutus_culture_pic1.png" width="320"/>
+                                        <h5>业务培训</h5>
+                                        <!--<p> 2020-06-20 09:13:44</p>-->
+                                        <div class="n_hover_m">
+                                            点击查看大图
+                                        </div>
+                                    </li>
+                                    <!--<li>
+                                        <img src="imgs/n_aboutus_culture_pic2.png" />
+                                        <h5>关务培训</h5>
+                                        <p> 2020-01-05 10:10:08</p>
+                                        <div class="n_hover_m">
+                                            点击查看大图
+                                        </div>
+                                    </li>-->
+                                    <li>
+                                        <img src="imgs/n_aboutus_culture_pic3.png" width="320" />
+                                        <h5>年会活动</h5>
+                                        <!--<p> 2019-12-20 10:13:30</p>-->
+                                        <div class="n_hover_m">
+                                            点击查看大图
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <img src="imgs/n_culture_care_small.png" width="320" />
+                                        <h5>领导关怀</h5>
+                                        <!--<p> 2019-11-07 10:19:48</p>-->
+                                        <div class="n_hover_m">
+                                            点击查看大图
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- 底部 -->
+    <div id="footer_zh"></div>
+    <script>
+        $("#n_sideBar").load("sideBar.html");
+		$("#n_insert_nav").load("header.html", function() {
+			$("#footer_zh").load("footer.html");
+			//导航中当前选中的项
+			$(".n_nagivation>ul>li:nth-child(4)").addClass("hot");
+			$(".n_nagivation>ul>li").hover(function() {
+				$(".n_nagivation>ul>li:nth-child(4)").removeClass("hot");
+			}, function() {
+				$(".n_nagivation>ul>li:nth-child(4)").addClass("hot");
+			})
+		});
+
+		$(function () {
+		
+
+
+
+
+		})
+
+		
+        
+    </script>
+</body>
+</html>

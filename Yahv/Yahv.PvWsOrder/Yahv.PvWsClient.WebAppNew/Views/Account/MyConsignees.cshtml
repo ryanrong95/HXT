@@ -1,0 +1,182 @@
+﻿@{
+    ViewBag.title = "收货地址管理";
+}
+<div id="vConsignee" v-cloak class="tab_content">
+    <div class="query_wrap">
+        <button v-on:click="add_Consignee" class="btn btn1">新增收货地址</button>
+        <span class="ml20">您已创建<span style="color: #71b247;">{{data.consignees.length}}</span>个收货地址，最多可创建<span style="color: #71b247;">20</span>个</span>
+    </div>
+    <div class="tb_wrap" v-loading="loading">
+        <table class="common_tb1 mt30">
+            <tr>
+                <th width="36px">序号</th>
+                <th>收货人</th>
+                <th>收货单位</th>
+                <th>收货地址</th>
+                <th>电话</th>
+                <th>手机</th>
+                <th>是否默认</th>
+                <th>操作</th>
+            </tr>
+            <tr v-for="(item,index) in data.consignees">
+                <td>{{index+1}}</td>
+                <td>{{item.Name}}</td>
+                <td>{{item.Title}}</td>
+                <td>{{item.Address}}</td>
+                <td>{{item.Tel}}</td>
+                <td>{{item.Mobile}}</td>
+                <td>{{item.IsDefault}}</td>
+                <td class="operate">
+                    <a v-on:click="edit_Consignee(item.ID)">编辑</a>
+                    <a v-if="item.IsDefault == false" v-on:click="setDefault(item.ID)">设为默认</a>
+                    <a v-if="data.IsMain" v-on:click="del_Consignee(item.ID)">删除</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <el-dialog :title="dialogFormName" :lock-scroll="false" width="40%" :visible.sync="dialogFormVisible" v-on:close="dialog_Closed" :close-on-click-modal="false">
+        <my-consignee ref="header"></my-consignee>
+        <div slot="footer" class="dialog-footer" style="padding-right:20px;">
+            <el-button v-on:click="dialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" v-on:click="onSubmit_ruleForm('header')">确 定</el-button>
+        </div>
+    </el-dialog>
+</div>
+@{Html.RenderAction("_ParticalConsignee", "Account");}
+<script>
+    var vConsignee = new Vue({
+        el: "#vConsignee",
+        data: {
+            dialogFormVisible:false,
+            data: @Html.Raw(Json.Encode(Model)),
+            dialogFormName: "",  //弹框名称
+            loading:false,
+        },
+        mounted: function () {
+            this.handleMyConsigneesList();
+        },
+        methods: {
+            //删除地址
+            del_Consignee: function (id) {
+                this.$confirm('您确定要删除该收货地址吗？', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                    lockScroll:false,
+                }).then(function(){
+                    axios({
+                        url: "/Account/DeleteConsignee",
+                        method: "post",
+                        data: {
+                            id: id
+                        }
+                    }).then(function (res) {
+                        vConsignee.handleMyConsigneesList(); //刷新列表
+                        vConsignee.onAlert(res.data.type, res.data.msg);
+
+                    }).catch(function (error) {
+                        vConsignee.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                    });
+                }).catch(function() {
+                    //取消
+                });
+            },
+            //设为默认地址
+            setDefault: function (id) {
+                axios({
+                    url: "/Account/SetDefaultConsignee",
+                    method: "post",
+                    data: {
+                        id:id
+                    }
+                }).then(function (res) {
+                    vConsignee.handleMyConsigneesList(); //刷新列表
+                    if (res.data.type == "error") {
+                        vConsignee.onAlert(res.data.type, res.data.msg);
+                    }
+                }).catch(function (error) {
+                    vConsignee.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //弹框关闭后事件
+            dialog_Closed: function () {
+                 //初始化列表值
+                vConsignee.$refs.header.$refs.form1.resetFields();
+                vConsignee.$refs.header.$refs.form1.Address = [];
+            },
+            handleMyConsigneesList:  function () {
+                var that = this;
+                axios({
+                    url: "/Account/GetMyConsigneesList",
+                    method: "post",
+                    data: {
+                    }
+                }).then(function (res) {
+                    that.data = JSON.parse(res.data.data);
+                }).catch(function (error) {
+                    vConsignee.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //新增收货地址
+            add_Consignee: function () {
+                if (this.data.consignees.length >= 20) {
+                    vConsignee.onAlert("error", "最多只能新增20个收货地址！");
+                    return;
+                }
+                vConsignee.dialogFormName = "新增收货地址";
+                vConsignee.dialogFormVisible = true;
+                setTimeout(function(){
+                    vConsignee.$refs.header.$refs.form1.resetFields();
+                    vConsignee.$refs.header.form1.Address = [];
+                    vConsignee.$refs.header.form1.ID = "";
+                }, 0);
+            },
+            //收货地址编辑
+            edit_Consignee: function (id) {
+                axios({
+                    url: "/Account/GetConsigneesInfo",
+                    method: "post",
+                    data: {
+                        id:id
+                    }
+                }).then(function (res) {
+                    vConsignee.dialogFormName = "编辑收货地址";
+                    vConsignee.dialogFormVisible = true;
+                    setTimeout(function(){
+                        vConsignee.$refs.header.$refs.form1.resetFields();
+                        vConsignee.$refs.header.form1 = JSON.parse(res.data.data);
+                        vConsignee.$refs.header.handPlaceChange();
+                    }, 0)
+                }).catch(function (error) {
+                    vConsignee.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            onSubmit_ruleForm: function (header) {
+                this.$refs.header.$refs.form1.validate(function(valid) {
+                    if (valid) {
+                        vConsignee.dialogFormVisible = false;
+                        axios({
+                            url: "/Account/ConsigneeSubmit",
+                            method: "post",
+                            data: vConsignee.$refs.header.form1,
+                        }).then(function (response) {
+                            vConsignee.handleMyConsigneesList(); //刷新列表
+                            vConsignee.onAlert(response.data.type, response.data.msg);
+                        }).catch(function (error) {
+                            vConsignee.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                        });
+                    } else {
+                        //验证失败
+                    }
+                });
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type
+                });
+            }
+        }
+    });
+</script>

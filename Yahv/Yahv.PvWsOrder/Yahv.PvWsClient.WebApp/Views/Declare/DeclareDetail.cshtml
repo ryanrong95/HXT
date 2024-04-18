@@ -1,0 +1,509 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_LayoutOrder.cshtml";
+}
+
+<div v-cloak id="vDeclareDetail" class="backshow">
+    <div class="breaklist">
+        <span class="fl first_title">订单详情</span>
+        <span class="fl second_title" v-on:click="history.back(-1)">返回</span>
+    </div>
+    <div class="order_detail">
+        <div class="order_title">
+            <span class="ml11">订单编号：<span class="txt1">{{indexData.ID}}</span></span>
+            <span class="ml157">订单状态：<span class="txt2">{{indexData.MainStatus}}</span></span>
+            <span class="ml142">下单日期：{{indexData.CreateDate}}</span>
+        </div>
+        <div class="order_content">
+            <div>
+                <p class="title mt30 mb20">基本信息</p>
+                <div class="info_content">
+                    <div class="overhide mb10">
+                        <div class="fl overhide  mr88">
+                            <span class="i_title">币种：</span>
+                            <span class="i_content">{{indexData.Currency}}</span>
+                        </div>
+                        <div class="fl overhide">
+                            <span class="i_title">是否代付货款：</span>
+                            <span class="i_content">{{indexData.IsPayCharge}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="order_div"><span>有疑问请咨询：<span class="link">跟单员</span></span></div>
+            <div>
+                <p class="title mt30 mb20">香港交货方式</p>
+                <div class="info_content">
+                    <div class="overhide mb10">
+                        <div class="fl overhide  mr88">
+                            <span class="i_title">交货方式：</span>
+                            <span class="i_content txt_yellow">{{indexData.HKDeliveryTypeName}}</span>
+                        </div>
+                    </div>
+                    <div v-if="indexData.HKDeliveryType=='1'">
+                        <div class="overhide mb10">
+                            <div class="fl overhide  mr88">
+                                <span class="i_title">供应商：</span>
+                                <span class="i_content">{{indexData.SupplierName}}</span>
+                            </div>
+                            <div class="fl overhide">
+                                <span class="i_title">提货人姓名：</span>
+                                <span class="i_content">{{indexData.TakingContact}}</span>
+                            </div>
+                        </div>
+                        <div class="overhide mb10">
+                            <div class="fl overhide  mr88">
+                                <span class="i_title">联系电话：</span>
+                                <span class="i_content">{{indexData.TakingPhone}}</span>
+                            </div>
+                            <div class="fl overhide">
+                                <span class="i_title">提货地址：</span>
+                                <span class="i_content">{{indexData.TakingDetailAddress}}</span>
+                            </div>
+                        </div>
+                        <div class="overhide mb10">
+                            <div class="fl overhide  mr88">
+                                <span class="i_title">提货时间：</span>
+                                <span class="i_content">{{indexData.TakingDate}}</span>
+                            </div>
+                            <div class="fl overhide ">
+                                <span class="i_title">提货文件：</span>
+                                <span class="i_content"><a download v-if="indexData.DeliveryFile!=''" class="file_link" target="_blank" :href="indexData.DeliveryFile">查看提货文件</a></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-if="indexData.HKDeliveryType=='2'">
+                        <div class="overhide mb10">
+                            <div class="fl overhide  mr88">
+                                <span class="i_title">物流单号：</span>
+                                <span class="i_content">{{indexData.WaybillCode}}</span>
+                            </div>
+                            <div class="fl overhide">
+                                <span class="i_title">供应商：</span>
+                                <span class="i_content">{{indexData.SupplierName}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <p class="title mt30 mb20">国内交货方式</p>
+                <div class="info_content">
+                    <div class="overhide mb10">
+                        <div class="fl overhide  mr88">
+                            <span class="i_title">交货方式：</span>
+                            <span class="i_content txt_yellow">{{indexData.SZDeliveryTypeName}}</span>
+                        </div>
+                    </div>
+                    <div v-if="indexData.SZDeliveryType=='1'">
+                        <div class="overhide mb10">
+                            <div class="fl overhide  mr88">
+                                <span class="i_title">提货人：</span>
+                                <span class="i_content">{{indexData.OutTakingContact}}</span>
+                            </div>
+                            <div class="fl overhide">
+                                <span class="i_title">电话：</span>
+                                <span class="i_content">{{indexData.OutTakingPhone}}</span>
+                            </div>
+                        </div>
+                        <div class="overhide mb10">
+                            <div class="fl overhide  mr88">
+                                <span class="i_title">证件类型：</span>
+                                <span class="i_content">{{indexData.CertificateType}}</span>
+                            </div>
+                            <div class="fl overhide">
+                                <span class="i_title">证件号码：</span>
+                                <span class="i_content">{{indexData.Certificate}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-if="indexData.SZDeliveryType=='2'||indexData.SZDeliveryType=='3'">
+                        <div class="overhide mb10">
+                            <div class="fl overhide  mr88">
+                                <span class="i_title">收货人：</span>
+                                <span class="i_content">{{indexData.ReceivedContact}}</span>
+                            </div>
+                            <div class="fl overhide">
+                                <span class="i_title">电话：</span>
+                                <span class="i_content">{{indexData.ReceivedPhone}}</span>
+                            </div>
+                        </div>
+                        <div class="overhide mb10">
+                            <div class="fl overhide  mr88">
+                                <span class="i_title">地址：</span>
+                                <span class="i_content">{{indexData.ReceivedAddress}}</span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <p class="title mt30 mb20">付汇供应商</p>
+                <div class="info_content">
+                    <div>
+                        <div class="overhide mb10">
+                            <div class="fl overhide  mr88">
+                                <span class="i_title">供应商：</span>
+                                <span class="i_content"><span v-for="(item,index) in indexData.PayExchangeSupplier">{{index+1}}.{{item}}<br /></span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <p class="title mt30 mb20">其他信息</p>
+                <div class="info_content">
+                    <div>
+                        <div class="overhide mb10">
+                            <div class="fl overhide  mr88">
+                                <span class="i_title">是否需要包车：</span>
+                                <span class="i_content">{{indexData.IsFullVehicle}}</span>
+                            </div>
+                            <div class="fl overhide">
+                                <span class="i_title">包装类型：</span>
+                                <span class="i_content">{{indexData.Packaging}}</span>
+                            </div>
+                        </div>
+                        <div class="overhide mb10">
+                            <div class="fl overhide  mr88">
+                                <span class="i_title">件数：</span>
+                                <span class="i_content">{{indexData.TotalParts}}</span>
+                            </div>
+                            <div class="fl overhide">
+                                <span class="i_title">备注：</span>
+                                <span class="i_content">{{indexData.Summary}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @*<div>
+                <p class="title mt30 mb20">开票信息</p>
+                <div class="info_content">
+                    <div class="overhide mb10">
+                        <div class="fl overhide  mr88">
+                            <span class="i_title">开票类型：</span>
+                            <span class="i_content">{{indexData.Invoice.Type}}</span>
+                        </div>
+                        <div class="fl overhide">
+                            <span class="i_title">交付方式：</span>
+                            <span class="i_content">{{indexData.Invoice.DeliveryType}}</span>
+                        </div>
+                    </div>
+                    <div class="overhide mb10">
+                        <div class="fl overhide  mr88">
+                            <span class="i_title">名称：</span>
+                            <span class="i_content">{{indexData.Invoice.CompanyName}}</span>
+                        </div>
+                        <div class="fl overhide">
+                            <span class="i_title">纳税人识别号：</span>
+                            <span class="i_content">{{indexData.Invoice.TaxperNumber}}</span>
+                        </div>
+                    </div>
+                    <div class="overhide mb10">
+                        <div class="fl overhide  mr88">
+                            <span class="i_title">地址：</span>
+                            <span class="i_content">{{indexData.Invoice.RegAddress}}</span>
+                        </div>
+                        <div class="fl overhide">
+                            <span class="i_title">电话：</span>
+                            <span class="i_content">{{indexData.Invoice.CompanyTel}}</span>
+                        </div>
+                    </div>
+                    <div class="overhide mb10">
+                        <div class="fl overhide  mr88">
+                            <span class="i_title">开户行：</span>
+                            <span class="i_content">{{indexData.Invoice.Bank}}</span>
+                        </div>
+                        <div class="fl overhide">
+                            <span class="i_title">账号：</span>
+                            <span class="i_content">{{indexData.Invoice.Account}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+            <div class="file_content">
+                <div class="overhide">
+                    <div class="file_l fl">
+                        <p class="title mt30 mb20">对账单</p>
+                        <div v-if="bill_fileName!=''" class="mb10">
+                            <i class="file_icon"></i>
+                            <span class="f_name">{{bill_fileName}}</span>
+                            <a class="link1" :href="bill_fileUrl" target="_blank">下载</a><span v-if="!indexData.OrderBillStatus" class="f_status ml10">(待审核)</span>
+                            <span v-if="indexData.OrderBillStatus" class="f_status ml10">(已审核)</span>
+                        </div>
+                        <div v-else>
+                            <span class="txt_yellow">提示：未上传</span>
+                        </div>
+                        <div class="common_upload_div  mb8 mt20">
+                            <div v-if="(!indexData.OrderBillStatus)&& indexData.IsUploadOrderBill" class="common_upload_div  mb8 mt20">
+                                <div class="overhide">
+                                    <div class="fl">
+                                        <el-button v-on:click="download_bill" class="el-icon-ump-xiazai">导出</el-button>
+                                        <a id="exportInfoForm" style="display:none" download><span id="ex-li" style="display:none"></span></a>
+                                    </div>
+                                    <div class="fl">
+                                        <el-upload action="/PayExchange/UploadOrderFile"
+                                                   :http-request="httpRequest_bill"
+                                                   :show-file-list="false"
+                                                   accept="image/jpg, image/bmp, image/jpeg, image/gif, image/png, application/pdf">
+                                            <el-button class="el-icon-ump-upload" size="small">上传</el-button>
+                                        </el-upload>
+                                    </div>
+                                </div>
+                                <div class="file_tip mt20">仅限图片或PDF文件，且文件不超过3M</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="file_r fl">
+                        <p class="title mt30 mb20">代理报关委托书</p>
+                        <div v-if="agent_fileName!=''" class="mb10">
+                            <i class="file_icon"></i>
+                            <span class="f_name">{{agent_fileName}}</span>
+                            <a class="link1" :href="agent_fileUrl" target="_blank">下载</a><span v-if="!indexData.OrderAgentStatus" class="f_status ml10">(待审核)</span>
+                            <span v-if="indexData.OrderAgentStatus" class="f_status ml10">(已审核)</span>
+                        </div>
+                        <div v-else>
+                            <span class="txt_yellow">提示：未上传</span>
+                        </div>
+                        <div class="common_upload_div  mb8 mt20">
+                            <div v-if="(!indexData.OrderAgentStatus)&& indexData.IsUploadOrderAgent" class="common_upload_div  mb8 mt20">
+                                <div class="overhide">
+                                    <div class="fl">
+                                        <el-button v-on:click="download_agent" class="el-icon-ump-xiazai">导出</el-button>
+                                        <a id="exportInfoForm" style="display:none" download><span id="ex-li" style="display:none"></span></a>
+                                    </div>
+                                    <div class="fl">
+                                        <el-upload action="/PayExchange/UploadOrderFile"
+                                                   :http-request="httpRequest_agent"
+                                                   :show-file-list="false"
+                                                   accept="image/jpg, image/bmp, image/jpeg, image/gif, image/png, application/pdf">
+                                            <el-button class="el-icon-ump-upload" size="small">上传</el-button>
+                                        </el-upload>
+                                    </div>
+                                </div>
+                                <div class="file_tip mt20">仅限图片或PDF文件，且文件不超过3M</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="overhide">
+                    <div class="file_l fl">
+                        <p class="title mt30 mb20">合同发票</p>
+                        <div v-for="item in indexData.PIFiles" class="mb10">
+                            <i class="invoice_icon"></i>
+                            <span class="f_name">{{item.Name}}</span>
+                            <a class="link1" :href="item.Url" target="_blank">下载</a>
+                        </div>
+                        <div v-if="indexData.PIFiles.length==0">
+                            <span class="txt_yellow">提示：未上传</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="product_content">
+                <p class="title mt30 mb20">产品信息</p>
+                <table border="0" cellspacing="0" cellpadding="0" style="word-wrap:break-word; word-break:break-all;">
+                    <tr>
+                        <th class="first_th" style="width:22px;">#</th>
+                        <th style="width:50px;">批号</th>
+                        <th style="width:110px;">品名</th>
+                        <th style="width:110px;">品牌</th>
+                        <th style="width:120px;">型号</th>
+                        <th style="width:110px;">产地</th>
+                        <th style="width:50px;">数量</th>
+                        <th style="width:58px;">单位</th>
+                        <th style="width:50px;">单价</th>
+                        <th style="width:50px;">总价</th>
+                    </tr>
+                    <tr v-for="(item,index) in indexData.OrderItems">
+                        <td>{{index+1}}</td>
+                        <td>{{item.DateCode}}</td>
+                        <td>{{item.Name}}</td>
+                        <td style="word-wrap:break-word;word-break:break-all;padding:0 5px;">{{item.Manufacturer}}</td>
+                        <td style="word-wrap:break-word;word-break:break-all;padding:0 5px;">{{item.PartNumber}}</td>
+                        <td>{{item.OriginLabel}}</td>
+                        <td>{{item.Quantity}}</td>
+                        <td>{{item.UnitLabel}}</td>
+                        <td>{{item.UnitPrice}}</td>
+                        <td>{{item.TotalPrice}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="10"><span class="txt1">订单总金额：</span><span class="txt2">{{indexData.TotalMoney}}</span></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    var vDeclareDetail = new Vue({
+        el: "#vDeclareDetail",
+        mounted: function () {
+            if (this.indexData.OrderBillURL != "") {
+                this.bill_fileUrl = this.indexData.OrderBillURL;
+                this.bill_fileName = this.indexData.OrderBillName;
+            }
+            if (this.indexData.OrderAgentURL != "") {
+                this.agent_fileUrl = this.indexData.OrderAgentURL;
+                this.agent_fileName = this.indexData.OrderAgentName;
+            }
+        },
+        data: function () {
+            return {
+                indexData:@Html.Raw(Json.Encode(Model)),
+                bill_fileUrl: "",
+                bill_URL: "",
+                bill_fileName: "",
+                bill_fileFormat: "",
+                agent_fileUrl: "",
+                agent_URL: "",
+                agent_fileName: "",
+                agent_fileFormat: "",
+            }
+        },
+        methods: {
+            httpRequest_agent: function (options) {
+                var that = this;
+                var file = options.file;
+                var size = file.size / 1024;
+                var imgArr = ["image/jpg", "image/bmp", "image/jpeg", "image/gif", "image/png"];
+                let config = {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                };
+                if (imgArr.indexOf(file.type) > -1 && size > 500) { //大于500kb的图片压缩
+                    photoCompress(file, { quality: 0.8 }, function (base64Codes) {
+                        var bl = convertBase64UrlToBlob(base64Codes);
+                        var form = new FormData(); // FormData 对象
+                        form.append("file", bl, "file_" + Date.parse(new Date()) + ".jpg"); // 文件对象
+                        form.append("type", "3");
+                        form.append("orderID", that.indexData.ID);
+                        //添加请求头
+                        axios.post('/Declare/UploadDeclareFile', form, config)
+                            .then(function (response) {
+                                var file = JSON.parse(response.data.data);
+                                if (response.data.type != "error") {
+                                    that.agent_fileUrl = file.fullURL;
+                                    that.agent_URL = file.URL;
+                                    that.agent_fileName = file.name;
+                                    that.agent_fileFormat = file.fileFormat;
+                                }
+                            });
+                    });
+                } else if (imgArr.indexOf(file.type) <= -1 && size > 1024 * 3) {
+                    that.onAlert("error", "上传的文件大小不能大于3M");
+                    return;
+                } else {
+                    var form = new FormData(); // FormData 对象
+                    form.append("file", file); // 文件对象
+                    form.append("type", "3");
+                    form.append("orderID", that.indexData.ID);
+                    //添加请求头
+                    axios.post('/Declare/UploadDeclareFile', form, config)
+                        .then(function (response) {
+                            var file = JSON.parse(response.data.data);
+                            if (response.data.type != "error") {
+                                that.agent_fileUrl = file.fullURL;
+                                that.agent_URL = file.URL;
+                                that.agent_fileName = file.name;
+                                that.agent_fileFormat = file.fileFormat;
+                            }
+                        });
+                }
+            },
+            httpRequest_bill: function (options) {
+                var that = this;
+                var file = options.file;
+                var size = file.size / 1024;
+                var imgArr = ["image/jpg", "image/bmp", "image/jpeg", "image/gif", "image/png"];
+                let config = {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                };
+                if (imgArr.indexOf(file.type) > -1 && size > 500) { //大于500kb的图片压缩
+                    photoCompress(file, { quality: 0.8 }, function (base64Codes) {
+                        var bl = convertBase64UrlToBlob(base64Codes);
+                        var form = new FormData(); // FormData 对象
+                        form.append("file", bl, "file_" + Date.parse(new Date()) + ".jpg"); // 文件对象
+                        form.append("type", "1");
+                        form.append("orderID", that.indexData.ID);
+                        //添加请求头
+                        axios.post('/Declare/UploadDeclareFile', form, config)
+                            .then(function (response) {
+                                var file = JSON.parse(response.data.data);
+                                if (response.data.type != "error") {
+                                    that.bill_fileUrl = file.fullURL;
+                                    that.bill_URL = file.URL;
+                                    that.bill_fileName = file.name;
+                                    that.bill_fileFormat = file.fileFormat;
+                                }
+                            });
+                    });
+                } else if (imgArr.indexOf(file.type) <= -1 && size > 1024 * 3) {
+                    that.onAlert("error", "上传的文件大小不能大于3M");
+                    return;
+                } else {
+                    var form = new FormData(); // FormData 对象
+                    form.append("file", file); // 文件对象
+                    form.append("type", "1");
+                    form.append("orderID", that.indexData.ID);
+                    //添加请求头
+                    axios.post('/Declare/UploadDeclareFile', form, config)
+                        .then(function (response) {
+                            console.log(response)
+                            var file = JSON.parse(response.data.data);
+                            if (response.data.type != "error") {
+                                that.bill_fileUrl = file.fullURL;
+                                that.bill_URL = file.URL;
+                                that.bill_fileName = file.name;
+                                that.bill_fileFormat = file.fileFormat;
+                            }
+                        });
+                }
+            },
+            //导出对账单
+            download_bill: function () {
+                var that = this;
+                axios({
+                    url: "/Declare/ExportBill",
+                    method: "post",
+                    data: {
+                        id: this.indexData.ID
+                    },
+                }).then(function (response) {
+                    if (response.data.type == "error") {
+                        that.onAlert(res.data.type, res.data.msg);
+                    } else {
+                        $('#exportInfoForm').attr("href", response.data.data);
+                        $('#exportInfoForm').attr("target", "_blank");
+                        $('#ex-li').trigger("click");
+                    }
+                }).catch(function (error) {
+                    that.onAlert("warning", error);
+                });
+            },
+            //导出代理报关委托书
+            download_agent: function () {
+                var that = this;
+                axios({
+                    url: "/Declare/ExportAgent",
+                    method: "post",
+                    data: {
+                        id: this.indexData.ID
+                    },
+                }).then(function (response) {
+                    if (response.data.type == "error") {
+                        that.onAlert(res.data.type, res.data.msg);
+                    } else {
+                        $('#exportInfoForm').attr("href", response.data.data);
+                        $('#exportInfoForm').attr("target", "_blank");
+                        $('#ex-li').trigger("click");
+                    }
+                }).catch(function (error) {
+                    that.onAlert("warning", error);
+                });
+            },
+        }
+    });
+    </script>
+

@@ -1,0 +1,69 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutAccount.cshtml";
+    ViewBag.navid = "MyCoupon";
+}
+
+<div v-cloak id="vMyCoupon" class="backshow">
+    <h2>我的优惠券</h2>
+    <div class="myCoupon_con">
+        <el-tabs class="money_tab" v-model="activeName1">
+            <el-tab-pane :label='"未使用 "+form.UnUseCount' name="first">
+                <div class="overhide pt6">
+                    <div v-for="item in form.UnUseList" class="coupon_warp fl mr38 mb20 overhide">
+                        <div class="coupon_left fl"><div class="c_txt">{{item.Type}}</div></div>
+                        <div class="coupon_right fl">
+                            <p>{{item.Name}}</p>
+                            <p class="mt6">【无门槛】</p>
+                            <p>可用于{{item.Conduct}}服务</p>
+                            <p class="mt8">无限期</p>
+                        </div>
+                    </div>
+                </div>
+            </el-tab-pane>
+            <el-tab-pane :label='"已使用 "+form.UsedCount' name="second">
+                <div class="overhide pt6">
+                    <div v-for="item in form.UsedList" class="coupon_warp fl mr38 mb20 overhide used_coupon">
+                        <i></i>
+                        <div class="coupon_left fl"><div class="c_txt">{{item.Type}}</div></div>
+                        <div class="coupon_right fl">
+                            <p>{{item.Name}}</p>
+                            <p class="mt6">【无门槛】</p>
+                            <p>可用于{{item.Conduct}}服务</p>
+                            <p class="mt8">无限期</p>
+                        </div>
+                    </div>
+                </div>
+            </el-tab-pane>
+            <el-tab-pane label="已失效 0" name="third">
+                <div class="overhide pt6">
+                    <div v-for="item in form.InvalidList" class="coupon_warp fl mr38 mb20 overhide invalid_coupon">
+                        <i></i>
+                        <div class="coupon_left fl"><div class="c_txt">{{item.Type}}</div></div>
+                        <div class="coupon_right fl">
+                            <p>{{item.Name}}</p>
+                            <p class="mt6">【无门槛】</p>
+                            <p>可用于{{item.Conduct}}服务</p>
+                            <p class="mt8">无限期</p>
+                        </div>
+                    </div>
+                </div>
+            </el-tab-pane>
+        </el-tabs>
+    </div>
+</div>
+
+<script>
+    var vMyCoupon = new Vue({
+        el: "#vMyCoupon",
+        data: function () {
+            return {
+                form:@Html.Raw(Json.Encode(Model)),
+                activeName1:"first",
+            }
+        },
+        methods: {
+            
+        }
+    });
+</script>
+

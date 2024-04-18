@@ -1,0 +1,257 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_LayoutOrder.cshtml";
+    ViewBag.navid = "PreConfirmList";
+}
+
+<div v-cloak id="vPreConfirm" class="backshow">
+    <h2>待确认</h2>
+    <div class="order_list_view">
+        <div class="orderlist mt20" ref="viewBox1" v-on:scroll="ss('viewBox1')">
+            <div class="title">
+                <ul class="overhide">
+                    <li class="fl" style="width:263px">
+                        <span>订单编号</span>
+                    </li>
+                    <li class="fl" style="width:141px">
+                        <span>订单状态</span>
+                    </li>
+                    <li class="fl" style="width:143px">
+                        <span>开票状态</span>
+                    </li>
+                    <li class="fl" style="width:171px">
+                        <span>
+                            收件人
+                        </span>
+                    </li>
+                    <li class="fl" style="width:195px">
+                        <span>操作</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="orderWrap" v-loading="indexData.loading">
+                <div class="order" v-if="!indexData.loading">
+                    <table class="myorder" border="0" cellspacing="0" cellpadding="0" v-for="item of indexData.curItems">
+                        <tr>
+                            <th class="overhide" colspan="6">
+                                <div class="fl">
+                                    <span class="lignt_text">
+                                        订单号：
+                                    </span>
+                                    <span>{{item.ID}}</span><br />
+                                </div>
+                                <div class="fl txtdate">
+                                    <span class="lignt_text">{{item.CreateDate}}</span>
+                                    <span class="ml14" v-html="item.specialTypeLabel"></span>
+                                </div>
+                                <div class="fr">
+                                    <a class="a_detail ml16 mr72" v-on:click="detail(item.ID,item.Type)">订单详情</a>
+                                </div>
+                            </th>
+                        </tr>
+                        <tr class="cell">
+                            <td style="width:215px;text-align:left">
+                                <div style="padding-left:60px;">
+                                    <p>交易币种 {{item.Currency}}</p>
+                                    <p>报关总价 {{item.TotalMoney}}</p>
+                                </div>
+
+                            </td>
+                            <td style="width:114px">
+                                <span>{{item.MainStatus}}</span><br />
+                                <a>订单跟踪</a>
+                            </td>
+                            <td style="width:116px">
+                                <p>{{item.InvoiceStatus}}</p>
+                                <a v-on:click="invoice(item.ID)">查看发票</a>
+                            </td>
+                            <td style="width:138px;">
+                                <p>{{item.Addressee}}</p>
+                            </td>
+                            <td style="width:158px;padding:12px 0px" class="myOrderTd">
+                                <el-button class="btn2 mb10" v-on:click="confirm(item.ID)">订单确认</el-button>
+                                <a v-on:click="cancel(item.ID)">订单取消</a>
+                            </td>
+                        </tr>
+                    </table>
+                    <div v-if="indexData.curItems.length==0">
+                        <div class="nodata-container">
+                            <el-row class="nodata-row1">
+                                <img src="~/Content/img/nodata.png" />
+                            </el-row>
+                            <el-row class="nodata-row2">
+                                <span class="nodata-info">暂无数据！</span>
+                            </el-row>
+                        </div>
+                    </div>
+                </div>
+                <div class="foot" v-if="(!indexData.loading)&&indexData.curItems.length!=0">
+                    <el-pagination style="float:right" v-on:size-change="handleSizeChange"
+                                   v-on:current-change="handleCurrentChange"
+                                   :current-page="indexData.pageIndex"
+                                   :page-sizes="[5, 10, 20, 40]"
+                                   :page-size="indexData.pageSize"
+                                   layout="total, sizes, prev, pager, next, jumper"
+                                   :total="indexData.Total">
+                    </el-pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+    <el-dialog title="取消订单" :visible.sync="dialogFormVisible" :lock-scroll="false" :close-on-click-modal="false" width="30%">
+        <el-form status-icon :model="ruleForm" label-width="60px" ref="ruleForm">
+            <el-form-item label="原因" prop="Cancel_Reason" :rules="[{ required: true, message: '请输入原因', trigger: 'blur' },{max:400, message: '原因长度不超过400', trigger: 'blur' }]">
+                <el-input v-model="ruleForm.Cancel_Reason" type="textarea" auto-complete="off"></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button v-on:click="dialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" v-on:click="onSubmit_ruleForm()">确 定</el-button>
+        </div>
+    </el-dialog>
+</div>
+
+<script>
+    var vPreConfirm = new Vue({
+        el: "#vPreConfirm",
+        data: function () {
+            return {
+                ruleForm: {
+                    Cancel_Reason: "",
+                    ID: "",
+                },
+                dialogFormVisible: false,
+                indexData: {
+                    loading: true,
+                    curItems: [],
+                    pageIndex: 1, //初始页
+                    pageSize: 5,    //每页的数据
+                    Total: 0,
+                    scrollTop: 0, //滚动条位置
+                },
+            }
+        },
+        mounted: function () {
+            var that = this;
+            var userJsonStr = sessionStorage.getItem('PreConfirmList');
+            userEntity = JSON.parse(userJsonStr);
+            if (userEntity == null) {
+                that.paging();
+            } else {
+                that.indexData = userEntity;
+                that.paging();
+                that.$nextTick(function () {
+                    that.$refs['viewBox1'].scrollTop = that.indexData.scrollTop;
+                })
+                sessionStorage.removeItem('PreConfirmList');
+            }
+        },
+        methods: {
+            onSubmit_ruleForm: function () {
+                var that = this;
+                this.$refs.ruleForm.validate(function (valid) {
+                    if (valid) {
+                        that.dialogFormVisible = false;
+                        axios({
+                            url: "/Declare/CancelConfirm",
+                            method: "post",
+                            data: {
+                                orderID: that.ruleForm.ID,
+                                reason: that.ruleForm.Cancel_Reason,
+                            }
+                        }).then(function (response) {
+                            if (response.data.type != "error") {
+                                that.paging();
+                            }
+                            that.onAlert(response.data.type, response.data.msg);
+                        }).catch(function (error) {
+                            that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                        });
+                    }
+                });
+            },
+            cancel: function (id) {
+                var that = this;
+                this.dialogFormVisible = true;
+                setTimeout(function () {
+                    that.$refs.ruleForm.resetFields();
+                    that.ruleForm.Cancel_Reason = "";
+                    that.ruleForm.ID = id;
+                }, 0);
+            },
+            confirm: function (id) {
+                sessionStorage.setItem('PreConfirmList', JSON.stringify(this.indexData));
+                location.href = "/Declare/DeclareConfirm/" + id;
+            },
+            detail: function (id, type) {
+                commonSkip(id, this.getNavid(type), "PreConfirmList");
+            },
+            getNavid: function (type) {
+                var url = "";
+                if (type == "5") {
+                    url = "/Declare/DeclareDetail"
+                } else if (type == "4") {
+                    url = "/Orders/TransDecDetail"
+                }
+                return url;
+            },
+            invoice: function (id,type) {
+                sessionStorage.setItem('PreConfirmList', JSON.stringify(this.indexData));
+                commonSkip(id, '/Declare/DeclareInvoice', 'PreConfirmList')
+            },
+            ss: function (ref) {
+                // 监听这个dom的scroll事件
+                var that = this;
+                this.$refs[ref].addEventListener('scroll', function () {
+                    that.indexData.scrollTop = that.$refs[ref].scrollTop;
+                }, false)
+            },
+            // 初始页currentPage、初始每页数据数pagesize和数据data
+            handleSizeChange: function (size) {
+                this.indexData.pageSize = size;
+                this.paging();
+            },
+            handleCurrentChange: function (currentPage) {
+                this.indexData.pageIndex = currentPage;
+                this.paging();
+            },
+            paging: function () {
+                var that = this;
+                that.indexData.loading = true;
+                axios({
+                    url: "/Declare/GetPreConfirmList",
+                    method: "post",
+                    data: {
+                        page: this.indexData.pageIndex,
+                        rows: this.indexData.pageSize,
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                    transformRequest: [function (data) {
+                        var ret = ''
+                        for (var it in data) {
+                            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+                        }
+                        return ret;
+                    }],
+                }).then(function (response) {
+                    var data = JSON.parse(response.data.data);
+                    that.indexData.curItems = data.list;
+                    that.indexData.Total = data.total;
+                    that.indexData.loading = false;
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                    offset:300,
+                });
+            },
+        }
+    });
+</script>

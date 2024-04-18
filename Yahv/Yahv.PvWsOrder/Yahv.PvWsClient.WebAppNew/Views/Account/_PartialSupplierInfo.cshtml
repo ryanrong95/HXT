@@ -1,0 +1,95 @@
+﻿<template id="info">
+    <el-form :model="form1" :rules="rules1" status-icon ref="form1" label-width="150px">
+        <el-form-item label="供应商中文名称" prop="ChineseName">
+            <el-input style="width: 90%;" size="mini" v-model="form1.ChineseName" placeholder="请输入供应商中文名称" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="中文简称" prop="ChineseSName">
+            <el-input style="width: 90%;" size="mini" v-model="form1.ChineseSName" placeholder="请输入中文简称" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="供应商英文名称" prop="EnglishName">
+            <el-input style="width: 90%;" size="mini" v-model="form1.EnglishName" placeholder="请输入供应商英文名称" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="国家/地区:" prop="Place" :rules="[{required: true, message: '请选择国家/地区', trigger: 'change'}]">
+            <el-select style="width: 50%;" size="mini" v-model="form1.Place" filterable clearable placeholder="请选择">
+                <el-option v-for="item in PlaceOptions"
+                           :key="item.value"
+                           :label="item.text"
+                           :value="item.value">
+                </el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item label="详细地址" prop="RegAddress" :rules="[{max:150, message: '详细地址长度超过限制', trigger: 'blur' }]">
+            <el-input style="width: 90%;" size="mini" v-model="form1.RegAddress" placeholder="请输入详细地址" auto-complete="off"></el-input>
+        </el-form-item>
+
+    </el-form>
+</template>
+<script>
+    Vue.component(
+        'my-supplier',
+        {
+            template: "#info",
+            data: function() {
+                var that = this;
+                var validateName = function(rule, value, callback) {
+                    if (value == '' || value == null) {
+                        callback(new Error('请输入供应商英文名称'));
+                    }
+                    value = value.trim();
+                    if (value == '' || value == null) {
+                        callback(new Error('请输入供应商英文名称'));
+                    }
+
+                    var reg = /[\u4e00-\u9fa5]/g;
+                    if (reg.test(value)) {
+                        callback(new Error('英文名称中不能输入汉字'));
+                    }
+
+                    axios({
+                        url: "/Account/CheckSupplierEnglishName",
+                        method: "post",
+                        data: {
+                            EnglishName: value,
+                            ID: that.form1.ID
+                        }
+                    }).then(function(response) {
+                        if (response.data.type == "error") {
+                            callback(new Error(response.data.msg));
+                        } else {
+                            callback();
+                        }
+                    }).catch(function(error) {
+                        that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                    });
+                };
+                return {
+                    form1: @Html.Raw(Json.Encode(Model)),
+                    rules1: {
+                        ChineseName: [
+                            //{ required: true, message: '请输入供应商中文名称', trigger: 'blur' },
+                            { max: 150, message: '供应商中文名称长度超过限制', trigger: 'blur' }
+                        ],
+                        EnglishName: [
+                            { required: true, validator: validateName, trigger: 'blur' },
+                            { max: 150, message: '供应商英文名称长度超过限制', trigger: 'blur' }
+                        ],
+                        ChineseSName: [{ max: 150, message: '中文简称长度超过限制', trigger: 'blur' }],
+                    },
+                    PlaceOptions: []
+                }
+            },
+            mounted: function() {
+                this.PlaceOptions = @Html.Raw(Json.Encode(@ViewBag.PlaceOptions));
+                this.form1.Place = '263';
+            },
+            methods: {
+                //消息提示框
+                onAlert: function(type, message) {
+                    this.$message({
+                        message: message,
+                        type: type
+                    });
+                }
+            }
+        });
+</script>

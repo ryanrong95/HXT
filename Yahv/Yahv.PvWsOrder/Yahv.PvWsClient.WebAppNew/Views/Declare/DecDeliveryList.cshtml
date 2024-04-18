@@ -1,0 +1,216 @@
+﻿@{
+
+}
+<div id="vDecDeliveryList" v-cloak class="tab_content">
+    <div class="query_wrap" ref="viewBox1" v-on:scroll="ss('viewBox1')">
+        <div class="clearfix">
+            <div class="fl">
+                <span class="title">下单日期:</span>
+                <el-date-picker style="width:250px;" size="small" v-model="dataValue"
+                                type="daterange"
+                                range-separator="至"
+                                start-placeholder="开始日期"
+                                end-placeholder="结束日期">
+                </el-date-picker>
+            </div>
+            <div class="fl ml20">
+                <span class="title">订单号:</span>
+                <el-input style="width:150px;" size="mini" v-model="OrderID"></el-input>
+            </div>
+            <div class="fl ml20">
+                <span class="title">供应商:</span>
+                <el-input style="width:150px;" size="mini" v-model="Supplier"></el-input>
+            </div>
+        </div>
+        <div class="clearfix mt20">
+            <div class="fl">
+                <span class="title">型号:</span>
+                <el-input style="width:150px;" size="mini" v-model="PartNumber"></el-input>
+            </div>
+            <button v-on:click="queryData" class="btn btn1 ml40">查询</button>
+            <button v-on:click="clearData" class="btn btn2 ml12">重置</button>
+        </div>
+    </div>
+    <div class="tb_wrap" v-loading="loading">
+        <table class="common_tb1 mt30">
+            <tr>
+                <th width="36px">序号</th>
+                <th>订单编号</th>
+                <th>下单日期</th>
+                <th>供应商</th>
+                <th>商品型号</th>
+                <th>商品名称</th>
+                <th>订单数量</th>
+                <th>HK已收货数量</th>
+                <th>已报关数量</th>
+                <th>SZ已出库数量</th>
+                <th>品牌</th>
+                <th>产地</th>
+                <th>订单交付情况</th>
+            </tr>
+            <tr v-for="(item,index) in indexData.dataList">
+                <td>{{index+1}}</td>
+                <td>{{item.ID}}</td>
+                <td>{{item.CreateDate}}</td>
+                <td>{{item.SupplierName}}</td>
+                <td>{{item.PartNumber}}</td>
+                <td>{{item.Name}}</td>
+                <td>{{item.Quantity}}</td>
+                <td>{{item.HKQuantity}}</td>
+                <td>{{item.DecQuantity}}</td>
+                <td>{{item.SZOutQuantity}}</td>
+                <td>{{item.Manufacturer}}</td>
+                <td>{{item.Origin}}</td>
+                <td>{{item.Status}}</td>
+            </tr>
+            <tr v-if="indexData.dataList.length==0"><td colspan="10">暂无数据</td></tr>
+        </table>
+        <div class="foot">
+            <el-pagination class="fr" style="margin-top:20px;" v-on:size-change="handleSizeChange"
+                           v-on:current-change="handleCurrentChange"
+                           :current-page="indexData.pageIndex"
+                           :page-sizes="[5, 10, 20, 40]"
+                           :page-size="indexData.pageSize"
+                           layout="total, sizes, prev, pager, next, jumper"
+                           :total="indexData.total">
+            </el-pagination>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var vDecDeliveryList = new Vue({
+        el: "#vDecDeliveryList",
+        data: function () {
+            return {
+                indexData: {
+                    pageIndex: 1, //初始页
+                    pageSize: 10,    //每页的数据
+                    total: 0,
+                    scrollTop: 0, //滚动条位置
+                    dataList: [],
+                },
+                dataValue: "",
+                startDate: "",
+                endDate: "",
+                OrderID:"",
+                Supplier:"",
+                PartNumber: "",
+                loading:false,
+            }
+        },
+        mounted: function () {
+            this.init();
+        },
+        methods: {
+            init: function () {
+                var that = this;
+                var userJsonStr = sessionStorage.getItem('vDecDeliveryList');
+                userEntity = JSON.parse(userJsonStr);
+                if (userEntity == null) {
+                    that.paging();
+                } else {
+                    that.indexData = userEntity;
+                    that.paging();
+                    that.$nextTick(function () {
+                        that.$refs['viewBox1'].scrollTop = that.indexData.scrollTop;
+                    })
+                    sessionStorage.removeItem('vDecDeliveryList');
+                }
+            },
+            ss: function (ref) {
+                // 监听这个dom的scroll事件
+                var that = this;
+                this.$refs[ref].addEventListener('scroll', function () {
+                    that.indexData.scrollTop = that.$refs[ref].scrollTop;
+                }, false)
+            },
+            //查询数据
+            queryData: function () {
+                if (this.dataValue != "" && this.dataValue != null) {
+                    var start = new Date(this.dataValue[0]);
+                    var startDate = start.getFullYear() + '-' + (start.getMonth() + 1) + '-' + start.getDate();
+                    var end = new Date(this.dataValue[1]);
+                    var endDate = end.getFullYear() + '-' + (end.getMonth() + 1) + '-' + end.getDate();
+                    this.startDate = startDate;
+                    this.endDate = endDate;
+                } else {
+                    this.startDate = "";
+                    this.endDate = "";
+                }
+                this.indexData.pageIndex = 1;
+                this.paging();
+            },
+            //重置数据
+            clearData: function () {
+                this.dataValue = "";
+                this.startDate = "";
+                this.endDate = "";
+                this.OrderStatus = "";
+                this.OrderID = "";
+                this.Supplier = "";
+                this.PartNumber = "";
+                this.InvoiceStatus = "";
+                this.RemittanceStatus = "";
+                this.indexData.pageIndex = 1;
+                this.indexData.pageSize = 10;
+                this.paging();
+            },
+            // 初始页currentPage、初始每页数据数pagesize和数据data
+            handleSizeChange: function (size) {
+                this.indexData.pageSize = size;
+                this.paging();
+            },
+            handleCurrentChange: function (currentPage) {
+                this.indexData.pageIndex = currentPage;
+                this.paging();
+            },
+            paging: function () {
+                var that = this;
+                that.loading = true;
+                axios({
+                    url: "/Declare/GetDecDeliveryList",
+                    method: "post",
+                    data: {
+                        page: this.indexData.pageIndex,
+                        rows: this.indexData.pageSize,
+                        startDate: this.startDate,
+                        endDate: this.endDate,
+                        OrderStatus: this.OrderStatus,
+                        OrderID: this.OrderID,
+                        Supplier: this.Supplier,
+                        PartNumber: this.PartNumber,
+                        InvoiceStatus: this.InvoiceStatus,
+                        RemittanceStatus: this.RemittanceStatus,
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                    transformRequest: [function (data) {
+                        var ret = ''
+                        for (var it in data) {
+                            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+                        }
+                        return ret;
+                    }],
+                }).then(function (response) {
+                    var data = JSON.parse(response.data.data);
+                    that.indexData.dataList = data.list;
+                    that.indexData.total = data.total;
+                    that.loading = false;
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                    offset:100,
+                });
+            },
+        }
+    });
+
+</script>
+

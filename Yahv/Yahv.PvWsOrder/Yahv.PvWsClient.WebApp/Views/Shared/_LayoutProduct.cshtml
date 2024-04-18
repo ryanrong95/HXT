@@ -1,0 +1,41 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<section class="accountSetting clearfix">
+    <div class="w1200 clearfix">
+        <div class="memberCenter_left">
+            <h2 id="mem_center">产品</h2>
+            <div class="member_left_list">
+                <p>产品中心</p>
+                <ul id="nav_left">
+                    <li id="MyProducts">
+                        <i></i>
+                        <a href="/Products/MyProducts">我的产品</a>
+                    </li>
+                    <li id="MyPreProducts">
+                        <i></i>
+                        <a href="/Products/MyPreProducts">产品预归类</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="memberCenter_right">
+            @RenderBody()
+        </div>
+    </div>
+</section>
+
+<script>
+    var id = '@ViewBag.navid';
+    if (id != "" && id != null) {
+        $("#" + id).addClass("active");
+    }
+    else {
+        $("#BasicInfo").addClass("active");
+    }
+    $("#declareCur").addClass("active").prev("a").addClass("active");
+    $("#mem_center").click(function () {
+        location.href = "/Home/Index";
+    })
+</script>
+

@@ -1,0 +1,86 @@
+﻿
+@{
+    ViewBag.Title = "_LayoutBill";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="accountSetting clearfix">
+    <div class="w1200 clearfix">
+        <div class="memberCenter_left">
+            <h2 id="mem_center">会员中心</h2>
+            <div class="member_left_list">
+                <p>我的账单</p>
+                <ul id="nav_left">
+                    @*<li id="BillConfirm">
+                    <i></i>
+                    <a href="/Account/Client">账单确认</a>
+                </li>*@
+                    <li id="BillRecord" class="">
+                        <i></i>
+                        <a href="/Bill/BillRecord">我的账单</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="member_left_list">
+                <p>我的付款</p>
+                <ul>
+                    <li id="PayRecord" class="">
+                        <i></i>
+                        <a href="">付款记录</a>
+                    </li>
+                    <li id="MyApplies">
+                        <i></i>
+                        <a href="/Bill/MyApplies">付汇记录</a>
+                    </li>
+                    <li id="PrePayApplyList" class="">
+                        <i></i> <a href="/Orders/PrePayApplyList">代付货款记录</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="member_left_list">
+                <p>我的收款</p>
+                <ul>
+                    <li id="ReceivableList" class="">
+                        <i></i> <a href="/Orders/ReceivableList">代收货款记录</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="member_left_list">
+                <p>我的报关</p>
+                <ul>
+                    <li id="DeclareOrder">
+                        <i></i>
+                        <a href="/Declare/DeclareOrder">报关单</a>
+                    </li>
+                    <li id="DeclareData">
+                        <i></i>
+                        <a href="/Declare/DeclareData">报关数据</a>
+                    </li>
+                    <li id="TaxRecord">
+                        <i></i>
+                        <a href="/Declare/TaxRecord">缴税记录</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="memberCenter_right">
+            @RenderBody()
+        </div>
+    </div>
+</section>
+
+<script>
+    var id = '@ViewBag.navid';
+    if (id != "" && id != null) {
+        $("#" + id).addClass("active");
+    }
+    else {
+        $("#BasicInfo").addClass("active");
+    }
+    $("#billCur").addClass("active").prev("a").addClass("active");
+    $("#mem_center").click(function () {
+        location.href = "/Home/Index";
+    })
+</script>
+

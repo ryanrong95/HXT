@@ -1,0 +1,181 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>指派 - jQuery EasyUI plugin</title>
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/gray/easyui.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/icon-yg-cool.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/standard-easyui/styles/plugin.css" rel="stylesheet" />
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.easyui.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/locale/easyui-lang-zh_CN.js"></script>
+</head>
+<body>
+    <script>
+        function getData1(cb) {
+            $.ajax({
+                type: "get",
+                url: "/rfqapi/offers/List?id=Inq201907160009",
+                dataType: "jsonp",
+                success: function (data) {
+                    cb(data);
+                },
+                error: function () {
+                    alert('接口异常，请求数据失败');
+                }
+            });
+        }
+        function getData1ByKey(key, cb) {
+            $.ajax({
+                type: "get",
+                url: "/rfqapi/offers/List?id=Inq201907160009&key=" + key,
+                dataType: "jsonp",
+                success: function (data) {
+                    cb(data);
+                },
+                error: function () {
+                    alert('接口异常，请求数据失败');
+                }
+            });
+        }
+        function getData2(cb) {
+            $.ajax({
+                type: "get",
+                url: "/rfqapi/offers/offered?id=Inq201907160009",
+                dataType: "jsonp",
+                success: function (data) {
+                    cb(data);
+                },
+                error: function () {
+                    alert('接口异常，请求数据失败');
+                }
+            });
+        }
+        function myloader1(param, success, error) {
+            getData1(function (data) { success(data) });
+        }
+        function myloader2(param, success, error) {
+            getData2(function (data) { success(data) });
+        }
+    </script>
+    <h1>指派插件</h1>
+    <button onclick="open2()">打开</button>
+    <div id="mm123">
+        <table class="easyui-datagrid" title="已选的采购员" id="assgin2" style="width:100%;height:auto;"
+               data-options="fitColumns:true,rownumbers:true,singleSelect:true,loader:myloader2,onLoadSuccess: function (data) {$.parser.parse('.easyui-formatted');}">
+            <thead>
+                <tr>
+                    <th data-options="field:'ID',width:100">ID</th>
+                    <th data-options="field:'UserName',width:80">用户名</th>
+                    <th data-options="field:'RealName',width:100">真实姓名</th>
+                    <th data-options="field:'btn',formatter:btn_formatter2,width:90">操作</th>
+                </tr>
+            </thead>
+        </table>
+        <div style="margin-bottom:40px;"></div>
+        <table class="easyui-datagrid" id="assgin1" title="选择采购员" style="width:100%;height:auto;"
+               data-options="fitColumns:true,rownumbers:true,singleSelect:true,toolbar:'#tb',loader:myloader1,onLoadSuccess: function (data) {$.parser.parse('.easyui-formatted');}">
+            <thead>
+                <tr>
+                    <th data-options="field:'ID',width:100">ID</th>
+                    <th data-options="field:'UserName',width:80">用户名</th>
+                    <th data-options="field:'RealName',width:100">真实姓名</th>
+                    <th data-options="field:'btn',formatter:btn_formatter1,width:90">操作</th>
+                </tr>
+            </thead>
+        </table>
+        <div id="tb" style="padding:5px;height:auto">
+            <input class="easyui-textbox" style="width:200px;height:32px" id="search_input">
+            <span class="easyui-linkbutton" iconCls="icon-search" onclick="searchUser()">搜索</span>
+            <span class="easyui-linkbutton" onclick="showAllUser()">展示所有采购员</span>
+        </div>
+    </div>
+    <script>
+        function open2() {
+            $('#mm123').dialog('open');
+        }
+        $(function () {
+            $('#mm123').dialog({
+                title: '指派',
+                width: 700,
+                height: 500,
+                closed: true,
+                modal: true,
+                buttons: [{
+                    text: '关闭',
+                    handler: function () {
+                        $('#mm123').dialog("close");
+                    }
+                }]
+            });
+        })
+        function btn_formatter1(value, row, index) {
+            console.log(value);
+            return ['<span class="easyui-formatted">',
+          , '<button class="easyui-linkbutton" style="margin-left:5px;"  onclick="assign(\'' + row.ID + '\');return false;">指派</button>'
+          , '</span>'].join('');
+        }
+        function btn_formatter2(value, row, index) {
+            return ['<span class="easyui-formatted">',
+          , '<button class="easyui-linkbutton" style="margin-left:5px;"  onclick="cancelAssign(\'' + row.ID + '\');return false;">取消指派</button>'
+          , '</span>'].join('');
+        }
+        function assign(ID) {
+            $.ajax({
+                type: "get",
+                url: "/rfqapi/offers/Offer?id=Inq201905270002&items=" + ID,
+                dataType: "jsonp",
+                success: function (data) {
+                    console.log(data);
+                    if (data.success) {
+                        getData1(function (data1) {
+                            $("#assgin1").datagrid("loadData", data1);
+                        })
+                        getData2(function (data2) {
+                            $("#assgin2").datagrid("loadData", data2);
+                        })
+                    }
+                },
+                error: function () {
+                    alert('接口异常，请求数据失败');
+                }
+            });
+        }
+        function cancelAssign(ID) {
+            $.ajax({
+                type: "get",
+                url: "/rfqapi/offers/CancelOffer?id=Inq201907160009&items=" + ID,
+                dataType: "jsonp",
+                success: function (data) {
+                    console.log(data);
+                    if (data.success) {
+                        getData2(function (data2) {
+                            $("#assgin2").datagrid("loadData", data2);
+                        })
+                        getData1(function (data1) {
+                            $("#assgin1").datagrid("loadData", data1);
+                        })
+                    }
+                },
+                error: function () {
+                    alert('接口异常，请求数据失败');
+                }
+            });
+        }
+        function searchUser() {
+            var key = $("#search_input").textbox("getValue");
+            if (key && key != "") {
+                getData1ByKey(key, function (data) {
+                    $("#assgin1").datagrid("loadData", data);
+                })
+            }
+        }
+        function showAllUser() {
+            $("#search_input").textbox("setValue", "");
+            getData1(function (data) {
+                $("#assgin1").datagrid("loadData", data);
+            })
+        }
+    </script>
+</body>
+</html>

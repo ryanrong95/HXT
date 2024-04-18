@@ -1,0 +1,386 @@
+﻿@{
+    ViewBag.subTitle = "供应商新增";
+}
+<div id="vAddSupplier" v-cloak class="tab_content">
+<el-form :model="formdata" :rules="formrules" ref="ruleForm" label-width="120px">
+    <div class="info_item_wrap mt20">
+        <span class="icon_img">1</span>
+        <span class="title">基础信息</span>
+    </div>
+    <div id="supplierinfo" class="info mt20">
+        <div class="clearfix mb20">
+            <div class="fl wp50">
+                <el-form-item label="中文名称:" prop="ChineseName">
+                    <el-input style="width: 90%;" size="mini" v-model="formdata.ChineseName" placeholder="请输入完整的公司名称" auto-complete="off"></el-input>
+                </el-form-item>
+            </div>
+            <div class="fl wp50">
+                <el-form-item label="中文简称:" prop="Name">
+                    <el-input style="width: 90%;" size="mini" v-model="formdata.Name" auto-complete="off"></el-input>
+                </el-form-item>
+            </div>
+        </div>
+        <div class="clearfix mb20">
+            <div class="fl wp50">
+                <el-form-item label="英文名称:" prop="EnglishName">
+                    <el-input style="width: 90%;" size="mini" v-model="formdata.EnglishName" auto-complete="off"></el-input>
+                </el-form-item>
+            </div>
+            @*<div class="fl wp50">
+                <el-form-item label="等级:" prop="nGrade" :rules="[{required: true, message: '请选择供应商等级', trigger: 'change'}]">
+                    <el-select size="mini" style="width: 90%" v-model="formdata.nGrade" filterable clearable placeholder="请选择供应商等级">
+                        <el-option v-for="c in SupplierGrade"
+                                   :key="c.value"
+                                   :label="c.text"
+                                   :value="c.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+            </div>*@
+        </div>
+        <div class="clearfix mb20">
+            <div class="fl wp50">
+                <el-form-item label="国家/地区:" prop="Place" :rules="[{required: true, message: '请选择国家/地区', trigger: 'change'}]">
+                    <el-select size="mini" style="width: 90%" v-model="formdata.Place" filterable clearable placeholder="请选择国家/地区">
+                        <el-option v-for="c in PlaceOptions"
+                                   :key="c.value"
+                                   :label="c.text"
+                                   :value="c.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+            </div>
+            <div class="fl wp50">
+                <el-form-item label="详细地址:" prop="RegAddress" :rules="[{max:150, message: '详细地址长度超过限制', trigger: 'blur' }]">
+                    <el-input style="width: 90%;" size="mini" v-model="formdata.RegAddress" auto-complete="off"></el-input>
+                </el-form-item>
+            </div>
+        </div>
+    </div>
+    <div class="info_item_wrap">
+        <span class="icon_img">2</span>
+        <span class="title">银行信息</span>
+        <a v-if="!formdata.IsBank" v-on:click="formdata.IsBank = true" class="ml20 link font14">+银行信息</a>
+        <a v-if="formdata.IsBank" v-on:click="formdata.IsBank = false" class="ml20 link font14">-银行信息</a>
+    </div>
+    <div v-if="formdata.IsBank" class="info  mt20">
+        <div class="clearfix mb20">
+            <div class="fl wp50">
+                <el-form-item label="账户名称:" prop="RealName" :rules="[{max:150, message: '账户名称长度超过限制', trigger: 'blur' }]">
+                    <el-input style="width: 90%;" size="mini" v-model="formdata.RealName" auto-complete="off" :disabled="true"></el-input>
+                </el-form-item>
+            </div>
+            <div class="fl wp50">
+                <el-form-item label="银行账号:" prop="Account">
+                    <el-input style="width: 90%;" size="mini" v-model="formdata.Account" auto-complete="off"></el-input>
+                </el-form-item>
+            </div>
+        </div>
+        <div class="clearfix mb20">
+            <div class="fl wp50">
+                <el-form-item label="国家/地区:" prop="BankPlace" :rules="[{required: true, message: '请选择国家/地区', trigger: 'change'}]">
+                    <el-select style="width: 90%" size="mini" v-model="formdata.BankPlace" filterable clearable placeholder="请选择国家/地区">
+                        <el-option v-for="c in PlaceOptions"
+                                   :key="c.value"
+                                   :label="c.text"
+                                   :value="c.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+            </div>
+            <div class="fl wp50">
+                <el-form-item label="银行名称:" prop="Bank" :rules="[{ required: true, message: '请输入开户行', trigger: 'blur' },{max:200, message: '银行名称长度超过限制', trigger: 'blur' }]">
+                    <el-input style="width: 90%;" size="mini" v-model="formdata.Bank" auto-complete="off"></el-input>
+                </el-form-item>
+            </div>
+        </div>
+        <div class="clearfix mb20">
+            <div class="fl wp50">
+                <el-form-item label="银行地址:" prop="BankAddress" :rules="[{ required: notHK, message: '请输入银行地址', trigger: 'blur' },{max:200, message: '银行地址长度超过限制', trigger: 'blur' }]">
+                    <el-input style="width: 90%;" size="mini" v-model="formdata.BankAddress" auto-complete="off"></el-input>
+                </el-form-item>
+            </div>
+            <div class="fl wp50">
+                <el-form-item label="SWIFTCODE:" prop="SwiftCode" :rules="[{ required: notHK, message: '请输入银行代码', trigger: 'blur' },{max:50, message: '银行代码长度超过限制', trigger: 'blur' }]">
+                    <el-input style="width: 90%;" size="mini" v-model="formdata.SwiftCode" auto-complete="off"></el-input>
+                </el-form-item>
+            </div>
+        </div>
+        @*<div class="clearfix mb20">
+            <div class="fl wp50">
+                <el-form-item label="支付币种：" prop="BankCurrency" :rules="[{ required: true, message: '请选择币种', trigger: 'change' }]">
+                    <el-select style="width: 90%;" size="mini" v-model="formdata.BankCurrency" clearable placeholder="请选择">
+                        <el-option v-for="item in CurrencyOptions" :label="item.text" :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+            </div>
+        </div>*@
+    </div>
+    <div class="info_item_wrap">
+        <span class="icon_img">3</span>
+        <span class="title">联系人信息</span>
+        <a v-if="!formdata.IsContact" v-on:click="formdata.IsContact = true" class="ml20 link font14">+联系人信息</a>
+        <a v-if="formdata.IsContact" v-on:click="formdata.IsContact = false" class="ml20 link font14">-联系人信息</a>
+    </div>
+    <div v-if="formdata.IsContact" class="info mt20">
+        <div class="clearfix mb20">
+            <div class="fl wp50">
+                <el-form-item label="联系人:" prop="ContactName" :rules="[{ required: true, message: '请输入联系人', trigger: 'blur' },{max:50, message: '联系人长度超过限制', trigger: 'blur' }]">
+                    <el-input style="width: 90%;" size="mini" v-model="formdata.ContactName" auto-complete="off"></el-input>
+                </el-form-item>
+            </div>
+            <div class="fl wp50">
+                <el-form-item label="联系电话:" prop="ContactTel">
+                    <el-input style="width: 90%;" size="mini" v-model="formdata.ContactTel" auto-complete="off"></el-input>
+                </el-form-item>
+            </div>
+        </div>
+        <div class="clearfix mb20">
+            <div class="fl wp50">
+                <el-form-item label="手机:" prop="ContactMobile">
+                    <el-input style="width: 90%;" size="mini" v-model="formdata.ContactMobile" auto-complete="off"></el-input>
+                </el-form-item>
+            </div>
+            <div class="fl wp50">
+                <el-form-item label="E-Mail:" prop="ContactEmail">
+                    <el-input style="width: 90%;" size="mini" v-model="formdata.ContactEmail" auto-complete="off"></el-input>
+                </el-form-item>
+            </div>
+        </div>
+        <div class="clearfix mb20">
+            <div class="fl wp50">
+                <el-form-item label="QQ:" prop="QQ">
+                    <el-input style="width: 90%;" size="mini" v-model="formdata.QQ" auto-complete="off"></el-input>
+                </el-form-item>
+            </div>
+        </div>
+    </div>
+    <div class="info_item_wrap">
+        <span class="icon_img">4</span>
+        <span class="title">提货地址信息</span>
+        <a v-if="!formdata.IsAddress" v-on:click="formdata.IsAddress = true" class="ml20 link font14">+提货地址</a>
+        <a v-if="formdata.IsAddress" v-on:click="formdata.IsAddress = false" class="ml20 link font14">-提货地址</a>
+    </div>
+    <div v-if="formdata.IsAddress" class="info mt20">
+        <div class="clearfix mb20">
+            <div class="fl wp50">
+                <el-form-item label="所在地区:" prop="Land" :rules="[{required: true, message: '请输入详细地址', trigger: 'blur'}]">
+                    <el-cascader placeholder="请选择地址" style="width: 90%;" size="mini" :props="cascaderConfig" :options="AddressLists" v-model="formdata.Land">
+                    </el-cascader>
+                </el-form-item>
+            </div>
+            <div class="fl wp50">
+                <el-form-item label="详细地址:" prop="DetailAddress" :rules="[{required: true, message: '请输入详细地址', trigger: 'blur'},{max:200, message: '详细地址长度超过限制', trigger: 'blur' }]">
+                    <el-input style="width: 90%;" size="mini" v-model="formdata.DetailAddress" auto-complete="off"></el-input>
+                </el-form-item>
+            </div>
+        </div>
+        <div class="clearfix mb20">
+            <div class="fl wp50">
+                <el-form-item label="联系人:" prop="AddressName" :rules="[{ required: true, message: '请输入联系人名称', trigger: 'blur' },{max:150, message: '联系人名称长度超过限制', trigger: 'blur' }]">
+                    <el-input style="width: 90%;" size="mini" v-model="formdata.AddressName" auto-complete="off"></el-input>
+                </el-form-item>
+            </div>
+            <div class="fl wp50">
+                <el-form-item label="手机:" prop="AddressMobile">
+                    <el-input style="width: 90%;" size="mini" v-model="formdata.AddressMobile" auto-complete="off"></el-input>
+                </el-form-item>
+            </div>
+        </div>
+        <div class="clearfix mb20">
+            <div class="fl wp50">
+                <el-form-item label="电话:" prop="AddressTel">
+                    <el-input style="width: 90%;" size="mini" v-model="formdata.AddressTel" auto-complete="off"></el-input>
+                </el-form-item>
+            </div>
+            <div class="fl wp50">
+                <el-form-item label="邮编：" prop="Postzip" :rules="[{max:10, message: '邮编长度超过限制', trigger: 'blur' }]">
+                    <el-input style="width: 90%;" size="mini" v-model="formdata.Postzip" placeholder="请输入邮编" auto-complete="off"></el-input>
+                </el-form-item>
+            </div>
+        </div>
+    </div>
+</el-form>
+<div class="btn_bottom mt40 mb100">
+    <button class="btn1" v-on:click="toBack">返回</button>
+    <button class="ml14 btn2" v-on:click="onSubmit">保存</button>
+</div>
+</div>
+<script src="~/Scripts/areaData.js"></script>
+<script>
+    var vAddSupplier = new Vue({
+        el: "#vAddSupplier",
+        data: function() {
+            //银行账户验证
+            var validatorBankAccount = function(rule, value, callback) {
+                if (value == "" || value == null) {
+                    callback(new Error('请输入银行账号'));
+                } else if (!/^[a-zA-Z0-9\-]+$/.test(value)) {
+                    callback(new Error('银行账号格式错误'));
+                } else {
+                    callback();
+                }
+            };
+            //验证邮箱
+            var validateMail = function(rule, value, callback) {
+                if (value != "" && value != null) {
+                    var reg = new RegExp(
+                        /^([a-zA-Z0-9._-])+@{@Html.Raw("@")
+                                               ;}([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/);
+                    if (!reg.test(value)) {
+                        callback(new Error('请输入正确的邮箱地址'));
+                    }
+                }
+                callback();
+            };
+            //验证英文名称
+            var validateName = function(rule, value, callback) {
+                var that = this;
+                if (value == '' || value == null) {
+                    callback(new Error('请输入供应商英文名称'));
+                }
+                value = value.trim();
+                if (value == '' || value == null) {
+                    callback(new Error('请输入供应商英文名称'));
+                }
+
+                var reg = /[\u4e00-\u9fa5]/g;
+                if (reg.test(value)) {
+                    callback(new Error('英文名称中不能输入汉字'));
+                }
+
+                axios({
+                    url: "/Account/CheckSupplierEnglishName",
+                    method: "post",
+                    data: {
+                        EnglishName: value,
+                        ID: ""
+                    }
+                }).then(function(response) {
+                    if (response.data.type == "error") {
+                        callback(new Error(response.data.msg));
+                    } else {
+                        callback();
+                    }
+                }).catch(function(error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            };
+            return {
+                formdata: @Html.Raw(Json.Encode(Model)), //表单数据
+                AddressLists: $.pccData[0].s, //省市区三级联动数据
+                cascaderConfig: {
+                    label: 'n',
+                    value: 'n',
+                    children: 's'
+                },
+                formrules: {
+                    ChineseName: [
+                        //{ required: true, message: '请输入供应商中文名称', trigger: 'blur' },
+                        { max: 150, message: '供应商中文名称长度超过限制', trigger: 'blur' }
+                    ],
+                    EnglishName: [
+                        { required: true, validator: validateName, trigger: 'blur' },
+                        { max: 150, message: '供应商英文名称长度超过限制', trigger: 'blur' }
+                    ],
+                    Name: [{ max: 150, message: '中文简称长度超过限制', trigger: 'blur' }],
+                    Account: [
+                        { required: true, validator: validatorBankAccount, trigger: 'blur' },
+                        { max: 50, message: '账号长度超过限制', trigger: 'blur' }
+                    ],
+                    ContactMobile: [{ max: 20, message: '手机长度超过限制', trigger: 'blur' }],
+                    ContactTel: [{ max: 20, message: '电话长度超过限制', trigger: 'blur' }],
+                    ContactEmail: [
+                        { validator: validateMail, trigger: 'blur' }, { max: 50, message: '邮编长度超过限制', trigger: 'blur' }
+                    ],
+                    AddressMobile: [{ max: 20, message: '电话长度超过限制', trigger: 'blur' }],
+                    AddressTel: [{ max: 20, message: '电话长度超过限制', trigger: 'blur' }],
+                    QQ: [{ max: 20, message: 'QQ长度超过限制', trigger: 'blur' }]
+                },
+                PlaceOptions: [],
+                CurrencyOptions: [],
+                SupplierGrade:
+                [
+                    { "value": "1", "text": "1" },
+                    { "value": "2", "text": "2" },
+                    { "value": "3", "text": "3" },
+                    { "value": "4", "text": "4" },
+                    { "value": "5", "text": "5" },
+                    { "value": "6", "text": "6" },
+                    { "value": "7", "text": "7" },
+                    { "value": "8", "text": "8" },
+                    { "value": "9", "text": "9" }
+                ],
+                notHK: false,
+                isCustoms: @(ViewBag.ThePageIsCustoms),
+            }
+        },
+        mounted: function() {
+            this.PlaceOptions = @Html.Raw(Json.Encode(ViewBag.PlaceOptions));
+            this.CurrencyOptions = @Html.Raw(Json.Encode(ViewBag.CurrencyOptions));
+            this.formdata.Place = '263';
+        },
+        watch: {
+            'formdata.BankPlace': function (val) {
+                //有报关服务类型,必填
+                if (this.isCustoms) {
+                    this.notHK = true;
+                    return;
+                }
+                if (val != 263) {
+                    this.notHK = true;
+                } else {
+                    this.notHK = false;
+                }
+            },
+            'formdata.EnglishName': function(val) {
+                this.formdata.RealName = val;
+            },
+        },
+        methods: {
+            onSubmit: function() {
+                var that = this;
+                that.$refs.ruleForm.validate(function(valid) {
+                    if (valid) {
+                        const loading = that.$loading({
+                            lock: false,
+                            text: 'Loading',
+                            spinner: 'el-icon-loading',
+                            background: 'rgba(0, 0, 0, 0.7)'
+                        });
+                        axios({
+                            url: "/Account/SupplierSubmit",
+                            method: "post",
+                            data: that.formdata,
+                        }).then(function(response) {
+                            loading.close();
+                            that.onAlert(response.data.type, response.data.msg);
+                            if (response.data.type == "success") {
+                                setTimeout(function() { //使用  setTimeout（）方法设定定时2000毫秒
+                                        location.href = "/Account/MySuppliers";
+                                    },
+                                    2000);
+                            }
+                        }).catch(function(error) {
+                            that.onAlert("warning", error);
+                            loading.close();
+                        });
+                    } else {
+                        return false;
+                    }
+                });
+            },
+            toBack: function() {
+                history.back(-1);
+            },
+            //消息提示框
+            onAlert: function(type, message) {
+                this.$message({
+                    message: message,
+                    type: type
+                });
+            }
+        }
+    });
+</script>

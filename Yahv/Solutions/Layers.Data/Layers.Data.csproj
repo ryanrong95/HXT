@@ -1,0 +1,515 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{FED16B15-565B-4ED6-A876-2146EB16B011}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Layers.Data</RootNamespace>
+    <AssemblyName>Layers.Data</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="LinqReponsitory.cs" />
+    <Compile Include="PKeySigner\PKeyAttribute.cs" />
+    <Compile Include="PKeySigner\PKeySignerExtension.cs" />
+    <Compile Include="PKeySigner\PKeySigner.cs" />
+    <Compile Include="PKeySigner\PKeyType.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Sqls\foricScCustomsReponsitory.cs" />
+    <Compile Include="Sqls\foricScCustoms\sql.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>sql.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Sqls\Overalls\Extends\ExchangeRates.cs" />
+    <Compile Include="Sqls\PSLReponsitory.cs" />
+    <Compile Include="Sqls\PSL\Sql.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Sql.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Sqls\PsOrderRepository.cs" />
+    <Compile Include="Sqls\PsOrder\sql.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>sql.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Sqls\PsWms\Sql.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Sql.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Sqls\PveCrmReponsitory.cs" />
+    <Compile Include="Sqls\PveCrm\sql.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>sql.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Sqls\PveSmsReponsitory.cs" />
+    <Compile Include="Sqls\PveSms\sql.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>sql.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Sqls\PveStandardReponsitory.cs" />
+    <Compile Include="Sqls\PveStandard\Sql.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Sql.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Sqls\PvRouteReponsitory.cs" />
+    <Compile Include="Sqls\PvdCrmReponsitory.cs" />
+    <Compile Include="Sqls\PvbCrm\Drivers.cs" />
+    <Compile Include="Sqls\PvbCrm\nContacts.cs" />
+    <Compile Include="Sqls\PvbCrm\Payees.cs" />
+    <Compile Include="Sqls\PvbCrm\Payers.cs" />
+    <Compile Include="Sqls\PvcCrmReponsitory.cs" />
+    <Compile Include="Sqls\PvcCrm\sql.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>sql.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Sqls\PvCenter\Logs_PvLsOrder.cs" />
+    <Compile Include="Sqls\PvCenter\Logs_PvWsOrder.cs" />
+    <Compile Include="Sqls\PvCenter\KdnResults.cs" />
+    <Compile Include="Sqls\PvCenter\KdnRequests.cs" />
+    <Compile Include="Sqls\PvCenter\WayParters.cs" />
+    <Compile Include="Sqls\PvCenter\WayLoadings.cs" />
+    <Compile Include="Sqls\PvCenter\WayExpress.cs" />
+    <Compile Include="Sqls\PvCenter\WayChcd.cs" />
+    <Compile Include="Sqls\PvCenter\Waybills.cs" />
+    <Compile Include="Sqls\PvdCrm\sql.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>sql.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Sqls\PvFinanceReponsitory.cs" />
+    <Compile Include="Sqls\PvFinance\Sql.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Sql.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Sqls\PvLsOrderReponsitory.cs" />
+    <Compile Include="Sqls\HvRFQ\AdvantagePNOs.cs" />
+    <Compile Include="Sqls\HvRFQ\Sql.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Sql.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Sqls\HvRFQ\Statistics_Boms.cs" />
+    <Compile Include="Sqls\HvRFQ\Statistics_Inquiries.cs" />
+    <Compile Include="Sqls\HvRFQ\MapsInquiryQuoter.cs" />
+    <Compile Include="Sqls\HvRFQ\OrderItems.cs" />
+    <Compile Include="Sqls\HvRFQ\Orders.cs" />
+    <Compile Include="Sqls\HvRFQ\Leagues.cs" />
+    <Compile Include="Sqls\HvRFQ\Purchases.cs" />
+    <Compile Include="Sqls\HvRFQ\SalesQuotes.cs" />
+    <Compile Include="Sqls\HvRFQ\Quotes.cs" />
+    <Compile Include="Sqls\HvRFQ\Inquiries.cs" />
+    <Compile Include="Sqls\HvRFQReponsitory.cs" />
+    <Compile Include="Sqls\OverallsReponsitory.cs" />
+    <Compile Include="Sqls\Overalls\ExchangeRates.cs" />
+    <Compile Include="Sqls\Overalls\Sql.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Sql.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Sqls\PvbCrm\Consignees.cs" />
+    <Compile Include="Sqls\PvbCrm\Sql.designer.cs">
+      <DependentUpon>Sql.dbml</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="Sqls\PvbCrm\Suppliers.cs" />
+    <Compile Include="Sqls\PvbCrm\Clients.cs" />
+    <Compile Include="Sqls\PvbCrm\Beneficiaries.cs" />
+    <Compile Include="Sqls\PvbCrm\Invoices.cs" />
+    <Compile Include="Sqls\PvCenterReponsitory.cs" />
+    <Compile Include="Sqls\PvCenter\FilesDescription.cs" />
+    <Compile Include="Sqls\PvCenter\Sql.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Sql.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Sqls\PvDataReponsitory.cs" />
+    <Compile Include="Sqls\PvData\sql.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>sql.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Sqls\PvLsOrder\Extends\LsOrders.cs" />
+    <Compile Include="Sqls\PvLsOrder\Sql.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Sql.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Sqls\PvRoute\Sql.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Sql.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Sqls\PsWmsRepository.cs" />
+    <Compile Include="Sqls\PvWmsRepository.cs" />
+    <Compile Include="Sqls\PvWms\Extend\Inputs.cs" />
+    <Compile Include="Sqls\PvWms\Extend\Logs_DeclareItem.cs" />
+    <Compile Include="Sqls\PvWms\Extend\LsNotice.cs" />
+    <Compile Include="Sqls\PvWms\Extend\Logs_Declare.cs" />
+    <Compile Include="Sqls\PvWms\Extend\Logs_Operator.cs" />
+    <Compile Include="Sqls\PvWms\Extend\Notices.cs" />
+    <Compile Include="Sqls\PvWms\Extend\Outputs.cs" />
+    <Compile Include="Sqls\PvWms\Extend\Pickings.cs" />
+    <Compile Include="Sqls\PvWms\Extend\Shelves.cs" />
+    <Compile Include="Sqls\PvWms\Extend\Sortings.cs" />
+    <Compile Include="Sqls\PvWms\Extend\Specs.cs" />
+    <Compile Include="Sqls\PvWms\Extend\Storages.cs" />
+    <Compile Include="Sqls\PvWms\Extend\Warehouses.cs" />
+    <Compile Include="Sqls\PvWms\Sql.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Sql.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Sqls\PvWsOrderReponsitory.cs" />
+    <Compile Include="Sqls\PvWsOrder\Extends\Users.cs" />
+    <Compile Include="Sqls\PvWsOrder\Extends\Admins.cs" />
+    <Compile Include="Sqls\PvWsOrder\Sql.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Sql.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Sqls\ScCustomReponsitory.cs" />
+    <Compile Include="Sqls\ScCustoms\sql.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>sql.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Sqls\VAERPReponsitory.cs" />
+    <Compile Include="Sqls\PvbCrmReponsitory.cs" />
+    <Compile Include="Sqls\PvbErmReponsitory.cs" />
+    <Compile Include="Sqls\PvbErm\Menus.cs" />
+    <Compile Include="Sqls\PvbErm\Admins.cs" />
+    <Compile Include="Sqls\PvbErm\Sql.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Sql.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Sqls\VAERP\DYJPurchases.cs" />
+    <Compile Include="Sqls\VAERP\DYJOrderFiles.cs" />
+    <Compile Include="Sqls\VAERP\Sql.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Sql.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Sqls\_ForTests\Sqls.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Sqls.dbml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Layers.Linq\Layers.Linq.csproj">
+      <Project>{56c33683-ce9a-4cc5-9cef-92e03bc8f739}</Project>
+      <Name>Layers.Linq</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Sqls\foricScCustoms\sql.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>sql.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Sqls\HvRFQ\Sql.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>Sql.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Sqls\Overalls\Sql.dbml.layout">
+      <DependentUpon>Sql.dbml</DependentUpon>
+    </None>
+    <None Include="Sqls\PSL\Sql.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>Sql.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Sqls\PsOrder\sql.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>sql.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Sqls\PsOrder\sql.dbml.layout">
+      <DependentUpon>sql.dbml</DependentUpon>
+    </None>
+    <None Include="Sqls\PsWms\Sql.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>Sql.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Sqls\PvbCrm\Sql.dbml">
+      <SubType>Designer</SubType>
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>Sql.designer.cs</LastGenOutput>
+    </None>
+    <None Include="Sqls\PvbCrm\Sql.dbml.layout">
+      <DependentUpon>Sql.dbml</DependentUpon>
+    </None>
+    <None Include="Sqls\PvbErm\Sql.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>Sql.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Sqls\PvcCrm\sql.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>sql.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Sqls\PvCenter\Sql.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>Sql.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Sqls\PvData\sql.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>sql.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Sqls\PvData\sql.dbml.layout">
+      <DependentUpon>sql.dbml</DependentUpon>
+    </None>
+    <None Include="Sqls\PvdCrm\sql.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>sql.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Sqls\PvdCrm\sql.dbml.layout">
+      <DependentUpon>sql.dbml</DependentUpon>
+    </None>
+    <None Include="Sqls\PveCrm\sql.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>sql.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Sqls\PveCrm\sql.dbml.layout">
+      <DependentUpon>sql.dbml</DependentUpon>
+    </None>
+    <None Include="Sqls\PveSms\sql.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>sql.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Sqls\PveSms\sql.dbml.layout">
+      <DependentUpon>sql.dbml</DependentUpon>
+    </None>
+    <None Include="Sqls\PveStandard\Sql.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>Sql.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Sqls\PveStandard\Sql.dbml.layout">
+      <DependentUpon>Sql.dbml</DependentUpon>
+    </None>
+    <None Include="Sqls\PvFinance\Sql.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>Sql.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Sqls\PvLsOrder\Sql.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>Sql.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Sqls\PvLsOrder\Sql.dbml.layout">
+      <DependentUpon>Sql.dbml</DependentUpon>
+    </None>
+    <None Include="Sqls\PvRoute\Sql.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>Sql.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Sqls\PvWms\Sql.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>Sql.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Sqls\PvWsOrder\Sql.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>Sql.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Sqls\ScCustoms\sql.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>sql.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Sqls\ScCustoms\sql.dbml.layout">
+      <DependentUpon>sql.dbml</DependentUpon>
+    </None>
+    <None Include="Sqls\VAERP\Sql.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>Sql.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Sqls\_ForTests\Sqls.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>Sqls.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Sqls\Overalls\Sql.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>Sql.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Sqls\PvbErm\Sql.dbml.layout">
+      <DependentUpon>Sql.dbml</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Sqls\VAERP\Sql.dbml.layout">
+      <DependentUpon>Sql.dbml</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Sqls\HvRFQ\Sql.dbml.layout">
+      <DependentUpon>Sql.dbml</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Sqls\PvWsOrder\Sql.dbml.layout">
+      <DependentUpon>Sql.dbml</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Sqls\PsWms\Extends\" />
+    <Folder Include="Sqls\PvcCrm\Extends\" />
+    <Folder Include="Sqls\PvCenter\Extends\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Sqls\PvWms\Sql.dbml.layout">
+      <DependentUpon>Sql.dbml</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Sqls\PvCenter\Sql.dbml.layout">
+      <DependentUpon>Sql.dbml</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Sqls\PvcCrm\sql.dbml.layout">
+      <DependentUpon>sql.dbml</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Sqls\PvWms\数据库生成脚本20200522.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Sqls\foricScCustoms\sql.dbml.layout">
+      <DependentUpon>sql.dbml</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Sqls\PSL\Sql.dbml.layout">
+      <DependentUpon>Sql.dbml</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Sqls\_ForTests\Sqls.dbml.layout">
+      <DependentUpon>Sqls.dbml</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Sqls\PvFinance\Sql.dbml.layout">
+      <DependentUpon>Sql.dbml</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Sqls\PvRoute\Sql.dbml.layout">
+      <DependentUpon>Sql.dbml</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Sqls\PsWms\Sql.dbml.layout">
+      <DependentUpon>Sql.dbml</DependentUpon>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,151 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>芯达通</title>
+    <link rel="stylesheet" type="text/css" href="css/common.css" />
+    <link rel="stylesheet" type="text/css" href="css/page.css" />
+    <link href="css/element.css" rel="stylesheet" />
+    <script type="text/javascript" src="js/jQuery-2.2.4.min.js"></script>
+    <script src="js/axios.min.js"></script>
+    <script type="text/javascript" src="js/vue.js"></script>
+    <script type="text/javascript" src="js/xs.js"></script>
+    <script type="text/javascript" src="js/common.js"></script>
+    <script src="js/element.js"></script>
+</head>
+
+<body>
+    <!-- 右侧定位 -->
+    <div id="right_bar"></div>
+    <!-- logo行 -->
+    <div id="header"></div>
+    <div class="sub_banner">
+        <p class="en">Assistant / Help</p>
+        <p class="china">芯达通助手</p>
+    </div>
+    <!-- 内容 -->
+    <div id="aboutus" class="clearfix wrapper sub_con">
+
+        <div>
+            <div class="right_bar list_bar">
+                <i class="home"></i>
+                <a href="index.html">首页</a>
+                <i>-</i>
+                <a href="">芯达通助手</a>
+                <i>-</i>
+                <a href="inquiry.html">归类信息查询</a>
+            </div>
+            <div class="list">
+                <h4>您的产品[{{querystring}}]的归类查询结果：</h4>
+                <table border="1" v-loading="loading" v-if="QueryData.length>0">
+                    <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>HS 编码</th>
+                            <th>商品名称</th>
+                            <th>型号</th>
+                            <th>第一法定单位</th>
+                            <th>第二法定单位</th>
+                            <th>监管条件</th>
+                            <th>检验检疫</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(item,index) in QueryData">
+                            <td>{{index+1}}</td>
+                            <td>{{item.HSCode}}</td>
+                            <td>{{item.Name}}</td>
+                            <td>{{item.PartNumber}}</td>
+                            <td>{{item.LegalUnit1}}</td>
+                            <td>{{item.LegalUnit2}}</td>
+                            <td>{{item.SupervisionRequirements}}</td>
+                            <td>{{item.CIQCode}}</td>
+                            <td style="cursor:pointer"><a v-on:click="openDetail(item.ID)">详情</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="re_error" style="display:none">您本次输入的型号数据库无法查询，请联系我们的在线客服人员解答您的问题。<i class="close"></i></div>
+                <p class="tip"><i></i>该 HS 归类查询结果仅供参考</p>
+                <div class="btn_query">
+                    <a href="inquiry.html">返回</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 底部 -->
+    <div id="footer_zh"></div>
+    <script>
+        $("#right_bar").load("rightBar.html");
+        $("#header").load("header.html", function () {
+            $("#footer_zh").load("footer.html");
+        });
+
+        var aboutus = new Vue({
+            el: '#aboutus',
+            data: {
+                QueryData: [],
+                loading: true,
+                querystring: "",
+            },
+            mounted: function () {
+                this.getQueryData()
+            },
+            methods: {
+                getQueryData: function () {
+                    this.querystring = localStorage["searchText"];
+                    var that = this;
+                    if (that.querystring == "" || that.querystring == null) {
+                        this.loading = false;
+                    } else {
+                        var that = this;
+                        axios({
+                            url: "/Home/QueryClassfiy",
+                            method: "post",
+                            data: {
+                                query: that.querystring,
+                            }
+                        }).then(function (response) {
+                            if (response.data.type == "success") {
+                                res = JSON.parse(response.data.data);
+                                if(res.count > 5){
+                                    that.onAlert("warning", "若要查询更多归类信息,请先登录或者注册!");
+                                } else {
+                                    if (res.data.length == 0) {
+                                        $(".re_error").show();
+                                    } else {
+                                        $(".re_error").hide();
+                                    }
+                                    that.QueryData = res.data;
+                                };
+                                that.loading = false;
+                            }
+                        }).catch(function (error) {
+                            that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                        });
+                    }
+                },
+                openDetail: function (id) {
+                    if (window.localStorage) {
+                        localStorage.detailText = id;
+                        window.open("query_details.html");
+
+                    } else {
+                        // alert("NOT SUPPORT");
+                    }
+                },
+                //消息提示框
+                onAlert: function (type, message) {
+                    this.$message({
+                        message: message,
+                        type: type
+                    });
+                },
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>芯达通</title>
+    <link rel="stylesheet" type="text/css" href="css/common.css" />
+    <link rel="stylesheet" type="text/css" href="css/page.css" />
+    <link rel="stylesheet" href="css/element.css" />
+    <script type="text/javascript" src="js/jQuery-2.2.4.min.js"></script>
+    <script type="text/javascript" src="js/axios.min.js"></script>
+    <script type="text/javascript" src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+    <script type="text/javascript" src="js/xs.js"></script>
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript" src="js/vue.js"></script>
+    <script type="text/javascript" src="js/element.js"></script>
+</head>
+
+<body>
+		<!-- 右侧边栏相关内容 -->
+			<div id="n_sideBar"></div>
+		<!--头部和banner部分-->
+		<div class="n_header">
+		    <div class="n_lunbt"></div>
+		    <div id="n_insert_nav"></div>
+		</div>
+		<!-- 中间不同内容 -->
+		<div class="n_mid">
+			<div class="n_select">
+				<ul class="clearfix">
+					<li>
+						<a href="importCustoms.html">进口报关服务</a>
+					</li>
+					<li>
+						<a href="expressCommission.html">香港代收发服务</a>
+					</li>
+					<li class="active">
+						<a href="storage.html">香港仓储服务</a>
+					</li>
+				</ul>
+			</div>
+			<div class="n_custom_con">
+				<div class="n_custom_desc">
+					<h3>关于香港仓储服务</h3>
+					<p>香港设有大型可视化仓库，ERP系统自助下单，您可随时随地掌握货物最新动态。专业的服务团队为您提供多种模式的仓储服务。</p>
+				</div>
+				<div class="n_custom_service n_storage_feature">
+					<div class="wrapper">
+						<h3>服务特色</h3>
+						<img src="imgs/n_storage_pic2.png" >
+					</div>
+				</div>
+				<div class="n_express_process n_storage_process">
+					<div class="wrapper">
+						<h3>服务流程</h3>
+						<div class="clearfix n_express_process_con">
+							<div class="left n_express_storage_img">
+								<img src="imgs/n_storage_pic4.png" >
+							</div>
+							<div class="left">
+								<img src="imgs/n_storage_pic3.png" >
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 底部 -->
+		<div id="footer_zh"></div>
+		<script>
+			$("#n_sideBar").load("sideBar.html")
+			$("#n_insert_nav").load("header.html",function(){
+			    $("#footer_zh").load("footer.html");
+			    //导航中当前选中的项
+			    $(".n_nagivation>ul>li:nth-child(2)").addClass("hot");
+			    $(".n_nagivation>ul>li").hover(function () {
+			        $(".n_nagivation>ul>li:nth-child(2)").removeClass("hot");
+			    }, function () {
+			        $(".n_nagivation>ul>li:nth-child(2)").addClass("hot");
+			    })
+			});
+			
+		</script>
+	</body>
+</html>

@@ -1,0 +1,378 @@
+﻿
+@{Html.RenderAction("NewOutStorageBaseInfo", "Order");}
+@{Html.RenderAction("NewOutStorageSpecialRequire", "Order");}
+@{Html.RenderAction("NewOutStorageTransport", "Order");}
+@{Html.RenderAction("NewOutStorageStockImport", "Order");}
+@{Html.RenderAction("NewOutStorageEditDeliveryInfo", "Order");}
+@{Html.RenderAction("NewOutStorageEditTakingInfo", "Order");}
+
+@model Yahv.PsWms.SzMvc.Models.NewOutStorageReturnModel
+
+<div id="newoutstorage" v-cloak class="tab_content order_add">
+    <div class="info_item_wrap">
+        <span class="icon_img">1</span>
+        <span class="title">订单基本信息</span>
+    </div>
+    <newoutstoragebaseinfo ref="newoutstoragebaseinfo"
+                           v-on:openstockimportwindow="openstockimportwindow"
+                           :orderitemsfrommystorage="orderitemsfrommystorage"></newoutstoragebaseinfo>
+    <newoutstoragestockimport ref="newoutstoragestockimport"
+                              :dialogstockimportvisible="dialogstockimportvisible"
+                              v-on:closestockimportwindow="closestockimportwindow"
+                              v-on:addorderitemsfromstock="addorderitemsfromstock"></newoutstoragestockimport>
+
+    <div class="info_item_wrap mt40">
+        <span class="icon_img">2</span>
+        <span class="title">特殊要求</span>
+    </div>
+    <newoutstoragespecialrequire ref="newoutstoragespecialrequire"></newoutstoragespecialrequire>
+
+    <div class="info_item_wrap mt40">
+        <span class="icon_img">3</span>
+        <span class="title">货运信息</span>
+    </div>
+    <newoutstoragetransport ref="newoutstoragetransport"
+                            v-on:openeditdeliveryinfowindow="openeditdeliveryinfowindow"
+                            v-on:openedittakinginfowindow="openedittakinginfowindow"></newoutstoragetransport>
+    <newoutstorageeditdeliveryinfo ref="newoutstorageeditdeliveryinfo"
+                                   :dialogdeliveryinfovisible="dialogdeliveryinfovisible"
+                                   v-on:closeeditdeliveryinfowindow="closeeditdeliveryinfowindow"
+                                   v-on:getdelivertargetoptions="getdelivertargetoptions"></newoutstorageeditdeliveryinfo>
+    <newoutstorageedittakinginfo ref="newoutstorageedittakinginfo"
+                                 :dialogtakinginfovisible="dialogtakinginfovisible"
+                                 v-on:closeedittakinginfowindow="closeedittakinginfowindow"
+                                 v-on:gettakinginfooptions="gettakinginfooptions"></newoutstorageedittakinginfo>
+
+    <div class="btn_bottom mt80 mb100">
+        <button class="ml14 btn2 " v-on:click="submitReal()">提交</button>
+    </div>
+
+    <el-dialog title="" class="dialog_success" :lock-scroll="false" width="520px" :before-close="btn_back" :visible.sync="dialogSuccessVisible" :close-on-click-modal="false">
+        <div class="content" style="text-align: center">
+            <p class="title">订单提交成功</p>
+            <p class="mt30">订单编号：<span class="txt_blue">{{newOrderID}}</span></p>
+        </div>
+        <div class="el-dialog__footer pb30 mt30">
+            <button class="btn2" v-on:click="orderDetails">查看订单信息</button>
+            <button class="btn2 ml12" v-on:click="btn_back">返回</button>
+        </div>
+    </el-dialog>
+</div>
+
+<script src="~/Content/script/clipboard.min.js"></script>
+<script>
+    var newoutstorage = new Vue({
+        el: "#newoutstorage",
+        data: function () {
+            return {
+                dialogSuccessVisible: false, //新增订单成功弹窗显示标志
+                newOrderID: '', //新增成功后赋值
+
+                dialogstockimportvisible: false, //库存导入窗口显示标志
+                orderitemsfrommystorage: @Html.Raw(Json.Encode(Model.OrderItemsFromMyStorage)), //从我的库存转的订单项
+
+                dialogdeliveryinfovisible: false, //新增收货地址窗口显示标志
+                dialogtakinginfovisible: false, //新增提货人信息窗口显示标志
+            }
+        },
+        created: function () {
+
+        },
+        methods: {
+            //打开库存导入窗口
+            openstockimportwindow: function (addedInfos) {
+                this.dialogstockimportvisible = true;
+                this.$refs.newoutstoragestockimport.initPageParams(addedInfos);
+                this.$refs.newoutstoragestockimport.paging();
+            },
+            //关闭库存导入窗口
+            closestockimportwindow: function () {
+                this.dialogstockimportvisible = false;
+            },
+            //从库存添加型号
+            addorderitemsfromstock: function (chuanDiOrderItems) {
+                this.$refs.newoutstoragebaseinfo.addOrderItemsFromStock(chuanDiOrderItems);
+            },
+            //打开新增送货地址窗口
+            openeditdeliveryinfowindow: function () {
+                this.dialogdeliveryinfovisible = true;
+                this.$refs.newoutstorageeditdeliveryinfo.initParams();
+            },
+            //关闭新增送货地址窗口
+            closeeditdeliveryinfowindow: function () {
+                this.dialogdeliveryinfovisible = false;
+            },
+            //获取送货地址选项
+            getdelivertargetoptions: function () {
+                this.$refs.newoutstoragetransport.getDeliverTargetOptions();
+            },
+            //打开新增提货人信息窗口
+            openedittakinginfowindow: function () {
+                this.dialogtakinginfovisible = true;
+                this.$refs.newoutstorageedittakinginfo.initParams();
+            },
+            //关闭新增提货人信息窗口
+            closeedittakinginfowindow: function () {
+                this.dialogtakinginfovisible = false;
+            },
+            //获取提货人信息选项
+            gettakinginfooptions: function () {
+                this.$refs.newoutstoragetransport.getTakingInfoOptions();
+            },
+            //真正提交
+            submitReal: function () {
+                var that = this;
+                //校验基本信息
+                if (that.validBaseInfo() == false) {
+                    return;
+                }
+                //校验特殊要求
+                if (that.validSpecialRequire() == false) {
+                    return;
+                }
+                //校验货运信息
+                if (that.validTransport() == false) {
+                    return;
+                }
+
+                const loading = that.$loading({
+                    lock: false,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)'
+                });
+                axios({
+                    url: "/Order/NewOutStorageSubmit",
+                    method: "post",
+                    data: {
+                        OrderItems: that.$refs.newoutstoragebaseinfo.orderItems, //订单项
+                        SpecialRequireValues: that.$refs.newoutstoragespecialrequire.specialRequireValues, //特殊要求的值
+                        OtherRequire: that.$refs.newoutstoragespecialrequire.otherRequire, //其他要求的值
+                        FileInfoFaHuoDan: that.$refs.newoutstoragespecialrequire.fileInfoFaHuoDan, //发货单文件信息
+                        FileInfoKeHuBiaoQian: that.$refs.newoutstoragespecialrequire.fileInfoKeHuBiaoQian, //客户标签文件信息
+                        TransportModeInt: that.$refs.newoutstoragetransport.transportmode, //货运类型
+                        DeliverTargetValue: that.$refs.newoutstoragetransport.deliverTargetValue, //送货地址的值(快递)
+                        ExpressCompanyValue: that.$refs.newoutstoragetransport.expressCompanyValue, //快递公司的值
+                        ExpressMethodValue: that.$refs.newoutstoragetransport.expressMethodValue, //快递方式的值
+                        FreightPayValue: that.$refs.newoutstoragetransport.freightPayValue, //运费支付的值
+                        ThirdParty: that.$refs.newoutstoragetransport.thirdParty, //月结账号的值
+                        DeliverTargetValue2: that.$refs.newoutstoragetransport.deliverTargetValue2, //送货地址的值(送货上门)
+                        TakingDate: that.$refs.newoutstoragetransport.takingDate != undefined && that.$refs.newoutstoragetransport.takingDate != "" ?
+                            this.dateToString(that.$refs.newoutstoragetransport.takingDate) : "", //提货时间的值
+                        TakingID: that.$refs.newoutstoragetransport.takingID, //提货人信息的 ID
+                        TakingMan: that.$refs.newoutstoragetransport.takingMan, //提货人的值
+                        TakingTel: that.$refs.newoutstoragetransport.takingTel, //提货人电话的值
+                        ProofTypeValue: that.$refs.newoutstoragetransport.proofTypeValue, //证件类型的值
+                        ProofNumber: that.$refs.newoutstoragetransport.proofNumber, //证件号码的值
+                    },
+                }).then(function (response) {
+                    loading.close();
+                    if (response.data.type == "error") {
+                        that.onAlert(response.data.type, response.data.msg);
+                    } else {
+                        that.newOrderID = response.data.data;
+                        that.dialogSuccessVisible = true;
+                    }
+                }).catch(function (error) {
+                    that.onAlert("warning", error);
+                });
+            },
+            //检验是否为空, false - 为空, true - 不为空
+            validFieldEmpty: function (field, tip) {
+                if (field == null || field == "") {
+                    this.onAlert("error", tip);
+                    return false;
+                }
+                return true;
+            },
+            //检验是否超长, false - 超长, true - 不超长
+            validFieldLength: function (field, length, tip) {
+                if (field != null && field.length > length) {
+                    this.onAlert("error", tip);
+                    return false;
+                }
+                return true;
+            },
+            //校验基本信息
+            validBaseInfo: function () {
+                var that = this;
+                var theOrderItems = that.$refs.newoutstoragebaseinfo.orderItems;
+                if (theOrderItems.length == 0) {
+                    that.onAlert("error", "请添加产品信息");
+                    return false;
+                }
+                //if (theOrderItems.length > 100) {
+                //    that.onAlert("error", "产品明细不能超过100条");
+                //    return false;
+                //}
+
+                for (var i = 0; i < theOrderItems.length; i++) {
+                    //检查数字
+                    if (parseFloat(theOrderItems[i].PackageNumber) == 0) {
+                        that.onAlert("error", "第【" + (i + 1) + "】行产品明细的【数量】不能为0");
+                        return false;
+                    }
+                    if (theOrderItems[i].PackageNumber == "") {
+                        that.onAlert("error", "第【" + (i + 1) + "】行产品明细的【数量】不能为空");
+                        return false;
+                    }
+                    if (theOrderItems[i].PackageNumber > theOrderItems[i].StoragePackageNumber) {
+                        that.onAlert("error", "第【" + (i + 1) + "】行产品明细的【数量】不能大于库存数量【" + theOrderItems[i].StoragePackageNumber + "】");
+                        return false;
+                    }
+                }
+
+                return true;
+            },
+            //校验特殊要求
+            validSpecialRequire: function () {
+                var that = this;
+                //检查其他要求的值
+                var theOtherRequireChoose = that.$refs.newoutstoragespecialrequire.specialRequireValues.filter(function (item) {
+                    return item == 3;
+                });
+                if (theOtherRequireChoose != null && theOtherRequireChoose != undefined && theOtherRequireChoose.length > 0) {
+                    var otherRequire = that.$refs.newoutstoragespecialrequire.otherRequire;
+                    if (that.validFieldEmpty(otherRequire, "其他要求不能为空") == false) {
+                        return false;
+                    }
+                    if (this.validFieldLength(otherRequire, 100, "其他要求长度超过限制") == false) {
+                        return false;
+                    }
+                }
+
+                //检查发货单文件信息
+                var theFaHuoDanChoose = that.$refs.newoutstoragespecialrequire.specialRequireValues.filter(function (item) {
+                    return item == 1;
+                });
+                if (theFaHuoDanChoose != null && theFaHuoDanChoose != undefined && theFaHuoDanChoose.length > 0) {
+                    var fileInfoFaHuoDan = that.$refs.newoutstoragespecialrequire.fileInfoFaHuoDan; //发货单文件信息
+                    if (fileInfoFaHuoDan.IsUploaded == false) {
+                        that.onAlert("error", "请上传发货单格式文件");
+                        return false;
+                    }
+                }
+
+                //检查客户标签文件信息
+                var theKeHuBiaoQianChoose = that.$refs.newoutstoragespecialrequire.specialRequireValues.filter(function (item) {
+                    return item == 2;
+                });
+                if (theKeHuBiaoQianChoose != null && theKeHuBiaoQianChoose != undefined && theKeHuBiaoQianChoose.length > 0) {
+                    var fileInfoKeHuBiaoQian = that.$refs.newoutstoragespecialrequire.fileInfoKeHuBiaoQian; //客户标签文件信息
+                    if (fileInfoKeHuBiaoQian.IsUploaded == false) {
+                        that.onAlert("error", "请上传客户标签格式文件");
+                        return false;
+                    }
+                }
+
+                return true;
+            },
+            //校验货运信息
+            validTransport: function () {
+                var that = this;
+                var transportModeInt = that.$refs.newoutstoragetransport.transportmode;
+                if (transportModeInt == 2) {
+                    //快递
+                    var deliverTargetValue = that.$refs.newoutstoragetransport.deliverTargetValue; //送货地址的值(快递)
+                    var expressCompanyValue = that.$refs.newoutstoragetransport.expressCompanyValue; //快递公司的值
+                    var expressMethodValue = that.$refs.newoutstoragetransport.expressMethodValue; //快递方式的值
+                    var freightPayValue = that.$refs.newoutstoragetransport.freightPayValue; //运费支付的值
+                    var thirdParty = that.$refs.newoutstoragetransport.thirdParty; //月结账号的值
+
+                    if (that.validFieldEmpty(deliverTargetValue, "送货地址不能为空") == false) {
+                        return false;
+                    }
+                    if (that.validFieldEmpty(expressCompanyValue, "快递公司不能为空") == false) {
+                        return false;
+                    }
+                    if (that.validFieldEmpty(expressMethodValue, "快递方式不能为空") == false) {
+                        return false;
+                    }
+                    if (that.validFieldEmpty(freightPayValue, "运费支付不能为空") == false) {
+                        return false;
+                    }
+
+                    if (freightPayValue == 3) {
+                        //第三方月结
+                        if (that.validFieldEmpty(thirdParty, "月结账号不能为空") == false) {
+                            return false;
+                        }
+                        if (this.validFieldLength(thirdParty, 50, "月结账号长度超过限制") == false) {
+                            return false;
+                        }
+                    }
+                } else if (transportModeInt == 3) {
+                    //送货上门
+                    var deliverTargetValue2 = that.$refs.newoutstoragetransport.deliverTargetValue2; //送货地址的值(送货上门)
+                    if (that.validFieldEmpty(deliverTargetValue2, "送货地址不能为空") == false) {
+                        return false;
+                    }
+                } else if (transportModeInt == 1) {
+                    //自提
+                    var takingDate = that.$refs.newoutstoragetransport.takingDate != undefined && that.$refs.newoutstoragetransport.takingDate != "" ?
+                                        this.dateToString(that.$refs.newoutstoragetransport.takingDate) : ""; //提货时间的值
+                    var takingMan = that.$refs.newoutstoragetransport.takingMan; //提货人的值
+                    var takingTel = that.$refs.newoutstoragetransport.takingTel; //提货人电话的值
+                    var proofTypeValue = that.$refs.newoutstoragetransport.proofTypeValue; //证件类型的值
+                    var proofNumber = that.$refs.newoutstoragetransport.proofNumber; //证件号码的值
+
+                    //检查是否为空
+                    if (that.validFieldEmpty(takingDate, "提货时间不能为空") == false) {
+                        return false;
+                    }
+                    if (that.validFieldEmpty(takingMan, "提货人不能为空") == false) {
+                        return false;
+                    }
+                    if (that.validFieldEmpty(takingTel, "提货人电话不能为空") == false) {
+                        return false;
+                    }
+                    if (that.validFieldEmpty(proofTypeValue, "证件类型不能为空") == false) {
+                        return false;
+                    }
+                    //检查是否超长
+                    if (this.validFieldLength(takingMan, 100, "提货人长度超过限制") == false) {
+                        return false;
+                    }
+                    if (this.validFieldLength(takingTel, 50, "提货人电话长度超过限制") == false) {
+                        return false;
+                    }
+                    if (this.validFieldLength(proofNumber, 50, "证件号码长度超过限制") == false) {
+                        return false;
+                    }
+                }
+
+                return true;
+            },
+            //日期转字符串
+            dateToString: function (date) {
+                var year = date.getFullYear();
+                var month = (date.getMonth() + 1).toString();
+                var day = (date.getDate()).toString();
+                if (month.length == 1) {
+                    month = "0" + month;
+                }
+                if (day.length == 1) {
+                    day = "0" + day;
+                }
+                var dateTime = year + "-" + month + "-" + day;
+                return dateTime;
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                    offset: 100
+                });
+            },
+            //返回新增页面
+            btn_back: function () {
+                window.location.href = "/Order/NewOutStorage";
+            },
+            //跳转到订单详情页面
+            orderDetails: function() {
+                commonSkipUrl(this.newOrderID, '/Order/StorageDetailOut', '/Order/StorageList');
+            },
+        },
+    });
+</script>

@@ -1,0 +1,522 @@
+﻿<template id="newoutstoragetransport">
+    <div>
+        <el-form>
+            <div class="clearfix radio_wl mt20">
+                <span class="title fl w130 txt_wl"></span>
+                <div class="fl radio">
+                    <el-radio v-model="transportmode" v-for="item of transportModeOptions" :label=item.value>{{item.text}}</el-radio>
+                </div>
+            </div>
+            <!-- 快递 -->
+            <div v-if="transportmode == 2" class="mt20">
+                <el-form-item style="margin-top: 20px; margin-bottom: 0;" label="送货地址：" prop="deliverTargetValue">
+                    <el-select size="mini" v-model="deliverTargetValue" style="width: 200px; float: left;" filterable clearable placeholder="请选择">
+                        <el-option v-for="item in deliverTargetOptions"
+                                   :key="item.DeliverTargetID"
+                                   :label="item.DeliverTargetMan"
+                                   :value="item.DeliverTargetID">
+                            <span style="float: left; padding-right: 15px;">{{item.DeliverTargetMan}}</span>
+                            <span style="float: right; color: #8492a6; font-size: 10px;">{{item.DeliverTargetTitle}}</span>
+                        </el-option>
+                    </el-select>
+                    <div class="btn-tb-list clearfix" style="float: left; margin-left: 10px; margin-top: 5px;">
+                        <el-button class="fl" v-on:click="editDeliveryInfoShowWindow">新增送货地址</el-button>
+                    </div>
+                </el-form-item>
+                <div style="font-size: 14px; margin-left: 95px; margin-top: 5px;">
+                    <span>{{deliverTargetManShow}}</span>
+                    <span style="margin-left: 40px;">{{deliverTargetTelShow}}</span>
+                </div>
+                <div style="font-size: 14px; margin-left: 95px; margin-top: 5px;">{{deliverTargetAddressShow}}&nbsp;</div>
+                <div style="font-size: 14px; margin-left: 95px; margin-top: 5px;">{{deliverTargetTitleShow}}&nbsp;</div>
+
+                <el-form-item style="margin-top: 5px; margin-bottom: 0;" label="快递公司：" prop="expressCompanyValue">
+                    <el-select size="mini" v-model="expressCompanyValue" style="width: 200px;" filterable clearable placeholder="请选择">
+                        <el-option v-for="item in expressCompanyOptions"
+                                   :key="item.value"
+                                   :label="item.text"
+                                   :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item style="margin-top: 5px; margin-bottom: 0;" label="快递方式：" prop="expressMethodValue">
+                    <el-select size="mini" v-model="expressMethodValue" style="width: 200px;" filterable clearable placeholder="请选择">
+                        <el-option v-for="item in expressMethodOptions"
+                                   :key="item.value"
+                                   :label="item.text"
+                                   :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item style="margin-top: 5px; margin-bottom: 0;" label="运费支付：" prop="freightPayValue">
+                    <el-select size="mini" v-model="freightPayValue" style="width: 200px;" filterable clearable placeholder="请选择">
+                        <el-option v-for="item in freightPayOptions"
+                                   :key="item.value"
+                                   :label="item.text"
+                                   :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item v-if="freightPayValue == 3" label="月结账号：" prop="thirdParty"
+                              :rules="[{ required: false, message: '请输入月结账号', trigger: 'blur' },
+                                       { max:50, message: '月结账号长度超过限制', trigger: 'blur' }]">
+                    <el-input size="mini" placeholder="请输入月结账号" v-model="thirdParty" style="width: 200px;" auto-complete="off"></el-input>
+                </el-form-item>
+            </div>
+            <!-- 送货上门 -->
+            <div v-if="transportmode == 3" class="mt20">
+                <el-form-item style="margin-top: 20px; margin-bottom: 0;" label="送货地址：" prop="deliverTargetValue2">
+                    <el-select size="mini" v-model="deliverTargetValue2" style="width: 200px; float: left;" filterable clearable placeholder="请选择">
+                        <el-option v-for="item in deliverTargetOptions"
+                                   :key="item.DeliverTargetID"
+                                   :label="item.DeliverTargetMan"
+                                   :value="item.DeliverTargetID">
+                            <span style="float: left; padding-right: 15px;">{{item.DeliverTargetMan}}</span>
+                            <span style="float: right; color: #8492a6; font-size: 10px;">{{item.DeliverTargetTitle}}</span>
+                        </el-option>
+                    </el-select>
+                    <div class="btn-tb-list clearfix" style="float: left; margin-left: 10px; margin-top: 5px;">
+                        <el-button class="fl" v-on:click="editDeliveryInfoShowWindow">新增送货地址</el-button>
+                    </div>
+                </el-form-item>
+                <div style="font-size: 14px; margin-left: 95px; margin-top: 5px;">
+                    <span>{{deliverTargetManShow2}}</span>
+                    <span style="margin-left: 40px;">{{deliverTargetTelShow2}}</span>
+                </div>
+                <div style="font-size: 14px; margin-left: 95px; margin-top: 5px;">{{deliverTargetAddressShow2}}&nbsp;</div>
+                <div style="font-size: 14px; margin-left: 95px; margin-top: 5px;">{{deliverTargetTitleShow2}}&nbsp;</div>
+            </div>
+            <!-- 自提 -->
+            <div v-if="transportmode == 1" class="mt20">
+                <el-form-item label="提货时间：" prop="takingDate" style="margin-bottom: 5px;"
+                              :rules="[{ type: 'date', required: false, message: '请选择提货时间', trigger: 'change' }]">
+                    <el-date-picker type="date" size="mini" :picker-options="pickerOptions2" placeholder="提货时间" v-model="takingDate" style="width: 200px;"></el-date-picker>
+                </el-form-item>
+                <el-form-item label="提货人：" prop="takingMan" style="margin-bottom: 5px;"
+                              :rules="[{ required: false, message: '请输入提货人', trigger: 'blur' },
+                                       { max:50, message: '提货人长度超过限制', trigger: 'blur' }]">
+                    <!--<el-input size="mini" placeholder="请输入提货人" v-model="takingMan" style="float: left; width: 200px; margin-left: 14px;" auto-complete="off"></el-input>-->
+                    <el-select size="mini" v-model="takingID" style="width: 200px; float: left; margin-left: 14px;" filterable clearable placeholder="请选择">
+                        <el-option v-for="item in takingInfoOptions"
+                                   :key="item.TakingID"
+                                   :label="item.TakingMan"
+                                   :value="item.TakingID" style="height: 68px;">
+                            <div style="float: left; width: 30%;">
+                                <span style="float: left;">{{ item.TakingMan }}</span><br>
+                                <span style="float: left; color: #8492a6; font-size: 10px;">{{ item.ProofTypeDes }}</span>
+                            </div>
+                            <div style="float: left; width: 65%;">
+                                <span style="float: right; color: #8492a6; font-size: 10px;">{{ item.TakingTel }}</span><br>
+                                <span style="float: right; color: #8492a6; font-size: 10px;">{{ item.ProofNumber }}</span>
+                            </div>
+                            <div style="float: left; width: 5%;">
+                                <span class="delete-taking-btn" style="float: right; margin-top: -5px; margin-right: -12px;" v-on:click="showDeleteTakingInfoWindow(item)">x</span><br>
+                                <span style="float: right;"></span>
+                            </div>
+                        </el-option>
+                    </el-select>
+
+                    <div class="btn-tb-list clearfix" style="float: left; margin-left: 10px; margin-top: 5px;">
+                        <el-button class="fl" v-on:click="editTakingInfoShowWindow">新增提货人信息</el-button>
+                    </div>
+                </el-form-item>
+                <el-form-item label="电话：" prop="takingTel" style="margin-bottom: 5px;"
+                              :rules="[{ required: false, message: '请输入电话', trigger: 'blur' },
+                                       { max:50, message: '电话长度超过限制', trigger: 'blur' }]">
+                    <el-input size="mini" placeholder="" v-model="takingTel" style="width: 200px; margin-left: 28px;" auto-complete="off" :disabled="true"></el-input>
+                </el-form-item>
+                <el-form-item style="margin-top: 20px; margin-bottom: 0;" label="证件类型：" prop="proofTypeValue">
+                    <!--<el-select size="mini" v-model="proofTypeValue" style="width: 200px;" filterable clearable placeholder="请选择">
+                        <el-option v-for="item in proofTypeOptions"
+                                   :key="item.value"
+                                   :label="item.text"
+                                   :value="item.value">
+                        </el-option>
+                    </el-select>-->
+                    <el-input size="mini" placeholder="" v-model="proofTypeDes" style="width: 200px;" auto-complete="off" :disabled="true"></el-input>
+                </el-form-item>
+                <el-form-item label="证件号码：" prop="proofNumber" style="margin-bottom: 5px;"
+                              :rules="[{ required: false, message: '请输入证件号码', trigger: 'blur' },
+                                       { max:50, message: '证件号码长度超过限制', trigger: 'blur' }]">
+                    <el-input size="mini" placeholder="" v-model="proofNumber" style="width: 200px; margin-left: 10px;" auto-complete="off" :disabled="true"></el-input>
+                </el-form-item>
+            </div>
+        </el-form>
+        <el-dialog title="确认" :visible.sync="dialogDeletePakingVisible" width="20%">
+            <span>您确定删除该提货人信息吗？</span><br>
+            <span style="margin-top: 15px; margin-right: 10px;">提货人：{{preDeleteTakingMan}}</span><br>
+            <span style="margin-top: 10px; margin-right: 10px;">电话：{{preDeleteTakingTel}}</span><br>
+            <span style="margin-top: 10px; margin-right: 10px;">证件类型：{{preDeleteProofTypeDes}}</span><br>
+            <span style="margin-top: 10px; margin-right: 10px;">证件号码：{{preDeleteProofNumber}}</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button v-on:click="dialogDeletePakingVisible = false" class="btn1">取 消</el-button>
+                <el-button v-on:click="deletePakingConfirm()" class="btn2 ml12">确 定</el-button>
+            </span>
+        </el-dialog>
+    </div>
+</template>
+<script>
+    Vue.component(
+        'newoutstoragetransport',
+        {
+            template: "#newoutstoragetransport",
+            data: function () {
+                return {
+                    pickerOptions2: {
+                        disabledDate: function (time) {
+                            var today = new Date();
+                            today.setDate(today.getDate() - 1);
+                            return time < today;
+                        }
+                    }, //时间选择器
+                    transportmode: 2,
+                    transportModeOptions: [], //货运类型选项
+
+                    deliverTargetOptions: [], //送货地址选项
+
+                    deliverTargetValue: "", //送货地址的值(快递)
+                    deliverTargetManShow: "", //送货地址联系人显示(快递)
+                    deliverTargetTelShow: "", //送货地址电话显示(快递)
+                    deliverTargetAddressShow: "", //送货地址地址显示(快递)
+                    deliverTargetTitleShow: "", //送货地址单位显示(快递)
+
+                    deliverTargetValue2: "", //送货地址的值(送货上门)
+                    deliverTargetManShow2: "", //送货地址联系人显示(送货上门)
+                    deliverTargetTelShow2: "", //送货地址电话显示(送货上门)
+                    deliverTargetAddressShow2: "", //送货地址地址显示(送货上门)
+                    deliverTargetTitleShow2: "", //送货地址单位显示(送货上门)
+
+                    expressCompanyValue: "", //快递公司的值
+                    expressCompanyOptions: [], //快递公司选项
+
+                    expressMethodValue: "", //快递方式的值
+                    expressMethodOptions: [], //快递方式选项
+                    expressMethodOptionsAll: [], //所有的快递方式选项
+
+                    freightPayValue: "", //运费支付的值
+                    freightPayOptions: [], //运费支付选项
+
+                    thirdParty: "", //月结账号的值
+
+                    takingDate: "", //提货时间的值
+                    takingMan: "", //提货人的值
+                    takingTel: "", //提货人电话的值
+
+                    proofTypeValue: "", //证件类型的值
+                    proofTypeOptions: [], //证件类型选项
+
+                    proofNumber: "", //证件号码的值
+
+                    takingInfoOptions: [], //提货人信息选项
+                    takingID: '', //提货人信息的ID
+                    proofTypeDes: '', //用于显示证件类型的名称
+
+                    dialogDeletePakingVisible: false, //删除提货人信息窗口显示控制变量
+
+                    preDeleteTakingID: '', //要删除的 TakingID
+                    preDeleteTakingMan: '', //要删除的 TakingMan
+                    preDeleteTakingTel: '', //要删除的 TakingTel
+                    preDeleteProofTypeDes: '', //要删除的 ProofTypeDes
+                    preDeleteProofNumber: '', //要删除的 ProofNumber
+                }
+            },
+            watch: {
+                deliverTargetValue: function (newVal, oldVal) {
+                    this.deliverTargetManShow = "";
+                    this.deliverTargetTelShow = "";
+                    this.deliverTargetAddressShow = "";
+                    this.deliverTargetTitleShow = "";
+                    var theDeliverTarget = this.deliverTargetOptions.filter(function (item) {
+                        return item.DeliverTargetID == newVal;
+                    });
+                    if (theDeliverTarget != null && theDeliverTarget != undefined && theDeliverTarget.length > 0) {
+                        this.deliverTargetManShow = "联系人：" + theDeliverTarget[0].DeliverTargetMan;
+                        this.deliverTargetTelShow = "电话：" + theDeliverTarget[0].DeliverTargetTel;
+                        this.deliverTargetAddressShow = "地址：" + theDeliverTarget[0].DeliverTargetAddress;
+                        this.deliverTargetTitleShow = "单位：" + theDeliverTarget[0].DeliverTargetTitle;
+                    }
+                },
+                deliverTargetValue2: function (newVal, oldVal) {
+                    this.deliverTargetManShow2 = "";
+                    this.deliverTargetTelShow2 = "";
+                    this.deliverTargetAddressShow2 = "";
+                    this.deliverTargetTitleShow2 = "";
+                    var theDeliverTarget = this.deliverTargetOptions.filter(function (item) {
+                        return item.DeliverTargetID == newVal;
+                    });
+                    if (theDeliverTarget != null && theDeliverTarget != undefined && theDeliverTarget.length > 0) {
+                        this.deliverTargetManShow2 = "联系人：" + theDeliverTarget[0].DeliverTargetMan;
+                        this.deliverTargetTelShow2 = "电话：" + theDeliverTarget[0].DeliverTargetTel;
+                        this.deliverTargetAddressShow2 = "地址：" + theDeliverTarget[0].DeliverTargetAddress;
+                        this.deliverTargetTitleShow2 = "单位：" + theDeliverTarget[0].DeliverTargetTitle;
+                    }
+                },
+                expressCompanyValue: function (newVal, oldVal) {
+                    this.expressMethodOptions = [];
+                    var theExpress = this.expressMethodOptionsAll.filter(function (item) {
+                        return item.ExpressName == newVal;
+                    });
+
+                    if (theExpress != null && theExpress.length > 0) {
+                        this.expressMethodOptions = theExpress[0].Values;
+                    }
+                },
+                takingID: function (newVal, oldVal) {
+                    var theTakingInfo = this.takingInfoOptions.filter(function (item) {
+                        return item.TakingID == newVal;
+                    });
+
+                    if (theTakingInfo != null && theTakingInfo != undefined && theTakingInfo.length > 0) {
+                        this.takingMan = theTakingInfo[0].TakingMan;
+                        this.takingTel = theTakingInfo[0].TakingTel;
+                        this.proofTypeValue = theTakingInfo[0].ProofTypeValue;
+                        this.proofNumber = theTakingInfo[0].ProofNumber;
+                        this.proofTypeDes = theTakingInfo[0].ProofTypeDes;
+                    } else {
+                        this.takingMan = "";
+                        this.takingTel = "";
+                        this.proofTypeValue = "";
+                        this.proofNumber = "";
+                        this.proofTypeDes = "";
+                    }
+                },
+            },
+            methods: {
+                //新增送货地址显示窗口
+                editDeliveryInfoShowWindow: function () {
+                    this.$emit("openeditdeliveryinfowindow");
+                },
+                //获取送货地址选项函数
+                getDeliverTargetOptions: function () {
+                    var that = this;
+                    axios.get('/Miscellaneous/DeliverTargets', { params: {} })
+                        .then(function (res) {
+                            if (res.data.success == 200) {
+                                that.deliverTargetOptions = res.data.result;
+                            }
+                        })
+                        .catch(function (err) {
+                            console.log(err);
+                        });
+                },
+                //新增提货人信息显示窗口
+                editTakingInfoShowWindow: function () {
+                    this.$emit("openedittakinginfowindow");
+                },
+                //获取提货人信息选项函数
+                getTakingInfoOptions: function () {
+                    var that = this;
+                    axios.get('/Miscellaneous/TakingInfos', { params: {} })
+                        .then(function (res) {
+                            if (res.data.success == 200) {
+                                that.takingInfoOptions = res.data.result;
+                            }
+                        })
+                        .catch(function (err) {
+                            console.log(err);
+                        });
+                },
+                //消息提示框
+                onAlert: function (type, message) {
+                    this.$message({
+                        message: message,
+                        type: type,
+                        offset: 100
+                    });
+                },
+                //删除提货人信息显示窗口
+                showDeleteTakingInfoWindow: function (item) {
+                    var preDeleteTakingInfo = this.takingInfoOptions.filter(function (t) {
+                        return t.TakingID == item.TakingID;
+                    });
+
+                    this.preDeleteTakingID = preDeleteTakingInfo[0].TakingID;
+                    this.preDeleteTakingMan = preDeleteTakingInfo[0].TakingMan;
+                    this.preDeleteTakingTel = preDeleteTakingInfo[0].TakingTel;
+                    this.preDeleteProofTypeDes = preDeleteTakingInfo[0].ProofTypeDes;
+                    this.preDeleteProofNumber = preDeleteTakingInfo[0].ProofNumber;
+
+                    this.dialogDeletePakingVisible = true;
+                },
+                //删除提货人信息确认
+                deletePakingConfirm: function () {
+                    var that = this;
+                    axios({
+                        url: "/Order/DeleteTakingInfo",
+                        method: "post",
+                        data: {
+                            PickingID: that.preDeleteTakingID,
+                        },
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                        },
+                        transformRequest: [
+                            function (data) {
+                                var ret = '';
+                                for (var it in data) {
+                                    ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&';
+                                }
+                                return ret;
+                            }
+                        ]
+                    }).then(function (response) {
+                        if (response.data.type == "success") {
+                            that.onAlert("success", "删除成功");
+                            that.dialogDeletePakingVisible = false;
+
+                            if (that.takingID == that.preDeleteTakingID) {
+                                that.takingID = "";
+                                that.takingMan = "";
+                                that.takingTel = "";
+                                that.proofTypeValue = "";
+                                that.proofNumber = "";
+                                that.proofTypeDes = "";
+                            }
+
+                            that.preDeleteTakingID = "";
+                            that.preDeleteTakingMan = "";
+                            that.preDeleteTakingTel = "";
+                            that.preDeleteProofTypeDes = "";
+                            that.preDeleteProofNumber = "";
+
+                            that.getTakingInfoOptions();
+
+                        } else {
+                            that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                        }
+                    }).catch(function (error) {
+                        that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                    });
+                }
+            },
+            mounted: function () {
+
+            },
+            created: function () {
+                //获取货运类型选项
+                var that = this;
+                axios.get('/Miscellaneous/TransportModes', { params: {} })
+                    .then(function (res) {
+                        if (res.data.success == 200) {
+                            that.transportModeOptions = res.data.result;
+                        }
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    });
+                //获取送货地址选项
+                that.getDeliverTargetOptions();
+                //获取快递公司选项
+                axios.get('/Miscellaneous/ExpressCompanies', { params: {} })
+                    .then(function (res) {
+                        if (res.data.success == 200) {
+                            that.expressCompanyOptions = res.data.result;
+                        }
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    });
+                //获取快递方式选项
+                axios.get('/Miscellaneous/ExpressMethods', { params: {} })
+                    .then(function (res) {
+                        if (res.data.success == 200) {
+                            that.expressMethodOptionsAll = res.data.result;
+                        }
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    });
+                //获取运费支付选项
+                axios.get('/Miscellaneous/FreightPays', { params: {} })
+                    .then(function (res) {
+                        if (res.data.success == 200) {
+                            that.freightPayOptions = res.data.result;
+                        }
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    });
+                //获取证件类型选项
+                axios.get('/Miscellaneous/ProofTypes', { params: {} })
+                    .then(function (res) {
+                        if (res.data.success == 200) {
+                            that.proofTypeOptions = res.data.result;
+                        }
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    });
+                //获取提货人信息选项
+                that.getTakingInfoOptions();
+            },
+        });
+</script>
+<style>
+    label[for="deliverTargetValue"]::before {
+        content: '*';
+        color: #F56C6C;
+        margin-right: 4px;
+    }
+
+    label[for="expressCompanyValue"]::before {
+        content: '*';
+        color: #F56C6C;
+        margin-right: 4px;
+    }
+
+    label[for="expressMethodValue"]::before {
+        content: '*';
+        color: #F56C6C;
+        margin-right: 4px;
+    }
+
+    label[for="freightPayValue"]::before {
+        content: '*';
+        color: #F56C6C;
+        margin-right: 4px;
+    }
+
+    label[for="thirdParty"]::before {
+        content: '*';
+        color: #F56C6C;
+        margin-right: 4px;
+    }
+
+    label[for="deliverTargetValue2"]::before {
+        content: '*';
+        color: #F56C6C;
+        margin-right: 4px;
+    }
+
+    label[for="takingDate"]::before {
+        content: '*';
+        color: #F56C6C;
+        margin-right: 4px;
+    }
+
+    label[for="takingMan"]::before {
+        content: '*';
+        color: #F56C6C;
+        margin-right: 4px;
+    }
+
+    label[for="takingTel"]::before {
+        content: '*';
+        color: #F56C6C;
+        margin-right: 4px;
+    }
+
+    label[for="proofTypeValue"]::before {
+        content: '*';
+        color: #F56C6C;
+        margin-right: 4px;
+    }
+
+    .delete-taking-btn:hover {
+        color: #F56C6C;
+    }
+
+    .el-icon-date {
+        display: none;
+    }
+</style>

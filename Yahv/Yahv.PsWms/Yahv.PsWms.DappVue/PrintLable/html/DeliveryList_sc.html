@@ -1,0 +1,468 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>送货单打印</title>
+    <script type="text/javascript" src="/PrintLable/js/jquery-1.3.2.min.js"></script>
+    <script type="text/javascript" src="/PrintLable/js/vue.js"></script>
+    <script type="text/javascript" src="/PrintLable/js/vue-barcode.js"></script>
+    <script type="text/javascript" src="/PrintLable/js/moment.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body,
+        html {
+            background: #ffffff;
+            width: 100%;
+            height: 100%;
+            font-family: '微软雅黑' !important;
+        }
+
+        #app {
+            width: 210mm;
+            height: auto;
+            margin: 0 auto;
+        }
+
+        .product {
+            width: 210mm;
+            margin: 0 auto;
+        }
+
+        .fl {
+            float: left;
+        }
+
+        .fr {
+            float: right;
+        }
+
+        .clearfix {
+            zoom: 1;
+        }
+
+            .clearfix:after {
+                content: '.';
+                display: block;
+                height: 0;
+                clear: both;
+                visibility: hidden;
+            }
+
+        ul,
+        li {
+            list-style: none;
+        }
+
+        .product {
+            width: 210mm;
+            padding: 5mm;
+        }
+
+        table {
+            width: 100%;
+            margin-bottom: 10px;
+            page-break-inside: auto;
+        }
+
+        tr {
+            page-break-inside: avoid;
+            page-break-after: auto;
+        }
+
+        thead {
+            display: table-header-group;
+        }
+
+        tfoot {
+            display: table-footer-group;
+        }
+        /*tr th {
+            font-size: 14px;
+            height: 30px;
+        }
+
+        tr td {
+            padding: 2px 5px;
+            font-size: 12px;
+            text-align: left;
+            height: 30px;
+        }*/
+
+        tr th {
+            font-size: 14px;
+            height: 26px;
+        }
+
+        tr td {
+            padding: 2px 5px;
+            font-size: 12px;
+            text-align: left;
+            height: 24px;
+        }
+
+        tr th,
+        tr td {
+            border: 1px solid #000;
+        }
+        /*标题*/
+
+        .tl {
+            width: 100%;
+            height: 66px;
+            text-align: center;
+        }
+
+            .tl span {
+                font-size: 14px;
+                height: 46px;
+                line-height: 46px;
+            }
+
+            .tl .barcode {
+                height: 46px;
+                float: right;
+            }
+
+        .msg1 {
+            margin-bottom: 10px;
+        }
+
+            .msg1 > div {
+                float: left;
+                font-size: 12px;
+                margin-right: 20px;
+            }
+
+                .msg1 > div.fr {
+                    float: right;
+                    margin-right: 0;
+                }
+
+        table.table_data {
+            table-layout: fixed;
+        }
+
+            table.table_data tr td {
+                text-align: center;
+                word-wrap: break-word;
+                padding: 2px;
+            }
+        /*签字区域*/
+
+        .print-row {
+            float: right;
+            font-size: 14px;
+            line-height: 20px;
+            margin-top: 15px;
+            margin-right: 120px;
+            margin-bottom: 20px;
+        }
+
+        .mlr5 {
+            margin: 0 5px;
+        }
+
+        .OrderRequirements td {
+            text-align: center;
+        }
+    </style>
+    <script type="text/javascript">
+        Date.prototype.format = function (fmt) {
+            var o = {
+                "M+": this.getMonth() + 1, //月份
+                "d+": this.getDate(), //日
+                "h+": this.getHours(), //小时
+                "m+": this.getMinutes(), //分
+                "s+": this.getSeconds(), //秒
+                "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+                "S": this.getMilliseconds() //毫秒
+            };
+
+            if (/(y+)/.test(fmt)) {
+                fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+            }
+
+            for (var k in o) {
+                if (new RegExp("(" + k + ")").test(fmt)) {
+                    fmt = fmt.replace(
+                        RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+                }
+            }
+
+            return fmt;
+        }
+        var now = new Date();
+        var nowStr = now.format("yyyy-MM-dd hh:mm:ss");
+        var getDate = new Date().format("yyyy-MM-dd hh:mm:ss");
+    </script>
+</head>
+
+<body>
+    <div id="app">
+        <div class="product">
+            <div class="compute_content">
+                <div class="compute_content_1">
+                    <div class="tl clearfix">
+                        <span>送货单</span>
+                        <barcode v-bind:value="infodata.FormID" v-bind:options="barcode_option" tag="svg" class="barcode"></barcode>
+                    </div>
+                    <div class="msg1 clearfix">
+                        <div><span>订单编号：</span><span>{{infodata.FormID}}</span></div>
+                        <div v-if="waybillinfo.TransportModeDec!='自提'"><span v-if="infodata.Consignee.TakingTime!=null">送货日期：</span><span v-if="infodata.Consignee.TakingTime!=null">{{infodata.Consignee.TakingTime|showDate}}</span></div>
+                        <div v-else><span>提货日期：</span><span v-if="infodata.Consignee.TakingTime!=null">{{infodata.Consignee.TakingTime|showDate}}</span></div>
+                        <!--<div v-if="msg.warehouseID.indexOf('SZ')!=-1">运输批次号：{{msg.LotNumber}}</div>-->
+                    </div>
+                    <table border="1" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td>
+                                <div>
+                                    <div>收货人:</div>
+                                    <div>{{infodata.ClientName}}</div>
+                                </div>
+                            </td>
+                            <td v-if="waybillinfo.TransportModeDec!='自提'">
+                                <div>收货地址：</div>
+                                <div>{{infodata.Consignee.Address}}</div>
+                            </td>
+                            <td v-if="waybillinfo.TransportModeDec!='自提'">
+                                <div>联系人：<span>{{infodata.Consignee.Contact}}</span></div>
+                                <div>电话号码：<span>{{infodata.Consignee.Phone}}</span></div>
+                            </td>
+                        </tr>
+                        <tr v-if="waybillinfo.TransportModeDec=='送货上门'">
+                            <td colspan="3">
+                                <div>送货人：<span>{{infodata.Consignee.TakerName}}</span></div>
+                                <div>
+                                    电话：<span style="margin-right:30px;">{{infodata.Consignee.TakerPhone}}</span>车牌号：<span>{{infodata.Consignee.TakerLicense}}</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr v-if="waybillinfo.TransportModeDec=='快递'">
+                            <td colspan="3">
+                                <div>快递公司：<span>{{infodata.Consignee.Carrier}}</span></div>
+                                <div>
+                                    快递方式：<span style="margin-right:30px;">{{waybillinfo.ExpressTransportDec}}</span>付费方式：<span>{{waybillinfo.ExpressPayerDec}}</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr v-if="waybillinfo.TransportModeDec=='自提'">
+                            <td colspan="3">
+                                <div>提货人：<span>{{infodata.Consignee.TakerName}}</span></div>
+                                <div>
+                                    证件类型：<span style="margin-right:30px;">{{waybillinfo.IDTypeDec}}</span> 证件号码/内容：
+                                    <span style="margin-right:30px;">{{infodata.Consignee.TakerIDCode}}</span> 电话：
+                                    <span>{{infodata.Consignee.TakerPhone}}</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <table border="1" cellspacing="0" cellpadding="0" class="table_data">
+                    <colgroup>
+                        <col width="6%">
+                        <col width="20%">
+                        <col width="30%">
+                        <col width="30%">
+                        <col width="20%">
+                        <col width="20%">
+                        <col width="15%">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>库位</th>
+                            <th>型号</th>
+                            <th>品牌</th>
+                            <th>封装</th>
+                            <th>批次</th>
+                            <th>数量</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(item,index) in print_data.list" v-if="print_data.list.length>0">
+                            <td>{{index+1}}</td>
+                            <td>{{item.ShelveCode}}</td>
+                            <td>{{item.Partnumber}}</td>
+                            <td>{{item.Brand}}</td>
+                            <td>{{item.Package}}</td>
+                            <td>{{item.DateCode}}</td>
+                            <td>
+                                <span v-if="item.Mpq>1">
+                                    {{item.Mpq}}/{{item.PackageNumber}}件
+                                </span>
+                                <span v-else>{{item.Total}}</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!--<div class="OrderRequirements">
+                    <table border="1" cellspacing="0" cellpadding="0" v-if="OrderRequirements!=null">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>服务项目</th>
+                                <th>服务要求</th>
+                                <th>数量</th>
+                                <th>具体要求</th>
+                                <th>服务费</th>
+                                <th>文件</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(item,index) in OrderRequirements">
+                                <td>{{index+1}}</td>
+                                <td>{{item.TypeName}}</td>
+                                <td>{{item.Name}}</td>
+                                <td>{{item.Quantity}}</td>
+                                <td>{{item.Requirement}}</td>
+                                <td>{{item.TotalPrice}}</td>
+                                <td>
+                                    <span v-if="item.File!=null">{{item.File.CustomName}}</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p v-else style="text-align: center; margin-bottom: 10px;border: 1px solid #000000; line-height: 27px;">无特殊服务要求</p>
+                </div>-->
+                <div class="compute_content_2">
+                    <table border="1" cellspacing="0" cellpadding="0">
+                        <tbody>
+                            <tr>
+                                <td style="width: 120px">对本次服务评价：</td>
+                                <td>
+                                    <span>口</span>&nbsp;优秀&nbsp;&nbsp;&nbsp;
+                                    <span>口</span>&nbsp;一般&nbsp;&nbsp;&nbsp;
+                                    <span>口</span>&nbsp;差
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 120px">客户意见或建议：</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">本公司已如数收到上述货物和发票，无货物数量损失，无货物损坏。</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="clearfix">
+                        <div style="float: left;margin-top: 40px;font-size: 14px;">
+                            <span style="padding-right: 20px;">仓库签字：_____________</span>
+                            <span>司机签字：_____________</span>
+                        </div>
+                        <div class="print-row">
+                            <ul v-if="waybillinfo.TransportModeDec=='自提'">
+                                <li style="margin-bottom:10px;">提货人签字/签章:</li>
+                                <li>提货日期: _____年 ____月 ____ 日</li>
+                            </ul>
+                            <ul v-else>
+                                <li style="margin-bottom:10px;">收货人签字/签章:</li>
+                                <li>收货日期: _____年 ____月 ____ 日</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        //存储合并单元格的数组
+        function saveArr(data) {
+            var StockCode_arr = [0],
+//					BoxCode_arr = [0],
+                StockCode_first = data[0].ShelveCode
+            //					BoxCode_first = data[0].BoxCode;
+            for (var i = 1; i < data.length; i++) {
+                if (StockCode_first != data[i].ShelveCode) {
+                    StockCode_first = data[i].ShelveCode;
+                    StockCode_arr.push(i);
+                }
+                //					if(BoxCode_first != data[i].BoxCode) {
+                //						BoxCode_first = data[i].BoxCode;
+                //						BoxCode_arr.push(i);
+                //					}
+            }
+            return {
+                StockCode_arr: StockCode_arr
+                //					BoxCode_arr: BoxCode_arr
+            }
+        }
+    </script>
+    <script>
+        $(function () {
+            var obj = null,
+                listdata = null;
+            if (window['model']) {
+                obj = model.waybillinfo;
+                listdata = model.listdata;
+                //					warehouseID = model.warehouseID
+            } else {
+                listdata = null;
+                msg = null;
+            }
+
+            var Vue = window.Vue;
+            var VueBarcode = window.VueBarcode;
+            Vue.component('barcode', VueBarcode);
+
+            new Vue({
+                el: '#app',
+                data: {
+                    waybillinfo: obj,
+                    infodata: obj.Notice,
+                    barcode_option: {
+                        displayValue: true, //是否默认显示条形码数据
+                        //textPosition  :'top', //条形码数据显示的位置
+                        background: "#fff", //条形码背景颜色
+                        valid: function (valid) { },
+                        width: "1.7px", //单个条形码的宽度
+                        height: "40px",
+                        fontSize: "16px", //字体大小
+                        fontFamily: "微软雅黑",
+                        format: "CODE128", //选择要使用的条形码类型
+                        margin: 2
+                    },
+                    print_data: { //保存打印数据
+                        BoxCode_arr: [],
+                        StockCode_arr: [],
+                        list: []
+                    },
+                    OrderRequirements: []
+                },
+                created() {
+                    this.print_data.list = listdata;
+                    if (listdata[0].ShelveCode) {
+                        var result = saveArr(this.print_data.list);
+                        this.print_data.StockCode_arr = result.StockCode_arr;
+                    }
+                },
+                mounted() { },
+                filters: {
+                    showDate: function (val) {
+                        return moment(val).format('YYYY-MM-DD');
+                    },
+                    showboxcode: function (val) {
+                        if (val != "" && val != null) {
+                            if (val.indexOf("]") == -1) {
+                                return val
+                            } else {
+                                if (val || "") {
+                                    var b = val.split("]")[1];
+                                    return b;
+                                }
+                            }
+                        }
+                    }
+                },
+            });
+        })
+    </script>
+</body>
+
+</html>

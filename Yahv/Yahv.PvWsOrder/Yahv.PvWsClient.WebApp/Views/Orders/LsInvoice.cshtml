@@ -1,0 +1,90 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_LayoutOrder.cshtml";
+    ViewBag.navid = "MyLeaseList";
+}
+
+<div id="invoice" class="backshow">
+    <div class="breaklist">
+        <span class="fl first_title">发票详情</span>
+        <span class="fl second_title" v-on:click="history.back(-1)">返回</span>
+    </div>
+    <div class="content">
+        @*产品明细*@
+        <div>
+            <table border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <th class="first_th" colspan="2">订单号：{{form.OrderID}}<a v-if="form.FileUrl!=''" target="_blank" class="down_file ml20" :href="form.FileUrl">下载</a></th>
+                </tr>
+                <tr>
+                    <td style="width:150px;">开票类型</td>
+                    <td>{{form.Type}}</td>
+                </tr>
+                <tr>
+                    <td>名称</td>
+                    <td>{{form.CompanyName}}</td>
+                </tr>
+                <tr>
+                    <td>纳税人识别号</td>
+                    <td>{{form.TaxperNumber}}</td>
+                </tr>
+                <tr>
+                    <td>地址、电话</td>
+                    <td>{{form.RegAddress}}&nbsp;、&nbsp;{{form.CompanyTel}}</td>
+                </tr>
+                <tr>
+                    <td>开户行及账号</td>
+                    <td>{{form.Bank}}&nbsp;、&nbsp;{{form.Account}}</td>
+                </tr>
+                <tr>
+                    <td>收件人姓名</td>
+                    <td>{{form.Name}}</td>
+                </tr>
+                <tr>
+                    <td>电话</td>
+                    <td>{{form.Mobile}}</td>
+                </tr>
+                <tr>
+                    <td>收件地址</td>
+                    <td>{{form.Address}}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="mail_detail mt30">
+                <table border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <th class="first_th" colspan="2">发票邮寄信息</th>
+                    </tr>
+                    <tr>
+                        <td style="width:150px;">快递公司</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>运单号</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>寄出日期</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>发票号码</td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+    </div>
+</div>
+<script>
+    var invoice = new Vue({
+        el: "#invoice",
+        data: function () {
+            return {
+                form: @Html.Raw(Json.Encode(Model)),
+            }
+        },
+        methods: {
+        }
+    });
+</script>
+

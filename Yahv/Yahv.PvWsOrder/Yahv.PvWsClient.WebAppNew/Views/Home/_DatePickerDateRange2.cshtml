@@ -1,0 +1,263 @@
+﻿<template id="datePicker_dateRange">
+    <div class="order-date">
+        <el-input v-model="timeResultShow" :readonly="true" size="mini" :style="{'width': width,}" v-on:click.native="inputClicked" placeholder="请选择"></el-input>
+        <div class="date-panel" :style="{ 'width': width, }" v-show="panelShow" ref="datePanel">
+            <ul>
+                <li v-on:click="orderDateSimpleBtnClicked('全部')">
+                    <el-button class="unselected" type="text" btn-type="全部">全部</el-button>
+                </li>
+                <li v-on:click="orderDateSimpleBtnClicked('今天')">
+                    <el-button class="unselected" type="text" btn-type="今天">今天</el-button>
+                </li>
+                <li v-on:click="orderDateSimpleBtnClicked('昨天')">
+                    <el-button class="unselected" type="text" btn-type="昨天">昨天</el-button>
+                </li>
+                <li v-on:click="orderDateSimpleBtnClicked('7天')">
+                    <el-button class="unselected" type="text" btn-type="7天">7天</el-button>
+                </li>
+                <li v-on:click="orderDateSimpleBtnClicked('30天')">
+                    <el-button class="unselected" type="text" btn-type="30天">30天</el-button>
+                </li>
+            </ul>
+            <div class="el-divider el-divider--horizontal" :style="{'width': 'calc(' + width + ' - 30px)',}"></div>
+            <div class="custom-container">
+                <el-button class="not-use" type="text">自定义</el-button>
+            </div>
+            <div class="custom-container date-picker-container">
+                <div class="fl date-before-text">从</div>
+                <el-date-picker v-model="value1" type="date" placeholder="" :editable="false" size="small"
+                                :append-to-body="false"
+                                popper-class="tab04f1-date-picker"
+                                :style="{'width': 'calc(' + width + ' - 60px)', marginLeft: '12px', }"></el-date-picker>
+            </div>
+            <div class="custom-container date-picker-container">
+                <div class="fl date-before-text">至</div>
+                <el-date-picker v-model="value2" type="date" placeholder="" :editable="false" size="small"
+                                :append-to-body="false"
+                                popper-class="tab04f1-date-picker"
+                                :style="{'width': 'calc(' + width + ' - 60px)', marginLeft: '12px', }"></el-date-picker>
+            </div>
+        </div>
+    </div>
+</template>
+<style>
+    .order-date .el-button {
+        margin: 6px 4px 0 4px;
+        padding: 0;
+        background-color: transparent !important;
+        border-color: transparent !important;
+        color: #606266 !important;
+    }
+
+        .order-date .el-button.unselected,
+        .order-date .el-button.unselected:focus,
+        .order-date .el-button.unselected:hover {
+            color: #c0c4cc;
+        }
+
+        .order-date .el-button.not-use {
+            cursor: default;
+        }
+
+    .custom-container {
+        padding-left: 10px;
+    }
+
+    .order-date {
+        position: relative;
+    }
+
+        .order-date .el-input__inner {
+            cursor: pointer;
+        }
+
+        .order-date .el-divider {
+            margin: 3px 15px;
+        }
+
+    .date-panel {
+        position: absolute;
+        padding: 6px 0 10px 0;
+        margin: 0;
+        z-index: 2001;
+        border: 1px solid #E4E7ED;
+        border-radius: 4px;
+        background-color: #FFF;
+        box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        margin: 12px 0 5px 0;
+    }
+
+        .date-panel ul, ol, li {
+            list-style: none;
+        }
+
+        .date-panel li {
+            padding: 0 10px;
+            height: 28px;
+        }
+
+            .date-panel li:hover {
+                background-color: #F5F7FA;
+                cursor: pointer;
+            }
+
+    .date-before-text {
+        margin-top: 6px;
+        margin-left: 6px;
+    }
+
+    .date-picker-container {
+        margin-top: 8px;
+    }
+
+        .date-picker-container .el-input__prefix {
+            display: none;
+        }
+
+        .date-picker-container .el-input__inner {
+            padding-left: 15px;
+        }
+
+        .date-picker-container .el-date-editor {
+            position: relative;
+        }
+
+        .date-picker-container .tab04f1-date-picker {
+            position: absolute !important;
+            left: 155px !important;
+            top: -13px !important;
+        }
+
+            .date-picker-container .tab04f1-date-picker div.popper__arrow {
+                display: none;
+            }
+</style>
+<script>
+    Vue.component(
+        'date-picker-daterange',
+        {
+            template: "#datePicker_dateRange",
+            props: {
+                width: {
+                    type: String,
+                    default: '180px',
+                    required: false,
+                },
+            },
+            data() {
+                return {
+                    dataValue: "",
+                    value1: null,
+                    value2: null,
+                    timeResultShow: "", // 显示在 intput 中的文字
+                    panelShow: false, // 控制 panel 是否显示
+                    inputClickedFlag: false, // 点击 inut 的标志
+                }
+            },
+            watch: {
+                value1() {
+                    this.singleValueChanged();
+                },
+                value2() {
+                    this.singleValueChanged();
+                },
+            },
+            methods: {
+                // 获取 dataValue, 就是该项目中大多数 el-date-picker(daterange) 的绑定值
+                getDataValue() {
+                    return this.dataValue;
+                },
+                // 点击input
+                inputClicked() {
+                    this.inputClickedFlag = true;
+                    this.panelShow = !this.panelShow;
+                },
+                // 下单日期简化按钮点击
+                orderDateSimpleBtnClicked(type) {
+                    switch (type) {
+                        case '全部':
+                            this.dataValue = "";
+                            break;
+                        case '今天':
+                            this.dataValue = [new Date(), new Date()];
+                            break;
+                        case '昨天':
+                            var yesterdayDateStamp = new Date().setDate((new Date().getDate() - 1));
+                            this.dataValue = [new Date(yesterdayDateStamp), new Date(yesterdayDateStamp)];
+                            break;
+                        case '7天':
+                            var sevenDayAgoDateStamp = new Date().setDate((new Date().getDate() - 6));  // 包含今天就减6
+                            this.dataValue = [new Date(sevenDayAgoDateStamp), new Date()];
+                            break;
+                        case '30天':
+                            var thirtyDayAgoDateStamp = new Date().setDate((new Date().getDate() - 29));  // 包含今天就减29
+                            this.dataValue = [new Date(thirtyDayAgoDateStamp), new Date()];
+                            break;
+                        default:
+                            break;
+                    }
+
+                    this.timeResultShow = type;
+                    this.panelShow = false;
+                },
+                // 两个日期，一个变化都要做的动作。更新 dataValue
+                singleValueChanged() {
+                    this.dataValue = [this.value1, this.value2 == null ? new Date("2299-01-01") : this.value2];
+                    console.log(this.dataValue);
+
+                    var inputShow = "";
+                    var value1DateString = this.value1 == null ? null : this.getDateString(this.value1);
+                    var value2DateString = this.value2 == null ? null : this.getDateString(this.value2);
+
+                    if (value1DateString == null && value2DateString == null) {
+                        inputShow = "全部";
+                    } else if (value1DateString != null && value2DateString == null) {
+                        inputShow = value1DateString + "至今";
+                    } else if (value1DateString == null && value2DateString != null) {
+                        inputShow = value2DateString + "之前";
+                    } else if (value1DateString != null && value2DateString != null) {
+                        inputShow = value1DateString + "至" + value2DateString;
+                    }
+
+                    this.timeResultShow = inputShow;
+                },
+                // 获取日期字符串yyyy-MM-dd格式
+                getDateString(date) {
+                    var nowMonth = date.getMonth() + 1;
+                    var strDate = date.getDate();
+                    var seperator = "-";
+                    if (nowMonth >= 1 && nowMonth <= 9) {
+                        nowMonth = "0" + nowMonth;
+                    }
+                    if (strDate >= 0 && strDate <= 9) {
+                        strDate = "0" + strDate;
+                    }
+                    return date.getFullYear() + seperator + nowMonth + seperator + strDate;
+                },
+            },
+            mounted() {
+                window.addEventListener("click", (e) => {
+                    const datePanel = this.$refs.datePanel;
+                    //const dateInput = this.$refs.dateInput;
+                    //if (dateInput.contains(e.target)) {
+                    //    return;
+                    //}
+
+                    if (this.inputClickedFlag == false) {
+                        if (!datePanel.contains(e.target)) {
+                            this.panelShow = false;
+                        }
+                    }
+
+                    this.inputClickedFlag = false;
+                });
+
+                var that = this;
+                $("div.el-select").click(function () {
+                    that.panelShow = false;
+                });
+            },
+        });
+</script>

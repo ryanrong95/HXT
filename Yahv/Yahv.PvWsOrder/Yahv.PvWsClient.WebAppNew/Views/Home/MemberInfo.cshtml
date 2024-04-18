@@ -1,0 +1,493 @@
+﻿@model Yahv.PvWsClient.WebAppNew.Models.BasicInfoViewModel
+@{
+    ViewBag.title = "会员信息";
+}
+<style>
+    .el-form-item__content {
+        width:230px;
+    }
+</style>
+<div id="memberInfo" v-cloak class="tab_content">
+    <el-form :model="formData" :rules="rules" ref="formData" status-icon label-width="140px" class="elform_padding">
+        <div class="info_item_wrap">
+            <span class="icon_img">1</span>
+            <span class="title">基础信息</span>
+        </div>
+        <el-form-item class="mt20" label="公司名称:" prop="CompanyName">
+            <el-row style="width: 270px;">
+                <el-col :span="16">
+                    <el-input size="mini" placeholder="请输入公司名称" v-model="formData.CompanyName" :readonly="companyEdit" style="width: 200px;" auto-complete="off"></el-input>
+                </el-col>
+                <el-col :span="8">
+                    <a class="link" v-on:click="showSearchCompanyDialog" style="margin-left: 30px;">查询</a>
+                </el-col>
+            </el-row>
+        </el-form-item>
+        <el-form-item label="海关编码:" prop="CustomsCode" :rules="[{ required: false, message: '请输入海关编码', trigger: 'blur' },{max:50, message: '海关编码长度超过限制', trigger: 'blur' }]">
+            <el-input size="mini" placeholder="请输入海关编码" v-model="formData.CustomsCode" style="width: 200px;" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="统一社会信用代码:" prop="Uscc" :rules="[{ required: true, message: '请输入统一社会信用代码', trigger: 'blur' },{max:50, message: '统一社会信用代码长度超过限制', trigger: 'blur' }]">
+            <el-input size="mini" placeholder="请输入统一社会信用代码" v-model="formData.Uscc" style="width: 200px;" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="公司法人:" prop="Corporation" :rules="[{ required: true, message: '请输入公司法人', trigger: 'blur' },{max:50, message: '公司法人长度超过限制', trigger: 'blur' }]">
+            <el-input size="mini" placeholder="请输入公司法人" v-model="formData.Corporation" style="width: 200px;" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="注册地址:" prop="RegAddress" :rules="[{ required: true, message: '请输入注册地址', trigger: 'blur' },{max:50, message: '注册地址长度超过限制', trigger: 'blur' }]">
+            <el-input size="mini" placeholder="请输入注册地址" v-model="formData.RegAddress" type="textarea" style="width: 300px;" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="固定电话:" prop="Tel" :rules="[{ required: true, message: '请输入固定电话', trigger: 'blur' },{max:50, message: '固定电话长度超过限制', trigger: 'blur' }]">
+            <el-input size="mini" placeholder="请输入固定电话" v-model="formData.Tel" style="width: 200px;" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="电子邮件:" prop="Email">
+            <el-input size="mini" placeholder="请输入电子邮件" v-model="formData.Email" style="width: 200px;" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="营业执照:" prop="BLFile.fullURL" :rules="[{ required: true, message: '请上传营业执照', trigger: 'blur' }]">
+            <div class=" upload_wrap mt6">
+                <el-upload :http-request="((item)=>{httpRequestFiles(item,'BLFile')})"
+                           action="/Files/UploadPickUpFile"
+                           :show-file-list="false"
+                           accept="image/jpg, image/bmp, image/jpeg, image/gif, image/png, application/pdf">
+                    <el-button size="small" class="btn_upload " type="primary">+添加文件</el-button>
+                    <span class="txt_grey ml8">仅限图片或PDF文件，且文件不超过3M</span>
+                </el-upload>
+                <ul class="file_item_ul mt10" v-if="formData.BLFile.fullURL!=null&&formData.BLFile.fullURL!=''">
+                    <li class="clearfix">
+                        <span class="icon1"></span>
+                        <a class="file_name ml6" :href="formData.BLFile.fullURL" target="_blank">{{formData.BLFile.name}}</a>
+                        <span class="icon2 fr" v-on:click="del_file()"></span>
+                    </li>
+                </ul>
+            </div>
+        </el-form-item>
+        <div class="info_item_wrap mt20">
+            <span class="icon_img">2</span>
+            <span class="title">发票信息</span>
+            <a class="link ml40" v-on:click="formData.IsEditInvoice=true" v-if="!formData.IsEditInvoice">修改</a>
+        </div>
+        <div v-if="formData.IsEditInvoice" class="mt20">
+            <el-form-item label="发票名称：" prop="Invoice.CompanyName">
+                <el-input v-model="formData.Invoice.CompanyName" size="mini" placeholder="请输入发票名称" readonly="true" style="width: 200px;" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="纳税人识别号：" prop="Invoice.TaxperNumber" :rules="[{required: false, message: '请输入纳税人识别号', trigger: 'blur'},{max:50, message: '纳税人识别号长度超过限制', trigger: 'blur' }]">
+                <el-input v-model="formData.Invoice.TaxperNumber" size="mini" placeholder="请输入纳税人识别号" readonly="true" style="width: 200px;" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="发票类型：" prop="Invoice.Type" :rules="[{required: true, message: '请选择发票类型', trigger: 'change'}]">
+                <el-select v-model="formData.Invoice.Type" size="mini" clearable placeholder="请选择" style="width: 200px;">
+                    <el-option v-for="item in InvoiceTypeOptions" :label="item.text" :value="item.value">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="开户行：" prop="Invoice.Bank" :rules="[{required: true, message: '请输入开户行', trigger: 'blur'},{max:150, message: '开户行长度超过限制', trigger: 'blur' }]">
+                <el-input v-model="formData.Invoice.Bank" size="mini" placeholder="请输入开户行" style="width: 200px;" auto-complete="off"></el-input>
+            </el-form-item>
+
+            <el-form-item label="账号：" prop="Invoice.Account" :rules="[{required: true, message: '请输入账号', trigger: 'blur'},{max:150, message: '账号长度超过限制', trigger: 'blur' }]">
+                <el-input v-model="formData.Invoice.Account" size="mini" placeholder="请输入账号" auto-complete="off" style="width: 200px;"></el-input>
+            </el-form-item>
+
+            <el-form-item label="地址：" prop="Invoice.BankAddress" :rules="[{required: true, message: '请输入地址', trigger: 'blur'},{max:200, message: '地址长度超过限制', trigger: 'blur' }]">
+                <el-input v-model="formData.Invoice.BankAddress" size="mini" placeholder="请输入地址" readonly="true" style="width: 200px;" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="发票交付方式：" prop="Invoice.DeliveryType" :rules="[{required: true, message: '请选择发票交付方式', trigger: 'change'}]">
+                <el-select v-model="formData.Invoice.DeliveryType" size="mini" clearable placeholder="请选择" style="width: 200px;">
+                    <el-option v-for="item in InvoiceDeliveryTypeOptions" :label="item.text" :value="item.value">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="收件人姓名：" prop="Invoice.Name" :rules="[{required: true, message: '请输入收件人名称', trigger: 'blur'},{max:150, message: '收件人名称长度超过限制', trigger: 'blur' }]">
+                <el-input v-model="formData.Invoice.Name" size="mini" placeholder="请输入收件人名称" style="width: 200px;" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="发票收件地址：" prop="Invoice.Address" :rules="[{required: true, message: '请输入详细地址', trigger: 'blur'},{max:200, message: '详细地址长度超过限制', trigger: 'blur' }]">
+                <el-input style="width: 300px;" size="mini" v-model="formData.Invoice.Address" type="textarea" placeholder="请输入详细的道路、楼宇、区号等名称"></el-input>
+            </el-form-item>
+            <el-form-item label="手机：" prop="Invoice.Mobile" :rules="[{required: false, message: '请输入手机', trigger: 'blur'},{max:50, message: '手机长度超过限制', trigger: 'blur' }]">
+                <el-input v-model="formData.Invoice.Mobile" size="mini" placeholder="请输入手机号码" style="width: 200px;" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="电话：" prop="Invoice.Tel" :rules="[{required: false, message: '请输入电话', trigger: 'blur'},{max:50, message: '电话长度超过限制', trigger: 'blur' }]">
+                <el-input v-model="formData.Invoice.Tel" size="mini" placeholder="请输入电话号码" style="width: 200px;" auto-complete="off"></el-input>
+            </el-form-item>
+
+            <el-form-item label="邮箱：" :rules="[{required: false, message: '请输入邮箱', trigger: 'blur'},{max:50, message: '邮箱长度超过限制', trigger: 'blur' }]">
+                <el-input v-model="formData.Invoice.Email" size="mini" placeholder="请输入邮箱" style="width: 200px;" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item class=" btn_bottom">
+                <el-button v-on:click="formData.IsEditInvoice=false" class="btn1 fl" size="mini">取消</el-button>
+            </el-form-item>
+        </div>
+        <div class="info_item_wrap mt20 mb20">
+            <span class="icon_img">3</span>
+            <span class="title">补充协议</span>
+            <a class="link ml40" v-if="!IsAgreement" v-on:click="IsAgreement=true">查看</a>
+            <a class="link ml40" v-else v-on:click="IsAgreement=false">隐藏</a>
+        </div>
+        <div v-if="IsAgreement">
+            <div class="content">
+                <div class="agree_item">
+                    <div class="aggree_name clearfix">
+                        <span class="line fl"></span><span class="ml14">报关类型：{{agreeData.InvoiceName}}</span>
+                    </div>
+                    <div class="divice"></div>
+                    <div class="agree_content clearfix">
+                        <div class="agree_content_left fl">
+                            <span class="xy_text">协议开始日期：{{agreeData.StartDate}}</span>
+                        </div>
+                        <div class="agree_content_right fl">
+                            <span class="xy_text">协议结束日期：{{agreeData.EndDate}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="agree_item">
+                    <div class="aggree_name clearfix">
+                        <span class="line fl"></span><span class="ml14">代理费</span>
+                    </div>
+                    <div class="divice"></div>
+                    <div class="agree_content clearfix">
+                        <div class="agree_content_left fl">
+                            <span class="xy_text">代理费率：{{agreeData.AgencyRate}}</span>
+                        </div>
+                        <div class="agree_content_right fl">
+                            <span class="xy_text">最低代理费（元）：{{agreeData.MinAgencyFee}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="agree_item">
+                    <div class="aggree_name clearfix">
+                        <span class="line fl"></span><span class="ml14">货款条款</span>
+                    </div>
+                    <div class="divice"></div>
+                    <div class="agree_content clearfix">
+                        <div class="agree_content_left fl">
+                            <span class="xy_text">换汇方式：{{agreeData.IsPrePayExchange}}</span>
+                            <span class="xy_text">结算方式：{{agreeData.GoodsPeriodType}}</span>
+                            <span v-if="agreeData.isGoodsAgreedPeriod" class="xy_text">约定期限(天)：{{agreeData.GoodsDaysLimit}}</span>
+                            <span v-if="agreeData.isGoodsMonthly" class="xy_text">结算日期(次月)：{{agreeData.GoodsMonthlyDay}}</span>
+                            <span class="xy_text">汇率类型：{{agreeData.GoodsExchangeRateType}}</span>
+                        </div>
+                        <div class="agree_content_right fl">
+                            <span v-if="!agreeData.isGoodsPrePaid" class="xy_text">垫款上限（元）：{{agreeData.GoodsUpperLimit}}</span>
+                            <span v-if="agreeData.isGoodsAgreed" class="xy_text">约定汇率：{{agreeData.GoodsExchangeRateValue}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="agree_item">
+                    <div class="aggree_name clearfix">
+                        <span class="line fl"></span><span class="ml14">税款条款</span>
+                    </div>
+                    <div class="divice"></div>
+                    <div class="agree_content clearfix">
+                        <div class="agree_content_left fl">
+                            <span class="xy_text">结算方式：{{agreeData.TaxPeriodType}}</span>
+                            <span v-if="agreeData.isTaxAgreedPeriod" class="xy_text">约定期限(天)：{{agreeData.TaxDaysLimit}}</span>
+                            <span v-if="agreeData.isTaxMonthly" class="xy_text">结算日期(次月)：{{agreeData.TaxMonthlyDay}}</span>
+                            <span class="xy_text">汇率类型：{{agreeData.TaxExchangeRateType}}</span>
+                        </div>
+                        <div class="agree_content_right fl">
+                            <span v-if="!agreeData.isTaxPrePaid" class="xy_text">垫款上限（元）：{{agreeData.TaxUpperLimit}}</span>
+                            <span v-if="agreeData.isTaxAgreed" class="xy_text">约定汇率：{{agreeData.TaxExchangeRateValue}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="agree_item">
+                    <div class="aggree_name clearfix">
+                        <span class="line fl"></span><span class="ml14">代理费条款</span>
+                    </div>
+                    <div class="divice"></div>
+                    <div class="agree_content clearfix">
+                        <div class="agree_content_left fl">
+                            <span class="xy_text">结算方式：{{agreeData.AgencyFeePeriodType}}</span>
+                            <span v-if="agreeData.isAgencyAgreedPeriod" class="xy_text">约定期限(天)：{{agreeData.AgencyDaysLimit}}</span>
+                            <span v-if="agreeData.isAgencyMonthly" class="xy_text">结算日期(次月)：{{agreeData.AgencyMonthlyDay}}</span>
+                            <span class="xy_text">汇率类型：{{agreeData.AgencyFeeExchangeRateType}}</span>
+                        </div>
+                        <div class="agree_content_right fl">
+                            <span v-if="!agreeData.isAgencyPrePaid" class="xy_text">垫款上限（元）：{{agreeData.AgencyFeeUpperLimit}}</span>
+                            <span v-if="agreeData.isAgencyAgreed" class="xy_text">约定汇率：{{agreeData.AgencyExchangeRateValue}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="agree_item">
+                    <div class="aggree_name clearfix">
+                        <span class="line fl"></span><span class="ml14">杂费条款</span>
+                    </div>
+                    <div class="divice"></div>
+                    <div class="agree_content clearfix">
+                        <div class="agree_content_left fl">
+                            <span class="xy_text">结算方式：{{agreeData.IncidentalPeriodType}}</span>
+                            <span v-if="agreeData.isIncidentalAgreedPeriod" class="xy_text">约定期限(天)：{{agreeData.IncidentalDaysLimit}}</span>
+                            <span v-if="agreeData.isIncidentalMonthly" class="xy_text">结算日期(次月)：{{agreeData.IncidentalMonthlyDay}}</span>
+                            <span class="xy_text">汇率类型：{{agreeData.IncidentalExchangeRateType}}</span>
+                        </div>
+                        <div class="agree_content_right fl">
+                            <span v-if="!agreeData.isIncidentalPrePaid" class="xy_text">垫款上限（元）：{{agreeData.IncidentalUpperLimit}}</span>
+                            <span v-if="agreeData.isIncidentalAgreed" class="xy_text">约定汇率：{{agreeData.IncidentalExchangeRateValue}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="agree_item">
+                    <div class="aggree_name clearfix">
+                        <span class="line fl"></span><span class="ml14">开票类型/税率</span>
+                    </div>
+                    <div class="divice"></div>
+                    <div class="agree_content clearfix">
+                        <div class="agree_content_left fl">
+                            <span class="xy_text">开票类型：{{agreeData.InvoiceType}}</span>
+                        </div>
+                        <div class="agree_content_right fl">
+                            <span class="xy_text">税率：{{agreeData.InvoiceRate}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <el-form-item class=" btn_bottom">
+            <el-button v-on:click="submit" class="btn2 fl" size="mini">提交</el-button>
+        </el-form-item>
+    </el-form>
+    <el-dialog title="" :lock-scroll="false" width="30%" :visible.sync="dialogCompanyVisible" :close-on-click-modal="false">
+        <company-name ref="company"></company-name>
+        <div slot="footer" class="dialog-footer">
+            <button v-on:click="dialogCompanyVisible = false" class="btn1">取 消</button>
+            <button v-on:click="onSubmit_Company" class="btn2 ml12">确 定</button>
+        </div>
+    </el-dialog>
+</div>
+@{Html.RenderAction("_PartialCompany", "Home");}
+<script>
+    var memberInfo = new Vue({
+        el: "#memberInfo",
+        data: function() {
+            var validateMail = function(rule, value, callback) {
+                if (value != '' && value != null) {
+                    if (!ValidMail(value)) {
+                        callback(new Error('请输入正确的邮箱地址'));
+                    }
+                }
+                callback();
+            };
+            var validateCompany = function(rule, value, callback) {
+                if (value.indexOf('reg-') == 0) {
+                    callback(new Error('公司名称不能以“reg-”开头'));
+                } else {
+                    $.ajax({
+                        url: "/Home/CheckCompanyName",
+                        data: {
+                            oldEntName: '@Model.Invoice.CompanyName',
+                            newEntName: value
+                        },
+                        type: 'post',
+                        dataType: 'json',
+                        async: false,
+                        success: function(data) {
+                            if (data.type == "error") {
+                                callback(new Error(data.msg));
+                            }
+                        }
+                    });
+                }
+                callback();
+            }
+            return {
+                formData: @Html.Raw(Json.Encode(Model)),
+                rules: {
+                    Email: [{ validator: validateMail, trigger: 'blur' }],
+                    CompanyName: [
+                        { required: true, message: '请输入公司名称', trigger: 'blur' },
+                        { max: 50, message: '公司名称长度超过限制', trigger: 'blur' },
+                        { validator: validateCompany, trigger: 'blur' }
+                    ]
+                },
+                companyEdit: '@(Model.Invoice.CompanyName.IndexOf("reg-"))' == '0' ? null : "readonly",
+                agreeData: @Html.Raw(Json.Encode(@ViewBag.Agreement)),
+                IsAgreement: false,
+                dialogCompanyVisible: false,
+            }
+        },
+        watch: {
+            'formData.CompanyName': function(val) {
+                this.formData.Invoice.CompanyName = val;
+            },
+            'formData.Uscc': function(val) {
+                this.formData.Invoice.TaxperNumber = val;
+            },
+            'formData.RegAddress': function(val) {
+                this.formData.Invoice.BankAddress = val;
+            }
+        },
+        computed: {
+            InvoiceDeliveryTypeOptions: function() {
+                return JSON.parse(this.formData.Invoice.InvoiceDeliveryTypeOptions);
+            },
+            InvoiceTypeOptions: function() {
+                return JSON.parse(this.formData.Invoice.InvoiceTypeOptions);
+            }
+        },
+        mounted: function() {
+            this.formData.CompanyName = this.formData.CompanyName.replace('reg-', '');
+            this.formData.Invoice.TaxperNumber = this.formData.Uscc;
+            this.formData.Invoice.BankAddress = this.formData.RegAddress;
+            this.onAlert("error", "请完善您的会员信息或与客服联系！");
+            this.showSearchCompanyDialog();
+        },
+        methods: {
+            showSearchCompanyDialog: function() {
+                var that = this;
+
+                that.dialogCompanyVisible = true;
+                setTimeout(function() {
+                        that.$refs.company.preInputKeyWord = that.formData.CompanyName;
+                    },
+                    0)
+            },
+            submit: function() {
+                var that = this;
+                that.$refs.formData.validate(function(valid) {
+                    if (valid) {
+                        const loading = that.$loading({
+                            lock: false,
+                            text: 'Loading',
+                            spinner: 'el-icon-loading',
+                            background: 'rgba(0, 0, 0, 0.7)'
+                        });
+                        axios({
+                            url: "/Home/MemberInfoSubmit",
+                            method: "post",
+                            data: {
+                                model: that.formData,
+                                oldEntName: "@Model.Invoice.CompanyName"
+                            }
+                        }).then(function(response) {
+                            loading.close();
+                            that.onAlert(response.data.type, response.data.msg);
+                            setTimeout(function() {
+                                window.location.reload();
+                            },1000);
+                        }).catch(function(error) {
+                            that.onAlert("warning", error);
+                        });
+                    } else {
+                        setTimeout(function() {
+                                var isError = document.getElementsByClassName("is-error");
+                                isError[0].querySelector('input').focus();
+                            },
+                            1);
+                        return false;
+                    }
+                });
+            },
+            del_file: function() {
+                this.formData.BLFile.fullURL = null;
+            },
+            //上传多文件
+            httpRequestFiles: function(options, column) {
+                var that = this;
+                UploadFile(options,
+                    '/Files/UploadOrderFile',
+                    function(res) {
+                        if (res.type) {
+                            var list = JSON.parse(res.file);
+                            that.formData[column] = list;
+                            that.$refs.formData.validateField('BLFile.fullURL');
+                        } else {
+                            that.onAlert("error", res.msg);
+                        }
+                    });
+            },
+            onSubmit_Company: function() {
+                var that = this;
+
+                var companyName = that.$refs.company.form1.CompanyName;
+                that.dialogCompanyVisible = false;
+                if(companyName == null || companyName == undefined) {
+                    that.formData.CompanyName = "";
+                    return;
+                }
+                companyName = companyName.trim();
+                if(companyName.length <= 0) {
+                    that.formData.CompanyName = "";
+                    return;
+                }
+
+                that.formData.CompanyName = companyName; //公司名称
+                that.formData.Invoice.CompanyName = companyName; //发票名称
+
+                axios({
+                    url: "/Home/GetEnterpriseByName",
+                    method: "post",
+                    data: { Keyword: companyName, },
+                }).then(function(response) {
+                    if (response.data.type == "success") {
+                        var companyRes = JSON.parse(response.data.data);
+                        
+                        if(companyRes.CustomsCode != null && companyRes.CustomsCode != undefined && companyRes.CustomsCode != "") {
+                            that.formData.CustomsCode = companyRes.CustomsCode; //海关编码
+                        }
+                        if(companyRes.Uscc != null && companyRes.Uscc != undefined && companyRes.Uscc != "") {
+                            that.formData.Uscc = companyRes.Uscc; //统一社会信用代码
+                        }
+                        if(companyRes.Corporation != null && companyRes.Corporation != undefined && companyRes.Corporation != "") {
+                            that.formData.Corporation = companyRes.Corporation; //公司法人
+                        }
+                        if(companyRes.RegAddress != null && companyRes.RegAddress != undefined && companyRes.RegAddress != "") {
+                            that.formData.RegAddress = companyRes.RegAddress; //注册地址
+                        }
+                        if(companyRes.Tel != null && companyRes.Tel != undefined && companyRes.Tel != "") {
+                            that.formData.Tel = companyRes.Tel; //固定电话
+                        }
+                        if(companyRes.Email != null && companyRes.Email != undefined && companyRes.Email != "") {
+                            that.formData.Email = companyRes.Email; //电子邮件
+                        }
+                        //营业执照
+                        
+                        if(companyRes.Invoice.CompanyName != null && companyRes.Invoice.CompanyName != undefined && companyRes.Invoice.CompanyName != "") {
+                            that.formData.Invoice.CompanyName = companyRes.Invoice.CompanyName; //发票名称
+                        }
+                        if(companyRes.Invoice.TaxperNumber != null && companyRes.Invoice.TaxperNumber != undefined && companyRes.Invoice.TaxperNumber != "") {
+                            that.formData.Invoice.TaxperNumber = companyRes.Invoice.TaxperNumber; //纳税人识别号
+                        }
+                        if(companyRes.Invoice.Type != null && companyRes.Invoice.Type != undefined && companyRes.Invoice.Type != "") {
+                            that.formData.Invoice.Type = companyRes.Invoice.Type; //发票类型
+                        }
+                        if(companyRes.Invoice.Bank != null && companyRes.Invoice.Bank != undefined && companyRes.Invoice.Bank != "") {
+                            that.formData.Invoice.Bank = companyRes.Invoice.Bank; //开户行
+                        }
+                        if(companyRes.Invoice.Account != null && companyRes.Invoice.Account != undefined && companyRes.Invoice.Account != "") {
+                            that.formData.Invoice.Account = companyRes.Invoice.Account; //账号
+                        }
+                        if(companyRes.Invoice.BankAddress != null && companyRes.Invoice.BankAddress != undefined && companyRes.Invoice.BankAddress != "") {
+                            that.formData.Invoice.BankAddress = companyRes.Invoice.BankAddress; //地址
+                        }
+                        if(companyRes.Invoice.DeliveryType != null && companyRes.Invoice.DeliveryType != undefined && companyRes.Invoice.DeliveryType != "") {
+                            that.formData.Invoice.DeliveryType = companyRes.Invoice.DeliveryType; //发票交付方式
+                        }
+                        if(companyRes.Invoice.Name != null && companyRes.Invoice.Name != undefined && companyRes.Invoice.Name != "") {
+                            that.formData.Invoice.Name = companyRes.Invoice.Name; //收件人姓名
+                        }
+                        if(companyRes.Invoice.Address != null && companyRes.Invoice.Address != undefined && companyRes.Invoice.Address != "") {
+                            that.formData.Invoice.Address = companyRes.Invoice.Address; //发票收件地址
+                        }
+                        if(companyRes.Invoice.Mobile != null && companyRes.Invoice.Mobile != undefined && companyRes.Invoice.Mobile != "") {
+                            that.formData.Invoice.Mobile = companyRes.Invoice.Mobile; //手机
+                        }
+                        if(companyRes.Invoice.Tel != null && companyRes.Invoice.Tel != undefined && companyRes.Invoice.Tel != "") {
+                            that.formData.Invoice.Tel = companyRes.Invoice.Tel; //电话
+                        }
+                        if(companyRes.Invoice.Email != null && companyRes.Invoice.Email != undefined && companyRes.Invoice.Email != "") {
+                            that.formData.Invoice.Email = companyRes.Invoice.Email; //邮箱
+                        }
+                    }
+                }).catch(function(error) {
+                    //that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+
+            },
+            //消息提示框
+            onAlert: function(type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                    offset: 100
+                });
+            }
+        }
+    });
+</script>

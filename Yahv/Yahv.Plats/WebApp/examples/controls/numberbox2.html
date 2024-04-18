@@ -1,0 +1,82 @@
+﻿﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>numberbox2(换算价格) - jQuery EasyUI plugin</title>
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/gray/easyui.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/icon-yg-cool.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/customs-easyui/Styles/reset.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/customs-easyui/Styles/main.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/standard-easyui/styles/plugin.css" rel="stylesheet" />
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.easyui.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/locale/easyui-lang-zh_CN.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/ajaxPrexUrl.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/standard-easyui/scripts/easyui.jl.static.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/standard-easyui/scripts/easyui.jl.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/main.js"></script>
+</head>
+<body>
+    <h1>numberbox2(换算价格)</h1>
+    <script>
+        var data = [{ "Name": "1002-002-01100", "Quantity": "100", "Manufacturer": "ALLEGRO", "QuantityRemark": "季度用量", "MfReplace": "true", "ChannelRequirement": "不限", "Package": "整包", "Batch": "17+", "UnitPrice": "", "UnitPrice1": "2", "UnitPrice2": "", "TradeType": "不限", "PurchasingCycle": "15", "Summary": "", "": "" }, { "Name": "100YXF10MEFCTA6.3X11", "Quantity": "50", "Manufacturer": "ALLEGRO", "QuantityRemark": "实际采购", "MfReplace": "false", "ChannelRequirement": "市场,海外,高端,固定渠道", "Package": "整包", "Batch": "17+", "UnitPrice": "12", "UnitPrice1": "6", "UnitPrice2": "", "TradeType": "不限", "PurchasingCycle": "15", "Summary": "", "": "" }]
+        //var data = [
+        //    { "Name": "vvvv", "Quantity": "100", "QuantityRemark": "", "Manufacturer": "xxx", "MfReplace": false, "ChannelRequirement": "不限", "Package": "整包", "Batch": "17+", "UnitPrice": "12", "UnitPrice1": "15", "TradeType": "", "PurchasingCycle": "15", "Summary": "", }, { "Name": "100YXF10MEFCTA6.3X11", "Quantity": "50", "QuantityRemark": "实际采购", "Manufacturer": "ALLEGRO", "MfReplace": false, "ChannelRequirement": "市场,高端", "Package": "整包", "Batch": "17+", "UnitPrice": "12", "UnitPrice1": "15", "TradeType": "不限", "PurchasingCycle": "15", "Summary": "", }, { "Name": "100YXF10MEFCTA6.3X11", "Quantity": "80", "QuantityRemark": "实际采购", "Manufacturer": "ALLEGRO", "MfReplace": false, "ChannelRequirement": "市场,高端", "Package": "整包", "Batch": "17+", "UnitPrice": "12", "UnitPrice1": "15", "TradeType": "不限", "PurchasingCycle": "15", "Summary": "22", }]
+    </script>
+    <form id="ff" class="easyui-form" method="post" data-options="novalidate:true" onsubmit="return $(this).form('enableValidation').form('validate');">
+        <input id='aa' name='aa' />
+        <input id='bb' name='bb' />
+        <input id='cc' name='cc' />
+        <button onclick="aas()">提交</button>
+    </form>
+    <script>
+        $(function () {
+            $("#aa").numberbox2({
+                width: 70,
+                target2: "#bb",
+                target3: "#cc",
+                currency: "USD",
+                required: false,
+                missingMessage: "不能为空",
+                precision: 5,
+                groupSeparator: ",",
+                value: "",
+                isNeedERate: true,
+                isNeedVATRate: true,
+                finish: function () {
+                    $("#bb").numberbox2({
+                        width: 70,
+                        target1: "#aa",
+                        target3: "#cc",
+                        currency: "CNY",
+                        readonly: true,
+                        value: "2",
+                        required: false,
+                        missingMessage: "不能为空",
+                        precision: 5,
+                        groupSeparator: ",",
+                        finish: function () {
+                            $("#cc").numberbox2({
+                                width: 70,
+                                target1: "#aa",
+                                target2: "#bb",
+                                currency: "CNY",
+                                value: "",
+                                readonly: true,
+                                required: false,
+                                missingMessage: "不能为空",
+                                precision: 5,
+                                groupSeparator: ",",
+                                finish: function () { }
+                            })
+                        }
+                    })
+                }
+            })
+        })
+        function aas() {
+            //console.log($("#aa").numberbox2("getAllData"))
+        }
+    </script>
+</body>
+</html>

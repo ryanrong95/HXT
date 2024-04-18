@@ -1,0 +1,61 @@
+﻿﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>客户公司 - jQuery EasyUI plugin</title>
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/gray/easyui.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/standard-easyui/styles/plugin.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/customs-easyui/Styles/reset.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/customs-easyui/Styles/main.css" rel="stylesheet" />
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.easyui.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/locale/easyui-lang-zh_CN.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/main.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/ajaxPrexUrl.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/standard-easyui/scripts/easyui.jl.js"></script>
+</head>
+<body>
+    <h1>客户公司插件</h1>
+    <form id="ff" class="easyui-form" method="post" data-options="novalidate:true" onsubmit="return $(this).form('enableValidation').form('validate');">
+        <input id="clientCompany1" name="clientCompany1" value="" data-options="width:400" />
+        <!--<input name="cusContact1" id="cusContact1" class="easyui-cusContact" />
+        <input id="clientCompany2" class="easyui-clientCompany" name="clientCompany2" value="" />
+        <input name="cusBillInfo1" id="cusBillInfo1" class="easyui-cusBillInfo" />-->
+        <label id="bb"></label>
+        <button onclick="aaa()">提交</button>
+    </form>
+
+    <script>
+        $(function () {
+            $("#clientCompany1").clientCompany({
+                //value:'北京威莱克迅腾科技有限公司',
+                target:"#bb",
+                onDoChange: function (data) {
+                    console.log(data);
+                    if (data.ID) {
+                        $('#cusContact1').cusContact({
+                            CustomerCompanyID: data.ID
+                        });
+                        $('#cusBillInfo1').cusBillInfo({
+                            CustomerCompanyID: data.ID
+                        });
+                    }
+                }
+            })
+            //$("#clientCompany1").clientCompany("setVal", "Digi-Key Electronics.");
+
+        })
+        function aaa() {
+            console.log($('#clientCompany1').clientCompany('options'));
+            console.log($('#clientCompany1').clientCompany('getVal'));
+            console.log($('#clientCompany1').clientCompany('getResult'));
+            console.log($('#clientCompany1').clientCompany('getAllData'));
+            //console.log("------------");
+            //console.log($('#clientCompany2').clientCompany('options'));
+            //console.log($('#clientCompany2').clientCompany('getVal'));
+            //console.log($('#clientCompany2').clientCompany('getResult'));
+            //console.log($('#clientCompany2').clientCompany('getAllData'));
+        }
+    </script>
+</body>
+</html>

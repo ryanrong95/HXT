@@ -1,0 +1,69 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using Yahv.Linq.Extends;
+using Yahv.PsWms.SzMvc.Services.Models.Origin;
+using Yahv.PsWms.SzMvc.Services.Views.Roll;
+using Yahv.Utils.Serializers;
+using Yahv.Web.Erp;
+
+namespace Yahv.PsWms.SzApp.Bills.Receives
+{
+    public partial class List : ErpParticlePage
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        /// <summary>
+        /// 获取数据列表
+        /// </summary>
+        /// <returns></returns>
+        protected object data()
+        {
+            Expression<Func<PayeeLeftShow, bool>> expression = Predicate();
+            int page, rows;
+            int.TryParse(Request.QueryString["page"], out page);
+            int.TryParse(Request.QueryString["rows"], out rows);
+
+            var query = new PayeeLefts_Show_View().GetPageList(page, rows, expression);
+
+            return new
+            {
+                rows = query.Select(t => new
+                {
+                    t.ID,
+                    t.PayerName,
+                    t.CutDateIndex,
+                    Total = t.Total.ToString("f2"),
+                    ReceiptTotal = t.ReceiptTotal
+                }),
+                total = query.Total,
+            }.Json();
+        }
+
+        Expression<Func<PayeeLeftShow, bool>> Predicate()
+        {
+            Expression<Func<PayeeLeftShow, bool>> predicate = item => true;
+            //查询参数
+            var Name = Request.QueryString["Name"];
+            var DateIndex = Request.QueryString["DateIndex"];
+
+            if (!string.IsNullOrWhiteSpace(Name))
+            {
+                predicate = predicate.And(item => item.PayerName.Contains(Name.Trim()));
+            }
+            if (!string.IsNullOrWhiteSpace(DateIndex))
+            {
+                var index = int.Parse(DateIndex);
+                predicate = predicate.And(item => item.CutDateIndex == index);
+            }
+            return predicate;
+        }
+    }
+}

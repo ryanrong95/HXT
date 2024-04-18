@@ -1,0 +1,69 @@
+﻿{
+    //"ID": null, // 要求的ID，本地保障唯全局一
+    "OrderID": "order202101150001", //订单ID
+    "WarehouseID": "SZ", //库房ID
+    "ClientID": "ID", //客户ID
+    "CompanyID": "xdtsz123", // 内部公司ID
+    "NoticeType": 1, //通知类型
+
+    "TrackerID": "00023", // 跟单, 一定不能为null,
+    "Summary": "下单测试0001", //订单备注
+    "Items": [ //通知项内容
+        {
+            "Product": { //产品内容
+                "Partnumber": "AD620+", //型号
+                "Brand": "TI", //品牌
+                "Package": null, //封装
+                "DateCode": null, //批次
+                "Mpq": 5, //最小包装量
+                "Moq": 1 //最小起订量
+            },
+
+            "OrderItemID": "OrderItem202101150001", //订单项ID
+            //"ID": null, //要求的ID，本地保障唯全局一
+
+            "Source": null, //通知来源， 库房，或者跟单
+            "InputID": null, //通知ID, 默认为null
+            "CustomCode": null, //客户自定义编码
+            "StocktakingType": 1, //盘点类型， 按个或者按最小包装量
+            "Mpq": 5, //最小包装量
+            "PackageNumber": 1, //件数，或者总数
+            "Total": 5, //总量
+
+            "Currency": 0, //币种
+            "UnitPrice": 0, //单价价格
+            "Supplier": null // 供应商
+        }
+    ],
+    "Requires": [ //特殊需求
+        {
+            "ID": null, //特殊需求ID , 建议给该值传过来, 没有赋值为null
+            "FormID": null, //订单ID , 该值可以不给,
+            "Name": "打包", //特殊需求名称
+            "Contents": "纸箱", //特殊需求内容
+            "Type": 1 //特殊需求类型: 1入库， 2出库, 该值不给可以的, 我默认为1, 入库
+        }
+    ],
+   
+    "Consignor": { //入库时此值有值  , 如果关注交货人,发货人
+        "TransportMode": 1, //货运类型
+        "Carrier": null, //承运商
+        "WaybillCode": null, // 运单Code
+        "ExpressPayer": 0, // 付款方类型,运费负担方，枚举
+        "ExpressEscrow": null, //默认为null, 当 付款方为FreightPayer.ThirdParty时候起作用
+        "ExpressFreight": 0, //快递运费
+        "TakingTime": "2021-01-14", //提送货时间
+        "TakerName": "苏亮", //提送货人名称
+        "TakerLicense": null, //提送货人车牌
+        "TakerPhone": null, //提送货人电话
+        "TakerIDCode": "23412343", //提送货人证件Code
+        "TakerIDType": 1, //提送货人证件类型
+        "Address": null, //提送货地址
+        "Contact": null, //提送货联系人，收货人
+        "Phone": null, //提送货联系电话
+        "Email": null, //提送货Email
+        "Summary": null //提送货备注
+    },
+
+    "Consignee": null //"入库时此值设置为NULL就行"
+}

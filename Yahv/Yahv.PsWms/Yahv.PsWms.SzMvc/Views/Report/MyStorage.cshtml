@@ -1,0 +1,552 @@
+﻿
+<div id="mystorage" v-cloak class="tab_content">
+    <div class="query_wrap clearfix">
+        <div class="clearfix">
+            <div class="fl">
+                <span class="title">型号:</span>
+                <el-input style="width:180px; margin-left: 12px;" size="mini" v-model="queryPartNumber" @@keyup.enter.native="queryData"></el-input>
+            </div>
+            <div class="fl ml30">
+                <span class="title">品牌:</span>
+                <el-input style="width:180px;" size="mini" v-model="queryBrand" @@keyup.enter.native="queryData"></el-input>
+            </div>
+        </div>
+        <div class="clearfix mt10">
+            <div class="fl">
+                <span class="title">库位号:</span>
+                <el-input style="width:180px;" size="mini" v-model="queryCode" @@keyup.enter.native="queryData"></el-input>
+            </div>
+            <button v-on:click="doQuery()" class="btn btn1 ml40">查询</button>
+            <button v-on:click="clearQueryCondition()" class="btn btn2 ml12">重置</button>
+        </div>
+    </div>
+    <div class="tb_wrap" v-loading="loading">
+        <div class="tb_over_wrap" style="border: none;">
+            <table border="0" cellspacing="0" cellpadding="0" class="common_tb1 mt30" style="border: 1px solid #eeeeee">
+                <tr>
+                    <th width="36px">@*<el-checkbox v-model="allChecked" v-on:change="allCheck"></el-checkbox>*@</th>
+                    <th width="100px">自定义编号</th>
+                    <th width="100px">型号</th>
+                    <th width="100px">品牌</th>
+                    <th width="100px">封装</th>
+                    <th width="100px">批次</th>
+                    <th width="50px">包装类型</th>
+                    <th width="70px">最小包装量</th>
+                    <th width="70px">数量</th>
+                    <th width="70px">总数</th>
+                    <th width="100px">库位号/货架</th>
+                    <th width="120px">发货数量</th>
+                </tr>
+                <tr v-for="(item,index) in dataList">
+                    <td><el-checkbox v-model="item.IsCheck" v-on:change="check(item)"></el-checkbox></td>
+                    <td>{{item.CustomCode}}</td>
+                    <td>{{item.PartNumber}}</td>
+                    <td>{{item.Brand}}</td>
+                    <td>{{item.Package}}</td>
+                    <td>{{item.DateCode}}</td>
+                    <td>{{item.StocktakingTypeName}}</td>
+                    <td>{{item.Mpq}}</td>
+                    <td>{{item.PackageNumber}}</td>
+                    <td>{{item.ItemTotal}}</td>
+                    <td>{{item.LocationNo}}</td>
+                    <td>
+                        <div class="shop-cartctrl" style="width: 140px; height: 22px; border-top: 1px solid #aaa; border-bottom: 1px solid #aaa;">
+                            <button :disabled="item.NeedPackageNumber == 0" class="ctrl minus" v-on:click="curItemsMinus(item)" style="margin-left: 4px; margin-top: 0; width: 20px; height: 20px;">-</button>
+                            <input v-model="item.NeedPackageNumber" v-on:change.prevent="changeQuantity(item)" class="ctrl quantity" min="1" style="width: 82px; height: 12px;">
+                            <button :disabled="item.NeedPackageNumber == item.PackageNumber" v-on:click="curItemsPlus(item)" class="ctrl plus" style="width: 20px; height: 20px;">+</button>
+                            <form method="post"></form>
+                        </div>
+                    </td>
+                </tr>
+                <tr v-if="dataList.length==0"><td colspan="10">暂无数据</td></tr>
+            </table>
+        </div>
+        <div class="foot">
+            <el-pagination class="fr" style="margin-top:20px;" v-on:size-change="handleSizeChange"
+                           v-on:current-change="handleCurrentChange"
+                           :current-page="pageIndex"
+                           :page-sizes="[5, 10, 20, 40]"
+                           :page-size="pageSize"
+                           layout="total, sizes, prev, pager, next, jumper"
+                           :total="total">
+            </el-pagination>
+        </div>
+    </div>
+
+    <div class="cd-cart-container empty" v-on:click="closeDilaog">
+        <a class="cd-cart-trigger" v-on:click.stop="toggleCart">
+            <ul class="count">
+                <!-- cart items count -->
+                <li>{{productCount}}</li>
+                <li>{{productCount}}</li>
+            </ul> <!-- .count -->
+        </a>
+
+        <div class="cd-cart" ref="content">
+            <div class="wrapper">
+                <header>
+                    <p class="h2">已选择产品列表</p>
+                </header>
+
+                <div class="body">
+                    <ul>
+                        <li v-for="(item,index) of selectedItems" class="product overhide" :key="item.ID">
+                            <div class="p_model fl">
+                                <span>{{item.PartNumber}}</span>
+                            </div>
+                            <div class="item_count fl">
+                                <div class="itemquantity">
+                                    <button class="minus" v-on:click="selectedItemMinus(index,item)">-</button>
+                                    <input type='text' v-model="item.NeedPackageNumber" v-on:change.prevent="changeSelectedQuantity(index,item)" style="width: 55px;">
+                                    <button class="plus" v-on:click="selectedItemPlus(index,item)" :disabled="item.NeedPackageNumber >= item.PackageNumber">+</button>
+                                </div>
+                            </div>
+                            <div class="delete_item fl">
+                                <a v-on:click="delete_item(index,item)">删除</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="footer">
+                    <a class="checkout btn overhide">
+                        <span v-on:click="linkToDelivery('/Order/NewOutStorage')" class="fl">发货</span>
+                    </a>
+                </div>
+            </div>
+        </div> <!-- .cd-cart -->
+    </div>
+
+</div>
+<script src="~/Content/script/jquery-3.3.1.min.js"></script>
+<script>
+    var mystorage = new Vue({
+        el: "#mystorage",
+        data: function () {
+            return {
+                queryPartNumber: "", //查询条件-型号
+                queryBrand: "", //查询条件-品牌
+                queryCode: "", //查询条件-库位号
+
+                loading: false,
+                dataList: [],
+                total: 0,
+                pageIndex: 1,
+                pageSize: 10,
+
+                allChecked: false, //全选按钮
+
+                selectedItems: [], //购物车中的项
+            }
+        },
+        watch: {
+            productCount: function (newVal, oldVal) {
+                if (newVal > 0) {
+                    $(".cd-cart-container").removeClass('empty');
+                } else {
+                    $(".cd-cart-container").removeClass('cart-open')
+                    setTimeout(function () { $(".cd-cart-container").addClass('empty'); }, 5);
+                }
+            },
+        },
+        computed: {
+            productCount: function () {
+                return this.selectedItems.length;
+            },
+        },
+        methods: {
+            //查询按钮点击
+            doQuery: function () {
+                this.pageIndex = 1;
+                this.paging();
+            },
+            //重置查询条件
+            clearQueryCondition: function () {
+                this.queryPartNumber = "";
+                this.queryBrand = "";
+                this.queryCode = "";
+                this.pageIndex = 1;
+                this.pageSize = 10;
+                this.paging();
+            },
+            //修改 pageSize
+            handleSizeChange: function (size) {
+                this.pageSize = size;
+                this.paging();
+            },
+            //修改 pageIndex
+            handleCurrentChange: function (currentPage) {
+                this.pageIndex = currentPage;
+                this.paging();
+            },
+            //执行分页查询
+            paging: function () {
+                var that = this;
+                that.loading = true;
+                axios({
+                    url: "/Report/GetMyStorageList",
+                    method: "post",
+                    data: {
+                        page: this.pageIndex,
+                        rows: this.pageSize,
+                        PartNumber: this.queryPartNumber,
+                        Brand: this.queryBrand,
+                        Code: this.queryCode,
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                    transformRequest: [
+                        function (data) {
+                            var ret = '';
+                            for (var it in data) {
+                                ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&';
+                            }
+                            return ret;
+                        }
+                    ]
+                }).then(function (response) {
+                    that.dataList = response.data.data.list;
+                    that.total = response.data.data.total;
+                    that.loading = false;
+
+                    //给 dataList 中的 IsCheck 赋值为 false。 然后在下面的 synchroPagingItems() 函数中根据购物车中的数据赋值 true
+                    if (that.dataList != undefined && that.dataList.length > 0) {
+                        for (var i = 0; i < that.dataList.length; i++) {
+                            that.dataList[i].IsCheck = false;
+                        }
+                    }
+                    that.synchroPagingItems();
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                    offset: 100
+                });
+            },
+            // ------------------------ 购物车内容 ------------------------
+            //点击全选按钮
+            allCheck: function () {
+                var that = this;
+                this.dataList.forEach(function (newVal, index) {
+                    newVal.IsCheck = that.allChecked;
+                });
+            },
+            //点击每一行前面的 checkbox
+            check: function (row) {
+                if (row.IsCheck) {
+                    //勾选
+                    //先判断币种
+                    if (this.selectedItems != undefined && this.selectedItems.length > 0) {
+                        //判断币种与已选的是否相同
+                        var selectedCurrency = this.selectedItems[0].CurrencyShortName;
+                        var newAddCurrency = row.CurrencyShortName;
+                        if (selectedCurrency != newAddCurrency) {
+                            this.onAlert("warning", "请选择相同币种的型号");
+                            //从购物车中还原库存列表中添加的数量
+                            var item = this.selectedItems.find(c => c.StorageID == row.StorageID);
+                            if (item == undefined) {
+                                //row.NeedPackageNumber = 0;
+                            } else {
+                                row.NeedPackageNumber = item.NeedPackageNumber;
+                            }
+
+                            row.IsCheck = false; //阻止这个 checkbox 被选中
+                            return;
+                        }
+                    }
+
+                    this.changeInputSaleQuantity(row);
+                    this.synchroSelectedItems(row);
+                } else {
+                    //不选
+                    //找到是购物车中的第几个项目, 然后调用 delete_item 删除购物车中的这项
+
+                    if (this.selectedItems != undefined && this.selectedItems.length > 0) {
+                        var index = -1;
+                        for (i = 0; i < this.selectedItems.length; i++) {
+                            if (row.StorageID == this.selectedItems[i].StorageID) {
+                                index = i;
+                                break;
+                            }
+                        }
+                        if (index != -1) {
+                            this.delete_item(index, row);
+                        }
+                    }
+                }
+            },
+            //分页时同步数据
+            synchroPagingItems: function () {
+                var that = this;
+                that.selectedItems.forEach(function (v) {
+                    that.dataList.forEach(function (v1) {
+                        if (v.StorageID == v1.StorageID) {
+                            v1.NeedPackageNumber = v.NeedPackageNumber;
+                            v1.IsCheck = true;
+                        }
+                    });
+                });
+            },
+            //列表项增加
+            curItemsPlus: function (row) {
+                row.NeedPackageNumber++;
+                if (row.IsCheck) {
+                    this.synchroSelectedItems(row);
+                }
+            },
+            //列表项减少
+            curItemsMinus: function (row) {
+                row.NeedPackageNumber--;
+                if (row.IsCheck) {
+                    this.synchroSelectedItems(row);
+                }
+                if (row.NeedPackageNumber <= 0) {
+                    row.IsCheck = false;
+                }
+            },
+            //同步已选项
+            synchroSelectedItems: function (row) {
+                var item = this.selectedItems.find(c => c.StorageID == row.StorageID);
+                if (item == undefined) {
+                    if (row.NeedPackageNumber > 0) {
+                        this.selectedItems.push(row);
+                    }
+                } else {
+                    if (row.NeedPackageNumber == 0) {
+                        this.selectedItems = this.selectedItems.filter(function (v) {
+                            return v.StorageID != row.StorageID;
+                        });
+                    } else {
+                        this.selectedItems.forEach(function (v) {
+                            if (v.StorageID == row.StorageID) {
+                                v = row;
+                            }
+                        });
+                    }
+                }
+            },
+            //修改库存列表中的购买数量
+            changeQuantity: function (row) {
+                this.changeInputSaleQuantity(row);
+
+                if (row.IsCheck) {
+                    if (this.selectedItems != undefined && this.selectedItems.length > 0) {
+                        //判断币种与已选的是否相同
+                        var selectedCurrency = this.selectedItems[0].CurrencyShortName;
+                        var newAddCurrency = row.CurrencyShortName;
+                        if (selectedCurrency != newAddCurrency) {
+                            this.onAlert("warning", "请选择相同币种的型号");
+                            //从购物车中还原库存列表中添加的数量
+                            var item = this.selectedItems.find(c => c.StorageID == row.StorageID);
+                            if (item == undefined) {
+                                //row.NeedPackageNumber = 0;
+                            } else {
+                                row.NeedPackageNumber = item.NeedPackageNumber;
+                            }
+
+                            return;
+                        }
+                    }
+
+                    this.synchroSelectedItems(row);
+                }
+
+                if (row.NeedPackageNumber <= 0) {
+                    row.IsCheck = false;
+                }
+            },
+            changeInputSaleQuantity: function (row) {
+                row.NeedPackageNumber = parseInt(row.NeedPackageNumber)
+                if (/^(0|[1-9][0-9]*)$/.test(row.NeedPackageNumber)) {
+                    if (row.NeedPackageNumber > row.PackageNumber) {
+                        row.NeedPackageNumber = row.PackageNumber;
+                    }
+                } else {
+                    row.NeedPackageNumber = 0;
+                }
+            },
+            //修改购物车中的数量
+            changeSelectedQuantity: function (index, item) {
+                item.NeedPackageNumber = parseInt(item.NeedPackageNumber)
+                if (/^(0|[1-9][0-9]*)$/.test(item.NeedPackageNumber)) {
+                    if (item.NeedPackageNumber > item.PackageNumber) {
+                        item.NeedPackageNumber = item.PackageNumber;
+                    }
+                } else {
+                    item.NeedPackageNumber = 0;
+                }
+
+                if (item.NeedPackageNumber <= 0) {
+                    this.delete_item(index, item);
+                }
+            },
+            //购物车中增加数量
+            selectedItemPlus: function (index, item) {
+                this.selectedItems[index].NeedPackageNumber++;
+                this.synchroCurItems(item);
+            },
+            //购物车中减少数量
+            selectedItemMinus: function (index, item) {
+                if (this.selectedItems[index].NeedPackageNumber > 0) {
+                    this.selectedItems[index].NeedPackageNumber--;
+                }
+                this.synchroCurItems(item);
+                if (item.NeedPackageNumber == 0) {
+                    this.delete_item(index, item);
+                }
+            },
+            //同步列表选项
+            synchroCurItems: function (row) {
+                this.dataList.forEach(function (v, i, arr) {
+                    if (v.StorageID == row.StorageID) {
+                        v.NeedPackageNumber = row.NeedPackageNumber;
+                    }
+                })
+            },
+            //删除购物车中的项
+            delete_item: function (index, item) {
+                var that = this;
+                var topPosition = $(".body ul li").eq(index).offset().top - $(".body ul").offset().top;
+                $(".body ul li").eq(index).css('top', topPosition + 'px');
+                $(".body ul li").eq(index).addClass('deleted');
+                setTimeout(function () {
+                    $(".body ul li").eq(index).removeClass('deleted');
+                    that.selectedItems.splice(index, 1);
+                    that.dataList.forEach(function (v, i, arr) {
+                        if (v.StorageID == item.StorageID) {
+                            v.IsCheck = false; //v.NeedPackageNumber = 0; 删除购物车中的项目, 不要和 NeedPackageNumber 关联, 和 IsCheck 关联
+                        }
+                    })
+                }, 5);
+            },
+            toggleCart: function () {
+                if (this.isOpen) {
+                    $(".cd-cart-container").removeClass('cart-open');
+                    setTimeout(function () {
+                        $(".body").scrollTop(0);
+                        //check if cart empty to hide it
+                        if (Number($(".count").find('li').eq(0).text()) == 0) $('.cd-cart-container').addClass('empty');
+                    }, 5);
+                } else {
+                    $('.cd-cart-container').addClass('cart-open');
+                }
+                this.isOpen = !this.isOpen;
+            },
+            linkToDelivery: function (path) {
+                var theItems = this.selectedItems.filter(v => v.NeedPackageNumber > 0);
+                var resultItemsInfo = [];
+                for (var i = 0; i < theItems.length; i++) {
+                    resultItemsInfo.push(
+                        {
+                            StorageID: theItems[i].StorageID,
+                            NeedPackageNumber: theItems[i].NeedPackageNumber,
+                        });
+                }
+
+                var stuAnswerArr = JSON.stringify(resultItemsInfo);//转成json字符串
+                //JS模拟post提交
+                var REVQForm = document.createElement("form");
+                REVQForm.setAttribute("method", 'POST');
+                REVQForm.setAttribute("action", path);
+                REVQForm.innerHTML = "";
+                var stuAnswerInput = document.createElement("input");
+                stuAnswerInput.setAttribute("type", "hidden");
+                stuAnswerInput.setAttribute("name", 'products');
+                stuAnswerInput.setAttribute("value", stuAnswerArr);
+                REVQForm.appendChild(stuAnswerInput);
+                document.body.appendChild(REVQForm);
+                REVQForm.submit();
+            },
+            closeDilaog(e) {
+                const _con = this.$refs.content;
+                if (!_con.isEqualNode(e.target) && e.target.contains(_con)) {
+                    $(".cd-cart-container").removeClass('cart-open');
+                }
+            },
+        },
+        mounted: function () {
+            this.paging();
+        },
+    });
+</script>
+<link href="~/Content/css/Shopping.css" rel="stylesheet" />
+<style>
+    .shop-cartbutton {
+        display: inline-block;
+        background-color: #0089dc;
+        color: #fff;
+    }
+
+    .shop-cartctrl {
+        border: 1px solid #ddd;
+    }
+
+    .shop-cartctrl, .shop-cartbutton {
+        display: inline-block;
+        cursor: pointer;
+        width: 90px;
+        height: 26px;
+        line-height: 26px;
+        border-radius: 10px;
+        text-align: center;
+        outline: 0;
+    }
+
+        .shop-cartctrl .ctrl.minus {
+            left: 0;
+            border-right: 1px solid #ddd;
+            border-radius: 10px 0 0 10px;
+            cursor: pointer;
+            position: relative;
+            top: -2px;
+        }
+
+        .shop-cartctrl .ctrl {
+            display: inline-block;
+            height: 24px;
+            border: 0;
+            width: 27px;
+            text-align: center;
+            background-color: #ffffff;
+            line-height: 24px;
+            outline: 0;
+        }
+
+            .shop-cartctrl .ctrl.quantity {
+                background-color: #fff;
+                width: 36px;
+                left: 27px;
+                position: relative;
+                top: -1px;
+                left: -4px;
+            }
+
+            .shop-cartctrl .ctrl.plus {
+                right: 0;
+                border-left: 1px solid #ddd;
+                border-radius: 0 10px 10px 0;
+                cursor: pointer;
+                position: relative;
+                top: -2px;
+                left: -10px;
+            }
+
+                .shop-cartctrl .ctrl.minus:active, .shop-cartctrl .ctrl.plus:active {
+                    background-color: #ddd;
+                    border-color: #ddd;
+                }
+
+        .shop-cartctrl button:disabled {
+            cursor: not-allowed !important;
+        }
+
+    .footer .checkout span {
+        width: 100%;
+    }
+</style>

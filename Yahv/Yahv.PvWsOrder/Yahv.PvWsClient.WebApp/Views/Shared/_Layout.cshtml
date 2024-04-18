@@ -1,0 +1,222 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <title>芯达通供应链</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="~/Content/css/element.css" rel="stylesheet" />
+    <link href="~/Content/css/common.css" type="text/css" rel="stylesheet" />
+    <link href="~/Content/css/style.css" type="text/css" rel="stylesheet" />
+    <link href="~/Content/css/Index.css" type="text/css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="~/Content/icons-ump/iconfont.css" />
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="~/Scripts/vue.min.js"></script>
+    <script src="~/Scripts/elementui.js"></script>
+    <script src="~/Scripts/axios.min.js"></script>
+    <script src="~/Scripts/Shared/Common.js"></script>
+</head>
+<body>
+    <!-- 头部开始 -->
+    <div id="header" class="head">
+        <div class="header_top w1200">
+            <a href=""><span> <img src="~/Content/img/icon-主页.png" alt="">芯达通主页</span></a>
+            @*<a class="shift_old ml15" href="">切换旧版</a>*@
+            <div class="fr">
+                <ul>
+                    <li>欢迎您，@Html.Raw(ViewBag.UserName)！<a class="ml15 logout" href="/Home/LoginOut">[退出]</a></li>
+                    <li><a>新手入门</a></li>
+                    <li class="ml30"><a v-on:click="suggestion = true">投诉建议</a></li>
+                    <li class="ml30">报关热线：<span class="tel_number">0755-83988698</span></li>
+                    <li class="divice">|</li>
+                    <li><a href="#">关于我们</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="header_main">
+            <div class="inner w1200 clearfix">
+                <div class="logo fl">
+                    <img class="img_logo fl" src="~/Content/img/logo.png" alt="">
+                </div>
+                <nav>
+                    <ul class="clearfix nav_item">
+                        <li class="nav_item_li">
+                            <a href="/Home/Index">首页</a>
+                            <i id="indexCur" class="curPos"></i>
+                        </li>
+                        <li class="nav_item_li">
+                            <a>
+                                <span>服务项目</span>
+                                <img class="arrow" src="~/Content/img/arrow_down.png" alt="">
+                            </a>
+                            <i id="declareCur" class="curPos"></i>
+                            <ul class="nav_item_ul">
+                                <li class="title">报关服务</li>
+                                <li class="nav_item"><a href="/Declare/DeclareList">进口报关</a></li>
+                                <li class="nav_item"><a href="/Orders/TransferDeclarationList">转报关</a></li>
+                                <li class="title">本港服务</li>
+                                <li class="nav_item"><a href="/Orders/StorageList">代收货</a></li>
+                                <li class="nav_item"><a href="/Orders/DeliveryList">代发货</a></li>
+                                <li class="nav_item"><a href="/Orders/TransportList">即收即发</a></li>
+                                <li class="item_line"></li>
+                                <li class="nav_item"><a href="/Orders/MyStockList">我的库存</a></li>
+                                <li class="nav_item"><a href="/Orders/MyLeaseList">我的租赁</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav_item_li">
+                            <a>
+                                <span>对账中心</span>
+                                <img class="arrow" src="~/Content/img/arrow_down.png" alt="">
+                            </a>
+                            <i id="billCur" class="curPos"></i>
+                            <ul class="nav_item_ul">
+                                <li class="nav_item"><a href="/Bill/BillRecord">我的账单</a></li>
+                                <li class="item_line"></li>
+                                <li class="nav_item"><a>付款记录</a></li>
+                                <li class="nav_item"><a href="/Bill/MyApplies">付汇记录</a></li>
+                                <li class="nav_item"><a href="/Orders/PrePayApplyList">代付货款记录</a></li>
+                                <li class="item_line"></li>
+                                <li class="nav_item"><a href="/Declare/DeclareOrder">报关单</a></li>
+                                <li class="nav_item"><a href="/Declare/DeclareData">报关数据</a></li>
+                                <li class="nav_item"><a href="/Declare/TaxRecord">缴税记录</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav_item_li">
+                            <a>
+                                <span>产品中心</span>
+                                <img class="arrow" src="~/Content/img/arrow_down.png" alt="">
+                            </a>
+                            <i id="productCur" class="curPos"></i>
+                            <ul class="nav_item_ul">
+                                <li class="nav_item"><a href="/Products/MyProducts">我的产品</a></li>
+                                <li class="nav_item"><a href="/Products/MyPreProducts">产品预归类</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav_item_li">
+                            <a>
+                                <span>账户设置</span>
+                                <img class="arrow" src="~/Content/img/arrow_down.png" alt="">
+                            </a>
+                            <i id="accountCur" class="curPos"></i>
+                            <ul class="nav_item_ul">
+                                <li class="nav_item"><a href="/Account/FundManagement">资金管理</a></li>
+                                <li class="nav_item"><a href="/Account/MyCoupon">我的优惠券</a></li>
+                                <li class="item_line"></li>
+                                <li class="nav_item"><a href="/Account/MyInformation">账户信息管理</a></li>
+                                <li class="nav_item"><a href="/Account/Invoice">开票信息管理</a></li>
+                                <li class="nav_item"><a href="/Account/MyConsignees">收货地址管理</a></li>
+                                <li class="nav_item"><a href="/Account/MySuppliers">供应商管理</a></li>
+                                <li class="nav_item"><a href="/Account/Password">账户安全设置</a></li>
+                                <li class="nav_item"><a href="/Account/Agreement">我的协议书</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+
+            </div>
+        </div>
+        <div class="suggestions" v-if="suggestion" v-cloak>
+            <div class="suggestions-box">
+                <div class="suggestions-title">
+                    投诉建议
+                    <i v-on:click="suggestion=false"></i>
+                </div>
+                <div class="suggestions-content">
+                    <h1>
+                        投诉建议
+                        <span>Suggestions</span>
+                    </h1>
+                    <div class="suggestions-style">
+                        <span>投诉电话：</span><em>0755-83988698</em>
+                        @*<span>投诉邮箱：</span><em>@Html.Raw("shenzhen@" + ViewBag.WebHtml)</em>*@
+                    </div>
+                    <p class="suggestions-text">尊敬的客户 您好！  芯达通对于您的不满深表歉意，请您耐心填写投诉或建议信息，我们将第一时间处理您的反馈</p>
+                    <div class="suggestions-textarea">
+                        <p>内容描述</p>
+                        <textarea placeholder="请填写您的投诉或建议信息" v-model="form.summary"></textarea>
+                    </div>
+                    <div class="suggestions-input">
+                        <span>我们如何联系您？</span>
+                        <input type="text" placeholder="姓名" v-model="form.name" />
+                        <input type="text" placeholder="电话" v-model="form.phone" />
+                    </div>
+                    <div class="suggestions-button">
+                        <button class="btn button nohover" type="button" v-on:click="submitSuggess">提&nbsp;交</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    @RenderBody()
+    <!--底部-->
+    <footer>
+        <p class="footer_text">禁限售规则 - 知识产权保护政策 - 隐私权政策 - 使用条款</p>
+        <p>©️2010-2020 www.for-ic.net 粤ICP备15026887号 版权所有 - 芯达通</p>
+    </footer>
+    <script>
+        var header = new Vue({
+            el: "#header",
+            data: {
+                form: {
+                    summary: '',
+                    name: '',
+                    phone: ''
+                },
+                suggestion: false,
+            },
+            methods: {
+                valid: function () {
+                    if (this.form.summary == null || this.form.summary == "") {
+                        this.onAlert("error", "请输入投诉建议");
+                        return false;
+                    }
+                    if (this.form.summary.length > 200) {
+                        this.onAlert("error", "输入投诉建议的字符不超过200个");
+                        return false;
+                    }
+                    if (this.form.name.length > 10) {
+                        this.onAlert("error", "输入姓名的字符不超过10个");
+                        return false;
+                    }
+                    if (this.form.phone.length > 20) {
+                        this.onAlert("error", "输入电话的字符不超过20个");
+                        return false;
+                    }
+                    return true;
+                },
+                closeSuggestions: function () {
+                    this.suggestion = false;
+                },
+                submitSuggess: function () {
+                    if (this.valid()) {
+                        axios({
+                            url: "/Home/Suggestions",
+                            method: "post",
+                            data: this.form
+                        }).then(function (response) {
+                            header.onAlert(response.data.type, response.data.msg);
+                            header.form.summary = "";
+                            header.form.name = "";
+                            header.form.phone = "";
+                            header.suggestion = false;
+                        }).catch(function (error) {
+                            header.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                        });
+                    }
+                },
+                onAlert: function (type, message) {
+                    this.$message({
+                        message: message,
+                        type: type,
+                        offset: 300,
+
+                    });
+                },
+            }
+        });
+    </script>
+</body>
+</html>
+

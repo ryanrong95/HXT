@@ -1,0 +1,413 @@
+﻿@{
+    ViewBag.title = "待确认订单";
+    ViewBag.subTitle = "转报关确认报价详情";
+}
+<div id="vTransDecConfirm" v-cloak class="order_detail">
+    <div class="info_item_wrap">
+        <span class="icon_img">1</span>
+        <span class="title">订单基本信息</span>
+    </div>
+    <div class="clearfix mt12">
+        <div class="fl wp50">
+            <div class="clearfix info_item">
+                <div class="info_title fl">订单号：</div>
+                <div class="info_content fl">{{indexData.ID}}</div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="fl">
+            <div class="clearfix info_item">
+                <div class="txt_red fl">币种：</div>
+                <div class="info_content fl">{{indexData.Currency}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="tb_wrap">
+        <table class="common_tb1 mt20">
+            <tr>
+                <th width="36px">序号</th>
+                <th style="width:120px;">规格型号</th>
+                <th style="width:120px;">品名</th>
+                <th style="width:100px;">品牌</th>
+                <th style="width:70px;">数量</th>
+                <th style="width:80px;">单价({{indexData.CurrencyCode}})</th>
+                <th style="width:80px;">总价({{indexData.CurrencyCode}})</th>
+                <th style="width:110px;">报关货值(CNY)</th>
+                <th style="width:70px;">关税率</th>
+                <th style="width:90px;">关税(CNY)</th>
+                <th style="width:70px;">消费税率</th>
+                <th style="width:90px;">消费税(CNY)</th>
+                <th style="width:70px;">增值税率</th>
+                <th style="width:90px;">增值税(CNY)</th>
+                <th style="width:90px;">代理费(CNY)</th>
+                <th style="width:90px;">杂费(CNY)</th>
+                <th style="width:110px;">税费合计(CNY)</th>
+                <th style="width:100px;">报关总金额</th>
+            </tr>
+            <tr v-if="(index<=1&&!isAll)||isAll" v-for="(item,index) in indexData.OrderItems">
+                <td>{{index+1}}</td>
+                <td style="word-wrap:break-word;word-break:break-all;padding:0 5px;text-align:left;line-height: 18px">
+                    {{item.PartNumber}}   <span class="label1" v-if="item.Ccc">3C</span>
+                    <span class="label1" v-if="item.Embargo">禁运</span>
+                    <span class="label1" v-if="item.Coo">原产地证明</span>
+                    <span class="label1" v-if="item.CIQ">商检</span>
+                    <span class="label1" v-if="item.IsHighPrice">高价值</span>
+                    <span class="label1" v-if="item.HkControl">香港管制</span>
+                </td>
+                <td style="word-wrap:break-word;word-break:break-all;padding:0 5px;text-align:left">{{item.Name}}</td>
+                <td>{{item.Manufacturer}}</td>
+                <td>{{item.Quantity}}</td>
+                <td>{{item.UnitPrice}}</td>
+                <td>{{item.TotalPrice}}</td>
+                <td>{{item.DeclareValue}}</td>
+                <td :class="{'txt_red':item.TraiffRate>0,'font_bold':item.TraiffRate>0}">{{item.TraiffRate}}</td>
+                <td>{{item.Traiff}}</td>
+                <td :class="{'txt_red':item.ExciseTaxRate>0,'font_bold':item.ExciseTaxRate>0}">{{item.ExciseTaxRate}}</td>
+                <td>{{item.ExcisePrice}}</td>
+                <td>{{item.AddTaxRate}}</td>
+                <td>{{item.AddTax}}</td>
+                <td>{{item.AgencyFee}}</td>
+                <td :class="{'txt_red':item.InspectionFee>0,'font_bold':item.InspectionFee>0}">{{item.InspectionFee}}</td>
+                <td>{{item.TotalTaxFee}}</td>
+                <td>{{item.TotalDeclareValue}}</td>
+            </tr>
+            <tr style="font-weight:bold">
+                <td colspan="4" style="text-align:right;">合计:</td>
+                <td>{{indexData.Products_Num}}</td>
+                <td></td>
+                <td>{{indexData.Products_TotalPrice}}</td>
+                <td>{{indexData.Products_DeclareValue}}</td>
+                <td></td>
+                <td>{{indexData.Products_Traiff}}</td>
+                <td></td>
+                <td>{{indexData.Products_Excise}}</td>
+                <td></td>
+                <td>{{indexData.Products_AddTax}}</td>
+                <td>{{indexData.Products_AgencyFee}}</td>
+                <td>{{indexData.Products_InspectionFee}}</td>
+                <td>{{indexData.Products_TotalTaxFee}}</td>
+                <td>{{indexData.Products_TotalDeclareValue}}</td>
+            </tr>
+            <tr v-if="indexData.OrderItems.length>2"><td colspan="18"><a v-on:click="isAll=!isAll"><span v-if="!isAll">查看全部<i class="el-icon-arrow-down ml4"></i></span><span v-else>收起<i class="el-icon-arrow-up ml4"></i></span></a></tr>
+        </table>
+    </div>
+    <div class="clearfix mt26 font_bold">
+        <span class="mr140 font_bold">总箱数：{{indexData.TotalParts}}</span>
+        <span class="font_bold">毛重(KG)：{{indexData.TotalWeight}}</span>
+    </div>
+    <div class="info_item_wrap mt40">
+        <span class="icon_img">2</span>
+        <span class="title">供应商信息</span>
+    </div>
+    <div class="clearfix mt20">
+        <div class="fl">
+            <div class="clearfix info_item">
+                <div class="info_title fl">供应商：</div>
+                <div class="info_content fl">{{indexData.SupplierName}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix">
+        <div class="fl wp50">
+            <div class="clearfix info_item">
+                <div class="info_title fl">发票：</div>
+                <div class="upload_wrap2 ml120">
+                    <div class="upload_wrap1 mt20">
+                        <ul>
+                            <li class="clearfix" v-for="item in indexData.PIFiles">
+                                <div class="file_icon fl"></div>
+                                <div class="fl c_right">
+                                    <p class="file_name">{{item.Name}}</p>
+                                    <a :href="item.Url" target="_blank" class="link">预览</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*<div class="clearfix">
+        <div class="fl wp50">
+            <div class="clearfix info_item">
+                <div class="info_title fl">装箱单：</div>
+                <div class="upload_wrap2 ml120">
+                    <div class="upload_wrap1 mt20">
+                        <ul>
+                            <li class="clearfix" v-for="item in indexData.PackingFiles">
+                                <div class="file_icon fl"></div>
+                                <div class="fl c_right">
+                                    <p class="file_name">{{item.Name}}</p>
+                                    <a :href="item.Url" target="_blank" class="link">预览</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>*@
+    <div class="info_item_wrap mt20">
+        <span class="icon_img">3</span>
+        <span class="title">国内收货方式</span>
+    </div>
+    <div v-if="indexData.SZDeliveryType=='1'">
+        <div class="clearfix mt30">
+            <div class="fl">
+                <div class="clearfix info_item font14">
+                    <div class="info_title font_bold fl">国内物流：</div>
+                    <div class="info_content fl">{{indexData.SZDeliveryTypeName}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="fl">
+                <div class="clearfix info_item">
+                    <div class="info_title fl">提货日期：</div>
+                    <div class="info_content fl">{{indexData.SZTakingDate}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="fl">
+                <div class="clearfix info_item">
+                    <div class="info_title fl">自提点：</div>
+                    <div class="info_content fl">{{indexData.OutTakingContact}}   {{indexData.OutTakingPhone}}   {{indexData.SZTakingDetailAddress}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="fl">
+                <div class="clearfix info_item">
+                    <div class="info_title fl">提货人信息：</div>
+                    <div class="info_content fl">证件类型：{{indexData.CertificateType}}  证件号码：{{indexData.Certificate}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div v-if="indexData.SZDeliveryType=='2'||indexData.SZDeliveryType=='3'">
+        <div class="clearfix mt30">
+            <div class="fl wp50">
+                <div class="clearfix font14 info_item">
+                    <div class="info_title font_bold  fl">国内物流：</div>
+                    <div class="info_content fl">{{indexData.SZDeliveryTypeName}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="fl">
+                <div class="clearfix info_item">
+                    <div class="info_title fl">收货人信息：</div>
+                    <div class="info_content fl">{{indexData.ReceivedContact}}   {{indexData.ReceivedPhone}}   {{indexData.ReceivedAddress}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="btn_bottom mt80 mb100">
+        <button class="btn1" v-on:click="cancel">不同意</button>
+        <button class="ml14 btn2 " v-on:click="onConfirm">同意</button>
+    </div>
+    <el-dialog title="取消订单" :visible.sync="dialogFormVisible" :lock-scroll="false" :close-on-click-modal="false" width="30%">
+        <el-form status-icon :model="ruleForm" label-width="60px" ref="ruleForm">
+            <el-form-item label="原因" prop="Cancel_Reason" :rules="[{ required: true, message: '请输入原因', trigger: 'blur' },{max:400, message: '原因长度超过限制', trigger: 'blur' }]">
+                <el-input v-model="ruleForm.Cancel_Reason" type="textarea" auto-complete="off"></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button v-on:click="dialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" v-on:click="onCancel">确 定</el-button>
+        </div>
+    </el-dialog>
+    <el-dialog title="确认成功,请上传报关委托书" class="fh_file" :lock-scroll="false" width="500px" :visible.sync="dialogSuccessVisible" :close-on-click-modal="false" :before-close="back">
+        <div class="dialog_body">
+            <div class="mt20">
+                <el-button v-on:click="download_file('/Files/ExportAgent')" class="el-icon-ump-xiazai btn">
+                    导出报关委托书
+                </el-button>
+                <a id="exportInfoForm" style="display:none" download><span id="ex-li" style="display:none"></span></a>
+            </div>
+            <div class="mt12 mb8">
+                <el-upload :show-file-list="false"
+                           :http-request="httpRequestFile_agent"
+                           accept="image/jpg, image/bmp, image/jpeg, image/gif, image/png, application/pdf">
+                    <el-button size="small" class="el-icon-ump-upload btn">上传报关委托书</el-button>
+                </el-upload>
+            </div>
+            <p class="txt txt2">仅限图片或PDF文件，且文件不超过3M</p>
+            <ul class="mt20">
+                <li v-for="(item,index) in fileList">
+                    <div class="file_item">
+                        <i class="file_icon"></i>
+                        <span class="file_name">{{item.name}}</span>
+                        <i class="file_del ml11" v-on:click="del_file(index)"></i>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div slot="footer" class="dialog-footer">
+            <button v-on:click="back" class="btn1">返回</button>
+            <button v-on:click="onSubmit" class="btn2 ml12">提交</button>
+        </div>
+    </el-dialog>
+</div>
+<script>
+    var vTransDecConfirm =  new Vue({
+        el: "#vTransDecConfirm",
+        data: function() {
+            return {
+                indexData: @Html.Raw(Json.Encode(Model)),
+                ruleForm: {
+                    Cancel_Reason: "",
+                },
+                isAll: false,
+                dialogSuccessVisible: false,
+                dialogFormVisible: false,
+                fileList:[],
+            }
+        },
+        methods: {
+            //删除文件
+            del_file: function (i) {
+                this.fileList.splice(i, 1);
+            },
+            onSubmit: function () {
+                var that = this;
+                if (that.fileList.length == 0) {
+                    that.onAlert("warning", "请上传报关委托书！");
+                } else {
+                    var list = that.fileList[0];
+                    axios({
+                        url: "/Files/UploadDeclareFile",
+                        method: "post",
+                        data: {
+                            id: this.indexData.ID,
+                            type:3,
+                            filename: list.name,
+                            fileurl: list.URL,
+                        },
+                    }).then(function (response) {
+                        this.fileList = [];
+                        that.onAlert(response.data.type, response.data.msg);
+                        if (response.data.type != "error") {
+                            setTimeout(function () {
+                                that.back();
+                            }, 1000);
+                        }
+
+                    }).catch(function (error) {
+                        that.onAlert("warning", error);
+                    });
+                }
+            },
+            //导出文件
+            download_file: function (url) {
+                var that = this;
+                axios({
+                    url: url,
+                    method: "post",
+                    data: {
+                        id: this.indexData.ID
+                    },
+                }).then(function (response) {
+                    if (response.data.type == "error") {
+                        that.onAlert(response.data.type, response.data.msg);
+                    } else {
+                        $('#exportInfoForm').attr("href", response.data.data);
+                        $('#exportInfoForm').attr("target", "_blank");
+                        $('#ex-li').trigger("click");
+                    }
+                }).catch(function (error) {
+                    that.onAlert("warning", error);
+                });
+            },
+            httpRequestFile_agent: function (options, column) {
+                var that = this;
+                UploadFile(options, '/Files/UploadPickUpFile', function (res) {
+                    if (res.type) {
+                        that.fileList.push(JSON.parse(res.file));
+                    } else {
+                        that.onAlert("error", res.msg)
+                    }
+                });
+            },
+            //弹出取消窗口
+            cancel: function () {
+                this.ruleForm.Cancel_Reason = "";
+                this.dialogFormVisible = true;
+            },
+            //确认订单
+            onConfirm: function () {
+                var that = this;
+                const loading = this.$loading({
+                    lock: false,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)'
+                });
+                axios({
+                    url: "/Declare/Confirm",
+                    method: "post",
+                    data: {
+                        orderID: that.indexData.ID,
+                    }
+                }).then(function (response) {
+                    loading.close();
+                    if (response.data.type == "error") {
+                        that.onAlert(response.data.type, response.data.msg);
+                    }
+                    else {
+                        that.dialogSuccessVisible = true;
+                    }
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //订单取消报价
+            onCancel: function () {
+                var that = this;
+                this.$refs.ruleForm.validate(function (valid) {
+                    if (valid) {
+                        const loading = that.$loading({
+                            lock: false,
+                            text: 'Loading',
+                            spinner: 'el-icon-loading',
+                            background: 'rgba(0, 0, 0, 0.7)'
+                        });
+                        that.dialogFormVisible = false;
+                        axios({
+                            url: "/Declare/CancelConfirm",
+                            method: "post",
+                            data: {
+                                orderID: that.indexData.ID,
+                                reason: that.ruleForm.Cancel_Reason,
+                            }
+                        }).then(function (response) {
+                            loading.close();
+                            if (response.data.type == "error") {
+                                that.onAlert(response.data.type, response.data.msg);
+                            }
+                            else {
+                                that.back();
+                            }
+                        }).catch(function (error) {
+                            that.onAlert("warning", error);
+                        });
+                    }
+                });
+            },
+            //返回待确认订单
+            back: function () {
+                location.href = "/Declare/UnConfirmedDecList";
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                    offset: 200,
+                });
+            },
+        }
+    });
+</script>

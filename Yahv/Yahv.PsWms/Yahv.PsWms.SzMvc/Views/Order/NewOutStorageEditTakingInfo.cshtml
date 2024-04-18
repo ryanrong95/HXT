@@ -1,0 +1,170 @@
+﻿<template id="newoutstorageedittakinginfo">
+    <el-dialog title="新增提货人信息" :lock-scroll="false" width="30%" :visible.sync="dialogtakinginfovisible"
+               :close-on-click-modal="false" v-on:close="closeedittakinginfowindow()">
+        <el-form>
+            <el-form-item label="提货人：" prop="takingMan" style="margin-bottom: 5px;"
+                          :rules="[{ required: false, message: '请输入提货人', trigger: 'blur' },
+                                       { max:50, message: '提货人长度超过限制', trigger: 'blur' }]">
+                <el-input size="mini" placeholder="请输入提货人" v-model="takingMan" style="width: 80%; margin-left: 14px;" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="电话：" prop="takingTel" style="margin-bottom: 5px;"
+                          :rules="[{ required: false, message: '请输入电话', trigger: 'blur' },
+                                       { max:50, message: '电话长度超过限制', trigger: 'blur' }]">
+                <el-input size="mini" placeholder="请输入电话" v-model="takingTel" style="width: 80%; margin-left: 28px;" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item style="margin-top: 20px; margin-bottom: 0;" label="证件类型：" prop="proofTypeValue">
+                <el-select size="mini" v-model="proofTypeValue" style="width: 80%;" filterable clearable placeholder="请选择">
+                    <el-option v-for="item in proofTypeOptions"
+                               :key="item.value"
+                               :label="item.text"
+                               :value="item.value">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="证件号码：" prop="proofNumber" style="margin-bottom: 5px;"
+                          :rules="[{ required: false, message: '请输入证件号码', trigger: 'blur' },
+                                       { max:50, message: '证件号码长度超过限制', trigger: 'blur' }]">
+                <el-input size="mini" placeholder="请输入证件号码" v-model="proofNumber" style="width: 80%; margin-left: 10px;" auto-complete="off"></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <button v-on:click="closeedittakinginfowindow()" class="btn1">取 消</button>
+            <button v-on:click="submitTakingInfo()" class="btn2 ml12">确 定</button>
+        </div>
+    </el-dialog>
+</template>
+<script>
+    Vue.component(
+        'newoutstorageedittakinginfo',
+        {
+            template: "#newoutstorageedittakinginfo",
+            data: function () {
+                return {
+                    takingMan: "", //提货人的值
+                    takingTel: "", //提货人电话的值
+
+                    proofTypeValue: "", //证件类型的值
+                    proofTypeOptions: [], //证件类型选项
+
+                    proofNumber: "", //证件号码的值
+                }
+            },
+            props: {
+                dialogtakinginfovisible: {
+                    type: Boolean,
+                    required: true,
+                    default: false,
+                },
+            },
+            methods: {
+                //检验是否为空, false - 为空, true - 不为空
+                validFieldEmpty: function (field, tip) {
+                    if (field == null || field == "") {
+                        this.onAlert("error", tip);
+                        return false;
+                    }
+                    return true;
+                },
+                //检验是否超长, false - 超长, true - 不超长
+                validFieldLength: function (field, length, tip) {
+                    if (field != null && field.length > length) {
+                        this.onAlert("error", tip);
+                        return false;
+                    }
+                    return true;
+                },
+                //初始化参数
+                initParams: function () {
+                    this.takingMan = "";
+                    this.takingTel = "";
+                    this.proofTypeValue = "";
+                    this.proofNumber = "";
+                },
+                //关闭窗口
+                closeedittakinginfowindow: function () {
+                    this.dialogtakinginfovisible = false;
+                    this.$emit("closeedittakinginfowindow");
+                },
+                //提交提货人信息
+                submitTakingInfo: function () {
+                    var that = this;
+
+                    //检查是否为空
+                    if (that.validFieldEmpty(that.takingMan, "提货人不能为空") == false) {
+                        return false;
+                    }
+                    if (that.validFieldEmpty(that.takingTel, "提货人电话不能为空") == false) {
+                        return false;
+                    }
+                    if (that.validFieldEmpty(that.proofTypeValue, "证件类型不能为空") == false) {
+                        return false;
+                    }
+                    //检查是否超长
+                    if (this.validFieldLength(that.takingMan, 100, "提货人长度超过限制") == false) {
+                        return false;
+                    }
+                    if (this.validFieldLength(that.takingTel, 50, "提货人电话长度超过限制") == false) {
+                        return false;
+                    }
+                    if (this.validFieldLength(that.proofNumber, 50, "证件号码长度超过限制") == false) {
+                        return false;
+                    }
+
+                    axios({
+                        url: "/Order/NewTakingInfoSubmit",
+                        method: "post",
+                        data: {
+                            TakingMan: that.takingMan,
+                            TakingTel: that.takingTel,
+                            ProofTypeValue: that.proofTypeValue,
+                            ProofNumber: that.proofNumber,
+                        },
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                        },
+                        transformRequest: [
+                            function (data) {
+                                var ret = '';
+                                for (var it in data) {
+                                    ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&';
+                                }
+                                return ret;
+                            }
+                        ]
+                    }).then(function (response) {
+                        if (response.data.type == "success") {
+                            that.$emit("gettakinginfooptions"); //获取提货人信息选项
+                            that.closeedittakinginfowindow(); //关闭窗口
+                            that.onAlert("success", "添加成功");
+                        }
+                    }).catch(function (error) {
+                        that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                    });
+                },
+                //消息提示框
+                onAlert: function (type, message) {
+                    this.$message({
+                        message: message,
+                        type: type,
+                        offset: 100
+                    });
+                },
+            },
+            mounted: function () {
+
+            },
+            created: function () {
+                var that = this;
+                //获取证件类型选项
+                axios.get('/Miscellaneous/ProofTypes', { params: {} })
+                    .then(function (res) {
+                        if (res.data.success == 200) {
+                            that.proofTypeOptions = res.data.result;
+                        }
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    });
+            },
+        });
+</script>

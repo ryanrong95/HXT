@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="/Content/css/n_common.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/css/n_register.css" />
+    <script type="text/javascript" src="/Scripts/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="/Scripts/vue.js"></script>
+    <script src="/Scripts/axios.min.js"></script>
+    <script type="text/javascript" src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+</head>
+<body>
+    <!-- 头部 -->
+    <div class="n_register_top">
+        <div class="wrapper">
+            <div class="left n_register_logo">
+                <h1>
+                    <a id="index" href="javascript:;"></a>
+                </h1>
+            </div>
+            <p class="right n_register_phone">热线电话：400-833-8321</p>
+        </div>
+    </div>
+    <!-- 中间部分 -->
+    <div class="n_register_mid" id="register">
+        <!-- 注册 -->
+        <div class="n_register_mod n_psd_mod n_success_mod">
+            <img src="Content/n_img/n_psd_success.png">
+            <p class="n_reset_success">重置密码成功</p>
+            <p class="n_success_link"><a href="Home/Login">点击重新登录</a></p>
+        </div>
+    </div>
+    <!-- 底部 -->
+    <div class="n_register_bottom">
+        <p>
+            <span>禁限售规则 - 知识产权保护政策 - 隐私权政策 - 使用条款</span>
+        </p>
+        <p>
+            <div style="display: flex; align-items: center; width: 580px; line-height: 30px; margin: 0 auto;">
+                <span>©️2010-2023 深圳市芯达通供应链管理有限公司 版权所有 |&nbsp;</span>
+                <img src="/Content/img/gonganlogo.png" style="margin-top: -3px;"/>
+                <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44030702003264" target="_blank" style="color: #333;">粤公网安备 44030702003264号</a>
+            </div>
+        </p>
+        <p>
+            <a href="https://beian.miit.gov.cn/#/Integrated/index" target="_blank" style="color: #333;">粤ICP备20066739号</a>
+        </p>
+    </div>
+    <script>
+    $(function(){
+        axios({
+            url: "/Home/GetDomainForIC",
+            method: "post",
+            data: {}
+        }).then(function(response) {
+            $('#index').attr('href',response.data);
+        }).catch(function(error) {
+            that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+        });
+    });
+    </script>
+</body>
+</html>

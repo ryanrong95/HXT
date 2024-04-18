@@ -1,0 +1,136 @@
+﻿<template id="bankinfo">
+    <el-form :model="form1" :rules="rules" status-icon ref="form1" label-width="140px">
+        @*<el-form-item label="供应商：" prop="SupplierID" :rules="[{ required: true, message: '请选择供应商', trigger: 'change' }]">
+            <el-select size="mini" v-model="form1.SupplierID" style="width: 90%;" filterable clearable placeholder="请选择">
+                <el-option v-for="item in SupplierOptions"
+                           :key="item.value"
+                           :label="item.text"
+                           :value="item.value">
+                </el-option>
+            </el-select>
+        </el-form-item>*@
+        <el-form-item label="公司名称：" prop="RealName">
+            <el-input style="width: 90%;" size="mini" v-model="form1.RealName" placeholder="请输入公司名称" auto-complete="off" 
+                    :disabled="editSupplierID != null && editSupplierID != undefined && editSupplierID.length > 0"></el-input>
+        </el-form-item>
+        @*<el-form-item label="支付币种：" prop="Currency" :rules="[{ required: true, message: '请选择支付币种', trigger: 'change' }]">
+            <el-select size="mini" v-model="form1.Currency" filterable clearable placeholder="请选择" style="width: 90%;">
+                <el-option v-for="item in CurrencyOptions" :label="item.text" :value="item.value">
+                </el-option>
+            </el-select>
+        </el-form-item>*@
+        <el-form-item label="银行名称：" prop="Bank" :rules="[{ required: true, message: '请输入开户行', trigger: 'blur' },{max:200, message: '银行名称长度超过限制', trigger: 'blur' }]">
+            <el-input style="width: 90%;" size="mini" v-model="form1.Bank" placeholder="请输入银行名称" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="银行账号：" prop="Account">
+            <el-input style="width: 90%;" size="mini" v-model="form1.Account" placeholder="请输入银行账号" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="国家/地区：" prop="Place" :rules="[{ required: true, message: '请选择国家/地区', trigger: 'change' }]">
+            <el-select size="mini" v-model="form1.Place" filterable clearable placeholder="请选择" style="width: 90%;">
+                <el-option v-for="item in PlaceOptions" :label="item.text" :value="item.value">
+                </el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item label="SWIFTCODE" prop="SwiftCode" :rules="[{ required: notHK, message: '请输入银行代码', trigger: 'blur' },{max:50, message: '银行代码长度超过限制', trigger: 'blur' }]">
+            <el-input style="width: 90%;" size="mini" v-model="form1.SwiftCode"></el-input>
+        </el-form-item>
+        <el-form-item label="银行地址" prop="BankAddress" :rules="[{ required: notHK, message: '请输入银行地址', trigger: 'blur' },{max:200, message: '银行地址长度超过限制', trigger: 'blur' }]">
+            <el-input style="width: 90%;" size="mini" v-model="form1.BankAddress" placeholder="请输入银行地址"></el-input>
+        </el-form-item>
+    </el-form>
+</template>
+<script>
+    Vue.component(
+        'my-bank',
+        {
+            template: "#bankinfo",
+            data: function() {
+                //银行账户验证
+                var validatorBankAccount = function(rule, value, callback) {
+                    if (value == "" || value == null) {
+                        callback(new Error('请输入银行账号'));
+                    } else if (!/^[a-zA-Z0-9\-]+$/.test(value)) {
+                        callback(new Error('银行账号只能为数字字母或-'));
+                    } else {
+                        callback();
+                    }
+                };
+                //公司名称验证
+                var validatorRealName = function (rule, value, callback) {
+                    if (value == '' || value == null) {
+                        callback(new Error('请输入公司名称'));
+                    }
+                    value = value.trim();
+                    if (value == '' || value == null) {
+                        callback(new Error('请输入公司名称'));
+                    }
+
+                    var reg = /[\u4e00-\u9fa5]/g;
+                    if (reg.test(value)) {
+                        callback(new Error('该公司名称中不能输入汉字'));
+                    }
+                    callback();
+                };
+                return {
+                    form1: @Html.Raw(Json.Encode(Model)),
+                    rules: {
+                        RealName: [
+                            { required: true, validator: validatorRealName, trigger: 'blur' },
+                            { max: 150, message: '公司名称长度超过限制', trigger: 'blur' }
+                        ],
+                        Account: [
+                            { required: true, validator: validatorBankAccount, trigger: 'blur' },
+                            { max: 50, message: '账号长度超过限制', trigger: 'blur' }
+                        ]
+                    },
+                    PlaceOptions: [],
+                    CurrencyOptions: [],
+                    notHK:false,
+                    SupplierOptions: [],
+
+                    editSupplierID: '',
+                    changeFlag: 1,
+                    isCustoms: @(ViewBag.ThePageIsCustoms),
+                }
+            },
+            mounted: function() {
+                this.PlaceOptions = @Html.Raw(Json.Encode(@ViewBag.PlaceOptions)); //加载基础数据
+                this.CurrencyOptions = @Html.Raw(Json.Encode(@ViewBag.CurrencyOptions)); //加载基础数据
+                this.SupplierOptions = @Html.Raw(Json.Encode(@ViewBag.SupplierOptions)); //加载基础数据
+            },
+            watch: {
+                'form1.Place': function (val) {
+                    //有报关服务类型,必填
+                    if (this.isCustoms) {
+                        this.notHK = true;
+                        return;
+                    }
+                    //没有报关服务类型,根据是否香港判断是否必填
+                    if (val != 263) {
+                        //不是香港,必填
+                        this.notHK = true;
+                    } else {
+                        //是香港,不必填
+                        this.notHK = false;
+                    }
+                },
+                'changeFlag': function(val) {
+                    var selectedSupplier = this.SupplierOptions.filter((item) => {
+                        return item.value == this.editSupplierID;
+                    });
+                    if (selectedSupplier != null && selectedSupplier != undefined && selectedSupplier.length > 0) {
+                        this.form1.RealName = selectedSupplier[0].text;
+                    }
+                },
+            },
+            methods: {
+                //消息提示框
+                onAlert: function(type, message) {
+                    this.$message({
+                        message: message,
+                        type: type
+                    });
+                }
+            }
+        });
+</script>

@@ -1,0 +1,389 @@
+﻿@{
+    ViewBag.title = "我的协议书";
+}
+<link href="~/Content/css/tab.css" rel="stylesheet" />
+<div id="agree" v-cloak>
+    <!-- tab start-->
+    <div class="clearfix tab_switch account-agreement">
+        <ul>
+            <li tabname="报关协议" v-if="agreeData.ThePageIsCustoms">
+                <a v-on:click="selectAgreement('报关协议')">报关协议<i></i></a>
+            </li>
+            <li tabname="仓储协议" v-if="agreeData.ThePageIsWarehouse">
+                <a v-on:click="selectAgreement('仓储协议')">仓储协议<i></i></a>
+            </li>
+        </ul>
+    </div>
+    <!-- tab end -->
+
+    <div v-if="agreeData.ThePageIsCustoms" v-show="tabname == '报关协议'">
+        <p class="title">报关协议书</p>
+        <div class="content">
+            <div class="agree_item">
+                <div class="aggree_name clearfix">
+                    <span class="line fl"></span><span class="ml14">报关类型：{{agreeData.InvoiceName}}</span>
+                </div>
+                <div class="divice"></div>
+                <div class="agree_content clearfix">
+                    <div class="agree_content_left fl">
+                        <span class="xy_text">协议开始日期：{{agreeData.StartDate}}</span>
+                    </div>
+                    <div class="agree_content_right fl">
+                        <span class="xy_text">协议结束日期：{{agreeData.EndDate}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="agree_item">
+                <div class="aggree_name clearfix">
+                    <span class="line fl"></span><span class="ml14">代理费</span>
+                </div>
+                <div class="divice"></div>
+                <div class="agree_content clearfix">
+                    <div class="agree_content_left fl">
+                        <span class="xy_text">代理费率：{{agreeData.AgencyRate}}</span>
+                    </div>
+                    <div class="agree_content_right fl">
+                        <span class="xy_text">最低代理费（元）：{{agreeData.MinAgencyFee}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="agree_item">
+                <div class="aggree_name clearfix">
+                    <span class="line fl"></span><span class="ml14">货款条款</span>
+                </div>
+                <div class="divice"></div>
+                <div class="agree_content clearfix">
+                    <div class="agree_content_left fl">
+                        <span class="xy_text">换汇方式：{{agreeData.IsPrePayExchange}}</span>
+                        <span class="xy_text">结算方式：{{agreeData.GoodsPeriodType}}</span>
+                        <span v-if="agreeData.isGoodsAgreedPeriod" class="xy_text">约定期限(天)：{{agreeData.GoodsDaysLimit}}</span>
+                        <span v-if="agreeData.isGoodsMonthly" class="xy_text">结算日期(次月)：{{agreeData.GoodsMonthlyDay}}</span>
+                        <span class="xy_text">汇率类型：{{agreeData.GoodsExchangeRateType}}</span>
+                    </div>
+                    <div class="agree_content_right fl">
+                        <span v-if="!agreeData.isGoodsPrePaid" class="xy_text">垫款上限（元）：{{agreeData.GoodsUpperLimit}}</span>
+                        <span v-if="agreeData.isGoodsAgreed" class="xy_text">约定汇率：{{agreeData.GoodsExchangeRateValue}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="agree_item">
+                <div class="aggree_name clearfix">
+                    <span class="line fl"></span><span class="ml14">税款条款</span>
+                </div>
+                <div class="divice"></div>
+                <div class="agree_content clearfix">
+                    <div class="agree_content_left fl">
+                        <span class="xy_text">结算方式：{{agreeData.TaxPeriodType}}</span>
+                        <span v-if="agreeData.isTaxAgreedPeriod" class="xy_text">约定期限(天)：{{agreeData.TaxDaysLimit}}</span>
+                        <span v-if="agreeData.isTaxMonthly" class="xy_text">结算日期(次月)：{{agreeData.TaxMonthlyDay}}</span>
+                        <span class="xy_text">汇率类型：{{agreeData.TaxExchangeRateType}}</span>
+                    </div>
+                    <div class="agree_content_right fl">
+                        <span v-if="!agreeData.isTaxPrePaid" class="xy_text">垫款上限（元）：{{agreeData.TaxUpperLimit}}</span>
+                        <span v-if="agreeData.isTaxAgreed" class="xy_text">约定汇率：{{agreeData.TaxExchangeRateValue}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="agree_item">
+                <div class="aggree_name clearfix">
+                    <span class="line fl"></span><span class="ml14">代理费条款</span>
+                </div>
+                <div class="divice"></div>
+                <div class="agree_content clearfix">
+                    <div class="agree_content_left fl">
+                        <span class="xy_text">结算方式：{{agreeData.AgencyFeePeriodType}}</span>
+                        <span v-if="agreeData.isAgencyAgreedPeriod" class="xy_text">约定期限(天)：{{agreeData.AgencyDaysLimit}}</span>
+                        <span v-if="agreeData.isAgencyMonthly" class="xy_text">结算日期(次月)：{{agreeData.AgencyMonthlyDay}}</span>
+                        <span class="xy_text">汇率类型：{{agreeData.AgencyFeeExchangeRateType}}</span>
+                    </div>
+                    <div class="agree_content_right fl">
+                        <span v-if="!agreeData.isAgencyPrePaid" class="xy_text">垫款上限（元）：{{agreeData.AgencyFeeUpperLimit}}</span>
+                        <span v-if="agreeData.isAgencyAgreed" class="xy_text">约定汇率：{{agreeData.AgencyExchangeRateValue}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="agree_item">
+                <div class="aggree_name clearfix">
+                    <span class="line fl"></span><span class="ml14">杂费条款</span>
+                </div>
+                <div class="divice"></div>
+                <div class="agree_content clearfix">
+                    <div class="agree_content_left fl">
+                        <span class="xy_text">结算方式：{{agreeData.IncidentalPeriodType}}</span>
+                        <span v-if="agreeData.isIncidentalAgreedPeriod" class="xy_text">约定期限(天)：{{agreeData.IncidentalDaysLimit}}</span>
+                        <span v-if="agreeData.isIncidentalMonthly" class="xy_text">结算日期(次月)：{{agreeData.IncidentalMonthlyDay}}</span>
+                        <span class="xy_text">汇率类型：{{agreeData.IncidentalExchangeRateType}}</span>
+                    </div>
+                    <div class="agree_content_right fl">
+                        <span v-if="!agreeData.isIncidentalPrePaid" class="xy_text">垫款上限（元）：{{agreeData.IncidentalUpperLimit}}</span>
+                        <span v-if="agreeData.isIncidentalAgreed" class="xy_text">约定汇率：{{agreeData.IncidentalExchangeRateValue}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="agree_item">
+                <div class="aggree_name clearfix">
+                    <span class="line fl"></span><span class="ml14">开票类型/税率</span>
+                </div>
+                <div class="divice"></div>
+                <div class="agree_content clearfix">
+                    <div class="agree_content_left fl">
+                        <span class="xy_text">开票类型：{{agreeData.InvoiceType}}</span>
+                    </div>
+                    <div class="agree_content_right fl">
+                        <span class="xy_text">税率：{{agreeData.InvoiceRate}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="agree_item">
+                <div class="aggree_name clearfix">
+                    <span class="line fl"></span><span class="ml14">导出与上传</span>
+                </div>
+                <div class="divice"></div>
+                <div class="agree_content clearfix">
+                    <div class="upload_wrap2 mt20">
+                        <p v-if="agreeData.FileUrl==''" class="tip mt16">提示：未上传</p>
+                        <div v-else class="upload_wrap1 mt20">
+                            <ul>
+                                <li class="clearfix">
+                                    <div class="file_icon fl"></div>
+                                    <div class="fl c_right">
+                                        <p class="file_name">{{agreeData.FileName}}</p>
+                                        <a :href="agreeData.FileUrl" target="_blank" class="link">预览</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <div class="clearfix mt26">
+                                <button v-on:click="declare_download_file" class="fl">导出</button>
+                                <a id="exportInfoForm" style="display: none" download>
+                                    <span id="ex-li" style="display: none"></span>
+                                </a>
+                                <el-upload class="fl" action=""
+                                           :show-file-list="false"
+                                           :http-request="httpRequest"
+                                           accept="image/jpg, image/bmp, image/jpeg, image/gif, image/png, application/pdf">
+                                    <button class="ml14">上传</button>
+                                </el-upload>
+                            </div>
+                            <p class="tip mt10">仅限图片、PDF文件，且文件不超过3M</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*<div v-if="agreeData.ThePageIsCustoms && agreeData.ThePageIsWarehouse" style="margin-top: 60px;"></div>*@
+    <div v-if="agreeData.ThePageIsWarehouse" v-show="tabname == '仓储协议'">
+        <p class="title">仓储协议书</p>
+        <div class="content">
+            <div class="agree_item">
+                <div class="aggree_name clearfix">
+                    <span class="line fl"></span><span class="ml14">导出与上传</span>
+                </div>
+                <div class="divice"></div>
+                <div class="agree_content clearfix">
+                    <div class="upload_wrap2 mt20">
+                        <p v-if="agreeData.StorageFileUrl==''" class="tip mt16">提示：未上传</p>
+                        <div v-else class="upload_wrap1 mt20">
+                            <ul>
+                                <li class="clearfix">
+                                    <div class="file_icon fl"></div>
+                                    <div class="fl c_right">
+                                        <p class="file_name">{{agreeData.StorageFileName}}</p>
+                                        <a :href="agreeData.StorageFileUrl" target="_blank" class="link">预览</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <div class="clearfix mt26">
+                                <button v-on:click="storage_download_file" class="fl">导出</button>
+                                <a id="storage_exportInfoForm" style="display: none" download>
+                                    <span id="storage_ex-li" style="display: none"></span>
+                                </a>
+                                <el-upload class="fl" action=""
+                                           :show-file-list="false"
+                                           :http-request="storagehttpRequest"
+                                           accept="image/jpg, image/bmp, image/jpeg, image/gif, image/png, application/pdf">
+                                    <button class="ml14">上传</button>
+                                </el-upload>
+                            </div>
+                            <p class="tip mt10">仅限图片、PDF文件，且文件不超过3M</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .account-agreement a:hover {
+        cursor: pointer;
+    }
+</style>
+<script>
+    var agree = new Vue({
+        el: "#agree",
+        data: function() {
+            return {
+                agreeData: @Html.Raw(Json.Encode(Model)),
+                URL: "",
+                fileFormat: "",
+
+                StorageURL: "",
+                StoragefileFormat: "",
+
+                tabname: '', // 选中 报关协议/仓储协议 标签标识
+            }
+        },
+        mounted() {
+            if (this.agreeData.ThePageIsCustoms) {
+                this.selectAgreement('报关协议');
+            } else if (this.agreeData.ThePageIsWarehouse) {
+                this.selectAgreement('仓储协议');
+            }
+        },
+        methods: {
+            declare_download_file: function() {
+                var that = this;
+                axios({
+                    url: "/Files/DownloadAgreement",
+                    method: "post",
+                    data: {
+                        id: this.agreeData.ClientID
+                    }
+                }).then(function(response) {
+                    if (response.data.type == "error") {
+                        that.onAlert(response.data.type, response.data.msg);
+                    } else {
+                        $('#exportInfoForm').attr("href", response.data.data);
+                        $('#exportInfoForm').attr("target", "_blank");
+                        $('#ex-li').trigger("click");
+                    }
+                }).catch(function(error) {
+                    that.onAlert("warning", error);
+                });
+            },
+            storage_download_file: function() {
+                var that = this;
+                axios({
+                    url: "/Files/StorageDownloadAgreement",
+                    method: "post",
+                    data: {
+                        id: this.agreeData.XDTClientID
+                    }
+                }).then(function(response) {
+                    if (response.data.type == "error") {
+                        that.onAlert(response.data.type, response.data.msg);
+                    } else {
+                        $('#storage_exportInfoForm').attr("href", response.data.data);
+                        $('#storage_exportInfoForm').attr("target", "_blank");
+                        $('#storage_ex-li').trigger("click");
+                    }
+                }).catch(function(error) {
+                    that.onAlert("warning", error);
+                });
+            },
+            // ------------- 报关协议书上传 -------------
+            saveFile: function() {
+                var that = this;
+                axios({
+                    url: "/Files/SaveAgreement",
+                    method: "post",
+                    data: {
+                        id: that.agreeData.ClientID,
+                        url: that.URL,
+                        filename: that.agreeData.FileName,
+                        ext: that.fileFormat
+                    }
+                }).then(function(response) {
+
+                    that.onAlert(response.data.type, response.data.msg);
+                    if (response.data.type == "success") {
+                        that.agreeData.FileUrl = response.data.data;
+                    }
+                }).catch(function(error) {
+                    that.onAlert("warning", error);
+                });
+            },
+            httpRequest: function(options) {
+                var that = this;
+                that.fileList = [];
+                UploadFile(options,
+                    '/Files/UploadPickUpFile',
+                    function(res) {
+                        if (res.type) {
+                            var file = JSON.parse(res.file);
+                            that.agreeData.FileUrl = file.fullURL;
+                            that.URL = file.URL;
+                            that.agreeData.FileName = file.name;
+                            that.fileFormat = file.fileFormat;
+                            that.saveFile();
+                        } else {
+                            that.onAlert("error", res.msg);
+                        }
+                    });
+            },
+            // ------------- 仓储协议书上传 -------------
+            saveStorageFile: function() {
+                var that = this;
+                axios({
+                    url: "/Files/SaveStorageAgreement",
+                    method: "post",
+                    data: {
+                        id: that.agreeData.XDTClientID,
+                        url: that.StorageURL,
+                        filename: that.agreeData.StorageFileName,
+                        ext: that.StoragefileFormat
+                    }
+                }).then(function(response) {
+
+                    that.onAlert(response.data.type, response.data.msg);
+                    if (response.data.type == "success") {
+                        that.agreeData.StorageFileUrl = response.data.data;
+                    }
+                }).catch(function(error) {
+                    that.onAlert("warning", error);
+                });
+            },
+            storagehttpRequest: function(options) {
+                var that = this;
+                that.fileList = [];
+                UploadFile(options,
+                    '/Files/UploadPickUpFile',
+                    function(res) {
+                        if (res.type) {
+                            var file = JSON.parse(res.file);
+                            that.agreeData.StorageFileUrl = file.fullURL;
+                            that.StorageURL = file.URL;
+                            that.agreeData.StorageFileName = file.name;
+                            that.StoragefileFormat = file.fileFormat;
+                            that.saveStorageFile();
+                        } else {
+                            that.onAlert("error", res.msg);
+                        }
+                    });
+            },
+
+            toFixed: function(num, val) {
+                return val.toFixed(num);
+            },
+            //消息提示框
+            onAlert: function(type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                    offset: 100
+                });
+            },
+
+            // 选择标签（报关协议/仓储协议）
+            selectAgreement(tab_name) {
+                $(".account-agreement li").removeClass("active");
+                $(".account-agreement li[tabname='" + tab_name + "']").addClass("active");
+                this.tabname = tab_name;
+            }
+        }
+    });
+</script>

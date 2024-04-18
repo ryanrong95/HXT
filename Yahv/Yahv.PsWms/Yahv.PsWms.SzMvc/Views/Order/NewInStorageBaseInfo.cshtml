@@ -1,0 +1,203 @@
+﻿<template id="newinstoragebaseinfo">
+    <div>
+        <div class="tb_wrap">
+            <table class="common_tb1 mt20 common_tb">
+                <tr>
+                    <th width="36px">序号</th>
+                    <th width="100px">自定义编号</th>
+                    <th width="100px">型号</th>
+                    <th width="100px">品牌</th>
+                    <th width="100px">封装</th>
+                    <th width="100px">批次</th>
+                    <th width="100px">包装类型</th>
+                    <th width="70px">最小包装量</th>
+                    <th width="70px">数量</th>
+                    <th width="70px">总数</th>
+                    <th width="36px">操作</th>
+                </tr>
+                <tr v-for="(item,index) in orderItems">
+                    <td>{{index+1}}</td>
+                    <td>
+                        <el-input size="mini" style="width: 90px" v-model="item.CustomCode"></el-input>
+                    </td>
+                    <td>
+                        <el-input size="mini" style="width: 90px" v-model="item.PartNumber"></el-input>
+                    </td>
+                    <td>
+                        <el-input size="mini" style="width: 90px" v-model="item.Brand"></el-input>
+                    </td>
+                    <td>
+                        <el-input size="mini" style="width: 90px" v-model="item.Package"></el-input>
+                    </td>
+                    <td>
+                        <el-input size="mini" style="width: 90px" v-model="item.DateCode"></el-input>
+                    </td>
+                    <td>
+                        <el-select size="mini" v-model="item.StocktakingTypeInt" v-on:change="stocktakingTypeChanged(index, item)" filterable clearable>
+                            <el-option v-for="it in stocktakingTypeOptions"
+                                       :key="it.value"
+                                       :label="it.text"
+                                       :value="it.value">
+                            </el-option>
+                        </el-select>
+                    </td>
+                    <td>
+                        <el-input size="mini" style="width: 60px" v-model="item.Mpq" v-on:focus="clearZero(item,'Mpq')"
+                                  v-on:blur="calcTotalAndAll(item,'Mpq')" v-on:input="calcTotalAndAll(item,'Mpq')"
+                                  :disabled="item.StocktakingTypeInt == '1'"></el-input>
+                    </td>
+                    <td>
+                        <el-input size="mini" style="width: 60px" v-model="item.PackageNumber" v-on:focus="clearZero(item,'PackageNumber')"
+                                  v-on:blur="calcTotalAndAll(item,'PackageNumber')" v-on:input="calcTotalAndAll(item,'PackageNumber')"></el-input>
+                    </td>
+                    <td class="text_left">{{item.ItemTotal}}</td>
+                    <td>
+                        <i v-on:click="deleteOneOrderItem(index)" class="tb_icon_del"></i>
+                    </td>
+                </tr>
+                <tr v-if="orderItems.length>0">
+                    <td colspan="8" class="text_center pr20  txt_tb_bottom">合计：</td>
+                    <td class="txt_tb_bottom text_left">{{allPackageNumber}}</td>
+                    <td class="txt_tb_bottom text_left">{{allItemTotal}}</td>
+                    <td class="txt_tb_bottom"></td>
+                </tr>
+                <tr v-if="orderItems.length==0">
+                    <td colspan="11">暂无数据</td>
+                </tr>
+            </table>
+        </div>
+        <div class="btn-tb-list clearfix mt26">
+            <el-button class="fl" v-on:click="addOneOrderItem">添加一行+</el-button>
+            <el-button class="btn_upload" v-on:click="dialogBatchAddOrderItemVisible()">批量导入<i></i></el-button>
+            <span class="txt_grey txt ml8">批量导入前，请先点击<a class="txt_blue" href="/Template/入库订单产品导入模板.xlsx">下载导入模板</a></span>
+        </div>
+    </div>
+</template>
+<script>
+    Vue.component(
+        'newinstoragebaseinfo',
+        {
+            template: "#newinstoragebaseinfo",
+            data: function () {
+                return {
+                    orderItems: [], //订单项
+                    stocktakingTypeOptions: [], //包装类型选项
+                    allPackageNumber: 0, //总的数量
+                    allItemTotal: 0, //总的总数
+                }
+            },
+            methods: {
+                //手工添加一行
+                addOneOrderItem: function () {
+                    var newOrderItem = {
+                        OrderItemID: "", //OrderItemID
+                        CustomCode: "", //自定义编号
+                        PartNumber: "", //型号
+                        Brand: "", //品牌
+                        Package: "", //封装
+                        DateCode: "", //批次
+                        StocktakingTypeInt: "1", //包装类型
+                        Mpq: 1, //最小包装量
+                        PackageNumber: 0, //数量
+                        ItemTotal: 0, //总数
+                    };
+                    this.orderItems.push(newOrderItem);
+                    this.calcSumInfo();
+                },
+                //删除一行
+                deleteOneOrderItem: function (index) {
+                    this.orderItems.splice(index, 1);
+                    this.calcSumInfo();
+                },
+                //计算联动的求和信息
+                calcSumInfo: function () {
+                    var that = this;
+                    that.allPackageNumber = 0;
+                    that.allItemTotal = 0;
+
+                    that.orderItems.forEach(function (item, index) {
+                        var mpq = Number(item.Mpq);
+                        var packageNumber = Number(item.PackageNumber);
+                        if (!isNaN(packageNumber)) {
+                            that.allPackageNumber = accAdd(that.allPackageNumber, packageNumber);
+                        }
+
+                        if (!isNaN(mpq) && !isNaN(packageNumber)) {
+                            var theItemTotal = (mpq * packageNumber);
+                            that.orderItems[index].ItemTotal = theItemTotal;
+                            that.allItemTotal = accAdd(that.allItemTotal, theItemTotal);
+                        }
+                    });
+                },
+                //焦点在输入框中, 若数值为0, 清除
+                clearZero: function (row, valuetext) {
+                    if (Number(row[valuetext]) == 0) {
+                        row[valuetext] = "";
+                    }
+                },
+                //计算各种总和
+                calcTotalAndAll: function (row, valuetext) {
+                    if (!ValidDecimal(row[valuetext])) {
+                        //如果不是数字
+                        //this.$nextTick(function () {
+                        //row[valuetext] = "0";
+                        //});
+                        row[valuetext] = row[valuetext].replace(/[^0-9]/g, '').replace(/\b(0+)/gi, "");
+                    } else {
+                        //如果是数字
+                        row[valuetext] = parseInt(row[valuetext]);
+                    }
+                    this.calcSumInfo();
+                },
+                //点击批量导入按钮
+                dialogBatchAddOrderItemVisible: function () {
+                    this.$emit("opendialogbatchaddorderitem");
+                },
+                //从Batch添加一行
+                addoneorderitemfrombatch: function (item) {
+                    var newOrderItem = {
+                        OrderItemID: "", //OrderItemID
+                        CustomCode: item.CustomCode, //自定义编号
+                        PartNumber: item.PartNumber, //型号
+                        Brand: item.Brand, //品牌
+                        Package: item.Package, //封装
+                        DateCode: item.DateCode, //批次
+                        StocktakingTypeInt: item.StocktakingTypeInt, //包装类型
+                        Mpq: item.Mpq, //最小包装量
+                        PackageNumber: item.PackageNumber, //数量
+                        ItemTotal: 0, //总数
+                    };
+                    this.orderItems.push(newOrderItem);
+                    //this.calcSumInfo();
+                },
+                //在批量提交之后计算求和信息
+                calcSumInfoAfterBatchSubmit: function () {
+                    this.calcSumInfo();
+                },
+                //包装类型选项改变
+                stocktakingTypeChanged: function (index, item) {
+                    if (item.StocktakingTypeInt == "1") {
+                        //如果包装类型改为了 1(个)
+                        this.orderItems[index].Mpq = 1;
+                        this.calcTotalAndAll(item, 'Mpq');
+                    }
+                },
+            },
+            mounted: function () {
+
+            },
+            created: function () {
+                //获取包装类型选项
+                var that = this;
+                axios.get('/Miscellaneous/StocktakingTypes', { params: {} })
+                    .then(function (res) {
+                        if (res.data.success == 200) {
+                            that.stocktakingTypeOptions = res.data.result;
+                        }
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    });
+            },
+        });
+</script>

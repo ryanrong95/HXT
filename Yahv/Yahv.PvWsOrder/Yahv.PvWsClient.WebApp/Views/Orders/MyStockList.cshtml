@@ -1,0 +1,332 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_LayoutOrder.cshtml";
+    ViewBag.navid = "MyStockList";
+}
+<link href="~/Content/css/Shopping.css" rel="stylesheet" />
+<div v-cloak id="vMyStockList" class="backshow">
+    <h2>我的库存</h2>
+    <div class="order_list_view">
+        <div class="order_btn">
+            @*<button v-on:click="add" class="btnAdd"><i class="el-icon-plus"></i>新增订单</button>*@
+        </div>
+        <div class="content" v-loading="indexData.loading" style="min-height:400px;">
+            <div v-if="!indexData.loading">
+                <el-table style="width: 100%;"
+                          :data="indexData.curItems"
+                          stripe>
+                    <el-table-column label="序号" type="index" width="48">
+                    </el-table-column>
+                    <el-table-column label="型号" prop="PartNumber">
+                    </el-table-column>
+                    <el-table-column label="品牌" prop="Manufacturer">
+                    </el-table-column>
+                    <el-table-column label="批号" prop="DateCode">
+                    </el-table-column>
+                    <el-table-column label="库存" prop="Quantity">
+                    </el-table-column>
+                    <el-table-column label="单位" prop="Unit">
+                    </el-table-column>
+                    <el-table-column label="操作" fixed="right" style="border-right: 1px solid #ebeef5" width="300" :show-overflow-tooltip="true">
+                        <template slot="header" slot-scope="scope">
+                            <div class="el-input el-input--mini" style="padding-left:0px;padding-right:0px;">
+                                <input type="text" autocomplete="off" placeholder="请输入型号或者品牌" v-model="search_data" class="el-input__inner">
+                            </div>
+                        </template>
+                        <template slot-scope="scope">
+                            <div class="shop-cartctrl">
+                                <button :disabled="scope.row.SaleQuantity==0" class="ctrl minus" v-on:click="curItemsMinus(scope.row)">-</button>
+                                <input v-model="scope.row.SaleQuantity" v-on:change.prevent="changeQuantity(scope.row)" class="ctrl quantity" min="1">
+                                <button :disabled="scope.row.SaleQuantity==scope.row.Quantity" v-on:click="curItemsPlus(scope.row)" class="ctrl plus">+</button>
+                                <form method="post">
+
+                                </form>
+                            </div>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <div class="overhide" v-if="indexData.curItems.length>0">
+                    <el-pagination class="fr" style="margin-top:20px;margin-bottom:30px" v-on:size-change="handleSizeChange"
+                                   v-on:current-change="handleCurrentChange"
+                                   :current-page="indexData.pageIndex"
+                                   :page-sizes="[5, 10, 20, 40]"
+                                   :page-size="indexData.pageSize"
+                                   layout="total, sizes, prev, pager, next, jumper"
+                                   :total="indexData.Total">
+                    </el-pagination>
+                </div>
+
+            </div>
+        </div>
+        <div class="cd-cart-container empty">
+            <a class="cd-cart-trigger" v-on:click.stop="toggleCart">
+                <ul class="count">
+                    <!-- cart items count -->
+                    <li>{{productCount}}</li>
+                    <li>{{productCount}}</li>
+                </ul> <!-- .count -->
+            </a>
+
+            <div class="cd-cart">
+                <div class="wrapper">
+                    <header>
+                        <p class="h2">已选择产品列表</p>
+                    </header>
+
+                    <div class="body">
+                        <ul>
+                            <li v-for="(item,index) of indexData.selectedItems" class="product overhide" :key="item.ID">
+                                <div class="p_model fl">
+                                    <span>{{item.PartNumber}}</span>
+                                </div>
+                                <div class="item_count fl">
+                                    <div class="itemquantity">
+                                        <button class="minus" v-on:click="selectedItemMinus(index,item)">-</button>
+                                        <input type='text' v-model="item.SaleQuantity" v-on:change.prevent="changeSelectedQuantity(index,item)">
+                                        <button class="plus" v-on:click="selectedItemPlus(index,item)" :disabled="item.SaleQuantity==item.Quantity">+</button>
+                                    </div>
+                                </div>
+                                <div class="delete_item fl">
+                                    <a v-on:click="delete_item(index,item)">删除</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="footer">
+                        <a class="checkout btn overhide">
+                            <span v-on:click="linkToDelivery('/Orders/TransferDeclarationAdd')" class="fl">转报关</span>
+                            <span v-on:click="linkToDelivery('/Orders/DeliveryAdd')" class="fl">发货</span>
+                        </a>
+                    </div>
+                </div>
+            </div> <!-- .cd-cart -->
+        </div>
+    </div>
+</div>
+<script>
+    var vMyStockList = new Vue({
+        el: "#vMyStockList",
+        data: function () {
+            return {
+                indexData: {
+                    loading: false,
+                    curItems: [],
+                    selectedItems: [],
+                    pageIndex: 1, //初始页
+                    pageSize: 5,    //每页的数据
+                    Total: 0,
+                    scrollTop: 0, //滚动条位置
+                    productId: 1,
+                },
+                search_data: "",
+                isOpen: false,
+            }
+        },
+        watch: {
+            //模糊查询
+            search_data: function (val, oldVal) {
+                this.paging();
+            },
+            productCount: function (val, oldVal) {
+                if (val > 0) {
+                    $(".cd-cart-container").removeClass('empty');
+                } else {
+                    $(".cd-cart-container").removeClass('cart-open')
+                    setTimeout(function () { $(".cd-cart-container").addClass('empty'); }, 1000);
+                }
+            }
+        },
+        mounted: function () {
+            this.paging();
+        },
+        computed: {
+            productCount: function () {
+                return this.indexData.selectedItems.length;
+            },
+        },
+        methods: {
+            linkToDelivery: function (path) {
+                var stuAnswerArr = JSON.stringify(this.indexData.selectedItems.filter(v=>v.SaleQuantity>0));//转成json字符串
+                //JS模拟post提交
+                var REVQForm = document.createElement("form");
+                REVQForm.setAttribute("method", 'POST');
+                REVQForm.setAttribute("action", path);
+                REVQForm.innerHTML = "";
+                var stuAnswerInput = document.createElement("input");
+                stuAnswerInput.setAttribute("type", "hidden");
+                stuAnswerInput.setAttribute("name", 'products');
+                stuAnswerInput.setAttribute("value", stuAnswerArr);
+                REVQForm.appendChild(stuAnswerInput);
+                document.body.appendChild(REVQForm);
+                REVQForm.submit();
+            },
+            changeSelectedQuantity: function (index, item) {
+                var saleQuantity = parseInt(item.SaleQuantity);
+                this.indexData.selectedItems[index].SaleQuantity = saleQuantity;
+                if (/^(0|[1-9][0-9]*)$/.test(saleQuantity)) {
+                    if (saleQuantity > item.Quantity || saleQuantity == 0) {
+                        this.indexData.selectedItems[index].SaleQuantity = 0;
+                    }
+                } else {
+                    this.indexData.selectedItems[index].SaleQuantity = 0;
+                }
+                this.synchroCurItems(this.indexData.selectedItems[index]);
+            },
+            changeInputSaleQuantity: function (row) {
+                row.SaleQuantity=parseInt(row.SaleQuantity)
+                if (/^(0|[1-9][0-9]*)$/.test(row.SaleQuantity)) {
+                    if (row.SaleQuantity > row.Quantity || row.SaleQuantity==0) {
+                        row.SaleQuantity = 0;
+                    }
+                } else {
+                    row.SaleQuantity = 0;
+                }
+            },
+            changeQuantity: function (row) {
+                this.changeInputSaleQuantity(row);
+                this.synchroSelectedItems(row);
+            },
+            //列表项减少
+            curItemsMinus: function (row) {
+                row.SaleQuantity--;
+                this.synchroSelectedItems(row);
+            },
+            //同步已选项
+            synchroSelectedItems: function (row) {
+                var item = this.indexData.selectedItems.find(c => c.ID == row.ID);
+                if (item == undefined) {
+                    if (row.SaleQuantity>0) {
+                        this.indexData.selectedItems.push(row);
+                    }
+                } else {
+                    if (row.SaleQuantity == 0) {
+                        this.indexData.selectedItems = this.indexData.selectedItems.filter(function (v) {
+                            return v.ID != row.ID;
+                        });
+                    } else {
+                        this.indexData.selectedItems.forEach(function (v) {
+                            if (v.ID == row.ID) {
+                                v = row;
+                            }
+                        });
+                    }
+                }
+            },
+            //列表项增加
+            curItemsPlus: function (row) {
+                row.SaleQuantity++;
+                this.synchroSelectedItems(row);
+            },
+            //同步列表选项
+            synchroCurItems: function (row) {
+                this.indexData.curItems.forEach(function (v, i, arr) {
+                    if (v.ID == row.ID) {
+                        v.SaleQuantity = row.SaleQuantity;
+                    }
+                })
+            },
+            selectedItemMinus: function (index, item) {
+                if (this.indexData.selectedItems[index].SaleQuantity > 0) {
+                    this.indexData.selectedItems[index].SaleQuantity--;
+                }
+                this.synchroCurItems(item);
+                if (item.SaleQuantity ==0) {
+                    this.delete_item(index, item);
+                }
+            },
+            selectedItemPlus: function (index, item) {
+                this.indexData.selectedItems[index].SaleQuantity++;
+                this.synchroCurItems(item);
+            },
+            delete_item: function (index, item) {
+                var that = this;
+                var topPosition = $(".body ul li").eq(index).offset().top - $(".body ul").offset().top;
+                $(".body ul li").eq(index).css('top', topPosition + 'px');
+                $(".body ul li").eq(index).addClass('deleted');
+                setTimeout(function () {
+                    $(".body ul li").eq(index).removeClass('deleted');
+                    that.indexData.selectedItems.splice(index, 1);
+                    that.indexData.curItems.forEach(function (v, i, arr) {
+                        if (v.ID == item.ID) {
+                            v.SaleQuantity = 0;
+                        }
+                    })
+                }, 500);
+            },
+            toggleCart: function () {
+                if (this.isOpen) {
+                    $(".cd-cart-container").removeClass('cart-open');
+                    setTimeout(function () {
+                        $(".body").scrollTop(0);
+                        //check if cart empty to hide it
+                        if (Number($(".count").find('li').eq(0).text()) == 0) $('.cd-cart-container').addClass('empty');
+                    }, 500);
+                } else {
+                    $('.cd-cart-container').addClass('cart-open');
+                }
+                this.isOpen = !this.isOpen;
+            },
+            //分页时同步数据
+            synchroPagingItems: function () {
+                var that = this;
+                that.indexData.selectedItems.forEach(function (v) {
+                    that.indexData.curItems.forEach(function (v1) {
+                        if (v.ID == v1.ID) {
+                            v1.SaleQuantity = v.SaleQuantity;
+                        }
+                    })
+                });
+            },
+            // 初始页currentPage、初始每页数据数pagesize和数据data
+            handleSizeChange: function (size) {
+                this.indexData.pageSize = size;
+                this.paging();
+            },
+            handleCurrentChange: function (currentPage) {
+                this.indexData.pageIndex = currentPage;
+                this.paging();
+            },
+            paging: function () {
+                var that = this;
+                that.indexData.loading = true;
+                axios({
+                    url: "/Orders/GetMyStockList",
+                    method: "post",
+                    data: {
+                        page: this.indexData.pageIndex,
+                        rows: this.indexData.pageSize,
+                        query: this.search_data,
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                    transformRequest: [function (data) {
+                        var ret = ''
+                        for (var it in data) {
+                            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+                        }
+                        return ret;
+                    }],
+                }).then(function (response) {
+                    var data = JSON.parse(response.data.data);
+                    that.indexData.curItems = data.list;
+                    //that.indexData.curItems = data;
+                    that.synchroPagingItems();
+                    that.indexData.Total = data.total;
+                    //that.indexData.Total = 7;
+                    that.indexData.loading = false;
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                });
+            },
+        }
+    });
+</script>

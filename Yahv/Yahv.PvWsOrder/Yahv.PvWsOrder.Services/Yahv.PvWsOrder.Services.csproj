@@ -1,0 +1,453 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{1579A49C-1DBF-4E41-8BA2-CE283EEF7D83}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Yahv.PvWsOrder.Services</RootNamespace>
+    <AssemblyName>Yahv.PvWsOrder.Services</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Aspose.Words, Version=19.11.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Aspose.Words.19.11.0\lib\Aspose.Words.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=1.0.0.999, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\SharpZipLib.1.0.0\lib\net45\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp">
+      <HintPath>..\packages\iTextSharp.5.5.4\lib\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NPOI, Version=2.4.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1">
+      <HintPath>..\packages\NPOI.2.4.1\lib\net45\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="Spire.Barcode, Version=2.3.0.16040, Culture=neutral, PublicKeyToken=663f351905198cb3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Solutions\Yahv.Utils\Dll\Spire.Barcode.dll</HintPath>
+    </Reference>
+    <Reference Include="Spire.License, Version=1.3.6.20, Culture=neutral, PublicKeyToken=b1144360237c8b3f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Solutions\Yahv.Utils\Dll\Spire.License.dll</HintPath>
+    </Reference>
+    <Reference Include="Spire.Pdf, Version=4.8.8.2020, Culture=neutral, PublicKeyToken=663f351905198cb3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Solutions\Yahv.Utils\Dll\Spire.Pdf.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Linq.Dynamic, Version=1.0.6132.35681, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Yahv.PvWsOrder.WebApi\Bin\System.Linq.Dynamic.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ClientModels\Application.cs" />
+    <Compile Include="ClientModels\Client\MyMsgConfig.cs" />
+    <Compile Include="ClientModels\Client\Payer.cs" />
+    <Compile Include="ClientModels\Consts.cs" />
+    <Compile Include="ClientModels\CustomerServiceLink.cs" />
+    <Compile Include="ClientModels\MobileLog.cs" />
+    <Compile Include="ClientModels\Order\DeclareOrder.cs" />
+    <Compile Include="ClientModels\Order\DeliveryOrder.cs" />
+    <Compile Include="ClientModels\Order\OrderRequirement.cs" />
+    <Compile Include="ClientModels\Order\ReceivedOrder.cs" />
+    <Compile Include="ClientModels\PaymentRecord.cs" />
+    <Compile Include="ClientModels\WeChat\WeChat.cs" />
+    <Compile Include="ClientModels\WeChat\WXRESTClient.cs" />
+    <Compile Include="ClientModels\WeChat\WXToolKit.cs" />
+    <Compile Include="ClientViews\CgWaybillsTopView.cs" />
+    <Compile Include="ClientViews\Client\MyCreditsUsdStatisticsView.cs" />
+    <Compile Include="ClientViews\Client\MyMsgConfigView.cs" />
+    <Compile Include="ClientViews\Client\MyPayerView.cs" />
+    <Compile Include="ClientViews\Client\bak_MySupplierContactView.cs" />
+    <Compile Include="ClientViews\Client\MyPersonInvoicesView.cs" />
+    <Compile Include="ClientViews\Client\StorageViewForAgency2Declare.cs" />
+    <Compile Include="ClientViews\Client\UsersView.cs" />
+    <Compile Include="ClientViews\CustomerServiceLinksView.cs" />
+    <Compile Include="ClientViews\LsOrder\MyLsOrdersView.cs" />
+    <Compile Include="ClientViews\MyApplicationView.cs" />
+    <Compile Include="ClientViews\Order\bak_MyXDTDecOrders.cs" />
+    <Compile Include="ClientViews\Order\DeclareOrders.cs" />
+    <Compile Include="ClientViews\Order\DeliveryOrders.cs" />
+    <Compile Include="ClientViews\Order\ReceiveAmountOrder.cs" />
+    <Compile Include="ClientViews\Order\ReceivedOrders.cs" />
+    <Compile Include="ClientViews\Order\UnConfirmedOrders.cs" />
+    <Compile Include="ClientViews\Order\UnReceivedOrderView.cs" />
+    <Compile Include="ClientViews\Origin\OrderRequirementOrigin.cs" />
+    <Compile Include="ClientViews\Origin\PvWsOrderBaseOrderView.cs" />
+    <Compile Include="ClientViews\PaymentRecordsView.cs" />
+    <Compile Include="ClientViews\Supplier\MySupplierConsignors.cs" />
+    <Compile Include="ClientViews\Supplier\MySupplierContacts.cs" />
+    <Compile Include="ClientViews\Supplier\MySupplierPayees.cs" />
+    <Compile Include="ClientViews\Supplier\MySuppliers.cs" />
+    <Compile Include="ClientViews\Supplier\SupplierViewBynPayeeID.cs" />
+    <Compile Include="ClientViews\Warehouse\InputReportTopView.cs" />
+    <Compile Include="ClientViews\Warehouse\OutputReportTopView.cs" />
+    <Compile Include="Common\PDFHelper.cs" />
+    <Compile Include="CompanyService.cs" />
+    <Compile Include="DyjModels\FeeApplyModel.cs" />
+    <Compile Include="Enums\ExpressCarrierType.cs" />
+    <Compile Include="Enums\InvoiceEnum.cs" />
+    <Compile Include="Enums\OrderItemStatus.cs" />
+    <Compile Include="Enums\PayType.cs" />
+    <Compile Include="Enums\TempStorageStatus.cs" />
+    <Compile Include="Extends\CrmNoticeExtends.cs" />
+    <Compile Include="InvoiceApiSetting.cs" />
+    <Compile Include="Models\Adopt\AdoptTmepStock.cs" />
+    <Compile Include="Models\Adopt\IOrderCheck.cs" />
+    <Compile Include="Models\Adopt\OrderCheckContext.cs" />
+    <Compile Include="Models\Adopt\ScCustomsCheck.cs" />
+    <Compile Include="Models\Adopt\TStorages.cs" />
+    <Compile Include="Models\Adopt\TWaybills.cs" />
+    <Compile Include="Models\Adopt\WsOrderCheck.cs" />
+    <Compile Include="Models\Application\ApplicationPayee.cs" />
+    <Compile Include="Models\Application\ApplicationItem.cs" />
+    <Compile Include="Models\Bill\WsClientBill.cs" />
+    <Compile Include="Models\Document\vCatalog.cs" />
+    <Compile Include="Models\Document\vDocument.cs" />
+    <Compile Include="Models\Exception\ExceptionLog.cs" />
+    <Compile Include="Models\Exception\ExceptionLogExtends.cs" />
+    <Compile Include="Models\GlobalTimer.cs" />
+    <Compile Include="Models\Invoice\InvoiceImport.cs" />
+    <Compile Include="Models\Invoice\InvoiceNoticeItem.cs" />
+    <Compile Include="Models\Invoice\InvoiceNotice.cs" />
+    <Compile Include="Models\Invoice\InvoiceXml.cs" />
+    <Compile Include="Models\Invoice\InvoiceXmlModel.cs" />
+    <Compile Include="Models\Invoice\MakeAccountHandler.cs" />
+    <Compile Include="Models\Invoice\WordNo\InvoiceWordNo.cs" />
+    <Compile Include="Models\Invoice\WordNo\IWordNo.cs" />
+    <Compile Include="Models\Invoice\WordNo\WordNoHandler.cs" />
+    <Compile Include="Models\Invoice\WordNo\WordNoTrigger.cs" />
+    <Compile Include="Models\SF\Commodity.cs" />
+    <Compile Include="Models\SF\Receiver.cs" />
+    <Compile Include="Models\SF\Sender.cs" />
+    <Compile Include="Models\SF\SFCall.cs" />
+    <Compile Include="Models\SF\SFConfig.cs" />
+    <Compile Include="Models\SF\SFExpres.cs" />
+    <Compile Include="Models\SF\SFRequestPara.cs" />
+    <Compile Include="Models\SF\SFResponse.cs" />
+    <Compile Include="Models\SF\SFWaybillPrinter.cs" />
+    <Compile Include="Models\SF\SpecialCharacter.cs" />
+    <Compile Include="Models\Storage\StorageListModel.cs" />
+    <Compile Include="Models\ZipFile.cs" />
+    <Compile Include="PvCrmApiSetting.cs" />
+    <Compile Include="PvFinanceApiSetting.cs" />
+    <Compile Include="Views\Alls\Application\ApplicationItemsAll.cs" />
+    <Compile Include="Views\Alls\Bill\ClientBillsAll.cs" />
+    <Compile Include="Views\Alls\Storage\TempStoragesAlls.cs" />
+    <Compile Include="Views\Alls\Storage\TempTrackerWsClients.cs" />
+    <Compile Include="Views\Origins\Application\ApplicationPayersOrigin.cs" />
+    <Compile Include="Views\Origins\Application\Application_LogsOrigin.cs" />
+    <Compile Include="Views\Origins\Application\ApplicationItemsOrigin.cs" />
+    <Compile Include="Views\Origins\Document\vCatalogsOrigin.cs" />
+    <Compile Include="Views\Origins\Document\vDocumentsOrigin.cs" />
+    <Compile Include="Views\Origins\Invoice\InvoiceNoticesOrigin.cs" />
+    <Compile Include="Views\Origins\Invoice\InvoiceNoticeItemsOrigin.cs" />
+    <Compile Include="Views\Origins\Invoice\vInvoicesTopView.cs" />
+    <Compile Include="Views\Origins\Storage\TStoragesOrigin.cs" />
+    <Compile Include="Views\Origins\Storage\TWaybillsOrigin.cs" />
+    <Compile Include="Views\Rolls\Document\vCatalogTree.cs" />
+    <Compile Include="Views\Rolls\Document\vDocumentsRoll.cs" />
+    <Compile Include="Views\Rolls\Express\ExpressCompanyView.cs" />
+    <Compile Include="Views\Rolls\Express\ExpressTypeView.cs" />
+    <Compile Include="Views\Rolls\Express\KDDRequestModel.cs" />
+    <Compile Include="Views\Rolls\Express\KDDResultModel.cs" />
+    <Compile Include="Views\Rolls\Express\WayBillCodeUpdater.cs" />
+    <Compile Include="Views\Rolls\Invoice\InvoiceDetailView.cs" />
+    <Compile Include="Views\Rolls\Invoice\InvoicedListView.cs" />
+    <Compile Include="Views\Rolls\Invoice\InvoiceNoticeItemOriginView.cs" />
+    <Compile Include="Views\Rolls\Invoice\InvoiceNoticeItemViewForBatchPrint.cs" />
+    <Compile Include="Views\Rolls\Invoice\InvoiceNoticeOriginView.cs" />
+    <Compile Include="Views\Rolls\Invoice\Invoices_Show_View.cs" />
+    <Compile Include="Views\Rolls\Invoice\InvoicingListView.cs" />
+    <Compile Include="Views\Rolls\Invoice\ServiceManagerByErmClientIDView.cs" />
+    <Compile Include="Views\Rolls\Invoice\UnInvoiceListView.cs" />
+    <Compile Include="Views\Rolls\Invoice\VourcherInfoView.cs" />
+    <Compile Include="WidelyUsedUnit.cs" />
+    <Compile Include="XDTClientView\AdvanceMoneyAppliesView.cs" />
+    <Compile Include="XDTClientView\AdvanceRecordsView.cs" />
+    <Compile Include="XDTClientView\ClientAccountPayablesView.cs" />
+    <Compile Include="XDTClientView\ClientSupplierView.cs" />
+    <Compile Include="XDTClientView\CurrenciesView.cs" />
+    <Compile Include="XDTClientView\ExchangeRatesView.cs" />
+    <Compile Include="XDTClientView\MyMainOrdersView.cs" />
+    <Compile Include="XDTClientView\MyPayExchangeApplies.cs" />
+    <Compile Include="XDTClientView\NoticeBoardView.cs" />
+    <Compile Include="XDTClientView\OrderAgentProxyView.cs" />
+    <Compile Include="XDTClientView\OrderAgreementTopView.cs" />
+    <Compile Include="XDTClientView\OrderCurrentPayAmountView.cs" />
+    <Compile Include="XDTClientView\OrderTracesView.cs" />
+    <Compile Include="XDTClientView\ClientAgreementFilesView.cs" />
+    <Compile Include="XDTClientView\PrePayApplyFilesView.cs" />
+    <Compile Include="XDTClientView\PayExchangeApplyFilesView.cs" />
+    <Compile Include="XDTClientView\PayExchangeApplyLogsView.cs" />
+    <Compile Include="XDTClientView\CustomExchangeRatesView.cs" />
+    <Compile Include="XDTClientView\XDTCustomsInvoiceView.cs" />
+    <Compile Include="XDTClientView\XDTOrderInvoiceTopView.cs" />
+    <Compile Include="XDTClientView\XDTOrderInvoiceView.cs" />
+    <Compile Include="XDTClientView\XDTOrderView.cs" />
+    <Compile Include="XDTClientView\PayExchangeSensitiveWordCheckView.cs" />
+    <Compile Include="XDTClientView\RealTimeExchangeRatesView.cs" />
+    <Compile Include="XDTModels\ClientAccountPayable.cs" />
+    <Compile Include="XDTModels\ClientOrder.cs" />
+    <Compile Include="XDTModels\ExchangeRate.cs" />
+    <Compile Include="XDTModels\NoticeBoardModel.cs" />
+    <Compile Include="XDTModels\OrderAgentProxy.cs" />
+    <Compile Include="XDTModels\OrderBillProxy.cs" />
+    <Compile Include="XDTModels\PrePayAgentProxy.cs" />
+    <Compile Include="XDTModels\PayExchangeAgentProxy.cs" />
+    <Compile Include="XDTModels\PayExchangeApply.cs" />
+    <Compile Include="XDTModels\PrePayApplyExtends.cs" />
+    <Compile Include="接口通用开发说明.cs" />
+    <Compile Include="ClientModels\Bill.cs" />
+    <Compile Include="ClientModels\Client\Supplier.cs" />
+    <Compile Include="ClientModels\Order\bak_DeclareOrderExtends.cs" />
+    <Compile Include="ClientModels\Order\bak_DeliveryOrderExtends.cs" />
+    <Compile Include="ClientModels\Order\bak_RecievedOrderExtends.cs" />
+    <Compile Include="ClientModels\Order\bak_TransferEntryOrderExtends.cs" />
+    <Compile Include="ClientModels\Order\bak_TransportOrderExtends.cs" />
+    <Compile Include="ClientViews\Client\CurrenciesView.cs" />
+    <Compile Include="ClientModels\Client\PreProduct.cs" />
+    <Compile Include="ClientModels\Client\StorageExtend.cs" />
+    <Compile Include="ClientModels\Client\User.cs" />
+    <Compile Include="ClientModels\Notice.cs" />
+    <Compile Include="ClientModels\Order\Order.cs" />
+    <Compile Include="ClientModels\Order\LsOrderExtends.cs" />
+    <Compile Include="ClientModels\Order\OrderExtends.cs" />
+    <Compile Include="ClientModels\Order\OrderInput.cs" />
+    <Compile Include="ClientModels\Order\OrderItem.cs" />
+    <Compile Include="ClientModels\Order\bak_OrderOperationLog.cs" />
+    <Compile Include="ClientModels\Order\OrderOutput.cs" />
+    <Compile Include="ClientModels\Suggestion.cs" />
+    <Compile Include="ClientModels\Waybill\Waybill.cs" />
+    <Compile Include="ClientViews\CenterFilesView.cs" />
+    <Compile Include="ClientViews\Client\bak_MyAccountPayableView.cs" />
+    <Compile Include="ClientViews\Client\bak_MyBalanceView.cs" />
+    <Compile Include="ClientViews\Client\bak_MyBeneficaryView.cs" />
+    <Compile Include="ClientViews\Client\bak_MyCashRecordsView.cs" />
+    <Compile Include="ClientViews\Client\MyConsigneesView.cs" />
+    <Compile Include="ClientViews\Client\MyContactsView.cs" />
+    <Compile Include="ClientViews\Client\bak_MyCreditRecordsView.cs" />
+    <Compile Include="ClientViews\Client\MyInvoicesView.cs" />
+    <Compile Include="ClientViews\Client\MyClientProductsView.cs" />
+    <Compile Include="ClientViews\Client\bak_MySupplierAddressView.cs" />
+    <Compile Include="ClientViews\Client\bak_MySupplierBankView.cs" />
+    <Compile Include="ClientViews\Client\bak_MySuppliersView.cs" />
+    <Compile Include="ClientViews\Client\bak_MyVouchersStatisticsView.cs" />
+    <Compile Include="ClientViews\Order\bak_ConfirmOrderView.cs" />
+    <Compile Include="ClientViews\Order\bak_DeliveryOrderView.cs" />
+    <Compile Include="ClientViews\Client\MyCreditsStatisticsView.cs" />
+    <Compile Include="ClientViews\LsOrder\LsProductView.cs" />
+    <Compile Include="ClientViews\Order\bak_MyOrderOperationLogView.cs" />
+    <Compile Include="ClientViews\LsOrder\bak_MyLsOrders.cs" />
+    <Compile Include="ClientViews\Order\MyOrders.cs" />
+    <Compile Include="ClientViews\Client\MyStorageView.cs" />
+    <Compile Include="ClientViews\NoticeAlls.cs" />
+    <Compile Include="ClientViews\LsOrder\bak_LsOrderAlls.cs" />
+    <Compile Include="ClientViews\LsOrder\LsOrderItemAlls.cs" />
+    <Compile Include="ClientViews\Order\OrderItemAlls.cs" />
+    <Compile Include="ClientViews\Order\OrderViewBase.cs" />
+    <Compile Include="ClientViews\Order\bak_DeclareOrderView.cs" />
+    <Compile Include="ClientViews\Origin\OrderBaseOrigin.cs" />
+    <Compile Include="ClientViews\Origin\OrderInputOrigin.cs" />
+    <Compile Include="ClientViews\Origin\OrderItemOrigin.cs" />
+    <Compile Include="ClientViews\Origin\OrderOutputOrigin.cs" />
+    <Compile Include="ClientViews\Order\bak_RecievedOrderView.cs" />
+    <Compile Include="ClientViews\SuggestionAlls.cs" />
+    <Compile Include="ClientViews\TrackerAdminsView.cs" />
+    <Compile Include="ClientViews\Order\bak_TransDeclareOrderView.cs" />
+    <Compile Include="ClientViews\Order\bak_TransportOrderView.cs" />
+    <Compile Include="ClientViews\WayBillAlls.cs" />
+    <Compile Include="Common\FileDirectory.cs" />
+    <Compile Include="Common\Helper.cs" />
+    <Compile Include="ConstConfig\ConstConfig.cs" />
+    <Compile Include="Enums\ClassifyEnums.cs" />
+    <Compile Include="Enums\ClientEnums.cs" />
+    <Compile Include="Enums\CompanyType.cs" />
+    <Compile Include="Enums\ExpressPayType.cs" />
+    <Compile Include="Enums\ApplicationEnum.cs" />
+    <Compile Include="Enums\CouponEnum.cs" />
+    <Compile Include="Enums\OrderEnums.cs" />
+    <Compile Include="Enums\UserStatus.cs" />
+    <Compile Include="Enums\VueMsgType.cs" />
+    <Compile Include="ErrorLogger.cs" />
+    <Compile Include="Extends\ExportFileExtends.cs" />
+    <Compile Include="Extends\FinanceExtends.cs" />
+    <Compile Include="Extends\LsOrderExtends.cs" />
+    <Compile Include="Extends\NoticeExtends.cs" />
+    <Compile Include="Extends\OrderItemExtends.cs" />
+    <Compile Include="Extends\OrderItemTermExtends.cs" />
+    <Compile Include="Extends\PreProductExtends.cs" />
+    <Compile Include="Extends\PvbCrmExtends.cs" />
+    <Compile Include="Extends\WaybillExtends.cs" />
+    <Compile Include="Extends\OrderExtends.cs" />
+    <Compile Include="Models\Bill\PaymentStatistic.cs" />
+    <Compile Include="Models\Bill\VouchersStatistic.cs" />
+    <Compile Include="Models\Classify\ClassifiedResult.cs" />
+    <Compile Include="Models\Classify\ClassifiedPartNumber.cs" />
+    <Compile Include="Models\Classify\ClassifyProductExcel.cs" />
+    <Compile Include="Models\Classify\OrderItem.cs" />
+    <Compile Include="Models\Classify\Lock_Classify.cs" />
+    <Compile Include="Models\Client\WsSupplier.cs" />
+    <Compile Include="Models\Customs\CustomsRecord.cs" />
+    <Compile Include="Models\LsOrder\InvoiceXml.cs" />
+    <Compile Include="Models\LsOrder\LsOrder.cs" />
+    <Compile Include="Models\LsOrder\LsOrderItem.cs" />
+    <Compile Include="Models\LsOrder\LsProductPrice.cs" />
+    <Compile Include="Models\Order\Condition.cs" />
+    <Compile Include="Models\Order\Logs_Order.cs" />
+    <Compile Include="Models\Order\OrderItem.cs" />
+    <Compile Include="Models\Order\Order.cs" />
+    <Compile Include="Models\Client\WsClient.cs" />
+    <Compile Include="Models\Order\OrderItemsChcd.cs" />
+    <Compile Include="Models\Order\OrderItemsTerm.cs" />
+    <Compile Include="Models\Application\ApplicationPayer.cs" />
+    <Compile Include="Models\Application\Application_Logs.cs" />
+    <Compile Include="Models\Application\Application.cs" />
+    <Compile Include="Models\Storage\Storage.cs" />
+    <Compile Include="Models\Waybill\WayCost.cs" />
+    <Compile Include="Models\Waybill\Waybill.cs" />
+    <Compile Include="ClientViews\Order\OrderAlls.cs" />
+    <Compile Include="ClientViews\Order\MyOrderBillView.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PvClientConfig.cs" />
+    <Compile Include="PvWmsApiSetting.cs" />
+    <Compile Include="PvDataApiSetting.cs" />
+    <Compile Include="PvWsOrderApiSetting.cs" />
+    <Compile Include="Views\Alls\Admin\ProductsAll.cs" />
+    <Compile Include="Views\Alls\Admin\AdminsAll.cs" />
+    <Compile Include="Views\Alls\Admin\CompanysAll.cs" />
+    <Compile Include="Views\Alls\Application\ApplicationsAll.cs" />
+    <Compile Include="Views\Alls\Bill\PaymentsStatisticsAll.cs" />
+    <Compile Include="Views\Alls\Bill\VouchersStatisticsAll.cs" />
+    <Compile Include="Views\Alls\Classify\ClassifyProductsAll.cs" />
+    <Compile Include="Views\Alls\Classify\ClassifyProductsAll_bak.cs" />
+    <Compile Include="Views\Alls\Classify\ClassifyProductsExcel.cs" />
+    <Compile Include="Views\Alls\Classify\Locks_ClassifyAll.cs" />
+    <Compile Include="Views\Alls\Client\WsClientsAlls.cs" />
+    <Compile Include="Views\Alls\Client\WsSupplierAlls.cs" />
+    <Compile Include="Views\Alls\LsOrder\LsOrderItemsAll.cs" />
+    <Compile Include="Views\Alls\Storage\StoragesAlls.cs" />
+    <Compile Include="Views\Alls\Waybill\WaybillsAlls.cs" />
+    <Compile Include="Views\Alls\LsOrder\LsOrdersAll.cs" />
+    <Compile Include="Views\Origins\Application\ApplicationPayeesOrigin.cs" />
+    <Compile Include="Views\Origins\Application\ApplicationsOrigin.cs" />
+    <Compile Include="Views\Origins\Order\OrdersOrigin.cs" />
+    <Compile Include="Views\Rolls\LsOrder\LsOrderItemRoll.cs" />
+    <Compile Include="Views\Rolls\Order\ExtendOrderView.cs" />
+    <Compile Include="Views\Rolls\Order\BaseOrderView.cs" />
+    <Compile Include="Views\Origins\Classify\ClassifiedPartNumbersOrigin.cs" />
+    <Compile Include="Views\Origins\Classify\Locks_ClassifyOrigin.cs" />
+    <Compile Include="Views\Alls\Order\OrderAlls.cs" />
+    <Compile Include="Views\Alls\Order\OrderItemsAlls.cs" />
+    <Compile Include="Views\Origins\Order\OrderItemsOrigin.cs" />
+    <Compile Include="Views\Rolls\Order\OrderFilesRoll.cs" />
+    <Compile Include="Views\Rolls\Order\OrderItemsRoll.cs" />
+    <Compile Include="Views\Rolls\Storage\ClientStorageRoll.cs" />
+    <Compile Include="Views\Rolls\Storage\OrderStorageRoll.cs" />
+    <Compile Include="Warehouse\SortingWaybill.cs" />
+    <Compile Include="WlAdminApiSetting.cs" />
+    <Compile Include="XDTClientView\ClientAgreementView.cs" />
+    <Compile Include="XDTClientView\ClientClassifiedPreProductsView.cs" />
+    <Compile Include="XDTClientView\ClientConsigeeView.cs" />
+    <Compile Include="XDTClientView\ClientCustomsTaxReportView.cs" />
+    <Compile Include="XDTClientView\ClientPreProductsView.cs" />
+    <Compile Include="XDTClientView\ClientSupplierAddressView.cs" />
+    <Compile Include="XDTClientView\ClientSupplierBankView.cs" />
+    <Compile Include="XDTClientView\ClientDecHeadsView.cs" />
+    <Compile Include="XDTClientView\PayExchangeOrderView.cs" />
+    <Compile Include="XDTModels\OrderConfirmed.cs" />
+    <Compile Include="XDTModels\ReceptorOrder.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Handlers\" />
+    <Folder Include="Models\MakeAccount\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Solutions\Layers.Data\Layers.Data.csproj">
+      <Project>{fed16b15-565b-4ed6-a876-2146eb16b011}</Project>
+      <Name>Layers.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Layers.Linq\Layers.Linq.csproj">
+      <Project>{56c33683-ce9a-4cc5-9cef-92e03bc8f739}</Project>
+      <Name>Layers.Linq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Yahv.Linq\Yahv.Linq.csproj">
+      <Project>{c8c572df-2bba-4483-b332-2652805aef87}</Project>
+      <Name>Yahv.Linq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Yahv.Services\Yahv.Services.csproj">
+      <Project>{ef7c5b21-4ce2-454a-8719-70e6dadacb69}</Project>
+      <Name>Yahv.Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Yahv.Underly\Yahv.Underly.csproj">
+      <Project>{15b56201-a129-4396-9431-0e5f9da7d9f9}</Project>
+      <Name>Yahv.Underly</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Yahv.Usually\Yahv.Usually.csproj">
+      <Project>{fa84a973-fc0b-4a57-9c6a-9212392f2d1c}</Project>
+      <Name>Yahv.Usually</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Yahv.Utils\Yahv.Utils.csproj">
+      <Project>{870A94D5-F08E-481F-A7AE-B90B5C249882}</Project>
+      <Name>Yahv.Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Yahv.Csrm\Yahv.Payments\Yahv.Payments.csproj">
+      <Project>{66924e27-72e9-4c5a-8cf3-220de6519a1f}</Project>
+      <Name>Yahv.Payments</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

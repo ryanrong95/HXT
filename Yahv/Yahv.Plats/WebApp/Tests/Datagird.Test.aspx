@@ -1,0 +1,122 @@
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Uc/Works.Master" AutoEventWireup="true" CodeBehind="Datagird.Test.aspx.cs" Inherits="WebApp.Tests.Datagird_Test" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="cphHead" runat="server">
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="cphForm" runat="server">
+
+    <!-- 表格 -->
+    <table class="easyui-datagrid" id="dg"></table>
+
+    <!--工具-->
+    <div id="tb" style="padding: 5px; height: auto">
+        <div>
+            Date From:
+            <input class="easyui-datebox" style="width: 150px">
+            To:
+            <input class="easyui-datebox" style="width: 150px">
+            Language:
+            <select class="easyui-combobox" panelheight="auto" style="width: 100px">
+                <option value="java">Java</option>
+                <option value="c">C</option>
+                <option value="basic">Basic</option>
+                <option value="perl">Perl</option>
+                <option value="python">Python</option>
+            </select>
+            <a href="#" class="easyui-linkbutton" iconcls="icon-search">Search</a>
+        </div>
+        <div style="height: 5px;"></div>
+        <div>
+            <a href="#" class="easyui-linkbutton" iconcls="icon-add" plain="true">新增</a>
+            <!--<a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true"></a>-->
+            <!--<a href="#" class="easyui-linkbutton" iconCls="icon-save" plain="true"></a>-->
+            <!--<a href="#" class="easyui-linkbutton" iconCls="icon-cut" plain="true"></a>-->
+            <a href="#" class="easyui-linkbutton" iconcls="icon-remove" plain="true">删除</a>
+        </div>
+
+    </div>
+    <script>
+        $(function () {
+            //设置表格
+            $("#dg").myDatagrid({
+                columns: [[
+                    { field: 'KeyCode', title: '关键词标识', width: 50, sortable: false },
+                    { field: 'Keys', title: '关键词', width: 50, sortable: false },
+                    { field: 'CacheTime', title: '缓存时间(秒,本页排序)', width: 50, sortable: true },
+                    { field: 'TotalCount', title: '频道ID', width: 30, sortable: false },
+                    { field: 'LastCacheDate', title: '最后缓存时间', width: 100, sortable: false },
+                    { field: 'CreateTime', title: '创建时间', width: 40, sortable: false },
+                    { field: 'Oper', title: '操作', width: 50, formatter: formatterOper }
+                ]],
+                loadFilter: pagerFilter,
+                toolbar: '#tb'
+            });
+
+            var data = getData();
+            $("#dg").myDatagrid('loadData', data);
+
+            $("body").css({ visibility: "visible" });
+        });
+        function formatterOper(value, rowData, rowIndex) {
+            return ['<span class="easyui-formatted">',
+             , '<a id="btn" href="#" class="easyui-linkbutton" data-options="iconCls:\'icon-search\'" onclick="showEditPage(this,null)">编辑</a>'
+             , ' '
+             , '<a id="btn" href="#" class="easyui-linkbutton" data-options="iconCls:\'icon-remove\'" onclick="showEditPage(this,null)">删除</a>'
+             , '</span>'].join('');
+        }
+        //模拟获取数据并且分页显示
+        function getData() {
+            var rows = [];
+            for (var i = 1; i <= 800; i++) {
+                var amount = Math.floor(Math.random() * 1000);
+                var price = Math.floor(Math.random() * 1000);
+                rows.push({
+                    KeyCode: 'Inv No ' + i,
+                    Keys: 'Name ' + i,
+                    CacheTime: amount,
+                    TotalCount: price,
+                    LastCacheDate: amount * price,
+                    CreateTime: $.fn.datebox.defaults.formatter(new Date()),
+                });
+            }
+            return rows;
+        }
+
+        function pagerFilter(data) {
+            if (typeof data.length == 'number' && typeof data.splice == 'function') {	// is array
+                data = {
+                    total: data.length,
+                    rows: data
+                }
+            }
+            var dg = $(this);
+            var opts = dg.datagrid('options');
+            var pager = dg.datagrid('getPager');
+            pager.pagination({
+                onSelectPage: function (pageNum, pageSize) {
+                    opts.pageNumber = pageNum;
+                    opts.pageSize = pageSize;
+                    pager.pagination('refresh', {
+                        pageNumber: pageNum,
+                        pageSize: pageSize
+                    });
+                    dg.datagrid('loadData', data);
+                }
+            });
+            if (!data.originalRows) {
+                data.originalRows = (data.rows);
+            }
+            var start = (opts.pageNumber - 1) * parseInt(opts.pageSize);
+            var end = start + parseInt(opts.pageSize);
+            data.rows = (data.originalRows.slice(start, end));
+            return data;
+        }
+        function showEditPage(item, data) {
+            $.myDialog({ url: '../../Tests/Postest.aspx', data: data });
+        }
+        function deleteItem(item, data) {
+            console.log(item);
+            console.log(data);
+        }
+    </script>
+
+</asp:Content>

@@ -1,0 +1,159 @@
+﻿
+@{
+                /**/
+
+                ViewBag.Title = "发票信息管理";
+}
+
+<div id="vPersonInvoice" v-cloak class="tab_content">
+    <div class="query_wrap">
+        <button v-on:click="add_PersonInvoice" class="btn btn1">新增发票信息</button>
+    </div>
+    <div class="tb_wrap" v-loading="loading">
+        <table class="common_tb1 mt30">
+            <tr>
+                <th width="36px">序号</th>
+                <th>个人/企业</th>
+                <th>类型</th>
+                <th>抬头</th>
+                <th>纳税人识别号</th>
+                <th>支付方式</th>
+                <th>是否默认</th>
+                <th>操作</th>
+            </tr>
+            <tr v-for="(item,index) in data.personInvoices">
+                <td>{{index+1}}</td>
+                <td>{{item.PerOrEnpDes}}</td>
+                <td>{{item.TypeDes}}</td>
+                <td>{{item.Title}}</td>
+                <td>{{item.TaxNumber}}</td>
+                <td>{{item.DeliveryTypeDes}}</td>
+                <td>{{item.IsDefaultDes}}</td>
+                <td class="operate">
+                    <a v-on:click="edit_PersonInvoice(item.ID)">编辑</a>
+                    <a v-if="item.IsDefault == false" v-on:click="setDefault(item.ID)">设为默认</a>
+                    <a v-if="data.IsMain" v-on:click="del_PersonInvoice(item.ID)">删除</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <el-dialog :title="dialogFormName" :lock-scroll="false" width="40%" :visible.sync="dialogFormVisible" v-on:close="dialog_Closed" :close-on-click-modal="false">
+        <my-personinvoice ref="header"></my-personinvoice>
+        <div slot="footer" class="dialog-footer" style="padding-right:20px;">
+            <el-button v-on:click="dialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" v-on:click="onSubmit_ruleForm('header')">确 定</el-button>
+        </div>
+    </el-dialog>
+</div>
+@{Html.RenderAction("_ParticalPersonInvoiceEdit", "Account");}
+<script>
+    var vPersonInvoice = new Vue({
+        el: "#vPersonInvoice",
+        data: {
+            dialogFormVisible:false,
+            data: @Html.Raw(Json.Encode(Model)),
+            dialogFormName: "",  //弹框名称
+            loading:false,
+        },
+        mounted: function () {
+            this.handlePersonInvoiceList();
+        },
+        methods: {
+            handlePersonInvoiceList:  function () {
+                var that = this;
+                axios({
+                    url: "/Account/GetPersonInvoiceList",
+                    method: "post",
+                    data: {
+                    }
+                }).then(function (res) {
+                    that.data = JSON.parse(res.data.data);
+                }).catch(function (error) {
+                    vPersonInvoice.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //新增发票信息
+            add_PersonInvoice: function () {
+                vPersonInvoice.dialogFormName = "新增发票信息";
+                vPersonInvoice.dialogFormVisible = true;
+                setTimeout(function(){
+                    vPersonInvoice.$refs.header.$refs.form1.resetFields();
+                    vPersonInvoice.$refs.header.form1.ID = "";
+                }, 0);
+            },
+            //收货地址编辑
+            edit_PersonInvoice: function (id) {
+                axios({
+                    url: "/Account/GetPersonInvoiceInfo",
+                    method: "post",
+                    data: {
+                        id:id
+                    }
+                }).then(function (res) {
+                    vPersonInvoice.dialogFormName = "编辑发票信息";
+                    vPersonInvoice.dialogFormVisible = true;
+                    setTimeout(function(){
+                        vPersonInvoice.$refs.header.$refs.form1.resetFields();
+                        vPersonInvoice.$refs.header.form1 = JSON.parse(res.data.data);
+                    }, 0)
+                }).catch(function (error) {
+                    vPersonInvoice.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //弹框关闭后事件
+            dialog_Closed: function () {
+                vPersonInvoice.$refs.header.$refs.form1.resetFields();
+            },
+            onSubmit_ruleForm: function (header) {
+                this.$refs.header.$refs.form1.validate(function(valid) {
+                    if (valid) {
+                        vPersonInvoice.dialogFormVisible = false;
+                        axios({
+                            url: "/Account/PersonInvoiceSubmit",
+                            method: "post",
+                            data: vPersonInvoice.$refs.header.form1,
+                        }).then(function (response) {
+                            vPersonInvoice.handlePersonInvoiceList(); //刷新列表
+                            vPersonInvoice.onAlert(response.data.type, response.data.msg);
+                        }).catch(function (error) {
+                            vPersonInvoice.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                        });
+                    } else {
+                        //验证失败
+                    }
+                });
+            },
+            del_PersonInvoice: function (id) {
+                this.$confirm('您确定要删除该发票信息吗？', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                    lockScroll:false,
+                }).then(function(){
+                    axios({
+                        url: "/Account/DeletePersonInvoice",
+                        method: "post",
+                        data: {
+                            id: id
+                        }
+                    }).then(function (res) {
+                        vPersonInvoice.handlePersonInvoiceList(); //刷新列表
+                        vPersonInvoice.onAlert(res.data.type, res.data.msg);
+
+                    }).catch(function (error) {
+                        vPersonInvoice.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                    });
+                }).catch(function() {
+                    //取消
+                });
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type
+                });
+            }
+        }
+    });
+</script>

@@ -1,0 +1,190 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>预出库单</title>
+    <script type="text/javascript" src="/PrintLable/js/jquery-1.3.2.min.js"></script>
+    <script type="text/javascript" src="/PrintLable/js/vue.js"></script>
+    <script type="text/javascript" src="/PrintLable/js/vue-barcode.js"></script>
+    <script type="text/javascript" src="/PrintLable/js/moment.js"></script>
+</head>
+<style type="text/css">
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body,
+    html {
+        background: #ffffff;
+        width: 100%;
+        height: 100%;
+        font-family: '微软雅黑' !important;
+    }
+
+    .labelbox {
+        width: 80mm;
+        min-height: 10mm;
+        margin: 0 auto;
+        font-size: 12px;
+        padding-left: 15px;
+    }
+
+    .borderbox {
+        width: 100%;
+        text-align: center;
+    }
+
+    .infobox {
+    }
+
+        .infobox li {
+            line-height: 1.1;
+            list-style: none;
+        }
+
+    .titel {
+        display: inline-block;
+    }
+
+    .titel1 {
+        width: 70px;
+    }
+
+    .t1content {
+        display: inline-block;
+        width: 195px;
+        vertical-align: middle;
+        line-height: 1.1;
+    }
+
+    .marginbox {
+        width: 80mm;
+        min-height: 10mm;
+        margin: 0 auto;
+        padding: 4mm 11px 0px 16px;
+        font-size: 14px;
+    }
+
+    em {
+        font-style: normal
+    }
+</style>
+<body>
+    <div class='labelbox' id="app">
+        <div class="marginbox">
+            <div class="borderbox">
+                <barcode v-bind:value="NoticeID" v-bind:options="barcode_option" tag="svg" class="barcode"></barcode>
+            </div>
+            <ul class="infobox">
+                <li><span class="titel1">客户：</span><span class="t1content">{{waybill.Notice.ClientName}}</span></li>
+                <li><span class="titel1">地址：</span><span class="t1content">{{waybill.Notice.Consignee.Address}}</span></li>
+                <li><span class="titel1">货运方式：</span><span class="t1content">{{waybill.TransportModeDec}}</span></li>
+                <li><span class="titel1">总型号数：</span><span class="t1content">{{waybill.PartnumberCount}}</span></li>
+                <li>
+                    <span class="titel1">特殊要求：</span><span class="t1content">
+                        <i v-for="item in waybill.Requres">
+                            <em style="font-style: normal;">{{item.Name}}</em>
+                        </i>
+                    </span>
+                </li>
+            </ul>
+            <ul class="infobox" v-for="(item,index) in listdata">
+                <li><span class="titel">{{index+1}}：型号：</span>{{item.Partnumber}}</li>
+                <li><span class="titel">品牌：</span>{{item.Brand}}</li>
+                <li></li>
+                <li>
+                    <p style="display: inline-block;width: 48%;"><span class="titel">封装：</span>{{item.Package}}</p>
+                    <p style="display: inline-block;width: 48%;"><span class="titel">批次：</span>{{item.DateCode}}</p>
+                </li>
+                <li>
+                    <p style="display: inline-block;width: 48%;"><span class="titel">Mpq：</span>{{item.Mpq}}</p>
+                    <p style="display: inline-block;width: 48%;">
+                        <span class="titel">数量：</span>{{item.PackageNumber}}
+                        <span>
+                            <em v-if="item.Mpq>1">件</em>
+                            <em v-else>个</em>
+                        </span>
+                    </p>
+                </li>
+                <li><span class="titel">备注：</span>{{item.Exception}}</li>
+                <li><span class="titel">所属库位：</span>{{item.ShelveCode}}</li>
+                <li v-if="index!=listdata.length-1" style="text-align: center;">------------------------------</li>
+            </ul>
+            <p style="text-align: center;padding-top: 10px;">---------------&nbsp;&nbsp;End&nbsp;&nbsp;--------------</p>
+            <div style="height:50px;">
+                1&nbsp;
+                <br />
+                2&nbsp;
+                <br />
+                3&nbsp;
+                <br />
+            </div>
+        </div>
+    </div>
+
+</body>
+<script type="text/javascript">
+
+			$(function () {
+			    var waybill = null;
+			    var listdata = null;
+			    if (window['model']) {
+			        waybill = model.waybill;
+			        listdata = model.listdata;
+			    } else {
+			        listdata = null;
+			        waybill = null;
+			    }
+
+            var Vue = window.Vue;
+            var VueBarcode = window.VueBarcode;
+            Vue.component('barcode', VueBarcode);
+
+            new Vue({
+                el: '#app',
+                data: {
+                    barcode_option: {
+                        displayValue: true, //是否默认显示条形码数据
+                        //textPosition  :'top', //条形码数据显示的位置
+                        background: "#fff", //条形码背景颜色
+                        valid: function (valid) { },
+                        width: "1.6px", //单个条形码的宽度
+                        height: "30px",
+                        fontSize: "18px", //字体大小
+                        fontFamily: "微软雅黑",
+                        format: "CODE128", //选择要使用的条形码类型
+                        margin: 2
+                    },
+                    waybill: waybill,
+                    listdata: listdata,
+                    NoticeID: null
+                },
+                created() {
+
+                },
+                mounted() {
+                    this.NoticeID = 'OPO:' + this.waybill.Notice.ID
+                },
+                filters: {
+                    showDate: function (val) {
+                        return moment(val).format('YYYY-MM-DD');
+                    },
+                    showboxcode: function (val) {
+                        if (val != "" && val != null) {
+                            if (val.indexOf("]") == -1) {
+                                return val
+                            } else {
+                                if (val || "") {
+                                    var b = val.split("]")[1];
+                                    return b;
+                                }
+                            }
+                        }
+                    }
+                },
+            });
+        })
+</script>
+</html>

@@ -1,0 +1,227 @@
+﻿<template id="storagelistout">
+    <div>
+        <div class="query_wrap" ref="viewBox1" v-on:scroll="ss('viewBox1')">
+            <div class="clearfix">
+                <div class="fl">
+                    <span class="title">订单状态:</span>
+                    <el-select style="width: 120px;" class="mr16" size="small" v-model="queryOrderStatus" filterable clearable>
+                        <el-option v-for="item in orderStatusOptions"
+                                   :key="item.value"
+                                   :label="item.text"
+                                   :value="item.value">
+                        </el-option>
+                    </el-select>
+                </div>
+                <div class="fl ml30">
+                    <span class="title">下单日期:</span>
+                    <el-date-picker style="width: 250px;" size="small" v-model="queryDateValue"
+                                    type="daterange"
+                                    range-separator="至"
+                                    start-placeholder="开始日期"
+                                    end-placeholder="结束日期">
+                    </el-date-picker>
+                </div>
+            </div>
+            <div class="clearfix mt20">
+                <div class="fl">
+                    <span class="title">订单号:</span>
+                    <el-input style="width: 120px; margin-left: 12px;" size="mini" v-model="queryOrderID" @@keyup.enter.native="queryData"></el-input>
+                </div>
+                <div class="fl ml30">
+                    <span class="title">型号:</span>
+                    <el-input style="width: 130px; margin-left: 24px;" size="mini" v-model="queryPartNumber" @@keyup.enter.native="queryData"></el-input>
+                </div>
+                <button v-on:click="doQuery()" class="btn btn1 ml40">查询</button>
+                <button v-on:click="clearQueryCondition()" class="btn btn2 ml12">重置</button>
+            </div>
+        </div>
+        <div class="tb_wrap" v-loading="loading">
+            <table class="common_tb1 mt30">
+                <tr>
+                    <th width="36px">序号</th>
+                    <th width="140px">下单日期</th>
+                    <th>订单号</th>
+                    <th width="120px">收货方式</th>
+                    <th width="120px">订单状态</th>
+                    <th width="110px">操作</th>
+                </tr>
+                <tr v-for="(item,index) in dataList">
+                    <td>{{(pageIndex-1)*pageSize+index+1}}</td>
+                    <td>{{item.CreateDateDes}}</td>
+                    <td>{{item.OrderID}}</td>
+                    <td>{{item.TransportModeDes}}</td>
+                    <td>{{item.OrderStatusDes}}</td>
+                    <td class="operate">
+                        <a v-on:click="detail(item)">查看</a>
+                        <a v-if="item.IsEdit" v-on:click="edit(item.OrderID)">修改</a>
+                        <a v-if="item.IsConfirm && !item.IsCancel" v-on:click="confirm(item)">确认</a>
+                    </td>
+                </tr>
+                <tr v-if="dataList.length==0">
+                    <td colspan="8">暂无数据</td>
+                </tr>
+            </table>
+            <div class="foot">
+                <el-pagination class="fr" style="margin-top: 20px;" v-on:size-change="handleSizeChange"
+                               v-on:current-change="handleCurrentChange"
+                               :current-page="pageIndex"
+                               :page-sizes="[5, 10, 20, 40]"
+                               :page-size="pageSize"
+                               layout="total, sizes, prev, pager, next, jumper"
+                               :total="total">
+                </el-pagination>
+            </div>
+        </div>
+    </div>
+</template>
+<script>
+    Vue.component(
+        'storagelistout',
+        {
+            template: "#storagelistout",
+            data: function () {
+                return {
+                    orderStatusOptions: [], //订单状态选项
+                    queryOrderStatus: "", //查询条件-订单状态
+                    queryDateValue: "", //查询条件-下单日期
+                    queryCreateDateBegin: "", //查询条件-下单日期开始时间
+                    queryCreateDateEnd: "", //查询条件-下单日期结束时间
+                    queryOrderID: "", //查询条件-订单号
+                    queryPartNumber: "", //查询条件-型号
+                    loading: false,
+
+                    dataList: [],
+                    total: 0,
+                    pageIndex: 1,
+                    pageSize: 10,
+                }
+            },
+            watch: {
+                queryDateValue: function (newVal, oldVal) {
+                    if (this.queryDateValue != "" && this.queryDateValue != null) {
+                        var start = new Date(this.queryDateValue[0]);
+                        var startDate = start.getFullYear() + '-' + (start.getMonth() + 1) + '-' + start.getDate();
+                        var end = new Date(this.queryDateValue[1]);
+                        var endDate = end.getFullYear() + '-' + (end.getMonth() + 1) + '-' + end.getDate();
+                        this.queryCreateDateBegin = startDate;
+                        this.queryCreateDateEnd = endDate;
+                    } else {
+                        this.queryCreateDateBegin = "";
+                        this.queryCreateDateEnd = "";
+                    }
+                },
+            },
+            methods: {
+                //初始化页面参数
+                initPageParams: function () {
+                    this.queryOrderStatus = "";
+                    this.queryDateValue = "";
+                    this.queryOrderID = "";
+                    this.queryPartNumber = "";
+                    this.loading = false;
+
+                    this.dataList = [];
+                    this.total = 0;
+                    this.pageIndex = 1;
+                    this.pageSize = 10;
+                },
+                //查询按钮点击
+                doQuery: function () {
+                    this.pageIndex = 1;
+                    this.paging();
+                },
+                //重置查询条件
+                clearQueryCondition: function () {
+                    this.queryOrderStatus = "";
+                    this.queryDateValue = "";
+                    this.queryCreateDateBegin = "";
+                    this.queryCreateDateEnd = "";
+                    this.queryOrderID = "";
+                    this.queryPartNumber = "";
+                    this.pageIndex = 1;
+                    this.pageSize = 10;
+                    this.paging();
+                },
+                //修改 pageSize
+                handleSizeChange: function (size) {
+                    this.pageSize = size;
+                    this.paging();
+                },
+                //修改 pageIndex
+                handleCurrentChange: function (currentPage) {
+                    this.pageIndex = currentPage;
+                    this.paging();
+                },
+                //执行分页查询
+                paging: function () {
+                    var that = this;
+                    that.loading = true;
+                    axios({
+                        url: "/Order/GetStorageListOut",
+                        method: "post",
+                        data: {
+                            page: this.pageIndex,
+                            rows: this.pageSize,
+                            OrderStatusInt: this.queryOrderStatus,
+                            CreateDateBegin: this.queryCreateDateBegin,
+                            CreateDateEnd: this.queryCreateDateEnd,
+                            PartNumber: this.queryPartNumber,
+                            OrderID: this.queryOrderID,
+                        },
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                        },
+                        transformRequest: [
+                            function (data) {
+                                var ret = '';
+                                for (var it in data) {
+                                    ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&';
+                                }
+                                return ret;
+                            }
+                        ]
+                    }).then(function (response) {
+                        that.dataList = response.data.data.list;
+                        that.total = response.data.data.total;
+                        that.loading = false;
+                    }).catch(function (error) {
+                        that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                    });
+                },
+                //消息提示框
+                onAlert: function (type, message) {
+                    this.$message({
+                        message: message,
+                        type: type,
+                        offset: 100
+                    });
+                },
+
+                //查看
+                detail: function (item) {
+                    commonSkipUrl(item.OrderID, '/Order/StorageDetailOut', '/Order/StorageList');
+                },
+                //修改
+                edit: function (item) {
+
+                },
+                //确认
+                confirm: function (item) {
+
+                },
+            },
+            created: function () {
+                //获取订单状态选项
+                var that = this;
+                axios.get('/Miscellaneous/OrderStatusesForOutStorage', { params: {} })
+                    .then(function (res) {
+                        if (res.data.success == 200) {
+                            that.orderStatusOptions = res.data.result;
+                        }
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    });
+            },
+        });
+</script>

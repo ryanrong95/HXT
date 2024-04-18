@@ -1,0 +1,42 @@
+﻿﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>文件上传 - jQuery EasyUI plugin</title>
+
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/gray/easyui.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/icon-yg-cool.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/standard-easyui/iconfont/iconfont.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/standard-easyui/styles/plugin.css" rel="stylesheet" />
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.easyui.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/locale/easyui-lang-zh_CN.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/main.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/standard-easyui/scripts/timeouts.js"></script>
+    <script src="https://cdn.bootcss.com/jquery.form/4.2.2/jquery.form.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/standard-easyui/scripts/fileUpload.js"></script>
+</head>
+<body>
+    <h1>文件上传（可限制文件大小，类型）</h1>
+    <form id="ff" class="easyui-form" method="post" data-options="novalidate:true" onsubmit="return $(this).form('enableValidation').form('validate');">
+        <div style="line-height:40px;">上传EXCEL文件（可以多文件上传，可以限制文件个数）</div>
+        <a id="all" href="#" class="easyui-fileUpload" data-options="accept:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel',onUnloadSuccess:function(data){console.log(data);}"></a>
+        <div style="line-height:40px;">上传PDF文件（可以多文件上传，可以限制文件个数）</div>
+        <a id="all2" href="#" class="easyui-fileUpload" data-options="accept:'application/pdf',onUnloadSuccess:function(data){console.log(data);}"></a>
+        <div style="margin-top:20px;line-height:40px;">上传图片（只能上传一张）</div>
+        <a id="one" href="#" class="easyui-fileUpload" data-options="{type:'img'}" name="img"></a>
+        <button onclick="getFilesUploadAfterPath()" type="button">获取文件上传后的路径</button>
+        <button class="upload">提交</button>
+    </form>
+
+    <script>
+        function getFilesUploadAfterPath() {
+            var all = $('#all').fileUpload('getFilesUploadAfterPath');
+            var one = $('#one').fileUpload('getFilesUploadAfterPath');
+            console.log(all);
+            console.log(one);
+        }
+    </script>
+</body>
+</html>

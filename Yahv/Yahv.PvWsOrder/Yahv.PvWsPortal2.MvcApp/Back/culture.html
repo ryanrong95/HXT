@@ -1,0 +1,123 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>芯达通</title>
+    <link rel="stylesheet" type="text/css" href="css/common.css" />
+    <link rel="stylesheet" type="text/css" href="css/page.css" />
+    <script type="text/javascript" src="js/jQuery-2.2.4.min.js"></script>
+    <script type="text/javascript" src="js/vue.js"></script>
+    <script src="js/axios.min.js"></script>
+    <script type="text/javascript" src="js/xs.js"></script>
+    <script type="text/javascript" src="js/common.js"></script>
+</head>
+
+<body>
+    <!-- 右侧定位 -->
+    <div id="right_bar"></div>
+    <!-- logo行 -->
+    <div id="header"></div>
+    <div class="sub_banner">
+        <p class="en">About us</p>
+        <p class="china">关于芯达通</p>
+    </div>
+    <!-- 内容 -->
+    <div id="profile" v-cloak class="clearfix wrapper sub_con">
+        <div class="left sub_left">
+            <div class="sub_title">关于芯达通</div>
+            <div class="sub_list">
+                <i class=deco></i>
+                <div class="sub_list_con">
+                    <ul>
+                        <li><a href="profile.html">企业简介</a></li>
+                        <li class="active"><a href="culture.html?navStatus=CXdt007">企业文化<i></i></a></li>
+                        <li><a href="partners.html">合作伙伴</a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+        <div class="left sub_right notice_right">
+            <div class="right_bar notice_bar">
+                <i class="home"></i>
+                <a href="index.html">首页</a>
+                <i>-</i>
+                <a href="culture.html?navStatus=CXdt007">企业文化</a>
+            </div>
+            <div class="all_notices">
+                <ul>
+                    <li v-for="(item,index) in curlist" v-if="(navStatus==''||navStatus==null||item.navStatus==navStatus)&&(item.navStatus=='CXdt007')">
+                        <h3>{{item.title}}</h3>
+                        <div class="data_extra">
+                            <span class="sign">{{item.catalog}}</span>
+                            <span class="date">
+                                <i></i>
+                                {{item.createDate}}
+                            </span>
+                        </div>
+                        <div v-if="!item.IsShow" class="notice_text" v-html="item.noticeText">
+                        </div>
+                        <div v-if="!item.IsShow" class="check">
+                            <a v-on:click="showDetail(index,item)">
+                                <i></i> 阅读全文
+                            </a>
+                        </div>
+                        <img v-if="!item.IsShow" :src="item.picUrl" alt="">
+                        <div v-if="item.IsShow" class="notice_text" v-html="item.content"></div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- 底部 -->
+    <div id="footer_zh"></div>
+    <script src="js/extends.js"></script>
+    <script>
+        $("#right_bar").load("rightBar.html");
+        $("#header").load("header.html", function () {
+            $("#footer_zh").load("footer.html");
+        });
+        var profile = new Vue({
+            el: "#profile",
+            data: {
+                list: [],
+                navStatus: "",
+                curlist: []
+            },
+            mounted: function () {
+                this.getNewsData();
+            },
+            methods: {
+                getNewsData: function () {
+                    var that = this;
+                    axios({
+                        url: "/Home/GetDocuments",
+                        method: "post",
+                    }).then(function (response) {
+                        if (response.data.type == "success") {
+                            that.list = JSON.parse(response.data.data)
+                            that.curlist = that.list;
+                            that.refreshNav(getQueryString('navStatus'))
+                        }
+                    }).catch(function (error) {
+
+                    });
+                },
+                refreshNav: function (index) {
+                    this.navStatus = index;
+                    this.curlist = this.list;
+                },
+                showDetail: function (index, item) {
+                    item.IsShow = true;
+                    this.curlist = [];
+                    this.curlist.push(item);
+                    $(window).scrollTop(0);
+                },
+            }
+        });
+    </script>
+</body>
+
+</html>

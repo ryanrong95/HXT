@@ -1,0 +1,487 @@
+﻿@{
+    if (Model.ID != null)
+    {
+        ViewBag.subTitle = "代收货款申请详情";
+    }
+    else
+    {
+        ViewBag.subTitle = "代收货款申请";
+    }
+}
+<div v-cloak id="vReceiveApply" class="order_add">
+    <div class="order_detail">
+        <div class="order_content contentOrder">
+            <el-form :model="indexData" ref="ruleForm" label-width="185px">
+                <div class="info_item_wrap">
+                    <span class="icon_img">1</span>
+                    <span class="title">订单信息</span>
+                </div>
+                <div>
+                    <div class="tb_wrap">
+                        <table class="common_tb1 mt10 common_tb">
+                            <tr>
+                                <th width="36px">序号</th>
+                                <th>订单编号</th>
+                                <th>币种</th>
+                                <th>订单总金额</th>
+                                <th v-if="!IsView">已收金额</th>
+                                <th v-if="!IsView">可申请金额</th>
+                                <th>本次申请金额</th>
+                                <th v-if="!IsView">操作</th>
+                            </tr>
+                            <tr v-for="(item,index) in indexData.Items">
+                                <td>{{index+1}}</td>
+                                <td>{{item.OrderID}}</td>
+                                <td>{{item.Currency}}</td>
+                                <td>{{toFixed(2,item.TotalPrice)}}</td>
+                                <td v-if="!IsView">{{toFixed(2,item.AppliedPrice)}}</td>
+                                <td v-if="!IsView">{{toFixed(2,item.AppLeftPrice)}}</td>
+                                <td>
+                                    <el-input style="width: 100px" size="mini" :readonly="IsView" v-model="item.Amount" v-on:blur="validTotalPrice(item)"></el-input>
+                                </td>
+                                <td v-if="!IsView" class="operate">
+                                    <a v-on:click="del(index)">删除</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td v-if="!IsView" colspan="6" class="text_right pr20 font_bold txt_tb_bottom">已选取申请金额：</td>
+                                <td v-else colspan="4" class="text_right pr20 font_bold txt_tb_bottom">已选取申请金额：</td>
+                                <td v-if="!IsView" colspan="2" class="text_left pl20 txt_red font_bold">{{indexData.TotalPrice}}</td>
+                                <td v-else colspan="1" class="text_left pl20 txt_red font_bold">{{indexData.TotalPrice}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="info_item_wrap mt12">
+                    <span class="icon_img">2</span>
+                    <span class="title">客户付款信息</span>
+                </div>
+                <div class="clearfix mt12">
+                    <el-form-item label="付款人:" prop="ReceivePayer.PayerID" class="fl" :rules="[{ required: true, message: '请选择付款人', trigger: 'change' }]">
+                        <el-select v-model="indexData.ReceivePayer.PayerID" size="mini" :disabled="IsView" style="width: 200px;" filterable clearable placeholder="请选择">
+                            <el-option v-for="item in ClientPayerOptions"
+                                       :key="item.value"
+                                       :label="item.text"
+                                       :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-button v-if="!IsView" class="btn_add ml8 fl" style="margin-top: 5px;" v-on:click="PayerVisible2">+新增</el-button>
+                </div>
+                <div class="clearfix">
+                    <div class="fl wp50">
+                        @*<el-form-item label="付款方式:">
+                            <el-input size="mini" v-model="PayerMethod" style="width: 200px;" readonly auto-complete="off"></el-input>
+                        </el-form-item>*@
+                        <el-form-item label="付款方式" prop="ReceivePayer.Method" :rules="[{ required: true, message: '请选择付款方式', trigger: 'change' }]">
+                        <el-select size="mini" :disabled="IsView" style="width: 200px" v-model="indexData.ReceivePayer.Method" filterable clearable placeholder="请选择">
+                            <el-option v-for="item in ReceivePayerMethordOptions"
+                                       :key="item.value"
+                                       :label="item.text"
+                                       :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </div>
+                    <div class="fl">
+                        @*<el-form-item label="付款人币种:">
+                            <el-input size="mini" v-model="PayerCurrency" style="width: 200px;" readonly auto-complete="off"></el-input>
+                        </el-form-item>*@
+                        <el-form-item label="付款币种" prop="ReceivePayer.Currency" :rules="[{ required: true, message: '请选择付款人币种', trigger: 'change' }]">
+                        <el-select size="mini" :disabled="IsView" style="width: 200px" v-model="indexData.ReceivePayer.Currency" filterable clearable placeholder="请选择">
+                            <el-option v-for="item in ReceivePayerCurrencyOptions"
+                                       :key="item.value"
+                                       :label="item.text"
+                                       :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </div>
+                </div>
+                <div class="clearfix">
+                    <div class="fl wp50">
+                        <el-form-item label="发货时机:" prop="DelivaryOpportunity" :rules="[{ required: true, message: '请选择发货时机', trigger: 'change' }]">
+                            <el-select style="width: 200px;" size="mini" :disabled="IsView" v-model="indexData.DelivaryOpportunity" filterable clearable placeholder="请选择">
+                                <el-option v-for="item in DelivaryOppOptions"
+                                           :key="item.value"
+                                           :label="item.text"
+                                           :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </div>
+                </div>
+                <div v-if="indexData.ReceivePayer.Method==5" class="clearfix">
+                    <div class="fl wp50">
+                        <el-form-item label="是否入账:" prop="IsEntry">
+                            <el-radio-group v-model="indexData.IsEntry" :disabled="IsView">
+                                <el-radio v-for="item of radioOptions" :label=item.value>{{item.text}}</el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </div>
+                    <div v-if="!indexData.IsEntry" class="fl">
+                        <el-form-item label="支票投送方式:" prop="CheckDelivery" :rules="[{ required: true, message: '请选择支票投送方式', trigger: 'change' }]">
+                            <el-select style="width: 200px;" size="mini" :disabled="IsView" v-model="indexData.CheckDelivery" filterable clearable placeholder="请选择">
+                                <el-option v-for="item in CheckDelTypeOptions"
+                                           :key="item.value"
+                                           :label="item.text"
+                                           :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </div>
+                    <div v-else class="fl">
+                        <el-form-item label="银行:" prop="CheckPayeeAccount" :rules="[{ required: true, message: '请填写银行', trigger: 'blur' }]">
+                            <el-input style="width: 200px" size="mini" :readonly="IsView" v-model="indexData.CheckPayeeAccount"></el-input>
+                        </el-form-item>
+                    </div>
+                </div>
+                <div v-if="indexData.ReceivePayer.Method==5 && !indexData.IsEntry && indexData.CheckDelivery>1" class="clearfix">
+                    <div v-if="indexData.CheckDelivery==3" class="fl wp50">
+                        <el-form-item label="快递承运商:" prop="CheckCarrier" :rules="[{ required: true, message: '请填写快递承运商', trigger: 'blur' }]">
+                            <el-input style="width: 200px" size="mini" :readonly="IsView" v-model="indexData.CheckCarrier"></el-input>
+                        </el-form-item>
+                    </div>
+                    <div v-if="indexData.CheckDelivery>=3" class="fl">
+                        <el-form-item label="收票人地址:" prop="CheckConsignee" :rules="[{ required: true, message: '请填写收票人地址', trigger: 'blur' }]">
+                            <el-input style="width: 200px" size="mini" :readonly="IsView" v-model="indexData.CheckConsignee"></el-input>
+                        </el-form-item>
+                    </div>
+                </div>
+                <div v-if="indexData.ReceivePayer.Method==5" class="clearfix">
+                    <div v-if="!IsView" class="fl wp100">
+                        <el-form-item label="支票抬头:" :rules="[{ required: true }]">
+                            <el-radio-group v-if="!IsView" v-model="TitleSelect">
+                                <el-radio :label="1" :disabled="indexData.IsEntry == false && indexData.ReceivePayer.Method == 5">
+                                    <span id="hkTitle">HONG KONG CHANGYUN INTERNATIONAL LOGISTICS CO., LIMITED</span>
+                                </el-radio>
+                                <el-radio :label="2">
+                                    <el-input id="inputTitle" style="width: 460px" size="mini" :readonly="IsView||TitleSelect==1" v-model="TitleText" maxlength="50"></el-input>
+                                </el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </div>
+                    <div v-if="IsView">
+                        <el-form-item label="支票抬头:">
+                            <span>{{indexData.CheckTitle}}</span>
+                        </el-form-item>
+                    </div>
+                </div>
+                <span id="hkTitle1" style="display: none;">HONG KONG CHANGYUN INTERNATIONAL LOGISTICS CO., LIMITED</span>
+                <div v-show="indexData.ReceivePayer.Method==3" class="clearfix">
+                    <div class="fl wp100">
+                        <el-form-item label="收款账户:">
+                            <el-radio-group v-if="!IsView" v-model="PayeeSelect">
+                                <el-radio :label="1" style="height:80px;margin-top:35px;">
+                                    <div style="margin-top: -39px;margin-left: 23px;">
+                                        <span>账户1：{{PayeeInfo1.InCompanyName}}</span><br />
+                                        <span>账号：{{PayeeInfo1.InBankAccount}}</span><br />
+                                        <span>银行：{{PayeeInfo1.InBankName}}</span><br />
+                                        <span>银行地址：{{PayeeInfo1.InBankAddress}}</span><br />
+                                        <span>SWIFTCODE：{{PayeeInfo1.InSwiftCode}}</span>
+                                    </div>
+                                </el-radio>
+                                <el-radio :label="2" style="height:80px;">
+                                    <div style="margin-top: -39px;margin-left: 23px;">
+                                        <span>账户2：{{PayeeInfo2.InCompanyName}}</span><br />
+                                        <span>账号：{{PayeeInfo2.InBankAccount}}</span><br />
+                                        <span>银行：{{PayeeInfo2.InBankName}}</span><br />
+                                        <span>银行地址：{{PayeeInfo2.InBankAddress}}</span><br />
+                                        <span>SWIFTCODE：{{PayeeInfo2.InSwiftCode}}</span>
+                                    </div>
+                                </el-radio>
+                            </el-radio-group>
+                            <div v-else>
+                                <span>账户：{{indexData.InCompanyName}}</span><br />
+                                <span>账号：{{indexData.InBankAccount}}</span><br />
+                                <span>银行：{{indexData.InBankName}}</span><br />
+                                <span>银行地址：{{indexData.InBankAddress}}</span><br />
+                                <span>SWIFTCODE：{{indexData.InSwiftCode}}</span>
+                            </div>
+                        </el-form-item>
+                    </div>
+                </div>
+            </el-form>
+            <div class="btn_bottom mt20 mb100">
+                <button v-if="!IsView" class="btn2" v-on:click="onSubmit">提交申请</button>
+            </div>
+        </div>
+    </div>
+    <el-dialog title="新增付款人" :lock-scroll="false" width="30%" :visible.sync="dialogPayerVisible" :close-on-click-modal="false">
+        <my-payer-mini ref="payer"></my-payer-mini>
+        <div slot="footer" class="dialog-footer">
+            <button v-on:click="dialogPayerVisible = false" class="btn1">取 消</button>
+            <button v-on:click="onSubmit_Payer()" class="btn2 ml12">确 定</button>
+        </div>
+    </el-dialog>
+</div>
+@{Html.RenderAction("_SimplePayer", "Orders", new { useDefaultMethord = true, useDefaultCurrency = true, });}
+<script>
+    var vReceiveApply = new Vue({
+        el: "#vReceiveApply",
+        data: {
+            indexData: @Html.Raw(Json.Encode(Model)),
+            ClientPayerOptions: [],
+            PayMethodOptions: [],
+            PayCurrencyOptions: [],
+            DelivaryOppOptions: [],
+            CheckDelTypeOptions: [],
+            ReceivePayerMethordOptions: [],
+            ReceivePayerCurrencyOptions: [],
+            dialogPayerVisible: false,
+            radioOptions: [{ value: false, text: "否" },{ value: true, text: "是" }],
+            IsView:false,
+            PayerMethod:'@ViewBag.PayerMethod',
+            PayerCurrency:'@ViewBag.PayerCurrency',
+            TitleText:'',
+            PayeeInfo1: @Html.Raw(@ViewBag.PayeeInfo1),
+            PayeeInfo2: @Html.Raw(@ViewBag.PayeeInfo2),
+            PayeeSelect:1,
+            TitleSelect:1
+        },
+        mounted: function() {
+            this.getTotalMoney();
+            this.ClientPayerOptions = @Html.Raw(Json.Encode(@ViewBag.ClientPayerOptions));
+            this.ClientPayerOptions = JSON.parse(this.ClientPayerOptions.data);
+            this.PayMethodOptions = @Html.Raw(Json.Encode(@ViewBag.PayMethodOptions));
+            this.PayCurrencyOptions = @Html.Raw(Json.Encode(@ViewBag.PayCurrencyOptions));
+            this.DelivaryOppOptions = @Html.Raw(Json.Encode(@ViewBag.DelivaryOppOptions));
+            this.CheckDelTypeOptions = @Html.Raw(Json.Encode(@ViewBag.CheckDelTypeOptions));
+            this.ReceivePayerMethordOptions = @Html.Raw(Json.Encode(@ViewBag.ReceivePayerMethordOptions));
+            this.ReceivePayerCurrencyOptions = @Html.Raw(Json.Encode(@ViewBag.ReceivePayerCurrencyOptions));
+            if (this.indexData.ID != null) {
+                this.IsView = true;
+                this.indexData.CheckDelivery =
+                    this.indexData.CheckDelivery == null ? "" : this.indexData.CheckDelivery.toString();
+            } else {
+                this.indexData.CheckTitle = 'HONG KONG CHANGYUN INTERNATIONAL LOGISTICS CO., LIMITED';
+            }
+            this.indexData.DelivaryOpportunity = this.indexData.DelivaryOpportunity.toString();
+        },
+        watch: {
+            //客户付款人
+            'indexData.ReceivePayer.PayerID': function(value) {
+                var that = this;
+                this.indexData.ReceivePayer.EnterpriseName = "";
+                this.indexData.ReceivePayer.BankName = "";
+                this.indexData.ReceivePayer.BankAccount = "";
+
+                this.ClientPayerOptions.filter(function(val) {
+                    if (val.value == value) {
+                        that.indexData.ReceivePayer.EnterpriseID = val.EnterpriseID;
+                        that.indexData.ReceivePayer.EnterpriseName = val.EnterpriseName;
+                        that.indexData.ReceivePayer.BankName = val.Bank;
+                        that.indexData.ReceivePayer.BankAccount = val.Account;
+                        //that.indexData.ReceivePayer.Method = val.Method;
+                        //that.indexData.ReceivePayer.Currency = val.Currency;
+                        //that.PayerMethod = val.MethodDec;
+                        //that.PayerCurrency = val.CurrencyDec;
+
+                        //如果付款方式是支票, 配合界面, 默认支票抬头设置为 $('#hkTitle').text()
+                        if(that.indexData.ReceivePayer.Method == 5) {
+                            that.indexData.CheckTitle = $('#hkTitle1').text();
+                        }
+                    }
+                });
+                that.indexData.IsEntry = true;
+            },
+            'PayeeSelect':function(val) {
+                if (val == 1) {
+                    this.indexData.InCompanyName = this.PayeeInfo1.InCompanyName;
+                    this.indexData.InBankAccount = this.PayeeInfo1.InBankAccount;
+                    this.indexData.InBankName = this.PayeeInfo1.InBankName;
+                    this.indexData.InBankAddress = this.PayeeInfo1.InBankAddress;
+                    this.indexData.InSwiftCode = this.PayeeInfo1.InSwiftCode;
+                } else {
+                    this.indexData.InCompanyName = this.PayeeInfo2.InCompanyName;
+                    this.indexData.InBankAccount = this.PayeeInfo2.InBankAccount;
+                    this.indexData.InBankName = this.PayeeInfo2.InBankName;
+                    this.indexData.InBankAddress = this.PayeeInfo2.InBankAddress;
+                    this.indexData.InSwiftCode = this.PayeeInfo2.InSwiftCode;
+                }
+            },
+            'TitleSelect':function(val) {
+                if (val == 1) {
+                    this.indexData.CheckTitle = $('#hkTitle').text();
+                } else {
+                    this.indexData.CheckTitle = this.TitleText;
+                }
+            },
+            'TitleText':function(val) {
+                this.indexData.CheckTitle = val;
+            },
+            'indexData.IsEntry':function(val) {
+                //是否入账选否 && 支付方式为支票, 则 支票抬头选2
+                if (val == false && this.indexData.ReceivePayer.Method == 5) {
+                    this.TitleSelect = 2;
+                    //$('#inputTitle').focus();
+                }
+            }
+        },
+        methods: {
+            checkTotalPrice: function() {
+                var list = this.indexData.Items;
+                if (list.length == 0) {
+                    this.onAlert("error", "申请的明细至少一条！");
+                    return false;
+                }
+                for (var i = 0; i < list.length; i++) {
+                    if (list[i].AppLeftPrice < list[i].Amount) {
+                        this.onAlert("error", "申请金额不能大于可申请金额！");
+                        return false;
+                    }
+                    if (list[i].Amount == 0) {
+                        this.onAlert("error", "申请金额不能为0！");
+                        return false;
+                    }
+                }
+                return true;
+            },
+            onSubmit_Payer: function() {
+                var that = this;
+                this.$refs.payer.$refs.form1.validate(function(valid) {
+                    if (valid) {
+                        that.dialogPayerVisible = false;
+                        axios({
+                            url: "/Orders/SubmitPayer",
+                            method: "post",
+                            data: that.$refs.payer.form1
+                        }).then(function(response) {
+                            that.$refs.payer.$refs.form1.resetFields();
+                            that.onAlert(response.data.type, response.data.msg);
+                            if (response.data.type == "success") {
+                                that.getPayerOptions();
+                            }
+                        }).catch(function(error) {
+                            that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                        });
+                    } else {
+                        //验证失败
+                    }
+                });
+            },
+            getPayerOptions: function() {
+                var that = this;
+                axios({
+                    url: "/Orders/GetPayerOptions",
+                    method: "post",
+                    data: {
+                    }
+                }).then(function(res) {
+                    if (res.data.type == "success") {
+                        that.ClientPayerOptions = JSON.parse(res.data.data);
+                    } else {
+                        that.onAlert(res.data.type, res.data.msg);
+                    }
+                }).catch(function(error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            toFixed: function(num, val) {
+                return val.toFixed(num);
+            },
+            del: function(i) {
+                var data = this.indexData.Items;
+                if (data.length == 1) {
+                    this.onAlert("error", "代收款数量不能少于1！");
+                } else {
+                    data.splice(i, 1);
+                }
+                this.getTotalMoney();
+            },
+            //验证申请金额
+            validTotalPrice: function(row) {
+                if (!ValidDecimal(row["Amount"])) {
+                    row["Amount"] = "0";
+                    return;
+                } else {
+                    var val = parseFloat(row["Amount"]).toFixed(2);
+                    if (val > parseFloat(row["AppLeftPrice"])) {
+                        this.onAlert("error", "申请金额不能大于可申请金额！");
+                        row["Amount"] = "0";
+                    } else {
+                        row["Amount"] = val;
+                        this.getTotalMoney();
+                    }
+                }
+            },
+            //本次申请总金额
+            getTotalMoney: function() {
+                let totalmoney = 0;
+                totalmoney = this.indexData.Items.reduce(function(total, currentValue) {
+                        return total + parseFloat(currentValue.Amount);
+                    },
+                    0);
+                this.indexData.TotalPrice = parseFloat(totalmoney).toFixed(2);
+            },
+            onSubmit: function() {
+                var that = this;
+                if (this.checkTotalPrice()) {
+                    this.$refs.ruleForm.validate(function(valid) {
+                        if (valid) {
+                            //付款方式 == 支票 && 是否入账选是 && TitleSelect == 2 && TitleText == ''
+                            if (that.indexData.ReceivePayer.Method == 5 && that.indexData.IsEntry && that.TitleSelect == 2 && that.TitleText == '') {
+                                that.onAlert("warning", "请填写支票抬头！");
+                                $('#inputTitle').focus();
+                                return false;
+                            }
+                            //付款方式 == 支票 && 是否入账选否 && TitleText == ''
+                            if (that.indexData.ReceivePayer.Method == 5 && !that.indexData.IsEntry && that.TitleText == '') {
+                                that.onAlert("warning", "请填写支票抬头！");
+                                $('#inputTitle').focus();
+                                return false;
+                            }
+                            const loading = that.$loading({
+                                lock: false,
+                                text: 'Loading',
+                                spinner: 'el-icon-loading',
+                                background: 'rgba(0, 0, 0, 0.7)'
+                            });
+                            axios({
+                                url: "/Orders/ReceiveSubmit",
+                                method: "post",
+                                data: {
+                                    model: that.indexData
+                                }
+                            }).then(function(response) {
+                                loading.close();
+                                if (response.data.type == "error") {
+                                    that.onAlert(response.data.type, response.data.msg);
+                                } else {
+                                    that.indexData.ID = response.data.data;
+                                    that.onAlert(response.data.type, response.data.msg);
+                                    setTimeout(function() {
+                                        location.href = "/Orders/DeliveryApplyList";
+                                    },
+                                        2000);
+                                }
+                            }).catch(function(error) {
+                                that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                                loading.close();
+                            });
+                            return true;
+                        } else {
+                            //验证失败
+                            return false;
+                        }
+                    });
+                }
+            },
+            //消息提示框
+            onAlert: function(type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                    offset: 200
+                });
+            },
+            PayerVisible2: function() {
+                var that = this;
+                this.dialogPayerVisible=true;
+                setTimeout(function() {
+                        that.$refs.payer.UseMethordOptions = that.$refs.payer.baseData.MethordOptions22;
+                    },
+                    0)
+
+            },
+        }
+    });
+</script>

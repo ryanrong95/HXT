@@ -1,0 +1,1904 @@
+﻿@{
+    ViewBag.title = "新增收货订单";
+}
+<div id="vStorageAdd" v-cloak class="tab_content order_add">
+    <div class="info_item_wrap">
+        <span class="icon_img">1</span>
+        <span class="title">订单基本信息</span>
+    </div>
+    <el-form ref="ruleForm" :model="formData" :rules="rules" label-width="130px">
+        <el-form-item class="currency mt20" label="货值币种:" prop="Currency" :rules="[{required: true, message: '请选择币种', trigger: 'change'}]"
+                      style="margin-bottom: 10px;">
+            <el-select style="width: 128px;" size="mini" v-on:change="handSupplierChange" v-model="formData.Currency" filterable clearable placeholder="请选择">
+                <el-option v-for="item in baseData.PayCurrencyOptions"
+                           :key="item.value"
+                           :label="item.text"
+                           :value="item.value">
+                </el-option>
+            </el-select>
+        </el-form-item>
+        <div>
+            <div class="btn-tb-list clearfix">
+                <el-button class="fl" v-on:click="addSubItems">单条新增+</el-button>
+                <el-button class="btn_upload" v-on:click="dialogUploadVisible=true">批量新增<i></i></el-button>
+                @*<span class="txt_grey txt ml26">批量导入前，请先点击<a class="txt_blue" href="/Template/代收货产品导入模板.xlsx">下载导入模板</a></span>*@
+            </div>
+        </div>
+        <div class="tb_wrap">
+            <table class="common_tb1 mt20 common_tb">
+                <tr>
+                    <th width="36px">序号</th>
+                    <th>型号</th>
+                    <th>品名</th>
+                    <th>品牌</th>
+                    <th>封装</th>
+                    <th>批号</th>
+                    <th width="70px">单位</th>
+                    <th width="70px">数量</th>
+                    <th width="90px">单价</th>
+                    <th width="90px">总价</th>
+                    <th width="120px">产地</th>
+                    <th width="36px;">操作</th>
+                </tr>
+                <tr v-for="(item,index) in formData.OrderItems">
+                    <td>{{index+1}}</td>
+                    <td>
+                        <el-input size="mini" style="width: 70px" v-model="item.PartNumber"></el-input>
+                    </td>
+                    <td>
+                        <el-input size="mini" style="width: 70px" v-model="item.Name"></el-input>
+                    </td>
+                    <td>
+                        <el-input size="mini" style="width: 70px" v-model="item.Manufacturer"></el-input>
+                    </td>
+                    <td>
+                        <el-input size="mini" style="width: 70px" v-model="item.PackageCase"></el-input>
+                    </td>
+                    <td>
+                        <el-input size="mini" style="width: 70px" v-model="item.DateCode"></el-input>
+                    </td>
+                    <td>
+                        <el-select size="mini" v-model="item.Unit" filterable clearable>
+                            <el-option v-for="c in baseData.UnitOptions"
+                                       :key="c.value"
+                                       :label="c.text"
+                                       :value="c.value">
+                            </el-option>
+                        </el-select>
+                    </td>
+                    <td>
+                        <el-input size="mini" v-model="item.Quantity" v-on:focus="clearZero(item,'Quantity')" v-on:blur="validTotalPrice(item,'Quantity')"></el-input>
+                    </td>
+                    <td>
+                        <el-input size="mini" v-model="item.UnitPrice" v-on:focus="clearZero(item,'UnitPrice')" v-on:blur="validTotalPrice(item,'UnitPrice')"></el-input>
+                    </td>
+                    <td>{{item.TotalPrice}}</td>
+                    <td>
+                        <el-select size="mini" v-model="item.Origin" filterable clearable>
+                            <el-option v-for="c in baseData.OriginOptions"
+                                       :key="c.value"
+                                       :label="c.text"
+                                       :value="c.value">
+                            </el-option>
+                        </el-select>
+                    </td>
+                    <td>
+                        <i v-on:click="handleSubItemDelete(index)" class="tb_icon_del"></i>
+                    </td>
+                </tr>
+                @*<tr>
+                    <td colspan="10">
+                        <div class="clearfix add-sub-items-btn" style="margin-left: 20px;">
+                            <el-button class="fl" v-on:click="addSubItems" style="margin-top: 0;">添加一行+</el-button>
+                        </div>
+                    </td>
+                </tr>*@
+                <tr v-if="formData.OrderItems.length>0">
+                    <td colspan="7" class="text_center pr20  txt_tb_bottom">合计：</td>
+                    <td class="txt_tb_bottom text_left">{{totalNum}}</td>
+                    <td class="txt_tb_bottom"></td>
+                    <td class="txt_tb_bottom text_left">{{totalPrice}}</td>
+                    <td class="txt_tb_bottom"></td>
+                    <td class="txt_tb_bottom"></td>
+                </tr>
+                <tr v-if="formData.OrderItems.length==0">
+                    <td colspan="10">暂无数据</td>
+                </tr>
+            </table>
+        </div>
+        <div class="info-total-wrap clearfix mt26">
+            <div class="fl">
+                <el-form-item label="总箱数:" prop="PackNo">
+                    <el-input size="mini" v-on:blur="validDecimalText('PackNo')" v-model="formData.PackNo" style="width: 80px;" auto-complete="off"></el-input>
+                </el-form-item>
+            </div>
+            <div class="fl ml110">
+                <el-form-item class="fl " label="毛重(KG):" prop="GrossWeight" :rules="[{ required: false, message: '', trigger: 'blur' }]">
+                    <el-input size="mini" v-on:blur="validDecimalText('GrossWeight')" v-model="formData.GrossWeight" placeholder="" style="width: 80px;" auto-complete="off"></el-input>
+                </el-form-item>
+            </div>
+        </div>
+        @*<div class="btn-tb-list clearfix">
+            <el-button class="fl" v-on:click="addSubItems">添加一行+</el-button>
+            <el-button class="btn_upload" v-on:click="dialogUploadVisible=true">批量导入<i></i></el-button>
+            <span class="txt_grey txt ml8">批量导入前，请先点击<a class="txt_blue" href="/Template/代收货产品导入模板.xlsx">下载导入模板</a></span>
+        </div>*@
+        <el-form-item class="mt8" label="发货地" prop="Origin" :rules="[{ required: true, message: '请选择发货地', trigger: 'change' }]">
+            <el-select size="mini" style="width: 200px;" v-model="formData.Origin" filterable clearable placeholder="请选择">
+                <el-option v-for="item in baseData.OriginOptions"
+                           :key="item.value"
+                           :label="item.text"
+                           :value="item.value">
+                </el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item label="供应商" prop="SupplierID" :rules="[{ required: true, message: '请选择供应商', trigger: 'change' }]">
+            <el-select size="mini" style="width: 200px;" v-on:change="handSupplierChange" v-model="formData.SupplierID" filterable clearable placeholder="请选择">
+                <el-option v-for="item in baseData.SupplierOptions"
+                           :key="item.value"
+                           :label="item.text"
+                           :value="item.value">
+                </el-option>
+            </el-select>
+            <el-button class="btn_add ml40" v-on:click="dialogSupplierVisible=true">+新增供应商</el-button>
+        </el-form-item>
+        <el-form-item label="费用结算币种" prop="SettlementCurrency" :rules="[{required: true, message: '请选择币种', trigger: 'change'}]">
+            <el-select size="mini" style="width: 200px;" v-model="formData.SettlementCurrency" filterable clearable placeholder="请选择">
+                <el-option v-for="item in baseData.SetCurrencyOptions"
+                           :key="item.value"
+                           :label="item.text"
+                           :value="item.value">
+                </el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item class="mt10" label="是否代付货款:">
+            <el-radio-group v-model="formData.IsPay">
+                <el-radio v-for="item of radioOptions" :label=item.value>{{item.text}}</el-radio>
+            </el-radio-group>
+        </el-form-item>
+        <div v-if="formData.IsPay">
+            <el-form-item label="付款金额:" prop="ApplyPrice">
+                <el-input id="ApplyPriceInput" style="width: 200px;" size="mini" placeholder="请输入付款金额" v-model="formData.ApplyPrice" auto-complete="off"></el-input>
+            </el-form-item>
+            @*<div class="info_item_wrap mt12">
+                <span class="title">供应商收款信息</span>
+            </div>*@
+            <div class="clearfix mt12">
+                <el-form-item label="支付方式:" prop="SupplierMethod" :rules="[{ required: true, message: '请选择支付方式', trigger: 'change' }]">
+                    <el-select style="width: 200px;" size="mini" v-model="formData.SupplierMethod" filterable clearable placeholder="请选择">
+                        <el-option v-for="item in baseData.PayMethrodsOptions"
+                                   :key="item.value"
+                                   :label="item.text"
+                                   :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+            </div>
+            <div class="clearfix">
+                <div class="fl wp50">
+                    <el-form-item label="收款人名称:" prop="BankID" class="fl" :rules="[{ required: true, message: '请选择收款人名称', trigger: 'change' }]">
+                        <el-select v-model="formData.BankID" size="mini" style="width: 200px;" filterable clearable placeholder="请选择">
+                            <el-option v-for="item in BeneficiariesOptions"
+                                       :key="item.value"
+                                       :label="item.text"
+                                       :value="item.value">
+                                <span style="float: left">{{ item.text }}</span>
+                                <span style="float: left; color: #8492a6; font-size: 6px">&nbsp;&nbsp;&nbsp;&nbsp;{{ item.RealEnterpriseName }}</span>
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-button class="btn_add ml8 fl" style="margin-top: 5px;" v-on:click="add_bank">+新增</el-button>
+                </div>
+                @*<div class="fl wp50">
+                    <el-form-item label="企业名称:">
+                        <span>{{formData.SupplierName}}</span>
+                    </el-form-item>
+                </div>*@
+            </div>
+            <div class="clearfix">
+                <div class="fl wp50">
+                    <el-form-item label="银行名称:">
+                        <span>{{formData.SupplierBankName}}</span>
+                    </el-form-item>
+                </div>
+                <div class="fl">
+                    <el-form-item label="银行账号:">
+                        <span>{{formData.SupplierBankAccount}}</span>
+                    </el-form-item>
+                </div>
+            </div>
+            @*<div class="info_item_wrap">
+                <span class="title">客户付款信息</span>
+            </div>*@
+            <div class="clearfix mt12">
+                <div class="fl wp50">
+                    <el-form-item label="账户余额(美元):">
+                        <span>{{formData.WareHouseLeft.toFixed(2)}}</span>
+                    </el-form-item>
+                </div>
+            </div>
+            <div class="clearfix">
+                <el-form-item label="付款人:" prop="PayPayerID" class="fl" :rules="[{ required: (Number(formData.WareHouseLeft.toFixed(2)) < formData.ApplyPrice), message: '请选择付款人', trigger: 'change' }]">
+                    <el-select v-model="formData.PayPayerID" size="mini" v-on:click.native="onPayPayer" style="width: 200px;" filterable clearable placeholder="请选择">
+                        <el-option v-for="item in PayPayerOptions"
+                                   :key="item.value"
+                                   :label="item.text"
+                                   :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-button class="btn_add ml8 fl" style="margin-top: 5px;" v-on:click="PayerVisible1">+新增</el-button>@*dialogPayerVisible=true*@
+            </div>
+            <div class="clearfix">
+                <div class="fl wp50">
+                    @*<el-form-item label="付款方式:">
+                        <span>{{PayPayerMethodName}}</span>
+                    </el-form-item>*@
+                    <el-form-item label="付款方式" prop="PayPayerMethod" :rules="[{ required: true, message: '请选择付款方式', trigger: 'change' }]">
+                        <el-select size="mini" style="width: 200px" v-model="formData.PayPayerMethod" filterable clearable placeholder="请选择">
+                            <el-option v-for="item in baseData.PayerMethordOptions"
+                                       :key="item.value"
+                                       :label="item.text"
+                                       :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </div>
+                <div class="fl">
+                    @*<el-form-item label="付款币种:">
+                        <span>{{PayPayerCurrencyName}}</span>
+                    </el-form-item>*@
+                    <el-form-item label="付款币种" prop="PayPayerCurrency" :rules="[{ required: true, message: '请选择付款人币种', trigger: 'change' }]">
+                        <el-select size="mini" style="width: 200px" v-model="formData.PayPayerCurrency" filterable clearable placeholder="请选择">
+                            <el-option v-for="item in baseData.PayerCurrencyOptions"
+                                       :key="item.value"
+                                       :label="item.text"
+                                       :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </div>
+            </div>
+            <div v-show="formData.PayPayerMethod==3" class="clearfix">
+                <el-form-item class="mt20" label="我方账户:" prop="PayCompanyBankID" :rules="[{ required: true, message: '', trigger: 'change' }]">
+                    <el-radio-group class="mt10" v-model="formData.PayCompanyBankID">
+                        <el-radio style="display:block;height:80px;margin-top:15px;" :title="item.EnterpriseName" size="mini" :label=item.ID v-for="item of baseData.PayeeOptions">
+                            <div style="margin-top: -39px;margin-left: 23px;">
+                                <span>账户：{{item.EnterpriseName}}</span>
+                                <el-button style="padding: 0px;" type="text" data-clipboard-action="copy" class="cobyOrderSn" :data-clipboard-text="item.ForCopy" v-on:click="copyOurAccount">复制</el-button>
+                                <br />
+                                <span>账号：{{item.Account}}</span><br />
+                                <span>银行：{{item.Bank}}</span><br />
+                                <span>银行地址：{{item.BankAddress}}</span><br />
+                                <span>SWIFTCODE：{{item.SwiftCode}}</span>
+                            </div>
+                            
+                        </el-radio>
+                    </el-radio-group>
+                </el-form-item>
+            </div>
+        </div>
+        <div class="info_item_wrap mt40">
+            <span class="icon_img">2</span>
+            <span class="title">香港收货方式</span>
+        </div>
+        <div class="clearfix radio_wl mt20">
+            <span class="title fl w130 txt_wl">香港物流</span>
+            <div class="fl radio">
+                <el-radio v-model="formData.HKWaybillType" v-for="item of baseData.HKDeliveryTypeOptions" :label=item.value>{{item.text}}</el-radio>
+            </div>
+        </div>
+        <div v-if="formData.HKWaybillType=='1'" class="mt20">
+            <el-form-item label="提货时间:" prop="HKTakingDate" :rules="[{ type: 'date', required: true, message: '请选择提货时间', trigger: 'change' }]">
+                <el-date-picker type="date" size="mini" :picker-options="pickerOptions2" placeholder="提货时间" v-model="formData.HKTakingDate" style="width: 200px;"></el-date-picker>
+            </el-form-item>
+            <div class="clearfix">
+                <div class="fl w130">
+                    <span class="fl txt2 el-form-item__label"><span class="txt_red mr4">*</span>提货单:</span>
+                </div>
+                <div class="fl upload_wrap mt6">
+                    <el-upload :http-request="((item)=>{httpRequestFiles(item,'TakingFiles')})"
+                               action="/Files/UploadPickUpFile"
+                               :show-file-list="false"
+                               multiple
+                               accept="image/jpg, image/bmp, image/jpeg, image/gif, image/png, application/pdf">
+                        <el-button size="small" class="btn_upload " type="primary">+添加文件</el-button> <span class="txt_grey ml8">仅限图片或PDF文件，且文件不超过3M</span>
+                    </el-upload>
+                    <ul class="file_item_ul mt10">
+                        <li class="clearfix" v-for="(item,index) in formData.TakingFiles">
+                            <span class="icon1"></span>
+                            <a class="file_name ml6" :href="item.fullURL" target="_blank">{{item.name}}</a>
+                            <span class="icon2 fr" v-on:click="del_file(index,'TakingFiles')"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <el-form-item class="mt20" label="交货联系人信息:" prop="HKSupplierAddress" :rules="[{ required: true, message: '请选择交货联系人信息', trigger: 'change' }]">
+                <el-button class="btn_add" v-on:click="addAddress">+新增交货联系人信息</el-button><br />
+                <el-radio-group class="SupplierAddressOptions mt10" v-model="formData.HKSupplierAddress">
+                    <el-radio style="display: block; margin-bottom: 6px" :title="item.text" size="mini" :label=item.value v-for="item of supplierAddressOptions">{{item.text}}</el-radio>
+                </el-radio-group>
+            </el-form-item>
+        </div>
+        <div v-if="formData.HKWaybillType=='2'" class="mt20">
+            <el-form-item label="收货公司:" style="margin-bottom: -10px;">
+                <span class="txt1">{{formData.WareHouseEnglishName}}</span>
+                <el-button style="padding: 0px;" type="text" data-clipboard-action="copy" class="cobyOrderSn" :data-clipboard-text="formData.WareHouseInfoForCopy" v-on:click="copyOurAccount">复制</el-button>
+            </el-form-item>
+            <el-form-item label="收货地址:" style="margin-bottom: -10px; margin-top: 10px;">
+                <span class="txt1">{{formData.WareHouseAddress}}</span>
+            </el-form-item>
+            <el-form-item label="联系人:" style="margin-bottom: -10px; margin-top: 10px;">
+                <p class="txt1">{{formData.WareHouseName}}</p>
+            </el-form-item>
+            <el-form-item label="联系电话:" style="margin-top: 10px;">
+                <p class="txt1">{{formData.WareHouseTel}}</p>
+            </el-form-item>
+            <el-form-item label="是否垫付运费:">
+                <el-radio-group v-model="formData.HKFreight">
+                    <el-radio v-for="item of radioOptions" :label=item.value>{{item.text}}</el-radio>
+                </el-radio-group>
+            </el-form-item>
+        </div>
+        <div v-if="formData.HKWaybillType=='3'" class="mt20">
+            <el-form-item label="收货公司:" style="margin-bottom: -10px;">
+                <span class="txt1">{{formData.WareHouseEnglishName}}</span>
+                <el-button style="padding: 0px;" type="text" data-clipboard-action="copy" class="cobyOrderSn" :data-clipboard-text="formData.WareHouseInfoForCopy" v-on:click="copyOurAccount">复制</el-button>
+            </el-form-item>
+            <el-form-item label="收货地址:" style="margin-bottom: -10px; margin-top: 10px;">
+                <span class="txt1">{{formData.WareHouseAddress}}</span>
+            </el-form-item>
+            <el-form-item label="联系人:" style="margin-bottom: -10px; margin-top: 10px;">
+                <p class="txt1">{{formData.WareHouseName}}</p>
+            </el-form-item>
+            <el-form-item label="联系电话:" style="margin-top: 10px;">
+                <p class="txt1">{{formData.WareHouseTel}}</p>
+            </el-form-item>
+            <el-form-item label="快递单号:" prop="HKExpressNumber" :rules="[{ required: false, message: '请输入快递单号', trigger: 'blur' },{max:50, message: '快递单号长度超过限制', trigger: 'blur' }]">
+                <el-input size="mini" placeholder="请输入快递单号" v-model="formData.HKExpressNumber" style="width: 200px;" auto-complete="off"></el-input>
+            </el-form-item>
+            @*<el-form-item label="快递子单号:" prop="HKExpressSubNumber" :rules="[{ required: false, message: '请输入快递子单号', trigger: 'blur' },{max:50, message: '快递子单号长度超过限制', trigger: 'blur' }]">
+            <el-input size="mini" placeholder="请输入快递单号" v-model="formData.HKExpressSubNumber" style="width: 200px;" auto-complete="off"></el-input>
+        </el-form-item>*@
+            <el-form-item label="快递公司:" prop="HKExpressName" :rules="[{ required: false, message: '请选择快递公司', trigger: 'change' }]">
+                <el-select size="mini" v-model="formData.HKExpressName" style="width: 200px;" filterable clearable placeholder="请选择">
+                    <el-option v-for="item in baseData.CarrierOptions"
+                               :key="item.value"
+                               :label="item.text"
+                               :value="item.value">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="是否垫付运费:">
+                <el-radio-group v-model="formData.HKFreight">
+                    <el-radio v-for="item of radioOptions" :label=item.value>{{item.text}}</el-radio>
+                </el-radio-group>
+            </el-form-item>
+            @*<el-form-item label="航次号:" prop="HKAirCode" :rules="[{ required: false, message: '请输入航次号', trigger: 'blur' },{max:50, message: '航次号长度超过限制', trigger: 'blur' }]">
+            <el-input size="mini" placeholder="请输入航次号" v-model="formData.HKAirCode" style="width: 200px;" auto-complete="off"></el-input>
+        </el-form-item>*@
+        </div>
+        <el-form-item class="mt10" label="是否到货即发:">
+            <el-radio-group v-if="!formData.isedit" v-model="formData.IsTransfer">
+                <el-radio v-for="item of radioOptions" :label=item.value>{{item.text}}</el-radio>
+            </el-radio-group>
+            <p v-if="formData.isedit" class="txt1">
+                <span v-if="formData.IsTransfer">是</span><span v-else>否</span>
+            </p>
+        </el-form-item>
+        <div v-if="formData.IsTransfer">
+            <div class="info_item_wrap mt40">
+                <span class="icon_img">3</span>
+                <span class="title">香港发货方式</span>
+            </div>
+            <el-form-item class="mt20" label="发货方式:">
+                <el-radio-group v-model="formData.WaybillType">
+                    <el-radio v-for="item of baseData.SZDeliveryTypeOptions" :label=item.value>{{item.text}}</el-radio>
+                </el-radio-group>
+            </el-form-item>
+            <div v-if="formData.WaybillType=='1'" class="mt20">
+                <el-form-item label="提货时间:" prop="PickupTime" :rules="[{ type: 'date', required: true, message: '请选择提货时间', trigger: 'change' }]">
+                    <el-date-picker type="date" size="mini" :picker-options="pickerOptions2" placeholder="提货时间" v-model="formData.PickupTime" style="width: 200px;"></el-date-picker>
+                </el-form-item>
+                <el-form-item label="提货人:" prop="ClientPicker" :rules="[{ required: true, message: '请输入提货人', trigger: 'blur' },{max:50, message: '提货人长度超过限制', trigger: 'blur' }]">
+                    <el-input size="mini" placeholder="请输入提货人" v-model="formData.ClientPicker" style="width: 200px;" auto-complete="off"></el-input>
+                </el-form-item>
+
+                <el-form-item label="电话:" prop="ClientPickerMobile" :rules="[{ required: true, message: '请输入电话', trigger: 'blur' },{max:20, message: '电话长度超过限制', trigger: 'blur' }]">
+                    <el-input size="mini" placeholder="请输入电话" v-model="formData.ClientPickerMobile" style="width: 200px;" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="证件类型:" prop="IDType" :rules="[{ required: true, message: '请选择证件类型', trigger: 'change' }]">
+                    <el-select size="mini" v-model="formData.IDType" style="width: 200px;" clearable placeholder="请选择">
+                        <el-option v-for="item in baseData.IDTypeOptions"
+                                   :key="item.value"
+                                   :label="item.text"
+                                   :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <div v-if="formData.IDType != '3'">
+                    <el-form-item label="证件号码:" prop="IDNumber" :rules="[{ required: true, message: '请输入证件号码', trigger: 'blur' },{max:20, message: '证件号码长度超过限制', trigger: 'blur' }]">
+                        <el-input size="mini" placeholder="请输入证件号码" v-model="formData.IDNumber" style="width:200px;" auto-complete="off"></el-input>
+                    </el-form-item>
+                </div>
+                <div v-if="formData.IDType == '3'">
+                    <el-form-item label="公章内容:" prop="SealContext" :rules="[{ message: '请输入公章内容', trigger: 'blur' },{max:50, message: '公章内容长度超过限制', trigger: 'blur' }]">
+                        <el-input size="mini" placeholder="请输入公章内容" v-model="formData.SealContext" style="width:200px;" auto-complete="off"></el-input>
+                    </el-form-item>
+                </div>
+            </div>
+            <div v-if="formData.WaybillType=='2'" class="mt20">
+                <el-form-item class="mt20" label="收货地址" prop="ClientConsignee" :rules="[{ required: true, message: '请选择收货地址', trigger: 'change' }]">
+                    <el-select size="mini" v-model="formData.ClientConsignee" v-on:change="handConsigneeChange" style="width: 200px;" clearable placeholder="请选择">
+                        <el-option v-for="item in baseData.ReceiveOptions"
+                                   :key="item.value"
+                                   :label="item.text"
+                                   :value="item.value">
+                        </el-option>
+                    </el-select>
+                    <el-button class="btn_add ml40" v-on:click="openDialogConsignee">+新增收货地址</el-button>
+                    <p class="txt1" v-if="formData.ClientConsigneeName!=''&&formData.ClientConsigneeName!=null">联系人：{{formData.ClientConsigneeName}} 电话：{{formData.ClientContactMobile}} 地址：{{formData.ClientConsigneeAddress}}</p>
+                </el-form-item>
+            </div>
+            <div v-if="formData.WaybillType=='3'" class="mt20">
+                <el-form-item class="mt20" label="收货地址" prop="ClientConsignee" :rules="[{ required: true, message: '请选择收货地址', trigger: 'change' }]">
+                    <el-select size="mini" v-model="formData.ClientConsignee" v-on:change="handConsigneeChange" style="width: 200px;" clearable placeholder="请选择">
+                        <el-option v-for="item in baseData.ReceiveOptions"
+                                   :key="item.value"
+                                   :label="item.text"
+                                   :value="item.value">
+                        </el-option>
+                    </el-select>
+                    <el-button class="btn_add ml40" v-on:click="openDialogConsignee">+新增收货地址</el-button>
+                    <p class="txt1" v-if="formData.ClientConsigneeName!=''&&formData.ClientConsigneeName!=null">联系人：{{formData.ClientConsigneeName}} 电话：{{formData.ClientContactMobile}} 地址：{{formData.ClientConsigneeAddress}}</p>
+                </el-form-item>
+                <el-form-item label="快递公司:" prop="ExpressID" :rules="[{ required: true, message: '请选择快递公司', trigger: 'change' }]">
+                    <el-select size="mini" v-model="formData.ExpressID" style="width: 200px;" filterable clearable placeholder="请选择">
+                        <el-option v-for="item in baseData.CarrierOptions"
+                                   :key="item.value"
+                                   :label="item.text"
+                                   :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="邮政编码:" prop="ZipCode" :rules="[{ required: false, message: '请输入邮政编码', trigger: 'blur' },{max:50, message: '邮政编码长度超过限制', trigger: 'blur' }]">
+                    <el-input size="mini" placeholder="请输入邮政编码" v-model="formData.ZipCode" style="width: 200px;" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="是否垫付运费:">
+                    <el-radio-group v-model="formData.Freight">
+                        <el-radio v-for="item of radioOptions" :label=item.value>{{item.text}}</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+            </div>
+            <el-form-item class="mt20" label="是否代收货款:">
+                <el-radio-group v-model="formData.IsRecieve">
+                    <el-radio v-for="item of radioOptions" :label=item.value>{{item.text}}</el-radio>
+                </el-radio-group>
+            </el-form-item>
+            <div v-if="formData.IsRecieve">
+                <div class="clearfix mt12">
+                    <el-form-item label="收款金额:" prop="RecievePrice">
+                        <el-input id="RecievePriceInput" style="width: 200px;" size="mini" placeholder="请输入收款金额" v-model="formData.RecievePrice" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="付款人:" prop="PayerID" class="fl" :rules="[{ required: true, message: '请选择收款人', trigger: 'change' }]">
+                        <el-select v-model="formData.PayerID" size="mini" v-on:click.native="onPayer" style="width: 200px;" filterable clearable placeholder="请选择">
+                            <el-option v-for="item in PayerOptions"
+                                       :key="item.value"
+                                       :label="item.text"
+                                       :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-button class="btn_add ml8 fl" style="margin-top: 5px;" v-on:click="PayerVisible2">+新增</el-button>@*dialogPayerVisible=true*@
+                </div>
+                <div class="clearfix">
+                    <div class="fl wp50">
+                        <el-form-item label="付款方式:">
+                            <el-input size="mini" v-model="PayerMethodName" style="width: 200px;" readonly auto-complete="off"></el-input>
+                        </el-form-item>
+                    </div>
+                    <div class="fl">
+                        <el-form-item label="付款币种:">
+                            <el-input size="mini" v-model="PayerCurrencyName" style="width: 200px;" readonly auto-complete="off"></el-input>
+                        </el-form-item>
+                    </div>
+                </div>
+                <div class="clearfix">
+                    <div class="fl wp50">
+                        <el-form-item label="发货时机:" prop="DelivaryOpportunity" :rules="[{ required: true, message: '请选择发货时机', trigger: 'change' }]">
+                            <el-select style="width: 200px;" size="mini" v-model="formData.DelivaryOpportunity" filterable clearable placeholder="请选择">
+                                <el-option v-for="item in baseData.DelivaryOppOptions"
+                                           :key="item.value"
+                                           :label="item.text"
+                                           :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </div>
+                </div>
+                <div v-if="formData.PayerMethod==5" class="clearfix">
+                    <div class="fl wp50">
+                        <el-form-item label="是否入账:" prop="IsEntry">
+                            <el-radio-group v-model="formData.IsEntry">
+                                <el-radio v-for="item of radioOptions" :label=item.value>{{item.text}}</el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </div>
+                    <div v-if="!formData.IsEntry" class="fl">
+                        <el-form-item label="支票投送方式:" prop="CheckDelivery" :rules="[{ required: true, message: '请选择支票投送方式', trigger: 'change' }]">
+                            <el-select style="width: 200px;" size="mini" v-model="formData.CheckDelivery" filterable clearable placeholder="请选择">
+                                <el-option v-for="item in baseData.CheckDelTypeOptions"
+                                           :key="item.value"
+                                           :label="item.text"
+                                           :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </div>
+                    <div v-else class="fl">
+                        <el-form-item label="银行:" prop="CheckPayeeAccount" :rules="[{ required: true, message: '请填写银行', trigger: 'blur' }]">
+                            <el-input style="width: 200px" size="mini" v-model="formData.CheckPayeeAccount"></el-input>
+                        </el-form-item>
+                    </div>
+                </div>
+                <div v-if="formData.PayerMethod==5 && !formData.IsEntry && formData.CheckDelivery>1" class="clearfix">
+                    <div v-if="formData.CheckDelivery==3" class="fl wp50">
+                        <el-form-item label="快递承运商:" prop="CheckCarrier" :rules="[{ required: true, message: '请填写快递承运商', trigger: 'blur' }]">
+                            <el-input style="width: 200px" size="mini" v-model="formData.CheckCarrier"></el-input>
+                        </el-form-item>
+                    </div>
+                    <div v-if="formData.CheckDelivery>=3" class="fl">
+                        <el-form-item label="收票人地址:" prop="CheckConsignee" :rules="[{ required: true, message: '请填写收票人地址', trigger: 'blur' }]">
+                            <el-input style="width: 200px" size="mini"  v-model="formData.CheckConsignee"></el-input>
+                        </el-form-item>
+                    </div>
+                </div>
+                <div v-if="formData.PayerMethod==5" class="clearfix">
+                    <div class="fl wp100">
+                        <el-form-item label="支票抬头:" :rules="[{ required: true }]">
+                            <el-radio-group v-model="TitleSelect">
+                                <el-radio :label="1" :disabled="formData.IsEntry == false && formData.PayerMethod == 5">
+                                    <span id="hkTitle">HONG KONG CHANGYUN INTERNATIONAL LOGISTICS CO., LIMITED</span>
+                                </el-radio>
+                                <el-radio :label="2">
+                                    <el-input id="inputTitle" style="width: 460px" size="mini" :readonly="TitleSelect==1" v-model="TitleText" maxlength="50"></el-input>
+                                </el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </div>
+                </div>
+                <span id="hkTitle1" style="display: none;">HONG KONG CHANGYUN INTERNATIONAL LOGISTICS CO., LIMITED</span>
+                <div v-show="formData.PayerMethod==3" class="clearfix">
+                    <div class="fl wp100">
+                        <el-form-item class="mt20" label="我方账户:" prop="CompanyBankID" :rules="[{ required: true, message: '', trigger: 'change' }]">
+                            <el-radio-group class="mt10" v-model="formData.CompanyBankID">
+                                <el-radio style="display:block;height:80px;margin-top:15px;" :title="item.EnterpriseName" size="mini" :label=item.ID v-for="item of baseData.PayeeOptions">
+                                    <div style="margin-top: -39px;margin-left: 23px;">
+                                        <span>账户：{{item.EnterpriseName}}</span>
+                                        <el-button style="padding: 0px;" type="text" data-clipboard-action="copy" class="cobyOrderSn" :data-clipboard-text="item.ForCopy" v-on:click="copyOurAccount">复制</el-button>
+                                        <br />
+                                        <span>账号：{{item.Account}}</span><br />
+                                        <span>银行：{{item.Bank}}</span><br />
+                                        <span>银行地址：{{item.BankAddress}}</span><br />
+                                        <span>SWIFTCODE：{{item.SwiftCode}}</span>
+                                    </div>
+                                </el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </div>
+                </div>
+            </div>
+            <div class="info_item_wrap mt40">
+                <span class="icon_img">4</span>
+                <span class="title">特殊货物处理要求</span>
+                <a class="ml20 font14 link" v-on:click="openGoods">新增</a>
+            </div>
+            <table class="common_tb1 mt20 wp70" v-if="formData.SpecialGoods.length>0">
+                <tr>
+                    <th width="20px">#</th>
+                    <th>服务项目</th>
+                    <th>服务要求</th>
+                    <th>数量</th>
+                    <th>具体要求</th>
+                    <th>服务费(RMB)</th>
+                    <th>文件</th>
+                    <th>操作</th>
+                </tr>
+                <tr v-for="(item,index) of formData.SpecialGoods">
+                    <td>{{index+1}}</td>
+                    <td>{{item.TypeName}}</td>
+                    <td>{{item.Name}}</td>
+                    <td>{{item.Quantity}}</td>
+                    <td>{{item.Requirement}}</td>
+                    <td>{{item.TotalPrice}}</td>
+                    <td>
+                        <a v-if="item.FileFullURL!=''&&item.FileFullURL!=null" target="_blank" :href="item.FileFullURL">{{item.FileName}}</a>
+                    </td>
+                    <td>
+                        <a v-on:click="del_goods(index)">删除</a>
+                    </td>
+                </tr>
+            </table>
+            <div class="info_item_wrap mt40">
+                <span class="icon_img">5</span>
+                <span class="title">附件信息</span>
+            </div>
+        </div>
+        <div v-if="!formData.IsTransfer" class="info_item_wrap mt40">
+            <span class="icon_img">3</span>
+            <span class="title">附件信息</span>
+        </div>
+        <div class="clearfix mt20">
+            <div class="fl w130">
+                <span class="fl txt2 el-form-item__label">发票:</span>
+            </div>
+            <div class="fl upload_wrap mt6">
+                <el-upload multiple
+                           ref="PIupload"
+                           :http-request="((item)=>{httpRequestFiles(item,'PIFiles')})"
+                           action="/Files/UploadOrderFile"
+                           :show-file-list="false"
+                           accept="image/jpg, image/bmp, image/jpeg, image/gif, image/png, application/pdf">
+                    <el-button size="small" class="btn_upload " type="primary">+添加文件</el-button>
+                    <span class="txt_grey ml8">仅限图片或PDF文件，且文件不超过3M</span>
+                </el-upload>
+                <ul class="file_item_ul mt10">
+                    <li class="clearfix" v-for="(item,index) in formData.PIFiles">
+                        <span class="icon1"></span>
+                        <a class="file_name ml6" :href="item.fullURL" target="_blank">{{item.name}}</a>
+                        <span class="icon2 fr" v-on:click="del_file(index,'PIFiles')"></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="clearfix mt20">
+            <div class="fl w130">
+                <span class="fl txt2 el-form-item__label">装箱单:</span>
+            </div>
+            <div class="fl upload_wrap mt6">
+                <el-upload multiple
+                           ref="PIupload"
+                           :http-request="((item)=>{httpRequestFiles(item,'PackingFiles')})"
+                           action="/Files/UploadOrderFile"
+                           :show-file-list="false"
+                           accept="image/jpg, image/bmp, image/jpeg, image/gif, image/png, application/pdf">
+                    <el-button size="small" class="btn_upload " type="primary">+添加文件</el-button>
+                    <span class="txt_grey ml8">仅限图片或PDF文件，且文件不超过3M</span>
+                </el-upload>
+                <ul class="file_item_ul mt10">
+                    <li class="clearfix" v-for="(item,index) in formData.PackingFiles">
+                        <span class="icon1"></span>
+                        <a class="file_name ml6" :href="item.fullURL" target="_blank">{{item.name}}</a>
+                        <span class="icon2 fr" v-on:click="del_file(index,'PackingFiles')"></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </el-form>
+    <div class="btn_bottom mt80 mb100">
+        <button class="btn1" v-on:click="onSubmit">暂存</button>
+        <button class="ml14 btn2 " v-on:click="onSubmit1">提交</button>
+    </div>
+    <el-dialog title="" class="dialog_success" :lock-scroll="false" width="520px" :before-close="btn_back" :visible.sync="dialogSuccessVisible" :close-on-click-modal="false">
+        <div class="content" style="text-align: center">
+            <p class="title">订单提交成功</p>
+            <p class="mt30">订单编号：<span class="txt_blue">{{orderid}}</span></p>
+        </div>
+        <div class="el-dialog__footer pb30 mt30">
+            <button class="btn2" v-on:click="orderDetails">查看订单信息</button>
+            <button class="btn2 ml12" v-on:click="btn_back">返回</button>
+        </div>
+    </el-dialog>
+    <el-dialog title="新增供应商" :lock-scroll="false" width="30%" :visible.sync="dialogSupplierVisible" :close-on-click-modal="false">
+        <my-supplier ref="header"></my-supplier>
+        <div slot="footer" class="dialog-footer">
+            <button v-on:click="dialogSupplierVisible = false" class="btn1">取 消</button>
+            <button v-on:click="onSubmit_Supplier()" class="btn2 ml12">确 定</button>
+        </div>
+    </el-dialog>
+    <el-dialog title="新增银行账户" :lock-scroll="false" width="30%" :visible.sync="BankVisible" :close-on-click-modal="false">
+        <my-bank ref="bank"></my-bank>
+        <div slot="footer" class="dialog-footer">
+            <button v-on:click="BankVisible = false" class="btn1">取 消</button>
+            <button v-on:click="onSubmit_Bank()" class="btn2 ml12">确 定</button>
+        </div>
+    </el-dialog>
+    <el-dialog title="新增联系人" :lock-scroll="false" width="30%" :visible.sync="dialogAddressVisible" :close-on-click-modal="false">
+        <my-address ref="address"></my-address>
+        <div slot="footer" class="dialog-footer">
+            <button v-on:click="dialogAddressVisible = false" class="btn1">取 消</button>
+            <button v-on:click="onSubmit_Address()" class="btn2 ml12">确 定</button>
+        </div>
+    </el-dialog>
+    <el-dialog title="新增付款人" :lock-scroll="false" width="30%" :visible.sync="dialogPayerVisible" :close-on-click-modal="false">
+        <my-payer-mini ref="payer"></my-payer-mini>
+        <div slot="footer" class="dialog-footer">
+            <button v-on:click="dialogPayerVisible = false" class="btn1">取 消</button>
+            <button v-on:click="onSubmit_Payer()" class="btn2 ml12">确 定</button>
+        </div>
+    </el-dialog>
+    <el-dialog title="新增收货地址" :lock-scroll="false" width="30%" :visible.sync="dialogConsigneeVisible" :close-on-click-modal="false">
+        <my-consignee ref="consignee"></my-consignee>
+        <div slot="footer" class="dialog-footer">
+            <button v-on:click="dialogConsigneeVisible = false" class="btn1">取 消</button>
+            <button v-on:click="onSubmit_Consignee()" class="btn2 ml12">确 定</button>
+        </div>
+    </el-dialog>
+    <el-dialog title="新增货物特殊处理要求" :lock-scroll="false" width="30%" :visible.sync="dialogGoodsVisible" :close-on-click-modal="false">
+        <my-goods ref="goods"></my-goods>
+        <div slot="footer" class="dialog-footer">
+            <button v-on:click="dialogGoodsVisible = false" class="btn1">取 消</button>
+            <button v-on:click="onSubmit_Goods" class="btn2 ml12">确 定</button>
+        </div>
+    </el-dialog>
+    <el-dialog title="收货订单产品批量导入" class="fh_file" :lock-scroll="false" width="30%" :visible.sync="dialogUploadVisible" :close-on-click-modal="false">
+        <div class="font12 txt_grey1 dialog_body txt_left">
+            <p>导入步骤：</p>
+            <p class="mt10">第一步：<a class="txt_blue" href="/Template/代收货产品导入模板.xlsx">下载导入模板</a>并保存到本地。</p>
+            <p class="mt10">第二步：请使用EXCEL表格，并按照以下模版格式整理您的产品，其中<span style="color: red;">品牌、型号、批号、数量</span>为必填。</p>
+            <table class="batchImportTipTable">
+                <tr>
+                    <td v-for="item in batchImportTipTable.row1">{{ item }}</td>
+                </tr>
+                <tr>
+                    <td v-for="(item, index) in batchImportTipTable.row2">
+                        <span v-if="batchImportTipTable.isRequired[index]" class="required">*</span>{{ item }}
+                    </td>
+                </tr>
+            </table>
+            <p class="mt10">第三步：开始导入</p>
+            <div class="mt20 clearfix line30">
+                <span class="fl mr20" style="display: inline-block">选择文件</span>
+                <div class="fl">
+                    <el-upload action="/Files/StorageFileUpload"
+                               :on-success="uploadSuccess"
+                               accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                               :show-file-list="false">
+                        <el-button size="small" class="el-icon-plus btn1">添加文件</el-button>
+                    </el-upload>
+                </div>
+                <ul class="fl ml20">
+                    <li v-for="(item,index) in batchFile">
+                        <div class="file_item">
+                            <i class="file_icon"></i>
+                            <span class="file_name">{{item.name}}</span>
+                            <i class="file_del ml11" v-on:click="delBatchData"></i>
+                        </div>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+        <div slot="footer" class="dialog-footer">
+            <button v-on:click="dialogUploadVisible = false" class="btn1">取消</button>
+            <button v-on:click="onSubmit_upload" class="btn2 ml12">提交</button>
+        </div>
+    </el-dialog>
+</div>
+<script src="~/Scripts/areaData.js"></script>
+@{Html.RenderAction("_PartialSupplierInfo", "Account");}
+@{Html.RenderAction("_PartialSupplierBankInfo", "Account");}
+@{Html.RenderAction("_PartialSupplierAddressInfo", "Account");}
+@{Html.RenderAction("_SimplePayer", "Orders", new { useDefaultMethord = true, useDefaultCurrency = true, });}
+@{Html.RenderAction("_PartialSpecialRequirements", "Orders");}
+@{Html.RenderAction("_ParticalConsignee", "Account");}
+<script src="~/Scripts/directives.js"></script>
+<script src="~/Scripts/clipboard.min.js"></script>
+<script type="text/javascript">
+
+    window.onload = function() {
+        // 获取拖拽内容头部
+        const dialogHeaderEl = $('.el-dialog__header')[2];
+        // 获取拖拽内容整体
+        const dragDom = $('.el-dialog')[2];
+        dialogDrag(dialogHeaderEl, dragDom);
+        
+        // 获取拖拽内容头部
+        const dialogHeaderEl3 = $('.el-dialog__header')[3];
+        // 获取拖拽内容整体
+        const dragDom3 = $('.el-dialog')[3];
+        dialogDrag(dialogHeaderEl3, dragDom3);
+        
+        // 获取拖拽内容头部
+        const dialogHeaderEl4 = $('.el-dialog__header')[4];
+        // 获取拖拽内容整体
+        const dragDom4 = $('.el-dialog')[4];
+        dialogDrag(dialogHeaderEl4, dragDom4);
+    }
+
+    var vStorageAdd = new Vue({
+        el: "#vStorageAdd",
+        data: function() {
+            var that = this;
+            //验证代付货款
+            var validateApplyPrice = function(rule, value, callback) {
+                if (value != '' && value != null) {
+                    if (!ValidDecimal(value)) {
+                        callback(new Error('请输入正确的金额'));
+                    } else if (value - that.totalPrice > 0) {
+                        callback(new Error('代付货款金额不得超过' + that.totalPrice));
+                    }
+                }
+                callback();
+            };
+            //验证代收货款
+            var validateRecievePrice = function(rule, value, callback) {
+                if (value != '' && value != null) {
+                    if (!ValidDecimal(value)) {
+                        callback(new Error('请输入正确的金额'));
+                    }
+                }
+                callback();
+            };
+            return {
+                formData: @Html.Raw(Json.Encode(Model)), //表单数据
+                BeneficiariesOptions: [],
+                baseData: {}, //基础数据
+                radioOptions: [{ value: false, text: "否" }, { value: true, text: "是" }],
+                totalNum: 0, //总数量
+                totalPrice: 0, //总金额
+                BankVisible: false,
+                cascaderConfig: {
+                    label: 'n',
+                    value: 'n',
+                    children: 's'
+                },
+                dialogUploadVisible: false,
+                batchData: [], //批量导入数据
+                batchFile: [],
+                AddressLists: $.pccData[0].s.filter(function(data) {
+                    if (data.n == "香港") {
+                        return data;
+                    }
+                }), //省市区三级联动数据
+                orderid: "",
+                //验证规则
+                rules: {
+                    RecievePrice: [{ required: true, validator: validateRecievePrice, trigger: 'blur' }],
+                    ApplyPrice: [{ required: true, validator: validateApplyPrice, trigger: 'blur' }],
+                },
+                pickerOptions1: {
+                    disabledDate: function(time) {
+                        var myDate = new Date();
+                        myDate.setDate(myDate.getDate() + 6);
+                        var today = new Date();
+                        today.setDate(today.getDate() - 1);
+                        return time > myDate || time < today;
+                    }
+                },
+                pickerOptions2: {
+                    disabledDate: function(time) {
+                        var today = new Date();
+                        today.setDate(today.getDate() - 1);
+                        return time < today;
+                    }
+                },
+                supplierAddressOptions: [], //供应商地址
+                dialogAddressVisible: false,
+                PayPayerOptions: [], //代付支付人
+                PayerOptions: [], //代收支付人
+                dialogPayerVisible: false,
+                dialogSupplierVisible: false,
+                dialogConsigneeVisible: false,
+                dialogSuccessVisible: false,
+                dialogGoodsVisible: false,
+                PayerMethodName: "",
+                PayPayerMethodName: "",
+                PayerCurrencyName: "",
+                PayPayerCurrencyName: "",
+
+                TitleText:'',
+                PayeeSelect:1,
+                TitleSelect: 1,
+
+                PayerMethordOptions: [], // 付款方式选项
+                PayerCurrencyOptions: [], // 付款币种选项
+
+                batchImportTipTable: {
+                    row1: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'],
+                    row2: ['品牌', '型号', '封装', '批号', '产地', '数量', '单位', '单价',],
+                    isRequired: [true, true, false, true, false, true, false, false,],
+                },
+            }
+        },
+        watch: {
+            BankID: function(value) {
+                var that = this;
+                that.formData.SupplierName = "";
+                that.formData.SupplierBankName = "";
+                that.formData.SupplierBankAccount = "";
+                that.BeneficiariesOptions.filter(function(val) {
+                    if (val.value == value) {
+                        that.formData.SupplierName = val.RealEnterpriseName;
+                        that.formData.SupplierBankName = val.Bank;
+                        that.formData.SupplierBankAccount = val.Account;
+                    }
+                });
+            },
+            HKTakingDate: function(val) {
+                if (val != null && val != "") {
+                    this.formData.HKTakingDateStr = this.dateToString(val);
+                }
+            },
+            PickupTime: function(val) {
+                if (val != null && val != "") {
+                    this.formData.PickupTimeStr = this.dateToString(val);
+                }
+            },
+            //代付货款付款人
+            PayPayerID: function(value) {
+                //debugger;
+                var that = this;
+                that.formData.PayPayerMethod = 0;
+                that.formData.PayPayerCurrency = 0;
+                that.PayPayerMethodName = "";
+                that.PayPayerCurrencyName = "";
+                if (value != "" && value != null) {
+                    that.PayPayerOptions.filter(function(val) {
+                        if (val.value == value) {
+                            that.formData.PayPayerMethod = val.Method;
+                            that.formData.PayPayerCurrency = val.Currency;
+                            that.PayPayerMethodName = val.MethodDec;
+                            that.PayPayerCurrencyName = val.CurrencyDec;
+                        }
+                    });
+                } else {
+                    if(Number(that.formData.WareHouseLeft.toFixed(2)) >= that.formData.ApplyPrice) {
+                        that.formData.PayPayerMethod = 6; //现金
+                        that.formData.PayPayerCurrency = 2; //美元
+                        that.PayPayerMethodName = "现金";
+                        that.PayPayerCurrencyName = "美元";
+                    } else {
+                        that.formData.PayPayerMethod = 0;
+                        that.formData.PayPayerCurrency = 0;
+                        that.PayPayerMethodName = "";
+                        that.PayPayerCurrencyName = "";
+                    }
+                }
+            },
+            PayerID: function(value) {
+                var that = this;
+                that.formData.PayerMethod = "";
+                that.formData.PayerCurrency = "";
+                that.PayerMethodName = "";
+                that.PayerCurrencyName = "";
+                if (value != "" && value != null) {
+                    that.PayerOptions.filter(function(val) {
+                        if (val.value == value) {
+                            that.formData.PayerMethod = val.Method;
+                            that.formData.PayerCurrency = val.Currency;
+                            that.PayerMethodName = val.MethodDec;
+                            that.PayerCurrencyName = val.CurrencyDec;
+        
+                            //如果付款方式是支票, 配合界面, 默认支票抬头设置为 $('#hkTitle').text()
+                            if(that.formData.PayerMethod == 5) {
+                                that.formData.CheckTitle = $('#hkTitle1').text();
+                            }
+                        }
+                    });
+                }
+            },
+            PayerMethod: function (value) {
+                var that = this;
+                //如果付款方式是支票, 配合界面, 默认支票抬头设置为 $('#hkTitle').text()
+                if (value == "5") {
+                    that.formData.CheckTitle = $('#hkTitle1').text();
+                }
+            },
+            WaybillType: function(val) {
+                this.$refs["ruleForm"].clearValidate();
+            },
+            HKWaybillType: function(val) {
+                this.$refs["ruleForm"].clearValidate();
+            },
+            BankVisible: function(val) {
+                //新增银行账户弹窗支持拖拽
+                var dialog = $('.el-dialog')[2];
+                if (val) {
+                    this.$nextTick(function() {
+                        var position = getAbsolutePosition(dialog);
+                        $(dialog).css('margin', '0');
+                        dialog.style.top = position.top + 'px';
+                        dialog.style.left = position.left + 'px';
+                    });
+                }
+            },
+            dialogPayerVisible: function(val) {
+                //新增付款人弹窗支持拖拽
+                var dialog = $('.el-dialog')[4];
+                if (val) {
+                    this.$nextTick(function() {
+                        var position = getAbsolutePosition(dialog);
+                        $(dialog).css('margin', '0');
+                        dialog.style.top = position.top + 'px';
+                        dialog.style.left = position.left + 'px';
+                    });
+                }
+            },
+            dialogAddressVisible: function(val) {
+                //新增交货联系人信息弹窗支持拖拽
+                var dialog = $('.el-dialog')[3];
+                if (val) {
+                    this.$nextTick(function() {
+                        var position = getAbsolutePosition(dialog);
+                        $(dialog).css('margin', '0');
+                        dialog.style.top = position.top + 'px';
+                        dialog.style.left = position.left + 'px';
+                    });
+                }
+            },
+            TitleSelect: function(val) {
+                if (val == 1) {
+                    this.formData.CheckTitle = $('#hkTitle').text();
+                } else {
+                    this.formData.CheckTitle = this.TitleText;
+                }
+            },
+            TitleText: function(val) {
+                if(this.TitleSelect == 2) {
+                    this.formData.CheckTitle = val;
+                }
+            },
+            IsEntry: function(val) {
+                //是否入账选否 && 支付方式为支票, 则 支票抬头选2
+                if(val == false && this.formData.PayerMethod == 5) {
+                    this.TitleSelect = 2;
+                }
+            },
+            ApplyPrice: function(val) {
+                if(this.formData.PayPayerID == null || this.formData.PayPayerID == undefined || this.formData.PayPayerID == "") {
+                    if(Number(this.formData.WareHouseLeft.toFixed(2)) >= this.formData.ApplyPrice) {
+                        this.formData.PayPayerMethod = 6; //现金
+                        this.formData.PayPayerCurrency = 2; //美元
+                        this.PayPayerMethodName = "现金";
+                        this.PayPayerCurrencyName = "美元";
+                    } else {
+                        this.formData.PayPayerMethod = 0;
+                        this.formData.PayPayerCurrency = 0;
+                        this.PayPayerMethodName = "";
+                        this.PayPayerCurrencyName = "";
+                    }
+                }
+            },
+        },
+        computed: {
+            Currency: function() {
+                return this.formData.Currency;
+            },
+            PayerID: function(value) {
+                return this.formData.PayerID;
+            },
+            PayPayerID: function(value) {
+                return this.formData.PayPayerID;
+            },
+            BankID: function() {
+                return this.formData.BankID;
+            },
+            HKTakingDate: function() {
+                return this.formData.HKTakingDate;
+            },
+            PickupTime: function() {
+                return this.formData.PickupTime;
+            },
+            WaybillType: function() {
+                return this.formData.WaybillType;
+            },
+            HKWaybillType: function() {
+                return this.formData.HKWaybillType;
+            },
+            IsEntry: function() {
+                return this.formData.IsEntry;
+            },
+            ApplyPrice: function() {
+                return this.formData.ApplyPrice;
+            },
+            PayerMethod: function (value) {
+                return this.formData.PayerMethod;
+            },
+        },
+        methods: {
+            //特殊物品打开弹窗
+            openGoods: function() {
+                var that = this;
+                that.dialogGoodsVisible = true;
+                setTimeout(function() {
+                        that.$refs.goods.form1.Type = "";
+                    },
+                    0)
+            },
+            //删除特殊物品
+            del_goods: function(i) {
+                this.formData.SpecialGoods.splice(i, 1);
+            },
+            addSubItems: function() {
+                var that = this;
+                var obj = {
+                    ID: "",
+                    Name: "",
+                    Manufacturer: "",
+                    PackageCase: "",
+                    DateCode: "",
+                    PartNumber: "",
+                    Origin: "",
+                    Quantity: "0",
+                    Unit: 7,
+                    TotalPrice: "0.0000",
+                    UnitPrice: "0.0000"
+                };
+                that.formData.OrderItems.push(obj);
+                this.calSum();
+            },
+            //验证总价
+            validTotalPrice: function(row, valuetext) {
+                if (!ValidDecimal(row[valuetext])) {
+                    this.$nextTick(function() {
+                        if (valuetext == 'Quantity') {
+                            row[valuetext] = "0";
+                        } else {
+                            row[valuetext] = "0.0000";
+                        }
+                    });
+                } else {
+                    if (valuetext == 'Quantity') {
+                        row[valuetext] = parseInt(row[valuetext]);
+                    } else {
+                        row[valuetext] = parseFloat(row[valuetext]).toFixed(4);
+                    }
+                    if (parseInt(row.Quantity) != 0) {
+                        this.$nextTick(function() {
+                            row.UnitPrice = (row.TotalPrice / row.Quantity).toFixed(4);
+                        });
+                    }
+                }
+                this.calSum();
+            },
+            clearZero: function(row, val) {
+                if (row[val] == "0" || row[val] == "0.0000") {
+                    row[val] = "";
+                }
+            },
+            //删除产品子项
+            handleSubItemDelete: function(index) {
+                this.formData.OrderItems.splice(index, 1);
+                this.calSum();
+            },
+            calSum: function() {
+                var that = this;
+                that.totalNum = 0;
+                that.totalPrice = 0;
+                this.formData.OrderItems.forEach(function(column, index) {
+                    var num = Number(column.Quantity);
+                    var price = Number(column.UnitPrice);
+                    if (!isNaN(num)) {
+                        that.totalNum = accAdd(that.totalNum, num);
+                    }
+                    if (!isNaN(price)) {
+
+                    }
+                    if (!isNaN(num) && !isNaN(price)) {
+                        var total = (num * price).toFixed(2);
+                        that.formData.OrderItems[index].TotalPrice = total;
+                        that.totalPrice = accAdd(that.totalPrice, total).toFixed(2);
+                    }
+                });
+            },
+            onSubmit_Supplier: function() {
+                var that = this;
+                this.$refs.header.$refs.form1.validate(function(valid) {
+                    if (valid) {
+                        that.dialogSupplierVisible = false;
+                        axios({
+                            url: "/Account/SupplierInfoSubmit",
+                            method: "post",
+                            data: that.$refs.header.form1,
+                        }).then(function(response) {
+                            that.$refs.header.$refs.form1.resetFields();
+                            that.onAlert(response.data.type, response.data.msg);
+                            if (response.data.type == "success") {
+                                that.refreshSupplier();
+                            }
+                        }).catch(function(error) {
+                            that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                        });
+                    } else {
+                        //验证失败
+                    }
+                });
+            },
+            handSupplierChange: function() {
+                var that = this;
+                //that.BeneficiariesOptions = [];
+                if (that.formData.SupplierID != '' || that.formData.SupplierID != null) {
+                    //that.formData.BankID = "";
+                    //that.refreshBank();
+                    that.refreshAddressOpt(); //刷新供应商提货地址
+                }
+            },
+            refreshBank: function() {
+                var that = this;
+                //if (that.formData.SupplierID != "" && that.formData.SupplierID != null) {
+                axios({
+                    url: "/Orders/GetSupplierBeneficiaries",
+                    method: "post",
+                    data: {
+                        //supplier: that.formData.SupplierID,
+                    }
+                }).then(function(res) {
+                    if (res.data.type == "success") {
+                        that.BeneficiariesOptions = JSON.parse(res.data.data);
+                    } else {
+                        that.onAlert(res.data.type, res.data.msg);
+                    }
+                }).catch(function(error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+                //}
+            },
+            //验证整数和小数
+            validDecimalText: function(valuetext) {
+                if (!ValidDecimal(this.formData[valuetext])) {
+                    this.$nextTick(function() {
+                        this.formData[valuetext] = 0;
+                    });
+                }
+            },
+            validApplyPrice: function() {
+                this.validDecimalText('ApplyPrice');
+                if (this.formData.ApplyPrice > this.totalPrice) {
+                    this.formData.ApplyPrice
+                }
+            },
+            onSubmit_Bank: function() {
+                var that = this;
+                var data = that.$refs.bank.form1;
+                that.$refs.bank.$refs.form1.validate(function(valid) {
+                    if (valid) {
+                        that.BankVisible = false;
+                        axios({
+                            url: "/Account/SupplierBankInfoSubmit",
+                            method: "post",
+                            data: data,
+                        }).then(function(response) {
+                            that.$refs.bank.$refs.form1.resetFields();
+                            that.onAlert(response.data.type, response.data.msg);
+                            if (response.data.type == "success") {
+                                that.refreshBank();
+                            }
+                        }).catch(function(error) {
+                            that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                        });
+                    } else {
+                        //验证失败
+                    }
+                });
+            },
+            add_bank: function() {
+                this.BankVisible = true;
+                /*
+                var that = this;
+                that.$refs.ruleForm.validateField('SupplierID',
+                    function(data) {
+                        if (data == "") {
+                            that.BankVisible = true;
+                            setTimeout(function() {
+                                    that.$refs.bank.form1.SupplierID = that.formData.SupplierID;
+                                },
+                                0);
+                        } else {
+                            setTimeout(function() {
+                                    var isError = document.getElementsByClassName("is-error");
+                                    isError[0].querySelector('input').focus();
+                                },
+                                1);
+                            return false;
+                        }
+                    });*/
+
+            },
+            //检测供应商和币种
+            checkBank: function() {
+                var that = this;
+                that.$refs.ruleForm.validateField('SupplierID',
+                    function(data) {
+                        if (data != "") {
+                            setTimeout(function() {
+                                    var isError = document.getElementsByClassName("is-error");
+                                    isError[0].querySelector('input').focus();
+                                },
+                                1);
+                            return false;
+                        }
+                    });
+                that.$refs.ruleForm.validateField('Currency',
+                    function(data) {
+                        if (data != "") {
+                            setTimeout(function() {
+                                    var isError = document.getElementsByClassName("is-error");
+                                    isError[0].querySelector('input').focus();
+                                },
+                                1);
+                            return false;
+                        }
+                    });
+            },
+            //删除文件
+            del_file: function(i, column) {
+                this.formData[column].splice(i, 1);
+            },
+            httpRequestFile: function(options, column) {
+                var that = this;
+                UploadFile(options,
+                    '/Files/UploadPickUpFile',
+                    function(res) {
+                        if (res.type) {
+                            var list = JSON.parse(res.file);
+                            that.formData[column] = [];
+                            that.formData[column].push(list);
+                        } else {
+                            that.onAlert("error", res.msg);
+                        }
+                    });
+            },
+            //上传多文件
+            httpRequestFiles: function(options, column) {
+                var that = this;
+                UploadFile(options,
+                    '/Files/UploadOrderFile',
+                    function(res) {
+                        if (res.type) {
+                            var list = JSON.parse(res.file);
+                            that.formData[column].push(list);
+                        } else {
+                            that.onAlert("error", res.msg);
+                        }
+                    });
+            },
+            addAddress: function() {
+                var that = this;
+                that.$refs.ruleForm.validateField('SupplierID',
+                    function(data) {
+                        if (data == "") {
+                            that.dialogAddressVisible = true;
+                            setTimeout(function() {
+                                    that.$refs.address.IsSupplier = false;
+                                    that.$refs.address.$refs.form1.resetFields();
+                                    that.$refs.address.form1.SupplierID = that.formData.SupplierID;
+                                },
+                                0);
+                        } else {
+                            setTimeout(function() {
+                                    var isError = document.getElementsByClassName("is-error");
+                                    isError[0].querySelector('input').focus();
+                                },
+                                1);
+                            return false;
+                        }
+                    });
+            },
+            //刷新供应商提货地址
+            refreshAddressOpt: function() {
+                var that = this;
+                that.supplierAddressOptions = [];
+                that.formData.HKSupplierAddress = "";
+                axios({
+                    url: "/Account/GetSupplierAddress",
+                    method: "post",
+                    data: {
+                        supplier: that.formData.SupplierID
+                    },
+                }).then(function(res) {
+                    if (res.data.type == "success") {
+                        that.supplierAddressOptions = JSON.parse(res.data.data);
+                        if (that.supplierAddressOptions.length > 0) {
+                            that.formData.HKSupplierAddress = that.supplierAddressOptions[0].value;
+                        }
+                    } else {
+                        that.onAlert(res.data.type, res.data.msg);
+                    }
+                }).catch(function(error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            onSubmit_Address: function() {
+                var that = this;
+                this.$refs.address.$refs.form1.validate(function(valid) {
+                    if (valid) {
+                        that.dialogAddressVisible = false;
+                        axios({
+                            url: "/Account/SupplierAddressInfoSubmit",
+                            method: "post",
+                            data: that.$refs.address.form1,
+                        }).then(function(response) {
+                            that.$refs.address.$refs.form1.resetFields();
+                            that.$refs.address.$refs.form1.IsDefault = false;
+                            that.onAlert(response.data.type, response.data.msg);
+                            if (response.data.type == "success") {
+                                that.refreshAddressOpt();
+                                that.formData.HKSupplierAddress = response.data.data;
+                            }
+                        }).catch(function(error) {
+                            that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                        });
+                    } else {
+                        //验证失败
+                    }
+                });
+            },
+            onPayer: function() {
+                this.getPayerOptions();
+            },
+            onPayPayer: function() {
+                this.getPayerOptions("5");
+            },
+            //获取支付人
+            getPayerOptions: function(type) {
+                var that = this;
+                axios({
+                    url: "/Orders/GetPayerOptions",
+                    method: "post",
+                    data: {
+                        type: type
+                    },
+                }).then(function(res) {
+                    if (res.data.type == "success") {
+                        that.PayerOptions = JSON.parse(res.data.data);
+                        that.PayPayerOptions = JSON.parse(res.data.data);
+                    } else {
+                        that.onAlert(res.data.type, res.data.msg);
+                    }
+                }).catch(function(error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            onSubmit_Payer: function() {
+                var that = this;
+                this.$refs.payer.$refs.form1.validate(function(valid) {
+                    if (valid) {
+                        that.dialogPayerVisible = false;
+                        axios({
+                            url: "/Orders/SubmitPayer",
+                            method: "post",
+                            data: that.$refs.payer.form1
+                        }).then(function(response) {
+                            that.$refs.payer.$refs.form1.resetFields();
+                            that.onAlert(response.data.type, response.data.msg);
+                            if (response.data.type == "success") {
+                                that.getPayerOptions();
+                            }
+                        }).catch(function(error) {
+                            that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                        });
+                    } else {
+                        //验证失败
+                    }
+                });
+            },
+            onSubmit_Goods: function() {
+                var that = this;
+                this.$refs.goods.$refs.form1.validate(function(valid) {
+                    if (valid) {
+                        var formData = that.$refs.goods.form1;
+                        if ((formData.FileName == "" || formData.FileName == null) &&
+                            formData.NameValue == '1' &&
+                            formData.Type == '1') { //贴标签
+                            that.onAlert("error", "请上传标签文件");
+                            return;
+                        }
+                        var arr = that.formData.SpecialGoods;
+                        arr.push(formData);
+                        that.formData.SpecialGoods = JSON.parse(JSON.stringify(arr));
+                        that.dialogGoodsVisible = false;
+                    } else {
+                        //验证失败
+                    }
+                });
+
+            },
+            //改变收货地址触发
+            handConsigneeChange: function() {
+                var that = this;
+                this.baseData.ReceiveOptions.filter(function(value) {
+                    if (value.value == that.formData.ClientConsignee) {
+                        that.formData.ClientConsigneeAddress = value.address;
+                        that.formData.ClientConsigneeName = value.name;
+                        that.formData.ClientContactMobile = value.mobile;
+                        that.formData.ClientConsigneeCompany = value.text;
+                    }
+                });
+            },
+            //刷新收货人
+            refreshConsignee: function() {
+                var that = this;
+                axios({
+                    url: "/Account/GetConsigneeAddress",
+                    method: "post",
+                    data: {}
+                }).then(function(response) {
+                    if (response.data.type == "success") {
+                        that.baseData.ReceiveOptions = JSON.parse(response.data.data);
+                        that.formData.ClientConsignee = that.baseData.ReceiveOptions[0].value;
+                        that.handConsigneeChange();
+                    }
+                }).catch(function(error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            onSubmit_Consignee: function() {
+                var that = this;
+                this.$refs.consignee.$refs.form1.validate(function(valid) {
+                    if (valid) {
+                        that.dialogConsigneeVisible = false;
+                        axios({
+                            url: "/Account/ConsigneeSubmit",
+                            method: "post",
+                            data: that.$refs.consignee.form1,
+                        }).then(function(response) {
+                            that.$refs.consignee.$refs.form1.resetFields();
+                            that.onAlert(response.data.type, response.data.msg);
+                            if (response.data.type == "success") {
+                                that.refreshConsignee();
+                            }
+                        }).catch(function(error) {
+                            that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                        });
+                    } else {
+                        //验证失败
+                    }
+                });
+            },
+            //返回新增页面
+            btn_back: function() {
+                window.location.href = "/Orders/StorageAdd";
+            },
+            orderDetails: function() {
+                if (!this.formData.IsTransfer) {
+                    commonSkipUrl(this.orderid, '/Orders/StorageDetail', "/" + "@(ViewContext.RouteData.Values["controller"].ToString())"
+                                                                       + "/" + "@(ViewContext.RouteData.Values["action"].ToString())");
+                } else {
+                    commonSkipUrl(this.orderid, '/Orders/StorageTransDetail', "/" + "@(ViewContext.RouteData.Values["controller"].ToString())"
+                                                                            + "/" + "@(ViewContext.RouteData.Values["action"].ToString())");
+                }
+            },
+            validProduct: function() {
+                var items = this.formData.OrderItems;
+                if (items.length == 0) {
+                    this.onAlert("error", "请输入产品信息");
+                    return;
+                }
+                if (items.length > 100) {
+                    this.onAlert("error", "产品明细不超过100条");
+                    return;
+                }
+                for (var i = 0; i < items.length; i++) {
+                    if (items[i].Name != null && items[i].Name.length > 150) {
+                        this.onAlert("error", "第" + (i + 1) + "行产品明细的品名长度超过限制");
+                        return;
+                    } else if (items[i].Manufacturer == null || items[i].Manufacturer == "") {
+                        this.onAlert("error", "第" + (i + 1) + "行产品明细的品牌不能为空");
+                        return;
+                    } else if (items[i].Manufacturer != null && items[i].Manufacturer.length > 150) {
+                        this.onAlert("error", "第" + (i + 1) + "行产品明细的品牌长度超过限制");
+                        return;
+                    //} else if (items[i].PackageCase == null || items[i].PackageCase == "") {
+                    //    this.onAlert("error", "第" + (i + 1) + "行产品明细的封装不能为空");
+                    //    return;
+                    } else if (items[i].PackageCase != null && items[i].PackageCase.length > 20) {
+                        this.onAlert("error", "第" + (i + 1) + "行产品明细的封装长度超过限制");
+                        return;
+                    } else if (items[i].DateCode == null || items[i].DateCode == "") {
+                        this.onAlert("error", "第" + (i + 1) + "行产品明细的批号不能为空");
+                        return;
+                    } else if (items[i].DateCode != null && items[i].DateCode.length > 50) {
+                        this.onAlert("error", "第" + (i + 1) + "行产品明细的批号长度超过限制");
+                        return;
+                    } else if (items[i].PartNumber == null || items[i].PartNumber == "") {
+                        this.onAlert("error", "第" + (i + 1) + "行产品明细的型号不能为空");
+                        return;
+                    //} else if (items[i].Origin == null || items[i].Origin == "") {
+                    //    this.onAlert("error", "第" + (i + 1) + "行产品明细的产地不能为空");
+                    //    return;
+                    } else if (items[i].PartNumber != null && items[i].PartNumber.length > 150) {
+                        this.onAlert("error", "第" + (i + 1) + "行产品明细的型号长度超过限制");
+                        return;
+                    } else if (parseFloat(items[i].Quantity) == 0) {
+                        this.onAlert("error", "第" + (i + 1) + "行产品明细的数量不能为0");
+                        return;
+                    } else if (items[i].Unit == null || items[i].Unit == "") {
+                        this.onAlert("error", "第" + (i + 1) + "行产品明细的单位不能为空");
+                        return;
+                    } else if (items[i].UnitPrice == null || items[i].UnitPrice == "") {
+                        this.onAlert("error", "第" + (i + 1) + "行产品明细的进单价不能为空");
+                        return;
+                    } else if (parseFloat(items[i].UnitPrice) == 0) {
+                        this.onAlert("error", "第" + (i + 1) + "行产品明细的单价不能为零");
+                        return;
+                    }
+                }
+                if (this.formData.HKWaybillType == '1' && this.formData.TakingFiles.length == 0) {
+                    this.onAlert("error", "请上传提货文件");
+                    return;
+                }
+                return true;
+            },
+            onSubmit: function() {
+                var that = this;
+                if (that.validProduct()) {
+                    that.$refs.ruleForm.validate(function(valid) {
+                        if (valid) {
+                            if(that.formData.IsPay && that.formData.ApplyPrice <= 0) {
+                                that.onAlert("warning", "付款金额必须大于0！");
+                                $('#ApplyPriceInput').focus();
+                                return false;
+                            }
+                            if(that.formData.IsRecieve && that.formData.RecievePrice <= 0) {
+                                that.onAlert("warning", "收款金额必须大于0！");
+                                $('#RecievePriceInput').focus();
+                                return false;
+                            }
+                            //付款方式 == 支票 && 是否入账选是 && TitleSelect == 2 && TitleText == ''
+                            if (that.formData.IsRecieve && that.formData.PayerMethod == 5 && that.formData.IsEntry && that.TitleSelect == 2 && that.TitleText == '') {
+                                that.onAlert("warning", "请填写支票抬头！");
+                                $('#inputTitle').focus();
+                                return false;
+                            }
+                            //付款方式 == 支票 && 是否入账选否 && TitleText == ''
+                            if (that.formData.IsRecieve && that.formData.PayerMethod == 5 && !that.formData.IsEntry && that.TitleText == '') {
+                                that.onAlert("warning", "请填写支票抬头！");
+                                $('#inputTitle').focus();
+                                return false;
+                            }
+                            if (that.formData.HKWaybillType != "1") {
+                                that.formData.TakingFiles = [];
+                            }
+                            const loading = that.$loading({
+                                lock: false,
+                                text: 'Loading',
+                                spinner: 'el-icon-loading',
+                                background: 'rgba(0, 0, 0, 0.7)'
+                            });
+                            axios({
+                                url: "/Orders/StorageSubmit",
+                                method: "post",
+                                data: {
+                                    data: JSON.stringify(that.formData),
+                                },
+                            }).then(function(response) {
+                                loading.close();
+                                if (response.data.type == "error") {
+                                    that.onAlert(response.data.type, response.data.msg);
+                                } else {
+                                    that.orderid = response.data.data;
+                                    that.dialogSuccessVisible = true;
+                                }
+                            }).catch(function(error) {
+                                that.onAlert("warning", error);
+                            });
+                        } else {
+                            setTimeout(function() {
+                                    var isError = document.getElementsByClassName("is-error");
+                                    isError[0].querySelector('input').focus();
+                                },
+                                1);
+                            return false;
+                        }
+                    });
+                }
+            },
+            onSubmit1: function() {
+                this.formData.IsSubmit = true;
+                this.onSubmit();
+            },
+            httpRequestPacking: function() {
+                var that = this;
+                UploadFile(options,
+                    '/Files/UploadOrderFile',
+                    function(res) {
+                        if (res.type) {
+                            var list = JSON.parse(res.file);
+                            that.formData.PackingFiles.push(list);
+                        } else {
+                            that.onAlert("error", res.msg);
+                        }
+                    });
+            },
+            dateToString: function(date) {
+                var year = date.getFullYear();
+                var month = (date.getMonth() + 1).toString();
+                var day = (date.getDate()).toString();
+                if (month.length == 1) {
+                    month = "0" + month;
+                }
+                if (day.length == 1) {
+                    day = "0" + day;
+                }
+                var dateTime = year + "-" + month + "-" + day;
+                return dateTime;
+            },
+            //刷新供应商
+            refreshSupplier: function() {
+                var that = this;
+                axios({
+                    url: "/Account/GetSupplierOptions",
+                    method: "post",
+                    data: {},
+                }).then(function(response) {
+                    if (response.data.type == "success") {
+                        that.baseData.SupplierOptions = JSON.parse(response.data.data);
+                    }
+                }).catch(function(error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            // 产品上传成功后的回调
+            uploadSuccess: function(response) {
+                var that = this;
+                if (response.type == "error") {
+                    that.onAlert(response.type, response.msg)
+                } else {
+                    var data = JSON.parse(response.data);
+                    var list = data.list;
+                    var file = {
+                        name: data.FileName
+                    };
+                    if (that.formData.OrderItems.length == 1) {
+                        that.formData.OrderItems = [];
+                    }
+                    this.batchFile.push(file);
+                    $.each(list,
+                        function(i, value) {
+                            var obj = {
+                                ID: value.ID,
+                                Name: value.Name,
+                                Manufacturer: value.Manufacturer,
+                                PackageCase: value.PackageCase,
+                                DateCode: value.DateCode,
+                                PartNumber: value.PartNumber,
+                                Origin: value.Origin,
+                                Quantity: value.Quantity,
+                                Unit: value.Unit,
+                                UnitPrice: value.UnitPrice.toFixed(4),
+                                TotalPrice: value.TotalPrice.toFixed(2)
+                            };
+                            that.batchData.push(obj);
+                        });
+                }
+            },
+            onSubmit_upload: function() {
+                if (this.batchData.length == 0) {
+                    this.onAlert("warning", "请上传导入文件");
+                    return;
+                } else {
+                    for (var i = 0; i < this.batchData.length; i++) {
+                        this.formData.OrderItems.push(this.batchData[i]);
+                    }
+                    this.dialogUploadVisible = false;
+                    this.delBatchData();
+                    this.calSum();
+                }
+            },
+            delBatchData: function() {
+                this.batchData = [];
+                this.batchFile = [];
+            },
+            //消息提示框
+            onAlert: function(type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                    offset: 100
+                });
+            },
+            GetDateFormat: function(str) {
+                return new Date(parseInt(str.substr(6, 13)));
+            },
+            PayerVisible1: function() {
+                var that = this;
+                this.dialogPayerVisible=true;
+                setTimeout(function() {
+                        that.$refs.payer.UseMethordOptions = that.$refs.payer.baseData.MethordOptions;
+                    },
+                    0)
+                
+                
+            },
+            PayerVisible2: function() {
+                var that = this;
+                this.dialogPayerVisible=true;
+                setTimeout(function() {
+                        that.$refs.payer.UseMethordOptions = that.$refs.payer.baseData.MethordOptions22;
+                    },
+                    0)
+                
+            },
+            copyOurAccount() {
+                var that = this;
+                var clipboard = new ClipboardJS(".cobyOrderSn");
+                clipboard.on('success', function () {
+                    that.onAlert("success", "复制成功");
+                    clipboard.destroy();
+                });
+                clipboard.on('error', function () {
+                    that.onAlert("error", "复制失败");
+                    clipboard.destroy();
+                });
+            },
+            openDialogConsignee() {
+                var that = this;
+                this.dialogConsigneeVisible=true;
+                setTimeout(function() {
+                        that.$refs.consignee.IsHideSome = true; //隐藏一些东西
+                        that.$refs.consignee.form1.Place = that.$refs.consignee.form1.PlaceDefault; //填充默认的国家地区
+                    },
+                    0)
+            },
+        },
+        mounted: function () {
+            this.calSum(); //如果是编辑, 页面加载时计算一下型号的总数量和总价
+
+            var options = @Html.Raw(Json.Encode(@ViewBag.Options)); //加载基础数据
+            this.baseData = options;
+            this.refreshBank();
+            this.refreshAddressOpt();
+            if (this.formData.PickupTime != null) {
+                this.formData.PickupTime = this.GetDateFormat(this.formData.PickupTime);
+            }
+            if (this.formData.HKTakingDate != null) {
+                this.formData.HKTakingDate = this.GetDateFormat(this.formData.HKTakingDate);
+            }
+            if (this.formData.OrderItems.length == 0) {
+                this.addSubItems();
+            }
+            if (this.formData.PayerID != null) {
+                this.onPayer();
+                this.PayerMethodName = this.formData.PayerMethodName;
+                this.PayerCurrencyName = this.formData.PayerCurrencyName;
+            }
+            if (this.formData.PayPayerID != null) {
+                this.onPayPayer();
+                this.PayPayerMethodName = this.formData.PayPayerMethodName;
+                this.PayPayerCurrencyName = this.formData.PayPayerCurrencyName;
+            }
+        }
+    });
+
+
+</script>
+<style>
+    .add-sub-items-btn .el-button {
+        float: left;
+        margin: 6px 4px 0 4px;
+        padding: 0;
+        background-color: transparent !important;
+        border-color: transparent !important;
+        color: #409EFF;
+    }
+
+        .add-sub-items-btn .el-button.is-disabled,
+        .add-sub-items-btn .el-button.is-disabled:focus,
+        .add-sub-items-btn .el-button.is-disabled:hover {
+            color: #c0c4cc;
+            background-color: transparent !important;
+            border-color: transparent !important;
+        }
+
+    table.batchImportTipTable {
+        border: 1px solid #F0F0F0;
+        margin-top: 10px;
+        margin-left: 35px;
+    }
+
+        table.batchImportTipTable td {
+            border: 1px solid #F0F0F0;
+            padding: 5px 15px;
+            text-align: center;
+        }
+
+        table.batchImportTipTable tr:first-child td {
+            background-color: #F0F0F0;
+            color: #323232;
+        }
+
+        table.batchImportTipTable td span.required {
+            color: red;
+        }
+</style>

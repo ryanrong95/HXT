@@ -1,0 +1,98 @@
+﻿﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>币种换算 - jQuery EasyUI plugin</title>
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/gray/easyui.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/standard-easyui/styles/plugin.css" rel="stylesheet" />
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.easyui.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/locale/easyui-lang-zh_CN.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/ajaxPrexUrl.js"></script>
+    <!--currency-v2-->
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/main.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/standard-easyui/scripts/debounce.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/standard-easyui/scripts/currency.js"></script>
+</head>
+<body>
+    <h1>币种换算</h1>
+    <form id="ff" class="easyui-form" method="post" data-options="novalidate:true" onsubmit="return $(this).form('enableValidation').form('validate');">
+        <div>
+            <input name="currency" value="" id="currency" />
+        </div>
+        <div>
+            <input name="currency2" value="" id="currency2" />
+        </div>
+        <div onclick="changeInvoice(1)">切换发票类型1</div>
+        <div onclick="changeInvoice(2)">切换发票类型2</div>
+        <div onclick="changeInvoice(4)">切换发票类型4</div>
+        <button>提交</button>
+    </form>
+    <script>
+        function changeInvoice(n) {
+            $('#currency2').currency('setInvoiceType', n)
+            $('#currency').currency('setInvoiceType', n)
+        }
+        $(function () {
+            $('#currency').currency({
+                currency: "USD",
+                currency1: "CNY",
+                //Price: 3,
+                Price1: 8,
+                //TaxedPrice: 87,
+                onEnter1: function (data, currency, currency1, ERate1, VATRate, Price, Price1, TaxedPrice) {
+                    console.log('onEnter1');
+                    console.log(VATRate);
+                    console.log($('#currency').currency("getAllData"));
+                },
+                onEnter2: function (data, currency, currency1, ERate1, VATRate, Price, Price1, TaxedPrice) {
+                    console.log('onEnter2');
+                    console.log($('#currency').currency("getAllData"));
+                },
+                onEnter3: function (data, currency, currency1, ERate1, VATRate, Price, Price1, TaxedPrice) {
+                    console.log('onEnter3');
+                    console.log($('#currency').currency("getAllData"));
+                    console.log($('#currency').currency("getRate"));
+                },
+                onChangeCurrency: function (data, currency, currency1, ERate1, VATRate, Price, Price1, TaxedPrice) {
+                    console.log('onChangeCurrency');
+                    console.log($('#currency').currency("getAllData"));
+                }
+            });
+            //$('#currency').currency("setPrice3", 300);
+            //$('#currency').currency("setPrice2", 300);
+            //$('#currency').currency("setPrice1", 300);
+
+
+            $('#currency2').currency({
+                currency: "CNY",
+                currency1: "CNY",
+                Price: 3,
+                //Price1: 8,
+                //TaxedPrice: 87,
+                onEnter1: function (data, currency, currency1, ERate1, VATRate, Price, Price1, TaxedPrice) {
+                    console.log('onEnter1');
+                    console.log($('#currency2').currency("getAllData"));
+                },
+                onEnter2: function (data, currency, currency1, ERate1, VATRate, Price, Price1, TaxedPrice) {
+                    console.log('onEnter2');
+                    console.log($('#currency2').currency("getAllData"));
+                },
+                onEnter3: function (data, currency, currency1, ERate1, VATRate, Price, Price1, TaxedPrice) {
+                    console.log('onEnter3');
+                    console.log($('#currency2').currency("getAllData"));
+                },
+                onChangeCurrency: function (data, currency, currency1, ERate1, VATRate, Price, Price1, TaxedPrice) {
+                    console.log('onChangeCurrency');
+                    console.log($('#currency2').currency("getAllData"));
+                }
+            });
+
+            //$('#currency2').currency("setPrice1", 100);
+            //$('#currency2').currency("setPrice2", 300);
+            //$('#currency2').currency("setPrice3", 400);
+        });
+
+    </script>
+</body>
+</html>

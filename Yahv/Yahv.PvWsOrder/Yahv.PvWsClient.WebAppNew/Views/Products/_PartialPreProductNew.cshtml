@@ -1,0 +1,117 @@
+﻿<template id="preproductinfonew">
+    <el-form :model="form2" :rules="rules2" status-icon ref="form2" label-width="140px">
+        <el-form-item label="物料号：" prop="ProductUnionCode">
+            <el-input v-model="form2.ProductUnionCode" size="mini" style="width:90%" :readonly="isReadonly" placeholder="请输入物料号" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="品名：" prop="ProductName">
+            <el-input v-model.trim="form2.ProductName" size="mini" style="width:90%" placeholder="请输入品名" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="型号：" prop="Models">
+            <el-input size="mini" style="width:90%" v-model="form2.Models" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="品牌：" prop="Manufacturer">
+            <el-input size="mini" style="width:90%" v-model="form2.Manufacturer" :readonly="isReadonly" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="币种：" prop="Currency" :rules="[{required: true, message: '请选择币种', trigger: 'change'}]">
+            <el-select v-model="form2.Currency" size="mini" style="width:50%;" filterable clearable placeholder="请选择">
+                <el-option v-for="item in baseData.CurrencyOptions"
+                           :key="item.value"
+                           :label="item.text"
+                           :value="item.value">
+                </el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item label="单价：" prop="Price">
+            <el-input v-model="form2.Price" auto-complete="off" size="mini" style="width:90%"></el-input>
+        </el-form-item>
+        <el-form-item label="数量：" prop="Qty">
+            <el-input v-model="form2.Qty" auto-complete="off" size="mini" style="width:90%"></el-input>
+        </el-form-item>
+        <el-form-item label="预计到货日期:" prop="DueDate" :rules="[{ type: 'date', required: false, message: '预计到货日期', trigger: 'change' }]">
+            <el-date-picker type="date" size="mini" style="width:50%" placeholder="预计到货日期" v-model="form2.DueDate"></el-date-picker>
+        </el-form-item>
+    </el-form>
+</template>
+<script>
+    Vue.component(
+        'preproductinfonew',
+        {
+            template: "#preproductinfonew",
+            data: function () {
+                var that = this;
+                var validatorProductUnionCode = function(rule, value, callback){
+                    if (value == '' || value == null) {
+                        callback(new Error('请输入物料号'));
+                    }
+                    else {;
+                        axios({
+                            url: "/Products/CheckProductUnionCode",
+                            method: "post",
+                            data: {
+                                ProductUnionCode: that.form2.ProductUnionCode,
+                                ID:that.form2.ID
+                            },
+                        }).then(function (response) {
+                            if (response.data.type == "error") {
+                                callback(new Error(response.data.msg));
+                            } else {
+                                callback();
+                            }
+                        }).catch(function (error) {
+                            that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                        });
+                    }
+                };
+                var validatorPrice = function (rule, value, callback) {
+                    if (value == '' || value == null) {
+                        callback(new Error('请输入单价'));
+                    }
+                    else if (!ValidDecimal(value)) {
+                        callback(new Error('请输入正确单价'));
+                    } else {
+                        callback();
+                    }
+                };
+                var validatorQty = function (rule, value, callback) {
+                    if (value == '' || value == null) {
+                        callback();
+                    }
+                    else if (!ValidDecimal(value)) {
+                        callback(new Error('请输入正确数量'));
+                    } else {
+                        callback();
+                    }
+                };
+                return {
+                    form2: @Html.Raw(Json.Encode(Model)),
+                    rules2: {
+                        ProductUnionCode: [{ required: true, validator: validatorProductUnionCode, trigger: 'blur' },
+                            { max: 50, message: '物料号长度不超过50', trigger: 'blur' }],
+                        ProductName: [{ required: true, message: '请输入品名', trigger: 'blur' }, { max: 150, message: '品名长度不超过150', trigger: 'blur' }],
+                        Models: [{ required: true, message: '请输入型号', trigger: 'blur' }, { max: 50, message: '型号长度不超过50', trigger: 'blur' }],
+                        Manufacturer: [{required: true, message: '请输入品牌', trigger: 'blur'},{ max: 50, message: '品牌长度不超过50', trigger: 'blur' }],
+                        Price: [{ required: true, validator: validatorPrice, trigger: 'blur' }],
+                        Qty: [{ required: false, validator: validatorQty, trigger: 'blur' }],
+                    },
+                    isReadonly: false,
+                    baseData: {}, //基础数据
+                }
+            },
+            methods: {
+                //消息提示框
+                onAlert: function (type, message) {
+                    this.$message({
+                        message: message,
+                        type: type
+                    });
+                },
+            }, mounted: function () {
+                var options = @Html.Raw(Json.Encode(@ViewBag.Options)); //加载基础数据
+                this.baseData = options;
+            }
+        });
+</script>
+
+
+
+

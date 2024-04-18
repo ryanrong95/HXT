@@ -1,0 +1,52 @@
+﻿﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>标准品牌名称补齐 - jQuery EasyUI plugin</title>
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/gray/easyui.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/standard-easyui/styles/plugin.css" rel="stylesheet" />
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.easyui.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/locale/easyui-lang-zh_CN.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/main.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/ajaxPrexUrl.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/standard-easyui/scripts/easyui.jl.js"></script>
+</head>
+<body>
+    <h1>标准品牌名称补齐</h1>
+    <form id="ff" class="easyui-form" method="post" data-options="novalidate:true" onsubmit="return $(this).form('enableValidation').form('validate');">
+        <input id="standardBrand" name="brand" value="" />
+        <input id="standardBrand2" class="easyui-standardBrand" name="brand2" value="" />
+        <button onclick="aaa()">提交</button>
+    </form>
+    <table>
+        <tr>
+            <td><span class="icon-IsAgent"></span>IsAgent</td>
+        </tr>
+    </table>
+    <script>
+      $(function () {
+          $("#standardBrand").standardBrand({
+              required: true,
+              value: 'ALLEGRO',
+              onDoChange: function (data) {
+                  console.log(data);
+              }
+          })
+      })
+      function aaa() {
+          $('#standardBrand').standardBrand('setVal', 'fhksfhks');
+
+          console.log($('#standardBrand').standardBrand('options'));
+          console.log($('#standardBrand').standardBrand('getVal'));
+          console.log($('#standardBrand').standardBrand('getResult'));
+          console.log($('#standardBrand').standardBrand('getAllData'));
+          console.log("------------");
+          console.log($('#standardBrand2').standardBrand('options'));
+          console.log($('#standardBrand2').standardBrand('getVal'));
+          console.log($('#standardBrand2').standardBrand('getResult'));
+          console.log($('#standardBrand2').standardBrand('getAllData'));
+      }
+    </script>
+</body>
+</html>

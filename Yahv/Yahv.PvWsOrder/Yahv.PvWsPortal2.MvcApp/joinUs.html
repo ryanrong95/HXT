@@ -1,0 +1,301 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>芯达通</title>
+    <link rel="stylesheet" type="text/css" href="css/common.css"/>
+    <link rel="stylesheet" type="text/css" href="css/page.css"/>
+    <link rel="stylesheet" type="text/css" href="css/element.css"/>
+    <script type="text/javascript" src="js/jQuery-2.2.4.min.js"></script>
+    <script type="text/javascript" src="js/axios.min.js"></script>
+    <script type="text/javascript" src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+    <script type="text/javascript" src="js/xs.js"></script>
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript" src="js/vue.js"></script>
+    <script type="text/javascript" src="js/element.js"></script>
+    <style>
+       /*解决elementui中弹出消息框图标和文字不在一行的问题*/
+        .el-message .el-message__content { display: inline-block; }
+    </style>
+</head>
+
+<body>
+
+<!-- 右侧边栏相关内容 -->
+<div id="n_sideBar"></div>
+<!--头部和banner部分-->
+<div class="n_header">
+    <div class="n_lunbt" style="background-image: url(imgs/n_join_bg.png);"></div>
+    <div id="n_insert_nav"></div>
+</div>
+<!-- 中间不同内容 -->
+<div class="n_differ_mid">
+    <!-- 人才招聘 -->
+    <div class="n_aboutus_mol n_zhaopin" id="n_recruit">
+        <div class="n_aboutus_title n_zhaopin_title">
+            <i></i>
+            人才招聘
+        </div>
+        <div class="wrapper n_zhaopin_con">
+            <p class="n_zhaopin_email">有意者请将简历投递至邮箱：job@for-ic.net</p>
+            <div class="clearfix n_zhaopin_position">
+                <ul>
+                    <li class="active">营销市场经理<i></i></li>
+                    <li>报关业务员<i></i></li>
+                    <li>商务专员/跟单员<i></i></li>
+                </ul>
+            </div>
+            <div class="n_zp_details">
+                <div class="n_zp_mod" style="display: block;">
+                    <ul>
+                        <li>
+                            <h5>招聘岗位：营销市场经理<span>（若干名）</span></h5>
+                            <p>工作地点：深圳龙岗 <span class="n_education">学历要求：学历不限</span></p>
+                            <p>薪资待遇：底薪+高额提成（35%-50%），工资上不封顶</p>
+                        </li>
+                        <li>
+                            <h5>岗位职责</h5>
+                            <p>1.有带领团队经验；</p>
+                            <p>2.有两年以上的供应链进口业务开发经验，有知名供应链公司的工作经历优先考虑；</p>
+                            <p>3.熟悉国内电子行业进口操作，了解代理进口、代理采购业务模式，拥有一定的客户资源；</p>
+                            <p>4.有执行力和协调力，具备较好的商务礼仪和洽谈能力；</p>
+                            <p>5.能跟客人交朋友，对公司优势项目与客户作深入融合，发展成合作伙伴关系。</p>
+                        </li>
+                    </ul>
+                </div>
+                <div class="n_zp_mod">
+                    <ul>
+                        <li>
+                            <h5>招聘岗位：报关业务员<span>（若干名）</span></h5>
+                            <p>工作地点：深圳龙岗 <span class="n_education">学历要求：学历不限</span></p>
+                            <p>薪资待遇：底薪+高额提成（35%-50%），工资上不封顶</p>
+                        </li>
+                        <li>
+                            <h5>岗位职责</h5>
+                            <p>1、通过电话、网络、上门拜访等方式寻找新客户，开发客户市场；</p>
+                            <p>2、深度了解客户需求，维护老客户，开发新客户，保持业绩持续增长；</p>
+                            <p>3、有团队精神，并完成公司制定的任务指标；</p>
+                            <p>4、有物流、货代以及销售工作经验优先考虑，可接收优秀毕业生；</p>
+                            <p>5、表达能力强、具有较强的沟通能力及交际欲望，敢于展现自己。</p>
+                        </li>
+                    </ul>
+                </div>
+                <div class="n_zp_mod">
+                    <ul>
+                        <li>
+                            <h5>招聘岗位：商务专员/跟单员<span>（若干名）</span></h5>
+                            <p>工作地点：深圳龙岗 <span class="n_education">学历要求：学历不限</span></p>
+                            <p>薪资待遇：底薪+奖金</p>
+                        </li>
+                        <li>
+                            <h5>岗位职责</h5>
+                            <p>1、熟悉EXCEL表格的操作；</p>
+                            <p>2、负责与客户的沟通；</p>
+                            <p>3、协助上级完成其他关务事宜；</p>
+                            <p>4、责任心、抗压能力强；</p>
+                            <p>5、优秀的表达和沟通能力。</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- 员工福利 -->
+    <div class="n_js_walfare" id="n_walfare">
+        <img src="imgs/n_joinus_walfare_pic.png">
+    </div>
+    <!-- 联系我们 -->
+    <div class="n_aboutus_mol n_js_contact" id="n_contact">
+        <div class="n_aboutus_title n_contact_title">
+            <i></i>
+            联系我们
+        </div>
+        <div class="clearfix n_contact_con">
+            <ul>
+                <li>
+                    <img src="imgs/n_js_contact_map1.png">
+                    <div class="n_contact_address">
+                        <p><b>深圳总部：</b>深圳市龙岗区吉华路393号英达丰科技园A栋一楼</p>
+                        <p><b>联系电话：</b>0755-83765188</p>
+                    </div>
+                </li>
+                <li>
+                    <img src="imgs/n_js_contact_map2.png">
+                    <div class="n_contact_address">
+                        <p><b>上海分部：</b>上海长宁区江苏路369号兆丰世贸大厦8G</p>
+                        <p><b>联系电话：</b>021-63330069</p>
+                    </div>
+                </li>
+                <li>
+                    <img src="imgs/n_js_contact_map3.png">
+                    <div class="n_contact_address">
+                        <p><b>北京分部：</b>北京市海淀区知春路113号 银网中心A1903</p>
+                        <p><b>联系电话：</b>010-62681266</p>
+                    </div>
+                </li>
+                <li>
+                    <img src="imgs/n_js_contact_map4.png">
+                    <div class="n_contact_address">
+                        <p><b>香港公司：</b>香港觀塘鴻圖道16號志成工業大廈2樓B2室</p>
+                        <p><b>联系电话：</b>852-31019258 </p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- 意向留言 -->
+    <div class="n_aboutus_mol n_js_msg" id="n_msg">
+        <div class="n_aboutus_title n_contact_title">
+            意向留言
+        </div>
+        <div class="n_msg_con">
+            <div class="n_msg_txt">
+                <input type="text" id="Name" v-model.trim="Name" @focus="clearDefaultName" @blur="recoverDefaultName"/>
+                <input type="text" id="City" v-model.trim="City" @focus="clearDefaultCity" @blur="recoverDefaultCity"/>
+                <input type="text" id="Phone" v-model.trim="Phone" @focus="clearDefaultPhone" @blur="recoverDefaultPhone"/>
+            </div>
+            <div class="n_msg_advice">
+                <textarea id="Suggestion" cols="0" v-model.trim="Suggestion"></textarea>
+            </div>
+            <div class="n_msg_btn">
+                <button type="button" class="n_msg_submit" v-on:click="submit">提交信息</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- 底部 -->
+<div id="footer_zh"></div>
+<script type="text/javascript">
+    $("#n_sideBar").load("sideBar.html");
+    $("#n_insert_nav").load("header.html",
+        function() {
+            $("#footer_zh").load("footer.html");
+            //导航中当前选中的项
+            $(".n_nagivation>ul>li:nth-child(5)").addClass("hot");
+            $(".n_nagivation>ul>li").hover(function() {
+                    $(".n_nagivation>ul>li:nth-child(5)").removeClass("hot");
+                },
+                function() {
+                    $(".n_nagivation>ul>li:nth-child(5)").addClass("hot");
+                });
+        });
+    $(function() {
+        //职位的切换
+        $(".n_zhaopin_position li").hover(function() {
+            $(this).addClass("active").siblings().removeClass("active");
+            $(".n_zp_details>div").eq($(this).index()).stop().show().siblings().stop().hide();
+        });
+    });
+
+    var n_msg = new Vue({
+        el: "#n_msg",
+        data: {
+            Name: "输入您的姓名",
+            City: "输入您所在的城市",
+            Phone: "输入您的联系方式",
+            Suggestion: ""
+        },
+        methods: {
+            submit: function() {
+                if (this.Name == "" || this.Name == null || this.Name == "输入您的姓名") {
+                    this.onAlert("error", "请输入您的姓名");
+                    return false;
+                } else if (this.Phone == "" || this.Phone == null || this.Phone == "输入您的联系方式") {
+                    this.onAlert("error", "请输入您的联系方式");
+                    return false;
+                } else if (this.Suggestion == "" || this.Suggestion == null) {
+                    this.onAlert("error", "请输入您的宝贵建议");
+                    return false;
+                } else if (this.Name != null && this.Name.length > 50) {
+                    this.onAlert("error", "输入的姓名超过限制");
+                    return false;
+                } else if (this.Phone != null && this.Phone.length > 50) {
+                    this.onAlert("error", "输入的联系方式超过限制");
+                    return false;
+                } else if (this.Suggestion != null && this.Suggestion.length > 150) {
+                    this.onAlert("error", "输入的建议长度超过限制");
+                    return false;
+                } else {
+                    var that = this;
+                    axios({
+                        url: "/Home/SuggestionSubmit",
+                        method: "post",
+                        data: {
+                            Name: that.Name,
+                            City: that.City,
+                            Contact: that.Phone,
+                            Suggestion: that.Suggestion
+                        }
+                    }).then(function(response) {
+                        if (response.data.type == "success") {
+                            that.$alert('保存成功！感谢您提出自己的宝贵建议',
+                                '提示',
+                                {
+                                    confirmButtonText: '关闭',
+                                    lockScroll: false,
+                                    confirmButtonClass: "el-button--warning",
+                                    //callback: action => {
+                                    //    location.href = "/joinUs.html";
+                                    //},
+                                    callback: (function(action) {
+                                        location.href = "/joinUs.html";
+                                    })
+                                });
+                        }
+                    }).catch(function(error) {
+                        that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                    });
+                }
+            },
+            //消息提示框
+            onAlert: function(type, message) {
+                this.$message({
+                    message: message,
+                    type: type
+                });
+            },
+            //姓名input 框获取焦点时清空input框中的文字
+            clearDefaultName: function() {
+                if (this.Name === "输入您的姓名") {
+                    this.Name = "";
+                }
+            },
+            //姓名input 框失去焦点时恢复input框中的文字
+            recoverDefaultName: function() {
+                if (this.Name === "") {
+                    this.Name = "输入您的姓名";
+                }
+            },
+            //城市input获取焦点
+            clearDefaultCity: function() {
+                if (this.City === "输入您所在的城市") {
+                    this.City = "";
+                }
+            },
+            //城市input失去焦点
+            recoverDefaultCity: function() {
+                if (this.City === "") {
+                    this.City = "输入您所在的城市";
+                }
+            },
+            //电话input获取焦点
+            clearDefaultPhone: function() {
+                if (this.Phone === "输入您的联系方式") {
+                    this.Phone = "";
+                }
+            },
+            //电话input失去焦点
+            recoverDefaultPhone: function() {
+                if (this.Phone === "") {
+                    this.Phone = "输入您的联系方式";
+                }
+            }
+        }
+    });
+</script>
+</body>
+</html>

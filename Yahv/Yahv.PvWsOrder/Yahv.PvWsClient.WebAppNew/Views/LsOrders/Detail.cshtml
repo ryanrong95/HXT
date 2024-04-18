@@ -1,0 +1,200 @@
+﻿@{
+    ViewBag.title = "仓位租赁订单";
+    ViewBag.subTitle = "租仓订单详情";
+}
+<div id="vLsOrdereDetail" v-cloak class="tab_content">
+    <div class="info_item_wrap">
+        <span class="icon_img">1</span>
+        <span class="title">租赁库位详情</span>
+    </div>
+    <div class="file_model">
+        @*<ul class="clearfix">
+                <li class="file-li-wrap fl">
+                    <p class="font16 txt_black1 mt26">租仓合同</p>
+                    <div class="upload_wrap2 mt20">
+                        <p v-if="agentUrl==''" class="tip mt16">提示：未上传</p>
+                        <div v-else class="upload_wrap1 mt20">
+                            <ul>
+                                <li class="clearfix">
+                                    <div class="file_icon fl"></div>
+                                    <div class="fl c_right">
+                                        <p class="file_name">{{agnetName}}</p>
+                                        <a :href="agentUrl" target="_blank" class="link">预览</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div v-if="indexData.IsUploadOrderAgent">
+                            <div class="clearfix mt26">
+                                <button v-on:click="download_file('/Files/ExportAgent')" class="fl">导出</button>
+                                <a id="exportInfoForm" style="display:none" download><span id="ex-li" style="display:none"></span></a>
+                                <el-upload class="fl"
+                                           :show-file-list="false"
+                                           :http-request="httpRequestFile_agent"
+                                           accept="image/jpg, image/bmp, image/jpeg, image/gif, image/png, application/pdf">
+                                    <button class="ml14">上传</button>
+                                </el-upload>
+                            </div>
+                            <p class="tip mt10">仅限图片、PDF文件，且文件不超过3M</p>
+                        </div>
+                    </div>
+                </li>
+            </ul>*@
+    </div>
+    <div class="tb_wrap" v-loading="loading">
+        <table border="0" cellspacing="0" cellpadding="0" class="common_tb1 mt30">
+            <tr>
+                <th width="36px">序号</th>
+                <th>库位类型</th>
+                <th>承重(KG)</th>
+                <th>容积(cm³)</th>
+                <th>数量</th>
+                <th>单价</th>
+                <th>租期</th>
+                <th>小计</th>
+            </tr>
+            <tr v-for="(item,index) in indexData.List">
+                <td>{{index+1}}</td>
+                <td class="font_bold">{{item.SpecID}}</td>
+                <td>{{item.Load}}</td>
+                <td>{{item.Volume}}</td>
+                <td>{{item.Quantity}}</td>
+                <td>{{item.UnitPrice}}</td>
+                <td>{{item.Month}}</td>
+                <td>{{item.TotalPrice}}</td>
+            </tr>
+            <tr>
+                <td colspan="4" class="text_right pr20 font_bold txt_tb_bottom">租赁费合计:</td>
+                <td colspan="4" class="text_left font_bold txt_red pl20">{{indexData.TotalPrice}}</td>
+            </tr>
+        </table>
+    </div>
+    <div class="info_item_wrap mt20">
+        <span class="icon_img">2</span>
+        <span class="title">租赁库位合同</span>
+    </div>
+    <div>
+        <div class="ls_contract_content clearfix">
+            <div class="upload_wrap2 mt20">
+                <p v-if="contract.FileUrl==''" class="tip mt16">提示：未上传</p>
+                <div v-if="contract.FileUrl!=null && contract.FileUrl!=''" class="upload_wrap1 mt20">
+                    <ul>
+                        <li class="clearfix" style="border-bottom-width: 0;">
+                            <div class="file_icon fl"></div>
+                            <div class="fl c_right">
+                                <p class="file_name">{{contract.FileName}}</p>
+                                <a :href="contract.FileUrl" target="_blank" class="link">预览</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div v-if="contract.FileUrl==''">
+                    <div class="clearfix mt26">
+                        <button v-on:click="exportFile" class="fl">导出</button>
+                        <a id="exportInfoForm" style="display: none" download>
+                            <span id="ex-li" style="display: none"></span>
+                        </a>
+                        <el-upload class="fl" action=""
+                                   :show-file-list="false"
+                                   :http-request="httpRequestFile"
+                                   accept="image/jpg, image/bmp, image/jpeg, image/gif, image/png, application/pdf, application/msword">
+                            <button class="ml14">上传</button>
+                        </el-upload>
+                    </div>
+                    <p class="tip mt10">仅限图片、PDF或Word文件，且文件不超过3M</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var vLsOrdereDetail = new Vue({
+        el: "#vLsOrdereDetail",
+        data: function () {
+            return {
+                indexData:@Html.Raw(Json.Encode(Model)),
+                loading: false,
+                contract: {
+                    FileName: null,
+                    FileUrl: null,
+                },
+                fileList: [],
+            }
+        },
+        mounted() {
+            this.getContract(this.indexData.LsOrderID);
+        },
+        methods: {
+            getContract(lsOrderID) {
+                var that = this;
+                axios({
+                    url: "/Files/GetContract",
+                    method: "post",
+                    data: {
+                        lsOrderID: lsOrderID,
+                    },
+                }).then(function (response) {
+                    if (response.data.type == "error") {
+                        that.onAlert(response.data.type, response.data.msg);
+                    } else {
+                        that.contract = JSON.parse(response.data.data);
+                    }
+                }).catch(function (error) {
+                    that.onAlert("warning", error);
+                });
+            },
+            exportFile: function () {
+                window.location.href = '/Template/香港库房库位租赁及仓储协议.doc';
+            },
+            httpRequestFile: function (options) {
+                var that = this;
+                UploadFile(options,
+                    '/Files/UploadPickUpFile',
+                    function (res) {
+                        if (res.type) {
+                            that.fileList.push(JSON.parse(res.file));
+                            that.submitContract();
+                        } else {
+                            that.onAlert("error", res.msg);
+                        }
+                    });
+            },
+            submitContract: function () {
+                var that = this;
+                if (that.fileList.length == 0) {
+                    that.onAlert("warning", "请上传租仓合同！");
+                } else {
+                    var list = that.fileList[0];
+                    axios({
+                        url: "/Files/UploadContract",
+                        method: "post",
+                        data: {
+                            id: that.indexData.LsOrderID,
+                            filename: list.name,
+                            fileurl: list.URL,
+                        },
+                    }).then(function (response) {
+                        that.fileList = [];
+                        that.onAlert(response.data.type, response.data.msg);
+                        if (response.data.type != "error") {
+                            setTimeout(function () {
+                                that.getContract(that.indexData.LsOrderID);
+                            }, 0);
+                        }
+
+                    }).catch(function (error) {
+                        that.onAlert("warning", error);
+                    });
+                }
+            },
+
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type
+                });
+            },
+        }
+    });
+</script>

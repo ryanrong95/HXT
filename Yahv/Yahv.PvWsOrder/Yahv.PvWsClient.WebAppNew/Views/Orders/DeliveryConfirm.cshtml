@@ -1,0 +1,358 @@
+﻿@{
+    ViewBag.title = "发货订单";
+    ViewBag.subTitle = "代发货订单确认报价详情";
+}
+<div id="vDeliveryConfirm" v-cloak class="order_detail">
+    <div class="info_item_wrap">
+        <span class="icon_img">1</span>
+        <span class="title">订单基本信息</span>
+    </div>
+    <div class="clearfix mt20">
+        <div class="clearfix info_item">
+            <div class="info_title fl">订单号：</div>
+            <div class="info_content fl">{{indexData.ID}}</div>
+        </div>
+    </div>
+    <div class="clearfix">
+        <div class="clearfix info_item">
+            <div class="txt_red fl">币种：</div>
+            <div class="info_content fl">{{indexData.Currency}}</div>
+        </div>
+    </div>
+    <div class="tb_wrap">
+        <table class="common_tb1 mt10 common_tb">
+            <tr>
+                <th width="36px">序号</th>
+                <th>型号</th>
+                <th>品名</th>
+                <th>品牌</th>
+                <th>单位</th>
+                <th>数量</th>
+                <th>单价</th>
+                <th>总价</th>
+                <th>产地</th>
+            </tr>
+            <tr v-if="(index<=1&&!isAll)||isAll" v-for="(item,index) in indexData.OrderItems">
+                <td>{{index+1}}</td>
+                <td>{{item.PartNumber}}</td>
+                <td>{{item.Name}}</td>
+                <td>{{item.Manufacturer}}</td>
+                <td>{{item.Unit}}</td>
+                <td>{{item.Quantity}}</td>
+                <td>{{item.UnitPrice}}</td>
+                <td>{{item.TotalPrice}}</td>
+                <td>{{item.Origin}}</td>
+            </tr>
+            <tr v-if="indexData.OrderItems.length>0">
+                <td colspan="5" class="text_center pr20  txt_tb_bottom">合计：</td>
+                <td class="txt_tb_bottom text_left">{{indexData.totalNum}}</td>
+                <td class="txt_tb_bottom"></td>
+                <td class="txt_tb_bottom text_left">{{indexData.totalPrice}}</td>
+                <td class="txt_tb_bottom"></td>
+            </tr>
+            <tr v-if="indexData.OrderItems.length==0"><td colspan="9">暂无数据</td></tr>
+            <tr v-if="indexData.OrderItems.length>2"><td colspan="9"><a v-on:click="isAll=!isAll"><span v-if="!isAll">查看全部<i class="el-icon-arrow-down ml4"></i></span><span v-else>收起<i class="el-icon-arrow-up ml4"></i></span></a></tr>
+        </table>
+    </div>
+    <div class="clearfix mt26 font_bold">
+        <span class="mr140 font_bold">总箱数：{{indexData.TotalParts}}</span>
+        <span class="font_bold">毛重(KG)：{{indexData.TotalWeight}}</span>
+    </div>
+    <div class="clearfix mt20">
+        <div class="clearfix info_item">
+            <div class="info_title fl">费用结算币种：</div>
+            <div class="info_content fl">{{indexData.SettlementCurrency}}</div>
+        </div>
+    </div>
+    <div class="clearfix">
+        <div class="clearfix info_item">
+            <div class="info_title fl">是否代收货款：</div>
+            <div class="info_content fl">{{indexData.IsRecieveName}}</div>
+        </div>
+    </div>
+    <div v-if="indexData.IsRecieve">
+        <div class="clearfix">
+            <div class="fl wp50">
+                <div class="info_title fl">收款金额：</div>
+                <div class="info_content fl">{{indexData.ReceiveDetailInfo.ReceivePrice}}</div>
+            </div>
+        </div>
+        <div class="clearfix mt20">
+            <div class="fl wp50">
+                <div class="info_title fl">付款人：</div>
+                <div class="info_content fl">{{indexData.ReceiveDetailInfo.PayerName}}</div>
+            </div>
+        </div>
+        <div class="clearfix mt20">
+            <div class="fl wp50">
+                <div class="info_title fl">付款方式：</div>
+                <div class="info_content fl">{{indexData.ReceiveDetailInfo.PayerMethodName}}</div>
+            </div>
+            <div class="fl">
+                <div class="info_title fl">付款人币种：</div>
+                <div class="info_content fl">{{indexData.ReceiveDetailInfo.PayerCurrencyName}}</div>
+            </div>
+        </div>
+        <div class="clearfix mt20">
+            <div class="fl wp50">
+                <div class="info_title fl">发货时机：</div>
+                <div class="info_content fl">{{indexData.ReceiveDetailInfo.DelivaryOpportunityDes}}</div>
+            </div>
+        </div>
+        <div class="clearfix mt20" v-if="indexData.ReceiveDetailInfo.PayerMethodInt == 5">
+            <div class="fl wp50">
+                <div class="info_title fl">是否入账：</div>
+                <div class="info_content fl">{{indexData.ReceiveDetailInfo.IsEntryDes}}</div>
+            </div>
+            <div class="fl wp50" v-if="indexData.ReceiveDetailInfo.IsEntryInt == 0">
+                <div class="info_title fl">支票投送方式：</div>
+                <div class="info_content fl">{{indexData.ReceiveDetailInfo.CheckDeliveryDes}}</div>
+            </div>
+        </div>
+        @*<div class="clearfix">
+            <div class="clearfix info_item">
+                <div class="info_title fl">收款金额：</div>
+                <div class="info_content fl">{{indexData.RecievePrice}}</div>
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="clearfix info_item">
+                <div class="info_title fl">客户付款人：</div>
+                <div class="info_content fl">{{indexData.PayerName}}</div>
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="clearfix info_item">
+                <div class="info_title fl">付款人银行：</div>
+                <div class="info_content fl">{{indexData.PayerBank}}</div>
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="clearfix info_item">
+                <div class="info_title fl">付款人银行账号：</div>
+                <div class="info_content fl">{{indexData.PayerAccount}}</div>
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="clearfix info_item">
+                <div class="info_title fl">公司受益人：</div>
+                <div class="info_content fl">{{indexData.CompanyBankName}}</div>
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="clearfix info_item">
+                <div class="info_title fl">受益人银行：</div>
+                <div class="info_content fl">{{indexData.CompanyBank}}</div>
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="clearfix info_item">
+                <div class="info_title fl">受益人银行账号：</div>
+                <div class="info_content fl">{{indexData.CompanyBankAccount}}</div>
+            </div>
+        </div>*@
+    </div>
+    <div class="clearfix mt10">
+        <div class="fl font_bold">
+            <span class="font16">服务费用清单</span>
+            <span class="ml20 text_center txt_red">温馨提示:费用以实际发生的最终对账单为准</span>
+        </div>
+    </div>
+    <div class="tb_wrap">
+        <table class="common_tb1 mt20 common_tb">
+            <tr>
+                <th>账单分类</th>
+                <th>账单科目</th>
+                <th>数量</th>
+                <th>单价</th>
+                <th>币种</th>
+                <th>合计</th>
+            </tr>
+            <tr v-if="(index<=1&&!isAllBill)||isAllBill" v-for="(item,index) in indexData.Bills">
+                <td>{{item.Catalog}}</td>
+                <td>{{item.Subject}}</td>
+                <td>{{item.Quantity}}</td>
+                <td>{{item.Price}}</td>
+                <td>{{item.CurrencyName}}</td>
+                <td>{{item.TotalPrice}}</td>
+            </tr>
+            <tr v-if="indexData.Bills.length>0">
+                <td colspan="5" class="text_center pr20  txt_tb_bottom">合计：</td>
+                <td class="txt_tb_bottom text_left">{{indexData.sumTotalPrice}}</td>
+            </tr>
+            <tr v-if="indexData.Bills.length==0"><td colspan="6">暂无数据</td></tr>
+            <tr v-if="indexData.Bills.length>2"><td colspan="6"><a v-on:click="isAllBill=!isAllBill"><span v-if="!isAllBill">查看全部</span><span v-else>收起</span><i class="el-icon-arrow-down ml4"></i></a></tr>
+        </table>
+    </div>
+    <div class="info_item_wrap mt40">
+        <span class="icon_img">2</span>
+        <span class="title">特殊货物处理要求</span>
+    </div>
+    <div class="info_item_wrap mt20">
+        <span class="icon_img">3</span>
+        <span class="title">香港发货方式</span>
+    </div>
+    <div class="clearfix mt20">
+        <div class="clearfix info_item">
+            <div class="info_title fl">香港物流：</div>
+            <div class="info_content fl">{{indexData.WaybillTypeName}}</div>
+        </div>
+    </div>
+    <div v-if="indexData.WaybillType=='1'">
+        <div class="clearfix">
+            <div class="clearfix info_item">
+                <div class="info_title fl">提货时间：</div>
+                <div class="info_content fl">{{indexData.PickupTime}}</div>
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="clearfix info_item">
+                <div class="info_title fl">提货人信息：</div>
+                <div class="info_content fl">{{indexData.ClientPicker}}  电话:{{indexData.ClientPickerMobile}} </div>
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="clearfix info_item">
+                <div class="info_title fl">提货人证件信息：</div>
+                <div class="info_content fl">
+                    {{indexData.IDType}}:
+                    <span v-if="indexData.IDType == '带公章提货'">{{indexData.IDNumber}}</span>
+                    <span v-else>{{indexData.SealContext}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div v-if="indexData.WaybillType=='2'">
+        <div class="clearfix">
+            <div class="clearfix info_item">
+                <div class="info_title fl">收货人信息：</div>
+                <div class="info_content fl">联系人：{{indexData.ClientConsigneeName}} 电话：{{indexData.ClientContactMobile}} 地址：{{indexData.ClientConsigneeAddress}}</div>
+            </div>
+        </div>
+    </div>
+    <div v-if="indexData.WaybillType=='3'">
+        <div class="clearfix">
+            <div class="clearfix info_item">
+                <div class="info_title fl">收货人信息：</div>
+                <div class="info_content fl">联系人：{{indexData.ClientConsigneeName}} 电话：{{indexData.ClientContactMobile}} 地址：{{indexData.ClientConsigneeAddress}}</div>
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="clearfix info_item">
+                <div class="info_title fl">快递公司：</div>
+                <div class="info_content fl">{{indexData.CarrierName}}</div>
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="clearfix info_item">
+                <div class="info_title fl">邮政编码：</div>
+                <div class="info_content fl">{{indexData.ZipCode}}</div>
+            </div>
+        </div>
+        <div class="clearfix">
+            <div class="clearfix info_item">
+                <div class="info_title fl">是否垫付运费：</div>
+                <div class="info_content fl">{{indexData.Freight}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="info_item_wrap mt20">
+        <span class="icon_img">4</span>
+        <span class="title">附件信息</span>
+    </div>
+    <div class="clearfix mt20">
+        <div class="clearfix info_item">
+            <div class="info_title fl">发票：</div>
+            <div class="upload_wrap1 ml20">
+                <ul>
+                    <li class="clearfix" v-for="item in indexData.PIFiles">
+                        <span class="file_icon fl"></span>
+                        <span><a :href="item.Url" target="_blank" class="link">{{item.Name}}</a></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="btn_bottom mt80 mb100">
+        <button class="btn1" v-on:click="onCancel">不同意</button>
+        <button class="ml14 btn2 " v-on:click="onConfirm">同意</button>
+    </div>
+</div>
+<script type="text/javascript">
+    var vDeliveryConfirm =  new Vue({
+        el: "#vDeliveryConfirm",
+        data: function() {
+            return {
+                indexData: @Html.Raw(Json.Encode(Model)),
+                isAllBill: false,
+                isAll: false,
+            }
+        },
+        methods: {
+            //确认订单
+            onConfirm: function () {
+                var that = this;
+                const loading = this.$loading({
+                    lock: false,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)'
+                });
+                axios({
+                    url: "/Orders/Confirm",
+                    method: "post",
+                    data: {
+                        orderID: that.indexData.ID,
+                    }
+                }).then(function (response) {
+                    loading.close();
+                    if (response.data.type == "error") {
+                        that.onAlert(response.data.type, response.data.msg);
+                    }
+                    else {
+                        that.onAlert(response.data.type, response.data.msg);
+                        location.href = "/Orders/ReceivedList";
+                    }
+                }).catch(function (error) {
+                    that.onAlert("warning", error);
+                });
+            },
+            //订单取消报价
+            onCancel: function () {
+                var that = this;
+                const loading = that.$loading({
+                    lock: false,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)'
+                });
+                axios({
+                    url: "/Orders/CancelConfirm",
+                    method: "post",
+                    data: {
+                        orderID: that.indexData.ID,
+                    }
+                }).then(function (response) {
+                    loading.close();
+                    if (response.data.type == "error") {
+                        that.onAlert(response.data.type, response.data.msg);
+                    }
+                    else {
+                        that.onAlert(response.data.type, response.data.msg);
+                        location.href = "/Orders/DeliveryList";
+                    }
+                }).catch(function (error) {
+                    that.onAlert("warning", error);
+                });
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                    offset:100,
+                });
+            },
+        }
+    });
+</script>

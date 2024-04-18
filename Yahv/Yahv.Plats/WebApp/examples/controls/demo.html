@@ -1,0 +1,131 @@
+﻿﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>demo - jQuery EasyUI plugin</title>
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/gray/easyui.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/icon-yg-cool.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/customs-easyui/Styles/reset.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/customs-easyui/styles/main.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/standard-easyui/styles/plugin.css" rel="stylesheet" />
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.easyui.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/locale/easyui-lang-zh_CN.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/ajaxPrexUrl.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/standard-easyui/scripts/easyui.jl.static.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/standard-easyui/scripts/easyui.jl.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/main.js"></script>
+</head>
+<body>
+    <!--<span class="vip"></span><br />
+    <span class="vip1"></span><br />
+    <span class="vip2"></span><br />
+    <span class="vip3"></span><br />
+    <span class="vip4"></span><br />
+    <span class="vip5"></span><br />
+    <span class="vip6"></span><br />
+    <span class="vip7"></span><br />
+    <span class="vip8"></span><br />
+    <span class="vip9"></span>-->
+    <form id="ff" class="easyui-form" method="post" data-options="novalidate:true" onsubmit="return $(this).form('enableValidation').form('validate');">
+        <!--<table id="dg"></table>-->
+        <input id="s_league" name="zz"/>
+        <button>提交</button>
+        <input id="aa" />
+        <button id="cc" type="button">aa</button>
+    </form>
+    
+    <!--<script>
+        $(function () {
+            var _grid = $('#dg').datagrid({
+                method: 'get',
+                url: 'json1.json',
+                columns: [[
+                    { field: 'productid', title: 'productid', width: 100 },
+                    { field: 'productname', title: 'productname', width: 100 },
+                    { field: 'listprice', title: 'listprice', width: 100, align: 'right' }
+                ]],
+                onLoadSuccess: function () {
+                    tipFun("productname", _grid);
+                    tipFun("productid", _grid);
+                }
+            });
+        });
+
+        function tipFun(columnName, _grid) {
+            var tableTd = $('div.datagrid-body td[field="' + columnName + '"]'); //productname是列名
+            tableTd.each(function () {
+                var $this = $(this);
+                var index = $this.parent('tr').attr('datagrid-row-index');
+                var rows = _grid.datagrid('getRows');
+                var currentRow = rows[index];
+                var content = '<div style="color:#fff;max-width:700px;word-break: break-all; word-wrap: break-word;">' + currentRow[columnName] + '</div>'; //productname是列名
+                $this.tooltip({ position: 'bottom', content: content, onShow: function () { $(this).tooltip('tip').css({ backgroundColor: '#666', borderColor: '#666' }); } });
+            });
+        }
+    </script>-->
+    <br />
+    <!--<select id="s_league" class="easyui-combotree" data-options="multiple:true,editable:false,panelMinWidth:150,data:selectdata"></select>-->
+    
+    <script>
+        var data = [{
+            "id": 1,
+            "text": "text1"
+        }, {
+            "id": 2,
+            "text": "text2"
+        }, {
+            "id": 3,
+            "text": "text3"
+        }, {
+            "id": 4,
+            "text": "text4"
+        }, {
+            "id": 5,
+            "text": "text5"
+        }]
+        $(function () {
+            var selectdata = [{
+                id: "Region01",
+                text: "全球",
+                children: [
+                    { id: "Region03", text: "华南地区", children: null },
+                    { id: "Region04", text: "廊坊国际部", children: null },
+                    { id: "Region05", text: "廊坊推广部", children: null },
+                    { id: "Region06", text: "西南地区", children: null },
+                    { id: "Region07", text: "英赛尔", children: null },
+                    { id: "Region08", text: "远大销售部", children: null },
+                    { id: "Region12", text: "深圳", children: null },
+                    { id: "Region13", text: "深圳国际部", children: null }
+                ]
+            }]
+            $('#s_league').combotree({
+                multiple: true,
+                editable: false,
+                panelMinWidth: 150,
+                data: selectdata,
+                onChange: function (n, o) {
+                    if ($('#s_league').combotree('tree').tree('getRoot').checked) {
+                        setTimeout(function () {
+                            $('#s_league').combotree('setText', '全球');
+                        })
+                    }
+                }
+            })
+            $('#aa').combobox({
+                required: true,
+                valueField: 'id',
+                textField: 'text',
+                data: data
+            })
+            //动态设置required的方法
+            $('#cc').click(function () {
+                $('#aa').combobox('textbox').validatebox('options').required = false;
+            })
+        })
+
+    </script>
+
+    
+</body>
+</html>

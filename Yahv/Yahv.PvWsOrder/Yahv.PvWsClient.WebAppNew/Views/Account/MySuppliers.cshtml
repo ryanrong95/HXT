@@ -1,0 +1,136 @@
+﻿@{
+
+}
+<div id="supplier" v-cloak class="tab_content">
+    <div class="query_wrap clearfix"  ref="viewBox1" v-on:scroll="ss('viewBox1')">
+        <div class="fl">
+            <span class="title">供应商名称:</span>
+            <el-input style="width:200px;" size="mini" v-model="indexData.search_data" @@keyup.enter.native="queryData"></el-input>
+        </div>
+
+        <div class="fr">
+            <button v-on:click="add_Supperlier" class="fl btn1 btn">新增供应商+</button>
+            <button class="fl ml20 btn1 btn" v-on:click="paging">查询</button>
+        </div>
+    </div>
+    <div class="tb_wrap" v-loading="loading">
+        <table border="0" cellspacing="0" cellpadding="0" class="common_tb1 mt30">
+            <tr>
+                <th width="36px">序号</th>
+                <th>国家/地区</th>
+                <th>中文名称</th>
+                <th>英文名称</th>
+                @*<th>等级</th>*@
+                <th>详细地址</th>
+                <th>操作</th>
+            </tr>
+            <tr v-for="(item,index) in indexData.dataList.slice((indexData.pageIndex-1)*indexData.pageSize,indexData.pageIndex*indexData.pageSize)">
+                <td>{{(indexData.pageIndex-1)*indexData.pageSize+index+1}}</td>
+                <td style="width:50px">{{item.Place}}</td>
+                <td>{{item.ChineseName}}</td>
+                <td>{{item.EnglishName}}</td>
+                @*<td>{{item.nGrade}}</td>*@
+                <td>{{item.RegAddress}}</td>
+                <td class="operate" style="width:50px"><a v-on:click="edit_Supperlier(item.ID)">详情</a></td>
+            </tr>
+            <tr v-if="indexData.dataList.length==0"><td colspan="6">暂无数据</td></tr>
+        </table>
+        <div class="foot">
+            <el-pagination class="fr" style="margin-top:20px;" v-on:size-change="handleSizeChange"
+                           v-on:current-change="handleCurrentChange"
+                           :current-page="indexData.pageIndex"
+                           :page-sizes="[5, 10, 20, 40]"
+                           :page-size="indexData.pageSize"
+                           layout="total, sizes, prev, pager, next, jumper"
+                           :total="indexData.dataList.length">
+            </el-pagination>
+        </div>
+    </div>
+</div>
+<script>
+    var supplier = new Vue({
+        el: "#supplier",
+        data: function () {
+            return {
+                indexData: {
+                    pageIndex: 1, //初始页
+                    pageSize: 5,    //每页的数据
+                    Total: 0,
+                    scrollTop: 0, //滚动条位置
+                    search_data: "",  //模糊查询的名称
+                    dataList: []  //表格真实数据
+                },
+                loading: true
+            }
+        },
+        mounted: function () {
+            this.init();
+        },
+        methods: {
+            init: function () {
+                var that = this;
+                var userJsonStr = sessionStorage.getItem('supplier');
+                userEntity = JSON.parse(userJsonStr);
+                if (userEntity == null) {
+                    that.paging();
+                } else {
+                    that.indexData = userEntity;
+                    that.paging();
+                    that.$nextTick(function() {
+                        that.$refs['viewBox1'].scrollTop = that.indexData.scrollTop;
+                    });
+                    sessionStorage.removeItem('supplier');
+                }
+            },
+            ss: function (ref) {
+                // 监听这个dom的scroll事件
+                var that = this;
+                this.$refs[ref].addEventListener('scroll',
+                    function() {
+                        that.indexData.scrollTop = that.$refs[ref].scrollTop;
+                    },
+                    false);
+            },
+            //新增供应商
+            add_Supperlier: function () {
+                commonSkipUrl("", '/Account/AddSupplier', "/" + "@(ViewContext.RouteData.Values["controller"].ToString())"
+                                                        + "/" + "@(ViewContext.RouteData.Values["action"].ToString())");
+            },
+            //供应商编辑
+            edit_Supperlier: function (id) {
+                commonSkipUrl(id, '/Account/SupplierDetail', "/" + "@(ViewContext.RouteData.Values["controller"].ToString())"
+                                                           + "/" + "@(ViewContext.RouteData.Values["action"].ToString())");
+            },
+            // 初始页currentPage、初始每页数据数pagesize和数据data
+            handleSizeChange: function (size) {
+                this.indexData.pageSize = size;
+            },
+            handleCurrentChange: function (currentPage) {
+                this.indexData.pageIndex = currentPage;
+            },
+            paging: function () {
+                var that = this;
+                that.loading = true;
+                axios({
+                    url: "/Account/GetSuppliersList",
+                    method: "post",
+                    data: {
+                        name: that.indexData.search_data
+                    }
+                }).then(function (response) {
+                    that.indexData.dataList = JSON.parse(response.data.data);
+                    that.loading = false;
+                }).catch(function (error) {
+                    supplier.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type
+                });
+            }
+        }
+    });
+</script>

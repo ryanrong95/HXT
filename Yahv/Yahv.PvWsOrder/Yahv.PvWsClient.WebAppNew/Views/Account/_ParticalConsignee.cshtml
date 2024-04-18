@@ -1,0 +1,114 @@
+﻿<template id="consigneeinfo">
+    <el-form :model="form1" :rules="rules1" status-icon ref="form1" label-width="130px" style="margin: 20px;">
+        <el-form-item label="收货单位：" prop="Title" :rules="[{ required: true, message: '请输入收货单位', trigger: 'blur' },{max:150, message: '收货单位长度超过限制', trigger: 'blur' }]">
+            <el-input size="mini" v-model="form1.Title" placeholder="请输入收货单位" style="width: 90%" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="收货人：" prop="Name" :rules="[{ required: true, message: '请输入收货人', trigger: 'blur' },{max:150, message: '收货人长度超过限制', trigger: 'blur' }]">
+            <el-input size="mini" v-model="form1.Name" placeholder="请输入收货人" style="width: 90%" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="国家地区：" prop="Place" :rules="[{ required: true, message: '请选择国家地区', trigger: 'change' }]">
+            <el-select size="mini" v-model="form1.Place" :disabled="Isdisabled" v-on:change="handPlaceChange" filterable clearable placeholder="请选择" style="width: 90%;">
+                <el-option v-for="item in PlaceOptions" :label="item.text" :value="item.value">
+                </el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item v-if="IsShow" label="地址：" prop="Address" :rules="[{ required: true, message: '请选择地址', trigger: 'change' }]">
+            <el-cascader placeholder="请选择地址" style="width: 90%;" size="mini" :props="cascaderConfig" :options="AddressLists" v-model="form1.Address">
+            </el-cascader>
+        </el-form-item>
+        <el-form-item label="" prop="AddressDetail" :rules="[{ required: true, message: '请输入详细地址', trigger: 'blur' },{max:200, message: '地址长度超过限制', trigger: 'blur' }]">
+            <el-input size="mini" v-model="form1.AddressDetail" style="width: 90%" type="textarea" placeholder="请输入详细的道路、楼宇、区号等名称"></el-input>
+        </el-form-item>
+        <el-form-item label="电话：" prop="Tel">
+            <el-input size="mini" v-model="form1.Tel" placeholder="请输入电话号码" style="width: 90%" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="手机号码：" prop="Mobile">
+            <el-input size="mini" v-model="form1.Mobile" placeholder="请输入手机号码" style="width: 90%" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="电子邮箱：" prop="Email" v-if="!IsHideSome">
+            <el-input size="mini" v-model="form1.Email" placeholder="请输入电子邮箱" style="width: 90%" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="是否默认：" prop="IsDefaultVal" :rules="[{ required: true, message: '请选择是否', trigger: 'change' }]" v-if="!IsHideSome">
+            <el-select size="mini" v-model="form1.IsDefaultVal" :disabled="Isdisabled" placeholder="请选择" style="width: 90%;">
+                <el-option v-for="item in YesNoOptions" :label="item.text" :value="item.value">
+                </el-option>
+            </el-select>
+        </el-form-item>
+    </el-form>
+</template>
+<script src="~/Scripts/areaData.js"></script>
+<script>
+    Vue.component(
+        'my-consignee',
+        {
+            template: "#consigneeinfo",
+            data: function() {
+                var validateMail = function(rule, value, callback) {
+                    if (value != '' && value != null) {
+                        if (!ValidMail(value)) {
+                            callback(new Error('请输入正确的邮箱地址'));
+                        }
+                    }
+                    callback();
+                };
+                //验证数字
+                var validateNumber = function(rule, value, callback) {
+                    if (value != '' && value != null) {
+                        if (!/^[0-9]*$/.test(value)) {
+                            callback(new Error('手机号只能是数字'));
+                        }
+                    }
+                    callback();
+                };
+                return {
+                    form1: @Html.Raw(Json.Encode(Model)),
+                    baseData: [], //基础数据
+                    AddressLists: $.pccData[0].s, //省市区三级联动数据, //省市区三级联动数据
+                    rules1: {
+                        Email: [
+                            { validator: validateMail, trigger: 'blur' },
+                            { max: 50, message: '邮箱地址长度超过限制', trigger: 'blur' }
+                        ],
+                        Mobile: [
+                            { required: true, message: '手机号不能为空', trigger: 'blur' },
+                            { validator: validateNumber, trigger: 'blur' },
+                            { max: 20, message: '手机号超过限制', trigger: 'blur' }
+                        ],
+                        Tel: [
+                            { required: false, validator: validateNumber, trigger: 'blur' },
+                            { max: 50, message: '电话长度超过限制', trigger: 'blur' }
+                        ]
+                    },
+                    cascaderConfig: {
+                        label: 'n',
+                        value: 'n',
+                        children: 's'
+                    },
+                    PlaceOptions: [],
+                    YesNoOptions: [{
+                        text: '是',
+                        value: '1'
+                    }, {
+                        text: '否',
+                        value: '2'
+                    }],
+                    IsShow: false,
+                    Isdisabled: false,
+                    IsHideSome: false, //是否隐藏一些内容,代仓储业务隐藏一些内容
+                }
+            },
+            mounted: function() {
+                this.PlaceOptions = @Html.Raw(Json.Encode(@ViewBag.PlaceOptions));
+            },
+            methods: {
+                //地区改变触发事件
+                handPlaceChange: function() {
+                    if (this.form1.Place == "9") {
+                        this.IsShow = true;
+                    } else {
+                        this.IsShow = false;
+                    }
+                },
+            },
+        });
+</script>

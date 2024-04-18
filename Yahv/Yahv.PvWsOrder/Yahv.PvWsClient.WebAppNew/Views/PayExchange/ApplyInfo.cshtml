@@ -1,0 +1,253 @@
+﻿@{
+    ViewBag.title = "我的付汇";
+    ViewBag.subTitle = "付汇详情";
+}
+<div id="vApplyInfo" v-cloak class="tab_content">
+    <div class="info_item_wrap">
+        <span class="icon_img">1</span>
+        <span class="title">付汇信息</span>
+    </div>
+    <div class="tb_wrap">
+        <table class="common_tb1 mt20">
+            <tr>
+                <th width="36px">序号</th>
+                <th>订单编号</th>
+                <th>币种</th>
+                <th>报关总价</th>
+                <th>付汇金额</th>
+
+            </tr>
+            <tr v-for="(item,index) in datalist.applyItems">
+                <td>{{index+1}}</td>
+                <td>{{item.OrderID}}</td>
+                <td>{{item.Currency}}</td>
+                <td>{{toFixed(2,item.DeclarePrice)}}</td>
+                <td>{{toFixed(2,item.Amount)}}</td>
+            </tr>
+            <tr>
+                <td colspan="3" class="text_right pr20 font_bold txt_tb_bottom">合计：</td>
+                <td class="font_bold txt_tb_bottom">{{toFixed(2,datalist.totalDeclarePrice)}}</td>
+                <td class="font_bold txt_tb_bottom">{{toFixed(2,datalist.totalAmount)}}</td>
+            </tr>
+        </table>
+    </div>
+    <div class="info_item_wrap mt30">
+        <span class="icon_img">2</span>
+        <span class="title">付款信息</span>
+    </div>
+    <div class="detail_info">
+        <div class="clearfix mt20">
+            <div class="fl wp50">
+                <span class="fl title">供应商公司全称(英文):</span>
+                <span class=" fl content ml6 w300">{{datalist.SupplierEnglishName}}</span>
+            </div>
+            <div class="fl clearfix">
+                <span class="fl title">币种:</span>
+                <span class=" fl content ml6">{{datalist.Currency}}</span>
+            </div>
+        </div>
+        <div class="clearfix mt20">
+            <div class="fl wp50">
+                <span class="fl title">供应商银行名称(英文):</span>
+                <span class=" fl content ml6 w300">{{datalist.BankName}}</span>
+            </div>
+            <div class="fl clearfix">
+                <span class="fl title">汇率:</span>
+                <span class=" fl content ml6">{{datalist.ExchangeRateType}}</span>
+                <span class=" fl content ml6 txt_red">{{datalist.ExchangeRate}}</span>
+            </div>
+        </div>
+        <div class="clearfix mt20">
+            <div class="fl wp50">
+                <span class="fl title">银行地址:</span>
+                <span class=" fl content ml6 w300">{{datalist.BankAddress}}</span>
+            </div>
+            <div class="fl clearfix">
+                <div class="mb30" style="height: 15px;" 
+                     v-show="datalist.HandlingFeePayerType != null && datalist.HandlingFeePayerType != ''">
+                    <span class="fl title">手续费承担方:</span>
+                    <span class=" fl content ml6">{{datalist.HandlingFeePayerTypeName}}</span>
+                    <div class="fl ml28" v-show="datalist.HandlingFee != null && datalist.HandlingFee != '' && datalist.HandlingFee != 0">
+                        <span class="fl title">手续费:</span>
+                        <span class=" fl content ml6 txt_red">{{datalist.HandlingFee}} 美元</span>
+                    </div>
+                </div>
+                <div>
+                    <span class="fl title">应付金额:</span>
+                    <span class=" fl content ml6 txt_red">{{datalist.TotalMoney}}(元)人民币</span>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix mt20">
+            <div class="fl">
+                <div class="clearfix">
+                    <span class="fl title">银行账号:</span>
+                    <span class=" fl content ml6 w300">{{datalist.BankAccount}}</span>
+                </div>
+                <div class="mt20 clearfix">
+                    <span class="fl title">SWIFTCODE:</span>
+                    <span class=" fl content ml6 w300">{{datalist.SwiftCode}}</span>
+                </div>
+                <div class="mt20 clearfix">
+                    <span class="fl title">付款方式:</span>
+                    <span class=" fl content ml6 w300">{{datalist.PaymentType}}</span>
+                </div>
+                <div class="mt20 clearfix">
+                    <span class="fl title">付汇日期:</span>
+                    <span class=" fl content ml6 w300">{{datalist.PayDate}}</span>
+                </div>
+                <div class="mt20 clearfix">
+                    <span class="fl title">备注:</span>
+                    <span class=" fl content ml6 w300">{{datalist.Summary}}</span>
+                </div>
+            </div>
+            <div class="fl pay_wrap">
+                <p>请于{{datalist.SettlementDate}}前向我司以下账号汇款：</p>
+                <p><span class="p_title">开户行：</span>{{datalist.Account}}</p>
+                <p><span class="p_title">开户名：</span>{{datalist.AgentName}}</p>
+                <p><span class="p_title">账&nbsp;&nbsp;&nbsp;号：</span>{{datalist.AccountID}}</p>
+            </div>
+        </div>
+        <div class="clearfix mt20">
+            <div class="fl wp50">
+                <div class="info_item_wrap">
+                    <span class="icon_img">3</span>
+                    <span class="title">合同发票(INVOICE LIST)</span>
+                </div>
+                <div class="upload_wrap1 mt20">
+                    <ul>
+                        <li class="clearfix" v-for="item in datalist.PIFiles">
+                            <div class="file_icon fl"></div>
+                            <div class="fl c_right">
+                                <p class="file_name">{{item.FileName}}</p>
+                                <a :href="item.URL" target="_blank" class="link">预览</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="fl">
+                <div class="info_item_wrap">
+                    <span class="icon_img">4</span>
+                    <span class="title">付汇委托书</span>
+                </div>
+                <div class="upload_wrap2 mt20">
+                    <p v-if="fileUrl==''" class="tip mt16">提示：未上传</p>
+                    <div v-else class="upload_wrap1 mt20">
+                        <ul>
+                            <li class="clearfix">
+                                <div class="file_icon fl"></div>
+                                <div class="fl c_right">
+                                    <p class="file_name">{{fileName}}</p>
+                                    <a :href="fileUrl" target="_blank" class="link">预览</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div v-if="datalist.IsUpload">
+                        <div class="clearfix mt26">
+                            <button v-on:click="download_file" class="fl">导出</button>
+                            <a id="exportInfoForm" style="display:none" download><span id="ex-li" style="display:none"></span></a>
+                            <el-upload class="fl" action="/PayExchanges/UploadOrderFile"
+                                       :show-file-list="false"
+                                       :http-request="httpRequest"
+                                       accept="image/jpg, image/bmp, image/jpeg, image/gif, image/png, application/pdf">
+                                <button class="ml14">上传</button>
+                            </el-upload>
+                        </div>
+                        <p class="tip mt10">仅限图片、PDF文件，且文件不超过3M</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var vApplyInfo = new Vue({
+        el: "#vApplyInfo",
+        data: {
+            datalist:@Html.Raw(Json.Encode(Model)),
+
+            fileUrl: "",
+            URL: "",
+            fileName: "",
+            fileFormat: "",
+        },
+        mounted: function () {
+            if (this.datalist.AgentTrustInstrumentURL != "") {
+                this.fileUrl = this.datalist.AgentTrustInstrumentURL;
+                this.fileName = this.datalist.AgentTrustInstrumentName;
+            }
+        },
+        methods: {
+            download_file: function () {
+                var that = this;
+                axios({
+                    url: "/Files/DownloadPayProxy",
+                    method: "post",
+                    data: {
+                        id: this.datalist.ID,
+                    },
+                }).then(function (response) {
+                    if (response.data.type == "error") {
+                        that.onAlert(response.data.type, response.data.msg);
+                    } else {
+                        $('#exportInfoForm').attr("href", response.data.data);
+                        $('#exportInfoForm').attr("target", "_blank");
+                        $('#ex-li').trigger("click");
+                    }
+                }).catch(function (error) {
+                    that.onAlert("warning", error);
+                });
+            },
+            saveFile: function () {
+                var that = this;
+                axios({
+                    url: "/Files/SavePayProxy",
+                    method: "post",
+                    data: {
+                        id: that.datalist.ID,
+                        url: that.URL,
+                        filename: that.fileName,
+                        ext: that.fileFormat,
+                    },
+                }).then(function (response) {
+
+                    that.onAlert(response.data.type, response.data.msg);
+                    if (response.data.type == "success") {
+                        that.fileUrl = response.data.data;
+                    }
+                }).catch(function (error) {
+                    that.onAlert("warning", error);
+                });
+            },
+            httpRequest: function (options) {
+                var that = this;
+                that.fileList = [];
+                UploadFile(options, '/Files/UploadPickUpFile', function (res) {
+                    if (res.type) {
+                        var file = JSON.parse(res.file);
+                        that.fileUrl = file.fullURL;
+                        that.URL = file.URL;
+                        that.fileName = file.name;
+                        that.fileFormat = file.fileFormat;
+                        that.saveFile();
+                    } else {
+                        that.onAlert("error", res.msg)
+                    }
+                });
+            },
+            toFixed: function (num, val) {
+                return val.toFixed(num);
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                    offset: 100,
+                });
+            },
+        }
+    });
+</script>

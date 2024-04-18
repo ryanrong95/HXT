@@ -1,0 +1,97 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>芯达通</title>
+    <link rel="stylesheet" type="text/css" href="css/common.css" />
+    <link rel="stylesheet" type="text/css" href="css/register.css" />
+    <link rel="stylesheet" href="css/element.css"  />
+    <script type="text/javascript" src="js/jQuery-2.2.4.min.js"></script>
+    <script src="js/axios.min.js"></script>
+    <script type="text/javascript" src="js/xs.js"></script>
+    <script type="text/javascript" src="js/vue.js"></script>
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript" src="js/element.js"></script>
+    <script src="js/slider.js"></script>
+</head>
+
+<body>
+    <!-- 头部 -->
+    <div class="n_register_top">
+        <div class="wrapper">
+            <div class="left n_register_logo">
+                <h1>
+                    <a href="index.html"></a>
+                </h1>
+            </div>
+            <p class="right n_register_phone">热线电话：400-833-8321</p>
+        </div>
+    </div>
+    <!-- 中间部分 -->
+    <div class="n_register_mid" id="register">
+        <div class="wrapper">
+            <!-- 登录 -->
+            <div class="n_login_mod">
+                <h3>账户登录</h3>
+                <div class="n_login_input">
+                    <div class="clearfix">
+                        <span class="left">用户名:</span>
+                        <input type="text" class="left" :class={'n_login_error':userStatus} v-model="userVal" @blur="verifyUser" />
+                    </div>
+                    <p v-show="userStatus">用户名不能为空</p>
+                </div>
+                <div class="n_login_input">
+                    <div class="clearfix">
+                        <span  class="left">密码:</span>
+                        <input class="left" type="password" />
+                    </div>
+                </div>
+                <div class="n_login_check">
+                    <input type="checkbox" :class={'selected':checkStatus} @click="selectCheck" />
+                    <i>记住账号和密码</i>
+                </div>
+                <div class="n_login_button">
+                    <button type="button">登录</button>
+                </div>
+                <div class="clearfix n_login_link">
+                    <a href="forgetPassword.html" class="left">忘记密码</a>
+                    <a href="register.html" class="right">注册新用户</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 底部 -->
+    <div class="n_register_bottom">
+        <p>禁限售规则 - 知识产权保护政策 - 隐私权政策 - 使用条款</p>
+        <p>©️2010-2020 北京创新在线 版权所有 | 京ICP备05069643号-10</p>
+        <p>京公网安备11010802029515号</p>
+    </div>
+    <script>
+		var register = new Vue({
+			el: "#register",
+			data:{
+				checkStatus:false,//多选框的状态
+				userVal:"",//用户名的值
+				userStatus:false,//用户名的状态
+			},
+			methods:{
+				// 选中多选框
+				selectCheck(){
+					this.checkStatus=!this.checkStatus;
+				},
+				//验证用户名
+				verifyUser(){
+					if(this.userVal==""){
+						this.userStatus=true;
+					} else {
+						this.userStatus=false;
+					}
+				}
+			}
+		})
+    </script>
+</body>
+
+</html>

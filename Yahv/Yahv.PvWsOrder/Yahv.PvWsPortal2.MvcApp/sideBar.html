@@ -1,0 +1,298 @@
+<!-- 右侧边栏相关内容 -->
+<div class="n_sideBar_m">
+    <!-- 意见反馈的弹出 -->
+    <div class="n_se_advice" id="contact">
+        <div class="clearfix n_advice_title">
+            <h4>意见反馈</h4>
+            <i class="right n_close" v-on:click="cancel"></i>
+        </div>
+        <div class="n_advice_context">
+            <div class="n_advice_desc">
+                <p>欢迎留下您的宝贵意见，您的每一条建议都是我们前进的动力！</p>
+                <p>我们会认真听取您的意见，不断完善我们的服务，以期为您带来更好的使用体验！</p>
+            </div>
+            <div class="n_advice_form">
+                <div class="n_advice_mol">
+                    <h5>公司名称 <span>（必填）</span></h5>
+                    <input type="text" class="text n_company" id="Name" v-model.trim="Name"/>
+                </div>
+                <div class="n_advice_mol">
+                    <h5>联系方式 <span>（至少填写一项）</span></h5>
+                    <input type="text" class="text text2 n_qq" id="QQ" v-model.trim="QQ" placeholder="QQ" @focus="clearText('QQ');" @blur="addText('QQ')"/>
+                    <input type="text" class="text text2 n_phone" id="Phone" v-model.trim="Phone" placeholder="手机" @focus="clearText('手机');" @blur="addText('手机')"/>
+                </div>
+                <div class="n_advice_mol">
+                    <h5>建议或问题<span>（必填）</span></h5>
+                    <textarea id="Suggestion" cols="0" v-model.trim="Suggestion"></textarea>
+                </div>
+                <div class="n_advice_mol n_advice_btn">
+                    <button type="submit" v-on:click="submit">提交</button>
+                    <button type="button" class="n_cancel" v-on:click="cancel">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--右侧边栏-->
+    <div class="n_sidebar">
+        <ul>
+            <li>
+                <a href="javascript:;">
+                    <i class="n_sidebar_i"></i>
+                    <p class="n_text">在线客服</p>
+                </a>
+                <div class="n_sidebar_expand n_se_kefu">
+                    <i class="n_se_arrow"></i>
+                    <div class="n_se_con">
+                        <p>在线客服：</p>
+                        <a href="http://wpa.qq.com/msgrd?v=1&uin=3008786186&site=b1b.com&menu=yes"><img src="https://bqq.gtimg.com/qidian/src/wpa/dist/4.1.0/images/invite/icon-qq-pc2.png" style="border:0px;width:20px;vertical-align:bottom;" /> 3008786186 </a>
+                        <a href="http://wpa.qq.com/msgrd?v=1&uin=3008785992&site=b1b.com&menu=yes"><img src="https://bqq.gtimg.com/qidian/src/wpa/dist/4.1.0/images/invite/icon-qq-pc2.png" style="border:0px;width:20px;vertical-align:bottom;" /> 3008785992 </a>
+                        <!--<a href="http://wpa.qq.com/msgrd?v=1&uin=3004339541&site=b1b.com&menu=yes">QQ1:3004339541 </a>
+                        <a href="http://wpa.qq.com/msgrd?v=1&uin=3004302230&site=b1b.com&menu=yes">QQ2:3004302230 </a>-->
+                    </div>
+                </div>
+            </li>
+            <li>
+                <a href="javascript:;">
+                    <i class="n_sidebar_i"></i>
+                    <p class="n_text">全国热线</p>
+                </a>
+                <div class="n_sidebar_expand">
+                    <i class="n_se_arrow"></i>
+                    <div class="n_se_con">
+                        <p>热线电话：</p>
+                        <span>400-833-8321</span>
+                    </div>
+                </div>
+            </li>
+
+            <li>
+                <a href="javascript:;">
+                    <i class="n_sidebar_i"></i>
+                    <p class="n_text">公众号</p>
+                </a>
+                <div class="n_sidebar_expand n_se_gongzh">
+                    <i class="n_se_arrow"></i>
+                    <div class="n_se_con">
+                        <img src="imgs/n_erweima.png"/>
+                        <p>扫码关注官方微信</p>
+                        <span>芯达通</span>
+                    </div>
+                </div>
+            </li>
+            <li class="n_advice_li">
+                <a href="javascript:;">
+                    <i class="n_sidebar_i"></i>
+                    <p class="n_text">意见反馈</p>
+                </a>
+            </li>
+            <li class="n_return_top">
+                <a href="javascript:;">
+                    <i class="n_sidebar_i"></i>
+                    <p class="n_text">返回顶部</p>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+<style>
+    /*解决elementui中弹出消息框图标和文字不在一行的问题*/
+    .el-message .el-message__content { display: inline-block; }
+</style>
+
+<!--<script src="js/common2.js"></script>-->
+
+<script>
+
+    $(function() {
+        //右边栏内容显示与隐藏
+        $(".n_sidebar li").hover(function() {
+                $(this).children(".n_sidebar_expand").stop().show().end().siblings().children(".n_sidebar_expand")
+                    .stop()
+                    .hide();
+            },
+            function() {
+                $(".n_sidebar li").find(".n_sidebar_expand").stop().hide();
+            });
+
+        //右侧边栏意见反馈
+        $(".n_advice_li").click(function() {
+            $(".n_se_advice").stop().show();
+        });
+
+        //返回顶部
+        $(".n_return_top").click(function() {
+            $("body,html").animate({ scrollTop: 0 }, 500);
+            return false;
+        });
+    });
+
+    var version = parseInt(navigator.appVersion.split(";")[1].replace(/[ ]/g, "").replace("MSIE", ""));
+
+    var contact = new Vue({
+        el: "#contact",
+        data: {
+            Name: "",
+            QQ: "",
+            Phone: "",
+            Suggestion: ""
+        },
+        mounted: function() {
+            //ie9兼容placeholder
+            if (version == 9) {
+                this.QQ = 'QQ';
+                this.Phone = '手机';
+            }
+        },
+        methods: {
+            cancel: function() {
+                $(".n_se_advice").stop().hide();
+                this.Name = companyName;
+                if (version == 9) {
+                    this.QQ = 'QQ';
+                    this.Phone = '手机';
+                } else {
+                    this.QQ = "";
+                    this.Phone = "";
+                }
+                this.Suggestion = "";
+            },
+            clearText: function(text) {
+                if (version == 9) {
+                    if (text == 'QQ') {
+                        if (this.QQ == 'QQ') {
+                            this.QQ = '';
+                        }
+                    } else {
+                        if (this.Phone == '手机') {
+                            this.Phone = '';
+                        }
+                    }
+                }
+            },
+            addText: function(text) {
+                if (version == 9) {
+                    if (text == 'QQ') {
+                        if (this.QQ == '') {
+                            this.QQ = 'QQ';
+                        }
+                    } else {
+                        if (this.Phone == '') {
+                            this.Phone = '手机';
+                        }
+                    }
+                }
+            },
+            //submit: function () {
+            //    if (this.Name == "" || this.Name == null) {
+            //        this.onAlert("error", "请输入您的公司名称");
+            //        return false;
+            //    } else if ((this.QQ == "" || this.QQ == null)&&(this.Phone == "" || this.Phone == null)) {
+            //        this.onAlert("error", "请输入您的联系方式");
+            //        return false;
+            //    } else if (this.Suggestion == "" || this.Suggestion == null) {
+            //        this.onAlert("error", "请输入您的宝贵建议");
+            //        return false;
+            //    } else if (this.Name!= null && this.Name.length > 50) {
+            //            this.onAlert("error", "输入的公司名称超过限制");
+            //            return false;
+            //    } else if (this.QQ!= null && this.QQ.length > 50) {
+            //        this.onAlert("error", "输入的QQ号超过限制");
+            //        return false;
+            //    } else if (this.Phone!= null && this.Phone.length > 50) {
+            //        this.onAlert("error", "输入的手机号超过限制");
+            //        return false;
+            //    } else if (this.Suggestion!= null && this.Suggestion.length > 150) {
+            //        this.onAlert("error", "输入的建议长度超过限制");
+            //        return false;
+            //    } else {
+            //        var that = this;
+            //        axios({
+            //            url: "/Home/SuggestionSubmit",
+            //            method: "post",
+            //            data: {
+            //                Name: that.Name,
+            //                City: "",
+            //                Contact: that.QQ + that.Phone,
+            //                Suggestion: that.Suggestion,
+            //            }
+            //        }).then(function (response) {
+            //            if (response.data.type == "success") {
+            //                that.$alert('保存成功！感谢您提出自己的宝贵建议', '提示', {
+            //                    confirmButtonText: '关闭',
+            //                    lockScroll: false,
+            //                    confirmButtonClass: "el-button--warning",
+            //                    callback: action => {
+            //                        that.cancel();
+            //                    }
+            //                });
+            //            }
+            //        }).catch(function (error) {
+            //            that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+            //        });
+            //    }
+            //},
+            submit: function() {
+                if (this.Name == "") {
+                    this.onAlert("error", "请输入您的公司名称");
+                    return false;
+                } else if ((this.QQ == "" && this.Phone == "") || (this.QQ == "QQ" && this.Phone == "手机")) {
+                    this.onAlert("error", "请输入您的联系方式");
+                    return false;
+                } else if (this.Suggestion == "") {
+                    this.onAlert("error", "请输入您的宝贵建议");
+                    return false;
+                } else if (this.Name != "" && this.Name.length > 50) {
+                    this.onAlert("error", "输入的公司名称超过限制");
+                    return false;
+                } else if (this.QQ != "" && this.QQ.length > 50) {
+                    this.onAlert("error", "输入的QQ号超过限制");
+                    return false;
+                } else if (this.Phone != "" && this.Phone.length > 50) {
+                    this.onAlert("error", "输入的手机号超过限制");
+                    return false;
+                } else if (this.Suggestion != "" && this.Suggestion.length > 150) {
+                    this.onAlert("error", "输入的建议长度超过限制");
+                    return false;
+                } else {
+                    var that = this;
+                    axios({
+                        url: "/Home/SuggestionSubmit",
+                        method: "post",
+                        data: {
+                            Name: that.Name,
+                            City: "",
+                            Contact: that.QQ + that.Phone,
+                            Suggestion: that.Suggestion
+                        }
+                    }).then(function(response) {
+                        if (response.data.type == "success") {
+                            that.$alert('保存成功！感谢您提出自己的宝贵建议',
+                                '提示',
+                                {
+                                    confirmButtonText: '关闭',
+                                    lockScroll: false,
+                                    confirmButtonClass: "el-button--warning",
+                                    callback: function(action) {
+                                        that.cancel();
+                                    }
+                                });
+                        }
+                    }).catch(function(error) {
+                        that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                    });
+                }
+            },
+            //消息提示框
+            onAlert: function(type, message) {
+                this.$message({
+                    message: message,
+                    type: type
+                });
+            }
+        }
+    });
+</script>
+
+<!-- WPA start -->
+<script id="qd23551234230f9893d016a2d42d539dc23c6d93c22b" src="https://wp.qiye.qq.com/qidian/2355123423/0f9893d016a2d42d539dc23c6d93c22b" charset="utf-8" async defer></script>
+<!-- WPA end -->

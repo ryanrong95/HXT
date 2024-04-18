@@ -1,0 +1,121 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <link href="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/jquery-easyui-1.7.6/themes/gray/easyui.css" rel="stylesheet" />
+
+    <link href="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/jquery-easyui-1.7.6/themes/icon.css" rel="stylesheet" />
+    <link href="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/jquery-easyui-1.7.6/themes/icon-jl-cool.css" rel="stylesheet" />
+    <link href="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/jquery-easyui-1.7.6/themes/icon-yg-cool.css" rel="stylesheet" />
+
+    <script src="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/jquery-easyui-1.7.6/jquery.min.js"></script>
+    <script src="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/jquery-easyui-1.7.6/jquery.easyui.min.js"></script>
+    <script src="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/jquery-easyui-1.7.6/locale/easyui-lang-zh_CN.js"></script>
+
+    <script src="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/customs-easyui/Scripts/easyui.myDialog.js"></script>
+    <script src="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/customs-easyui/Scripts/easyui.myWindow.js"></script>
+    <script src="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/customs-easyui/Scripts/easyui.tabExtend.js"></script>
+
+    <script src="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/customs-easyui/Scripts/fullscreen.js"></script>
+
+    <script src="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/customs-easyui/Scripts/main.js"></script>
+    <script src="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/customs-easyui/Scripts/panels.js"></script>
+
+    <link href="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/customs-easyui/fonts/iconfont.css" rel="stylesheet" />
+    <link href="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/customs-easyui/Styles/reset.css" rel="stylesheet" />
+    <link href="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/customs-easyui/Styles/main.css" rel="stylesheet" />
+</head>
+<body class="gray">
+    <div class="easyui-layout" data-options="fit:true" id="toplayer">
+        <!--头部-->
+        <div data-options="region:'north'" class="header-box" style="height:60px;">
+            <div class="header clearfix">
+                <!--头部左侧-->
+                <div class="header-left">
+                    <div class="fl header-left-logo">
+                        <img src="" class="LogoUrl" />
+                    </div>
+                    <div class="header-left-comName">
+                        <h1>远大创新集团</h1>
+                        <div class="header-left-business header-left-business-single clearfix">
+                            <span></span>
+                        </div>
+                        <div class="header-left-business header-left-business-multiple clearfix">
+                            <span></span><i></i>
+                        </div>
+                    </div>
+                </div>
+                <!--隐藏侧边栏-->
+                <div class="toggleSide open" onclick="toggleFun()">
+                    <i class="iconfont open">&#xe716;</i>
+                    <i class="iconfont close">&#xe624;</i>
+                    <!--<span style="display:none;">隐藏侧边栏</span>-->
+                </div>
+                <!--头部右侧-->
+                <div class="header-right clearfix">
+                    <div class="header-right-helpdoc fl">
+                        <i class="iconfont">&#xe615;</i>
+                        <a href="#">帮助文档</a>
+                    </div>
+                    <div class="header-right-msg fl">
+                        <i class="iconfont">&#xe678;</i>
+                        <span>(<b>33</b>)</span>
+                    </div>
+                    <div class="header-right-fullscreen fl">
+                        <div class="header-right-fullscreen-open">
+                            <i class="iconfont">&#xe62b;</i>
+                            <span>开启全屏</span>
+                        </div>
+                        <div class="header-right-fullscreen-close">
+                            <i class="iconfont">&#xe608;</i>
+                            <span>退出全屏</span>
+                        </div>
+                    </div>
+                    <div class="header-right-line fl"></div>
+                    <div class="header-right-componey fl">
+                        <!--<i></i>-->
+                        <span onclick="selectCom()" class="selectCom">远大创新</span>
+                    </div>
+                    <div class="header-right-person fl">
+                        <i class="iconfont">&#xe647;</i>
+                        <span class="blue">张三</span>
+                    </div>
+                    <div class="header-right-changePsd fl">
+                        <span onclick="openChangePsd()">修改密码</span>
+                    </div>
+                    <div class="header-right-line fl"></div>
+                    <div class="header-right-exit fl">
+                        <i class="iconfont">&#xe682;</i>
+                        <span>退出</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 左侧菜单 -->
+        <div data-options="region:'west',split:false,collapsedSize:-1" class="nav-left">
+            <div id="sm" style="width:200px;"></div>
+        </div>
+        <!-- 主体iframe部分 -->
+        <div data-options="region:'center'" style="background-color:#eee; ">
+            <!--padding:0 5px 0 10px;-->
+            <div class="easyui-tabs overflowStyle" id="tabs" data-options="fit:true,border:true,plain:true">
+                <div title="首页" style="overflow:hidden;">
+                    <iframe src="" style="width:100%;height:100%;" class="workSpace FirstUrl"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 选择业务 -->
+    <ul class="header-business-list"></ul>
+    <!--选择公司、职位弹出层-->
+    <div id="selectCom">
+        <ul class="easyui-tree" id="comMsg"></ul>
+    </div>
+    <!--修改密码-->
+    <div id="changePsd" style="overflow:hidden;">
+        <iframe src="changePsd.html" style="width:100%;height:100%;"></iframe>
+    </div>
+</body>
+</html>

@@ -1,0 +1,135 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>芯达通</title>
+    <link rel="stylesheet" type="text/css" href="css/common.css" />
+    <link rel="stylesheet" type="text/css" href="css/page.css" />
+    <link href="css/element.css" rel="stylesheet" />
+    <script type="text/javascript" src="js/jQuery-2.2.4.min.js"></script>
+    <script src="js/axios.min.js"></script>
+    <script type="text/javascript" src="js/vue.js"></script>
+    <script type="text/javascript" src="js/xs.js"></script>
+    <script type="text/javascript" src="js/common.js"></script>
+    <script src="js/element.js"></script>
+</head>
+
+<body>
+    <!-- 右侧定位 -->
+    <div id="right_bar"></div>
+    <!-- logo行 -->
+    <div id="header"></div>
+    <div class="sub_banner">
+        <p class="en">Assistant / Help</p>
+        <p class="china">芯达通助手</p>
+    </div>
+    <!-- 内容 -->
+    <div id="QueryDetail" class="clearfix wrapper sub_con">
+        
+        <div>
+            <div class="right_bar list_bar">
+                <i class="home"></i>
+                <a href="index.html">首页</a>
+                <i>-</i>
+                <a href="">芯达通助手</a>
+                <i>-</i>
+                <a href="inquiry.html">归类信息查询</a>
+            </div>
+			<div class="list query_details" v-loading="loading">
+                <h4>HS编码：{{form.HSCode}} 详情</h4>
+				<div class="info">
+					<h5>税率信息</h5>
+					<div class="info_con">
+						<ul>
+							<li><label>进口最惠国税率：</label><span>{{form.ImportPreferentialTaxRate}}</span></li>
+							<li><label>普通税率：</label><span>{{form.ImportGeneralTaxRate}}</span></li>
+							<li><label>增值税率：</label><span>{{form.VATRate}}</span></li>
+							<li><label>消费税：</label><span>{{form.ExciseTaxRate}}</span></li>
+							<li><label>是否3C：</label><span>{{form.Ccc}}</span></li>
+						</ul>
+					</div>
+				</div>
+				<div class="info">
+					<h5>申报要素</h5>
+					<div class="info_con">
+						<ul>
+							<li v-for="item in form.ElementsExtend"><label></label><span>{{item.Key}}</span></li>
+						</ul>
+					</div>
+				</div>
+				<div class="info">
+					<h5>CIQ代码（13位海关编码）</h5>
+					<div class="info_con">
+						<ul>
+							<li><label>{{form.HSCode}}：</label><span>{{form.Name}}</span></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+        </div>
+    </div>
+    <!-- 底部 -->
+    <div id="footer_zh"></div>
+    <script>
+		$("#right_bar").load("rightBar.html");
+    	$("#header").load("header.html",function(){
+    		$("#footer_zh").load("footer.html");
+        });
+
+        var aboutus = new Vue({
+            el: '#QueryDetail',
+            mounted: function () {
+                this.getQueryDetailData();
+            },
+            data: {
+                id: "",
+                form: {
+                    HSCode: "",
+                    ImportPreferentialTaxRate: "",
+                    ImportGeneralTaxRate: "",
+                    VATRate: "",
+                    ExciseTaxRate: "",
+                    Ccc: "",
+                    Name: "",
+                    CIQCode: "",
+                    ElementsExtend:[],
+                },
+                loading:true,
+            },
+            methods: {
+                getQueryDetailData: function () {
+                    var that = this;
+                    var query = localStorage["detailText"];
+                    this.id= query;
+                    var that = this;
+                    axios({
+                        url: "/Home/QueryClassfiyDetail",
+                        method: "post",
+                        data: {
+                            id: that.id,
+                        }
+                    }).then(function (response) {
+                        that.loading = false;
+                        if (response.data.type == "success") {
+                            res = JSON.parse(response.data.data);
+                            that.form = res;
+                        }
+                    }).catch(function (error) {
+                        that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                    });
+                },
+                //消息提示框
+                onAlert: function (type, message) {
+                    this.$message({
+                        message: message,
+                        type: type
+                    });
+                },
+            }
+        })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,232 @@
+﻿<template id="newoutstoragebaseinfo">
+    <div>
+        <div class="tb_wrap">
+            <table class="common_tb1 mt20 common_tb">
+                <tr>
+                    <th width="36px">序号</th>
+                    <th width="100px">自定义编号</th>
+                    <th width="100px">型号</th>
+                    <th width="100px">品牌</th>
+                    <th width="100px">封装</th>
+                    <th width="100px">批次</th>
+                    <th width="100px">包装类型</th>
+                    <th width="70px">最小包装量</th>
+                    <th width="70px">数量</th>
+                    <th width="70px">总数</th>
+                    <th width="36px">操作</th>
+                </tr>
+                <tr v-for="(item,index) in orderItems">
+                    <td>{{index+1}}</td>
+                    <td>{{item.CustomCode}}</td>
+                    <td>{{item.PartNumber}}</td>
+                    <td>{{item.Brand}}</td>
+                    <td>{{item.Package}}</td>
+                    <td>{{item.DateCode}}</td>
+                    <td>{{item.StocktakingTypeName}}</td>
+                    <td class="text_left">{{item.Mpq}}</td>
+                    <td>
+                        <el-input size="mini" style="width: 60px" v-model="item.PackageNumber" v-on:focus="clearZero(item,'PackageNumber')"
+                                  v-on:blur="calcTotalAndAll(item,'PackageNumber')" v-on:input="calcTotalAndAll(item,'PackageNumber')"></el-input>
+                    </td>
+                    <td class="text_left">{{item.ItemTotal}}</td>
+                    <td>
+                        <i v-on:click="deleteOneOrderItem(index)" class="tb_icon_del"></i>
+                    </td>
+                </tr>
+                <tr v-if="orderItems.length>0">
+                    <td colspan="8" class="text_center pr20  txt_tb_bottom">合计：</td>
+                    <td class="txt_tb_bottom text_left">{{allPackageNumber}}</td>
+                    <td class="txt_tb_bottom text_left">{{allItemTotal}}</td>
+                    <td class="txt_tb_bottom"></td>
+                </tr>
+                <tr v-if="orderItems.length==0">
+                    <td colspan="11">暂无数据</td>
+                </tr>
+            </table>
+        </div>
+        <div class="btn-tb-list clearfix mt26">
+            <el-button class="fl" v-on:click="stockImportShowWindow()">库存导入</el-button>
+        </div>
+    </div>
+</template>
+<script>
+    Vue.component(
+        'newoutstoragebaseinfo',
+        {
+            template: "#newoutstoragebaseinfo",
+            data: function () {
+                return {
+                    orderItems: [], //订单项
+                    allPackageNumber: 0, //总的数量
+                    allItemTotal: 0, //总的总数
+                }
+            },
+            props: {
+                //从我的库存转的订单项
+                orderitemsfrommystorage: {
+                    type: Array,
+                    default: [],
+                }
+            },
+            methods: {
+                //删除一行
+                deleteOneOrderItem: function (index) {
+                    this.orderItems.splice(index, 1);
+                    this.calcSumInfo();
+                },
+                //焦点在输入框中, 若数值为0, 清除
+                clearZero: function (row, valuetext) {
+                    if (Number(row[valuetext]) == 0) {
+                        row[valuetext] = "";
+                    }
+                },
+                //计算联动的求和信息
+                calcSumInfo: function () {
+                    var that = this;
+                    that.allPackageNumber = 0;
+                    that.allItemTotal = 0;
+
+                    that.orderItems.forEach(function (item, index) {
+                        var mpq = Number(item.Mpq);
+                        var packageNumber = Number(item.PackageNumber);
+                        if (!isNaN(packageNumber)) {
+                            that.allPackageNumber = accAdd(that.allPackageNumber, packageNumber);
+                        }
+
+                        if (!isNaN(mpq) && !isNaN(packageNumber)) {
+                            var theItemTotal = (mpq * packageNumber);
+                            that.orderItems[index].ItemTotal = theItemTotal;
+                            that.allItemTotal = accAdd(that.allItemTotal, theItemTotal);
+                        }
+                    });
+                },
+                //计算各种总和
+                calcTotalAndAll: function (row, valuetext) {
+                    if (!ValidDecimal(row[valuetext])) {
+                        //如果不是数字
+                        //this.$nextTick(function () {
+                        //row[valuetext] = "0";
+                        //});
+                        row[valuetext] = row[valuetext].replace(/[^0-9]/g, '').replace(/\b(0+)/gi, "");
+                    } else {
+                        //如果是数字
+                        row[valuetext] = parseInt(row[valuetext]);
+                    }
+                    this.calcSumInfo();
+                },
+                //库存导入显示窗口
+                stockImportShowWindow: function () {
+                    var addedInfos = [];
+                    this.orderItems.forEach(function (item, i) {
+                        addedInfos.push({
+                            StorageID: item.StorageID,
+                            PackageNumber: item.PackageNumber,
+                        });
+                    });
+                    this.$emit("openstockimportwindow", addedInfos);
+                },
+                //从库存添加型号
+                addOrderItemsFromStock: function (chuanDiOrderItems) {
+                    var that = this;
+                    var oldAddedStorageIDs = [];
+                    that.orderItems.forEach(function (item, i) {
+                        oldAddedStorageIDs.push(item.StorageID);
+                    });
+
+                    chuanDiOrderItems.forEach(function (item, i) {
+                        if (oldAddedStorageIDs.indexOf(item.StorageID) >= 0) {
+                            //已经添加到订单项中, 更新数量, 顺带其他的字段也更新一遍
+                            var cno = -1;
+                            for (var i = 0; i < that.orderItems.length; i++) {
+                                if (that.orderItems[i].StorageID == item.StorageID) {
+                                    cno = i;
+                                }
+                            }
+
+                            if (cno > -1) {
+                                //that.orderItems[cno].OrderItemID =  ""; //OrderItemID
+                                that.orderItems[cno].CustomCode = item.CustomCode; //自定义编号
+                                that.orderItems[cno].PartNumber = item.PartNumber; //型号
+                                that.orderItems[cno].Brand = item.Brand; //品牌
+                                that.orderItems[cno].Package = item.Package; //封装
+                                that.orderItems[cno].DateCode = item.DateCode; //批次
+                                that.orderItems[cno].StocktakingTypeInt = item.StocktakingTypeInt; //包装类型 Int
+                                that.orderItems[cno].StocktakingTypeName = item.StocktakingTypeName; //包装类型 Name
+                                that.orderItems[cno].Mpq = item.Mpq; //最小包装量
+                                that.orderItems[cno].StoragePackageNumber = item.StoragePackageNumber; //库存数量
+                                that.orderItems[cno].PackageNumber = item.PackageNumber; //数量
+                                that.orderItems[cno].ItemTotal = item.ItemTotal; //总数
+                                //that.orderItems[cno].StorageID = item.StorageID;
+                            }
+
+                        } else {
+                            //新添加到订单项中
+                            var newOrderItem = {
+                                OrderItemID: "", //OrderItemID
+                                CustomCode: item.CustomCode, //自定义编号
+                                PartNumber: item.PartNumber, //型号
+                                Brand: item.Brand, //品牌
+                                Package: item.Package, //封装
+                                DateCode: item.DateCode, //批次
+                                StocktakingTypeInt: item.StocktakingTypeInt, //包装类型 Int
+                                StocktakingTypeName: item.StocktakingTypeName, //包装类型 Name
+                                Mpq: item.Mpq, //最小包装量
+                                StoragePackageNumber: item.StoragePackageNumber, //库存数量
+                                PackageNumber: item.PackageNumber, //数量
+                                ItemTotal: item.ItemTotal, //总数
+                                StorageID: item.StorageID,
+                            };
+
+                            that.orderItems.push(newOrderItem);
+                        }
+                    });
+
+                    //寻找在库存导入中取消勾选的
+                    oldAddedStorageIDs.forEach(function (oldAddedStorageID, i) {
+                        var theOrderItemInChuanDi = chuanDiOrderItems.filter(function (chuandiItem) {
+                            return chuandiItem.StorageID == oldAddedStorageID;
+                        });
+
+                        if (theOrderItemInChuanDi == null || theOrderItemInChuanDi == undefined || theOrderItemInChuanDi.length <= 0) {
+                            //老的 StorageID 在传递过来的数据中找不到, 就是被取消勾选的
+                            that.orderItems = that.orderItems.filter(function (item) {
+                                return item.StorageID != oldAddedStorageID;
+                            });
+                        }
+                    });
+
+                    that.calcSumInfo();
+                },
+            },
+            mounted: function () {
+                var that = this;
+                //如果 orderitemsfrommystorage 不为 [], 则加载从我的库存转的订单项
+                if (that.orderitemsfrommystorage != null && that.orderitemsfrommystorage != undefined && that.orderitemsfrommystorage.length > 0) {
+                    that.orderitemsfrommystorage.forEach(function (item, i) {
+                        //新添加到订单项中
+                        var newOrderItem = {
+                            OrderItemID: "", //OrderItemID
+                            CustomCode: item.CustomCode, //自定义编号
+                            PartNumber: item.PartNumber, //型号
+                            Brand: item.Brand, //品牌
+                            Package: item.Package, //封装
+                            DateCode: item.DateCode, //批次
+                            StocktakingTypeInt: item.StocktakingTypeInt, //包装类型 Int
+                            StocktakingTypeName: item.StocktakingTypeName, //包装类型 Name
+                            Mpq: item.Mpq, //最小包装量
+                            StoragePackageNumber: item.StoragePackageNumber, //库存数量
+                            PackageNumber: item.PackageNumber, //数量
+                            ItemTotal: item.ItemTotal, //总数
+                            StorageID: item.StorageID,
+                        };
+
+                        that.orderItems.push(newOrderItem);
+                    });
+                }
+                that.calcSumInfo();
+            },
+            created: function () {
+
+            },
+        });
+</script>

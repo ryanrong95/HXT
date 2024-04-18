@@ -1,0 +1,221 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{7D9013AD-66B9-414B-9962-622D4D04D4C0}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>YaHv.PvData.Services</RootNamespace>
+    <AssemblyName>YaHv.PvData.Services</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="NPOI, Version=2.4.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NPOI.2.4.1\lib\net45\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML, Version=2.4.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NPOI.2.4.1\lib\net45\NPOI.OOXML.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net, Version=2.4.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NPOI.2.4.1\lib\net45\NPOI.OpenXml4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats, Version=2.4.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NPOI.2.4.1\lib\net45\NPOI.OpenXmlFormats.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CacheManager.cs" />
+    <Compile Include="Cachers.cs" />
+    <Compile Include="Handlers\ElementsMfrChangedHandler.cs" />
+    <Compile Include="Models\BaseData\ElementsManufacturer.cs" />
+    <Compile Include="Models\BaseData\StandardPartnumbersForPlugin.cs" />
+    <Compile Include="Models\Classify\HKControl.cs" />
+    <Compile Include="TopControllers.cs" />
+    <Compile Include="Enums\Enum.Rqf.cs" />
+    <Compile Include="Models\BaseData\StandardManufacturer.cs" />
+    <Compile Include="Models\BaseData\StandardPartnumber.cs" />
+    <Compile Include="Models\BaseData\StandardPartnumberForShow.cs" />
+    <Compile Include="Models\BaseData\StandardPastQuote.cs" />
+    <Compile Include="SqlView.cs" />
+    <Compile Include="ConnManager.cs" />
+    <Compile Include="ConstConfig.cs" />
+    <Compile Include="Enums\Enum.ClassifyStep.cs" />
+    <Compile Include="Enums\Enum.ControlType.cs" />
+    <Compile Include="Enums\Enum.CustomsControlType.cs" />
+    <Compile Include="Enums\Enum.DeclarantRole.cs" />
+    <Compile Include="Enums\Enum.LogType.cs" />
+    <Compile Include="Extends\ClassifiedPartNumberExtend.cs" />
+    <Compile Include="Extends\ClassifyProductExtend.cs" />
+    <Compile Include="Extends\LogExtend.cs" />
+    <Compile Include="Extends\OrderedProductExtend.cs" />
+    <Compile Include="Extends\OtherExtend.cs" />
+    <Compile Include="Extends\PreProductExtend.cs" />
+    <Compile Include="Extends\ProductConstraintExtend.cs" />
+    <Compile Include="Extends\ProductControlExtend.cs" />
+    <Compile Include="Extends\TariffExtend.cs" />
+    <Compile Include="Handlers\ProductClassifiedHandler.cs" />
+    <Compile Include="Handlers\ProductLockedHandler.cs" />
+    <Compile Include="Handlers\ProductReturnedHandler.cs" />
+    <Compile Include="Handlers\SyncingHandler.cs" />
+    <Compile Include="Interfaces\IClassifyProduct.cs" />
+    <Compile Include="Models\BaseData\CustomsControl.cs" />
+    <Compile Include="Models\Classify\ClassifiedHistory.cs" />
+    <Compile Include="Models\Classify\Behavior\ClassifyDoneEdit.cs" />
+    <Compile Include="Models\Classify\Behavior\PreClassifyDoneEdit.cs" />
+    <Compile Include="Models\Classify\Behavior\PreClassifyStep1.cs" />
+    <Compile Include="Models\Classify\Behavior\PreClassifyStep2.cs" />
+    <Compile Include="Models\Classify\Behavior\ReClassify.cs" />
+    <Compile Include="Models\Classify\ClassifiedPartNumber.cs" />
+    <Compile Include="Models\BaseData\ElementsDefault.cs" />
+    <Compile Include="Models\Classify\Log_ClassifiedPartNumber.cs" />
+    <Compile Include="Models\BaseData\OriginATRate.cs" />
+    <Compile Include="Models\BaseData\OriginDisinfection.cs" />
+    <Compile Include="Models\Classify\Log_ClassifiedTax.cs" />
+    <Compile Include="Models\Classify\Other.cs" />
+    <Compile Include="Models\Classify\Behavior\Classify.cs" />
+    <Compile Include="Models\Classify\Behavior\ClassifyFactory.cs" />
+    <Compile Include="Models\Classify\Behavior\ClassifyStep1.cs" />
+    <Compile Include="Models\Classify\Behavior\ClassifyStep2.cs" />
+    <Compile Include="Models\Classify\Lock_Classify.cs" />
+    <Compile Include="Models\Classify\Log_ClassifyModified.cs" />
+    <Compile Include="Models\Classify\Log_ClassifyOperating.cs" />
+    <Compile Include="Models\Classify\Past_ClassifiedModified.cs" />
+    <Compile Include="Models\Classify\ProductQuote.cs" />
+    <Compile Include="Models\Classify\Product\OrderedProduct.cs" />
+    <Compile Include="Models\Classify\Product\PreProduct.cs" />
+    <Compile Include="Interfaces\IProductConstraint.cs" />
+    <Compile Include="Models\Classify\SubSystemClassifiedResult.cs" />
+    <Compile Include="Models\Classify\Sync\ClassifySyncHandler.cs" />
+    <Compile Include="Models\Classify\Sync\_bak_SyncHandler.cs" />
+    <Compile Include="Models\Classify\Sync\SyncHandlerBase.cs" />
+    <Compile Include="Models\Classify\Sync\SyncManager.cs" />
+    <Compile Include="Models\Classify\Sync\TaxChangeSyncHandler.cs" />
+    <Compile Include="Models\BaseData\Product.cs" />
+    <Compile Include="Models\BaseData\ProductControl.cs" />
+    <Compile Include="Models\BaseData\Tariff.cs" />
+    <Compile Include="Models\BaseData\TaxRule.cs" />
+    <Compile Include="Models\SysConfig\ExchangeRate.cs" />
+    <Compile Include="PKeyType.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PvDataApiSetting.cs" />
+    <Compile Include="Utils\GuidUtil.cs" />
+    <Compile Include="Utils\StringUtil.cs" />
+    <Compile Include="Views\Alls\BaseData\CustomsControlsAll.cs" />
+    <Compile Include="Views\Alls\BaseData\ElementsManufacturersAll.cs" />
+    <Compile Include="Views\Alls\BaseData\ProductControlsAll.cs" />
+    <Compile Include="Views\Alls\BaseData\StandardManufacturersAll.cs" />
+    <Compile Include="Views\Alls\BaseData\StandardPartnumbersAll.cs" />
+    <Compile Include="Views\Alls\BaseData\StandardPastQuotesAll.cs" />
+    <Compile Include="Views\Alls\Classify\ClassifiedHistoriesAll.cs" />
+    <Compile Include="Views\Alls\Classify\ClassifiedPartNumbersAll.cs" />
+    <Compile Include="Views\Alls\Classify\HKControlsAll.cs" />
+    <Compile Include="Views\Alls\Classify\Locks_ClassifyAll.cs" />
+    <Compile Include="Views\Alls\Classify\Logs_ClassifiedPartNumberAll.cs" />
+    <Compile Include="Views\Alls\BaseData\OriginsATRateAll.cs" />
+    <Compile Include="Views\Alls\BaseData\OriginsDisinfectionAll.cs" />
+    <Compile Include="Views\Alls\Classify\Logs_ClassifiedTaxAll.cs" />
+    <Compile Include="Views\Alls\Classify\Logs_ClassifyModifiedAll.cs" />
+    <Compile Include="Views\Alls\Classify\Logs_ClassifyOperatingAll.cs" />
+    <Compile Include="Views\Alls\Classify\OthersAll.cs" />
+    <Compile Include="Views\Alls\BaseData\TariffsAll.cs" />
+    <Compile Include="Views\Alls\Classify\Pasts_ClassifiedModifiedAll.cs" />
+    <Compile Include="Views\Alls\Classify\ProductQuotesAll.cs" />
+    <Compile Include="Views\Alls\Classify\SubSystemClassifiedResultsAll.cs" />
+    <Compile Include="Views\Alls\InfoSearch\CccInfosAll.cs" />
+    <Compile Include="Views\Alls\BaseData\EccnsAll.cs" />
+    <Compile Include="Views\Alls\InfoSearch\EmbargoInfosAll.cs" />
+    <Compile Include="Views\Alls\BaseData\StandardPartnumbersForPlugin.cs" />
+    <Compile Include="Views\Alls\SysConfig\ExchangeRatesAll.cs" />
+    <Compile Include="Views\Origins\Classify\ClassifiedPartNumbersOrigin.cs" />
+    <Compile Include="Views\Origins\BaseData\ElementsDefaultsOrigin.cs" />
+    <Compile Include="Views\Origins\Classify\Locks_ClassifyOrigin.cs" />
+    <Compile Include="Views\Origins\Classify\Logs_ClassifiedPartNumberOrigin.cs" />
+    <Compile Include="Views\Origins\BaseData\OriginsATRateOrigin.cs" />
+    <Compile Include="Views\Origins\BaseData\OriginsDisinfectionOrigin.cs" />
+    <Compile Include="Views\Origins\Classify\OthersOrigin.cs" />
+    <Compile Include="Views\Origins\BaseData\TariffsOrigin.cs" />
+    <Compile Include="Views\Origins\BaseData\TaxRulesOrigin.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Solutions\Layers.Data\Layers.Data.csproj">
+      <Project>{fed16b15-565b-4ed6-a876-2146eb16b011}</Project>
+      <Name>Layers.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Layers.Linq\Layers.Linq.csproj">
+      <Project>{56c33683-ce9a-4cc5-9cef-92e03bc8f739}</Project>
+      <Name>Layers.Linq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Yahv.Linq\Yahv.Linq.csproj">
+      <Project>{c8c572df-2bba-4483-b332-2652805aef87}</Project>
+      <Name>Yahv.Linq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Yahv.Services\Yahv.Services.csproj">
+      <Project>{ef7c5b21-4ce2-454a-8719-70e6dadacb69}</Project>
+      <Name>Yahv.Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Yahv.Settings\Yahv.Settings.csproj">
+      <Project>{1ddf4a9b-d19a-4d3e-9575-0247975320c8}</Project>
+      <Name>Yahv.Settings</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Yahv.Underly\Yahv.Underly.csproj">
+      <Project>{15b56201-a129-4396-9431-0e5f9da7d9f9}</Project>
+      <Name>Yahv.Underly</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Yahv.Usually\Yahv.Usually.csproj">
+      <Project>{fa84a973-fc0b-4a57-9c6a-9212392f2d1c}</Project>
+      <Name>Yahv.Usually</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Yahv.Utils\Yahv.Utils.csproj">
+      <Project>{870a94d5-f08e-481f-a7ae-b90b5c249882}</Project>
+      <Name>Yahv.Utils</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,127 @@
+﻿<template id="newinstoragebatchaddorderitem">
+    <el-dialog title="入库订单产品批量导入" class="fh_file" :lock-scroll="false" width="30%" :visible.sync="dialogbatchaddorderitemvisible"
+               :close-on-click-modal="false" v-on:close="closedialogbatchaddorderitem()">
+        <div class="font12 txt_grey1 dialog_body txt_left">
+            <p>导入步骤：</p>
+            <p class="mt10">第一步：<a class="txt_blue" href="/Template/入库产品导入模板.xlsx">下载导入模板</a>并保存到本地。</p>
+            <p class="mt10">第二步：请严格按照模板示例准确填写相关信息，红色部分为必填项</p>
+            <p class="mt10">第三步：开始导入</p>
+            <div class="mt20 clearfix line30">
+                <span class="fl mr20" style="display: inline-block">选择文件</span>
+                <div class="fl">
+                    <el-upload action="/Order/InStorageBatchFileUpload"
+                               :on-success="uploadSuccess"
+                               accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                               :show-file-list="false">
+                        <el-button size="small" class="el-icon-plus btn1">添加文件</el-button>
+                    </el-upload>
+                </div>
+                <ul class="fl ml20">
+                    <li v-for="(item,index) in batchFile">
+                        <div class="file_item">
+                            <i class="file_icon"></i>
+                            <span class="file_name">{{item.name}}</span>
+                            <i class="file_del ml11" v-on:click="delBatchData"></i>
+                        </div>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+        <div slot="footer" class="dialog-footer">
+            <button v-on:click="closedialogbatchaddorderitem()" class="btn1">取消</button>
+            <button v-on:click="onSubmit_upload" class="btn2 ml12">提交</button>
+        </div>
+    </el-dialog>
+</template>
+<script>
+    Vue.component(
+        'newinstoragebatchaddorderitem',
+        {
+            template: "#newinstoragebatchaddorderitem",
+            data: function () {
+                return {
+                    batchData: [], //批量导入数据
+                    batchFile: [],
+                }
+            },
+            props: {
+                dialogbatchaddorderitemvisible: {
+                    type: Boolean,
+                    required: true,
+                    default: false,
+                },
+            },
+            methods: {
+                // 产品上传成功后的回调
+                uploadSuccess: function (response) {
+                    var that = this;
+                    if (response.type == "error") {
+                        that.onAlert(response.type, response.msg)
+                    } else {
+                        var list = response.data.list;
+                        var file = {
+                            name: response.data.FileName
+                        };
+                        this.batchFile.push(file);
+                        list.forEach(function (value, i) {
+                            var obj = {
+                                OrderItemID: "", //OrderItemID
+                                CustomCode: value.CustomCode, //自定义编号
+                                PartNumber: value.PartNumber, //型号
+                                Brand: value.Brand, //品牌
+                                Package: value.Package, //封装
+                                DateCode: value.DateCode, //批次
+                                StocktakingTypeInt: value.StocktakingTypeInt, //包装类型
+                                Mpq: value.Mpq, //最小包装量
+                                PackageNumber: value.PackageNumber, //数量
+                                ItemTotal: 0 //总数
+                            };
+                            that.batchData.push(obj);
+                        });
+                    }
+                },
+                onSubmit_upload: function () {
+                    if (this.batchData.length == 0) {
+                        this.onAlert("warning", "请上传导入文件");
+                        return;
+                    } else {
+                        for (var i = 0; i < this.batchData.length; i++) {
+                            //this.orderItems.push(this.batchData[i]);
+                            this.$emit("addorderitemfrombatch", this.batchData[i]);
+                        }
+                        this.calcSumInfoAfterBatchSubmit();
+                        this.closedialogbatchaddorderitem();
+                        this.delBatchData();
+                    }
+                },
+                delBatchData: function () {
+                    this.batchData = [];
+                    this.batchFile = [];
+                },
+                //在批量提交之后计算求和信息
+                calcSumInfoAfterBatchSubmit: function () {
+                    this.$emit("calcsuminfoafterbatchsubmit");
+                },
+                //关闭窗口
+                closedialogbatchaddorderitem: function () {
+                    this.dialogbatchaddorderitemvisible = false;
+                    this.$emit("closedialogbatchaddorderitem");
+                },
+                //消息提示框
+                onAlert: function (type, message) {
+                    this.$message({
+                        message: message,
+                        type: type,
+                        offset: 100
+                    });
+                },
+            },
+            mounted: function () {
+
+            },
+            created: function () {
+
+            },
+        });
+</script>

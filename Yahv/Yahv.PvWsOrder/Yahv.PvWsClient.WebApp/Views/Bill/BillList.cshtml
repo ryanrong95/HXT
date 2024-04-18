@@ -1,0 +1,208 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutOrder.cshtml";
+}
+    <div v-cloak id="vBillList" class="backshow">
+        <div class="breaklist">
+            <span class="fl first_title">对账单</span>
+            <span class="fl second_title" v-on:click="history.back(-1)">返回</span>
+        </div>
+        <div class="bill_content">
+            <p class="txt_currency mb44">交易币种：{{formData.currency}}({{formData.currencyCode}})</p>
+            <div v-if="formData.creditList.length>0 && !formData.IsOverDue && formData.IsConfirm">
+                <p class="title">信用额度</p>
+                <table style="width:500px;" class="common1 mb30 mt20" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <th width="50%">科目分类</th>
+                        <th>可用金额</th>
+                    </tr>
+                    <tr v-for="item in formData.creditList">
+                        <td>{{item.Catalog}}</td>
+                        <td>{{item.Left.toFixed(2)}}</td>
+                    </tr>
+                </table>
+            </div>
+
+            <p class="title">对账信息</p>
+            <table class="common1 mt20" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <th width="40px"><el-checkbox v-model="allChecked" v-on:change="allCheck"></el-checkbox></th>
+                    <th>科目分类</th>
+                    <th>科目</th>
+                    <th>单价/数量</th>
+                    <th>应付小计</th>
+                    <th>实付金额</th>
+                    <th>未付金额</th>
+                </tr>
+                <template v-for="(item,index) in formData.bill">
+                    <tr v-for="(m,i) in item.Node">
+                        <td><el-checkbox v-model="m.IsChecked"></el-checkbox></td>
+                        <td v-if="i==0" :rowspan="item.Node.length"><span class="lbl" :class="{'lbl1':item.Catalog=='代理费','lbl2':item.Catalog=='杂费','lbl3':item.Catalog=='货款','lbl4':item.Catalog=='税款'}">{{item.Catalog}}</span></td>
+                        <td>{{m.Subject}}</td>
+                        <td>
+                            {{m.LeftPrice.toFixed(2)}}×1
+                        </td>
+                        <td>{{m.LeftPrice.toFixed(2)}}<br /><span class="txt_yellow" v-if="m.CouponPrice>0">已优惠{{m.CouponPrice}}</span></td>
+                        <td>{{m.RightPrice.toFixed(2)}}</td>
+                        <td :class="[{txt_red:m.UnPay>0}]">{{m.UnPay.toFixed(2)}}</td>
+                    </tr>
+                </template>
+            </table>
+            <div class="bill_static">
+                <p>应付合计：{{formData.TotalLeft.toFixed(2)}}</p>
+                <p class="txt_yellow txt_discount">共优惠：{{formData.TotalCoupon.toFixed(2)}}</p>
+                <p>实付合计：{{formData.TotalRight.toFixed(2)}}</p>
+                <p class="txt_red">仍需支付：{{formData.TotalUnPay.toFixed(2)}}</p>
+            </div>
+            <div class="btn_list">
+                <button class="btn btn_pay" v-if="!formData.IsOverDue&&formData.creditList.length>0&& formData.IsConfirm" v-on:click="pay">信用支付</button>
+            </div>
+        </div>
+        <el-dialog class="successdialog" title="信用支付" :lock-scroll="false" width="520px" :visible.sync="dialogSuccessVisible1" :close-on-click-modal="false">
+            <div class="content">
+                <p>信用支付成功</p>
+            </div>
+            <div class="dialog_foot ml142">
+                <el-button type="primary" v-on:click="history.back(-1)">返回</el-button>
+            </div>
+        </el-dialog>
+    </div>
+    <script>
+    var vBillList = new Vue({
+        el: "#vBillList",
+        data:function() {
+            return{
+                formData: @Html.Raw(Json.Encode(Model)),  //表单数据
+                dialogSuccessVisible1: false,
+                GoodsCredit: 0,
+                TaxCredit: 0,
+                AgentCredit: 0,
+                OtherCredit: 0,
+                allChecked: false,
+                payData: [],
+                creditMoney:0,//信用支付总金额
+            }
+        },
+        methods: {
+            allCheck: function () {
+                for (var i = 0; i < this.formData.bill.length; i++) {
+                    for (var j = 0; j < this.formData.bill[i].Node.length; j++) {
+                        this.formData.bill[i].Node[j].IsChecked = this.allChecked;
+                    }
+                }
+            },
+            checkPay: function () {
+                var that = this;
+                that.creditMoney = 0;
+                that.GoodsCredit = 0;
+                that.TaxCredit = 0;
+                that.AgentCredit = 0;
+                that.OtherCredit = 0;
+                that.payData = [];
+                var list = this.formData.bill;
+                for (var i = 0; i < list.length; i++) {
+                    for (var j = 0; j < list[i].Node.length; j++) {
+                        if (list[i].Node[j].IsChecked) { //已勾选
+                            var realMoney =list[i].Node[j].UnPay;//实付价格
+                            that.creditMoney = accAdd(that.creditMoney, realMoney); //总共需要支付的价格
+                            that.payData.push(list[i].Node[j].ReceivableID);
+                            that.totalCatelog(list[i].Node[j].Catalog,realMoney);
+                        }
+                    }
+                }
+                if (that.payData.length == 0) {
+                     this.onAlert("error", "请勾选需要信用支付的账单明细");
+                    return false;
+                }
+                if (this.formData.Credit.GoodsCredit < this.GoodsCredit) {
+                    this.onAlert("error", "货款信用额度不足");
+                    return false;
+                } else if (this.formData.Credit.TaxCredit < this.TaxCredit) {
+                    this.onAlert("error", "税款信用额度不足");
+                    return false;
+                } else if (this.formData.Credit.AgentCredit < this.AgentCredit) {
+                    this.onAlert("error", "代理费信用额度不足");
+                    return false;
+                } else if (this.formData.Credit.OtherCredit < this.OtherCredit) {
+                    this.onAlert("error", "杂费信用额度不足");
+                    return false;
+                }
+                return true;
+            },
+            pay: function () {
+                var that = this;
+                if (this.checkPay()) {
+                    const loading = that.$loading({
+                        lock: false,
+                        text: 'Loading',
+                        spinner: 'el-icon-loading',
+                        background: 'rgba(0, 0, 0, 0.7)'
+                    });
+                    axios({
+                        url: "/Bill/CreditPayOnly",
+                        method: "post",
+                        data: {
+                            payData: JSON.stringify(that.payData),
+                            id: that.formData.ID,
+                            creditMoney: that.creditMoney
+                        },
+                    }).then(function (response) {
+                        loading.close();
+                        if (response.data.type == "error") {
+                            that.onAlert(response.data.type, response.data.msg);
+                        } else {
+                            that.dialogSuccessVisible1 = true;
+                        }
+                    }).catch(function (error) {
+                        that.onAlert("warning", error);
+                    });
+                }
+            },
+            totalCatelog: function (catelog,money) {
+                //统计各个科目应付金额
+                if (catelog == "货款") {
+                    this.GoodsCredit += money;
+                } else if (catelog == "税款") {
+                    this.TaxCredit += money;
+                } else if (catelog == "代理费") {
+                    this.AgentCredit += money;
+                } else if (catelog == "杂费") {
+                    this.OtherCredit += money;
+                }
+            },
+            mergeData: function () {
+                var data = this.formData.bill;
+                var arr = [];
+                var newObj = {};
+                for (var i = 0; i < data.length; i++) {
+                    if (!newObj[data[i].Catalog]) {
+                        var obj = {
+                            Catalog: data[i].Catalog,
+                            Node: []
+                        };
+                        obj.Node.push(data[i]);
+                        arr.push(obj);
+                        newObj[data[i].Catalog] = true;
+                    } else {
+                        for (var j = 0; j < arr.length; j++) {
+                            if (arr[j].Catalog == data[i].Catalog) {
+                                arr[j].Node.push(data[i])
+                            }
+                        }
+                    }
+                }
+                this.formData.bill = arr;
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                    offset: 200,
+                });
+            },
+        },
+        mounted:function() {
+            this.mergeData();
+        },
+    })
+    </script>

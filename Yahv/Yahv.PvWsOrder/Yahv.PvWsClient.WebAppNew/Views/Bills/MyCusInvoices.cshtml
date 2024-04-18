@@ -1,0 +1,468 @@
+﻿@{ ViewBag.subTitle = "海关发票"; }
+<link href="~/Content/css/tab.css" rel="stylesheet" />
+<!-- tab start-->
+<div class="clearfix tab_switch">
+    <ul>
+        <li>
+            <a href="/Bills/MyInvoices">我的发票<i></i></a>
+        </li>
+        @if ((ViewBag.IsCustoms == false && ViewBag.IsWarehouse == false) || ViewBag.IsCustoms)
+        {
+<li class="active">
+    <a href="/Bills/MyCusInvoices">海关发票<i></i></a>
+</li>}
+    </ul>
+</div>
+<!-- tab end -->
+<div id="vMyCusInvoices" v-cloak class="tab_content">
+    <div class="query_wrap clearfix" ref="viewBox1" v-on:scroll="ss('viewBox1')">
+        <div class="clearfix">
+            <div class="fl">
+                <div class="title label-style">订单号:</div>
+                <el-input class="input-style" style="width: 150px;" size="mini" v-model="OrderID" @@keyup.enter.native="queryData"></el-input>
+            </div>
+            <div class="fl ml20">
+                <div class="title label-style">合同号:</div>
+                <el-input class="input-style" style="width: 150px;" size="mini" v-model="ContrNo" @@keyup.enter.native="queryData"></el-input>
+            </div>
+            <div class="fl ml20">
+                <div class="title label-style">报关日期:</div>
+                <date-picker-daterange ref="datePickerDaterange" class="fl"></date-picker-daterange>
+            </div>
+
+            <div class="fr">
+                <button v-on:click="queryData" class="btn btn1">查询</button>
+                <button v-on:click="clearData" class="btn btn2 ml12">重置</button>
+            </div>
+        </div>
+        <div class="clearfix mt20">
+            @*<button class="btn btn1" v-on:click="importExcel">导出</button>*@
+            <button class="btn btn1" v-on:click="importEntryList">导出报关单</button>
+            <button class="btn btn1 ml18" v-on:click="importCTaxList">导出关税单</button>
+            <button class="btn btn1 ml18" v-on:click="importATaxList">导出增值税单</button>
+            <a id="exportInfoForm" style="display: none" download>
+                <span id="ex-li" style="display: none"></span>
+            </a>
+        </div>
+    </div>
+    <div class="tb_wrap" v-loading="loading">
+        <div class="tb_over_wrap mt30">
+            <table class="common_tb1" style="width: 1400px">
+                <tr>
+                    <th width="36px">
+                        <el-checkbox v-model="allChecked" v-on:change="allCheck"></el-checkbox>
+                    </th>
+                    <th>报关日期</th>
+                    <th>发票日期</th>
+                    <th>发票号</th>
+                    <th>小订单号</th>
+                    <th>主订单号</th>
+                    <th>报关金额</th>
+                    <th>代理费</th>
+                    <th>报关单下载</th>
+                    <th>关税单下载</th>
+                    <th>增值税单下载</th>
+                    <th>操作</th>
+                </tr>
+                <tr v-for="(item,index) in indexData.dataList">
+                    <td>
+                        <el-checkbox v-model="item.IsChecked"></el-checkbox>
+                    </td>
+                    <td>{{item.DDate}}</td>
+                    <td>{{item.InvoiceDate}}</td>
+                    <td>{{item.InvoiceNo}}</td>
+                    <td>{{item.TinyOrderID}}</td>
+                    <td>{{item.OrderID}}</td>
+                    <td>{{item.DeclarePrice}}</td>
+                    <td>{{item.AgencyAmount}}</td>
+                    <td>
+                        <a v-if="item.EntryID != ''" v-on:click="importEntry(item.EntryID)">{{item.EntryID}}</a>
+                    </td>
+                    <td>
+                        <!-- InvoiceTypeInt 为 0 是全额发票 -->
+                        <span v-if="item.CustomsTaxID != '' && item.InvoiceTypeInt == '0'">--</span>
+                        <a v-else-if="item.CustomsTaxID != ''" v-on:click="importTax(item.CustomsTaxID)">{{item.CustomsTaxNumber}}</a>
+                    </td>
+                    <td>
+                        <span v-if="item.AddedTaxID != '' && item.InvoiceTypeInt == '0'">--</span>
+                        <a v-else-if="item.AddedTaxID != ''" v-on:click="importTax(item.AddedTaxID)">{{item.AddedTaxNumber}}</a>
+                    </td>
+                    <td class="operate" width="50px">
+                        <a v-if="item.IsShow" v-on:click="Detail(item.TinyOrderID)">查看</a>
+                    </td>
+                </tr>
+                <tr v-if="indexData.dataList.length==0">
+                    <td colspan="13">暂无数据</td>
+                </tr>
+            </table>
+        </div>
+        <div class="foot">
+            <el-pagination class="fr" style="margin-top: 20px;" v-on:size-change="handleSizeChange"
+                           v-on:current-change="handleCurrentChange"
+                           :current-page="indexData.pageIndex"
+                           :page-sizes="[5, 10, 20, 40]"
+                           :page-size="indexData.pageSize"
+                           layout="total, sizes, prev, pager, next, jumper"
+                           :total="indexData.total">
+            </el-pagination>
+        </div>
+    </div>
+</div>
+<style>
+    .label-style {
+        width: 60px;
+        float: left;
+        margin-top: 6px;
+    }
+
+    .input-style {
+        width: 180px !important;
+    }
+</style>
+@{Html.RenderAction("_DatePickerDateRange", "Home");}
+<script>
+    var vMyCusInvoices = new Vue({
+        el: "#vMyCusInvoices",
+        data: function() {
+            return {
+                indexData: {
+                    pageIndex: 1, //初始页
+                    pageSize: 10, //每页的数据
+                    total: 0,
+                    scrollTop: 0, //滚动条位置
+                    dataList: [],
+                },
+                loading: true,
+                dataValue: "",
+                startDate: "",
+                endDate: "",
+                OrderID: "",
+                ContrNo:"",
+                PartNumber: "",
+                OrderType: "",
+                InvoiceStatus: "",
+                OrderTypeOptions: [],
+                InvoiceStatusOptions: [],
+                allChecked: false, //全选按钮
+            }
+        },
+        mounted: function () {
+            //设置默认时间
+            //this.dataValue = [];
+            ////1
+            //let d = new Date();
+            //let date1 = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+            //this.dataValue.push(date1);
+            //this.endDate = date1;
+            ////2
+            //d.setTime(d.getTime() - 30 * 24 * 3600 * 1000);
+            //let date2 = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+            //this.dataValue.unshift(date2);
+            //this.startDate = date2;
+
+            this.OrderTypeOptions = @Html.Raw(Json.Encode(@ViewBag.OrderTypeOptions));
+            this.InvoiceStatusOptions = @Html.Raw(Json.Encode(@ViewBag.InvoiceStatusOptions));
+            this.$refs.datePickerDaterange.orderDateSimpleBtnClicked('30天');
+            this.init();
+        },
+        methods: {
+            //导出excel
+            importExcel: function() {
+                var that = this;
+                var ids = [];
+                var list = this.indexData.dataList;
+                for (var i = 0; i < list.length; i++) {
+                    if (list[i].IsChecked) {
+                        ids.push(list[i].TinyOrderID);
+                    }
+                }
+                if (ids.length == 0) {
+                    this.onAlert("error", "请选择发票！");
+                    return;
+                }
+                axios({
+                    url: "/Files/ExportInvoices",
+                    method: "post",
+                    data: {
+                        ids: JSON.stringify(ids)
+                    },
+                }).then(function(response) {
+                    if (response.data.type == "error") {
+                        that.onAlert(response.data.type, response.data.msg);
+                    } else {
+                        $('#exportInfoForm').attr("href", response.data.data);
+                        $('#exportInfoForm').attr("target", "_blank");
+                        $('#ex-li').trigger("click");
+                    }
+                }).catch(function(error) {
+                    that.onAlert("warning", error);
+                });
+            },
+            //批量导出报关单
+            importEntryList: function() {
+                var that = this;
+                var ids = '';
+                var list = this.indexData.dataList;
+                for (var i = 0; i < list.length; i++) {
+                    if (list[i].IsChecked) {
+                        if (list[i].EntryID != null) {
+                            ids += `,${list[i].EntryID}`;
+                        }
+                    }
+                }
+                if (ids == '') {
+                    this.onAlert("error", "请选择要下载报关单的发票！");
+                    return;
+                }
+                axios({
+                    url: "/Files/DownloadDeclare",
+                    method: "post",
+                    data: {
+                        ids: ids.substr(1, ids.length - 1)
+                    }
+                }).then(function(response) {
+                    if (response.data.type == "error") {
+                        that.onAlert(response.data.type, response.data.msg);
+                    } else {
+                        $('#exportInfoForm').attr("href", response.data.data);
+                        $('#exportInfoForm').attr("target", "_blank");
+                        $('#ex-li').trigger("click");
+                    }
+                }).catch(function(error) {
+                    that.onAlert("warning", error);
+                });
+            },
+            //批量导出关税单
+            importCTaxList: function() {
+                var that = this;
+                var ids = '';
+                var list = this.indexData.dataList;
+                for (var i = 0; i < list.length; i++) {
+                    if (list[i].IsChecked) {
+                        if (list[i].CustomsTaxID != null && list[i].InvoiceTypeInt != "0") {
+                            ids += `,${list[i].CustomsTaxID}`;
+                        }
+                    }
+                }
+                if (ids == '') {
+                    this.onAlert("error", "请选择要下载关税单的发票！");
+                    return;
+                }
+                axios({
+                    url: "/Files/DownloadTaxList",
+                    method: "post",
+                    data: {
+                        ids: ids.substr(1, ids.length - 1)
+                    }
+                }).then(function(response) {
+                    if (response.data.type == "error") {
+                        that.onAlert(response.data.type, response.data.msg);
+                    } else {
+                        $('#exportInfoForm').attr("href", response.data.data);
+                        $('#exportInfoForm').attr("target", "_blank");
+                        $('#ex-li').trigger("click");
+                    }
+                }).catch(function(error) {
+                    that.onAlert("warning", error);
+                });
+            },
+            //批量导出增值税单
+            importATaxList: function() {
+                var that = this;
+                var ids = '';
+                var list = this.indexData.dataList;
+                for (var i = 0; i < list.length; i++) {
+                    if (list[i].IsChecked) {
+                        if (list[i].AddedTaxID != null && list[i].InvoiceTypeInt != "0") {
+                            ids += `,${list[i].AddedTaxID}`;
+                        }
+                    }
+                }
+                if (ids == '') {
+                    this.onAlert("error", "请选择要下载关税单的发票！");
+                    return;
+                }
+                axios({
+                    url: "/Files/DownloadTaxList",
+                    method: "post",
+                    data: {
+                        ids: ids.substr(1, ids.length - 1)
+                    }
+                }).then(function(response) {
+                    if (response.data.type == "error") {
+                        that.onAlert(response.data.type, response.data.msg);
+                    } else {
+                        $('#exportInfoForm').attr("href", response.data.data);
+                        $('#exportInfoForm').attr("target", "_blank");
+                        $('#ex-li').trigger("click");
+                    }
+                }).catch(function(error) {
+                    that.onAlert("warning", error);
+                });
+            },
+            //下载税单
+            importTax: function(id) {
+                var that = this;
+                axios({
+                    url: "/Files/DownloadTaxListSolo",
+                    method: "post",
+                    data: {
+                        ids: id
+                    }
+                }).then(function(response) {
+                    if (response.data.type == "error") {
+                        that.onAlert(response.data.type, response.data.msg);
+                    } else {
+                        $('#exportInfoForm').attr("href", response.data.data);
+                        $('#exportInfoForm').attr("target", "_blank");
+                        $('#ex-li').trigger("click");
+                    }
+                }).catch(function(error) {
+                    that.onAlert("warning", error);
+                });
+            },
+            //下载报关单
+            importEntry: function(id) {
+                var that = this;
+                axios({
+                    url: "/Files/DownloadDeclareSolo",
+                    method: "post",
+                    data: {
+                        ids: id
+                    }
+                }).then(function(response) {
+                    if (response.data.type == "error") {
+                        that.onAlert(response.data.type, response.data.msg);
+                    } else {
+                        $('#exportInfoForm').attr("href", response.data.data);
+                        $('#exportInfoForm').attr("target", "_blank");
+                        $('#ex-li').trigger("click");
+                    }
+                }).catch(function(error) {
+                    that.onAlert("warning", error);
+                });
+            },
+            allCheck: function() {
+                var that = this;
+                this.indexData.dataList.forEach(function(val, index) {
+                    val.IsChecked = that.allChecked;
+                });
+            },
+            init: function() {
+                var that = this;
+                var userJsonStr = sessionStorage.getItem('vMyCusInvoices');
+                userEntity = JSON.parse(userJsonStr);
+                if (userEntity == null) {
+                    that.queryData(); // that.paging();
+                } else {
+                    that.indexData = userEntity;
+                    that.queryData(); // that.paging();
+                    that.$nextTick(function() {
+                        that.$refs['viewBox1'].scrollTop = that.indexData.scrollTop;
+                    })
+                    sessionStorage.removeItem('vMyCusInvoices');
+                }
+            },
+            ss: function(ref) {
+                // 监听这个dom的scroll事件
+                var that = this;
+                this.$refs[ref].addEventListener('scroll',
+                    function() {
+                        that.indexData.scrollTop = that.$refs[ref].scrollTop;
+                    },
+                    false)
+            },
+            Detail: function(id) {
+                commonSkipUrl(id, '/Bills/InvoiceDetail', "/" + "@(ViewContext.RouteData.Values["controller"].ToString())"
+                                                        + "/" + "@(ViewContext.RouteData.Values["action"].ToString())");
+            },
+            //查询数据
+            queryData: function () {
+                this.dataValue = this.$refs.datePickerDaterange.getDataValue();
+                if (this.dataValue != "" && this.dataValue != null) {
+                    var start = new Date(this.dataValue[0]);
+                    var startDate = start.getFullYear() + '-' + (start.getMonth() + 1) + '-' + start.getDate();
+                    var end = new Date(this.dataValue[1]);
+                    var endDate = end.getFullYear() + '-' + (end.getMonth() + 1) + '-' + end.getDate();
+                    this.startDate = startDate;
+                    this.endDate = endDate;
+                } else {
+                    this.startDate = "";
+                    this.endDate = "";
+                }
+                this.indexData.pageIndex = 1;
+                this.paging();
+            },
+            //重置数据
+            clearData: function () {
+                this.$refs.datePickerDaterange.orderDateSimpleBtnClicked('30天');
+                // this.dataValue = "";
+                this.startDate = "";
+                this.endDate = "";
+                this.OrderID = "";
+                this.ContrNo = ""
+                this.PartNumber = "";
+                this.OrderType = "";
+                this.InvoiceStatus = "";
+                this.indexData.pageIndex = 1;
+                this.indexData.pageSize = 10;
+                this.queryData(); // this.paging();
+            },
+            // 初始页currentPage、初始每页数据数pagesize和数据data
+            handleSizeChange: function(size) {
+                this.indexData.pageSize = size;
+                this.paging();
+            },
+            handleCurrentChange: function(currentPage) {
+                this.indexData.pageIndex = currentPage;
+                this.paging();
+            },
+            paging: function() {
+                var that = this;
+                that.loading = true;
+                axios({
+                    url: "/Bills/GetMyCusInvoices",
+                    method: "post",
+                    data: {
+                        page: this.indexData.pageIndex,
+                        rows: this.indexData.pageSize,
+                        startDate: this.startDate,
+                        endDate: this.endDate,
+                        PartNumber: this.PartNumber,
+                        OrderID: this.OrderID,
+                        ContrNo: this.ContrNo,
+                        OrderType: this.OrderType,
+                        InvoiceStatus: this.InvoiceStatus,
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                    transformRequest: [
+                        function(data) {
+                            var ret = ''
+                            for (var it in data) {
+                                ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+                            }
+                            return ret;
+                        }
+                    ],
+                }).then(function(response) {
+                    that.allChecked = false;
+                    var data = JSON.parse(response.data.data);
+                    that.indexData.dataList = data.list;
+                    that.indexData.total = data.total;
+                    that.loading = false;
+                }).catch(function(error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //消息提示框
+            onAlert: function(type, message) {
+                this.$message({
+                    message: message,
+                    type: type
+                });
+            },
+        }
+    });
+</script>

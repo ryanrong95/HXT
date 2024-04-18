@@ -1,0 +1,198 @@
+﻿
+@{
+    ViewBag.Title = "会员供应商列表";
+    Layout = "~/Views/Shared/_LayoutAccount.cshtml";
+    ViewBag.navid = "MySuppliers";
+}
+
+<div class="content_right backshow" style="min-height:600px;">
+    <h2>供应商</h2>
+    <div id="supplier" v-cloak>
+        <div class="buttonlist mt16" style="margin-left:20px;">
+            <el-row>
+                <el-col :span="12">
+                    <el-button type="primary" size="mini" v-on:click="add_Supperlier">新增</el-button>
+                </el-col>
+            </el-row>
+        </div>
+        <div class="content">
+            <el-table style="width: 100%;"
+                      :data="dataList.slice((pageIndex-1)*pageSize,pageIndex*pageSize)"
+                      stripe>
+                <el-table-column label="序号" type="index">
+                </el-table-column>
+                <el-table-column label="供应商中文名称" prop="ChineseName">
+                </el-table-column>
+                <el-table-column label="供应商英文名称" prop="EnglishName">
+                </el-table-column>
+                <el-table-column label="操作" fixed="right" style="border-right: 1px solid #ebeef5" width="350" :show-overflow-tooltip="true">
+                    <template slot="header" slot-scope="scope">
+                        <div class="el-input el-input--mini" style="padding-left:0px;padding-right:0px;">
+                            <input type="text" autocomplete="off" placeholder="请输入中文名称或者英文名称" v-model="search_data" class="el-input__inner">
+                        </div>
+                    </template>
+                    <template slot-scope="scope">
+                        <a style="text-decoration:none" :href="'/Account/SupplierBank?id='+scope.row.ID" class="el-button el-button--default el-button--mini">受益人</a>
+                        <a style="text-decoration:none" :href="'/Account/SupplierAddress?id='+scope.row.ID" class="el-button el-button--default el-button--mini">提货地址</a>
+                        <el-button size="mini" v-if="scope.row.isShowBtn"
+                                   v-on:click="edit_Supperlier(scope.$index, scope.row)">编辑</el-button>
+                        <el-button size="mini" v-if="scope.row.isShowBtn"
+                                   type="danger"
+                                   v-on:click="delete_Supperlier(scope.$index, scope.row)">删除</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div class="overhide">
+                <el-pagination class="fr" style="margin-top:20px;" v-on:size-change="handleSizeChange"
+                               v-on:current-change="handleCurrentChange"
+                               :current-page="pageIndex"
+                               :page-sizes="[5, 10, 20, 40]"
+                               :page-size="pageSize"
+                               layout="total, sizes, prev, pager, next, jumper"
+                               :total="dataList.length">
+                </el-pagination>
+            </div>
+            <el-dialog :title="dialogFormName" :lock-scroll="false" width="40%" :visible.sync="dialogFormVisible" :close-on-click-modal="false">
+                <my-supplier ref="header"></my-supplier>
+                <div slot="footer" class="dialog-footer">
+                    <el-button v-on:click="dialogFormVisible = false">取 消</el-button>
+                    <el-button type="primary" v-on:click="onSubmit_ruleForm()">确 定</el-button>
+                </div>
+            </el-dialog>
+        </div>
+    </div>
+</div>
+@{Html.RenderAction("_PartialSupplierInfo", "Account");}
+<script>
+    var supplier = new Vue({
+        el: "#supplier",
+        data: function () {
+            return {
+                pageIndex: 1, //初始页
+                pageSize: 10,    //每页的数据
+                userList: @Html.Raw(Json.Encode(Model)),
+                search_data: "",  //模糊查询的名称
+                dialogFormVisible: false,  //弹框
+                dialogFormName: "",  //弹框名称
+                dataList:@Html.Raw(Json.Encode(Model)),  //表格真实数据
+            }
+        },
+        watch: {
+            //模糊查询
+            search_data: function (val, oldVal) {
+                this.dataList = this.userList.filter(function (data) {
+                    if (data.Name.toLowerCase().includes(val.toLowerCase()) || data.ChineseName.toLowerCase().includes(val.toLowerCase())) {
+                        return data;
+                    }
+                });
+            }
+        },
+        methods: {
+            //供应商信息提交
+            onSubmit_ruleForm: function () {
+                var that=this;
+                this.$refs.header.$refs.form1.validate(function (valid){
+                    if (valid) {
+                        supplier.dialogFormVisible = false;
+                        axios({
+                            url: "/Account/_partialSupplierInfo",
+                            method: "post",
+                            data: that.$refs.header.form1,
+                        }).then(function (response) {
+                            that.$refs.header.$refs.form1.resetFields();
+                            that.handleUserList(); //刷新列表
+                            that.onAlert(response.data.type, response.data.msg);
+                        }).catch(function (error) {
+                            supplier.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                        });
+                    } else {
+                        //验证失败
+                    }
+                });
+            },
+            //供应商编辑
+            edit_Supperlier: function (index, row) {
+                axios.get('/Account/GetSupplierInfo', {  //params参数必写 , 如果没有参数传{}也可以
+                    params: {
+                        id: row.ID
+                    }
+                }).then(function (res) {
+                    supplier.dialogFormName = "编辑供应商";
+                    supplier.dialogFormVisible = true;
+                    setTimeout(function(){
+                        supplier.$refs.header.$refs.form1.resetFields();
+                        supplier.$refs.header.form1 = JSON.parse(res.data.data);
+                    }, 0);
+                    }).catch(function (err) {
+                    supplier.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //新增供应商
+            add_Supperlier: function () {
+                supplier.dialogFormName = "新增供应商";
+                supplier.dialogFormVisible = true;
+                setTimeout(function(){
+                    supplier.$refs.header.$refs.form1.resetFields();
+                    supplier.$refs.header.form1.ID = "";
+                }, 0)
+            },
+            //删除供应商
+            delete_Supperlier: function (index, row) {
+                this.$confirm('您确定要删除"' + row.ChineseName+'"吗？', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                    lockScroll: false,
+                }).then(function(){
+                    axios({
+                        url: "/Account/DelSupplier",
+                        method: "post",
+                        data: {
+                            id:row.ID
+                        }
+                    }).then(function (response) {
+                        supplier.handleUserList();
+                        supplier.onAlert(response.data.type, response.data.msg);
+                    }).catch(function (error) {
+                        supplier.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                    });
+                }).catch(function() {
+                    //取消
+                });
+            },
+            // 初始页currentPage、初始每页数据数pagesize和数据data
+            handleSizeChange: function (size) {
+                this.pageSize = size;
+            },
+            handleCurrentChange: function (currentPage) {
+                this.pageIndex = currentPage;
+            },
+            //弹框关闭后事件
+            dialog_Closed: function () {
+                //初始化列表值
+                supplier.$refs.header.$refs.form1.resetFields();
+            },
+            handleUserList:  function () {
+                axios({
+                    url: "/Account/GetSuppliersList",
+                    method: "post",
+                    data: {
+                    }
+                }).then(function (response) {
+                    supplier.userList = JSON.parse(response.data.data);
+                    supplier.dataList = JSON.parse(response.data.data);
+                }).catch(function (error) {
+                    supplier.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type
+                });
+            },
+        }
+    });
+</script>
+

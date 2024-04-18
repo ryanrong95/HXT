@@ -1,0 +1,129 @@
+﻿<template id="company_name">
+    <el-form id="theForm" :model="form1" :rules="rules" status-icon ref="form1" label-width="90px">
+        <el-form-item label="贵司全称：" prop="CompanyName" @*:rules="[{ required: true, message: '请输入贵司全称', trigger: 'change' }]"*@>
+            <el-autocomplete id="theCompanyInput" size="mini" style="width: 90%" v-model="form1.CompanyName" :fetch-suggestions="querySearchAsync" placeholder="请输入贵司全称" 
+                             v-on:select="handleSelect" :trigger-on-focus="false"></el-autocomplete>
+        </el-form-item>
+    </el-form>
+</template>
+<style>
+    /* #memberInfo .el-input {
+        width: calc(90% + 50px);
+    } */
+
+    /* #memberInfo .el-dialog__body */
+
+</style>
+<script>
+    Vue.component(
+        'company-name',
+        {
+            template: "#company_name",
+            data: function() {
+                return {
+                    form1: {
+                        CompanyName: '',
+                    },
+                    rules: {
+        
+                    },
+
+                    //state: '',
+                    timeout:  null,
+                    lastKeyWord: '',
+                    lastCompanies: [],
+                    preInputKeyWord: '',
+
+                    theFormWidth: document.body.clientWidth,
+                }
+            },
+            methods: {
+                loadRemoteData: function(queryString, cb) {
+                    var that = this;
+                    
+                    if(queryString != null && queryString != undefined) {
+                        queryString = queryString.trim();
+                        if(queryString.length < 2) {
+                            clearTimeout(this.timeout);
+                            this.timeout = setTimeout(() => {
+                                cb([]);
+                            }, 0);
+                            return;
+                        }
+
+                        //检查内容有变化
+                        if(this.lastKeyWord == queryString) {
+                            clearTimeout(this.timeout);
+                            this.timeout = setTimeout(() => {
+                                cb(that.lastCompanies);
+                            }, 0);
+                            return;
+                        }
+                        this.lastKeyWord = queryString;
+
+                        axios({
+                            url: "/Home/GetEnterpriseByKeyword",
+                            method: "post",
+                            data: { Keyword: queryString, },
+                        }).then(function(response) {
+                            if (response.data.type == "success") {
+                                var companyRes = JSON.parse(response.data.data);
+                                that.lastCompanies = companyRes;
+
+                                clearTimeout(this.timeout);
+                                this.timeout = setTimeout(() => {
+                                    cb(companyRes);
+                                }, 0);
+                            }
+                        }).catch(function(error) {
+                            //that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                        });
+                    }
+
+                },
+                querySearchAsync(queryString, cb) {
+                    this.loadRemoteData(queryString, cb);
+                },
+                handleSelect(item) {
+                    //console.log(item);
+                    //console.log(this.form1.CompanyName);
+                    this.form1.CompanyName = item.name;
+                },
+                //消息提示框
+                onAlert: function(type, message) {
+                    this.$message({
+                        message: message,
+                        type: type
+                    });
+                }
+            },
+            watch: {
+                theFormWidth: function (val) {
+                    $("#theCompanyInput").parent().parent().width(val - 90 - 40);
+                },
+                preInputKeyWord: function (val) {
+                    $("#theCompanyInput").val(val);
+                    this.form1.CompanyName = val;
+                },
+            },
+            mounted: function() {
+                //this.form1.CompanyName = "111";
+                $("#theCompanyInput").parent().parent().width($("#theForm").width() - 90 - 40);
+                $("#theCompanyInput").focus();
+
+                var that = this;
+                setTimeout(function() {
+                        $("#theCompanyInput").val(that.preInputKeyWord);
+                        that.form1.CompanyName = that.preInputKeyWord;
+                    },
+                    0);
+                
+                // 监听弹框宽度
+                window.onresize = () => {
+                    return (() => {
+                        this.theFormWidth = $("#theForm").width();
+                    })()
+                }
+            }
+        });
+</script>

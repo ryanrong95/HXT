@@ -1,0 +1,50 @@
+﻿﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>多选 - jQuery EasyUI plugin</title>
+
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/gray/easyui.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/icon-yg-cool.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/standard-easyui/iconfont/iconfont.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/standard-easyui/styles/plugin.css" rel="stylesheet" />
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.easyui.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/locale/easyui-lang-zh_CN.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/standard-easyui/scripts/checkboxlist.js"></script>
+</head>
+<body>
+    <h1>单选</h1>
+    <form id="ff" class="easyui-form" method="post" data-options="novalidate:true" onsubmit="return $(this).form('enableValidation').form('validate');">
+        <span id="checkboxlist"></span>
+        <div onclick="aa()">ff</div>
+        <button class="upload">提交</button>
+    </form>
+    <script>
+        var ChannelRequirementData = [{ 'Description': '不限', 'ID': 0 }, { 'Description': '市场', 'ID': 1 }, { 'Description': '海外', 'ID': 2 }, { 'Description': '高端', 'ID': 4 }, { 'Description': '固定渠道', 'ID': 8 }];
+        $(function () {
+            $("#checkboxlist").checkboxlist({
+                name: "xx",//input统一的name值
+                missingMessage: "不能为空",
+                data: ChannelRequirementData,//数据
+                url: '/csrmapi/WareHouses',
+                valueField: "ID",//value值
+                labelField: "Description",//展示label的属性
+                onSelect: function (element, item) {
+                    if (item.ID == 0 && $(element).checkboxlist("checkedValue").indexOf(0) != -1) {
+                        $(element).checkboxlist("setCheck", [0])
+                    } else if (item.ID != 0 && $(element).checkboxlist("checkedValue").indexOf(0) != -1) {
+                        var list = $(element).checkboxlist("checkedValue").filter(function (it) { return it != 0 });
+                        $(element).checkboxlist("setCheck", list);
+                    }
+                },
+                checked: [1,2]//选中的值为某一条的valueField
+            })
+        })
+        function aa() {
+            //选择
+            $("#checkboxlist").checkboxlist("setCheck", [4, 8]);
+        }
+    </script>
+</body>
+</html>

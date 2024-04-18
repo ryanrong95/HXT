@@ -1,0 +1,76 @@
+﻿﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>客户公司 - jQuery EasyUI plugin</title>
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/gray/easyui.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/standard-easyui/styles/plugin.css" rel="stylesheet" />
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.easyui.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/locale/easyui-lang-zh_CN.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/ajaxPrexUrl.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/main.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/standard-easyui/scripts/easyui.jl.js"></script>
+</head>
+<body>
+    <h1>综合插件</h1>
+    <form id="ff" class="easyui-form" method="post" data-options="novalidate:true" onsubmit="return $(this).form('enableValidation').form('validate');">
+        <input id="clientCompany1" class="easyui-clientCompany" name="clientCompany1" value="" />
+        <input name="cusBillInfo1" id="cusBillInfo1" class="easyui-cusBillInfo" data-options="{ CustomerCompanyID: '2DB11FF5C1D30E468347DC5455F0BD36'}" />
+        <input name="cusContact1" id="cusContact1" class="easyui-cusContact" data-options="{ CustomerCompanyID: '2DB11FF5C1D30E468347DC5455F0BD36'}" />
+        <input name="cusRecAddress1" id="cusRecAddress1" class="easyui-cusRecAddress" data-options="{ CustomerCompanyID: '2DB11FF5C1D30E468347DC5455F0BD36'}" />
+        <input id="InternalCompany1" class="easyui-InternalCompany" name="InternalCompany1" value="" />
+        <input id="originPlace1" class="easyui-originPlace" name="originPlace1" value="" />
+        <input id="standardBrand" class="easyui-standardBrand" name="brand" value="" />
+        <input id="standardModel" class="easyui-standardModel" name="model" value="" />
+        <input id="storeroom2" class="easyui-storeroom" name="storeroom2" value="" />
+        <input id="supplier1" class="easyui-supplier" name="supplier1" value="" data-options="{target:'#supplierBeneficiary'}" />
+        <span id="supplierBeneficiary" style="display:none;" name="supplierBeneficiary"></span>
+        <div>
+            <input id="email" name="reportPrice" value="" />
+            <span style="margin-left:10px;">人民币：<span id="aaa" name="sdfasdf"></span></span>
+        </div>
+        <input class="easyui-filebox" style="width:50%" id="addd">
+        <button onclick="aaa()">提交</button>
+    </form>
+    <script>
+        $(function () {
+            $('#email').currency({
+                width: '150px',
+                currency2: "CNY",
+                target: '#aaa',
+                onEnter: function (data, rate, price1, price2, currency1, currency2) {
+                    console.log(data);
+                    console.log(rate);
+                    console.log(price1);
+                    console.log(price2);
+                    console.log(currency1);
+                    console.log(currency2);
+                }
+            });
+            $("#addd").filebox({
+                onChange: function (n, o) {
+                    console.log(n);
+                    console.log(o);
+                }
+            })
+            $('#rb').iRadiobutton({
+                label: 'Apple:',
+                value: 'Apple',
+                checked: true
+            });
+        });
+        function aaa() {
+            //    console.log($('#clientCompany1').clientCompany('options'));
+            //    console.log($('#clientCompany1').clientCompany('getVal'));
+            //    console.log($('#clientCompany1').clientCompany('getResult'));
+            //    console.log($('#clientCompany1').clientCompany('getAllData'));
+            //    console.log("------------");
+            //    console.log($('#clientCompany2').clientCompany('options'));
+            //    console.log($('#clientCompany2').clientCompany('getVal'));
+            //    console.log($('#clientCompany2').clientCompany('getResult'));
+            //    console.log($('#clientCompany2').clientCompany('getAllData'));
+        }
+    </script>
+</body>
+</html>

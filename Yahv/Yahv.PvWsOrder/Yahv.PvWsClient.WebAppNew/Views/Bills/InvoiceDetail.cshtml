@@ -1,0 +1,55 @@
+﻿@{
+    ViewBag.title = "我的发票";
+    ViewBag.subTitle = "发票详情";
+}
+<div id="vInvoiceDetail" v-cloak class="tab_content">
+    <div class="query_wrap clearfix">
+        <a style="text-align:center;font:20px;font-weight:bold">发票明细</a>
+    </div>
+    <div class="tb_wrap" v-loading="loading">
+        <table border="0" cellspacing="0" cellpadding="0" class="common_tb1 mt30">
+            <tr>
+                <th width="36px">序号</th>
+                <th>货物名称</th>
+                <th>型号</th>
+                <th>数量</th>
+                <th>单位</th>
+                <th>完税价格(¥)</th>
+                <th>税率</th>
+                <th>税款金额(¥)</th>
+            </tr>
+            <tr v-for="(item,index) in dataList.list">
+                <td>{{index+1}}</td>
+                <td>{{item.TaxName}}</td>
+                <td>{{item.Model}}</td>
+                <td>{{item.Quantity}}</td>
+                <td>{{item.UnitName}}</td>
+                <td>{{item.Amount}}</td>
+                <td>{{item.InvoiceTaxRate}}</td>
+                <td>{{item.TaxPrice}}</td>
+            </tr>
+            <tr>
+                <td colspan="5" class="text_right pr20 font_bold">价税合计:</td>
+                <td colspan="4" class="text_left pl20 font_bold">{{dataList.totalprice}}</td>
+            </tr>
+        </table>
+    </div>
+</div>
+<script>
+    var vInvoiceDetail = new Vue({
+        el: "#vInvoiceDetail",
+        data: {
+            dataList:@Html.Raw(Json.Encode(Model)),
+            loading: false,
+        },
+        methods: {
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type
+                });
+            },
+        }
+    });
+</script>

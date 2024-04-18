@@ -1,0 +1,57 @@
+﻿@{
+    ViewBag.subTitle = "仓储对账单详情";
+}
+<div id="vWarehouseBillDetail" v-cloak class="tab_content">
+    <div class="query_wrap clearfix">
+        <a style="text-align:center;font:20px;font-weight:bold">仓储账单明细</a>
+    </div>
+    <div class="tb_wrap">
+        <table border="0" cellspacing="0" cellpadding="0" class="common_tb1 mt30">
+            <tr>
+                <th width="36px">序号</th>
+                <th width="90px">账单日期</th>
+                <th width="160px">订单编号</th>
+                <th width="75px">业务类型</th>
+                <th width="90px">账单分类</th>
+                <th width="90px">账单科目</th>
+                <th width="75px">币种</th>
+                <th width="90px">应收</th>
+                <th width="90px">实收</th>
+                <th width="90px">减免</th>
+                <th width="90px">优惠券金额</th>
+                <th width="90px">剩余金额</th>
+            </tr>
+            <tr v-for="(item,index) in datalist">
+                <td>{{index+1}}</td>
+                <td>{{item.CreateDateDateString}}</td>
+                <td>{{item.OrderID}}</td>
+                <td>{{item.Business}}</td>
+                <td>{{item.Catalog}}</td>
+                <td>{{item.Subject}}</td>
+                <td>{{item.Currency}}</td>
+                <td>{{item.LeftPrice}}</td>
+                <td>{{item.RightPrice}}</td>
+                <td>{{item.ReducePrice}}</td>
+                <td>{{item.CouponPrice}}</td>
+                <td>{{item.Remains}}</td>
+            </tr>
+        </table>
+    </div>
+</div>
+<script>
+    var vWarehouseBillDetail = new Vue({
+        el: "#vWarehouseBillDetail",
+        data: {
+            datalist: @Html.Raw(Json.Encode(Model)),
+        },
+        methods: {
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type
+                });
+            },
+        }
+    });
+</script>

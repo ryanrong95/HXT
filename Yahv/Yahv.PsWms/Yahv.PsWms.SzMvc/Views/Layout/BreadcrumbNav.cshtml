@@ -1,0 +1,61 @@
+﻿<template id="breadcrumbnav">
+    <div class="break_nav">
+        <el-breadcrumb class="ml20" separator-class="el-icon-arrow-right">
+            <el-breadcrumb-item>
+                <span class="icon_home mr3"></span><a href="/">首页</a>
+            </el-breadcrumb-item>
+            <!--菜单目录-->
+            <el-breadcrumb-item v-if="menuIndex>-1 && menulists[menuIndex] != undefined">
+                <span>{{menulists[menuIndex].title}}</span>
+            </el-breadcrumb-item>
+            <!--菜单名称-->
+            <el-breadcrumb-item v-if="subIndex>-1 && menulists[menuIndex] != undefined">
+                <a v-if="subTitle!=''" :href="menulists[menuIndex].options[subIndex].url">{{menulists[menuIndex].options[subIndex].text}}</a>
+                <span v-else>{{menulists[menuIndex].options[subIndex].text}}</span>
+            </el-breadcrumb-item>
+            <!--子菜单-->
+            <el-breadcrumb-item v-if="subTitle!=''">
+                <span>{{subTitle}}</span>
+            </el-breadcrumb-item>
+        </el-breadcrumb>
+    </div>
+</template>
+<script>
+    Vue.component(
+        'breadcrumbnav',
+        {
+            template: "#breadcrumbnav",
+            data: function () {
+                return {
+                    
+                }
+            },
+            props: {
+                menuinfo: {
+                    type: Object,
+                    default: function () {
+                        return {
+                            menulists: [],
+                            subIndex: -1, //二级标题控制序号
+                            menuIndex: -1, // 一级标题控制序号
+                            subTitle: '',
+                        };
+                    }
+                }
+            },
+            computed: {
+                menulists: function () {
+                    return this.menuinfo.menulists;
+                },
+                subIndex: function () {
+                    return this.menuinfo.subIndex;
+                },
+                menuIndex: function () {
+                    return this.menuinfo.menuIndex;
+                },
+                subTitle: function () {
+                    return this.menuinfo.subTitle;
+                },
+            },
+        });
+</script>

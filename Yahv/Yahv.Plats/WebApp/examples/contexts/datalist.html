@@ -1,0 +1,136 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>datalist</title>
+    <link href="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/jquery-easyui-1.7.6/themes/metro/easyui.css" rel="stylesheet" />
+    <link href="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/jquery-easyui-1.7.6/themes/metro/jl-cool.css" rel="stylesheet" />
+
+    <link href="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/jquery-easyui-1.7.6/themes/icon.css" rel="stylesheet" />
+    <link href="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/jquery-easyui-1.7.6/themes/icon-jl-cool.css" rel="stylesheet" />
+
+    <script src="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/jquery-easyui-1.7.6/jquery.min.js"></script>
+    <script src="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/jquery-easyui-1.7.6/jquery.easyui.min.js"></script>
+    <script src="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/jquery-easyui-1.7.6/locale/easyui-lang-zh_CN.js"></script>
+
+    <script src="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/customs-easyui/Scripts/easyui.myWindow.js"></script>
+    <script src="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/customs-easyui/Scripts/easyui.myDialog.js"></script>
+</head>
+<body>
+    <!-- 表格 -->
+    <table class="easyui-datagrid" id="dg" toolbar="#tb" style="height: 700px"></table>
+    <!--工具-->
+    <div id="tb" style="padding:5px;height:auto">
+        <div style="margin-bottom:5px">
+            <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true"></a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true"></a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-save" plain="true"></a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-cut" plain="true"></a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true"></a>
+        </div>
+        <div>
+            Date From: <input class="easyui-datebox" style="width:150px">
+            To: <input class="easyui-datebox" style="width:150px">
+            Language:
+            <select class="easyui-combobox" panelHeight="auto" style="width:100px">
+                <option value="java">Java</option>
+                <option value="c">C</option>
+                <option value="basic">Basic</option>
+                <option value="perl">Perl</option>
+                <option value="python">Python</option>
+            </select>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-search">Search</a>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            //设置表格
+            $("#dg").datagrid({
+                fit: true,//当设置为true的时候面板大小将自适应父容器。
+                scrollbarSize: 0,//滚动条的宽度
+                rownumbers: true,//显示一个行号列
+                fitColumns: true,//真正的自动展开/收缩列的大小，以适应网格的宽度，防止水平滚动。
+                singleSelect: true,//单选//fasle是多选
+                //showHeader:true,
+                //showFooter: true,
+                remoteSort: false,//定义从服务器对数据进行排序。
+                multiSort: true,//定义是否允许多列排序
+                sortOrder: "asc",//定义排序顺序
+                pagination: true,
+                pageSize: 300,
+                pageList: [300, 500],
+                columns: [[
+                    { field: 'KeyCode', title: '关键词标识', width: 50, sortable: true },
+                    { field: 'Keys', title: '关键词', width: 50, sortable: true },
+                    { field: 'CacheTime', title: '缓存时间(秒)', width: 30, sortable: true },
+                    { field: 'TotalCount', title: '频道ID', width: 30, sortable: true },
+                    { field: 'LastCacheDate', title: '最后缓存时间', width: 100, sortable: true },
+                    { field: 'CreateTime', title: '创建时间', width: 40, sortable: true },
+                    { field: 'Oper', title: '操作', width: 50, formatter: formatterOper }
+                ]],
+                loadFilter: pagerFilter
+            }).datagrid('loadData', getData());
+            $("body").css({ visibility: "visible" });
+        });
+        function formatterOper(value, rowData, rowIndex) {
+            return "<a href='#' class='easyui-linkbutton l-btn l-btn-small' onclick='showEditPage(this," + JSON.stringify(rowData) + ")'><span class=''><span class='l-btn-text'>编辑</span></span></a>" + "<a href='#' class='easyui-linkbutton l-btn l-btn-small' onclick='deleteItem(this," + JSON.stringify(rowData.KeyCode) + ")'><span class=''><span class='l-btn-text'>删除</span></span></a>"
+        }
+        //模拟获取数据并且分页显示
+        function getData() {
+            var rows = [];
+            for (var i = 1; i <= 800; i++) {
+                var amount = Math.floor(Math.random() * 1000);
+                var price = Math.floor(Math.random() * 1000);
+                rows.push({
+                    KeyCode: 'Inv No ' + i,
+                    Keys: 'Name ' + i,
+                    CacheTime: amount,
+                    TotalCount: price,
+                    LastCacheDate: amount * price,
+                    CreateTime: $.fn.datebox.defaults.formatter(new Date()),
+                });
+            }
+            return rows;
+        }
+
+        function pagerFilter(data) {
+            if (typeof data.length == 'number' && typeof data.splice == 'function') {	// is array
+                data = {
+                    total: data.length,
+                    rows: data
+                }
+            }
+            var dg = $(this);
+            var opts = dg.datagrid('options');
+            var pager = dg.datagrid('getPager');
+            pager.pagination({
+                onSelectPage: function (pageNum, pageSize) {
+                    opts.pageNumber = pageNum;
+                    opts.pageSize = pageSize;
+                    pager.pagination('refresh', {
+                        pageNumber: pageNum,
+                        pageSize: pageSize
+                    });
+                    dg.datagrid('loadData', data);
+                }
+            });
+            if (!data.originalRows) {
+                data.originalRows = (data.rows);
+            }
+            var start = (opts.pageNumber - 1) * parseInt(opts.pageSize);
+            var end = start + parseInt(opts.pageSize);
+            data.rows = (data.originalRows.slice(start, end));
+            return data;
+        }
+        function showEditPage(item, data) {
+            //top.$.myWindow({ url: '../../Tests/Postest.aspx', data: data });
+            $.myDialog({ url: '../../Tests/Postest.aspx', data: data });
+        }
+        function deleteItem(item, data) {
+            console.log(item);
+            console.log(data);
+        }
+    </script>
+</body>
+</html>

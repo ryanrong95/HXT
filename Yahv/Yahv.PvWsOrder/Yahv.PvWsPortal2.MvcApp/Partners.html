@@ -1,0 +1,135 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>芯达通</title>
+    <link rel="stylesheet" type="text/css" href="css/common.css" />
+    <link rel="stylesheet" type="text/css" href="css/page.css" />
+    <link rel="stylesheet" type="text/css" href="css/element.css" />
+    <script type="text/javascript" src="js/jQuery-2.2.4.min.js"></script>
+    <script type="text/javascript" src="js/vue.js"></script>
+    <script type="text/javascript" src="js/element.js"></script>
+    <script type="text/javascript" src="js/axios.min.js"></script>
+    <script type="text/javascript" src="js/culture.js"></script>
+    <script type="text/javascript" src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+    <script type="text/javascript" src="js/xs.js"></script>
+    <script type="text/javascript" src="js/common.js"></script>
+</head>
+
+<body>
+    <!-- 企业文化的遮罩层 -->
+    <div class="mask"></div>
+    <div id="img">
+        <img src="imgs/n_culture_pic_big1.png" />
+        <img src="imgs/n_culture_pic_big2.png" />
+        <img src="imgs/n_culture_pic_big3.png" />
+        <img src="imgs/n_culture_pic_big4.png" />
+
+        <span id="front" title="上一张" class="pngFix n_culture_left"></span>
+        <span id="next" title="下一张" class="pngFix n_culture_right"></span>
+        <span class="n_culture_close"></span>
+    </div>
+
+    <!-- 右侧边栏相关内容 -->
+    <div id="n_sideBar"></div>
+    <!--头部和banner部分-->
+    <div class="n_header">
+        <div class="n_lunbt" style="background-image:url(imgs/n_aboutus_bg.png);"></div>
+        <div id="n_insert_nav"></div>
+    </div>
+    <!-- 中间不同内容 -->
+    <div id="CompanyInfo" class="n_mid n_assist_mid n_info_mid">
+        <div class="n_select n_assist_select n_info_select n_aboutxdt_select">
+            <ul class="clearfix">
+                <li>
+                    <a href="aboutUs.html">
+                        <i></i>
+                        <p>企业简介</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="companyCulture.html">
+                        <i></i>
+                        <p>企业文化</p>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="Partners.html">
+                        <i></i>
+                        <p>合作伙伴</p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+       
+        <!-- 合作伙伴 -->
+        <div class="n_partner_mol n_partner_mol_2" id="n_partner">
+            <!--<div class="n_aboutus_title n_partner_title">
+                <i></i>
+                合作伙伴
+            </div>-->
+            <div class="wrapper n_mol_partner_new">
+                <div style="margin-bottom:46px;">
+                    <h4><img src="imgs/n_partner_clients_bt.png" /></h4>
+                    <ul class="clearfix">
+                        <li><img src="imgs/n_partner_client_1.png" /></li>
+                        <li><img src="imgs/n_partner_client_2.png" /></li>
+                        <li><img src="imgs/n_partner_client_3.png" /></li>
+                        <li><img src="imgs/n_partner_client_4.png" /></li>
+                        <li><img src="imgs/n_partner_client_5.png" /></li>
+                        <li class="nomargin"><img src="imgs/n_partner_client_6.png" /></li>
+                        <li><img src="imgs/n_partner_client_7.png" /></li>
+                        <li><img src="imgs/n_partner_client_8.png" /></li>
+                        <li><img src="imgs/n_partner_client_9.png" /></li>
+                        <li><img src="imgs/n_partner_client_10.png" /></li>
+                        <li><img src="imgs/n_partner_client_11.png" /></li>
+                        <li class="nomargin"><img src="imgs/n_partner_client_12.png" /></li>
+                        <li><img src="imgs/n_partner_client_13.png" /></li>
+                        <li><img src="imgs/n_partner_client_14.png" /></li>
+                        <li><img src="imgs/n_partner_client_15.png" /></li>
+                        <li><img src="imgs/n_partner_client_16.png" /></li>
+                        <li><img src="imgs/n_partner_client_17.png" /></li>
+                        <li class="nomargin"><img src="imgs/n_partner_client_18.png" /></li>
+                        <li><img src="imgs/n_partner_client_19.png" /></li>
+                        <li><img src="imgs/n_partner_client_20.png" /></li>
+                        <li><img src="imgs/n_partner_client_21.png" /></li>
+                        <li><img src="imgs/n_partner_client_22.png" /></li>
+                        <li><img src="imgs/n_partner_client_23.png" /></li>
+                        <li class="nomargin"><img src="imgs/n_partner_client_24.png" /></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4><img src="imgs/n_partners_banks_bt.png" /></h4>
+                    <ul class="clearfix">
+                        <li><img src="imgs/n_partner_banks_1.png" /></li>
+                        <li><img src="imgs/n_partner_banks_2.png" /></li>
+                        <li><img src="imgs/n_partner_banks_3.png" /></li>
+                        <li><img src="imgs/n_partner_banks_4.png" /></li>
+                        <li><img src="imgs/n_partner_banks_5.png" /></li>
+                        <li class="nomargin"><img src="imgs/n_partner_banks_6.png" /></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 底部 -->
+    <div id="footer_zh"></div>
+    <script>
+		$("#n_sideBar").load("sideBar.html")
+		$("#n_insert_nav").load("header.html", function() {
+			$("#footer_zh").load("footer.html");
+			//导航中当前选中的项
+			$(".n_nagivation>ul>li:nth-child(4)").addClass("hot");
+			$(".n_nagivation>ul>li").hover(function() {
+				$(".n_nagivation>ul>li:nth-child(4)").removeClass("hot");
+			}, function() {
+				$(".n_nagivation>ul>li:nth-child(4)").addClass("hot");
+			})
+		});
+
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+﻿<html>
+<head>
+    <script>var model = {};</script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>
+        综合业务管理系统
+    </title>
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/gray/easyui.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/icon.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/icon-yg-cool.css" rel="stylesheet" />
+
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.easyui.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/locale/easyui-lang-zh_CN.js"></script>
+
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/easyui.myDialog.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/easyui.myWindow.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/easyui.tabExtend.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/fullscreen.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/main.js"></script>
+
+    <link href="http://fixed2.b1b.com/Yahv/customs-easyui/fonts/iconfont.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/customs-easyui/Styles/reset.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/customs-easyui/Styles/main.css" rel="stylesheet" />
+
+    <link href="http://fixed8.ic360.cn/Yahv/standard-easyui/iconfont/iconfont.css" rel="stylesheet" />
+    <link href="http://fixed8.ic360.cn/Yahv/standard-easyui/styles/plugin.css" rel="stylesheet" />
+    <script src="http://fixed8.ic360.cn/Yahv/standard-easyui/scripts/timeouts.js"></script>
+    <script src="http://fixed8.ic360.cn/Yahv/customs-easyui/scripts/easyui.myDialog.js"></script>
+
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/easyui.myDialog.fuse.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/easyui.myWindow.fuse.js"></script>
+
+
+
+    <script>
+        //修改异步
+        function myDialogFuse() {
+            $.myDialogFuse({
+                url: 'fuse-content.aspx',
+                width: '561px',
+                height: '200px',
+                onClose: function () {
+                    alert('获取本页面数据1:' + $('#msg').html()); // bug
+                }
+            });
+        }
+
+
+
+        //修改异步
+        function myWindowFuse() {
+            $.myWindowFuse({
+                url: 'fuse-content.aspx',
+                width: '561px',
+                height: '200px',
+                onClose: function () {
+                    alert('获取本页面数据2:' + $('#msg').html()); // bug
+                }
+            });
+        }
+
+
+        $(function () {
+
+
+        });
+
+
+    </script>
+    <style>
+        /*body { background-color: #ccc; }*/
+    </style>
+
+</head>
+<body>
+
+    <!--<div class="datagrid-mask-msg" style="background-color: transparent; border: none; display: block; left: 625px; top: 221.5px;">121212</div>-->
+    <form>
+        <h2 id="msg">Modal Window ..chenn</h2>
+        <p>Click the open button below to open the modal window.</p>
+        <div style="margin:20px 0;">
+            <a href="javascript:void(0)" class="easyui-linkbutton" onclick="myWindowFuse();">打开窗体</a>
+            <a id="" href="javascript:void(0)" class="easyui-linkbutton" onclick="myDialogFuse();">打开对话框</a>
+        </div>
+    </form>
+</body>
+</html>

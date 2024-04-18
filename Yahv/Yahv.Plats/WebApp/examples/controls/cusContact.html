@@ -1,0 +1,40 @@
+﻿﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>客户联系人 - jQuery EasyUI plugin</title>
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/gray/easyui.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/standard-easyui/styles/plugin.css" rel="stylesheet" />
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.easyui.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/locale/easyui-lang-zh_CN.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/main.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/ajaxPrexUrl.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/standard-easyui/scripts/easyui.jl.js"></script>
+</head>
+<body>
+    <h1>客户联系人</h1>
+    <form action="/" method="post" class="easyui-form" data-options="novalidate:true" onsubmit="return $(this).form('enableValidation').form('validate');">
+        <input name="cusContact1" id="cusContact1" class="easyui-cusContact" />
+        <button onclick="aaa()">提交</button>
+    </form>
+    <button onclick="getData()">ss</button>
+    <script type="text/javascript">
+        $(function () {
+            $('#cusContact1').cusContact({
+                CustomerCompanyID: "6E925B41A8FABB83CD6C5AD3EEB690E2"
+            });
+
+        })
+        function getData() {
+            console.log($('#cusContact1').combobox('select', 'fasdfdsaf'))
+        }
+        function aaa() {
+            console.log($('#cusContact1').cusContact('options'));
+            console.log($('#cusContact1').cusContact('getVal'));
+            console.log($('#cusContact1').cusContact('getResult'));
+            console.log($('#cusContact1').cusContact('getAllData'));
+        }
+    </script>
+</body>
+</html>

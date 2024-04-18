@@ -1,0 +1,199 @@
+﻿
+@{
+    ViewBag.Title = "提货地址";
+    Layout = "~/Views/Shared/_LayoutAccount.cshtml";
+    ViewBag.navid = "MySuppliers";
+}
+<div class="content_right backshow" style="min-height:600px;">
+    <h2>供应商提货地址</h2>
+    <div id="address" v-cloak >
+        <div class="buttonlist ml20 mt16">
+            <el-row>
+                <el-col :span="12">
+                    <el-button size="mini" v-on:click="history.back(-1)">返回</el-button>
+                    <el-button type="primary" size="mini" v-on:click="add_Supperlieraddress">新增</el-button>
+                </el-col>
+            </el-row>
+        </div>
+        <div class="content">
+            <el-table style="width: 100%;"
+                      :data="addressList.slice((pageIndex-1)*pageSize,pageIndex*pageSize)"
+                      stripe>
+                <el-table-column label="序号" type="index" width="50">
+                </el-table-column>
+                <el-table-column label="联系人" prop="Name">
+                </el-table-column>
+                <el-table-column label="手机号" prop="Mobile">
+                </el-table-column>
+                <el-table-column label="联系电话" prop="Tel">
+                </el-table-column>
+                <el-table-column label="详细地址" prop="Address">
+                </el-table-column>
+                <el-table-column label="邮编" prop="Postzip">
+                </el-table-column>
+                <el-table-column label="是否默认" prop="IsDefault">
+                </el-table-column>
+                <el-table-column label="操作" fixed="right" width="160">
+                    <template slot-scope="scope">
+                        <el-button size="mini"
+                                   v-on:click="edit_Supperlieraddress(scope.$index, scope.row)">编辑</el-button>
+                        <el-button size="mini"
+                                   type="danger"
+                                   v-on:click="delete_Supperlieraddress(scope.$index, scope.row)">删除</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div class="overhide">
+                <el-pagination class="fr" style="margin-top:20px;" v-on:size-change="handleSizeChange"
+                               v-on:current-change="handleCurrentChange"
+                               :current-page="pageIndex"
+                               :page-sizes="[5, 10, 20, 40]"
+                               :page-size="pageSize"
+                               layout="total, sizes, prev, pager, next, jumper"
+                               :total="addressList.length">
+                </el-pagination>
+            </div>
+            @*银行账号新增/编辑框*@
+            <el-dialog :title="dialogFormName" :lock-scroll="false" width="40%" :visible.sync="dialogFormVisible" v-on:close="dialog_Closed" :close-on-click-modal="false">
+                <my-address ref="header"></my-address>
+                <div slot="footer" class="dialog-footer">
+                    <el-button v-on:click="dialogFormVisible = false">取 消</el-button>
+                    <el-button type="primary" v-on:click="onSubmit_ruleForm('header')">确 定</el-button>
+                </div>
+            </el-dialog>
+        </div>
+    </div>
+</div>
+
+@{Html.RenderAction("_PartialSupplierAddressInfo", "Account");}
+<script>
+    var address = new Vue({
+        el: "#address",
+        data: function () {
+            return {
+                pageIndex: 1, //初始页
+                pageSize: 10,    //    每页的数据
+                addressList: @Html.Raw(Json.Encode(Model)),    //银行账户列表
+                dialogFormVisible: false,  //弹框
+                dialogFormName: "",  //弹框名称
+            }
+        },
+        methods: {
+            //弹框关闭后事件
+            dialog_Closed: function () {
+                //初始化列表值
+                address.$refs.header.form1.IsDefault = false;
+            },
+            //提货地址提交
+            onSubmit_ruleForm: function (form1) {
+                var that = this;
+                this.$refs.header.$refs.form1.validate(function(valid){
+
+                    if (valid) {
+                        address.dialogFormVisible = false;
+                        axios.post('/Account/_PartialSupplierAddressInfo', {
+                            data: that.$refs.header.form1,
+                        }).then(function (response) {
+                            address.$refs.header.$refs.form1.resetFields();
+                            address.$refs.header.form1.Address = [];
+                            address.handleUserList(); //刷新列表
+                            address.onAlert(response.data.type, response.data.msg);
+                        }).catch(function (error) {
+                            address.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                        });
+                    } else {
+                        //验证失败
+                    }
+                });
+            },
+            //供应商银行编辑
+            edit_Supperlieraddress: function (index, row) {
+                axios({
+                    url: "/Account/GetSupplierAddressInfo",
+                    method: "post",
+                    data: {
+                        addressid: row.ID,
+                        supplierid: '@Request.QueryString["id"]'
+                    },
+                }).then(function (response) {
+                    if (response.data.type == "error") {
+                        address.onAlert(response.data.type, response.data.msg);
+                        return;
+                    }
+                    address.dialogFormName = "编辑供应商提货地址";
+                    address.dialogFormVisible = true;
+                    setTimeout(function () {
+                        address.$refs.header.$refs.form1.resetFields();
+                        address.$refs.header.form1.IsDefault = false;
+                        address.$refs.header.form1 = JSON.parse(response.data.data);
+                    }, 0)
+                }).catch(function (error) {
+                    address.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //新增供应商银行账号
+            add_Supperlieraddress: function () {
+                address.dialogFormName = "新增供应商提货地址";
+                address.dialogFormVisible = true;
+                setTimeout(function(){
+                    address.$refs.header.$refs.form1.resetFields();
+                    address.$refs.header.form1.IsDefault = false;
+                    address.$refs.header.form1.SupplierID = '@Request.QueryString["id"]';
+                }, 0);
+            },
+            //删除供应商
+            delete_Supperlieraddress: function (index, row) {
+                this.$confirm('您确定要删除该提货地址吗？', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                    lockScroll: false,
+                }).then(function() {
+                    axios({
+                        url: "/Account/DelSupplierAddress",
+                        method: "post",
+                        data: {
+                            addressid: row.ID,
+                             supplierid:'@Request.QueryString["id"]'
+                        }
+                    }).then(function (response) {
+                        address.handleUserList(); //刷新列表
+                        address.onAlert(response.data.type, response.data.msg);
+                    }).catch(function (error) {
+                        address.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                    });
+                }).catch(function() {
+                    //取消
+                });
+            },
+            // 初始页currentPage、初始每页数据数pagesize和数据data
+            handleSizeChange: function (size) {
+                this.pageSize = size;
+            },
+            handleCurrentChange: function (currentPage) {
+                this.pageIndex = currentPage;
+            },
+            handleUserList:  function () {
+                axios({
+                    url: "/Account/GetSuppliersaddressList",
+                    method: "post",
+                    data: {
+                        id: '@Request.QueryString["id"]'
+                    }
+                }).then(function (res) {
+                    address.addressList = JSON.parse(res.data.data);
+                }).catch(function (error) {
+                    address.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type
+                });
+            },
+        }
+    });
+</script>
+

@@ -1,0 +1,175 @@
+﻿<template id="storagedetailintransport">
+    <div>
+        <el-form>
+            <div class="mt20">
+                <div style="font-size: 14px; color: #666666;">● {{transport.TransportModeName}}</div>
+            </div>
+            <!-- 快递 -->
+            <div v-if="transport.TransportModeInt == 2" class="mt20">
+                <el-form-item label="收货公司:" style="margin-bottom: -10px;">
+                    <span class="txt1">{{wareHouseInfo.WareHouseName}}</span>
+                    <el-button style="padding: 0px;" type="text" data-clipboard-action="copy" class="cobyOrderSn" :data-clipboard-text="wareHouseInfo.WareHouseInfoForCopy" v-on:click="copyWareHouseInfo">复制</el-button>
+                </el-form-item>
+                <el-form-item label="收货地址:" style="margin-bottom: -10px; margin-top: 10px;">
+                    <span class="txt1">{{wareHouseInfo.WareHouseAddress}}</span>
+                </el-form-item>
+                <el-form-item label="联系人:" style="margin-bottom: -10px; margin-top: 10px;">
+                    <p class="txt1">{{wareHouseInfo.WareHouseManName}}</p>
+                </el-form-item>
+                <el-form-item label="联系电话:" style="margin-bottom: -10px; margin-top: 10px;">
+                    <p class="txt1">{{wareHouseInfo.WareHouseTel}}</p>
+                </el-form-item>
+                <el-form-item label="快递公司:" style="margin-bottom: -10px; margin-top: 10px;">
+                    <p class="txt1">
+                        <span>{{transport.ExpressCompanyName}}</span>
+                        <span v-if="storagetransportinfo.IsHasValue == true
+                                 && storagetransportinfo.TransportModeInt == 2
+                                 && transport.ExpressCompanyName != storagetransportinfo.CarrierName">
+                            (修改为：{{storagetransportinfo.CarrierName}})
+                        </span>
+                    </p>
+                </el-form-item>
+                <el-form-item label="快递单号:" style="margin-bottom: -10px; margin-top: 10px;">
+                    <p class="txt1">
+                        <span>{{transport.ExpressNumber}}</span>
+                        <span v-if="storagetransportinfo.IsHasValue == true
+                                 && storagetransportinfo.TransportModeInt == 2
+                                 && transport.ExpressNumber != storagetransportinfo.WaybillCode">
+                            (修改为：{{storagetransportinfo.WaybillCode}})
+                        </span>
+                    </p>
+                </el-form-item>
+            </div>
+            <!-- 送货上门 -->
+            <div v-if="transport.TransportModeInt == 3" class="mt20">
+                <el-form-item label="收货公司:" style="margin-bottom: -10px;">
+                    <span class="txt1">{{wareHouseInfo.WareHouseName}}</span>
+                    <el-button style="padding: 0px;" type="text" data-clipboard-action="copy" class="cobyOrderSn" :data-clipboard-text="wareHouseInfo.WareHouseInfoForCopy" v-on:click="copyWareHouseInfo">复制</el-button>
+                </el-form-item>
+                <el-form-item label="收货地址:" style="margin-bottom: -10px; margin-top: 10px;">
+                    <span class="txt1">{{wareHouseInfo.WareHouseAddress}}</span>
+                </el-form-item>
+                <el-form-item label="联系人:" style="margin-bottom: -10px; margin-top: 10px;">
+                    <p class="txt1">{{wareHouseInfo.WareHouseManName}}</p>
+                </el-form-item>
+                <el-form-item label="联系电话:" style="margin-bottom: -10px; margin-top: 10px;">
+                    <p class="txt1">{{wareHouseInfo.WareHouseTel}}</p>
+                </el-form-item>
+            </div>
+            <!-- 自提 -->
+            <div v-if="transport.TransportModeInt == 1" class="mt20">
+                <el-form-item label="提货时间:" style="margin-bottom: -10px; margin-top: 10px;">
+                    <span class="txt1" style="margin-left: 42px;">{{transport.TakingDate}}</span>
+                </el-form-item>
+                <el-form-item label="提货单:" style="margin-bottom: -10px; margin-top: 10px;">
+                    <div class="fl upload_wrap mt6" style="margin-left: 58px;">
+                        <ul class="file_item_ul">
+                            <li class="clearfix" v-for="(item,index) in transport.TakingFiles">
+                                <span class="icon1"></span>
+                                <a class="file_name ml6" :href="item.fullURL" target="_blank">{{item.name}}</a>
+                            </li>
+                        </ul>
+                    </div>
+                </el-form-item>
+                <el-form-item label="交货联系人信息:" style="margin-bottom: -10px; margin-top: 10px;">
+                    <span class="txt1">{{transport.ConsigneeManName}}</span>
+                </el-form-item>
+                <el-form-item label="" style="margin-bottom: -10px;"
+                              v-if="transport.ConsigneeManTel != null && transport.ConsigneeManTel != undefined && transport.ConsigneeManTel != ''">
+                    <span class="txt1">{{transport.ConsigneeManTel}}</span>
+                </el-form-item>
+                <el-form-item label="" style="margin-bottom: -10px; margin-left: 115px;"
+                              v-if="transport.ConsigneeManAddress != null && transport.ConsigneeManAddress != undefined && transport.ConsigneeManAddress != ''">
+                    <span class="txt1">{{transport.ConsigneeManAddress}}</span>
+                </el-form-item>
+            </div>
+        </el-form>
+    </div>
+</template>
+<script>
+    Vue.component(
+        'storagedetailintransport',
+        {
+            template: "#storagedetailintransport",
+            data: function () {
+                return {
+                    wareHouseInfo: {
+                        WareHouseName: '', //收货公司
+                        WareHouseAddress: '', //收货地址
+                        WareHouseManName: '', //联系人
+                        WareHouseTel: '', //联系电话
+                        WareHouseInfoForCopy: '', //用于复制的信息
+                    },
+                }
+            },
+            props: {
+                transport: {
+                    type: Object,
+                    default: function () {
+                        return {
+                            TransportModeInt: 0, //货运类型 Int
+                            TransportModeName: '', //货运类型名称
+                            ExpressCompanyName: '', //快递公司名称
+                            ExpressNumber: '', //快递单号
+                            TakingDate: '', //提货时间,
+                            TakingFiles: [], //提货单文件信息
+                            ConsigneeManName: '', //交货联系人姓名
+                            ConsigneeManTel: '', //交货联系人电话
+                            ConsigneeManAddress: '', //交货联系人地址
+                        };
+                    }
+                },
+                storagetransportinfo: {
+                    type: Object,
+                    default: function () {
+                        return {
+                            IsHasValue: false,
+                            TransportModeInt: 0, //货运类型
+                            CarrierName: '', //承运商名称
+                            WaybillCode: '', //运单号
+                        };
+                    }
+                }
+            },
+            methods: {
+                //复制库房信息
+                copyWareHouseInfo: function () {
+                    var that = this;
+                    var clipboard = new ClipboardJS(".cobyOrderSn");
+                    clipboard.on('success', function () {
+                        that.onAlert("success", "复制成功");
+                        clipboard.destroy();
+                    });
+                    clipboard.on('error', function () {
+                        that.onAlert("error", "复制失败");
+                        clipboard.destroy();
+                    });
+                },
+                //消息提示框
+                onAlert: function (type, message) {
+                    this.$message({
+                        message: message,
+                        type: type,
+                        offset: 100
+                    });
+                },
+            },
+            created: function () {
+                var that = this;
+                //获取库房信息
+                axios.get('/Miscellaneous/WareHouseInfo', { params: {} })
+                    .then(function (res) {
+                        if (res.data.success == 200) {
+                            that.wareHouseInfo.WareHouseName = res.data.result.WareHouseName; //收货公司
+                            that.wareHouseInfo.WareHouseAddress = res.data.result.WareHouseAddress; //收货地址
+                            that.wareHouseInfo.WareHouseManName = res.data.result.WareHouseManName; //联系人
+                            that.wareHouseInfo.WareHouseTel = res.data.result.WareHouseTel; //联系电话
+                            that.wareHouseInfo.WareHouseInfoForCopy = res.data.result.WareHouseInfoForCopy; //用于复制的信息
+                        }
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    });
+            },
+        });
+</script>

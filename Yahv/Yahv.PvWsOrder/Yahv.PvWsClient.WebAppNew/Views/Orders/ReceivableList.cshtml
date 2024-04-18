@@ -1,0 +1,244 @@
+﻿@{
+    ViewBag.subTitle = "我的代收款";
+}
+<link href="~/Content/css/tab.css" rel="stylesheet" />
+<!-- tab start-->
+<div class="clearfix tab_switch">
+    <ul>
+        <li>
+            <a href="/Orders/DeliveryApplyList">代收款申请<i></i></a>
+        </li>
+        <li class="active">
+            <a href="/Orders/ReceivableList">我的代收款<i></i></a>
+        </li>
+    </ul>
+</div>
+<!-- tab end -->
+<div id="vReceive" v-cloak class="tab_content">
+    <div class="query_wrap" ref="viewBox1" v-on:scroll="ss('viewBox1')">
+        <div class="clearfix">
+            <div class="fl">
+                <div class="title label-style">审批状态:</div>
+                <el-select style="width: 120px;" class="mr16 input-style" size="small" v-model="ApplicationStatus" filterable clearable>
+                    <el-option v-for="item in ApplyStatusOptions"
+                               :key="item.value"
+                               :label="item.text"
+                               :value="item.value">
+                    </el-option>
+                </el-select>
+            </div>
+            <div class="fl ml20">
+                <div class="title label-style">收款状态:</div>
+                <el-select style="width: 120px;" class="mr16 input-style" size="small" v-model="ReceiveStatus" filterable clearable>
+                    <el-option v-for="item in RecStatusOptions"
+                               :key="item.value"
+                               :label="item.text"
+                               :value="item.value">
+                    </el-option>
+                </el-select>
+            </div>
+            <div class="fl ml20">
+                <div class="title label-style">申请日期:</div>
+                <date-picker-daterange ref="datePickerDaterange" class="fl"></date-picker-daterange>
+            </div>
+
+            <div class="fr">
+                <button v-on:click="queryData" class="btn btn1">查询</button>
+                <button v-on:click="clearData" class="btn btn2 ml12">重置</button>
+            </div>
+        </div>
+    </div>
+    <div class="tb_wrap" v-loading="loading">
+        <table class="common_tb1 mt30">
+            <tr>
+                <th width="36px">序号</th>
+                <th>申请单号</th>
+                <th>申请日期</th>
+                <th>审批状态</th>
+                <th>收款状态</th>
+                <th>付款人名称</th>
+                <th>申请金额</th>
+                <th>操作</th>
+            </tr>
+            <tr v-for="(item,index) in indexData.dataList">
+                <td>{{(indexData.pageIndex-1)*indexData.pageSize+index+1}}</td>
+                <td>{{item.ID}}</td>
+                <td>{{item.CreateDateDateString}}</td>
+                <td>{{item.ApplicationStatus}}</td>
+                <td>{{item.ReceiveStatus}}</td>
+                <td>{{item.PayerEntName}}</td>
+                <td>{{item.TotalPrice}}</td>
+                <td class="operate">
+                    <a v-on:click="detail(item.ID)">查看</a>
+                </td>
+            </tr>
+            <tr v-if="indexData.dataList.length==0">
+                <td colspan="9">暂无数据</td>
+            </tr>
+        </table>
+        <div class="foot">
+            <el-pagination class="fr" style="margin-top: 20px;" v-on:size-change="handleSizeChange"
+                           v-on:current-change="handleCurrentChange"
+                           :current-page="indexData.pageIndex"
+                           :page-sizes="[5, 10, 20, 40]"
+                           :page-size="indexData.pageSize"
+                           layout="total, sizes, prev, pager, next, jumper"
+                           :total="indexData.total">
+            </el-pagination>
+        </div>
+    </div>
+</div>
+<style>
+    .label-style {
+        width: 60px;
+        float: left;
+        margin-top: 6px;
+    }
+
+    .input-style {
+        width: 180px !important;
+    }
+</style>
+@{Html.RenderAction("_DatePickerDateRange", "Home");}
+<script>
+    var vReceive = new Vue({
+        el: "#vReceive",
+        data: function() {
+            return {
+                indexData: {
+                    pageIndex: 1, //初始页
+                    pageSize: 10, //每页的数据
+                    total: 0,
+                    scrollTop: 0, //滚动条位置
+                    dataList: []
+                },
+                dataValue: "",
+                ApplyStatusOptions: [],
+                RecStatusOptions: [],
+                ApplicationStatus: "",
+                startDate: "",
+                endDate: "",
+                ReceiveStatus: "",
+                loading: false
+            }
+        },
+        mounted: function() {
+            this.ApplyStatusOptions = @Html.Raw(Json.Encode(@ViewBag.ApplyStatusOptions));
+            this.RecStatusOptions = @Html.Raw(Json.Encode(@ViewBag.RecStatusOptions));
+            this.$refs.datePickerDaterange.orderDateSimpleBtnClicked('7天');
+            this.init();
+        },
+        methods: {
+            init: function() {
+                var that = this;
+                var userJsonStr = sessionStorage.getItem('vReceive');
+                userEntity = JSON.parse(userJsonStr);
+                if (userEntity == null) {
+                    that.queryData(); // that.paging();
+                } else {
+                    that.indexData = userEntity;
+                    that.queryData(); // that.paging();
+                    that.$nextTick(function() {
+                        that.$refs['viewBox1'].scrollTop = that.indexData.scrollTop;
+                    });
+                    sessionStorage.removeItem('vReceive');
+                }
+            },
+            detail: function(id) {
+                commonSkipUrl(id, '/Orders/ReceivedApply?id=' + id, "/" + "@(ViewContext.RouteData.Values["controller"].ToString())"
+                                                                  + "/" + "@(ViewContext.RouteData.Values["action"].ToString())");
+            },
+            ss: function(ref) {
+                // 监听这个dom的scroll事件
+                var that = this;
+                this.$refs[ref].addEventListener('scroll',
+                    function() {
+                        that.indexData.scrollTop = that.$refs[ref].scrollTop;
+                    },
+                    false);
+            },
+            //查询数据
+            queryData: function () {
+                this.dataValue = this.$refs.datePickerDaterange.getDataValue();
+                if (this.dataValue != "" && this.dataValue != null) {
+                    var start = new Date(this.dataValue[0]);
+                    var startDate = start.getFullYear() + '-' + (start.getMonth() + 1) + '-' + start.getDate();
+                    var end = new Date(this.dataValue[1]);
+                    var endDate = end.getFullYear() + '-' + (end.getMonth() + 1) + '-' + end.getDate();
+                    this.startDate = startDate;
+                    this.endDate = endDate;
+                } else {
+                    this.startDate = "";
+                    this.endDate = "";
+                }
+                this.indexData.pageIndex = 1;
+                this.paging();
+            },
+            //重置数据
+            clearData: function () {
+                this.$refs.datePickerDaterange.orderDateSimpleBtnClicked('7天');
+                // this.dataValue = "";
+                this.ApplicationStatus = "";
+                this.startDate = "";
+                this.endDate = "";
+                this.ReceiveStatus = "";
+                this.indexData.pageIndex = 1;
+                this.indexData.pageSize = 10;
+                this.queryData(); // this.paging();
+            },
+            // 初始页currentPage、初始每页数据数pagesize和数据data
+            handleSizeChange: function(size) {
+                this.indexData.pageSize = size;
+                this.paging();
+            },
+            handleCurrentChange: function(currentPage) {
+                this.indexData.pageIndex = currentPage;
+                this.paging();
+            },
+            paging: function() {
+                var that = this;
+                that.loading = true;
+                axios({
+                    url: "/Orders/GetReceivableList",
+                    method: "post",
+                    data: {
+                        page: this.indexData.pageIndex,
+                        rows: this.indexData.pageSize,
+                        ApplicationStatus: this.ApplicationStatus,
+                        startDate: this.startDate,
+                        endDate: this.endDate,
+                        ReceiveStatus: this.ReceiveStatus
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                    transformRequest: [
+                        function(data) {
+                            var ret = '';
+                            for (var it in data) {
+                                ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&';
+                            }
+                            return ret;
+                        }
+                    ]
+                }).then(function(response) {
+                    var data = JSON.parse(response.data.data);
+                    that.indexData.dataList = data.list;
+                    that.indexData.total = data.total;
+                    that.loading = false;
+                }).catch(function(error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //消息提示框
+            onAlert: function(type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                    offset: 100
+                });
+            }
+        }
+    });
+
+</script>

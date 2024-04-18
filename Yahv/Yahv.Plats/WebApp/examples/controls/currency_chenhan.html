@@ -1,0 +1,43 @@
+﻿﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>币种换算 - jQuery EasyUI plugin</title>
+
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/gray/easyui.css" rel="stylesheet" />
+
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/icon.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/icon-yg-cool.css" rel="stylesheet" />
+
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.easyui.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/locale/easyui-lang-zh_CN.js"></script>
+
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/main.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/ajaxPrexUrl.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/standard-easyui/scripts/currency_chenhan.js"></script>
+
+    <script>
+        //暂时使用  currency_chenhan
+        $(function () {
+            $('#ss').currency({
+                Prex: 'standartd',
+                currency: "USD",
+                invoiceType: 1,
+                value1: 10,
+                precision: 5
+            }).currency('setCurrency', 'CNY').currency('setInvoiceType', 2).currency('setCurrency', 'USD');
+        });
+    </script>
+
+</head>
+<body>
+   
+    <h1>币种换算</h1>
+    <form id="ff" class="easyui-form" method="post" data-options="novalidate:true" onsubmit="return $(this).form('enableValidation').form('validate');">
+        <div class="easyui-panel" data-options="title:'测试价格控件'" style="width:100%;padding:3px 6px;">
+            <a id="ss">币种</a>
+        </div>
+    </form>
+</body>
+</html>

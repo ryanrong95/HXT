@@ -1,0 +1,54 @@
+﻿<template id="storagedetailoutcostinfo">
+    <div>
+        <div class="tb_wrap">
+            <table class="common_tb1 mt30">
+                <tr>
+                    <th width="36px">序号</th>
+                    <th width="150px">期号</th>
+                    <th width="160px">科目</th>
+                    <th width="150px">金额</th>
+                </tr>
+                <tr v-for="(item,index) in dataList">
+                    <td>{{index+1}}</td>
+                    <td>{{item.CutDateIndex}}</td>
+                    <td>{{item.Subject}}</td>
+                    <td>{{item.TotalDes}}</td>
+                </tr>
+                <tr v-if="dataList.length==0">
+                    <td colspan="8">暂无数据</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</template>
+<script>
+    Vue.component(
+        'storagedetailoutcostinfo',
+        {
+            template: "#storagedetailoutcostinfo",
+            data: function () {
+                return {
+                    dataList: [],
+                }
+            },
+            props: {
+                orderid: '',
+            },
+            methods: {
+
+            },
+            mounted: function () {
+                //获取费用信息列表
+                var that = this;
+                axios.get('/Order/GetOutStorageFeeList?OrderID=' + that.orderid, { params: {} })
+                    .then(function (res) {
+                        if (res.data.type == "success") {
+                            that.dataList = res.data.data.list;
+                        }
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    });
+            },
+        });
+</script>

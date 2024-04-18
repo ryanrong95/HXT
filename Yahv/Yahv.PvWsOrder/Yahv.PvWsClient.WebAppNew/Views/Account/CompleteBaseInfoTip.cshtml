@@ -1,0 +1,245 @@
+﻿
+@{
+    ViewBag.title = "会员基本信息";
+}
+
+<style>
+    #tipTitle h2 {
+        font-size: 18px;
+        color: rgba(255,172,43,1);
+        margin-bottom: 12px;
+        font-weight: normal;
+        /*text-align: center;*/
+    }
+
+    #completeTip p.title {
+        font-size: 16px;
+        font-weight: 400;
+        color: rgba(50,50,50,0.7);
+        font-weight: bold;
+        text-align: center;
+        /*margin-top:40px;*/
+        margin-bottom: 10px;
+    }
+
+    #completeTip .agree_content {
+        padding-top: 5px;
+    }
+
+    #completeTip .agree_content_left {
+        margin-bottom: 5px;
+    }
+
+    #completeTip .xy_text {
+        margin-bottom: 8px;
+    }
+
+    #completeTip .agree_item .aggree_name { 
+        height: 18px;
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+
+    .divice {
+        display: none;
+    }
+</style>
+
+<div id="completeTip" v-cloak>
+    <div id="tipTitle" style="border:1px solid #fed99e; background-color: #fef7ec; border-radius: 5px;">
+        <div class="sectitle">
+            <img src="~/Content/n_img/exclamatory_min.png" style="float: left; padding-left: 40%; padding-top: 3px; padding-right: 10px;" />
+            <h2 style="margin: 12px; font-weight: 600;">请等待业务员联系您！</h2>
+        </div>
+        
+    </div>
+
+    <p class="title" style="margin-top: 40px;">代报关业务协议书（样张）</p>
+    <div class="content">
+        <div class="agree_item">
+            <div class="aggree_name clearfix">
+                <span class="line fl"></span><span class="ml14">报关类型：-</span>
+            </div>
+            <div class="divice"></div>
+            <div class="agree_content clearfix">
+                <div class="agree_content_left fl">
+                    <span class="xy_text">协议开始日期：-</span>
+                </div>
+                <div class="agree_content_right fl">
+                    <span class="xy_text">协议结束日期：-</span>
+                </div>
+            </div>
+        </div>
+        <div class="agree_item">
+            <div class="aggree_name clearfix">
+                <span class="line fl"></span><span class="ml14">代理费</span>
+            </div>
+            <div class="divice"></div>
+            <div class="agree_content clearfix">
+                <div class="agree_content_left fl">
+                    <span class="xy_text">代理费率：-</span>
+                </div>
+                <div class="agree_content_right fl">
+                    <span class="xy_text">最低代理费（元）：-</span>
+                </div>
+            </div>
+        </div>
+        <div class="agree_item">
+            <div class="aggree_name clearfix">
+                <span class="line fl"></span><span class="ml14">货款条款</span>
+            </div>
+            <div class="divice"></div>
+            @*<div class="agree_content clearfix">
+                <div class="agree_content_left fl">
+                    <span class="xy_text">换汇方式：-</span>
+                    <span class="xy_text">结算方式：-</span>
+                    <span v-if="1" class="xy_text">约定期限(天)：-</span>
+                    <span v-if="1" class="xy_text">结算日期(次月)：-</span>
+                    <span class="xy_text">汇率类型：-</span>
+                </div>
+                <div class="agree_content_right fl">
+                    <span v-if="1" class="xy_text">垫款上限（元）：-</span>
+                    <span v-if="1" class="xy_text">约定汇率：-</span>
+                </div>
+            </div>*@
+        </div>
+        <div class="agree_item">
+            <div class="aggree_name clearfix">
+                <span class="line fl"></span><span class="ml14">税款条款</span>
+            </div>
+            <div class="divice"></div>
+            @*<div class="agree_content clearfix">
+                <div class="agree_content_left fl">
+                    <span class="xy_text">结算方式：-</span>
+                    <span v-if="1" class="xy_text">约定期限(天)：-</span>
+                    <span v-if="1" class="xy_text">结算日期(次月)：-</span>
+                    <span class="xy_text">汇率类型：-</span>
+                </div>
+                <div class="agree_content_right fl">
+                    <span v-if="1" class="xy_text">垫款上限（元）：-</span>
+                    <span v-if="1" class="xy_text">约定汇率：-</span>
+                </div>
+            </div>*@
+        </div>
+        <div class="agree_item">
+            <div class="aggree_name clearfix">
+                <span class="line fl"></span><span class="ml14">代理费条款</span>
+            </div>
+            <div class="divice"></div>
+            @*<div class="agree_content clearfix">
+                <div class="agree_content_left fl">
+                    <span class="xy_text">结算方式：-</span>
+                    <span v-if="1" class="xy_text">约定期限(天)：-</span>
+                    <span v-if="1" class="xy_text">结算日期(次月)：-</span>
+                    <span class="xy_text">汇率类型：-</span>
+                </div>
+                <div class="agree_content_right fl">
+                    <span v-if="1" class="xy_text">垫款上限（元）：-</span>
+                    <span v-if="1" class="xy_text">约定汇率：-</span>
+                </div>
+            </div>*@
+        </div>
+        <div class="agree_item">
+            <div class="aggree_name clearfix">
+                <span class="line fl"></span><span class="ml14">杂费条款</span>
+            </div>
+            <div class="divice"></div>
+            @*<div class="agree_content clearfix">
+                <div class="agree_content_left fl">
+                    <span class="xy_text">结算方式：-</span>
+                    <span v-if="1" class="xy_text">约定期限(天)：-</span>
+                    <span v-if="1" class="xy_text">结算日期(次月)：-</span>
+                    <span class="xy_text">汇率类型：-</span>
+                </div>
+                <div class="agree_content_right fl">
+                    <span v-if="1" class="xy_text">垫款上限（元）：-</span>
+                    <span v-if="1" class="xy_text">约定汇率：-</span>
+                </div>
+            </div>*@
+        </div>
+        <div class="agree_item">
+            <div class="aggree_name clearfix">
+                <span class="line fl"></span><span class="ml14">开票类型/税率</span>
+            </div>
+            <div class="divice"></div>
+            <div class="agree_content clearfix">
+                <div class="agree_content_left fl">
+                    <span class="xy_text">开票类型：-</span>
+                </div>
+                <div class="agree_content_right fl">
+                    <span class="xy_text">税率：-</span>
+                </div>
+            </div>
+        </div>
+        @*<div class="agree_item">
+                <div class="aggree_name clearfix">
+                    <span class="line fl"></span><span class="ml14">导出与上传</span>
+                </div>
+                <div class="divice"></div>
+                <div class="agree_content clearfix">
+                    <div class="upload_wrap2 mt20">
+                        <p v-if="1" class="tip mt16">提示：未上传</p>
+                        <div v-else class="upload_wrap1 mt20">
+                            <ul>
+                                <li class="clearfix">
+                                    <div class="file_icon fl"></div>
+                                    <div class="fl c_right">
+                                        <p class="file_name">--</p>
+                                        <!--<a :href="" target="_blank" class="link">预览</a>-->
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <div class="clearfix mt26">
+                                <button v-on:click="download_file" class="fl">导出</button>
+                                <a id="exportInfoForm" style="display: none" download>
+                                    <span id="ex-li" style="display: none"></span>
+                                </a>
+                                <el-upload class="fl" action=""
+                                           :show-file-list="false"
+                                           :http-request="httpRequest"
+                                           accept="image/jpg, image/bmp, image/jpeg, image/gif, image/png, application/pdf">
+                                    <button class="ml14">上传</button>
+                                </el-upload>
+                            </div>
+                            <p class="tip mt10">仅限图片、PDF文件，且文件不超过3M</p>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+    </div>
+
+
+    <p class="title" style="margin-top: 40px;">代仓储业务协议书（样张）</p>
+    <div class="content">
+        
+    </div>
+</div>
+<script>
+
+    var complete = new Vue({
+        el: "#completeTip",
+
+        data: function() {
+            return {
+                URL: "as34342",
+            }
+        },
+
+        methods: {
+
+            toFixed: function(num, val) {
+                return val.toFixed(num);
+            },
+            //消息提示框
+            onAlert: function(type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                    offset: 100
+                });
+            }
+        }
+    });
+</script>

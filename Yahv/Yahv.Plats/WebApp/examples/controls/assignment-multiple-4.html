@@ -1,0 +1,176 @@
+﻿﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>批量指派（不是插件）</title>
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/gray/easyui.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/icon-yg-cool.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/standard-easyui/styles/plugin.css" rel="stylesheet" />
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.easyui.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/locale/easyui-lang-zh_CN.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/main.js"></script>
+</head>
+<body>
+    <div class="easyui-layout" style="width: 100%; height: 100%;" id="assginment_box" data-options="fit:true">
+        <div data-options="region:'west',collapsible:false," title="待选择列表" style="width: 50%;">
+            <table id="assginment_tab1"></table>
+            <div id="pendtoolbar" style='padding: 5px; height: auto'>
+                <input id="pendtoolbar_input">
+                <button style="margin-left: 5px; margin-right: 5px;" id="pendtoolbar_search">筛选</button>
+                <button style="margin-left: 5px; margin-right: 5px;" id="pendtoolbar_cancelsearch">取消筛选</button>
+                <button id="pendtoolbar_sureselect">确认选择</button>
+            </div>
+        </div>
+        <div data-options="region:'center',collapsible:false" title="已选择列表">
+            <table id="assginment_tab2"></table>
+        </div>
+    </div>
+    <script>
+        var col_pending = [[
+            { field: 'ck', checkbox: true },
+            { field: 'ID', title: 'ID' },
+            { field: 'UserName', title: '用户名' },
+            { field: 'RealName', title: '真实姓名' }
+        ]];
+        var col_select = [[
+            { field: 'ID', title: 'ID' },
+            { field: 'UserName', title: '用户名' },
+            { field: 'RealName', title: '真实姓名' }
+        ]];
+        var selectPendingData = [];
+        var selectselectedData = [];
+        function showSelectedList(data, flag) {
+            $("#assginment_tab2").datagrid({
+                columns: col_select,
+                rownumbers: true,
+                singleSelect: false,
+                data: data
+            })
+            flag = true;
+            return flag;
+        }
+        //获取url的参数值
+        function getUrl(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var reg_rewrite = new RegExp("(^|/)" + name + "/([^/]*)(/|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            var q = window.location.pathname.substr(1).match(reg_rewrite);
+            if (r != null) {
+                return unescape(r[2]);
+            } else if (q != null) {
+                return unescape(q[2]);
+            } else {
+                return null;
+            }
+        }
+        function load(url, cb) {
+            $.ajax({
+                type: "get",
+                url: url,
+                dataType: "jsonp",
+                success: function (data) {
+                    cb(data);
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+        }
+        function getData1ByKey(key, cb) {
+            $.ajax({
+                type: "get",
+                url: "/rfqapi/offers/BatchList?key=" + key,
+                dataType: "jsonp",
+                success: function (data) {
+                    cb(data);
+                },
+                error: function () {
+                    alert('接口异常，请求数据失败');
+                }
+            });
+        }
+        var idVal = getUrl("id");
+        var flag = false;
+        $(function () {
+            $("#assginment_tab1").datagrid({
+                height: '100%',
+                fitColumns: true,
+                loader: function (param, success, error) {
+                    load("/rfqapi/offers/BatchList", function (data) {
+                        success(data);
+                    });
+                },
+                columns: col_pending,
+                rownumbers: true,
+                singleSelect: false,
+                toolbar: '#pendtoolbar'
+            })
+
+            $("#pendtoolbar_input").textbox({ prompt: "请输入用户名或者真实姓名", width: 180 });
+            $("#pendtoolbar_search").linkbutton({
+                iconCls: 'icon-yg-search',
+                onClick: function () {
+                    var key = $("#pendtoolbar_input").textbox('getValue');
+                    if (key && key != "") {
+                        getData1ByKey(key, function (data) {
+                            $("#assginment_tab1").datagrid('loadData', data);
+                        })
+                    }
+                }
+            });
+            $("#pendtoolbar_cancelsearch").linkbutton({
+                onClick: function () {
+                    $("#pendtoolbar_input").textbox("setValue", "");
+                    $("#assginment_tab1").datagrid('load');
+                }
+            });
+            $("#pendtoolbar_sureselect").linkbutton({
+                onClick: function () {
+                    var data = $("#assginment_tab1").datagrid("getSelections");
+                    if (data.length == 0) {
+                        $.messager.alert('警告', '请选择待选择列表中的数据');
+                    } else {
+                        var data1 = [];
+                        $.each(data, function (i, val) {
+                            data1.push(val.ID);
+                        })
+                        var data2 = data1.join(",");
+
+                        $.ajax({
+                            type: "get",
+                            url: "/rfqapi/offers/BatchOffer?inquiryids=" + idVal + "&items=" + data2,
+                            dataType: "jsonp",
+                            success: function (data3) {
+                                if (data3.success) {
+                                    if (!flag) {
+                                        flag = showSelectedList(data, flag);
+                                    } else {
+                                        var data4;
+                                        var selectedData = $("#assginment_tab2").datagrid("getData").rows;
+                                        if (selectedData.length >= data.length) {
+                                            selectedData.push.apply(selectedData, data);
+                                            data4 = selectedData;
+                                        } else {
+                                            data.push.apply(data, selectedData);
+                                            data4 = data;
+                                        }
+                                        $("#assginment_tab2").datagrid("loadData", data4);
+                                    }
+                                    var url = "/rfqapi/offers/BatchList?ids=" + data2;
+                                    load(url, function (data) {
+                                        $("#assginment_tab1").datagrid("loadData", data);
+                                    })
+                                }
+                            },
+                            error: function (err) {
+                                console.log(err);
+                            }
+                        });
+                    }
+                }
+            });
+        })
+    </script>
+</body>
+</html>

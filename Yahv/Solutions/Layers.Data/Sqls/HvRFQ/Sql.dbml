@@ -1,0 +1,1998 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="HvRFQ" Class="SqlDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=192.168.80.25,5311;Initial Catalog=HvRFQ;Persist Security Info=True;User ID=udata" SettingsObjectName="Layers.Data.Properties.Settings" SettingsPropertyName="HvRFQConnectionString6" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.WareHouses" Member="WareHouses">
+    <Type Name="WareHouses">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="MainID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="AdminCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Grade" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DyjCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="District" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Address" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.AdminExtends" Member="AdminExtends">
+    <Type Name="AdminExtends">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="LeagueID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Association Name="Leagues_AdminExtends" Member="Leagues" ThisKey="LeagueID" OtherKey="ID" Type="Leagues" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.AdvantagePNOs" Member="AdvantagePNOs">
+    <Type Name="AdvantagePNOs">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="PartNumber" Type="System.String" DbType="VarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Manufacturer" Type="System.String" DbType="VarChar(150)" CanBeNull="true" />
+      <Column Name="SupplierName" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="InvoiceType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Currency" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="UnitPrice" Type="System.Decimal" DbType="Decimal(18,5)" CanBeNull="true" />
+      <Column Name="LimitedPrice" Type="System.Decimal" DbType="Decimal(18,5)" CanBeNull="true" />
+      <Column Name="Batch" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="MOQ" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DurationDate" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="JoinQuote" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="JoinAssign" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Origin" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="DeliveryPlace" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="IsAdvantage" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="SupplierContacts" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="SupplierContactInfo" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="Package" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Rank" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="TradeType" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.AgentApplies" Member="AgentApplies">
+    <Type Name="AgentApplies">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AgentInquiryID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ApproverID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="ModifyDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.AgentInquiries" Member="AgentInquiries">
+    <Type Name="AgentInquiries">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="BomID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ClientID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ProductID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="BrandID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Currency" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Price" Type="System.Decimal" DbType="Decimal(18,7)" CanBeNull="true" />
+      <Column Name="DeliveryPlace" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="InvoiceType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DeliveryDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="ModifyDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300) NOT NULL" CanBeNull="false" />
+      <Association Name="AgentInquiries_Logs_AgentInquiryStatus" Member="Logs_AgentInquiryStatus" ThisKey="ID" OtherKey="MainID" Type="Logs_AgentInquiryStatus" />
+      <Association Name="AgentInquiries_SalesQuotes" Member="SalesQuotes" ThisKey="ID" OtherKey="AgentInquiryID" Type="SalesQuotes" />
+    </Type>
+  </Table>
+  <Table Name="dbo.AgentProducts" Member="AgentProducts">
+    <Type Name="AgentProducts">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="PartNumber" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="BrandID" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Package" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="DataCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="MPQ" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="MOQ" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="ModifyDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Beneficiaries" Member="Beneficiaries">
+    <Type Name="Beneficiaries">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="InvoiceType" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="RealName" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="Bank" Type="System.String" DbType="NVarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="BankAddress" Type="System.String" DbType="NVarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="Account" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SwiftCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Methord" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Currency" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="District" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Tel" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Mobile" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Email" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Association Name="Beneficiaries_Orders" Member="Orders" ThisKey="ID" OtherKey="CompanyBeneficiaryID" Type="Orders" />
+    </Type>
+  </Table>
+  <Table Name="dbo.BomSearchers" Member="BomSearchers">
+    <Type Name="BomSearchers">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="MainID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Value" Type="System.String" DbType="NVarChar(4000) NOT NULL" CanBeNull="false" />
+      <Association Name="Boms_BomSearchers" Member="Boms" ThisKey="MainID" OtherKey="ID" Type="Boms" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Consignees" Member="Consignees">
+    <Type Name="Consignees">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="DyjCode" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="District" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Address" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="Postzip" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="Tel" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Mobile" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Email" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Association Name="Consignees_Orders" Member="Orders" ThisKey="ID" OtherKey="ConsigneeID" Type="Orders" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ContractItems" Member="ContractItems">
+    <Type Name="ContractItems">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Contracts" Member="Contracts">
+    <Type Name="Contracts">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ClientID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CompanyID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="ModifyDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="CreatorID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300) NOT NULL" CanBeNull="false" />
+      <Column Name="SealerID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="SealDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="SealStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Contracts_Logs_Contract" Member="Logs_Contract" ThisKey="ID" OtherKey="ContractID" Type="Logs_Contract" />
+      <Association Name="Contracts_Orders" Member="Orders" ThisKey="ID" OtherKey="ContractID" Type="Orders" />
+      <Association Name="Contracts_OrderItems" Member="OrderItems" ThisKey="ID" OtherKey="ContractID" Type="OrderItems" />
+    </Type>
+  </Table>
+  <Table Name="dbo.FileInfo" Member="FileInfo">
+    <Type Name="FileInfo">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="MainID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Url" Type="System.String" DbType="VarChar(300) NOT NULL" CanBeNull="false" />
+      <Column Name="IsEnable" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ICGooInquiryRelationship" Member="ICGooInquiryRelationship">
+    <Type Name="ICGooInquiryRelationship">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="MainID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SubID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Invoices" Member="Invoices">
+    <Type Name="Invoices">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="EnterpriseID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="EnterpriseName" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="EnterpriseDistrict" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Bank" Type="System.String" DbType="NVarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="BankAddress" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="Account" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="TaxperNumber" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="Tel" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Mobile" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Email" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="District" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Address" Type="System.String" DbType="VarChar(150)" CanBeNull="true" />
+      <Column Name="Postzip" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Association Name="Invoices_Orders" Member="Orders" ThisKey="ID" OtherKey="ClientInvoiceID" Type="Orders" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Leagues" Member="Leagues">
+    <Type Name="Leagues">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Category" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="FatherID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="RoleID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Association Name="Leagues_AdminExtends" Member="AdminExtends" ThisKey="ID" OtherKey="LeagueID" Type="AdminExtends" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Logs_CheckStatus" Member="Logs_CheckStatus">
+    <Type Name="Logs_CheckStatus">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="MainID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
+      <Column Name="IsLatest" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="Inquiries_Logs_CheckStatus" Member="Inquiries" ThisKey="MainID" OtherKey="ID" Type="Inquiries" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Logs_Contract" Member="Logs_Contract">
+    <Type Name="Logs_Contract">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ContractID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="CreatorID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300) NOT NULL" CanBeNull="false" />
+      <Association Name="Contracts_Logs_Contract" Member="Contracts" ThisKey="ContractID" OtherKey="ID" Type="Contracts" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Logs_Errors" Member="Logs_Errors">
+    <Type Name="Logs_Errors">
+      <Column Name="ID" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Page" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="Codes" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Message" Type="System.String" DbType="NVarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="Source" Type="System.String" DbType="NVarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="Stack" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Logs_Inquiries" Member="Logs_Inquiries">
+    <Type Name="Logs_Inquiries">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="MainID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="BussinessType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="District" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Contact" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="ContactMobile" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="BomID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="InputID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ClientID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Manufacturer" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="MfReplace" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="MfRequirement" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ChannelRequirement" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Package" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Batch" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="QuantityRemark" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TradeType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DeliveryDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300) NOT NULL" CanBeNull="false" />
+      <Column Name="Creator" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="ReplyTime" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ReplyTimeDateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="PurchasingCycle" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PurchasingCycleDateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="NeedCCCCertificate" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="IsEmbargo" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="TariffRate" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="IsInsp" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="AddedTariffs" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="PriceID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Logs_InquiryApprovalStatus" Member="Logs_InquiryApprovalStatus">
+    <Type Name="Logs_InquiryApprovalStatus">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="PassCount" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="FailCount" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="WaitCount" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ReverCount" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Logs_InquiryStatus" Member="Logs_InquiryStatus">
+    <Type Name="Logs_InquiryStatus">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="MainID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300) NOT NULL" CanBeNull="false" />
+      <Column Name="IsLatest" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="Inquiries_Logs_InquiryStatus" Member="Inquiries" ThisKey="MainID" OtherKey="ID" Type="Inquiries" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Logs_OrderItemStatus" Member="Logs_OrderItemStatus">
+    <Type Name="Logs_OrderItemStatus">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="MainID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300) NOT NULL" CanBeNull="false" />
+      <Column Name="IsLatest" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="OrderItems_Logs_OrderItemStatus" Member="OrderItems" ThisKey="MainID" OtherKey="ID" Type="OrderItems" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Logs_OrderStatus" Member="Logs_OrderStatus">
+    <Type Name="Logs_OrderStatus">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="MainID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300) NOT NULL" CanBeNull="false" />
+      <Column Name="IsLatest" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Orders_Logs_OrderStatus" Member="Orders" ThisKey="MainID" OtherKey="ID" Type="Orders" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Logs_PurchaseStatus" Member="Logs_PurchaseStatus">
+    <Type Name="Logs_PurchaseStatus">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="MainID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300) NOT NULL" CanBeNull="false" />
+      <Column Name="IsLatest" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="Purchases_Logs_PurchaseStatus" Member="Purchases" ThisKey="MainID" OtherKey="ID" Type="Purchases" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Logs_QuoteStatus" Member="Logs_QuoteStatus">
+    <Type Name="Logs_QuoteStatus">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="MainID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300) NOT NULL" CanBeNull="false" />
+      <Column Name="IsLatest" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="Quotes_Logs_QuoteStatus" Member="Quotes" ThisKey="MainID" OtherKey="ID" Type="Quotes" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Logs_SaleQuoteStatus" Member="Logs_SaleQuoteStatus">
+    <Type Name="Logs_SaleQuoteStatus">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="MainID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300) NOT NULL" CanBeNull="false" />
+      <Column Name="IsLatest" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="SalesQuotes_Logs_SaleQuoteStatus" Member="SalesQuotes" ThisKey="MainID" OtherKey="ID" Type="SalesQuotes" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Logs_SalesQuotes" Member="Logs_SalesQuotes">
+    <Type Name="Logs_SalesQuotes">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="MainID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="BomID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="InquiryID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="QuoteID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ClientID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="BussinessType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="District" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Contact" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="ContactMobile" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ProductID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SupplierID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="WarehouseID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DeliveryDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300) NOT NULL" CanBeNull="false" />
+      <Column Name="TradeType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Creator" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PriceID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Association Name="SalesQuotes_Logs_SalesQuotes" Member="SalesQuotes" ThisKey="MainID" OtherKey="ID" Type="SalesQuotes" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.MapsInquiryQuoter" Member="MapsInquiryQuoter">
+    <Type Name="MapsInquiryQuoter">
+      <Column Name="InquiryID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Assigner" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Quoter" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Count" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
+      <Column Name="AssignDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="SaveCount" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Inquiries_MapsInquiryQuoter" Member="Inquiries" ThisKey="InquiryID" OtherKey="ID" Type="Inquiries" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.OrderItems_Argments" Member="OrderItems_Argments">
+    <Type Name="OrderItems_Argments">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Source" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="AgentQouteID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="SaleQuoteID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="OrderID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CustomerCode" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="SupplierID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ProductID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DeliveryDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PriceID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="TotalPriceID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CostQID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CostPID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="QuotePriceID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PurchasePriceID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.OrderItems0702" Member="OrderItems0702">
+    <Type Name="OrderItems0702">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SaleQuoteID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="OrderID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CustomerCode" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="SupplierID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ProductID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Currency" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="UnitPrice" Type="System.Decimal" DbType="Decimal(18,5) NOT NULL" CanBeNull="false" />
+      <Column Name="Currency1" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="UnitPrice1" Type="System.Decimal" DbType="Decimal(18,5) NOT NULL" CanBeNull="false" />
+      <Column Name="DeliveryDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Orders" Member="Orders">
+    <Type Name="Orders">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ClientID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CompanyID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="TradeType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DeliveryDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300) NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ConsigneeID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ClientInvoiceID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CompanyBeneficiaryID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Type" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TotalPriceID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CostQID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="InvoiceType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Sealer" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="SealDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="SealStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IsAdvance" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="SealType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CostPID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="GrossProfit" Type="System.Decimal" DbType="Decimal(18,5) NOT NULL" CanBeNull="false" />
+      <Column Name="Approver" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="AdvanceSummary" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
+      <Column Name="Remark" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="ContractID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Association Name="Orders_Logs_OrderStatus" Member="Logs_OrderStatus" ThisKey="ID" OtherKey="MainID" Type="Logs_OrderStatus" />
+      <Association Name="Orders_OrderSearchers" Member="OrderSearchers" ThisKey="ID" OtherKey="MainID" Type="OrderSearchers" />
+      <Association Name="Orders_Purchases" Member="Purchases" ThisKey="ID" OtherKey="OrderID" Type="Purchases" />
+      <Association Name="Orders_OrderItems" Member="OrderItems" ThisKey="ID" OtherKey="OrderID" Type="OrderItems" />
+      <Association Name="Beneficiaries_Orders" Member="Beneficiaries" ThisKey="CompanyBeneficiaryID" OtherKey="ID" Type="Beneficiaries" IsForeignKey="true" />
+      <Association Name="Consignees_Orders" Member="Consignees" ThisKey="ConsigneeID" OtherKey="ID" Type="Consignees" IsForeignKey="true" />
+      <Association Name="Contracts_Orders" Member="Contracts" ThisKey="ContractID" OtherKey="ID" Type="Contracts" IsForeignKey="true" />
+      <Association Name="Invoices_Orders" Member="Invoices" ThisKey="ClientInvoiceID" OtherKey="ID" Type="Invoices" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Orders0702" Member="Orders0702">
+    <Type Name="Orders0702">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ClientID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CompanyID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="TradeType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Currency" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TotalPrice" Type="System.Decimal" DbType="Decimal(18,5) NOT NULL" CanBeNull="false" />
+      <Column Name="CostPrice" Type="System.Decimal" DbType="Decimal(18,5) NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DeliveryDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300) NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ConsigneeID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ClientInvoiceID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CompanyBeneficiaryID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.OrderSearchers" Member="OrderSearchers">
+    <Type Name="OrderSearchers">
+      <Column Name="MainID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Value" Type="System.String" DbType="NVarChar(4000) NOT NULL" CanBeNull="false" />
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="Orders_OrderSearchers" Member="Orders" ThisKey="MainID" OtherKey="ID" Type="Orders" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.OverStocks" Member="OverStocks">
+    <Type Name="OverStocks">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="PartNumber" Type="System.String" DbType="VarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Manufacturer" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Currency" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="UnitPrice" Type="System.Decimal" DbType="Decimal(18,5)" CanBeNull="true" />
+      <Column Name="Package" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="Rank" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Batch" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="SourceType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SourceName" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="Contacts" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="ContactInfo" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="TradeType" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="DurationDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="InvoiceType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="MOQ" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Origin" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="DeliveryPlace" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PcFiles" Member="PcFiles">
+    <Type Name="PcFiles">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="MainID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="Url" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SiteuserID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Premiums" Member="Premiums">
+    <Type Name="Premiums">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="QuoteID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Currency" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="UnitPrice" Type="System.Decimal" DbType="Decimal(18,5) NOT NULL" CanBeNull="false" />
+      <Column Name="Currency1" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="UnitPrice1" Type="System.Decimal" DbType="Decimal(18,5) NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Quotes_Premiums" Member="Quotes" ThisKey="QuoteID" OtherKey="ID" Type="Quotes" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Products" Member="Products">
+    <Type Name="Products">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Manufacturer" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="PackageCase" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Packing" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Batch" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="MOQ" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="MPQ" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="HSCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Classification" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="TaxCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="TaxableName" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="AddedTariffs" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="AddedTax" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="InspFee" Type="System.Decimal" DbType="Decimal(18,5)" CanBeNull="true" />
+      <Column Name="NeedCCCCertificate" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="IsEmbargo" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="TariffRate" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="IsInsp" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="Origin" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Association Name="Products_Purchases" Member="Purchases" ThisKey="ID" OtherKey="ProductID" Type="Purchases" />
+      <Association Name="Products_SecondInquiries" Member="SecondInquiries" ThisKey="ID" OtherKey="ProductID" Type="SecondInquiries" />
+      <Association Name="Products_Quotes" Member="Quotes" ThisKey="ID" OtherKey="ProductID" Type="Quotes" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Purchases" Member="Purchases">
+    <Type Name="Purchases">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="OrderID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="OrderItemID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="QuoteID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ClientID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SalesCompanyID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SalesCompanyBeneficiaryID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Salesman" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="OrderSummary" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
+      <Column Name="PurchaseCompanyID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PurchaseCompanyBeneficiaryID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="TradeType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CustomerCode" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="AdminCode" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="SupplierID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="InvoiceType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SupplierBeneficiaryID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ProductID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="EnterStorage" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ExitStorage" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="DeliveryDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="DyjWtcgStatus" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="DyjBgztStatus" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="OrderType" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Origin" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Carrier" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Purchaser" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PriceID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="SalePriceID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PurchasePriceID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ClientInvoiceType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Total" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseTotal" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SaleTotal" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PayType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Purchases_Logs_PurchaseStatus" Member="Logs_PurchaseStatus" ThisKey="ID" OtherKey="MainID" Type="Logs_PurchaseStatus" />
+      <Association Name="Purchases_SecondInquiries" Member="SecondInquiries" ThisKey="ID" OtherKey="PurchaseID" Type="SecondInquiries" />
+      <Association Name="Orders_Purchases" Member="Orders" ThisKey="OrderID" OtherKey="ID" Type="Orders" IsForeignKey="true" />
+      <Association Name="Products_Purchases" Member="Products" ThisKey="ProductID" OtherKey="ID" Type="Products" IsForeignKey="true" />
+      <Association Name="OrderItems_Purchases" Member="OrderItems" ThisKey="OrderItemID" OtherKey="ID" Type="OrderItems" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.QPrices" Member="QPrices">
+    <Type Name="QPrices">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="MainID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Currency" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Price" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="Currency1" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Price1" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="ERate1" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="TaxCurrency" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TaxedPrice" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="UntaxedPrice" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="TaxERate" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="VATRate" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="QPrices_Inquiries" Member="Inquiries" ThisKey="ID" OtherKey="PriceID" Type="Inquiries" />
+    </Type>
+  </Table>
+  <Table Name="dbo.QuoteHelpers" Member="QuoteHelpers">
+    <Type Name="QuoteHelpers">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ClientID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="FileName" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="FileUrl" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="Suppliers" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Records" Member="Records">
+    <Type Name="Records">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="DocID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="OtherID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PartyID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="StartDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="EndDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="CreatorID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="ModifyDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="TrusteeID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="TrustDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ApproverID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ApprovedDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.SalesQuotes_Argment" Member="SalesQuotes_Argment">
+    <Type Name="SalesQuotes_Argment">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Source" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AgentInquiryID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="AgentQuoteID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="InquiryID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="QuoteID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="BomID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ClientID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="BussinessType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="District" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Contact" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="ContactMobile" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ProductID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SupplierID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="WarehouseID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DeliveryDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="TradeType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PriceID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.SecondInquiries" Member="SecondInquiries">
+    <Type Name="SecondInquiries">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="PurchaseID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="QuoteID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ProductID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ClientID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="InvoiceType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PriceID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="ModifyDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="InquirierID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ApproverID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
+      <Association Name="SecondInquiries_SecondOffers" Member="SecondOffers" ThisKey="ID" OtherKey="SecondInquiryID" Type="SecondOffers" />
+      <Association Name="SecondInquiries_SecondQuotes" Member="SecondQuotes" ThisKey="ID" OtherKey="SecondInquiryID" Type="SecondQuotes" />
+      <Association Name="Products_SecondInquiries" Member="Products" ThisKey="ProductID" OtherKey="ID" Type="Products" IsForeignKey="true" />
+      <Association Name="Purchases_SecondInquiries" Member="Purchases" ThisKey="PurchaseID" OtherKey="ID" Type="Purchases" IsForeignKey="true" />
+      <Association Name="Quotes_SecondInquiries" Member="Quotes" ThisKey="QuoteID" OtherKey="ID" Type="Quotes" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.SecondOffers" Member="SecondOffers">
+    <Type Name="SecondOffers">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="SecondInquiryID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="OfferID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="QuoterID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Qouted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="SecondInquiries_SecondOffers" Member="SecondInquiries" ThisKey="SecondInquiryID" OtherKey="ID" Type="SecondInquiries" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.SecondQuotes" Member="SecondQuotes">
+    <Type Name="SecondQuotes">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="SecondInquiryID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SupplierID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SupplierPayeeID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="EnterStorageID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ExitStorageID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TradeType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DeliveryDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="ModifyDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="InvoiceType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PriceID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="TotalPriceID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ApproverID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ProductID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Duration" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="PurchasingCycle" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="PayType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="SecondInquiries_SecondQuotes" Member="SecondInquiries" ThisKey="SecondInquiryID" OtherKey="ID" Type="SecondInquiries" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.StandardBrands" Member="StandardBrands">
+    <Type Name="StandardBrands">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="ChineseName" Type="System.String" DbType="NVarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="ShortName" Type="System.String" DbType="NVarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="IsAgent" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="ModifyDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Statistics_Boms" Member="Statistics_Boms">
+    <Type Name="Statistics_Boms">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="InquiriesCount" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SubmitCount" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AbandonCount" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CheckStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CheckSubmitCount" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CheckRejectCount" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="OfferStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="OfferedCount" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="QuoteStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="QuotedCount" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="QuoteRejectCount" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ApprovalStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ApprovalCount" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Statistics_Inquiries" Member="Statistics_Inquiries">
+    <Type Name="Statistics_Inquiries">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="CheckStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="OfferStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="OfferCount_Check" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="OfferCount_Approval" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="OfferCount_Common" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="QuoteStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ApprovalStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ApprovalCount" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="WaitCount" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="RejectCount" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="RevertCount" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="MapsJson" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="LastPredictorID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Tariffs" Member="Tariffs">
+    <Type Name="Tariffs">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Partnumber" Type="System.String" DbType="VarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="HSCode" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="DeclarationName" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="TariffRate" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.AdminsBussinessTopView" Member="AdminsBussinessTopView">
+    <Type Name="AdminsBussinessTopView">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="StaffID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="UserName" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="RealName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SelCode" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="LastLoginDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="RoleID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="RoleName" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="bussiness" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.WorkCitiesTopView" Member="WorkCitiesTopView">
+    <Type Name="WorkCitiesTopView">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.AdminsTopView" Member="AdminsTopView">
+    <Type Name="AdminsTopView">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="StaffID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="UserName" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="RealName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SelCode" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="LastLoginDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="RoleID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="RoleName" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="RoleStatus" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.DYJPurchasesView" Member="DYJPurchasesView">
+    <Type Name="DYJPurchasesView">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="OrderID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="NoticeID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ChangeType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ProductTitle" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="MF_Name" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="Count" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TradeDistrict" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="EnterStorage" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ExitStorage" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SalesCurrency" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ProductPrice" Type="System.Decimal" DbType="Decimal(28,5) NOT NULL" CanBeNull="false" />
+      <Column Name="SalesCurrency1" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ProductPrice1" Type="System.Decimal" DbType="Decimal(28,5) NOT NULL" CanBeNull="false" />
+      <Column Name="PurchasesCurrency" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PurchasesPrice" Type="System.Decimal" DbType="Decimal(28,5) NOT NULL" CanBeNull="false" />
+      <Column Name="PurchasesCurrency1" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PurchasesPrice1" Type="System.Decimal" DbType="Decimal(28,5) NOT NULL" CanBeNull="false" />
+      <Column Name="ProductBatch" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="ProductPostting" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="ProductSummary" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="ShopType" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Placer" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Tax" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Promoter" Type="System.String" DbType="VarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="SupplierBeneficiary" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Company" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseCompany" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="OrderSummary" Type="System.String" DbType="NVarChar(300) NOT NULL" CanBeNull="false" />
+      <Column Name="OLDDYJID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="DYJID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="DYJStatus" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="DYJStatus2" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="DYJMark" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
+      <Column Name="DYJCurrency" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DYJPrice" Type="System.Decimal" DbType="Decimal(28,5)" CanBeNull="true" />
+      <Column Name="DYJPrice1" Type="System.Decimal" DbType="Decimal(28,5)" CanBeNull="true" />
+      <Column Name="LockStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Origin" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PoD" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="OldNoticeId" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ServiceCode" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
+      <Column Name="CustomerPartCode" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="DYJdateDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="DYJClientCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ClientName" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="DYJSupplierCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="SupplierName" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="PurchaseType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Carrier" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Purchaser" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="DeliveryDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="PayType" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="SupplierBank" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="SupplierBankAddress" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="SupplierAccount" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="SupplierSwiftCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="SupplierTax" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.hv_V_B1B报关查询" Member="hv_V_B1B报关查询">
+    <Type Name="hv_V_B1B报关查询">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="PartNumber" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Inspection" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="SpecialPackaging" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="CustomsCompany" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+      <Column Name="Source" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="OrderID" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Status" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Manufacturer" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Origin" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CustomsDeclarationNumber" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="TempBoxNumber" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="BoxNumber" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Weight" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Tariff" Type="System.Decimal" DbType="Decimal(18,4) NOT NULL" CanBeNull="false" />
+      <Column Name="Fees" Type="System.Decimal" DbType="Decimal(18,4) NOT NULL" CanBeNull="false" />
+      <Column Name="BranchCompany" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="Department" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="Salesman" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="NoStorage" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="WaybillNumber" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="MainID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ClassName" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="BD_CodePart" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.hv_V_B1B委托采购" Member="hv_V_B1B委托采购">
+    <Type Name="hv_V_B1B委托采购">
+      <Column Name="PID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="BranchCompany" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="Department" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="Salesman" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Supplier" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="Status" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="OrderID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PartNumber" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="MainSummary" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="WaitingQuantity" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Type" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="Outdate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Creator" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="WaybillNumber" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ManufacturersTopView" Member="ManufacturersTopView">
+    <Type Name="ManufacturersTopView">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Agent" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.NolockInquiriesView" Member="NolockInquiriesView">
+    <Type Name="NolockInquiriesView">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="BomID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="InputID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ClientID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="BussinessType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="District" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Contact" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="ContactMobile" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Manufacturer" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="MfReplace" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="MfRequirement" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ChannelRequirement" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Package" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Batch" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="QuantityRemark" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TradeType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DeliveryDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="IsFocus" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ReplyTime" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ReplyTimeDateTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="PurchasingCycle" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PurchasingCycleDateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="NeedCCCCertificate" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="IsEmbargo" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="TariffRate" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="IsInsp" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="AddedTariffs" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="ApprovalDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="QuoteDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="AgentID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PriceID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="IsFollow" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PurchasesTopView" Member="PurchasesTopView">
+    <Type Name="PurchasesTopView">
+      <Column Name="PurchaseID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseOrderID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseOrderItemID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseQuoteID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PurchaseClientID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseSalesCompanyID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseSalesCompanyBeneficiaryID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PurchaseSalesman" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseOrderSummary" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
+      <Column Name="PurchasePurchaseCompanyID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PurchasePurchaseCompanyBeneficiaryID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PurchaseTradeType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseCustomerCode" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="PurchaseAdminCode" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="PurchaseSupplierID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseInvoiceType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseSupplierBeneficiaryID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PurchaseProductID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseQuantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseEnterStorage" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PurchaseExitStorage" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PurchaseDeliveryDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseSummary" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
+      <Column Name="PurchaseCreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseUpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseAdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseDyjWtcgStatus" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PurchaseDyjBgztStatus" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PurchaseOrderType" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PurchaseOrigin" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PurchasePurchaseType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseCarrier" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PurchasePurchaser" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PurchasePriceID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PurchaseSalePriceID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PurchasePurchasePriceID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PurchaseClientInvoiceType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseTotal" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PurchasePurchaseTotal" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseSaleTotal" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PurchasePayType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ClientName" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="ClientDistrict" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ClientID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ClientNature" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ClientGrade" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ClientTaxperNumber" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ClientVip" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ClientStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ClientAreaType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ClientDyjCode" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SalesCompanyID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SalesCompanyType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SalesCompanyRange" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SalesCompanyStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SalesCompanyName" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="SalesCompanyCorporation" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="SalesCompanyRegAddress" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="SalesCompanyUscc" Type="System.String" DbType="VarChar(150)" CanBeNull="true" />
+      <Column Name="SalesCompanyDistrict" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="SalesmanID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SalesmanStaffID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="SalesmanUserName" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="SalesmanRealName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SalesmanSelCode" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SalesmanStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SalesmanLastLoginDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="SalesmanRoleID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="SalesmanRoleName" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="SalesmanRoleStatus" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="AdminStaffID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="AdminUserName" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="AdminRealName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="AdminSelCode" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="AdminStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AdminLastLoginDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="AdminRoleID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="AdminRoleName" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="AdminRoleStatus" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SupplierID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SupplierStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SupplierName" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="SupplierDistrict" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="SupplierType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SupplierNature" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SupplierGrade" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SupplierAreaType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SupplierIsFactory" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="SupplierAgentCompany" Type="System.String" DbType="VarChar(150)" CanBeNull="true" />
+      <Column Name="SupplierTaxperNumber" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="SupplierDyjCode" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SupplierInvoiceType" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SupplierCurrency" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SupplierPrice" Type="System.Decimal" DbType="Decimal(18,5) NOT NULL" CanBeNull="false" />
+      <Column Name="SupplierRepayCycle" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ProductID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ProductName" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="ProductManufacturer" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="ProductPackageCase" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="ProductPacking" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="ProductBatch" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="ProductMOQ" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ProductMPQ" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ProductHSCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ProductClassification" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="ProductTaxCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ProductTaxableName" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="ProductAddedTariffs" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="ProductAddedTax" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="ProductInspFee" Type="System.Decimal" DbType="Decimal(18,5)" CanBeNull="true" />
+      <Column Name="ProductNeedCCCCertificate" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="ProductIsEmbargo" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="ProductTariffRate" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="ProductIsInsp" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="ProductOrigin" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="CarrierID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CarrierStaffID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CarrierUserName" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="CarrierRealName" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="CarrierSelCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CarrierStatus" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CarrierLastLoginDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="CarrierRoleID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CarrierRoleName" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="CarrierRoleStatus" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PurchaserID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PurchaserStaffID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PurchaserUserName" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="PurchaserRealName" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="PurchaserSelCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PurchaserStatus" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PurchaserLastLoginDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="PurchaserRoleID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PurchaserRoleName" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="PurchaserRoleStatus" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="EnterStorageID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="EnterStorageGrade" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="EnterStorageDistrict" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="EnterStorageAddress" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="EnterStorageDyjCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="EnterStorageName" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="EnterStorageAdminCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="EnterStorageRegAddress" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="EnterStorageCorporation" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="EnterStorageUscc" Type="System.String" DbType="VarChar(150)" CanBeNull="true" />
+      <Column Name="EnterStorageAdminID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="EnterStorageCreateDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="EnterStorageUpdateDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="EnterStorageStatus" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="EnterStorageWsCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ExitStorageID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ExitStorageGrade" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ExitStorageDistrict" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ExitStorageAddress" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="ExitStorageDyjCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ExitStorageName" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="ExitStorageAdminCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ExitStorageRegAddress" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="ExitStorageCorporation" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="ExitStorageUscc" Type="System.String" DbType="VarChar(150)" CanBeNull="true" />
+      <Column Name="ExitStorageAdminID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ExitStorageCreateDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ExitStorageUpdateDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ExitStorageStatus" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ExitStorageWsCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PurchaseCompanyID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PurchaseCompanyType" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PurchaseCompanyRange" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PurchaseCompanyStatus" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PurchaseCompanyName" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="PurchaseCompanyCorporation" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="PurchaseCompanyRegAddress" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="PurchaseCompanyUscc" Type="System.String" DbType="VarChar(150)" CanBeNull="true" />
+      <Column Name="PurchaseCompanyDistrict" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="SalesCompanyBeneficiaryID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="SalesCompanyBeneficiaryInvoiceType" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SalesCompanyBeneficiaryRealName" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="SalesCompanyBeneficiaryBank" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="SalesCompanyBeneficiaryBankAddress" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="SalesCompanyBeneficiaryAccount" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="SalesCompanyBeneficiarySwiftCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="SalesCompanyBeneficiaryMethord" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SalesCompanyBeneficiaryCurrency" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SalesCompanyBeneficiaryDistrict" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SalesCompanyBeneficiaryName" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="SalesCompanyBeneficiaryTel" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="SalesCompanyBeneficiaryMobile" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="SalesCompanyBeneficiaryEmail" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="SupplierBeneficiaryID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="SupplierBeneficiaryInvoiceType" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SupplierBeneficiaryRealName" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="SupplierBeneficiaryBank" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="SupplierBeneficiaryBankAddress" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="SupplierBeneficiaryAccount" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="SupplierBeneficiarySwiftCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="SupplierBeneficiaryMethord" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SupplierBeneficiaryCurrency" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SupplierBeneficiaryDistrict" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SupplierBeneficiaryName" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="SupplierBeneficiaryTel" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="SupplierBeneficiaryMobile" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="SupplierBeneficiaryEmail" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PurchaseCompanyBeneficiaryID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PurchaseCompanyBeneficiaryInvoiceType" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PurchaseCompanyBeneficiaryRealName" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="PurchaseCompanyBeneficiaryBank" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="PurchaseCompanyBeneficiaryBankAddress" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="PurchaseCompanyBeneficiaryAccount" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PurchaseCompanyBeneficiarySwiftCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PurchaseCompanyBeneficiaryMethord" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PurchaseCompanyBeneficiaryCurrency" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PurchaseCompanyBeneficiaryDistrict" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PurchaseCompanyBeneficiaryName" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PurchaseCompanyBeneficiaryTel" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PurchaseCompanyBeneficiaryMobile" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PurchaseCompanyBeneficiaryEmail" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="QpriceID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="QpriceMainID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="QpriceCurrency" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="QpricePrice" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="QpriceCurrency1" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="QpricePrice1" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="QpriceERate1" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="QpriceTaxCurrency" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="QpriceTaxedPrice" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="QpriceUntaxedPrice" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="QpriceTaxERate" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="QpriceVATRate" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="QpriceStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="QpriceType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SaleQpriceID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SaleQpriceMainID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SaleQpriceCurrency" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SaleQpricePrice" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="SaleQpriceCurrency1" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SaleQpricePrice1" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="SaleQpriceERate1" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="SaleQpriceTaxCurrency" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SaleQpriceTaxedPrice" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="SaleQpriceUntaxedPrice" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="SaleQpriceTaxERate" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="SaleQpriceVATRate" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="SaleQpriceStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SaleQpriceType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TotalQpriceID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="TotalQpriceMainID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="TotalQpriceCurrency" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TotalQpricePrice" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="TotalQpriceCurrency1" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TotalQpricePrice1" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="TotalQpriceERate1" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="TotalQpriceTaxCurrency" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TotalQpriceTaxedPrice" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="TotalQpriceUntaxedPrice" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="TotalQpriceTaxERate" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="TotalQpriceVATRate" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="TotalQpriceStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TotalQpriceType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseTotalID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseTotalMainID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseTotalCurrency" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseTotalPrice" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseTotalCurrency1" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseTotalPrice1" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseTotalERate1" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseTotalTaxCurrency" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseTotalTaxedPrice" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseTotalUntaxedPrice" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseTotalTaxERate" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseTotalVATRate" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseTotalStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseTotalType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SaleTotalID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SaleTotalMainID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SaleTotalCurrency" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SaleTotalPrice" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="SaleTotalCurrency1" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SaleTotalPrice1" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="SaleTotalERate1" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="SaleTotalTaxCurrency" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SaleTotalTaxedPrice" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="SaleTotalUntaxedPrice" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="SaleTotalTaxERate" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="SaleTotalVATRate" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="SaleTotalStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SaleTotalType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PurchasePriceMainID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PurchasePriceCurrency" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PurchasePricePrice" Type="System.Decimal" DbType="Decimal(18,7)" CanBeNull="true" />
+      <Column Name="PurchasePriceCurrency1" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PurchasePricePrice1" Type="System.Decimal" DbType="Decimal(18,7)" CanBeNull="true" />
+      <Column Name="PurchasePriceERate1" Type="System.Decimal" DbType="Decimal(18,7)" CanBeNull="true" />
+      <Column Name="PurchasePriceTaxCurrency" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PurchasePriceTaxedPrice" Type="System.Decimal" DbType="Decimal(18,7)" CanBeNull="true" />
+      <Column Name="PurchasePriceUntaxedPrice" Type="System.Decimal" DbType="Decimal(18,7)" CanBeNull="true" />
+      <Column Name="PurchasePriceTaxERate" Type="System.Decimal" DbType="Decimal(18,7)" CanBeNull="true" />
+      <Column Name="PurchasePriceVATRate" Type="System.Decimal" DbType="Decimal(18,7)" CanBeNull="true" />
+      <Column Name="PurchasePriceStatus" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PurchasePriceType" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.QuotesTopView" Member="QuotesTopView">
+    <Type Name="QuotesTopView">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="InquiryID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Taxedtotal" Type="System.Decimal" DbType="Decimal(37,14)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.StaffsTopView" Member="StaffsTopView">
+    <Type Name="StaffsTopView">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Code" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="DyjCompanyCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="DyjDepartmentCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="DyjCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="WorkCity" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.StatisticsAdvantagesView" Member="StatisticsAdvantagesView">
+    <Type Name="StatisticsAdvantagesView">
+      <Column Name="PartNumber" Type="System.String" DbType="VarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Count" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.StatisticsOrderedRateView" Member="StatisticsOrderedRateView">
+    <Type Name="StatisticsOrderedRateView">
+      <Column Name="ClientID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="InquiryCount" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PurchaseCount" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.StatisticsPurchasesView" Member="StatisticsPurchasesView">
+    <Type Name="StatisticsPurchasesView">
+      <Column Name="PartNumber" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Count" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.StatisticsQuotesView" Member="StatisticsQuotesView">
+    <Type Name="StatisticsQuotesView">
+      <Column Name="PartNumber" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Count" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.StatisticsStoragesView" Member="StatisticsStoragesView">
+    <Type Name="StatisticsStoragesView">
+      <Column Name="PartNumber" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="Count" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.StoragesView" Member="StoragesView">
+    <Type Name="StoragesView">
+      <Column Name="是否发布" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="发布价格" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+      <Column Name="限价" Type="System.Decimal" DbType="Decimal(18,4) NOT NULL" CanBeNull="false" />
+      <Column Name="进价" Type="System.Decimal" DbType="Decimal(18,4) NOT NULL" CanBeNull="false" />
+      <Column Name="美金" Type="System.Decimal" DbType="Decimal(18,4)" CanBeNull="true" />
+      <Column Name="型号" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="剩余数量" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="金额" Type="System.Decimal" DbType="Decimal(29,4)" CanBeNull="true" />
+      <Column Name="部门号" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="是否备货部门" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="厂家" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="批号" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="描述" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="封装" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="仓库" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="入库编号" Type="System.String" DbType="NVarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="原始入库编号" Type="System.String" DbType="NVarChar(25)" CanBeNull="true" />
+      <Column Name="入库日期" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="原始入库日期" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="位置" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="强限价" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="单据类型" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="开票类型" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="开票公司" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="下单公司" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="备注" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="PanKuFlag" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="盘库日期" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="盘库前型号" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="盘库前数量" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="盘库型号" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="盘库数量" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="盘库厂家" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="盘库描述" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="PKPack" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="MinPack" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="OperID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="OperName" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="publishid" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="uptime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="单据号" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="明细ID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SQInVoiceType" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="StorageID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="BuyerID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="BillType" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CorpIDA" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="禁用" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Sales" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Logs_AgentInquiryStatus" Member="Logs_AgentInquiryStatus">
+    <Type Name="Logs_AgentInquiryStatus">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="MainID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300) NOT NULL" CanBeNull="false" />
+      <Column Name="IsLatest" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="AgentInquiries_Logs_AgentInquiryStatus" Member="AgentInquiries" ThisKey="MainID" OtherKey="ID" Type="AgentInquiries" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Logs_AgentQuoteStatus" Member="Logs_AgentQuoteStatus">
+    <Type Name="Logs_AgentQuoteStatus">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="MainID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300) NOT NULL" CanBeNull="false" />
+      <Column Name="IsLatest" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="AgentQuotes_Logs_AgentQuoteStatus" Member="AgentQuotes" ThisKey="MainID" OtherKey="ID" Type="AgentQuotes" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.AgentQuotes" Member="AgentQuotes">
+    <Type Name="AgentQuotes">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="AgentInquiryID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="NominalID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="SupplierID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ClientCurrency" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ClientPrice" Type="System.Decimal" DbType="Decimal(18,7)" CanBeNull="true" />
+      <Column Name="InputCurrency" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="InputPrice" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="OutPutERate" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="OutputCurrency" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="OutputPrice" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="ProfitRate" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="ProductID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="InvoiceType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PayType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DeliveryDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="TermDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="IsReport" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="ProjectID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="EnterStorageID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="ModifyDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300) NOT NULL" CanBeNull="false" />
+      <Column Name="IsAvailable" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="AgentQuotes_Logs_AgentQuoteStatus" Member="Logs_AgentQuoteStatus" ThisKey="ID" OtherKey="MainID" Type="Logs_AgentQuoteStatus" />
+      <Association Name="AgentQuotes_SalesQuotes" Member="SalesQuotes" ThisKey="ID" OtherKey="AgentQuoteID" Type="SalesQuotes" />
+    </Type>
+  </Table>
+  <Table Name="dbo.OrderItems" Member="OrderItems">
+    <Type Name="OrderItems">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="SaleQuoteID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="OrderID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CustomerCode" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="SupplierID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ProductID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DeliveryDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PriceID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="TotalPriceID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CostQID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CostPID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="QuotePriceID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PurchasePriceID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PurchaseStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ContractID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Source" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Nature" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="OrderItems_Logs_OrderItemStatus" Member="Logs_OrderItemStatus" ThisKey="ID" OtherKey="MainID" Type="Logs_OrderItemStatus" />
+      <Association Name="OrderItems_Purchases" Member="Purchases" ThisKey="ID" OtherKey="OrderItemID" Type="Purchases" />
+      <Association Name="Contracts_OrderItems" Member="Contracts" ThisKey="ContractID" OtherKey="ID" Type="Contracts" IsForeignKey="true" />
+      <Association Name="Orders_OrderItems" Member="Orders" ThisKey="OrderID" OtherKey="ID" Type="Orders" IsForeignKey="true" />
+      <Association Name="SalesQuotes_OrderItems" Member="SalesQuotes" ThisKey="SaleQuoteID" OtherKey="ID" Type="SalesQuotes" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Boms" Member="Boms">
+    <Type Name="Boms">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ClientID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="BussinessType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="District" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Currency" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Contact" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="ContactMobile" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="AgentID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="Boms_BomSearchers" Member="BomSearchers" ThisKey="ID" OtherKey="MainID" Type="BomSearchers" />
+      <Association Name="Boms_Inquiries" Member="Inquiries" ThisKey="ID" OtherKey="BomID" Type="Inquiries" />
+    </Type>
+  </Table>
+  <Table Name="dbo.BeneficiariesTopView" Member="BeneficiariesTopView">
+    <Type Name="BeneficiariesTopView">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="EnterpriseID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="InvoiceType" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="RealName" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="RealID" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="Bank" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="BankAddress" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="Account" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SwiftCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Methord" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Currency" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="District" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="Tel" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="Mobile" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="Email" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.CompaniesTopView" Member="CompaniesTopView">
+    <Type Name="CompaniesTopView">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Range" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Corporation" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="RegAddress" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="Uscc" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="District" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ConsigneesTopView" Member="ConsigneesTopView">
+    <Type Name="ConsigneesTopView">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="EnterpriseID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="DyjCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="District" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Address" Type="System.String" DbType="NVarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="PostZip" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Tel" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Mobile" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Email" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="Title" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Place" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="RegAddress" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="Uscc" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Corperation" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.EnterprisesTopView" Member="EnterprisesTopView">
+    <Type Name="EnterprisesTopView">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="AdminCode" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Corperation" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="RegAddress" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="Uscc" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Place" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="District" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.InvoicesTopView" Member="InvoicesTopView">
+    <Type Name="InvoicesTopView">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="EnterpriseID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="EnterpriseName" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="District" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Bank" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="BankAddress" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="Account" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="TaxperNumber" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Type" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="Address" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="Postzip" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="Tel" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Mobile" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="Email" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.nBrandsTopView" Member="nBrandsTopView">
+    <Type Name="nBrandsTopView">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="BrandID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="BrandName" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="SupplierID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SupplierName" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.SuppliersTopView" Member="SuppliersTopView">
+    <Type Name="SuppliersTopView">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Nature" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="Grade" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="AreaType" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="IsFactory" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="AgentCompany" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="TaxperNumber" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="DyjCode" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="InvoiceType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Currency" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Price" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="RepayCycle" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Corperation" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="RegAddress" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="Uscc" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="District" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.vBrandsTopView" Member="vBrandsTopView">
+    <Type Name="vBrandsTopView">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="BrandID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="BrandName" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.WarehousesTopView" Member="WarehousesTopView">
+    <Type Name="WarehousesTopView">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Grade" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="District" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Address" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="DyjCode" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="AdminCode" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="RegAddress" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="Corporation" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="Uscc" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="WsCode" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.EnumsDictionariesTopView" Member="EnumsDictionariesTopView">
+    <Type Name="EnumsDictionariesTopView">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Enum" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="IsFixed" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Field" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Value" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="CreatorID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ClientsTopView" Member="ClientsTopView">
+    <Type Name="ClientsTopView">
+      <Column Name="Name" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Nature" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Grade" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DyjCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="TaxperNumber" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Vip" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="AreaType" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Corperation" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="RegAddress" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="Uscc" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="District" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="IsNew" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PurchaseHistoriesTopView" Member="PurchaseHistoriesTopView">
+    <Type Name="PurchaseHistoriesTopView">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TradeType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Manufacturer" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="PackageCase" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Batch" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Currency" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Price" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="TaxCurrency" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TaxedPrice" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="UntaxedPrice" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="TaxERate" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="VATRate" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PurchaseQuotesTopView" Member="PurchaseQuotesTopView">
+    <Type Name="PurchaseQuotesTopView">
+      <Column Name="PartNumber" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Manufacturer" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="PackageCase" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Batch" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="MOQ" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="MPQ" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Supplier" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Currency" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Price" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="Currency1" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Price1" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="ERate1" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="TaxedPrice" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DeliveryDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="DurationDateTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PurchasingCycle" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PurchasingCycleDateTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Quotes" Member="Quotes">
+    <Type Name="Quotes">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="InquiryID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="InuptID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ProductID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SupplierID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="RealSupplierID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="WarehouseID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TradeType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DeliveryDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="DurationDate" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DurationDateTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PurchasingCycle" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PurchasingCycleDateTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="InvoiceType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="NeedCCCCertificate" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="IsEmbargo" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="TariffRate" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="IsInsp" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="AddedTariffs" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="PriceID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Price1ID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PayType" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Approver" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="Source" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Quotes_Logs_QuoteStatus" Member="Logs_QuoteStatus" ThisKey="ID" OtherKey="MainID" Type="Logs_QuoteStatus" />
+      <Association Name="Quotes_Premiums" Member="Premiums" ThisKey="ID" OtherKey="QuoteID" Type="Premiums" />
+      <Association Name="Quotes_SecondInquiries" Member="SecondInquiries" ThisKey="ID" OtherKey="QuoteID" Type="SecondInquiries" />
+      <Association Name="Quotes_SalesQuotes" Member="SalesQuotes" ThisKey="ID" OtherKey="QuoteID" Type="SalesQuotes" />
+      <Association Name="Products_Quotes" Member="Products" ThisKey="ProductID" OtherKey="ID" Type="Products" IsForeignKey="true" />
+      <Association Name="Inquiries_Quotes" Member="Inquiries" ThisKey="InquiryID" OtherKey="ID" Type="Inquiries" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Inquiries" Member="Inquiries">
+    <Type Name="Inquiries">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="BomID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="InputID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ClientID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="BussinessType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="District" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Contact" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="ContactMobile" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Manufacturer" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="MfReplace" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="ChannelRequirement" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Package" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Batch" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="QuantityRemark" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TradeType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="InvoiceType" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DeliveryDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="IsFocus" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ReplyTime" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ReplyTimeDateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="PurchasingCycle" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PurchasingCycleDateTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="NeedCCCCertificate" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="IsEmbargo" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="TariffRate" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="IsInsp" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="AddedTariffs" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="ApprovalDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="QuoteDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="AgentID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PriceID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="IsFollow" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Nature" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Currency" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Inquiries_Logs_CheckStatus" Member="Logs_CheckStatus" ThisKey="ID" OtherKey="MainID" Type="Logs_CheckStatus" />
+      <Association Name="Inquiries_Logs_InquiryStatus" Member="Logs_InquiryStatus" ThisKey="ID" OtherKey="MainID" Type="Logs_InquiryStatus" />
+      <Association Name="Inquiries_MapsInquiryQuoter" Member="MapsInquiryQuoter" ThisKey="ID" OtherKey="InquiryID" Type="MapsInquiryQuoter" />
+      <Association Name="Inquiries_Quotes" Member="Quotes" ThisKey="ID" OtherKey="InquiryID" Type="Quotes" />
+      <Association Name="Inquiries_SalesQuotes" Member="SalesQuotes" ThisKey="ID" OtherKey="InquiryID" Type="SalesQuotes" />
+      <Association Name="Boms_Inquiries" Member="Boms" ThisKey="BomID" OtherKey="ID" Type="Boms" IsForeignKey="true" />
+      <Association Name="QPrices_Inquiries" Member="QPrices" ThisKey="PriceID" OtherKey="ID" Type="QPrices" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.SalesQuotes" Member="SalesQuotes">
+    <Type Name="SalesQuotes">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="BomID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="InquiryID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="QuoteID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="AgentInquiryID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="AgentQuoteID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ClientID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="BussinessType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="District" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Contact" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="ContactMobile" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ProductID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SupplierID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="WarehouseID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DeliveryDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="TradeType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PriceID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Source" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Nature" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="SalesQuotes_Logs_SaleQuoteStatus" Member="Logs_SaleQuoteStatus" ThisKey="ID" OtherKey="MainID" Type="Logs_SaleQuoteStatus" />
+      <Association Name="SalesQuotes_Logs_SalesQuotes" Member="Logs_SalesQuotes" ThisKey="ID" OtherKey="MainID" Type="Logs_SalesQuotes" />
+      <Association Name="SalesQuotes_OrderItems" Member="OrderItems" ThisKey="ID" OtherKey="SaleQuoteID" Type="OrderItems" />
+      <Association Name="AgentInquiries_SalesQuotes" Member="AgentInquiries" ThisKey="AgentInquiryID" OtherKey="ID" Type="AgentInquiries" IsForeignKey="true" />
+      <Association Name="AgentQuotes_SalesQuotes" Member="AgentQuotes" ThisKey="AgentQuoteID" OtherKey="ID" Type="AgentQuotes" IsForeignKey="true" />
+      <Association Name="Inquiries_SalesQuotes" Member="Inquiries" ThisKey="InquiryID" OtherKey="ID" Type="Inquiries" IsForeignKey="true" />
+      <Association Name="Quotes_SalesQuotes" Member="Quotes" ThisKey="QuoteID" OtherKey="ID" Type="Quotes" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Function Name="dbo.dp_PurchaseQuoteStatistic" Method="dp_PurchaseQuoteStatistic">
+    <Parameter Name="startDate" Type="System.DateTime" DbType="DateTime" />
+    <Parameter Name="endDate" Type="System.DateTime" DbType="DateTime" />
+    <ElementType Name="dp_PurchaseQuoteStatisticResult">
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="RealName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CommonCount" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="AssignCount" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="QuoteCount" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ApprovalCount" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ConfirmCount" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="RejectCount" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PurchaseCount" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.dp_StatisticAdmin" Method="dp_StatisticAdmin">
+    <Parameter Name="name" Type="System.String" DbType="VarChar(150)" />
+    <Parameter Name="manufacturer" Type="System.String" DbType="VarChar(150)" />
+    <ElementType Name="dp_StatisticAdminResult">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="StaffID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="UserName" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="RealName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SelCode" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="LastLoginDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="RoleID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="RoleName" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="bussiness" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="AdminID1" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="AdminID2" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="AdminID3" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Storage" Type="System.String" DbType="VarChar(2) NOT NULL" CanBeNull="false" />
+      <Column Name="Advantage" Type="System.String" DbType="VarChar(2) NOT NULL" CanBeNull="false" />
+      <Column Name="Purchase" Type="System.String" DbType="VarChar(2) NOT NULL" CanBeNull="false" />
+      <Column Name="Quote" Type="System.String" DbType="VarChar(2) NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.StatisBomUpdate" Method="StatisBomUpdate">
+    <Parameter Name="BomID" Parameter="bomID" Type="System.String" DbType="VarChar(50)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.StatisInquiryUpdate" Method="StatisInquiryUpdate">
+    <Parameter Name="InquiryID" Parameter="inquiryID" Type="System.String" DbType="VarChar(50)" />
+    <Return Type="System.Int32" />
+  </Function>
+</Database>

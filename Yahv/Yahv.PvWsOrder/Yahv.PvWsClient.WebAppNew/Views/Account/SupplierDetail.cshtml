@@ -1,0 +1,476 @@
+﻿@{
+    ViewBag.subTitle = "供应商详情";
+}
+<div id="vSupplierDetail" v-cloak class="tab_content">
+    <el-form :model="datalist" ref="ruleForm" label-width="120px">
+        <div class="info_item_wrap">
+            <span class="icon_img">1</span>
+            <span class="title">基础信息</span>
+        </div>
+        <div class="info mt10">
+            <div class="clearfix mb10">
+                <div class="fl wp50">
+                    <span class="fl txt2">中文名称:</span>
+                    <span class=" fl txt3">{{datalist.ChineseName}}</span>
+                </div>
+                <div class="fl wp50">
+                    <span class="fl txt2">中文简称:</span>
+                    <span class=" fl txt3">{{datalist.Name}}</span>
+                </div>
+            </div>
+            <div class="clearfix mb10">
+                <div class="fl wp50">
+                    <span class="fl txt2">英文名称:</span>
+                    <span class=" fl txt3">{{datalist.EnglishName}}</span>
+                </div>
+                @*<div class="fl wp50">
+                    <span class="fl txt2">等级:</span>
+                    <span class=" fl txt3">{{datalist.nGrade}}</span>
+                </div>*@
+            </div>
+            <div class="clearfix mb10">
+                <div class="fl wp50">
+                    <span class="fl txt2">国家/地区:</span>
+                    <span class=" fl txt3">{{datalist.Place}}</span>
+                </div>
+                <div class="fl wp50">
+                    <span class="fl txt2">详细地址:</span>
+                    <span class=" fl txt3">{{datalist.RegAddress}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="info_item_wrap  mt20">
+            <span class="icon_img">2</span>
+            <span class="title">银行信息</span>
+            <a v-on:click="add_Bank" class="ml20 link font14">新增银行信息</a>
+        </div>
+        <div id="banklist" class="tb_wrap">
+            <table class="common_tb1 mt20">
+                <tr>
+                    <th width="36px">序号</th>
+                    <th>账户名称</th>
+                    <th>账号</th>
+                    <th>国家/地区</th>
+                    <th>银行名称</th>
+                    <th>银行地址</th>
+                    <th>SWIFTCODE</th>
+                    <th width="70px">操作</th>
+                </tr>
+                <tr v-for="(item,index) in datalist.Banks">
+                    <td>{{index+1}}</td>
+                    <td>{{item.RealName}}</td>
+                    <td>{{item.Account}}</td>
+                    <td>{{item.Place}}</td>
+                    <td>{{item.Bank}}</td>
+                    <td>{{item.BankAddress}}</td>
+                    <td>{{item.SwiftCode}}</td>
+                    <td class="operate"><a v-on:click="edit_bank(item.ID)">编辑</a><a v-on:click="del_bank(item.ID)">删除</a></td>
+                </tr>
+            </table>
+        </div>
+        <div class="info_item_wrap mt20">
+            <span class="icon_img">3</span>
+            <span class="title">联系人信息</span>
+            <a v-on:click="add_Contact" class="ml20 link font14">新增联系人信息</a>
+        </div>
+        <div id="contactlist" class="tb_wrap">
+            <table class="common_tb1 mt20">
+                <tr>
+                    <th width="36px">序号</th>
+                    <th>联系人</th>
+                    <th>联系电话</th>
+                    <th>手机号</th>
+                    <th>Email</th>
+                    <th>QQ</th>
+                    <th>状态</th>
+                    <th width="70px">操作</th>
+                </tr>
+                <tr v-for="(item,index) in datalist.Contacts">
+                    <td>{{index+1}}</td>
+                    <td>{{item.Name}}</td>
+                    <td>{{item.Tel}}</td>
+                    <td>{{item.Mobile}}</td>
+                    <td>{{item.Email}}</td>
+                    <td>{{item.QQ}}</td>
+                    <td>{{item.Status}}</td>
+                    <td class="operate"><a v-on:click="edit_contact(item.ID)">编辑</a><a v-on:click="del_contact(item.ID)">删除</a></td>
+                </tr>
+            </table>
+        </div>
+        <div class="info_item_wrap  mt20">
+            <span class="icon_img">4</span>
+            <span class="title">提货地址信息</span>
+            <a v-on:click="add_Address" class="ml20 link font14">新增提货地址</a>
+        </div>
+        <div id="banklist" class="tb_wrap">
+            <table class="common_tb1 mt20">
+                <tr>
+                    <th width="36px">序号</th>
+                    <th>详细地址</th>
+                    <th>联系人</th>
+                    <th>手机</th>
+                    <th>电话</th>
+                    <th>邮编</th>
+                    <th width="70px">操作</th>
+                </tr>
+                <tr v-for="(item,index) in datalist.Address">
+                    <td>{{index+1}}</td>
+                    <td>{{item.Address}}</td>
+                    <td>{{item.Contact}}</td>
+                    <td>{{item.Mobile}}</td>
+                    <td>{{item.Tel}}</td>
+                    <td>{{item.PostZip}}</td>
+                    <td class="operate"><a v-on:click="edit_Address(item.ID)">编辑</a><a v-on:click="del_Address(item.ID)">删除</a></td>
+                </tr>
+            </table>
+        </div>
+    </el-form>
+    <el-dialog :title="BankName" :lock-scroll="false" width="30%" :visible.sync="BankVisible" v-on:close="Bank_Closed" :close-on-click-modal="false">
+        <my-bank ref="bank"></my-bank>
+        <div slot="footer" class="dialog-footer">
+            <button v-on:click="BankVisible = false" class="btn1">取 消</button>
+            <button v-on:click="onSubmit_Bank('bank')" class="btn2 ml12">确 定</button>
+        </div>
+    </el-dialog>
+    <el-dialog :title="ContactName" :lock-scroll="false" width="30%" :visible.sync="ContactVisible" v-on:close="Contact_Closed" :close-on-click-modal="false">
+        <my-contact ref="contact"></my-contact>
+        <div slot="footer" class="dialog-footer">
+            <el-button v-on:click="ContactVisible = false" class="btn1">取 消</el-button>
+            <el-button v-on:click="onSubmit_Conatct('contact')" class="btn2 ml12">确 定</el-button>
+        </div>
+    </el-dialog>
+    <el-dialog :title="AddressName" :lock-scroll="false" width="30%" :visible.sync="AddressVisible" v-on:close="Address_Closed" :close-on-click-modal="false">
+        <my-address ref="address"></my-address>
+        <div slot="footer" class="dialog-footer">
+            <el-button v-on:click="AddressVisible = false" class="btn1">取 消</el-button>
+            <el-button v-on:click="onSubmit_Address('address')" class="btn2 ml12">确 定</el-button>
+        </div>
+    </el-dialog>
+</div>
+@{Html.RenderAction("_PartialSupplierAddressInfo", "Account");}
+@{Html.RenderAction("_PartialSupplierBankInfo", "Account");}
+@{Html.RenderAction("_PartialSupplierContactInfo", "Account");}
+<script>
+    var vSupplierDetail = new Vue({
+        el: "#vSupplierDetail",
+        data: {
+            datalist:@Html.Raw(Json.Encode(Model)),
+            BankVisible: false,
+            AddressVisible: false,
+            ContactVisible: false,
+            BankName: "",
+            ContactName: "",
+            AddressName: "",
+            loading:false
+        },
+        methods: {
+            GetSupplierDetail:  function () {
+                var that = this;
+                axios({
+                    url: "/Account/GetSupplierDetail",
+                    method: "post",
+                    data: {
+                        id: that.datalist.ID
+                    }
+                }).then(function (res) {
+                    that.datalist = JSON.parse(res.data.data);
+                }).catch(function (error) {
+                    vSupplierDetail.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //新增银行信息
+            add_Bank: function () {
+                vSupplierDetail.BankName = "新增银行信息";
+                vSupplierDetail.BankVisible = true;
+                setTimeout(function(){
+                    vSupplierDetail.$refs.bank.$refs.form1.resetFields();
+                    vSupplierDetail.$refs.bank.form1.ID = "";
+                    vSupplierDetail.$refs.bank.form1.SupplierID = vSupplierDetail.datalist.ID;
+
+                    vSupplierDetail.$refs.bank.editSupplierID = vSupplierDetail.datalist.ID;
+                    vSupplierDetail.$refs.bank.changeFlag = vSupplierDetail.$refs.bank.changeFlag + 1;
+
+                }, 0);
+            },
+            //新增联系人信息
+            add_Contact: function () {
+                vSupplierDetail.ContactName = "新增联系人信息";
+                vSupplierDetail.ContactVisible = true;
+                setTimeout(function(){
+                    vSupplierDetail.$refs.contact.$refs.form1.resetFields();
+                    vSupplierDetail.$refs.contact.form1.ID = "";
+                    vSupplierDetail.$refs.contact.form1.SupplierID = vSupplierDetail.datalist.ID;
+                }, 0);
+            },
+            //新增提货地址
+            add_Address: function () {
+                vSupplierDetail.AddressName = "新增提货地址";
+                vSupplierDetail.AddressVisible = true;
+                setTimeout(function(){
+                    vSupplierDetail.$refs.address.IsSupplier = false;
+                    vSupplierDetail.$refs.address.$refs.form1.resetFields();
+                    vSupplierDetail.$refs.address.form1.Address = [];
+                    vSupplierDetail.$refs.address.form1.ID = "";
+                    vSupplierDetail.$refs.address.form1.SupplierID = vSupplierDetail.datalist.ID;
+                }, 0);
+            },
+            //银行信息编辑
+            edit_bank: function (id) {
+                var that = this;
+                axios({
+                    url: "/Account/GetSupplierBankInfo",
+                    method: "post",
+                    data: {
+                        bankid: id,
+                        supplierid:that.datalist.ID
+                    }
+                }).then(function (res) {
+                    vSupplierDetail.BankName = "编辑银行信息";
+                    vSupplierDetail.BankVisible = true;
+                    setTimeout(function(){
+                        vSupplierDetail.$refs.bank.editSupplierID = that.datalist.ID;
+                        vSupplierDetail.$refs.bank.form1 = JSON.parse(res.data.data);
+                        vSupplierDetail.$refs.bank.changeFlag = vSupplierDetail.$refs.bank.changeFlag + 1;
+                    }, 0)
+                }).catch(function (error) {
+                    vSupplierDetail.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //联系人编辑
+            edit_contact: function (id) {
+                var that = this;
+                axios({
+                    url: "/Account/GetSupplierContactInfo",
+                    method: "post",
+                    data: {
+                        contactid: id,
+                        supplierid:that.datalist.ID
+                    }
+                }).then(function (res) {
+                    vSupplierDetail.ContactName = "编辑联系人";
+                    vSupplierDetail.ContactVisible = true;
+                    setTimeout(function(){
+                        vSupplierDetail.$refs.contact.form1 = JSON.parse(res.data.data);
+                    }, 0)
+                }).catch(function (error) {
+                    vSupplierDetail.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //收货地址编辑
+            edit_Address: function (id) {
+                var that = this;
+                axios({
+                    url: "/Account/GetSupplierAddressInfo",
+                    method: "post",
+                    data: {
+                        addressid: id,
+                        supplierid:that.datalist.ID
+                    }
+                }).then(function (res) {
+                    vSupplierDetail.AddressName = "编辑提货地址";
+                    vSupplierDetail.AddressVisible = true;
+                    setTimeout(function() {
+                            vSupplierDetail.$refs.address.IsSupplier = false;
+                            vSupplierDetail.$refs.address.form1 = JSON.parse(res.data.data);
+                        },
+                        0);
+                }).catch(function (error) {
+                    vSupplierDetail.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //删除银行信息
+            del_bank:function(id){
+                var that = this;
+                this.$confirm('您确定要删除该银行信息吗？', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                    lockScroll:false,
+                }).then(function(){
+                    axios({
+                        url: "/Account/DeleteSupplierBank",
+                        method: "post",
+                        data: {
+                            bankid: id,
+                            supplierid:that.datalist.ID
+                        }
+                    }).then(function (res) {
+                        vSupplierDetail.GetSupplierDetail(); //刷新列表
+                        vSupplierDetail.onAlert(res.data.type, res.data.msg);
+                    }).catch(function (error) {
+                        vSupplierDetail.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                    });
+                }).catch(function() {
+                    //取消
+                });
+            },
+            //删除联系人
+            del_contact: function (id) {
+                var that = this;
+                this.$confirm('您确定要删除该联系人吗？', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                    lockScroll:false
+                }).then(function(){
+                    axios({
+                        url: "/Account/DeleteSupplierContact",
+                        method: "post",
+                        data: {
+                            contactid: id,
+                            supplierid:that.datalist.ID
+                        }
+                    }).then(function (res) {
+                        vSupplierDetail.GetSupplierDetail(); //刷新列表
+                        vSupplierDetail.onAlert(res.data.type, res.data.msg);
+
+                    }).catch(function (error) {
+                        vSupplierDetail.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                    });
+                }).catch(function() {
+                    //取消
+                });
+            },
+            //删除提货地址
+            del_Address: function (id) {
+                var that = this;
+                this.$confirm('您确定要删除该提货地址吗？', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                    lockScroll:false
+                }).then(function(){
+                    axios({
+                        url: "/Account/DeleteSupplierAddress",
+                        method: "post",
+                        data: {
+                            addressid: id,
+                            supplierid:that.datalist.ID,
+                        }
+                    }).then(function (res) {
+                        vSupplierDetail.GetSupplierDetail(); //刷新列表
+                        vSupplierDetail.onAlert(res.data.type, res.data.msg);
+
+                    }).catch(function (error) {
+                        vSupplierDetail.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                    });
+                }).catch(function() {
+                    //取消
+                });
+            },
+            //弹框关闭后事件
+            Bank_Closed: function () {
+                 //初始化列表值
+                vSupplierDetail.$refs.bank.$refs.form1.resetFields();
+            },
+            //弹框关闭后事件
+            Contact_Closed: function () {
+                 //初始化列表值
+                vSupplierDetail.$refs.contact.$refs.form1.resetFields();
+            },
+            //弹框关闭后事件
+            Address_Closed: function () {
+                 //初始化列表值
+                vSupplierDetail.$refs.address.$refs.form1.resetFields();
+                vSupplierDetail.$refs.address.form1.Address = [];
+            },
+            //银行信息提交
+            onSubmit_Bank: function () {
+                var that = this;
+                this.$refs.bank.$refs.form1.validate(function(valid) {
+                    if (valid) {
+                        const loading = that.$loading({
+                            lock: false,
+                            text: 'Loading',
+                            spinner: 'el-icon-loading',
+                            background: 'rgba(0, 0, 0, 0.7)'
+                        });
+                        vSupplierDetail.BankVisible = false;
+                        axios({
+                            url: "/Account/SupplierBankInfoSubmit",
+                            method: "post",
+                            data: vSupplierDetail.$refs.bank.form1
+                        }).then(function (response) {
+                            vSupplierDetail.GetSupplierDetail(); //刷新列表
+                            vSupplierDetail.onAlert(response.data.type, response.data.msg);
+                            loading.close();
+                        }).catch(function (error) {
+                            loading.close();
+                            vSupplierDetail.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                        });
+                    } else {
+                        //验证失败
+                    }
+                });
+            },
+            //联系人提交
+            onSubmit_Conatct: function () {
+                var that = this;
+                this.$refs.contact.$refs.form1.validate(function(valid) {
+                    if (valid) {
+                        const loading = that.$loading({
+                            lock: false,
+                            text: 'Loading',
+                            spinner: 'el-icon-loading',
+                            background: 'rgba(0, 0, 0, 0.7)'
+                        });
+                        vSupplierDetail.ContactVisible = false;
+                        axios({
+                            url: "/Account/SupplierContactInfoSubmit",
+                            method: "post",
+                            data: vSupplierDetail.$refs.contact.form1
+                        }).then(function (response) {
+                            vSupplierDetail.GetSupplierDetail(); //刷新列表
+                            vSupplierDetail.onAlert(response.data.type, response.data.msg);
+                            loading.close();
+                        }).catch(function (error) {
+                            loading.close();
+                            vSupplierDetail.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                        });
+                    } else {
+                        //验证失败
+                        return false;
+                    }
+                });
+            },
+            //提货地址提交
+            onSubmit_Address: function () {
+                var that = this;
+                this.$refs.address.$refs.form1.validate(function(valid) {
+                    if (valid) {
+                        const loading = that.$loading({
+                            lock: false,
+                            text: 'Loading',
+                            spinner: 'el-icon-loading',
+                            background: 'rgba(0, 0, 0, 0.7)'
+                        });
+                        vSupplierDetail.AddressVisible = false;
+                        axios({
+                            url: "/Account/SupplierAddressInfoSubmit",
+                            method: "post",
+                            data: vSupplierDetail.$refs.address.form1
+                        }).then(function (response) {
+                            vSupplierDetail.GetSupplierDetail(); //刷新列表
+                            vSupplierDetail.onAlert(response.data.type, response.data.msg);
+                            loading.close();
+                        }).catch(function (error) {
+                            loading.close();
+                            vSupplierDetail.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                        });
+                    } else {
+                        //验证失败
+                        return false;
+                    }
+                });
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type
+                });
+            }
+        }
+    });
+</script>
+
