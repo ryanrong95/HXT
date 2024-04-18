@@ -1,0 +1,142 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="keywords" content="jquery,ui,easy,easyui,web">
+    <meta name="description" content="easyui help you build your web page easily!">
+    <title>人员分配</title>
+    <link rel="stylesheet" type="text/css" href="http://www.jeasyui.net/Public/js/easyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="http://www.jeasyui.net/Public/js/easyui/themes/icon.css">
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.1.min.js"></script>
+    <script type="text/javascript" src="http://www.jeasyui.net/Public/js/easyui/jquery.easyui.min.js"></script>
+    <style type="text/css">
+        .right { }
+            .right table { background: #E0ECFF; width: 100%; }
+            .right td { background: #eee; text-align: center; padding: 2px; }
+            .right td { background: #E0ECFF; }
+                .right td.drop { background: #fafafa; width: 100px; }
+                .right td.over { background: #FBEC88; }
+        .item { text-align: center; border: 1px solid #499B33; background: #fafafa; width: 300px; margin: 3px; }
+        .assigned { border: 1px solid #BC2A4D; }
+    </style>
+    <script>
+        function startMenu(context) {
+            $(context).bind('contextmenu', function (e) {
+                e.preventDefault();
+
+                $('#mm').data('current', $(e.target));
+
+                $('#mm').menu('show', {
+                    left: e.pageX,
+                    top: e.pageY,
+
+                });
+            });
+        }
+
+        function menuHandler(item) {
+            var current = $('#mm').data('current');
+            if (item.name == 'cancel') {
+                current.remove();
+            }
+            if (item.name == 'clear') {
+                current.parent().empty();
+            }
+        }
+
+    </script>
+    <script>
+        $(function () {
+            $('.left .item').draggable({
+                revert: true,
+                proxy: 'clone'
+            });
+            $('.right .item').draggable({
+                revert: true,
+                //proxy: 'clone'
+            });
+            $('.right .drop').droppable({
+                onDragEnter: function () {
+                    $(this).addClass('over');
+                },
+                onDragLeave: function () {
+                    $(this).removeClass('over');
+                },
+                onDrop: function (e, source) {
+                    //重复判断
+                    var current = $(source).prop('id');
+                    if ($(this).find('[id="' + current + '"]').length > 0) {
+                        return;
+                    }
+
+                    $(this).removeClass('over');
+                    if ($(source).hasClass('assigned')) {
+                        $(this).append(source);
+                    } else {
+                        var c = $(source).clone().addClass('assigned');
+                        //$(this).empty();
+                        $(this).append(c);
+                        c.draggable({
+                            revert: true
+                        });
+                        startMenu(c);
+                    }
+                }
+            });
+
+
+            $(' .right').bind('contextmenu', function (e) { return false; });
+
+            startMenu('.assigned');
+        });
+    </script>
+
+
+
+</head>
+<body>
+    <table width="100%">
+        <tr>
+            <td style="vertical-align:top; width:50%; ">
+                <div class="left">
+                    <div id="managers" class="easyui-panel drop" title="现有人员"
+                         style="width:100%;"
+                         data-options="fit:true">
+                        <div class="item" id="Admin001">shenchen  沈忱</div>
+                        <div class="item" id="Admin002">chenhan  陈翰</div>
+                        <div class="item" id="Admin003">yangying  杨樱</div>
+                        <div class="item" id="Admin004">gaochaoyu  高超禹</div>
+                    </div>
+                </div>
+            </td>
+            <td style="vertical-align:top;">
+                <div class="right">
+                    <div id="managers" class="easyui-panel drop" title="经理任命区"
+                         style="width:100%;height:150px;"
+                         data-options="iconCls:'icon-save'">
+                        <div class="item assigned" id="Admin003">yangying  杨樱</div>
+                    </div>
+                    <div id="members" class="easyui-panel drop" title="组员任命区"
+                         style="width:100%;height:250px;"
+                         data-options="iconCls:'icon-save'">
+                        <div class="item assigned" id="Admin004">gaochaoyu  高超禹</div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tfoot>
+            <tr>
+                <td>
+                    保存按钮：用asp控件
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+    <div id="mm" class="easyui-menu" style="width:120px;" data-options="onClick:menuHandler">
+        <div data-options="name:'cancel',iconCls:'icon-cancel'">取消任命</div>
+        <div class="menu-sep"></div>
+        <div data-options="name:'clear',iconCls:'icon-clear'">清空任命</div>
+    </div>
+</body>
+</html>
