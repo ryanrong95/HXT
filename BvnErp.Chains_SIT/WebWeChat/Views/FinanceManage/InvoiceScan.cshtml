@@ -1,0 +1,273 @@
+﻿
+@{
+    ViewBag.Title = "发票扫码";
+    Layout = null;
+}
+@model WebWeChat.Models.InvoiceScanReturnModel
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>发票扫码</title>
+    @*<script src="~/Scripts/vconsole.min.js"></script>*@
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" href="~/Content/css/mui.min.css" />
+    <script src="~/Scripts/mui.min.js"></script>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+    <script src="~/Scripts/handlebars.min.js"></script>
+    <script type="text/javascript">
+        mui.init()
+    </script>
+    <style>
+        .separate-line {
+            border-bottom: 1px dashed #8f8f94;
+            margin: 4px 0 10px 0;
+        }
+
+        .one-invoice {
+            border: 1px solid #8f8f94;
+            border-radius: 10px;
+            padding-top: 2px;
+        }
+
+        .invoice-serial {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+
+        .delete-invoice-btn {
+            padding: 1px 6px 0 6px;
+            font-size: 10px;
+        }
+
+        #invoice-template {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="mui-bar mui-bar-nav">
+        <div class="mui-title">欢迎使用发票扫码功能</div>
+    </header>
+    <div class="mui-content">
+        <div class="mui-content-padded mytb">
+            <div class="mui-row mui-h5 myrow">
+                <div class="mui-col-xs-1"></div>
+                <div class="mui-col-xs-3 mui-text-left">编号</div>
+                <div class="mui-col-xs-7 mui-text-right">@(Model.InvoiceNoticeID)</div>
+                <div class="mui-col-xs-1"></div>
+            </div>
+
+            <div class="mui-row mui-h5 myrow">
+                <div class="mui-col-xs-1"></div>
+                <div class="mui-col-xs-3 mui-text-left">开票类型</div>
+                <div class="mui-col-xs-7 mui-text-right">@(Model.InvoiceTypeName)</div>
+                <div class="mui-col-xs-1"></div>
+            </div>
+            <div class="mui-row mui-h5 myrow">
+                <div class="mui-col-xs-1"></div>
+                <div class="mui-col-xs-3 mui-text-left">公司名称</div>
+                <div class="mui-col-xs-7 mui-text-right">@(Model.CompanyName)</div>
+                <div class="mui-col-xs-1"></div>
+            </div>
+            <div class="mui-row mui-h5 myrow">
+                <div class="mui-col-xs-1"></div>
+                <div class="mui-col-xs-3 mui-text-left">纳税人识别号</div>
+                <div class="mui-col-xs-7 mui-text-right">@(Model.TaxCode)</div>
+                <div class="mui-col-xs-1"></div>
+            </div>
+            <div class="mui-row mui-h5 myrow">
+                <div class="mui-col-xs-1"></div>
+                <div class="mui-col-xs-3 mui-text-left">开户行</div>
+                <div class="mui-col-xs-7 mui-text-right">@(Model.BankName)</div>
+                <div class="mui-col-xs-1"></div>
+            </div>
+            <div class="mui-row mui-h5 myrow">
+                <div class="mui-col-xs-1"></div>
+                <div class="mui-col-xs-3 mui-text-left">账号</div>
+                <div class="mui-col-xs-7 mui-text-right">@(Model.BankAccount)</div>
+                <div class="mui-col-xs-1"></div>
+            </div>
+            <div class="mui-row mui-h5 myrow">
+                <div class="mui-col-xs-1"></div>
+                <div class="mui-col-xs-3 mui-text-left">含税金额</div>
+                <div class="mui-col-xs-7 mui-text-right">@(Model.Amount)</div>
+                <div class="mui-col-xs-1"></div>
+            </div>
+            <div class="mui-row mui-h5 myrow">
+                <div class="mui-col-xs-1"></div>
+                <div class="mui-col-xs-3 mui-text-left">开票差额</div>
+                <div class="mui-col-xs-7 mui-text-right">@(Model.Difference)</div>
+                <div class="mui-col-xs-1"></div>
+            </div>
+            <div class="mui-row mui-h5 myrow">
+                <div class="mui-col-xs-1"></div>
+                <div class="mui-col-xs-3 mui-text-left">备注信息</div>
+                <div class="mui-col-xs-7 mui-text-right">@(Model.Summary)</div>
+                <div class="mui-col-xs-1"></div>
+            </div>
+
+            <div class="mui-row mui-h5 myrow">
+                <div class="mui-col-xs-12 mui-text-center separate-line"></div>
+            </div>
+            <div class="mui-row mui-h5 myrow">
+                <div class="mui-col-xs-12 mui-text-center">
+                    <button type="button" class="mui-btn mui-btn-primary" onclick="scanQRCode()">点击扫描发票上的二维码</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="invoice-list">
+
+        </div>
+
+        <div id="invoice-template">
+            <div class="mui-content-padded mytb one-invoice">
+                <div class="mui-row mui-h5 myrow">
+                    <div class="mui-col-xs-2 mui-text-center">
+                        <span class="mui-badge mui-badge-primary invoice-serial">{{num}}</span>
+                    </div>
+                    <div class="mui-col-xs-2 mui-text-left">发票类型</div>
+                    <div class="mui-col-xs-7 mui-text-right">{{invoiceTypeName}}</div>
+                    <div class="mui-col-xs-1"></div>
+                </div>
+                <div class="mui-row mui-h5 myrow">
+                    <div class="mui-col-xs-2"></div>
+                    <div class="mui-col-xs-2 mui-text-left">发票代码</div>
+                    <div class="mui-col-xs-7 mui-text-right">{{invoiceCode}}</div>
+                    <div class="mui-col-xs-1"></div>
+                </div>
+                <div class="mui-row mui-h5 myrow">
+                    <div class="mui-col-xs-2"></div>
+                    <div class="mui-col-xs-2 mui-text-left">发票号码</div>
+                    <div class="mui-col-xs-7 mui-text-right">{{invoiceNo}}</div>
+                    <div class="mui-col-xs-1"></div>
+                </div>
+                <div class="mui-row mui-h5 myrow">
+                    <div class="mui-col-xs-2"></div>
+                    <div class="mui-col-xs-2 mui-text-left">发票金额</div>
+                    <div class="mui-col-xs-7 mui-text-right">{{invoiceAmount}}<span>(不含税)</span></div>
+                    <div class="mui-col-xs-1"></div>
+                </div>
+                <div class="mui-row mui-h5 myrow">
+                    <div class="mui-col-xs-2 mui-text-center">
+                        <button type="button" class="mui-btn mui-btn-danger mui-btn-outlined delete-invoice-btn" onclick="deleteInvoice('{{taxManageID}}')">删除</button>
+                    </div>
+                    <div class="mui-col-xs-2 mui-text-left">开票日期</div>
+                    <div class="mui-col-xs-7 mui-text-right">{{invoiceDate}}</div>
+                    <div class="mui-col-xs-1"></div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+</body>
+
+</html>
+<script>
+    //var vConsole = new VConsole();
+
+    var invoiceNoticeID = "@(Model.InvoiceNoticeID)";
+
+    $(document).ready(function () {
+        $.post("/JsSDKConfig/GetWXConfig", { CurrentUrl: "@Html.Raw(ViewBag.CurrentUrl)" }, function (result) {
+            wx.config(result.wxconfig);
+        });
+
+        loadInvoices();
+    });
+
+    function loadInvoices() {
+        $.post("/FinanceManage/GetInvoiceList", { InvoiceNoticeID: invoiceNoticeID, }, function (result) {
+            if (result.success) {
+                $("#invoice-list").html('');
+                for (let index in result.data) {
+                    let item = result.data[index];
+                    let templateStr = $("#invoice-template").html();
+                    let template = Handlebars.compile(templateStr);
+                    let invoiceHtml = template({
+                        num: (Number(index) + 1),
+                        invoiceTypeName: item.InvoiceTypeName,
+                        invoiceCode: item.InvoiceCode,
+                        invoiceNo: item.InvoiceNo,
+                        invoiceAmount: item.Amount,
+                        invoiceDate: item.InvoiceDate,
+                        taxManageID: item.TaxManageID,
+                    });
+                    $("#invoice-list").append(invoiceHtml);
+                }
+            }
+        });
+    }
+
+    function scanQRCode() {
+        wx.scanQRCode({
+            needResult: 1,
+            scanType: ["qrCode"],
+            success: function (res) {
+                var result = res.resultStr;
+                scanQRCodeCallback(result);
+            }
+        });
+
+        //let qrCodeContent = "01,01,4403204130,16539809,1383.44,20210420,,135A,"
+        //scanQRCodeCallback(qrCodeContent);
+    }
+
+    function scanQRCodeCallback(qrCodeContent) {
+        let reg = /^([\d\s]+),([\d\s]+),([\d\s]+),([\d\s]+),([\.\d\s]+),([\d\s]+)/;
+        let qrCodeContentArray = reg.exec(qrCodeContent);
+        if (qrCodeContentArray == null || qrCodeContentArray == undefined || qrCodeContentArray.length < 7) {
+            mui.toast('<div>二维码内容错误</div>', { duration: 'long', type: 'div' });
+            return;
+        }
+
+        let invoiceTypeInt = qrCodeContentArray[2].trim();
+        let invoiceCode = qrCodeContentArray[3].trim();
+        let invoiceNo = qrCodeContentArray[4].trim();
+        let invoiceAmount = qrCodeContentArray[5].trim();
+        let invoiceDate = qrCodeContentArray[6].trim();
+
+        $.post("/FinanceManage/InsertInvoice", {
+            InvoiceNoticeID: invoiceNoticeID,
+            InvoiceCode: invoiceCode,
+            InvoiceNo: invoiceNo,
+            InvoiceAmount: invoiceAmount,
+            InvoiceDate: invoiceDate,
+        }, function (result) {
+                if (result.success) {
+                    mui.toast('<div>扫码提交成功</div>', { duration: 'long', type: 'div' });
+                    loadInvoices();
+                } else {
+                    mui.toast('<div>' + result.message + '</div>', { duration: 'long', type: 'div' });
+                }
+        });
+    }
+
+    function deleteInvoice(taxManageID) {
+        var btnArray = ['否', '是'];
+        mui.confirm('确定要删除这个发票吗？', '', btnArray, function (e) {
+            if (e.index == 1) {
+                $.post("/FinanceManage/DeleteInvoice", {
+                    TaxManageID: taxManageID,
+                    InvoiceNoticeID: invoiceNoticeID,
+                }, function (result) {
+                    if (result.success) {
+                        mui.toast('<div>删除成功</div>', { duration: 'long', type: 'div' });
+                        loadInvoices();
+                    } else {
+                        mui.toast('<div>删除出错</div>', { duration: 'long', type: 'div' });
+                    }
+                });
+            } else {
+
+            }
+        });
+    }
+</script>

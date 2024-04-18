@@ -1,0 +1,40 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Pages.master.cs" Inherits="Needs.Cbs.WebApp.Uc.Pages" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title><%: Page.Title %></title>
+
+    <%=Needs.Settings.SettingsManager<Needs.Settings.IErpSrcContext>.Current.Easyui%>
+    <script>
+        /* 全局 */
+        window.gvSettings = {
+            menu: '',
+            fatherMenu: '',
+            summary: ''
+        };
+
+        function Valid() {
+            var isValid = $("#form1").form("enableValidation").form("validate");
+            if (!isValid) {
+                //$.messager.alert('提示', '请按提示输入数据！');
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+    </script>
+    <link href="../App_Themes/xp/Style.css" rel="stylesheet" />
+    <script src="../Scripts/Cbs.js"></script>
+
+    <asp:ContentPlaceHolder ID="cbsHead" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body class="easyui-layout">
+    <asp:ContentPlaceHolder ID="cbsForm" runat="server">
+    </asp:ContentPlaceHolder>
+</body>
+</html>

@@ -1,0 +1,585 @@
+﻿@{
+    /**/
+    ViewBag.Title = "待付汇订单";
+    Layout = "~/Views/Shared/_LayoutCenter.cshtml";
+    ViewBag.navid = "UnPayExchanges";
+}
+<style>
+    .el-message {
+        top: 250px;
+        min-width: 150px;
+    }
+
+    .el-message__content {
+        font-size: 16px;
+    }
+
+    .el-message .el-icon-error {
+        font-size: 16px;
+    }
+</style>
+<div class="content_right backshow">
+    <h2>待付汇</h2>
+    <div id="mypay" v-cloak style="padding:30px;min-height:650px;">
+        <div class="check">
+            <el-checkbox v-model="indexData.allChecked" v-on:change="allCheck">全选</el-checkbox>
+            <el-button v-on:click="applyOrders" type="primary">申请付汇</el-button>
+            <span class="tip">如何选择？多个订单一起付汇，需要选择相同交易币种及供应商订单</span>
+        </div>
+        <div v-loading="indexData.loading" style="min-height:400px;">
+            <div class="orderlist" v-if="!indexData.loading">
+                <div class="title">
+                    <ul class="overhide">
+                        <li class="fl" style="width:244px">
+                            <el-dropdown v-on:command="currencyChange">
+                                <span class="el-dropdown-link">
+                                    {{indexData.currencyName}}<i class="el-icon-arrow-down el-icon--right"></i>
+                                </span>
+                                <el-dropdown-menu slot="dropdown">
+                                    <el-dropdown-item command="all">全部币种</el-dropdown-item>
+                                    <el-dropdown-item v-for="item of optionsData.CurrencyOptions" :command="item.text">{{item.text}}</el-dropdown-item>
+                                </el-dropdown-menu>
+                            </el-dropdown>
+                        </li>
+                        <li class="fl" style="width:126px">订单状态</li>
+                        <li class="fl" style="width:204px">供应商</li>
+                        <li class="fl" style="width:154px">付汇状态</li>
+                        <li class="fl" style="width:160px">操作</li>
+                    </ul>
+                </div>
+                <div v-on:scroll="ss('viewBox1')" ref="viewBox1">
+                    <div v-for="t of indexData.curItems" style="margin-top:10px" >
+                        <div class="main_TitleTop">   
+                            <div style="display:block;float:left">
+                                <span class="main_TitleTopOrderNo">订单号：{{t.MainOrderID}}</span>
+                                <span class="main_TitleTopCreateTime">{{t.createTime}}</span>
+                            </div>
+                            <div style="display:block;float:right">
+                                <span v-if="t.isSplit" class="main_TitleSplitReason">您订单中的商品因分批到货[海关特殊申报]要求，拆分报关。</span>
+                            </div>                                                                                   
+                        </div>
+                        <div class="main_TitleBottom">
+                            <div style="display:block;float:left">
+                                <span class="main_TitleBottomText" style="margin-left:17px">交易币种：{{t.currency}}</span>
+                                <span class="main_TitleBottomText" style="margin-left:50px">报关总价：{{t.declarePrice.toFixed(2)}}</span>
+                                <span class="main_TitleBottomText" style="margin-left:50px">订单状态：</span>
+                                <span class="main_TitleBottomText" style="color:#FDA100" v-if="t.isSplit">已拆分</span><span class="main_TitleBottomText" style="color:#FDA100" v-else>未拆分</span>
+                            </div>
+                            <div style="display:block;float:left;margin-left:260px">                              
+                                <img src="~/Content/images/Shpae1.png" />
+                                <a v-on:click="orderDetails(t.MainOrderID)" style="text-align:right">订单详情</a>
+                            </div>
+                        </div>
+                        <div v-for="item of t.Orders">
+                            <div class="subTitle">
+                                <div style="display:block;float:left;width:400px">
+                                    <el-checkbox v-model="item.IsCheck" v-on:change="singlecheck(item.ID,item.IsCheck)" style="margin-left:17px"></el-checkbox>
+                                    <span class="subTitleOrderNO">订单号：{{item.ID}}</span>
+                                    @*<span class="lignt_text">{{item.CreateDate}}</span>*@
+                                </div>
+                                <div style="display:block;float:left">
+                                    <span class="subTitleDeclarePrice" style="margin-left:100px">报关总价： {{item.DeclarePrice.toFixed(2)}} {{item.Currency}}</span>
+                                </div>
+                                
+                            </div>
+                            <div class="subItems">
+                                <table class="subItemsTable">
+                                    <tr class="cellSplit">                                       
+                                        <td style="width:125px;text-align:center" >
+                                            <span>{{item.OrderStatus}}</span><br />
+                                            <a v-on:click="orderTrace(item.ID)">订单跟踪</a>
+                                        </td>
+                                        <td  style="word-wrap:break-word;word-break:break-all;padding:0 20px;text-align:left">                                           
+                                            <ul style="line-height: 25px;margin-top: 10px;">
+                                                <li v-for="(sub_item,index) in item.PaySuppliersName" style="margin-left:5px">
+                                                    {{index + 1}}. {{sub_item}}
+                                                </li>
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            <div style="padding-left:40px;text-align:left">
+                                                <p>{{item.PayExchangeType}}</p>
+                                                <p>可付汇: {{item.Remittance}}</p>
+                                                <p>已付汇: {{item.Remittanced}}</p>
+                                            </div>
+                                        </td>
+                                        <td style="text-align:center">
+                                            <a v-on:click="payDetails(item.ID)">查看付汇记录</a>
+                                        </td>
+                                        <td style="text-align:center">                                           
+                                            <el-button class="confirm" v-on:click="applyOrder(item.ID,item.IsPrePayExchange,item.DeclareDate)">申请付汇</el-button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div>
+                            @*<table class="myorder" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <th class="overhide main_title" colspan="6">
+                                        <div class="fl">
+                                            <span class="lignt_text">
+                                                订单号：
+                                            </span>
+                                            <span>{{t.MainOrderID}}</span>
+                                        </div>
+                                        <div class="fr detail">
+                                            <a v-on:click="orderDetails(t.MainOrderID)">订单详情</a>
+                                        </div>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="order subitem">
+                                            <table class="myorder" border="0" cellspacing="0" cellpadding="0" v-for="item of t.Orders">
+                                                <tr>
+                                                    <th class="overhide" colspan="6">
+                                                        <div class="fl mr6">
+                                                            <el-checkbox v-model="item.IsCheck" v-on:change="singlecheck(item.ID,item.IsCheck)"></el-checkbox>
+                                                        </div>
+                                                        <div class="fl">
+                                                            <span class="lignt_text">
+                                                                订单号：
+                                                            </span>
+                                                            <span>{{item.ID}}</span>
+                                                        </div>
+                                                        <div class="fl txtdate">
+                                                            <span class="lignt_text">{{item.CreateDate}}</span>
+                                                        </div>
+                                                        <div class="fr detail">
+                                        <a v-on:click="orderDetails(item.ID)">订单详情</a>
+                                    </div>
+                                                    </th>
+                                                </tr>
+                                                <tr class="cell">
+                                                    <td style="width:244px;text-align:left">
+                                                        <div style="padding-left:50px;">
+                                                            <p>交易币种 {{item.Currency}}</p>
+                                                            <p>报关总价 {{item.DeclarePrice.toFixed(2)}}</p>
+                                                        </div>
+                                                    </td>
+                                                    <td style="width:126px">
+                                                        <span>{{item.OrderStatus}}</span><br />
+                                                        <a v-on:click="orderTrace(item.ID)">订单跟踪</a>
+                                                    </td>
+                                                    <td style="width:164px;word-wrap:break-word;word-break:break-all;padding:0 20px;text-align:left">
+                                                        <span>{{item.PaySuppliersName}}</span>
+                                                    </td>
+                                                    <td style="width:154px">
+                                                        <div style="padding-left:40px;text-align:left">
+                                                            <p>{{item.PayExchangeType}}</p>
+                                                            <p>可付汇: {{item.Remittance}}</p>
+                                                            <p>已付汇: {{item.Remittanced}}</p>
+                                                        </div>
+                                                    </td>
+                                                    <td style="width:160px;">
+                                                        <a v-on:click="payDetails(item.ID)">查看付汇记录</a>
+                                                        <el-button class="confirm" v-on:click="applyOrder(item.ID,item.IsPrePayExchange,item.DeclareDate)">申请付汇</el-button>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>*@
+                        </div>
+                    </div>
+                    <div v-if="indexData.curItems.length > 0" class="foot">
+                        <el-pagination style="float:right" v-on:size-change="handleSizeChange"
+                                       v-on:current-change="handleCurrentChange"
+                                       :current-page="indexData.pageIndex"
+                                       :page-sizes="[5, 10]"
+                                       :page-size="indexData.pageSize"
+                                       layout="total, sizes, prev, pager, next, jumper"
+                                       :total="indexData.total">
+                        </el-pagination>
+                    </div>
+                    <div v-else>
+                        <div class="nodata-container">
+                            <el-row class="nodata-row1">
+                                <img src="~/Content/img/nodata.png" />
+                            </el-row>
+                            <el-row class="nodata-row2">
+                                <span class="nodata-info">暂无数据！</span>
+                            </el-row>
+                            <el-row class="nodata-row3">
+                                <button class="nodata-button" v-on:click="location.href='/Orders/MyOrders'">查看全部订单</button>
+                                <button class="nodata-button" v-on:click="location.href='/Home/Index'">返回首页</button>
+                            </el-row>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <el-dialog title="付汇记录" :lock-scroll="false" width="600px" :visible.sync="dialogFormVisible" :close-on-click-modal="false">
+            <el-table :data="indexData.tableData"
+                      border
+                      style="width: 100%">
+                <el-table-column label="#" type="index">
+                </el-table-column>
+                <el-table-column prop="ApplyTime"
+                                 label="申请时间">
+                </el-table-column>
+                <el-table-column prop="SupplierName"
+                                 label="供应商">
+                </el-table-column>
+                <el-table-column prop="Applier"
+                                 label="申请人">
+                </el-table-column>
+                <el-table-column prop="Amount"
+                                 label="付汇金额">
+                </el-table-column>
+                <el-table-column prop="Status"
+                                 label="状态">
+                </el-table-column>
+            </el-table>
+        </el-dialog>
+        <el-dialog title="订单跟踪" :lock-scroll="false" class="trace_dialog" width="700px" :visible.sync="traceFormVisible">
+            <div class="order-track">
+                <div class="track-rcol">
+                    <div v-if="list.length>0" class="track-list">
+                        <ul>
+                            <li class="" v-for="item of list">
+                                <div class="line"></div>
+                                <i class="dot" v-if="item.isDot"></i>
+                                <i v-else :class="[item.isCompleted?'complete':'state-icon']"></i>
+                                <span class="date">
+                                    {{item.Date}}
+                                </span>
+                                <span class="time">{{item.Time}}</span>
+                                <span class="txt">
+                                    <span class="stress-txt">{{item.Step}}</span>
+                                    <span v-html="item.Summary"></span>
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                    <p v-else class="no_data">
+                        暂无数据...
+                    </p>
+                </div>
+            </div>
+        </el-dialog>
+    </div>
+</div>
+
+<script>
+    var pay = new Vue({
+        el: "#mypay",
+        data: function () {
+            return {
+                traceFormVisible: false,
+                list: [],
+                indexData: {
+                    loading: true,
+                    total: 0,
+                    tableData: [],
+                    curItems: [],
+                    datalist:@Html.Raw(Json.Encode(Model)),
+                    currencyName: "交易币种",
+                    currency: "all",
+                    allChecked: false,
+                    pageIndex: 1, //初始页
+                    pageSize: 5,    //每页的数据
+                    scrollTop: 0, //滚动条位置
+                },
+                dialogFormVisible: false,
+                optionsData: {},//绑定基础数据
+            }
+        },
+        //computed: {
+        //    //币种
+        //    CurrencyOptions: function () {
+        //        return JSON.parse(this.indexData.datalist.CurrencyOptions);
+        //    }
+        //},
+        mounted: function () {
+            var that = this;
+            var userJsonStr = sessionStorage.getItem('UnPayExchanges');
+            userEntity = JSON.parse(userJsonStr);
+            if (userEntity == null) {
+                that.paging();
+            } else {
+                that.indexData = userEntity;
+                that.$nextTick(function () {
+                    that.$refs['viewBox1'].scrollTop = that.indexData.scrollTop;
+                })
+
+                sessionStorage.removeItem('UnPayExchanges');
+            }
+            this.optionsData = @Html.Raw(Json.Encode(@ViewBag.Options)); //加载基础数据
+        },
+        methods: {
+            orderTrace: function (id) {
+                var that = this;
+                that.list = [];
+                axios({
+                    url: "/Orders/GetTrace",
+                    method: "post",
+                    data: { id: id },
+                }).then(function (res) {
+                    if (res.data.type == "success") {
+                        that.list = that.dataProcessing(JSON.parse(res.data.data))
+                        that.traceFormVisible = true;
+                    } else {
+
+                    }
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            dataProcessing: function (data) {
+                var arr = [];
+                var date = "";
+                var step = "";
+                for (var i = 0; i < data.length; i++) {
+                    var temp = data[i];
+                    if (data[i].Date == date) {
+                        temp.Date = "";
+                    } else {
+                        date = data[i].Date;
+                    }
+                    if (data[i].Step == step) {
+                        temp.isDot = true;
+                        temp.Step = "";
+                    } else {
+                        step = data[i].Step;
+                    }
+                    if (i > 0) {
+                        temp.isCompleted = false;
+                    }
+                    arr.push(temp);
+                }
+                return arr;
+            },
+            ss: function (ref) {
+                // 监听这个dom的scroll事件
+                var that = this;
+                this.$refs[ref].addEventListener('scroll', function () {
+                    that.indexData.scrollTop = that.$refs[ref].scrollTop;
+                }, false)
+            },
+            paging: function () {
+                var that = this;
+                that.indexData.loading = true;
+                that.indexData.allChecked = false;
+                axios({
+                    url: "/PayExchanges/GetUnPayExchanges",
+                    method: "post",
+                    data: {
+                        page: this.indexData.pageIndex,
+                        rows: this.indexData.pageSize,
+                        currency: this.indexData.currency
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                    transformRequest: [function (data) {
+                        var ret = ''
+                        for (var it in data) {
+                            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+                        }
+                        return ret;
+                    }],
+                }).then(function (response) {                   
+                    var data = JSON.parse(response.data.data);
+                    var MianIDs = [];
+                    var newData = [];
+                    for (var irow = 0; irow < data.list.length; irow++){
+                        if (MianIDs.indexOf(data.list[irow].MainOrderID) < 0) {
+                            MianIDs.push(data.list[irow].MainOrderID);
+                        }
+                    }                 
+                    for (var i = 0; i < MianIDs.length; i++) {
+                        var d = [];
+                        var declarePrice = 0;
+                        for (var j = 0; j < data.list.length; j++) {
+                            if (data.list[j].MainOrderID == MianIDs[i]) {
+                                d.push(data.list[j]);
+
+                                declarePrice += data.list[j].DeclarePrice;
+                            }
+                        }
+                        var isSplit = false;
+                        if (d.length > 1) {
+                            isSplit = true;
+                        }
+                        newData.push(
+                            {
+                                MainOrderID: MianIDs[i],
+                                Orders: d,
+                                isSplit: isSplit,
+                                createTime: d[0].MainOrderCreateDate,
+                                currency: d[0].Currency,
+                                declarePrice: declarePrice
+                            })
+                    }                   
+                    that.indexData.curItems = newData;
+                    that.indexData.total = data.total;
+                    that.indexData.loading = false;
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            allCheck: function () {
+                this.indexData.curItems.forEach(function (val, index) {
+                    val.Orders.forEach(function (order, index) {
+                        order.IsCheck = pay.indexData.allChecked;
+                    });                    
+                });
+            },
+            //是否全选
+            isAllcheck: function () {
+                var flag = true;
+                this.indexData.curItems.forEach(function (val, index) {
+                    if (!val.IsCheck) {
+                        flag = false;
+                    }
+                });
+                pay.indexData.allChecked = flag;
+            },
+            singlecheck: function (id, ischeck) {
+                this.indexData.curItems.filter(function (data) {
+                    if (data.ID == id) {
+                        data.IsCheck = ischeck;
+                    }
+                });
+                this.isAllcheck();
+            },
+            //付汇记录
+            payDetails: function (id) {
+                axios({
+                    url: "/PayExchanges/GetPayRecord",
+                    method: "post",
+                    data: { id: id},
+                }).then(function (res) {
+                    if (res.data.type == "success") {
+                        pay.indexData.tableData = JSON.parse(res.data.data);
+                        pay.dialogFormVisible = true;
+                    }
+                }).catch(function (error) {
+                    pay.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            orderDetails: function (id) {
+                sessionStorage.setItem('UnPayExchanges', JSON.stringify(this.indexData));
+                location.href = "/Orders/Info/?id=" + id + "&v=" + '@ViewBag.navid';
+            },
+            //是否满足付汇条款：如果是90天内付汇需在报关完成后付汇
+            isAllowPayment: function (orderID, isPrePayExchange, DeclareDate) {
+                //20190924 取消付汇90天限制
+                //if ((!isPrePayExchange) && DeclareDate != null) {
+                //    var curDate = new Date();
+                //    var declareDate = new Date(DeclareDate);
+                //    var minusDays = this.datedifference(curDate, declareDate);
+                //    if (minusDays > 90) {
+                //        this.onAlert("error", "订单号'" + orderID + "'协议条款为'90天内换汇'，需在报关完成90天内付汇！");
+                //        return false;
+                //    }
+                //}
+                return true;
+            },
+            datedifference:function(sDate1, sDate2) {    //sDate1和sDate2是2006-12-18格式
+                var dateSpan,
+                    iDays;
+                sDate1 = new Date(sDate1.toDateString());
+                sDate2 = new Date(sDate2.toDateString());
+                dateSpan = sDate2 - sDate1;
+                dateSpan = Math.abs(dateSpan);
+                iDays = Math.ceil(dateSpan / (24 * 3600 * 1000));
+                return iDays
+            },
+            //多选申请付汇
+            applyOrders: function () {
+                var ids = [];
+                var curency = [];
+                var supplier = [];
+                for (var i = 0; i < this.indexData.curItems.length; i++) {
+                    for (var j = 0; j < this.indexData.curItems[i].Orders.length; j++) {
+                        if (this.indexData.curItems[i].Orders[j].IsCheck) {
+                            //是否满足付汇条款
+                            if (!pay.isAllowPayment(this.indexData.curItems[i].Orders[j].ID, this.indexData.curItems[i].Orders[j].IsPrePayExchange, this.indexData.curItems[i].Orders[j].DeclareDate)) {
+                                return;
+                            }
+
+                            ids.push(this.indexData.curItems[i].Orders[j].ID);
+                            curency.push(this.indexData.curItems[i].Orders[j].Currency);
+                            supplier.push(this.indexData.curItems[i].Orders[j].PaySuppliers);
+                        }
+                    }  
+                }
+                debugger
+                if (ids.length == 0) {
+                    this.onAlert("error", "请选择订单！");
+                    return;
+                }
+                //货币去重
+                var uniqueCurrency = curency.filter(function (element, index, self) {
+                    return self.indexOf(element) === index;
+                });
+                if (uniqueCurrency.length != 1) {
+                    this.onAlert("error", "请选择相同的交易币种！");
+                    return;
+                }
+                var intersection = []; //供应商交集
+                for (var i = 0; i < supplier.length; i++) {
+                    if (i == 0) {
+                        intersection = supplier[i];
+                    } else {
+                        intersection = intersection.filter(function (v) {
+                            if (supplier[i].includes(v)) {
+                                return v;
+                            }
+                        });
+                        if (intersection.length == 0) {
+                            this.onAlert("error", "请选择相同的供应商。");
+                            return;
+                        }
+                    }
+                }
+                location.href = "/PayExchanges/Apply/" + ids.join(',');
+            },
+            //申请付汇
+            applyOrder: function (orderID, isPrePayExchange, DeclareDate) {
+                if (this.isAllowPayment(orderID, isPrePayExchange, DeclareDate)) {
+                    sessionStorage.setItem('UnPayExchanges', JSON.stringify(this.indexData));
+                    location.href = "/PayExchanges/Apply/" + orderID;
+                }
+            },
+            //查询检索
+            getCurItems: function () {
+                this.paging();
+            },
+            //货币变化
+            currencyChange: function (item) {
+                if (item == "all") {
+                    this.indexData.currencyName = "全部币种";
+                    this.indexData.currency = "all";
+                }
+                else {
+                    this.indexData.currencyName = item;
+                    this.indexData.currency = item;
+                }
+                this.paging();
+            },
+            // 初始页currentPage、初始每页数据数pagesize和数据data
+            handleSizeChange: function (size) {
+                this.indexData.pageSize = size;
+                this.paging();
+            },
+            handleCurrentChange: function (currentPage) {
+                this.indexData.pageIndex = currentPage;
+                this.paging();
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                });
+            },
+        }
+    });
+</script>
+

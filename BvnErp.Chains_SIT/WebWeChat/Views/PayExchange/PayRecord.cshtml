@@ -1,0 +1,140 @@
+﻿
+@{
+    ViewBag.Title = "付汇记录";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>付汇记录</title>
+    <link rel="stylesheet" href="~/Content/css/border.css">
+    <link rel="stylesheet" href="~/Content/css/reset.css">
+    <link rel="stylesheet" href="~/Content/css/element.css">
+    <link rel="stylesheet" href="~/Content/css/mint-ui.css">
+    <link rel="stylesheet" href="~/Content/css/index.css">
+    <script src="~/Scripts/vue.js"></script>
+    <script src="~/Scripts/elementui.js"></script>
+    <script src="~/Scripts/mint-ui.js"></script>
+</head>
+<body>
+    <div id="Record_remittance">
+        <ul v-if="datalist.length<=5" class="ul_borders">
+            <li v-for="(item,index) in datalist">
+                <div class="unconfirmed_tiele" v-on:click="closeItem(index)">
+                    <div class="title_box">
+                        <p>{{index+1}}</p>
+                        <p class="supplier_name">{{item.SupplierName}}</p>
+                        <p>付汇金额:<span class="tax_price">{{item.Amount}}</span></p>
+                        <p class="supplier_icon">
+                            <span v-if="arr.indexOf(index)==-1" class="order_icon el-icon-arrow-up"></span>
+                            <span v-else class="order_icon el-icon-arrow-down"></span>
+                        </p>
+                    </div>
+                </div>
+                <div class="unconfirmed_contents" v-if="arr.indexOf(index)==-1">
+                    <div class="showindex_back">
+                        <div class="contents_laber">
+                            <p>
+                                <span class="laber_name">供应商</span>
+                                <span class="laber_contents">{{item.SupplierName}}</span>
+                            </p>
+                            <p>
+                                <span class="laber_name">申请时间</span>
+                                <span class="laber_contents">{{item.ApplyTime}}</span>
+                            </p>
+                            <p>
+                                <span class="laber_name">申请人</span>
+                                <span class="laber_contents">{{item.Applier}}</span>
+                            </p>
+                            <p>
+                                <span class="laber_name">付汇金额</span>
+                                <span class="laber_contents">{{item.Amount}}</span>
+                            </p>
+                            <p>
+                                <span class="laber_name">状态</span>
+                                <span class="laber_contents">{{item.Status}}</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <ul v-else class="ul_borders">
+            <li v-for="(item,index) in datalist">
+                <div class="unconfirmed_tiele" v-on:click="item_list(index)">
+                    <div class="title_box">
+                        <p>{{index+1}}</p>
+                        <p class="supplier_name">{{item.SupplierName}}</p>
+                        <p>付汇金额:<span class="tax_price">{{item.Amount}}</span></p>
+                        <p class="supplier_icon">
+                            <span v-if="li_index==index" class="order_icon el-icon-arrow-up"></span>
+                            <span v-else class="order_icon el-icon-arrow-down"></span>
+                        </p>
+                    </div>
+                </div>
+                <div class="unconfirmed_contents" v-if="li_index==index">
+                    <div class="showindex_back">
+                        <div class="contents_laber">
+                            <p>
+                                <span class="laber_name">供应商</span>
+                                <span class="laber_contents">{{item.SupplierName}}</span>
+                            </p>
+                            <p>
+                                <span class="laber_name">申请时间</span>
+                                <span class="laber_contents">{{item.ApplyTime}}</span>
+                            </p>
+                            <p>
+                                <span class="laber_name">申请人</span>
+                                <span class="laber_contents">{{item.Applier}}</span>
+                            </p>
+                            <p>
+                                <span class="laber_name">付汇金额</span>
+                                <span class="laber_contents">{{item.Amount}}</span>
+                            </p>
+                            <p>
+                                <span class="laber_name">状态</span>
+                                <span class="laber_contents">{{item.Status}}</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>
+<script>
+    var supplier_list = new Vue({
+        el: "#Record_remittance",
+        data: function () {
+            return {
+                arr: [],
+                li_index: 0,
+
+                datalist: @Html.Raw(Json.Encode(Model)),
+            }
+        },
+        mounted() {
+
+        },
+        methods: {
+            closeItem: function (item) {
+                if (this.arr.indexOf(item) == -1) {
+                    this.arr.push(item)
+                } else {
+                    var arr = this.arr;
+                    this.arr = arr.filter(function (i) {
+                        return i != item;
+                    })
+                }
+            },
+            item_list: function (index) {
+                this.li_index = index
+            }
+        }
+    })
+</script>

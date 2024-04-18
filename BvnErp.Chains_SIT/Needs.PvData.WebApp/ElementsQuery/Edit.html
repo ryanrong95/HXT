@@ -1,0 +1,281 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <meta charset="utf-8" />
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/gray/easyui.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/icon.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/icon-yg-cool.css" rel="stylesheet" />
+
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.easyui.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/locale/easyui-lang-zh_CN.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-extension/datagrid-dnd.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/extends.js"></script>
+
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/easyui.myDatagrid.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/easyui.myDialog.js"></script>
+    <!--<script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/easyui.myWindow.js"></script>-->
+    <script src="http://fixed2.b1b.com/My/Scripts/easyui.myWindow.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/easyui.tabExtend.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/main.js"></script>
+
+    <link href="http://fixed2.b1b.com/Yahv/customs-easyui/fonts/iconfont.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/customs-easyui/Styles/reset.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/customs-easyui/Styles/main.css" rel="stylesheet" />
+
+    <link href="http://fixed2.b1b.com/Yahv/standard-easyui/iconfont/iconfont.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/standard-easyui/styles/plugin.css" rel="stylesheet" />
+    <script src="http://fixed2.b1b.com/Yahv/standard-easyui/scripts/timeouts.js"></script>
+
+    <script src="../Scripts/pvdata.js"></script>
+
+    <script>
+        var setwindow = queryString('setwindow');
+        var ewindow = $.myDialog.getMyDialog(setwindow);
+
+        var PvDataApiUrl = queryString('PvDataApiUrl');
+        $(function () {
+            var hsCode = ewindow.$('#hsCode').combogrid('getText');
+            var partNumber = $.trim(ewindow.$('#partNumber').combogrid('getText'));
+            var manufacture = $.trim(ewindow.$('#manufacturer').textbox('getValue'));
+            $('#hsCode').textbox('setValue', hsCode);
+            $('#partNumber').textbox('setValue', partNumber);
+            $('#manufacturer').textbox('setValue', manufacture);
+
+            $('#btnHSCode').trigger('click');
+            $('#divSave').css('display', 'none');
+        });
+
+        //获取申报要素
+        function GetElements() {
+            var hsCode = $('#hsCode').val();
+            var origin = ewindow.$('#origin').textbox('getValue');
+
+            //从归类界面打开申报要素查询窗口时,判断该海关编码与之前归类过的海关编码是否发生变更
+            var isHSCodeChanged = getQueryString('IsHSCodeChanged') == 'false' ? false : true;
+            //在申报要素查询界面，输入新的海关编码进行查询时，判断该海关编码与归类界面输入的海关编码是否变更
+            var parentHSCode = ewindow.$('#hsCode').textbox('getValue');
+            if (hsCode != parentHSCode) {
+                isHSCodeChanged = true;
+            }
+
+            //根据海关编码和原产地查询申报要素
+            getDataFun(PvDataApiUrl + 'Classify/GetElements', {
+                hsCode: hsCode,
+                origin: origin
+            }, {
+                noDataFun: function (res) {
+                    $('#elements').empty();
+                    $.messager.alert('消息', '未查询到该海关编码的申报要素！');
+                    $('#divSave').css('display', 'none');
+                },
+                success: function (res) {
+                    var data = res.data;
+                    ewindow.$('#tariffName').combogrid('setValue', data.TariffName);
+                    ewindow.$('#importPreferentialTaxRate').combogrid('setValue', parseFloat(data.ImportPreferentialTaxRate) == 0 ? '' : data.ImportPreferentialTaxRate);
+                    ewindow.$('#originATRate').combogrid('setValue', parseFloat(data.OriginATRate) == 0 ? '' : data.OriginATRate);
+                    ewindow.$('#vatRate').combogrid('setValue', parseFloat(data.VATRate) == 0 ? '' : data.VATRate);
+                    ewindow.$('#ExciseTaxRate').combogrid('setValue', parseFloat(data.ExciseTaxRate) == 0 ? '' : data.ExciseTaxRate);
+                    ewindow.$('#legalUnit1').textbox('setValue', data.LegalUnit1);
+                    ewindow.$('#legalUnit2').textbox('setValue', data.LegalUnit2);
+                    ewindow.$('#ciqCode').combobox('setValue', data.CIQCode);
+                    //系统判断是否需要商检
+                    if (data.CIQFlag) {
+                        ewindow.setIsSysCiq(true);
+                    } else {
+                        ewindow.setIsSysCiq(false);
+                    }
+                    //系统判断是否需要原产地证明
+                    if (data.SupervisionRequirements != null && data.SupervisionRequirements.toUpperCase().indexOf('Y') != -1) {
+                        ewindow.setIsSysCoo(true);
+                    } else {
+                        ewindow.setIsSysCoo(false);
+                    }
+
+                    $('#elements').empty();
+                    var array = data.DeclareElements.split(';');
+                    var arrayIndex = array.length - 1;
+
+                    var isSetDefalut = $('#elements', ewindow.document).val() == undefined;
+                    var ElementsArrayText = isSetDefalut ? '' : $('#elements', ewindow.document).val();
+                    var ElementsArray = isSetDefalut ? '' : $('#elements', ewindow.document).val().split('|');
+
+                    var temp = '';
+                    var value = '';
+                    var isRequired = true;
+                    var otherDefault = '';
+
+                    var htmlArray = new Array();
+                    var looptimes;
+
+                    for (var i = 0; i <= arrayIndex ; i++) {
+                        if (array[i] != null && array[i] != '') {
+                            var name = array[i].replace((i + 1).toString(), '').replace(':', '');
+                            var nametooltip = name
+                            if (name.length >= 6) {
+                                nametooltip = name.substring(0, 5) + '...';
+                            }
+                            temp += '<td class="lbl"><label class="lbl"  title="' + name + '">' + nametooltip;
+                            if (name == 'GTIN' || name == 'CAS') {
+                                isRequired = false;
+                            } else {
+                                temp += '<span style="color:red">*</span>';
+                            }
+
+                            //设置默认值
+                            if (ElementsArrayText == '' || isHSCodeChanged) {
+                                $.each(data.ElementsDefaults, function (index, element) {
+                                    if (element.ElementName == name) {
+                                        value = element.DefaultValue;
+                                    }
+                                    if (element.ElementName == '其他') {
+                                        otherDefault = element.DefaultValue;
+                                    }
+                                });
+                            } else {
+                                value = ElementsArray[i];
+                                otherDefault = ElementsArray[i + 1];
+                            }
+
+                            //特殊值设置
+                            if (ElementsArrayText == '' || isHSCodeChanged) {
+                                if (name == '品牌') {
+                                    value = $('#manufacturer').val() + '牌';
+                                }
+                                if (name == '型号') {
+                                    value = '型号:' + $('#partNumber').val();
+                                }
+
+                                if (name == '品牌类型') {
+                                    value = '4';
+                                }
+                                if (name == '出口享惠情况') {
+                                    value = '3';
+                                }
+                            }
+
+                            temp += '</label></td>';
+                            temp += '<td>';
+                            if (value.indexOf('"') != -1) {
+                                temp += '<input class="easyui-textbox" name="elements" data-options="required: ' + isRequired + '" value=\'' + value + '\' style="width: 400px;"/>';
+                            } else if (value.indexOf("'") != -1) {
+                                temp += '<input class="easyui-textbox" name="elements" data-options="required: ' + isRequired + '" value=\"' + value + '\" style="width: 400px;"/>';
+                            } else {
+                                temp += '<input class="easyui-textbox" name="elements" data-options="required: ' + isRequired + '" value="' + value + '" style="width: 400px;"/>';
+                            }
+                            temp += '</td>';
+                        }
+
+                        value = "";
+                        isRequired = 1;
+                        htmlArray[i] = temp;
+                        temp = "";
+                    }
+
+                    temp += '<td class="lbl"><label class="lbl" title="其他">其他<span style="color:red">*</span></label></td>';
+                    temp += '<td>';
+                    temp += '<input class="easyui-textbox" name="elements" data-options="required:true" value="' + otherDefault + '" style="width: 400px;"/>';
+                    temp += '</td>';
+
+                    htmlArray[array.length] = temp;
+
+                    var tempall = '<table class="liebiao-compact" style="margin: 0 auto; width: 95%; border-spacing: 0px 5px;">' +
+                                        '<tr>' +
+                                             '<th style="width:10%"></th>' +
+                                             '<th style="width:20%"></th>' +
+                                             '<th style="width:10%"></th>' +
+                                             '<th style="width:20%"></th>' +
+                                        '</tr>';
+
+                    if (htmlArray.length % 2 == 0) {
+                        looptimes = htmlArray.length;
+                        for (var j = 0; j < looptimes; j = j + 2) {
+                            tempall += '<tr>';
+                            tempall += htmlArray[j] + htmlArray[j + 1];
+                            tempall += '</tr>';
+                        }
+                    } else {
+                        looptimes = htmlArray.length - 1;
+                        for (var j = 0; j < looptimes; j = j + 2) {
+                            tempall += '<tr>';
+                            tempall += htmlArray[j] + htmlArray[j + 1];
+                            tempall += '</tr>';
+                        }
+
+                        tempall += '<tr>';
+                        tempall += htmlArray[htmlArray.length - 1];
+                        tempall += '</tr>';
+                    }
+
+                    tempall += '</table>'
+
+                    $('#elements').empty();
+                    $('#elements').html(tempall);
+                    //重新渲染，使js添加的easyui样式生效
+                    $.parser.parse('#elements');
+                    $('#divSave').css('display', 'block');
+
+                }
+            })
+        }
+        //确认
+        function confirm() {
+            var isValid = $('#form1').form('enableValidation').form('validate');
+            if (!isValid) {
+                return;
+            }
+
+            var elements = document.getElementsByName('elements');
+            var temp = '';
+            for (var i = 0; i < elements.length; i++) {
+                temp += elements[i].value + '|';
+            }
+            temp = temp.substring(0, temp.length - 1);
+            ewindow.$('#elements').textbox('setValue', temp);
+            ewindow.setHSCode($('#hsCode').val());
+            ewindow.verifyManufacturer();
+
+            //关闭当前弹框
+            $.myDialog.close();
+        }
+    </script>
+</head>
+<body>
+    <form id="form1">
+        <div style="margin-top: 10px">
+            <table class="liebiao-compact" style="margin: 0 auto; width: 95%; border-spacing: 0px 5px;">
+                <tr>
+                    <th style="width: 10%"></th>
+                    <th style="width: 20%"></th>
+                    <th style="width: 10%"></th>
+                    <th style="width: 20%"></th>
+                </tr>
+                <tr>
+                    <td class="lbl">型号</td>
+                    <td>
+                        <input class="easyui-textbox" id="partNumber" name="partNumber" data-options="disabled:true" style="width: 400px;" />
+                    </td>
+                    <td class="lbl">品牌</td>
+                    <td>
+                        <input class="easyui-textbox" id="manufacturer" name="manufacturer" data-options="disabled:true" style="width: 400px;" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lbl">海关编码</td>
+                    <td>
+                        <input class="easyui-textbox" id="hsCode" name="hsCode" style="width: 250px;" />
+                        <a id="btnHSCode" href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search'" style="width: 135px;" onclick="GetElements()">申报要素查询</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <hr style="margin-top: 10px; background-color: #ddd; height: 1px; border: none" />
+        <div id="elements" style="margin-top: 10px"></div>
+
+        <!--点击dialog的提交按钮时控件会调用该input元素的点击事件-->
+        <input type="submit" style="display: none" onclick="confirm()" />
+    </form>
+</body>
+</html>

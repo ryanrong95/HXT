@@ -1,0 +1,237 @@
+﻿
+@{
+    /**/
+
+    ViewBag.Title = "报关单";
+    Layout = "~/Views/Shared/_LayoutCenter.cshtml";
+    ViewBag.navid = "DeclareOrder";
+}
+<div class="content_right backshow">
+    <h2>报关单<span style="font-size:12px;color:red;margin-left:25px;">说明：仅显示订单开票类型为[服务费发票]的订单</span></h2>
+    <div id="declareOrder" v-cloak>
+        <div class="queryData">
+            <div>
+                <span class="title1 title">合同号:</span>
+                <el-input size="small" auto-complete="off" v-model="indexData.contrNo"></el-input>
+                <span class="title2 title ml10">报关起始日期:</span>
+                <el-date-picker size="small" v-model="indexData.dataValue"
+                                type="daterange"
+                                range-separator="至"
+                                start-placeholder="开始日期"
+                                end-placeholder="结束日期">
+                </el-date-picker>
+            </div>
+            <div>
+                <span class="title1 title">订单编号:</span>
+                <el-input size="small" auto-complete="off" v-model="indexData.orderID"></el-input>
+                <span class="title2 ml10 title">报关单号:</span>
+                <el-input size="small" auto-complete="off" v-model="indexData.decID"></el-input>
+                <button class="btnQuery ml28" v-on:click="queryData"><i></i>查询</button>
+                <button class="btnQuery ml12 el-icon-delete" v-on:click="clearData">清空</button>
+            </div>
+        </div>
+        <div class="allTodo">
+            <el-checkbox v-model="indexData.allCheck" v-on:change="handleallCheck">全选</el-checkbox>
+            <button class="download_cloud ml18" v-on:click="downloadInvoices"><i></i>下载报关单</button>
+            <a id="exportInfoForm" style="display:none" download><span id="ex-li" style="display:none"></span></a>
+        </div>
+        <div class="dataList mt12" v-loading="indexData.loading">
+            <table class="taxRecordTb" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <th width="30"></th>
+                    <th width="40">序列</th>
+                    <th width="186">订单编号</th>
+                    <th width="210">合同号</th>
+                    <th width="220">报关单号</th>
+                    <th width="120">报关日期</th>
+                    <th width="120">报关金额</th>
+                    <th width="60">币种</th>
+                </tr>
+                <tr v-for="(item,index) of dataList">
+                    <td><el-checkbox v-model="item.isCheck" v-on:change="singlecheck(item.TaxNumber,item.isCheck)"></el-checkbox></td>
+                    <td>{{index+1}}</td>
+                    <td>{{item.OrderID}}</td>
+                    <td>{{item.ContrNo}}</td>
+                    <td>{{item.EntryId}}</td>
+                    <td>{{item.DDate}}</td>
+                    <td>{{item.TotalDeclarePrice}}</td>
+                    <td>{{item.Currency}}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="foot" v-if="!indexData.loading">
+            <el-pagination style="float:right" v-on:size-change="handleSizeChange"
+                           v-on:current-change="handleCurrentChange"
+                           :current-page="indexData.pageIndex"
+                           :page-sizes="[5, 10, 20, 40]"
+                           :page-size="indexData.pageSize"
+                           layout="total, sizes, prev, pager, next, jumper"
+                           :total="indexData.total">
+            </el-pagination>
+        </div>
+    </div>
+</div>
+<script>
+    var declareOrder = new Vue({
+        el: "#declareOrder",
+        data: function () {
+            return {
+                dataList: [],
+                indexData: {
+                    loading: true,
+                    pageIndex: 1, //初始页
+                    pageSize: 10,    //每页的数据
+                    total: 0,
+                    allCheck: false,
+                    startDate: "",
+                    endDate: "",
+                    dataValue: "",
+                    contrNo: "",
+                    orderID: "",
+                    decID: "",
+                },
+            }
+        },
+        mounted: function () {
+            this.paging();
+        },
+        methods: {
+            //清空数据
+            clearData: function () {
+                this.indexData.contrNo = "";
+                this.indexData.startDate = "";
+                this.indexData.endDate = "";
+                this.indexData.orderID = "";
+                this.indexData.decID = "";
+                this.indexData.dataValue = "";
+                this.indexData.allCheck = false;
+                this.indexData.pageIndex = 1;
+                this.paging();
+            },
+            //查询数据
+            queryData: function () {
+                if (this.indexData.dataValue != "" && this.indexData.dataValue != null) {
+                    var start = new Date(this.indexData.dataValue[0]);
+                    var startDate = start.getFullYear() + '-' + (start.getMonth() + 1) + '-' + start.getDate();
+                    var end = new Date(this.indexData.dataValue[1]);
+                    var endDate = end.getFullYear() + '-' + (end.getMonth() + 1) + '-' + end.getDate();
+                    this.indexData.startDate = startDate;
+                    this.indexData.endDate = endDate;
+                } else {
+                    this.indexData.startDate = "";
+                    this.indexData.endDate = "";
+                }
+                this.indexData.pageIndex = 1;
+                this.paging();
+            },
+            //下载报关单
+            downloadInvoices: function () {
+                var that = this;
+                var ids = [];
+                this.dataList.filter(function (value, index) {
+                    if (value.isCheck) {
+                        ids.push(value.ID)
+                    }
+                });
+                if (ids.length == 0) {
+                    this.onAlert("warning", "请选择需要下载的报关单！");
+                    return;
+                }
+                axios({
+                    url: "/Declare/DownloadDeclare",
+                    method: "post",
+                    data: {
+                        id: JSON.stringify(ids)
+                    }
+                }).then(function (response) {
+                    if (response.data.type == "error") {
+                        that.onAlert(response.data.type, response.data.msg);
+                    } else {
+                        $('#exportInfoForm').attr("href", response.data.data);
+                        $('#exportInfoForm').attr("target", "_blank");
+                        $('#ex-li').trigger("click");
+                    }
+                }).catch(function (error) {
+                    that.onAlert("warning", error);
+                });
+            },
+            handleallCheck: function () {
+                var that = this;
+                this.dataList.forEach(function (val, index) {
+                    val.isCheck = that.indexData.allCheck;
+                });
+            },
+            //是否全选
+            isAllcheck: function () {
+                var flag = true;
+                this.dataList.forEach(function (val, index) {
+                    if (!val.isCheck) {
+                        flag = false;
+                    }
+                });
+                this.indexData.allCheck = flag;
+            },
+            singlecheck: function (id, ischeck) {
+                this.dataList.filter(function (data) {
+                    if (data.ID == id) {
+                        data.isCheck = ischeck;
+                    }
+                });
+                this.isAllcheck();
+            },
+            // 初始页currentPage、初始每页数据数pagesize和数据data
+            handleSizeChange: function (size) {
+                this.indexData.pageSize = size;
+                this.paging();
+            },
+            handleCurrentChange: function (currentPage) {
+                this.indexData.pageIndex = currentPage;
+                this.paging();
+            },
+            paging: function () {
+                var that = this;
+                that.indexData.allCheck = false;
+                that.indexData.loading = true;
+                axios({
+                    url: "/Declare/GetDeclareOrders",
+                    method: "post",
+                    data: {
+                        page: this.indexData.pageIndex,
+                        rows: this.indexData.pageSize,
+                        orderID: this.indexData.orderID,
+                        contrNo: this.indexData.contrNo,
+                        startDate: this.indexData.startDate,
+                        endDate: this.indexData.endDate,
+                        decID: this.indexData.decID
+
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                    transformRequest: [function (data) {
+                        var ret = ''
+                        for (var it in data) {
+                            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+                        }
+                        return ret;
+                    }],
+                }).then(function (response) {
+                    var data = JSON.parse(response.data.data);
+                    that.dataList = data.list;
+                    that.indexData.total = data.total;
+                    that.indexData.loading = false;
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                });
+            },
+        }
+    });
+</script>
+

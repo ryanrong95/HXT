@@ -1,0 +1,146 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="BvOrders" Class="SqlDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=192.168.80.25;Initial Catalog=BvOrders;User ID=udata" SettingsObjectName="Layer.Data.Properties.Settings" SettingsPropertyName="BvOrdersConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Carts" Member="Carts">
+    <Type Name="Carts">
+      <Column Name="ServiceOutputID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ServiceInputID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="UserID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CustomerCode" Type="System.String" DbType="VarChar(22)" CanBeNull="true" />
+      <Column Name="ProductSign" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Xml" Type="System.Xml.Linq.XElement" DbType="Xml NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Waybills" Member="Waybills">
+    <Type Name="Waybills">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="WaybillNumber" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="Carrier" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="Payer" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Freight" Type="System.Decimal" DbType="Decimal(28,5) NOT NULL" CanBeNull="false" />
+      <Column Name="Weight" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Measurement" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.OrderSearchers" Member="OrderSearchers">
+    <Type Name="OrderSearchers">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="MainID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Value" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="Orders_OrderSearchers" Member="Orders" ThisKey="MainID" OtherKey="ID" Type="Orders" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.OrderShowers" Member="OrderShowers">
+    <Type Name="OrderShowers">
+      <Column Name="MainID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Xml" Type="System.Xml.Linq.XElement" DbType="Xml NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Association Name="Orders_OrderShowers" Member="Orders" ThisKey="MainID" OtherKey="ID" Type="Orders" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PrimaryKeys" Member="PrimaryKeys">
+    <Type Name="PrimaryKeys">
+      <Column Name="Name" Type="System.String" DbType="VarChar(10) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Length" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Value" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Day" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.UserAccounts" Member="UserAccounts">
+    <Type Name="UserAccounts">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Source" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="UserID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Code" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Currency" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Amount" Type="System.Decimal" DbType="Decimal(18,5) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Users_UserAccounts" Member="Users" ThisKey="UserID" OtherKey="ID" Type="Users" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.UserInputs" Member="UserInputs">
+    <Type Name="UserInputs">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Source" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="UserID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Code" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Currency" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Amount" Type="System.Decimal" DbType="Decimal(18,5) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="UserInputs_UserOutputs" Member="UserOutputs" ThisKey="ID" OtherKey="UserInputID" Type="UserOutputs" />
+      <Association Name="Users_UserInputs" Member="Users" ThisKey="UserID" OtherKey="ID" Type="Users" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Users" Member="Users">
+    <Type Name="Users">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="Users_UserAccounts" Member="UserAccounts" ThisKey="ID" OtherKey="UserID" Type="UserAccounts" />
+      <Association Name="Users_UserInputs" Member="UserInputs" ThisKey="ID" OtherKey="UserID" Type="UserInputs" />
+      <Association Name="Users_UserOutputs" Member="UserOutputs" ThisKey="ID" OtherKey="UserID" Type="UserOutputs" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Orders" Member="Orders">
+    <Type Name="Orders">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="UserID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SiteUserName" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="CompanyName" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="Currency" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="District" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Transport" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300) NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PaidRatio" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="DeliveryRatio" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Orders_OrderSearchers" Member="OrderSearchers" ThisKey="ID" OtherKey="MainID" Type="OrderSearchers" />
+      <Association Name="Orders_OrderShowers" Member="OrderShowers" ThisKey="ID" OtherKey="MainID" Type="OrderShowers" Cardinality="One" />
+      <Association Name="Orders_UserOutputs" Member="UserOutputs" ThisKey="ID" OtherKey="OrderID" Type="UserOutputs" />
+    </Type>
+  </Table>
+  <Table Name="dbo.CommodityOutputs" Member="CommodityOutputs">
+    <Type Name="CommodityOutputs">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="InputID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="OrderID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ServiceInputID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Count" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="CommodityInputs_CommodityOutputs" Member="CommodityInputs" ThisKey="InputID" OtherKey="ID" Type="CommodityInputs" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.CommodityInputs" Member="CommodityInputs">
+    <Type Name="CommodityInputs">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="OrderID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ServiceOuputID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="UserID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Count" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="CommodityInputs_CommodityOutputs" Member="CommodityOutputs" ThisKey="ID" OtherKey="InputID" Type="CommodityOutputs" />
+    </Type>
+  </Table>
+  <Table Name="dbo.UserOutputs" Member="UserOutputs">
+    <Type Name="UserOutputs">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="UserInputID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="UserID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="OrderID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Currency" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Amount" Type="System.Decimal" DbType="Decimal(18,5) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="DateIndex" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Orders_UserOutputs" Member="Orders" ThisKey="OrderID" OtherKey="ID" Type="Orders" IsForeignKey="true" />
+      <Association Name="UserInputs_UserOutputs" Member="UserInputs" ThisKey="UserInputID" OtherKey="ID" Type="UserInputs" IsForeignKey="true" />
+      <Association Name="Users_UserOutputs" Member="Users" ThisKey="UserID" OtherKey="ID" Type="Users" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>

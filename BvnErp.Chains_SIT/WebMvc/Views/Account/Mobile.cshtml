@@ -1,0 +1,152 @@
+﻿@model WebMvc.Models.MobileViewModel
+@{
+    ViewBag.Title = "修改手机绑定";
+    Layout = "~/Views/Shared/_LayoutAccount.cshtml";
+    ViewBag.navid = "Mobile";
+}
+
+<div id="app" v-cloak class="backshow" style="height:450px;" >
+    <h2>手机绑定</h2>
+    <div >
+        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" status-icon label-width="120px" class="elform_padding">
+            <el-row>
+                <el-col :span="12">
+                    <el-form-item label="原手机号码：">
+                        <el-input v-model="ruleForm.Phone" auto-complete="off" readonly></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="12">
+                    <el-form-item label="新手机号码：" prop="NewPhone">
+                        <el-input v-model="ruleForm.NewPhone" placeholder="请输入新手机号码" auto-complete="off"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="8">
+                    <el-form-item label="短信验证码：" prop="Code" :rules="[{required: true, message: '请输入短信验证码', trigger: 'blur'}]">
+                        <el-input v-model="ruleForm.Code" placeholder="短信验证码" auto-complete="off"></el-input>
+
+                    </el-form-item>
+                </el-col>
+                <el-col :span="4">
+                    <el-form-item label="" label-width="10px">
+                        <el-button style="padding-left:20px;" :disabled="buttonDisable" type="primary" size="medium" v-on:click="sendSms('ruleForm')">{{buttonTxt}}</el-button>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="12">
+                    <el-form-item>
+                        <el-button type="primary" v-on:click="onSubmit('ruleForm')">保存</el-button>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+        </el-form>
+    </div>
+</div>
+<script>
+    var app = new Vue({
+        el: "#app",
+        data: function () {
+            var validateMobile = function(rule, value, callback){
+                if (value == '' || value == null) {
+                    callback(new Error('请输入手机号'));
+                }
+                else if (!/^[0-9]*$/.test(value)) {
+                    callback(new Error('请输入数字'));
+                }
+                else if (!ValidMobile(value)) {
+                    callback(new Error('请输入正确的手机号码'));
+                }
+                else {
+                    axios({
+                        url: "/Account/CheckMobile",
+                        method: "post",
+                        data: {
+                            phone: app.ruleForm.NewPhone
+                        },
+                    }).then(function (response) {
+                        if (response.data.type == "error") {
+                            callback(new Error(response.data.msg));
+                        } else {
+                            callback();
+                        }
+                    }).catch(function (error) {
+                        app.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                    });
+                }
+
+            };
+            return {
+                buttonDisable:false,
+                buttonTxt:"获取短信验证码",
+                ruleForm:@Html.Raw(Json.Encode(Model)),
+                rules: {
+                    NewPhone: [{ required: true, validator: validateMobile, trigger: 'blur' }],
+                }
+            }
+        },
+        methods: {
+            onSubmit: function (ruleForm) {
+                this.$refs.ruleForm.validate(function (valid){
+                    if (valid) {
+                        axios({
+                            url: "/Account/Mobile",
+                            method: "post",
+                            data: app.ruleForm,
+                        }).then(function (response) {
+                            app.onAlert(response.data.type, response.data.msg);
+                            if (response.data.type == "error") {
+                                app.$refs.ruleForm.resetFields();
+                            } else {
+                                setTimeout(function () { location.href ="/Account/Mobile"}, 1000)
+                            }
+                        }).catch(function (error) {
+                            app.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                        });
+                    } else {
+                        //验证失败
+                        return false;
+                    }
+                });
+            },
+            //发送短信
+            sendSms: function (ruleForm) {
+                this.$refs.ruleForm.validateField('NewPhone', function (data) {
+                    if (data == "") {
+                        app.buttonDisable = true;
+                        var time = 60;
+                        axios({
+                            url: "/Account/SendCode",
+                            method: "post",
+                            data: {
+                                phone: app.ruleForm.NewPhone
+                            },
+                        }).then(function (response) {
+                            var t = setInterval(function () {
+                                time--;
+                                app.buttonTxt = time + "秒后重新获取";
+                                if (time == 0) {
+                                    clearInterval(t);
+                                    app.buttonTxt = "发送短信";
+                                    app.buttonDisable = false;
+                                }
+                            }, 1000);
+                        }).catch(function (error) {
+                            app.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                        });
+                    }
+                });
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type
+                });
+            },
+        },
+    });
+</script>

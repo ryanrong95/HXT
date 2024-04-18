@@ -1,0 +1,206 @@
+﻿
+@{
+    ViewBag.Title = "银行账号";
+    Layout = "~/Views/Shared/_LayoutAccount.cshtml";
+    ViewBag.navid = "MySuppliers";
+}
+<div class="content_right backshow">
+    @*<h2>供应商银行账号</h2>*@
+
+    <div id="bank" v-cloak style="min-height:460px;">
+        <div class="breaklist">
+            <span class="fl first_title">银行账号</span>
+            <span v-on:click="history.back(-1)" class="fl second_title">返回</span>
+        </div>
+        <div class="buttonlist">
+            <el-row>
+                <el-col :span="12">
+                    <el-button  size="mini" v-on:click="return_Supplier">返回</el-button>
+                    <el-button type="primary" size="mini" v-on:click="add_SupperlierBank">新增</el-button>
+                </el-col>
+            </el-row>
+        </div>
+        <div class="content">
+            <el-table :data="bankList.slice((pageIndex-1)*pageSize,pageIndex*pageSize)"
+                      stripe>
+                <el-table-column label="序号" type="index">
+                </el-table-column>
+                <el-table-column label="银行名称(英文)" prop="BankName">
+                </el-table-column>
+                <el-table-column label="银行地址(英文)" prop="BankAddress">
+                </el-table-column>
+                <el-table-column label="银行账号" prop="BankAccount">
+                </el-table-column>
+                <el-table-column label="银行代码" prop="SwiftCode">
+                </el-table-column>
+                <el-table-column label="操作" fixed="right" width="160">
+                    <template slot-scope="scope">
+                        <el-button size="mini"
+                                   v-on:click="edit_SupperlierBank(scope.$index, scope.row)">编辑</el-button>
+                        <el-button size="mini"
+                                   type="danger"
+                                   v-on:click="delete_SupperlierBank(scope.$index, scope.row)">删除</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div class="overhide">
+                <el-pagination class="fr" style="margin-top:20px;" v-on:size-change="handleSizeChange"
+                               v-on:current-change="handleCurrentChange"
+                               :current-page="pageIndex"
+                               :page-sizes="[5, 10, 20, 40]"
+                               :page-size="pageSize"
+                               layout="total, sizes, prev, pager, next, jumper"
+                               :total="bankList.length">
+                </el-pagination>
+            </div>
+        </div>
+        @*银行账号新增/编辑框*@
+        <el-dialog :title="dialogFormName" :lock-scroll="false" width="40%" :visible.sync="dialogFormVisible" :close-on-click-modal="false">
+            <my-component ref="header"></my-component>
+            <div slot="footer" class="dialog-footer">
+                <el-button v-on:click="dialogFormVisible = false">取 消</el-button>
+                <el-button type="primary" v-on:click="onSubmit_ruleForm('header')">确 定</el-button>
+            </div>
+        </el-dialog>
+    </div>
+</div>
+
+@{Html.RenderAction("_PartialBeneficiarieInfo", "Suppliers");}
+<script>
+    var bank = new Vue({
+        el: "#bank",
+        data: function () {
+            return {
+                pageIndex: 1, //初始页
+                pageSize: 10,    //    每页的数据
+                bankList: @Html.Raw(Json.Encode(Model)),    //银行账户列表
+                dialogFormVisible: false,  //弹框
+                dialogFormName: "",  //弹框名称
+            }
+        },
+        methods: {
+            //返回供应商
+            return_Supplier: function () {
+                location.href="/Suppliers/MySuppliers"
+            },
+            //银行账户信息提交
+            onSubmit_ruleForm: function (form1) {
+                var that = this;
+                this.$refs.header.$refs.form1.validate(function(valid){
+                    if (valid) {
+                        bank.dialogFormVisible = false;
+                        axios.post('/Suppliers/_PartialBeneficiarieInfo', {
+                            data: that.$refs.header.form1,
+                        }).then(function (response) {
+                            if (response.data.type == "error") {
+                                bank.onAlert(response.data.type, response.data.msg);
+                            }
+                            else {
+                                bank.$refs.header.$refs.form1.resetFields();
+                                bank.handleUserList(); //刷新列表
+                                bank.onAlert(response.data.type, response.data.msg);
+                            }
+                            
+                        }).catch(function (error) {
+                            bank.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                        });
+                    } else {
+                        //验证失败
+                    }
+                });
+            },
+            //供应商银行编辑
+            edit_SupperlierBank: function (index, row) {
+                axios({
+                    url: "/Suppliers/GetBeneficiarieInfo",
+                    method: "post",
+                    data: {
+                         bankid: row.ID,
+                        supplierid:'@Request.QueryString["id"]'
+                    },
+                }).then(function (response) {
+                    if (response.data.type == "error") {
+                        bank.onAlert(response.data.type, response.data.msg);
+                        return;
+                    }
+                    bank.dialogFormName = "编辑供应商银行账号";
+                    bank.dialogFormVisible = true;
+                    setTimeout(function() {
+                        bank.$refs.header.$refs.form1.resetFields();
+                        bank.$refs.header.form1.ID = "";
+                        bank.$refs.header.form1 = JSON.parse(response.data.data);
+                    }, 0)
+                }).catch(function (error) {
+                    bank.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //新增供应商银行账号
+            add_SupperlierBank: function () {
+                bank.dialogFormName = "新增供应商银行账号";
+                bank.dialogFormVisible = true;
+                setTimeout(function(){
+                    bank.$refs.header.$refs.form1.resetFields(); 
+                    bank.$refs.header.form1.ID = "";
+                    bank.$refs.header.form1.ClientSupplierID = '@Request.QueryString["id"]';          
+                }, 0);
+            },
+            //删除供应商
+            delete_SupperlierBank: function (index, row) {
+                this.$confirm('您确定要删除银行账号【' + row.BankAccount + '】吗？', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                    lockScroll: false,
+                }).then(function(){
+                    axios({
+                        url: "/Suppliers/DelSupplierBank",
+                        method: "post",
+                        data: {
+                            bankid: row.ID,
+                             supplierid:'@Request.QueryString["id"]'
+                        }
+                    }).then(function (response) {
+                        bank.handleUserList(); //刷新列表
+                        bank.onAlert(response.data.type, response.data.msg);
+                    }).catch(function (error) {
+                        bank.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                    });
+                }).catch(function() {
+                    //取消
+                });
+            },
+            // 初始页currentPage、初始每页数据数pagesize和数据data
+            handleSizeChange: function (size) {
+                this.pageSize = size;
+            },
+            handleCurrentChange: function (currentPage) {
+                this.pageIndex = currentPage;
+            },
+            //弹框关闭后事件
+            dialog_Closed: function () {
+                bank.$refs.header.$refs.form1.resetFields();  //初始化列表值
+            },
+            handleUserList:  function () {
+                axios({
+                    url: "/Suppliers/GetSuppliersBankList",
+                    method: "post",
+                    data: {
+                        id: '@Request.QueryString["id"]'
+                    }
+                }).then(function (response) {
+                    bank.bankList = JSON.parse(response.data.data);
+                }).catch(function (error) {
+                    bank.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type
+                });
+            },
+        }
+    });
+</script>
+

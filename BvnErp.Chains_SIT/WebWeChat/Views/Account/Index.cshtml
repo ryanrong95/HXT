@@ -1,0 +1,238 @@
+﻿
+@{
+    ViewBag.Title = "会员中心";
+}
+<style>
+    .rucanghao {
+        font-size: 12px;
+        border-radius: 0.2rem;
+        width: 50%;
+        background: rgba(0,0,0,4);
+        color: #FFFFFF;
+        left: 28px;
+    }
+
+    .el-popper[x-placement^=bottom] .popper__arrow::after {
+        top: 1px;
+        margin-left: -6px;
+        border-top-width: 0;
+        border-bottom-color: #1e1e1e;
+    }
+
+    #rucanghaobox {
+        cursor: pointer;
+    }
+</style>
+<div id="index" v-cloak>
+    <div class="home_content">
+        <div class="home-top">
+            <div class="titlesbox">
+                <p class="titles">{{formdata.CompanyName}}</p>
+                <p class="icons">
+                    <a href="/Account/Settings">
+                        <span><img src="~/Content/img/设置.png" alt=""></span>
+                    </a>
+                    <a href="/Order/Menu_folding">                       
+                        <span><img src="~/Content/img/菜单.png" alt=""></span>
+                    </a>
+                </p>
+            </div>
+            <div class="inform">
+                <span>
+                    <img src="~/Content/img/trumpet.png" alt="">
+                </span>
+                <span class="inform_content">
+                    <i class="inform_contentdiv">
+                        <a href="">对美国原产的商品实施加征关税</a>
+                    </i>
+                </span>
+            </div>
+        </div>
+        <div class="home-bottom">
+            <div class="box-mak">
+                <div class="list1 listpublic">
+                    <div class="list_title">
+                        <p>应付款</p>
+                        <p>
+                            <span v-on:click="Payment()">付款记录</span>
+                            <span class="el-icon-d-arrow-right"></span>
+                        </p>
+                    </div>
+                    <div>
+                        <ul class="dues">
+                            <li>
+                                <span>{{formdata.ProductPayable}}</span>
+                                <span>货款</span>
+                            </li>
+                            <li>
+                                <span>{{formdata.TaxPayable}}</span>
+                                <span>税款</span>
+                            </li>
+                            <li>
+                                <span>{{formdata.AgencyFeePayable}}</span>
+                                <span> 代理费</span>
+                            </li>
+                            <li>
+                                <span>{{formdata.IncidentalPayable}}</span>
+                                <span>杂费</span>
+                            </li>
+                            <li>
+                                <span>{{formdata.TotalPayableAmount}}</span>
+                                <span>总金额</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="list2 listpublic">
+                <div class="list_title">
+                    <p>我的订单</p>
+                    <p>
+                        <span v-on:click="MyOrders">查看全部</span>
+                        <span class="el-icon-d-arrow-right"></span>
+                    </p>
+                </div>
+                <ul class="myorders">
+                    <li>
+                        <a href="/Order/MyOrders/3">
+                            <i class="Badge">{{formdata.UnConfirmCount}}</i>
+                            <img src="~/Content/img/待确认.png" alt="">
+                            <span>待确认</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Order/MyOrders/5">
+                            <i class="Badge">{{formdata.UnInvoiceCount}}</i>
+                            <img src="~/Content/img/ticket.png" alt="">
+                            <span>待开票</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Order/MyOrders/8">
+                            <i class="Badge">{{formdata.HangUpCount}}</i>
+                            <img src="~/Content/img/挂起.png" alt="">
+                            <span>挂起</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Order/MyOrders/4">
+                            <i class="Badge">{{formdata.UnPayExchangeCount}}</i>
+                            <img src="~/Content/img/payment.png" alt="">
+                            <span>待付汇</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Order/MyOrders/6">
+                            <i class="Badge">{{formdata.CompeletedCount}}</i>
+                            <img src="~/Content/img/finish.png" alt="">
+                            <span>待收货</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="list3 listpublic">
+                <div class="list_title">
+                    <p>客户服务</p>
+                    <p id="rucanghaobox">
+                        @*<el-tooltip class="item" :hide-after="2000" effect="dark" content="入仓号是您的货物进入我们仓库的唯一标识，是我司确认货物的唯一途径，请务必将您的入仓号填写在运单或外包装上。" placement="bottom-end">
+            <i>入仓号：{{formdata.ClientCode}}</i>
+        </el-tooltip>*@
+                        <el-popover placement="bottom"
+                                    width="300"
+                                    trigger="manual"
+                                    popper-class="rucanghao"
+                                    v-model="visible"
+                                    content="入仓号是您的货物进入我们仓库的唯一标识，是我司确认货物的唯一途径，请务必将您的入仓号填写在运单或外包装上。" id="popoverbox">
+                            <i slot="reference">入仓号：{{formdata.ClientCode}}</i>
+                        </el-popover>
+                    </p>
+                </div>
+                <div class="client">
+                    <h2>业务经理</h2>
+                    <p>
+                        <img src="~/Content/img/name.png" alt="">
+                        <span>姓名：{{formdata.ServiceManagerName}}</span>
+                    </p>
+                    <p>
+                        <img src="~/Content/img/phone.png" alt="">
+                        <span>电话：{{formdata.ServiceManagerTel}}</span>
+                    </p>
+                    <p>
+                        <img src="~/Content/img/email_hui.png" alt="">
+                        <span>邮箱：{{formdata.ServiceManagerMail}}</span>
+                    </p>
+                </div>
+                <div class="client">
+                    <h2>跟单员</h2>
+                    <p>
+                        <img src="~/Content/img/name.png" alt="">
+                        <span>姓名：{{formdata.MerchandiserName}}</span>
+                    </p>
+                    <p>
+                        <img src="~/Content/img/phone.png" alt="">
+                        <span>电话：{{formdata.MerchandiserTel}}</span>
+                    </p>
+                    <p>
+                        <img src="~/Content/img/email_hui.png" alt="">
+                        <span>邮箱：{{formdata.MerchandiserMail}}</span>
+                    </p>
+                </div>
+            </div>
+            <div class="list4 listpublic">
+                <div class="list_title">
+                    <p>服务</p>
+                </div>
+                <div class="menu">
+                    <a href="http://www.boc.cn/sourcedb/whpj/" target="_blank"><img src="~/Content/img/exchange_rate.png" alt=""><span>实时汇率</span></a>
+                    <a v-on:click="unDevelop"><img src="~/Content/img/Customs.png" alt=""><span>海关汇率</span></a>
+                    <a href="http://v1.wl.net.cn/Sort/Search.html"><img src="~/Content/img/inquire.png" alt=""><span>归类查询</span></a>
+                    <a v-on:click="unDevelop"><img src="~/Content/img/charge.png" alt=""><span>收费标准</span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var index = new Vue({
+        el: "#index",
+        data: {
+            formdata:@Html.Raw(Json.Encode(Model)),
+            visible: false,//是否现在
+        },
+        methods: {
+            unDevelop: function () {
+                this.$toast("此服务暂未开通");
+            },
+            MyOrders: function () {
+                window.location.href = '/Order/MyOrders'
+            },
+            Payment: function () {
+                window.location.href = '/Order/Payment'
+            },
+        }
+    })
+    /*阻止冒泡*/
+    function stopPropagation(e) {
+        e = e || event;
+        if (e.stopPropagation)
+            e.stopPropagation();//停止冒泡  非ie
+        else
+            e.cancelBubble = true;//停止冒泡 ie
+    }
+    /*点击按钮，下拉区域显示或隐藏*/
+    $('#rucanghaobox').bind('click', function (e) {
+        stopPropagation(e);
+        index.visible = true
+    });
+    /*点击别的地方下拉框消失*/
+    /*app相当于body里面唯一的子元素*/
+    document.getElementById("index").addEventListener('click', function (e) {
+        var parent = $(e.target).parents('#rucanghaobox');   //navIcon为按钮，触发下拉区域
+        if (parent.length === 0) {
+            index.visible = false;//下拉框区域隐藏
+        } else {
+            index.visible = true
+        }
+    });
+</script>
+

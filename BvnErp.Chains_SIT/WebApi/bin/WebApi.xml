@@ -1,0 +1,3847 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WebApi</name>
+    </assembly>
+    <members>
+        <member name="M:WebApi.Areas.HelpPage.ApiDescriptionExtensions.GetFriendlyId(System.Web.Http.Description.ApiDescription)">
+            <summary>
+            Generates an URI-friendly ID for the <see cref="T:System.Web.Http.Description.ApiDescription"/>. E.g. "Get-Values-id_name" instead of "GetValues/{id}?name={name}"
+            </summary>
+            <param name="description">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <returns>The ID as a string.</returns>
+        </member>
+        <member name="T:WebApi.Areas.HelpPage.HelpPageConfig">
+            <summary>
+            Use this class to customize the Help Page.
+            For example you can set a custom <see cref="T:System.Web.Http.Description.IDocumentationProvider"/> to supply the documentation
+            or you can provide the samples for the requests/responses.
+            </summary>
+        </member>
+        <member name="T:WebApi.Areas.HelpPage.Controllers.HelpController">
+            <summary>
+            The controller that will handle requests for the help page.
+            </summary>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageConfigurationExtensions.SetDocumentationProvider(System.Web.Http.HttpConfiguration,System.Web.Http.Description.IDocumentationProvider)">
+            <summary>
+            Sets the documentation provider for help page.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="documentationProvider">The documentation provider.</param>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleObjects(System.Web.Http.HttpConfiguration,System.Collections.Generic.IDictionary{System.Type,System.Object})">
+            <summary>
+            Sets the objects that will be used by the formatters to produce sample requests/responses.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sampleObjects">The sample objects.</param>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleRequest(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue,System.String,System.String)">
+            <summary>
+            Sets the sample request directly for the specified media type and action.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample request.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleRequest(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue,System.String,System.String,System.String[])">
+            <summary>
+            Sets the sample request directly for the specified media type and action with parameters.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample request.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleResponse(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue,System.String,System.String)">
+            <summary>
+            Sets the sample request directly for the specified media type of the action.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample response.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleResponse(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue,System.String,System.String,System.String[])">
+            <summary>
+            Sets the sample response directly for the specified media type of the action with specific parameters.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample response.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleForMediaType(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue)">
+            <summary>
+            Sets the sample directly for all actions with the specified media type.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample.</param>
+            <param name="mediaType">The media type.</param>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleForType(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue,System.Type)">
+            <summary>
+            Sets the sample directly for all actions with the specified type and media type.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="type">The parameter type or return type of an action.</param>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageConfigurationExtensions.SetActualRequestType(System.Web.Http.HttpConfiguration,System.Type,System.String,System.String)">
+            <summary>
+            Specifies the actual type of <see cref="T:System.Net.Http.ObjectContent`1"/> passed to the <see cref="T:System.Net.Http.HttpRequestMessage"/> in an action.
+            The help page will use this information to produce more accurate request samples.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="type">The type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageConfigurationExtensions.SetActualRequestType(System.Web.Http.HttpConfiguration,System.Type,System.String,System.String,System.String[])">
+            <summary>
+            Specifies the actual type of <see cref="T:System.Net.Http.ObjectContent`1"/> passed to the <see cref="T:System.Net.Http.HttpRequestMessage"/> in an action.
+            The help page will use this information to produce more accurate request samples.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="type">The type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageConfigurationExtensions.SetActualResponseType(System.Web.Http.HttpConfiguration,System.Type,System.String,System.String)">
+            <summary>
+            Specifies the actual type of <see cref="T:System.Net.Http.ObjectContent`1"/> returned as part of the <see cref="T:System.Net.Http.HttpRequestMessage"/> in an action.
+            The help page will use this information to produce more accurate response samples.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="type">The type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageConfigurationExtensions.SetActualResponseType(System.Web.Http.HttpConfiguration,System.Type,System.String,System.String,System.String[])">
+            <summary>
+            Specifies the actual type of <see cref="T:System.Net.Http.ObjectContent`1"/> returned as part of the <see cref="T:System.Net.Http.HttpRequestMessage"/> in an action.
+            The help page will use this information to produce more accurate response samples.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="type">The type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageConfigurationExtensions.GetHelpPageSampleGenerator(System.Web.Http.HttpConfiguration)">
+            <summary>
+            Gets the help page sample generator.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <returns>The help page sample generator.</returns>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageConfigurationExtensions.SetHelpPageSampleGenerator(System.Web.Http.HttpConfiguration,WebApi.Areas.HelpPage.HelpPageSampleGenerator)">
+            <summary>
+            Sets the help page sample generator.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sampleGenerator">The help page sample generator.</param>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageConfigurationExtensions.GetModelDescriptionGenerator(System.Web.Http.HttpConfiguration)">
+            <summary>
+            Gets the model description generator.
+            </summary>
+            <param name="config">The configuration.</param>
+            <returns>The <see cref="T:WebApi.Areas.HelpPage.ModelDescriptions.ModelDescriptionGenerator"/></returns>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageConfigurationExtensions.GetHelpPageApiModel(System.Web.Http.HttpConfiguration,System.String)">
+            <summary>
+            Gets the model that represents an API displayed on the help page. The model is initialized on the first call and cached for subsequent calls.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="apiDescriptionId">The <see cref="T:System.Web.Http.Description.ApiDescription"/> ID.</param>
+            <returns>
+            An <see cref="T:WebApi.Areas.HelpPage.Models.HelpPageApiModel"/>
+            </returns>
+        </member>
+        <member name="T:WebApi.Areas.HelpPage.ModelDescriptions.ModelDescription">
+            <summary>
+            Describes a type model.
+            </summary>
+        </member>
+        <member name="T:WebApi.Areas.HelpPage.ModelDescriptions.ModelDescriptionGenerator">
+            <summary>
+            Generates model descriptions for given types.
+            </summary>
+        </member>
+        <member name="T:WebApi.Areas.HelpPage.ModelDescriptions.ModelNameAttribute">
+            <summary>
+            Use this attribute to change the name of the <see cref="T:WebApi.Areas.HelpPage.ModelDescriptions.ModelDescription"/> generated for a type.
+            </summary>
+        </member>
+        <member name="T:WebApi.Areas.HelpPage.Models.HelpPageApiModel">
+            <summary>
+            The model that represents an API displayed on the help page.
+            </summary>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.Models.HelpPageApiModel.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:WebApi.Areas.HelpPage.Models.HelpPageApiModel"/> class.
+            </summary>
+        </member>
+        <member name="P:WebApi.Areas.HelpPage.Models.HelpPageApiModel.ApiDescription">
+            <summary>
+            Gets or sets the <see cref="P:WebApi.Areas.HelpPage.Models.HelpPageApiModel.ApiDescription"/> that describes the API.
+            </summary>
+        </member>
+        <member name="P:WebApi.Areas.HelpPage.Models.HelpPageApiModel.UriParameters">
+            <summary>
+            Gets or sets the <see cref="T:WebApi.Areas.HelpPage.ModelDescriptions.ParameterDescription"/> collection that describes the URI parameters for the API.
+            </summary>
+        </member>
+        <member name="P:WebApi.Areas.HelpPage.Models.HelpPageApiModel.RequestDocumentation">
+            <summary>
+            Gets or sets the documentation for the request.
+            </summary>
+        </member>
+        <member name="P:WebApi.Areas.HelpPage.Models.HelpPageApiModel.RequestModelDescription">
+            <summary>
+            Gets or sets the <see cref="T:WebApi.Areas.HelpPage.ModelDescriptions.ModelDescription"/> that describes the request body.
+            </summary>
+        </member>
+        <member name="P:WebApi.Areas.HelpPage.Models.HelpPageApiModel.RequestBodyParameters">
+            <summary>
+            Gets the request body parameter descriptions.
+            </summary>
+        </member>
+        <member name="P:WebApi.Areas.HelpPage.Models.HelpPageApiModel.ResourceDescription">
+            <summary>
+            Gets or sets the <see cref="T:WebApi.Areas.HelpPage.ModelDescriptions.ModelDescription"/> that describes the resource.
+            </summary>
+        </member>
+        <member name="P:WebApi.Areas.HelpPage.Models.HelpPageApiModel.ResourceProperties">
+            <summary>
+            Gets the resource property descriptions.
+            </summary>
+        </member>
+        <member name="P:WebApi.Areas.HelpPage.Models.HelpPageApiModel.SampleRequests">
+            <summary>
+            Gets the sample requests associated with the API.
+            </summary>
+        </member>
+        <member name="P:WebApi.Areas.HelpPage.Models.HelpPageApiModel.SampleResponses">
+            <summary>
+            Gets the sample responses associated with the API.
+            </summary>
+        </member>
+        <member name="P:WebApi.Areas.HelpPage.Models.HelpPageApiModel.ErrorMessages">
+            <summary>
+            Gets the error messages associated with this model.
+            </summary>
+        </member>
+        <member name="T:WebApi.Areas.HelpPage.HelpPageSampleGenerator">
+            <summary>
+            This class will generate the samples for the help page.
+            </summary>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageSampleGenerator.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:WebApi.Areas.HelpPage.HelpPageSampleGenerator"/> class.
+            </summary>
+        </member>
+        <member name="P:WebApi.Areas.HelpPage.HelpPageSampleGenerator.ActualHttpMessageTypes">
+            <summary>
+            Gets CLR types that are used as the content of <see cref="T:System.Net.Http.HttpRequestMessage"/> or <see cref="T:System.Net.Http.HttpResponseMessage"/>.
+            </summary>
+        </member>
+        <member name="P:WebApi.Areas.HelpPage.HelpPageSampleGenerator.ActionSamples">
+            <summary>
+            Gets the objects that are used directly as samples for certain actions.
+            </summary>
+        </member>
+        <member name="P:WebApi.Areas.HelpPage.HelpPageSampleGenerator.SampleObjects">
+            <summary>
+            Gets the objects that are serialized as samples by the supported formatters.
+            </summary>
+        </member>
+        <member name="P:WebApi.Areas.HelpPage.HelpPageSampleGenerator.SampleObjectFactories">
+            <summary>
+            Gets factories for the objects that the supported formatters will serialize as samples. Processed in order,
+            stopping when the factory successfully returns a non-<see langref="null"/> object.
+            </summary>
+            <remarks>
+            Collection includes just <see cref="M:WebApi.Areas.HelpPage.ObjectGenerator.GenerateObject(System.Type)"/> initially. Use
+            <code>SampleObjectFactories.Insert(0, func)</code> to provide an override and
+            <code>SampleObjectFactories.Add(func)</code> to provide a fallback.</remarks>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageSampleGenerator.GetSampleRequests(System.Web.Http.Description.ApiDescription)">
+            <summary>
+            Gets the request body samples for a given <see cref="T:System.Web.Http.Description.ApiDescription"/>.
+            </summary>
+            <param name="api">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <returns>The samples keyed by media type.</returns>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageSampleGenerator.GetSampleResponses(System.Web.Http.Description.ApiDescription)">
+            <summary>
+            Gets the response body samples for a given <see cref="T:System.Web.Http.Description.ApiDescription"/>.
+            </summary>
+            <param name="api">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <returns>The samples keyed by media type.</returns>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageSampleGenerator.GetSample(System.Web.Http.Description.ApiDescription,WebApi.Areas.HelpPage.SampleDirection)">
+            <summary>
+            Gets the request or response body samples.
+            </summary>
+            <param name="api">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <param name="sampleDirection">The value indicating whether the sample is for a request or for a response.</param>
+            <returns>The samples keyed by media type.</returns>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageSampleGenerator.GetActionSample(System.String,System.String,System.Collections.Generic.IEnumerable{System.String},System.Type,System.Net.Http.Formatting.MediaTypeFormatter,System.Net.Http.Headers.MediaTypeHeaderValue,WebApi.Areas.HelpPage.SampleDirection)">
+            <summary>
+            Search for samples that are provided directly through <see cref="P:WebApi.Areas.HelpPage.HelpPageSampleGenerator.ActionSamples"/>.
+            </summary>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+            <param name="type">The CLR type.</param>
+            <param name="formatter">The formatter.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="sampleDirection">The value indicating whether the sample is for a request or for a response.</param>
+            <returns>The sample that matches the parameters.</returns>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageSampleGenerator.GetSampleObject(System.Type)">
+            <summary>
+            Gets the sample object that will be serialized by the formatters. 
+            First, it will look at the <see cref="P:WebApi.Areas.HelpPage.HelpPageSampleGenerator.SampleObjects"/>. If no sample object is found, it will try to create
+            one using <see cref="M:WebApi.Areas.HelpPage.HelpPageSampleGenerator.DefaultSampleObjectFactory(WebApi.Areas.HelpPage.HelpPageSampleGenerator,System.Type)"/> (which wraps an <see cref="T:WebApi.Areas.HelpPage.ObjectGenerator"/>) and other
+            factories in <see cref="P:WebApi.Areas.HelpPage.HelpPageSampleGenerator.SampleObjectFactories"/>.
+            </summary>
+            <param name="type">The type.</param>
+            <returns>The sample object.</returns>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageSampleGenerator.ResolveHttpRequestMessageType(System.Web.Http.Description.ApiDescription)">
+            <summary>
+            Resolves the actual type of <see cref="T:System.Net.Http.ObjectContent`1"/> passed to the <see cref="T:System.Net.Http.HttpRequestMessage"/> in an action.
+            </summary>
+            <param name="api">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <returns>The type.</returns>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageSampleGenerator.ResolveType(System.Web.Http.Description.ApiDescription,System.String,System.String,System.Collections.Generic.IEnumerable{System.String},WebApi.Areas.HelpPage.SampleDirection,System.Collections.ObjectModel.Collection{System.Net.Http.Formatting.MediaTypeFormatter}@)">
+            <summary>
+            Resolves the type of the action parameter or return value when <see cref="T:System.Net.Http.HttpRequestMessage"/> or <see cref="T:System.Net.Http.HttpResponseMessage"/> is used.
+            </summary>
+            <param name="api">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+            <param name="sampleDirection">The value indicating whether the sample is for a request or a response.</param>
+            <param name="formatters">The formatters.</param>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageSampleGenerator.WriteSampleObjectUsingFormatter(System.Net.Http.Formatting.MediaTypeFormatter,System.Object,System.Type,System.Net.Http.Headers.MediaTypeHeaderValue)">
+            <summary>
+            Writes the sample object using formatter.
+            </summary>
+            <param name="formatter">The formatter.</param>
+            <param name="value">The value.</param>
+            <param name="type">The type.</param>
+            <param name="mediaType">Type of the media.</param>
+            <returns></returns>
+        </member>
+        <member name="T:WebApi.Areas.HelpPage.HelpPageSampleKey">
+            <summary>
+            This is used to identify the place where the sample should be applied.
+            </summary>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageSampleKey.#ctor(System.Net.Http.Headers.MediaTypeHeaderValue)">
+            <summary>
+            Creates a new <see cref="T:WebApi.Areas.HelpPage.HelpPageSampleKey"/> based on media type.
+            </summary>
+            <param name="mediaType">The media type.</param>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageSampleKey.#ctor(System.Net.Http.Headers.MediaTypeHeaderValue,System.Type)">
+            <summary>
+            Creates a new <see cref="T:WebApi.Areas.HelpPage.HelpPageSampleKey"/> based on media type and CLR type.
+            </summary>
+            <param name="mediaType">The media type.</param>
+            <param name="type">The CLR type.</param>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageSampleKey.#ctor(WebApi.Areas.HelpPage.SampleDirection,System.String,System.String,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Creates a new <see cref="T:WebApi.Areas.HelpPage.HelpPageSampleKey"/> based on <see cref="P:WebApi.Areas.HelpPage.HelpPageSampleKey.SampleDirection"/>, controller name, action name and parameter names.
+            </summary>
+            <param name="sampleDirection">The <see cref="P:WebApi.Areas.HelpPage.HelpPageSampleKey.SampleDirection"/>.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageSampleKey.#ctor(System.Net.Http.Headers.MediaTypeHeaderValue,WebApi.Areas.HelpPage.SampleDirection,System.String,System.String,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Creates a new <see cref="T:WebApi.Areas.HelpPage.HelpPageSampleKey"/> based on media type, <see cref="P:WebApi.Areas.HelpPage.HelpPageSampleKey.SampleDirection"/>, controller name, action name and parameter names.
+            </summary>
+            <param name="mediaType">The media type.</param>
+            <param name="sampleDirection">The <see cref="P:WebApi.Areas.HelpPage.HelpPageSampleKey.SampleDirection"/>.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="P:WebApi.Areas.HelpPage.HelpPageSampleKey.ControllerName">
+            <summary>
+            Gets the name of the controller.
+            </summary>
+            <value>
+            The name of the controller.
+            </value>
+        </member>
+        <member name="P:WebApi.Areas.HelpPage.HelpPageSampleKey.ActionName">
+            <summary>
+            Gets the name of the action.
+            </summary>
+            <value>
+            The name of the action.
+            </value>
+        </member>
+        <member name="P:WebApi.Areas.HelpPage.HelpPageSampleKey.MediaType">
+            <summary>
+            Gets the media type.
+            </summary>
+            <value>
+            The media type.
+            </value>
+        </member>
+        <member name="P:WebApi.Areas.HelpPage.HelpPageSampleKey.ParameterNames">
+            <summary>
+            Gets the parameter names.
+            </summary>
+        </member>
+        <member name="P:WebApi.Areas.HelpPage.HelpPageSampleKey.SampleDirection">
+            <summary>
+            Gets the <see cref="P:WebApi.Areas.HelpPage.HelpPageSampleKey.SampleDirection"/>.
+            </summary>
+        </member>
+        <member name="T:WebApi.Areas.HelpPage.ImageSample">
+            <summary>
+            This represents an image sample on the help page. There's a display template named ImageSample associated with this class.
+            </summary>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.ImageSample.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WebApi.Areas.HelpPage.ImageSample"/> class.
+            </summary>
+            <param name="src">The URL of an image.</param>
+        </member>
+        <member name="T:WebApi.Areas.HelpPage.InvalidSample">
+            <summary>
+            This represents an invalid sample on the help page. There's a display template named InvalidSample associated with this class.
+            </summary>
+        </member>
+        <member name="T:WebApi.Areas.HelpPage.ObjectGenerator">
+            <summary>
+            This class will create an object of a given type and populate it with sample data.
+            </summary>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.ObjectGenerator.GenerateObject(System.Type)">
+            <summary>
+            Generates an object for a given type. The type needs to be public, have a public default constructor and settable public properties/fields. Currently it supports the following types:
+            Simple types: <see cref="T:System.Int32"/>, <see cref="T:System.String"/>, <see cref="T:System.Enum"/>, <see cref="T:System.DateTime"/>, <see cref="T:System.Uri"/>, etc.
+            Complex types: POCO types.
+            Nullables: <see cref="T:System.Nullable`1"/>.
+            Arrays: arrays of simple types or complex types.
+            Key value pairs: <see cref="T:System.Collections.Generic.KeyValuePair`2"/>
+            Tuples: <see cref="T:System.Tuple`1"/>, <see cref="T:System.Tuple`2"/>, etc
+            Dictionaries: <see cref="T:System.Collections.Generic.IDictionary`2"/> or anything deriving from <see cref="T:System.Collections.Generic.IDictionary`2"/>.
+            Collections: <see cref="T:System.Collections.Generic.IList`1"/>, <see cref="T:System.Collections.Generic.IEnumerable`1"/>, <see cref="T:System.Collections.Generic.ICollection`1"/>, <see cref="T:System.Collections.IList"/>, <see cref="T:System.Collections.IEnumerable"/>, <see cref="T:System.Collections.ICollection"/> or anything deriving from <see cref="T:System.Collections.Generic.ICollection`1"/> or <see cref="T:System.Collections.IList"/>.
+            Queryables: <see cref="T:System.Linq.IQueryable"/>, <see cref="T:System.Linq.IQueryable`1"/>.
+            </summary>
+            <param name="type">The type.</param>
+            <returns>An object of the given type.</returns>
+        </member>
+        <member name="T:WebApi.Areas.HelpPage.SampleDirection">
+            <summary>
+            Indicates whether the sample is used for request or response
+            </summary>
+        </member>
+        <member name="T:WebApi.Areas.HelpPage.TextSample">
+            <summary>
+            This represents a preformatted text sample on the help page. There's a display template named TextSample associated with this class.
+            </summary>
+        </member>
+        <member name="T:WebApi.Areas.HelpPage.XmlDocumentationProvider">
+            <summary>
+            A custom <see cref="T:System.Web.Http.Description.IDocumentationProvider"/> that reads the API documentation from an XML documentation file.
+            </summary>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.XmlDocumentationProvider.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WebApi.Areas.HelpPage.XmlDocumentationProvider"/> class.
+            </summary>
+            <param name="documentPath">The physical path to XML document.</param>
+        </member>
+        <member name="T:WebApi.Controllers.AgreementExportController">
+            <summary>
+            导出客户协议
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.AgreementExportController.Download(System.String)">
+            <summary>
+            下载
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.AgreementExportController.ExportStorageFile(System.String)">
+            <summary>
+            下载仓储协议
+            </summary>
+            <param name="ClientID"></param>
+            <returns></returns>
+        </member>
+        <member name="T:WebApi.Controllers.DYJController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:WebApi.Controllers.DYJController.GetAddedTaxDetail(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="InvoiceNo"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.DYJController.GetPayexchangeFile(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="pid"></param>
+            <returns></returns>
+        </member>
+        <member name="T:WebApi.Controllers.HandOverController">
+            <summary>
+            自动交接接口
+            </summary>
+        </member>
+        <member name="M:WebApi.Controllers.HandOverController.HandOver(Needs.Ccs.Services.Models.HandOverPostPara)">
+            <summary>
+            将请假人员的客户的跟单，设置为交接人员
+            </summary>
+            <param name="para">参数</param>      
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.HandOverController.HandOverReturn(Needs.Ccs.Services.Models.HandOverPostPara)">
+            <summary>
+            将请假人员的客户的跟单，设置回为请假人员
+            </summary>
+            <param name="para">参数</param>     
+            <returns></returns>
+        </member>
+        <member name="T:WebApi.Controllers.HKWarehouseNewController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.UnSortingList(WebApi.Models.JPost)">
+            <summary>
+            代装箱列表数据
+            </summary>
+            <param name="jpost"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.SealedList(WebApi.Models.JPost)">
+            <summary>
+            已封箱列表数据
+            </summary>
+            <param name="jpost"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.SortingBasicInfo(System.String)">
+            <summary>
+            代报关装箱基础信息
+            </summary>
+            <param name="entryNoticeID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.HKWaybillUpdate(WebApi.Models.JPost)">
+            <summary>
+            更新香港收货信息
+            </summary>
+            <param name="jpost"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.DeliveryNoticesUpdate(WebApi.Models.JPost)">
+            <summary>
+            更改提货状态为提货中
+            </summary>
+            <param name="jpost"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.LoadNoticeItems(System.String,System.String)">
+            <summary>
+            待装箱产品数据
+            </summary>
+            <param name="entryNoticeID"></param>
+            <param name="keys"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.LoadPackedProduct(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="orderID"></param>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.LoadPackedProductWayBill(System.String)">
+            <summary>
+            带WayBill 信息
+            </summary>
+            <param name="orderID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.totalPackNo(WebApi.Models.JPost)">
+            <summary>
+            计算总件数
+            </summary>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.PackingBoxIndex(WebApi.Models.JPost)">
+            <summary>
+            装箱操作
+            </summary>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.BoxIndexValidate(WebApi.Models.JPost)">
+            <summary>
+            验证箱号是否可用
+            </summary>
+            <param name="jpost"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.OrderWaybillInfo(System.String)">
+            <summary>
+            国际快递信息
+            </summary>
+            <param name="orderID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.ChangeBoxIndex(WebApi.Models.JPost)">
+            <summary>
+            更改箱号
+            </summary>
+            <param name="jpost"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.ChangeUnExpectedBoxIndex(WebApi.Models.JPost)">
+            <summary>
+            更改无通知录入产品箱号
+            </summary>
+            <param name="jpost"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.SensitiveArea(System.Collections.Generic.List{Needs.Ccs.Services.Models.PackingSensitiveModel})">
+            <summary>
+            敏感地区不能和其他地区装在一个箱子里
+            </summary>
+            <param name="packings"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.CanSeal(System.String)">
+            <summary>
+            未处理的无通知录入产品，不能封箱
+            </summary>
+            <param name="orderID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.HKOperationLog(WebApi.Models.JPost)">
+            <summary>
+            香港操作日志
+            </summary>
+            <param name="jpost"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.DeletePacking(WebApi.Models.JPost)">
+            <summary>
+            删除装箱结果
+            </summary>
+            <param name="jpost"></param>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.Sealed(WebApi.Models.JPost)">
+            <summary>
+            封箱
+            要订单变更处理完成之后才能封箱，因为封箱之后就生成报关通知，报关通知是根据Sorting生成的，
+            如果有“无通知产品”，没有处理，就没有soriting信息，生成的报关通知就少这一项
+            </summary>
+            <param name="jpost"></param>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.CancelSealed(WebApi.Models.JPost)">
+            <summary>
+            取消封箱
+            </summary>
+            <param name="jpost"></param>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.SplitModelData(WebApi.Models.JPost)">
+            <summary>
+            拆分型号
+            拆分型号的同步动作（同步客户端，同步归类结果，都在OrderItem里面做了）
+            </summary>
+            <param name="jPost"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.ChangeProductModel(WebApi.Models.JPost)">
+            <summary>
+            修改型号
+            </summary>
+            <param name="jPost"></param>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.ChangeOrigin(WebApi.Models.JPost)">
+            <summary>
+            修改产地
+            </summary>
+            <param name="jPost"></param>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.ChangeManufacturer(WebApi.Models.JPost)">
+            <summary>
+            修改品牌
+            </summary>
+            <param name="jPost"></param>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.ChangeBatch(WebApi.Models.JPost)">
+            <summary>
+            修改批次号
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.Post2Client(System.String)">
+            <summary>
+            将型号、品牌、产地变更信息通给客户端
+            </summary>
+            <param name="orderID"></param>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.UnExpectedGoods(System.Collections.Generic.List{Needs.Ccs.Services.Models.UnExpectedOrderItem})">
+            <summary>
+            无通知录入用一张表记录
+            跟单拆分订单的页面显示这条记录，跟单录入品名和价格
+            </summary>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.UnExceptedList(System.String)">
+            <summary>
+            无通知产品录入视图
+            </summary>
+            <param name="orderID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.DeleteUnExceptedList(System.String)">
+            <summary>
+            删除无通知产品录入
+            </summary>
+            <param name="ID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.AllocateWeight(WebApi.Models.JPost)">
+            <summary>
+            重量分配 不需要实现，装箱的时候，就已经分配了
+            </summary>
+            <param name="jPost"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.WeightEstimate(System.Collections.Generic.List{Needs.Ccs.Services.Models.WeightAlterItem})">
+            <summary>
+            重量预测
+            取每个型号的 单个标准重量，乘以每个型号的数量，加总
+            用加总之后的重量比较
+            </summary>
+            <param name="requestModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.WeightAlert(WebApi.Models.JPost)">
+            <summary>
+             传入预测重量，传入装箱重量，比较两者的值
+            </summary>
+            <param name="jPost"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.StockingDays(System.String)">
+            <summary>
+            计算仓储天数
+            </summary>
+            <param name="orderID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.CarrierInteLogisticsList">
+            <summary>
+            获取PvbCrm 承运商信息
+            </summary>
+            <param name="jPost"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.ManifestVoyageList(WebApi.Models.JPost)">
+            <summary>
+            报关运输列表数据
+            </summary>
+            <param name="jPost"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.VoyageInfo(System.String)">
+            <summary>
+            报关运输基本信息数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.VoyageDetail(WebApi.Models.JPost)">
+            <summary>
+            
+            </summary>
+            <param name="jPost"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.UpdateHKSealNo(WebApi.Models.JPost)">
+            <summary>
+            修改封条号
+            </summary>
+            <param name="jPost"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.UpdateVoyaeStatus(WebApi.Models.JPost)">
+            <summary>
+            运输批次 完成
+            </summary>
+            <param name="jPost"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.GetEntryNoticeStatus">
+            <summary>
+            获取 入库通知状态
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.GetHKDeliveryType">
+            <summary>
+            获取 香港提货方式
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.GetOrigin">
+            <summary>
+            产地信息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.GetCutStatus">
+            <summary>
+            报关运输状态
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.GetExpressInfo">
+            <summary>
+            快递信息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseNewController.PrintExportFiles(WebApi.Models.JPost)">
+            <summary>
+            生成提货委托书、货物流转确认单
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.NoticeController.SendNotice(System.String,Needs.Ccs.Services.Enums.SendNoticeType)">
+            <summary>
+            
+            </summary>
+            <param name="mianID"></param>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="T:WebApi.Controllers.FinanceController">
+            <summary>
+            财务相关接口
+            </summary>
+        </member>
+        <member name="M:WebApi.Controllers.FinanceController.InsertInvoiceNoticeFiles(WebApi.Models.JPost)">
+            <summary>
+            新增发票文件数据
+            </summary>
+            <param name="files"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.FinanceController.DeleteInvoiceNoticeFiles(WebApi.Models.JPost)">
+            <summary>
+            删除发票文件数据
+            </summary>
+            <param name="files"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.FinanceController.InsertHKWarehouseFee(WebApi.Models.JPost)">
+            <summary>
+            香港库房费用接口
+            </summary>
+            <param name="requestData"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.FinanceController.InsertHKWarehouseFeeNew(WebApi.Models.JPost)">
+            <summary>
+            香港库房重构 费用接口
+            </summary>
+            <param name="requestData"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.FinanceController.CenterVaultUpdate(WebApi.Models.JPost)">
+            <summary>
+            中心修改FinanceVaults
+            </summary>
+            <param name="requestData"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.FinanceController.CenterAccountUpdate(WebApi.Models.JPost)">
+            <summary>
+            
+            </summary>
+            <param name="requestData"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.FinanceController.FinanceReceipt(WebApi.Models.JPost)">
+            <summary>
+            中心同步收款
+            </summary>
+            <param name="requestData"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.FinanceController.FinanceReceiptMulti(WebApi.Models.JPost)">
+            <summary>
+            中心批量同步收款
+            </summary>
+            <param name="requestData"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.FinanceController.FinancePayment(WebApi.Models.JPost)">
+            <summary>
+            中心同步付款
+            </summary>
+            <param name="requestData"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.FinanceController.FinanceFee(WebApi.Models.JPost)">
+            <summary>
+            中心同步费用
+            </summary>
+            <param name="requestData"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.FinanceController.FinanceFeeJson">
+            <summary>
+            获取费用Json 临时用
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.FinanceController.FundTransfer(WebApi.Models.JPost)">
+            <summary>
+            中心同步 资金挑拨
+            </summary>
+            <param name="requestData"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.FinanceController.FundTransferJson">
+            <summary>
+            获取资金调拨Json 临时用
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.FinanceController.FinancePayementJson">
+            <summary>
+            货款Json
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.FinanceController.FileSave">
+            <summary>
+            测试文件保存
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.FinanceController.FinanceReceiptMultiJson">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.FinanceController.AcceptanceBill(WebApi.Models.JPost)">
+            <summary>
+            中心同步费用
+            </summary>
+            <param name="requestData"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.MyApiController.#ctor">
+            <summary>
+            受保护的构造器
+            </summary>
+        </member>
+        <member name="M:WebApi.Controllers.MyApiController.eJson(System.Object)">
+            <summary>
+            eJson 
+            </summary>
+            <param name="data">对象</param>
+            <returns>返回 json 字符串</returns>
+        </member>
+        <member name="M:WebApi.Controllers.MyApiController.Jsonp(System.Object,System.String,System.String)">
+            <summary>
+            Jsonp
+            </summary>
+            <param name="data">返回数据</param>
+            <param name="callback">回调函数</param>
+            <param name="contentType">内容编码</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.ClassifyController.SubmitClassified(WebApi.Models.ClassifiedResult)">
+            <summary>
+            归类完成，提交归类信息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.ClassifyController.ModelChangeInsertOrderChangeNotice(Needs.Ccs.Services.Models.PD_ClassifyProduct)">
+            <summary>
+            如果重新归类的时候，发现型号变更了，需要生成订单变更
+            </summary>
+            <param name="classifyProduct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.ClassifyController.InsertOrderChangeNotice(Needs.Ccs.Services.Models.PD_ClassifyProduct,System.Decimal,System.Decimal,System.Decimal,System.Decimal,System.Decimal,System.Decimal)">
+            <summary>
+            生成订单变更通知  
+            </summary>
+            <param name="classifyProduct"></param>
+            <param name="originalTariff"></param>
+            <param name="Tariff"></param>
+            <param name="originalExciseTax"></param>
+            <param name="ExciseTax"></param>
+            <param name="originalAddedValueTax"></param>
+            <param name="AddedValueTax"></param>
+        </member>
+        <member name="M:WebApi.Controllers.ClassifyController.GetNext(System.String,System.String)">
+            <summary>
+            继续归类，获取下一条归类信息
+            </summary>
+            <param name="step"></param>
+            <param name="creatorId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.ClassifyController.GetUnitPriceLogs(System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="partNumber"></param>
+            <param name="orderID"></param>
+            <returns></returns>
+        </member>
+        <member name="T:WebApi.Controllers.ClientsController">
+            <summary>
+            芯达通客户信息相关接口
+            </summary>
+        </member>
+        <member name="M:WebApi.Controllers.ClientsController.SaveClient(WebApi.Models.ApiParamterModel.ClientModel)">
+            <summary>
+            新增或修改客户信息
+            </summary>
+            <param name="param"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.ClientsController.SaveSupplier(WebApi.Models.ApiParamterModel.Supplier)">
+            <summary>
+             保存供应商
+            </summary>
+            <param name="param"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.ClientsController.DeleteSupplier(System.String,System.String)">
+            <summary>
+            删除供应商
+            </summary>
+            <param name="name">客户名称</param>
+            <param name="supplierName">供应商</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.ClientsController.SaveBanksList(WebApi.Models.ApiParamterModel.SupplierBank)">
+            <summary>
+            保存供应商账户信息
+            </summary>
+            <param name="param"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.ClientsController.DeleteSupplierBank(System.String,System.String,System.String)">
+            <summary>
+            删除供应商账户
+            </summary>
+            <param name="name">客户名称</param>
+            <param name="supplierName">供应商中文名称</param>
+            <param name="account">供应商账户</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.ClientsController.SaveSupplierAddress(WebApi.Models.ApiParamterModel.SupplierAddress)">
+            <summary>
+            保存供应商提货地址
+            </summary>
+            <param name="param">入参</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.ClientsController.DeleteSupplierAddress(System.String,System.String,System.String)">
+            <summary>
+            删除供应商提货地址
+            </summary>
+            <param name="name">客户名称</param>
+            <param name="supplierName">供应商英文名称</param>
+             <param name="address">提货地址</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.ClientsController.SaveClientInvoice(WebApi.Models.ApiParamterModel.ClientInvoice)">
+            <summary>
+            新增或修改客户发票信息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.ClientsController.SaveConsignee(WebApi.Models.ApiParamterModel.ClientConsigin)">
+            <summary>
+            保存客户收件地址
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.ClientsController.DeleteConsignee(System.String,System.String,System.String,System.String)">
+            <summary>
+            删除收件地址
+            </summary>
+            <param name="name">客户名称</param>
+            <param name="receiver">收件单位</param>
+            <param name="address">收件地址</param>
+            <param name="mobile">电话</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.ClientsController.SaveClientAccount(WebApi.Models.ApiParamterModel.ClientAccount)">
+            <summary>
+            保存会员账号
+            </summary>
+            <param name="param"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.ClientsController.DeleteClientAccount(System.String,System.String)">
+            <summary>
+            删除会员账号
+            </summary>
+            <param name="name">客户名称</param>
+            <param name="userName">登录账号</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.ClientsController.ResetPassword(System.String,System.String)">
+            <summary>
+            重置密码
+            </summary>
+            <param name="name">客户名称</param>
+            <param name="userName">用户名</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.ClientsController.SaveClientFile(WebApi.Models.ApiParamterModel.ClientFile)">
+            <summary>
+            保存客户文件
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.ClientsController.DeleteClientFile(System.String,System.String)">
+            <summary>
+            删除客户文件
+            </summary>
+            <param name="name">客户名称</param>
+            <param name="fileName">文件名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.ClientsController.SaveClientAssign(WebApi.Models.ApiParamterModel.ClientAssign)">
+            <summary>
+            客户分配人员
+            </summary>
+            <param name="param"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.ClientsController.SaveClientAgreement(WebApi.Models.ApiParamterModel.ClientAgreement)">
+            <summary>
+            客户协议
+            </summary>
+            <param name="param"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.ClientsController.GetFileFromNetUrl(System.String)">
+             <summary>
+            根据远程URL　保存附件到本地后 ，重新上传中心
+             </summary>
+             <param name="url"></param>
+             <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.ClientsController.CreateDirectory">
+            <summary>
+            创建文件夹
+            </summary>
+        </member>
+        <member name="M:WebApi.Controllers.ClientsController.LoginClient(WebApi.Models.ApiParamterModel.Member)">
+            <summary>
+            非会员注册
+            </summary>
+            <param name="param"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.ClientsController.ModifyCompanyName(System.String,System.String)">
+            <summary>
+            修改reg企业名称
+            </summary>
+            <param name="OldName"></param>
+            <param name="NewName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.DeclarationController.DeclarationNotice(WebApi.Models.JPost)">
+            <summary>
+            库房申请报关
+            </summary>
+            <param name="DecInfo"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.DeclarationController.GetDeclareCreatorAdminID(System.Collections.Generic.List{Needs.Ccs.Services.Views.CurrentUnDecNoticeCountViewModel})">
+            <summary>
+            
+            </summary>
+            <param name="listModel"></param>
+            <returns></returns>
+        </member>
+        <member name="T:WebApi.Controllers.HKWarehouseController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseController.DeliveryNotice(WebApi.Models.JPost)">
+            <summary>
+            到货通知
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseController.UpdateSortingItemID(System.String,Needs.Ccs.Services.Models.OrderItemPair[])">
+            <summary>
+            更新分拣那边的 ItemID
+            </summary>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseController.SendCurrentOrderInfo(System.String,System.String,System.String[],Needs.Ccs.Services.Models.OrderItemPair[],System.Collections.Generic.List{Needs.Ccs.Services.Views.DeliveriesTopModelOriginName},System.Collections.Generic.List{Needs.Ccs.Services.Models.OrderItem})">
+            <summary>
+            发送当前订单信息
+            </summary>
+            <param name="batchID"></param>
+            <param name="mainOrderID"></param>
+            <param name="oldOrderItemIDs"></param>
+            <param name="newOrderItemPairs"></param>
+            <param name="OrderItemInView返回代仓储"></param>
+            <param name="OrderItemInLocal返回代仓储"></param>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseController.SendCurrentOrderInfoNew(System.String,System.String)">
+            <summary>
+            到货信息 同步代仓储--20200414新
+            </summary>
+            <param name="batchID"></param>
+            <param name="MainOrderID"></param>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseController.ItemChangeNotice(WebApi.Models.JPost)">
+            <summary>
+            
+            </summary>
+            <param name="ItemChangeRequest"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.HKWarehouseController.SplitChangeNotice(WebApi.Models.JPost)">
+            <summary>
+            
+            </summary>
+            <param name="SpiltRequest"></param>
+            <returns></returns>
+        </member>
+        <member name="T:WebApi.Controllers.CostApplyController">
+            <summary>
+            与大赢家交互费用申请的接口
+            </summary>
+        </member>
+        <member name="M:WebApi.Controllers.CostApplyController.HeadOfficeApproveRefuse(WebApi.Models.ApiCostApplyParamModel.HeadOfficeApproveRefuseRequest)">
+            <summary>
+            总公司审批不通过，被调用接口，更新状态
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.CostApplyController.PaymentSuccessNotice(WebApi.Models.ApiCostApplyParamModel.PaymentSuccessNoticeRequest)">
+            <summary>
+            总公司审批通过后，付款成功，被调用接口，更新状态，并获取付款凭证
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.CostApplyController.PaymentFailNotice(WebApi.Models.ApiCostApplyParamModel.PaymentFailNoticeRequest)">
+            <summary>
+            总公司审批通过后，付款失败，被调用接口，更新状态
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:WebApi.Controllers.OrderController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:WebApi.Controllers.OrderController.GetReceptorOrder(WebApi.Models.JPost)">
+            <summary>
+            
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.OrderController.OrderConfirmOld(WebApi.Models.JPost)">
+            <summary>
+            订单确认
+            2022-01-19 香港库房重构、需要生成EntryNotice
+            </summary>
+            <param name="OrderConfirmed"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.OrderController.OrderFile(WebApi.Models.JPost)">
+            <summary>
+            委托书、对账单附件，代仓储前端调用
+            </summary>
+            <param name="File"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.OrderController.UserConfirmReceipt(WebApi.Models.JPost)">
+            <summary>
+            用户确定订单收货
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.OrderController.SalesContract(System.String)">
+            <summary>
+            销售合同生成PDF文件路径，会员端调用
+            </summary>
+            <param name="ID"></param>
+            <returns>PDF文件路径</returns>
+        </member>
+        <member name="M:WebApi.Controllers.OrderController.AddOrderPremiums(System.String,System.Decimal,System.String)">
+            <summary>
+            香港代仓储 转报关，添加订单费用
+            </summary>
+            <param name="orderID"></param>
+            <param name="orderFee"></param>
+            <param name="adminID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.OrderController.OrderConfirm(WebApi.Models.JPost)">
+            <summary>
+            订单确认
+            </summary>
+            <param name="OrderConfirmed"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.PayExchangeApplyController.PayExchangeApply(WebApi.Models.PayExchangeRequest)">
+            <summary>
+            付汇申请
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.PayExchangeApplyController.DeletePayExchange(System.String,System.String)">
+            <summary>
+            删除付汇申请
+            </summary>
+            <param name="ID">申请ID</param>
+            <param name="UserID">用户ID</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.PublicController.ProductDeclareDetail(System.String)">
+            <summary>
+            提供报关产品数据查询接口
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.PublicController.DeclareDetailByOrderID(System.String)">
+            <summary>
+            提供报关产品数据查询接口--订单号
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.PublicController.DeclareDetailByCartonNO(System.String)">
+            <summary>
+            提供报关产品数据查询接口--箱号
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.PublicController.GetDelerationStatus(System.String)">
+            <summary>
+            根据Icgoo的订单号，查询报关单状态，以及箱号
+            </summary>
+            <param name="FS_Number"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.PublicController.DeclareFile(System.DateTime,System.DateTime)">
+            <summary>
+            缴款书PDF路径接口
+            </summary>
+            <param name="StartDate"></param>
+            <param name="EndDate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.PublicController.ExcludeOriginHSCode(System.String)">
+            <summary>
+            原产地加征排除-采购计划
+            </summary>
+            <param name="Month"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.PublicController.RealTimeExRate">
+            <summary>
+            实时汇率
+            </summary>
+            <param name="day"></param>
+            <returns></returns>
+        </member>
+        <member name="T:WebApi.Controllers.IcgooController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:WebApi.Controllers.IcgooController.CreateOrderMQ(Needs.Ccs.Services.Models.PartNoJson)">
+            <summary>
+            Icgoo 下单接口
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.IcgooController.PalletNumber(Needs.Ccs.Services.Models.PalletNumberJson)">
+            <summary>
+            Icgoo提交卡板数
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.IcgooController.PayRMB(Needs.Ccs.Services.Models.IcgooFinanceReceipt)">
+            <summary>
+            Icgoo提交付款记录
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.IcgooController.EntrustPayExchange(Needs.Ccs.Services.Models.EntrustPayExchange)">
+            <summary>
+            转付汇申请
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.IcgooController.GetPayExchangeStatus(System.String)">
+            <summary>
+            获取委托付汇进度
+            </summary>
+            <param name="ApplyID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.IcgooController.IcgooBalance">
+            <summary>
+            余额查询接口
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.IcgooController.VerificationInfo(System.String)">
+            <summary>
+            查询资金核销明细
+            </summary>
+            <param name="icgooOrder"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.IcgooController.CreateClientBalance(System.String)">
+            <summary>
+            创建客户账户
+            </summary>
+            <param name="clientID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.IcgooController.IsVerified(System.DateTime,System.DateTime)">
+            <summary>
+            根据时间段查询核销情况
+            </summary>
+            <param name="StartDate"></param>
+            <param name="EndDate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.IcgooController.IcgooClassifyResult(System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="model"></param>
+            <param name="manufacturer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.PreClassifyController.SubmitClassified(WebApi.Models.ClassifiedResult)">
+            <summary>
+            归类完成，提交归类信息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.PreClassifyController.GetNext(System.String,System.String,System.String)">
+            <summary>
+            继续归类，获取下一条归类信息
+            </summary>
+            <param name="step">处理步骤</param>
+            <param name="creatorId">报关员</param>
+            <param name="useType">产品预归类或咨询归类</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.PreClassifyController.AutoClassify(WebApi.Models.PreProductCategories)">
+            <summary>
+            预归类产品自动归类
+            </summary>
+            <param name="categories">预归类产品IDs</param>
+            <returns></returns>
+        </member>
+        <member name="T:WebApi.Controllers.SZWarehouseController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:WebApi.Controllers.SZWarehouseController.OutStock(System.String,System.String)">
+            <summary>
+            深圳出库完成操作
+            </summary>
+            <param name="AdminID">操作人 </param>
+            <param name="WaybillID">运单ID</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.SZWarehouseController.ReceiptConfirmed(System.String,System.String)">
+            <summary>
+            确认收货操作
+            </summary>
+            <param name="AdminID">操作人</param>
+            <param name="WaybillID">运单ID</param>
+            <returns></returns>
+        </member>
+        <member name="T:WebApi.CarriersController">
+            <summary>
+            承运商贯通
+            </summary>
+        </member>
+        <member name="M:WebApi.CarriersController.Enter(Needs.Ccs.Services.Models.ApiModels.CarrierModel)">
+            <summary>
+            物流信息持久化
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.CarriersController.DriverEnter(Needs.Ccs.Services.Models.ApiModels.Driver)">
+            <summary>
+            
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.CarriersController.TransportEnter(Needs.Ccs.Services.Models.ApiModels.Transport)">
+            <summary>
+            
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.CarriersController.WarehouseEnter(Needs.Ccs.Services.Models.ApiModels.CarrierModel)">
+            <summary>
+            库房新增承运信息接口
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="T:WebApi.Models.ApiBeneficiary">
+            <summary>
+            受益人
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiBeneficiary.Enterprise">
+            <summary>
+            企业
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiBeneficiary.InvoiceType">
+            <summary>
+            3海关、2增票、1普票、0无法开票（Yahv.Underly.InvoiceType）
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiBeneficiary.RealName">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiBeneficiary.RealID">
+            <summary>
+            MD5(RealName)
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiBeneficiary.Bank">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiBeneficiary.BankAddress">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiBeneficiary.Account">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiBeneficiary.SwiftCode">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiBeneficiary.Methord">
+            <summary>
+            汇款方式(TT,支付宝)
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiBeneficiary.Currency">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiBeneficiary.District">
+            <summary>
+            地区
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiBeneficiary.Name">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiBeneficiary.Tel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiBeneficiary.Mobile">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiBeneficiary.Email">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiBeneficiary.Status">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiBeneficiary.CreateDate">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiBeneficiary.UpdateDate">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiBeneficiary.CreatorID">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.ApiContact">
+            <summary>
+            联系人
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiContact.Name">
+            <summary>
+            联系人姓名
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiContact.Tel">
+            <summary>
+            联系人电话
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiContact.Mobile">
+            <summary>
+            联系人手机号
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiContact.Email">
+            <summary>
+            联系人邮箱
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiContact.Fax">
+            <summary>
+            传真
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.ApiParamterModel">
+            <summary>
+            Post到接口的变量数据定义
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.ApiParamterModel.ClientModel">
+            <summary>
+            保存客户信息传入参数
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientModel.Enterprise">
+            <summary>
+            企业信息
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientModel.EnterCode">
+            <summary>
+            客户编号
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientModel.CustomsCode">
+            <summary>
+            海关编码(不必填)
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientModel.Rank">
+            <summary>
+            会员等级
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientModel.Summary">
+            <summary>
+            备注
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientModel.Creator">
+            <summary>
+            创建人(业务员的realName)
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientModel.Contact">
+            <summary>
+            联系人
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientModel.BusinessLicense">
+            <summary>
+            营业执照
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientModel.HKBusinessLicense">
+            <summary>
+            登记证
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientModel.ClientNature">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientModel.ServiceType">
+            <summary>
+            业务类型
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientModel.StorageType">
+            <summary>
+            仓储客户类型
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientModel.IsDeclaretion">
+            <summary>
+            代报关信息是否完善
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientModel.IsStorageService">
+            <summary>
+            代仓储信息是否完善
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.ApiParamterModel.ClientFile">
+            <summary>
+            客户附件
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientFile.Type">
+            <summary>
+            类型
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientFile.Name">
+            <summary>
+            文件名
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientFile.FileFormat">
+            <summary>
+            文件格式
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientFile.Url">
+            <summary>
+            文件地址
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientFile.CreateDate">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientFile.Summary">
+            <summary>
+            备注
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientFile.Status">
+            <summary>
+            状态
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.ApiParamterModel.Supplier">
+            <summary>
+            供应商
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.Supplier.Enterprise">
+            <summary>
+            企业
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.Supplier.EnglishName">
+            <summary>
+            英文名称
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.Supplier.ChineseName">
+            <summary>
+            中文名称
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.Supplier.Summary">
+            <summary>
+            备注（不必填）
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.Supplier.Place">
+            <summary>
+            国家/地区 简称
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.Supplier.Grade">
+            <summary>
+            供应商等级
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.ApiParamterModel.SupplierBank">
+             <summary>
+            供应商账户
+             </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.SupplierBank.SupplierName">
+            <summary>
+            供应商英文名称
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.SupplierBank.InvoiceType">
+            <summary>
+            3海关、2增票、1普票、0无法开票（Yahv.Underly.InvoiceType）
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.SupplierBank.RealName">
+            <summary>
+            企业名称
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.SupplierBank.Bank">
+            <summary>
+            开户行
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.SupplierBank.BankAddress">
+            <summary>
+            开户行地址
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.SupplierBank.Account">
+            <summary>
+            账号
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.SupplierBank.SwiftCode">
+            <summary>
+            银行编码 (国际)
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.SupplierBank.Methord">
+            <summary>
+            汇款方式(TT,支付宝)
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.SupplierBank.Currency">
+            <summary>
+            币种
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.SupplierBank.District">
+            <summary>
+            地区
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.SupplierBank.Name">
+            <summary>
+            姓名(不必填)
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.SupplierBank.Tel">
+            <summary>
+            电话(不必填)
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.SupplierBank.Mobile">
+            <summary>
+            手机号(不必填)
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.SupplierBank.Email">
+            <summary>
+            邮箱
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.SupplierBank.Place">
+            <summary>
+            国家/地区 简称
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.ApiParamterModel.SupplierAddress">
+            <summary>
+            供应商提货地址
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.SupplierAddress.Enterprise">
+            <summary>
+            企业
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.SupplierAddress.SupplierName">
+            <summary>
+            供应商中文名称
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.SupplierAddress.IsDefault">
+            <summary>
+            是否默认提货地址(默认是 false)
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.SupplierAddress.Address">
+            <summary>
+            提货地址
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.SupplierAddress.Name">
+            <summary>
+            联系人
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.SupplierAddress.Tel">
+            <summary>
+            电话
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.SupplierAddress.Mobile">
+            <summary>
+            手机号
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.SupplierAddress.Postzip">
+            <summary>
+            邮编
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.SupplierAddress.Place">
+            <summary>
+            国家/地区 简称
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.ApiParamterModel.ClientConsigin">
+            <summary>
+            客户收件地址请求参数
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientConsigin.Receiver">
+            <summary>
+            收件单位
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientConsigin.Name">
+            <summary>
+            收件人
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientConsigin.Mobile">
+            <summary>
+            电话
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientConsigin.Address">
+            <summary>
+            地址
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientConsigin.IsDefault">
+            <summary>
+            是否默认地址
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientConsigin.Email">
+            <summary>
+            电子邮箱(不必填)
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientConsigin.Summary">
+            <summary>
+            备注(不必填)
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.ApiParamterModel.ClientAccount">
+            <summary>
+            用户账号
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientAccount.Enterprise">
+            <summary>
+            企业
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientAccount.UserName">
+            <summary>
+            用户名/账号/登录账号
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientAccount.Password">
+            <summary>
+            登录密码(无加密的密码)
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientAccount.Mobile">
+            <summary>
+            手机号码
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientAccount.Email">
+            <summary>
+            邮箱(可为空)
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientAccount.IsMain">
+            <summary>
+            是否主账号
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientAccount.RealName">
+             <summary>
+            真实姓名
+             </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientAccount.Summary">
+            <summary>
+            备注(不必填)
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientAccount.Creator">
+            <summary>
+            添加人
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.ApiParamterModel.ClientInvoice">
+            <summary>
+            新增或修改客户发票
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientInvoice.Enterprise">
+             <summary>
+            企业
+             </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientInvoice.Bank">
+            <summary>
+            开户行
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientInvoice.InvoiceAddress">
+            <summary>
+            发票地址
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientInvoice.BankAddress">
+            <summary>
+            开户行地址(不必填)
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientInvoice.TaxperNumber">
+            <summary>
+            纳税人识别号
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientInvoice.CompanyTel">
+             <summary>
+            企业电话（发票信息电话）
+             </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientInvoice.Account">
+            <summary>
+            银行账号
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientInvoice.DeliveryType">
+            <summary>
+            发票交付方式（默认值为1 ，邮寄）
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientInvoice.ConsigneeAddress">
+            <summary>
+            收件地址(省市区之间要有空格 ex:黑龙江 齐齐哈尔 龙沙区 稻花村)
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientInvoice.Name">
+             <summary>
+            发票收件联系人
+             </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientInvoice.Tel">
+            <summary>
+            发票收件电话（不必填）
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientInvoice.Email">
+             <summary>
+            发票收件邮箱
+             </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientInvoice.Mobile">
+            <summary>
+            发票收件手机号
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientInvoice.Postzip">
+            <summary>
+            邮编(不必填)
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientInvoice.Summary">
+            <summary>
+            备注(不必填)
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientInvoice.UserID">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.ApiParamterModel.ClientAssign">
+            <summary>
+            客户分配人员
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientAssign.Enterprise">
+            <summary>
+            企业
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientAssign.ServiceManager">
+            <summary>
+            业务员名称
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientAssign.Merchandiser">
+            <summary>
+            跟单员名称
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientAssign.Referrer">
+            <summary>
+            引荐人
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientAssign.Summary">
+            <summary>
+            备注(不必填)
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.ApiParamterModel.ClientAgreement">
+            <summary>
+            客户协议
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientAgreement.Enterprise">
+            <summary>
+            企业
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientAgreement.StartDate">
+            <summary>
+            合同协议开始时间
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientAgreement.EndDate">
+            <summary>
+            合同协议结束日期
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientAgreement.AgencyRate">
+            <summary>
+            代理费率
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientAgreement.MinAgencyFee">
+            <summary>
+            最低代理费
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientAgreement.IsPrePayExchange">
+            <summary>
+            是否可以预换汇，否则不可以在报关前换汇
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientAgreement.IsLimitNinetyDays">
+            <summary>
+            是否选定在90天内换汇，超过90天就不允许换汇，如果不限制，可以在90天后换汇
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientAgreement.InvoiceType">
+            <summary>
+            开票类型( 0 代表全额发票 1代表 服务费发票)
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientAgreement.InvoiceTaxRate">
+            <summary>
+            开票的税率 增值税 16%  服务费：3% 6% 固定不变，可以用系统常量表示
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientAgreement.ClientFile">
+             <summary>
+            客户服务协议文件
+             </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientAgreement.Creator">
+            <summary>
+            操作人
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientAgreement.Summary">
+             <summary>
+            备注
+             </summary>
+        </member>
+        <member name="T:WebApi.Models.ApiParamterModel.ClientFeeSettlement">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientFeeSettlement.FeeType">
+            <summary>
+            费用类型（1-货款, 2-税款,3-代理费,4-杂费）
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientFeeSettlement.PeriodType">
+            <summary>
+            账期类型（0,1,2）
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientFeeSettlement.ExchangeRateType">
+            <summary>
+            费用使用的汇率类型(0,1,2,3)
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientFeeSettlement.ExchangeRateValue">
+            <summary>
+            约定汇率的值
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientFeeSettlement.DaysLimit">
+            <summary>
+            /约定期限（天）不必填
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientFeeSettlement.MonthlyDay">
+            <summary>
+            月结的日期 不必填
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.ClientFeeSettlement.UpperLimit">
+            <summary>
+            垫款上线 不必填
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.ApiParamterModel.AgreementFile">
+            <summary>
+            服务协议
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.AgreementFile.Type">
+            <summary>
+            类型
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.AgreementFile.Name">
+            <summary>
+            文件名
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.AgreementFile.FileFormat">
+            <summary>
+            文件格式
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.AgreementFile.Url">
+            <summary>
+            文件地址
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.AgreementFile.CreateDate">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.AgreementFile.Summary">
+            <summary>
+            备注
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.ApiParamterModel.Member">
+            <summary>
+            会员注册参数
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.Member.Company">
+            <summary>
+            客户名称
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.Member.UserName">
+            <summary>
+            用户名
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.Member.Password">
+            <summary>
+            登录密码
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.Member.Contacts">
+            <summary>
+            联系人
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.Member.Mobile">
+            <summary>
+            手机号
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.Member.CustomsCode">
+            <summary>
+            海关编码(不必填)
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.Member.Uscc">
+            <summary>
+            统一社会信用编码
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.Member.Corporate">
+            <summary>
+            公司法人
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.Member.Address">
+            <summary>
+            注册地址
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.Member.Tel">
+            <summary>
+            固定电话
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.Member.Email">
+            <summary>
+            联系人邮箱
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.Member.Creator">
+            <summary>
+            创建人
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.ApiParamterModel.File">
+            <summary>
+            营业执照
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.File.Type">
+            <summary>
+            类型
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.File.Name">
+            <summary>
+            文件名
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.File.FileFormat">
+            <summary>
+            文件格式
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.File.Url">
+            <summary>
+            文件地址
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.File.CreateDate">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.File.Summary">
+            <summary>
+            备注
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiParamterModel.File.Status">
+            <summary>
+            状态
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.ApiSupplier">
+            <summary>
+            供应商
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiSupplier.EnglishName">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiSupplier.ChineseName">
+            <summary>
+            中文名
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiSupplier.Grade">
+            <summary>
+            等级
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiSupplier.CreatorID">
+            <summary>
+            创建人
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiSupplier.CreateDate">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiSupplier.UpdateDate">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiSupplier.Status">
+            <summary>
+            状态( 200正常400 已删除)
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiSupplier.Summary">
+            <summary>
+            备注(不必填)
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.ApiCostApplyParamModel">
+            <summary>
+            与大赢家交互费用申请的接口-输入参数
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiCostApplyParamModel.HeadOfficeApproveRefuseRequest.BillNo">
+            <summary>
+            单据号
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiCostApplyParamModel.HeadOfficeApproveRefuseRequest.Summary">
+            <summary>
+            备注
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiCostApplyParamModel.PaymentSuccessNoticeRequest.BillNo">
+            <summary>
+            单据号
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiCostApplyParamModel.PaymentSuccessNoticeRequest.SeqNo">
+            <summary>
+            付款流水号
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiCostApplyParamModel.PaymentSuccessNoticeRequest.BankAccount">
+            <summary>
+            银行账户
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiCostApplyParamModel.PaymentSuccessNoticeRequest.PaymentVoucherUrl">
+            <summary>
+            付款凭证文件地址
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiCostApplyParamModel.PaymentFailNoticeRequest.BillNo">
+            <summary>
+            单据号
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiCostApplyParamModel.PaymentFailNoticeRequest.Summary">
+            <summary>
+            备注
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.ApiResultModel">
+            <summary>
+            Api接口返回数据定义
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.ApiResultModel.BaseMeg">
+            <summary>
+            基础类
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiResultModel.BaseMeg.code">
+            <summary>
+            代码
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiResultModel.BaseMeg.desc">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiResultModel.BaseMeg.exdesc">
+            <summary>
+            系统内部错误描述
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.ApiResultModel.CommonStringModel">
+            <summary>
+            公共模型
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiResultModel.CommonStringModel.data">
+            <summary>
+            返回信息
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.ApiResultModel.CommonClassModel`1">
+            <summary>
+            公共模型(含有 T)
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:WebApi.Models.ApiResultModel.CommonClassModel`1.data">
+            <summary>
+            指定类信息
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.ApiResultModel.CommonList`1">
+            <summary>
+            公共类
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:WebApi.Models.ApiResultModel.CommonList`1.items">
+            <summary>
+            指定类信息
+            </summary>
+        </member>
+        <member name="M:WebApi.Models.ApiResultModel.OutputResult(System.Object)">
+             <summary>
+            返回HttpResponseMessage
+             </summary>
+             <param name="obj"></param>
+             <returns></returns>
+        </member>
+        <member name="T:WebApi.Models.JPost">
+            <summary>
+            Payload参数对象
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.JPost.JObject">
+            <summary>
+            JObject
+            </summary>
+        </member>
+        <member name="M:WebApi.Models.JPost.#ctor">
+            <summary>
+            默认构造器
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.JPost.Item(System.String)">
+            <summary>
+            获取 JToken
+            </summary>
+            <param name="index">索引</param>
+            <returns>JToken</returns>
+        </member>
+        <member name="M:WebApi.Models.JPost.ToObject``1">
+            <summary>
+            对象转化
+            </summary>
+            <typeparam name="T">类型</typeparam>
+            <returns>转化类型实例</returns>
+        </member>
+        <member name="M:WebApi.Models.JPost.op_Implicit(WebApi.Models.JPost)~Newtonsoft.Json.Linq.JObject">
+            <summary>
+            隐式转换
+            </summary>
+            <param name="v">来源数据</param>
+        </member>
+        <member name="T:WebApi.Models.JsonpResult">
+            <summary>
+            jsonp 处理结果
+            </summary>
+        </member>
+        <member name="M:WebApi.Models.JsonpResult.#ctor(System.Object,System.String,System.String)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="data">返回数据</param>
+            <param name="callback">回调函数</param>
+            <param name="contentType">内容编码</param>
+        </member>
+        <member name="P:WebApi.Models.JsonpResult.Data">
+            <summary>
+            返回数据
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.JsonpResult.CallbackName">
+            <summary>
+            回调函数
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.JsonpResult.ContentType">
+            <summary>
+            内容编码
+            </summary>
+        </member>
+        <member name="M:WebApi.Models.JsonpResult.ExecuteResult(System.Web.Mvc.ControllerContext)">
+            <summary>
+            执行处理结果
+            </summary>
+            <param name="context">上下文</param>
+        </member>
+        <member name="T:WebApi.Models.ApiUtils.RedisHelper">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiUtils.RedisHelper.connectionMultiplexer">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ApiUtils.RedisHelper.Current">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.EnterpriseObj">
+             <summary>
+            企业信息
+             </summary>
+        </member>
+        <member name="P:WebApi.Models.EnterpriseObj.Name">
+            <summary>
+            修改后的企业名称
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.EnterpriseObj.AdminCode">
+            <summary>
+            管理编码(保障局部唯一)
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.EnterpriseObj.District">
+            <summary>
+            区域
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.EnterpriseObj.Status">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.EnterpriseObj.Corporation">
+            <summary>
+            法人
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.EnterpriseObj.RegAddress">
+            <summary>
+            注册地址
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.EnterpriseObj.Uscc">
+            <summary>
+            统一社会信用代码
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.ResponseClientInvoice">
+            <summary>
+            客户发票信息
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ResponseClientInvoice.ClientId">
+            <summary>
+            客户ID
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ResponseClientInvoice.CompanyCode">
+            <summary>
+             统一社会信用编码
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ResponseClientInvoice.CompanyName">
+            <summary>
+            公司名称
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:WebApi.Models.ResponseClientInvoice.InvoiceId" -->
+        <member name="P:WebApi.Models.ResponseClientInvoice.TaxCode">
+            <summary>
+            纳税人识别号
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ResponseClientInvoice.Address">
+            <summary>
+            地址
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ResponseClientInvoice.Tel">
+            <summary>
+            电话
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ResponseClientInvoice.BankName">
+            <summary>
+            开户行
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ResponseClientInvoice.BankAccount">
+            <summary>
+            账号
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ResponseClientInvoice.DeliveryType">
+            <summary>
+            交付方式
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ResponseClientInvoice.Summary">
+            <summary>
+            开票信息备注
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ResponseClientInvoice.InvoiceConsignee">
+            <summary>
+            收件地址
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.InvoiceConsignee">
+            <summary>
+            发票收件地址
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.InvoiceConsignee.ConsigneeName">
+            <summary>
+            收件人
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.InvoiceConsignee.ConsigneeAddress">
+            <summary>
+            收件地址
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.InvoiceConsignee.ConsigneeMobile">
+            <summary>
+            手机
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.InvoiceConsignee.ConsigneeTel">
+            <summary>
+            电话
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.InvoiceConsignee.ConsigneeEmail">
+            <summary>
+            邮箱
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.ClassifiedResult">
+            <summary>
+            归类结果
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ClassifiedResult.ItemID">
+            <summary>
+            OrderItemID
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ClassifiedResult.MainID">
+            <summary>
+            OrderID或预归类产品ID
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ClassifiedResult.PartNumber">
+            <summary>
+            型号
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ClassifiedResult.Manufacturer">
+            <summary>
+            品牌
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ClassifiedResult.Unit">
+            <summary>
+            成交单位
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ClassifiedResult.HSCode">
+            <summary>
+            海关编码
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ClassifiedResult.TariffName">
+            <summary>
+            报关品名
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ClassifiedResult.TaxCode">
+            <summary>
+            税务编码
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ClassifiedResult.TaxName">
+            <summary>
+            税务名称
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ClassifiedResult.LegalUnit1">
+            <summary>
+            法定第一单位
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ClassifiedResult.LegalUnit2">
+            <summary>
+            法定第二单位
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ClassifiedResult.VATRate">
+            <summary>
+            增值税率
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ClassifiedResult.ImportPreferentialTaxRate">
+            <summary>
+            进口优惠税率
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ClassifiedResult.OriginRate">
+            <summary>
+            加征税率
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ClassifiedResult.ExciseTaxRate">
+            <summary>
+            消费税率
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ClassifiedResult.CIQCode">
+            <summary>
+            检验检疫编码
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ClassifiedResult.Elements">
+            <summary>
+            申报要素
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ClassifiedResult.Summary">
+            <summary>
+            摘要备注
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ClassifiedResult.Ccc">
+            <summary>
+            是否3C
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ClassifiedResult.Embargo">
+            <summary>
+            是否禁运
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ClassifiedResult.HkControl">
+            <summary>
+            是否香港管制
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ClassifiedResult.Coo">
+            <summary>
+            是否需要原产地证明
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ClassifiedResult.CIQ">
+            <summary>
+            是否商检
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ClassifiedResult.CIQprice">
+            <summary>
+            商检费
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ClassifiedResult.IsHighPrice">
+            <summary>
+            是否高价值
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ClassifiedResult.IsDisinfected">
+            <summary>
+            是否消毒/检疫
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ClassifiedResult.IsSysCcc">
+            <summary>
+            是否系统判定3C
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ClassifiedResult.IsSysEmbargo">
+            <summary>
+            是否系统判定禁运
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ClassifiedResult.IsCustomsInspection">
+            <summary>
+            是否属于海关验估编码
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ClassifiedResult.Step">
+            <summary>
+            归类阶段
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ClassifiedResult.CreatorID">
+            <summary>
+            操作人
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.DeclarationApply">
+            <summary>
+            报关申请数据要求
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.DeclarationApply.Items">
+            <summary>
+            报关申请内容
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.DeclarationApplyItem">
+            <summary>
+            一个分拣/拣货
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.DeclarationApplyItem.TinyOrderID">
+            <summary>
+            小订单ID
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.DeclarationApplyItem.AdminID">
+            <summary>
+            操作人ID
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.DeclarationApplyItem.DeclareID">
+            <summary>
+            分拣/拣货ID
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.FileReturn">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.FileReturn.CusTaxNumber">
+            <summary>
+            缴款书编号
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.FileReturn.CusTaxPdfPath">
+            <summary>
+            缴款书路径
+            </summary>
+        </member>
+        <member name="M:WebApi.Models.InvoiceNoticeFileRequest.ToNormalServiceModel">
+            <summary>
+            转正常保存ServiceModel
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Models.InvoiceNoticeFileRequest.ToDeleteServiceModel">
+            <summary>
+            转删除ServiceModel
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:WebApi.Models.InvoiceNoticeFile.InvoiceNoticeID">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.InvoiceNoticeFile.ErmAdminID">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.InvoiceNoticeFile.Name">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.InvoiceNoticeFile.FileFormat">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.InvoiceNoticeFile.Url">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.WhesPremium">
+            <summary>
+            接口：库房费用调用数据要求
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.WhesPremium.Premiums">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.HKWhesPremium">
+            <summary>
+            接口：库房费用调用数据要求
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.HKWhesPremium.Premiums">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.Premium">
+            <summary>
+            库房费用
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.Premium.ID">
+            <summary>
+            ID
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.Premium.TinyOrderID">
+            <summary>
+            小订单号
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.Premium.AdminID">
+            <summary>
+            添加人
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.Premium.WhesFeeType">
+            <summary>
+            库房费用类型
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.Premium.Count">
+            <summary>
+            数量 当前默认：1
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.Premium.UnitPrice">
+            <summary>
+            单价 当前就写库房的金额
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.Premium.Currency">
+            <summary>
+            币种：CNY HKD
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.Premium.PaymentType">
+            <summary>
+            1:现金(实收)  2:非现金，记账(应收)
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.Premium.CreateDate">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.Premium.Summary">
+            <summary>
+            备注
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.HKPremium">
+            <summary>
+            香港库房重构，费用类型修改
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.HKPremium.Subject">
+            <summary>
+            香港库房费用名称：中文
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.HKPremium.HKWhesFeeType">
+            <summary>
+            费用类型转换
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.SubjectConsts">
+            <summary>
+            科目名称
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.GoodsDeliveryPrint">
+            <summary>
+            货物流转确认单
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.GoodsPickUpPrint">
+            <summary>
+            货物提货委托书
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.PrintFile">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.PrintFile.VoyageNo">
+            <summary>
+            运输批次号
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.PrintFile.TemplateFilePath">
+            <summary>
+            模板路径
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.PrintFile.TotalPackNo">
+            <summary>
+            总件数
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.PrintFile.TotalWeight">
+            <summary>
+            总重量
+            </summary>
+        </member>
+        <member name="M:WebApi.Models.PrintFile.GenerateFile">
+            <summary>
+            生成文件
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.DeliveryNoticeRequest">
+            <summary>
+            到货通知 Request
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.DeliveryNoticeReponse">
+            <summary>
+            到货通知 Reponse
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.ItemChangeRequest">
+            <summary>
+            产品变更 Request
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ItemChangeRequest.Notices">
+            <summary>
+            tongz
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.ItemChangeNotices">
+            <summary>
+            产品变更 Request
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ItemChangeNotices.ItemID">
+            <summary>
+            d订单项ID  OrderItemID
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ItemChangeNotices.TinyOrderID">
+            <summary>
+            小订单ID
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ItemChangeNotices.AdminID">
+            <summary>
+            库房分拣员（变更产地/品牌）
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ItemChangeNotices.OldValue">
+            <summary>
+            旧的值 产地写 CHN USA等
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ItemChangeNotices.NewValue">
+            <summary>
+            新的值
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ItemChangeNotices.Type">
+            <summary>
+            品牌变更/产地变更
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ItemChangeNotices.CreateDate">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.SplitChangeRequest">
+            <summary>
+            拆项 Request
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.SplitChangeRequest.Notices">
+            <summary>
+            通知
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.SplitOrderItemNotice">
+            <summary>
+            订单拆项变更
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.SplitOrderItemNotice.InputID">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.SplitOrderItemNotice.ItemID">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.SplitOrderItemNotice.TinyOrderID">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.SplitOrderItemNotice.AdminID">
+            <summary>
+            库房分拣员（变更产地/品牌）
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.SplitOrderItemNotice.Brand">
+            <summary>
+            品牌
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.SplitOrderItemNotice.Origin">
+            <summary>
+            产地
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.SplitOrderItemNotice.Qty">
+            <summary>
+            数量
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.UpdateSortingItemResponseModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.UpdateSortingItemResponseModel.InputID">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.UpdateSortingItemResponseModel.OrderItemID">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.UpdateSortingItemResponseModel.TinyOrderID">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:WebApi.Models.IcgooCreateOrder.CreateOrderBill(System.Object,Needs.Ccs.Services.Hanlders.IcgooCreateOrderEventArgs)">
+            <summary>
+            生成对账单
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:WebApi.Models.IcgooCreateOrder.Quote(System.Object,Needs.Ccs.Services.Hanlders.IcgooCreateOrderEventArgs)">
+            <summary>
+            报价
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:WebApi.Models.IcgooCreateOrder.QuoteConfirm(System.Object,Needs.Ccs.Services.Hanlders.IcgooCreateOrderEventArgs)">
+            <summary>
+            客户确认
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:WebApi.Models.IcgooCreateOrder.ToEntryNotice(System.Object,Needs.Ccs.Services.Hanlders.IcgooCreateOrderEventArgs)">
+            <summary>
+            有没有归类的型号，先生成香港仓库的入库通知
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:WebApi.Models.IcgooCreateOrder.Packing(System.Object,Needs.Ccs.Services.Hanlders.IcgooCreateOrderEventArgs)">
+            <summary>
+            装箱
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:WebApi.Models.IcgooCreateOrder.Seal(System.Object,Needs.Ccs.Services.Hanlders.IcgooCreateOrderEventArgs)">
+            <summary>
+            封箱
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="T:WebApi.Models.Order.OrderConfirmed">
+            <summary>
+            订单确认
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.Order.OrderConfirmed.OrderID">
+            <summary>
+            主订单-订单ID
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.Order.OrderConfirmed.UserID">
+            <summary>
+            用户ID
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.Order.OrderConfirmed.IsCancel">
+            <summary>
+            是否取消
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.Order.OrderConfirmed.CancelReason">
+            <summary>
+            取消原因
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.Order.UserConfirmReceiptModel">
+            <summary>
+            用户确定订单收货接收Model
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.Order.UserConfirmReceiptModel.MainOrderID">
+            <summary>
+            主订单号
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.ReceptorOrder.Type">
+            <summary>
+            订单类型：内单、外单、Icgoo
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.ReceptorOrder.AdminID">
+            <summary>
+            下单时的跟单员
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.ReceptorOrder.UserID">
+            <summary>
+            平台用户
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.ReceptorOrder.ClientName">
+            <summary>
+            客户名称
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.ReceptorOrder.ClientCode">
+            <summary>
+            客户代码（入仓号）
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.ReceptorOrder.Currency">
+            <summary>
+            交易币种
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.ReceptorOrder.IsFullVehicle">
+            <summary>
+            是否包车：Yes/No
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.ReceptorOrder.IsLoan">
+            <summary>
+            是否垫款：Yes/No
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.ReceptorOrder.PackNo">
+            <summary>
+            件数
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.ReceptorOrder.WarpType">
+            <summary>
+            包装种类
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.ReceptorOrder.InvoiceStatus">
+            <summary>
+            订单的开票状态
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.ReceptorOrder.PaidExchangeAmount">
+            <summary>
+            已申请付汇金额
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.ReceptorOrder.IsHangUp">
+            <summary>
+            是否挂起：Yes/No
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.ReceptorOrder.IsReturned">
+            <summary>
+            是否退回重新提交订单？
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.ReceptorOrder.Status">
+            <summary>
+            状态：正常、删除
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.ReceptorOrder.OrderBillType">
+            <summary>
+            代理费收取方式
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.ReceptorOrder.Items">
+            <summary>
+            订单项
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.ReceptorOrder.OrderConsignee">
+            <summary>
+            订单的香港接货方式
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.ReceptorOrder.OrderConsignor">
+            <summary>
+            订单的深圳交货方式
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.ReceptorOrder.PayExchangeSuppliers">
+            <summary>
+            付汇供应商
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.OrderItems.ID">
+            <summary>
+            订单项ID
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.OrderItems.TinyOrderID">
+            <summary>
+            小订单ID，订单退回客户编辑后，提交时赋值
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.OrderItems.PreProductID">
+            <summary>
+            供前端快捷下单使用
+            正常下单情况，禁止使用
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.OrderItems.Origin">
+            <summary>
+            原产地
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.OrderItems.Quantity">
+            <summary>
+            数量
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.OrderItems.Unit">
+            <summary>
+            单位
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.OrderItems.UnitPrice">
+            <summary>
+            单价
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.OrderItems.TotalPrice">
+            <summary>
+            总价
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.OrderItems.GrossWeight">
+            <summary>
+            毛重
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.OrderItems.IsSampllingCheck">
+            <summary>
+            对于四级客户，报价时需要选择是否抽检
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.OrderItems.ClassifyStatus">
+            <summary>
+            归类状态：未归类、首次归类、归类完成，归类异常
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.OrderItems.ProductUniqueCode">
+            <summary>
+            产品唯一编码
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.OrderItems.Status">
+            <summary>
+            状态：正常、删除
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.OrderConsignee.Type">
+            <summary>
+            香港接货方式：供应商送货、自提
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.OrderConsignee.Contact">
+            <summary>
+            联系人, 交货方式为自提时填写
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.OrderConsignee.Mobile">
+            <summary>
+            联系人手机号码, 交货方式为自提时填写
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.OrderConsignee.Tel">
+            <summary>
+            联系人电话, 交货方式为自提时填写（可空）
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.OrderConsignee.Address">
+            <summary>
+            交货地址, 交货方式为自提时填写
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.OrderConsignee.PickUpTime">
+            <summary>
+            提货时间，交货方式为自提时填写
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.OrderConsignee.WayBillNo">
+            <summary>
+            物流单号，供应商送货时填写
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.OrderConsignor.Type">
+            <summary>
+            订单交货方式：自提、送货上门、快递
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.OrderConsignor.Name">
+            <summary>
+            收件单位名称（送货上门/快递时填写）
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.OrderConsignor.Contact">
+            <summary>
+            联系人（送货上门/快递时），提货人（客户自提时）
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.OrderConsignor.Mobile">
+            <summary>
+            联系人手机号码（送货上门/快递时），提货人手机号码（客户自提时）
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.OrderConsignor.Tel">
+            <summary>
+            联系人电话（送货上门/快递时），提货人电话（客户自提时），可空
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.OrderConsignor.Address">
+            <summary>
+            收件地址（送货上门/快递时填写）
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.OrderConsignor.IDType">
+            <summary>
+            提货人证件类型：身份证、驾驶证（客户自提时填写）
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.OrderConsignor.IDNumber">
+            <summary>
+            提货人证件号码（客户自提时填写）
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.ReceptorOrder.OrderPayExchangeSuppliers.ClientSupplierName">
+            <summary>
+            付汇供应商
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.PayExchangeRequest">
+            <summary>
+            付汇申请
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.PayExchangeRequest.ClientID">
+            <summary>
+            客户ID
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.PayExchangeRequest.UserID">
+            <summary>
+            会员
+            客户提交的付汇申请
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.PayExchangeRequest.SupplierName">
+            <summary>
+            供应商
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.PayExchangeRequest.SupplierEnglishName">
+            <summary>
+            供应商英文名称
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.PayExchangeRequest.SupplierAddress">
+            <summary>
+            供应商地址
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.PayExchangeRequest.BankAccount">
+            <summary>
+            银行账户
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.PayExchangeRequest.BankAddress">
+            <summary>
+            银行地址
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.PayExchangeRequest.BankName">
+            <summary>
+            银行名称
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.PayExchangeRequest.SwiftCode">
+            <summary>
+            银行国际代码
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.PayExchangeRequest.ExchangeRateType">
+            <summary>
+            使用的汇率类型
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.PayExchangeRequest.Currency">
+            <summary>
+            币种
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.PayExchangeRequest.ExchangeRate">
+            <summary>
+            汇率
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.PayExchangeRequest.PaymentType">
+            <summary>
+            付款方式
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.PayExchangeRequest.ExpectPayDate">
+            <summary>
+            期望付款日期
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.PayExchangeRequest.SettlemenDate">
+            <summary>
+            结算截止日期
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.PayExchangeRequest.OtherInfo">
+            <summary>
+            其它资料
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.PayExchangeRequest.UnPayExchangeOrders">
+            <summary>
+            订单项
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.PayExchangeRequest.Summary">
+            <summary>
+            备注
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.PayExchangeRequest.ABA">
+            <summary>
+            美国付汇账号
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.PayExchangeRequest.IBAN">
+            <summary>
+            欧美付汇账号
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.PayExchangeRequest.IsAdvanceMoney">
+            <summary>
+            是否垫块(0是垫款，1是不垫款)
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.PayExchangeRequest.HandlingFeePayerType">
+            <summary>
+            代付款手续费类型
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.PayExchangeRequest.HandlingFee">
+            <summary>
+            手续费（美元）
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.PayExchangeRequest.USDRate">
+            <summary>
+            美元实时汇率
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.PayExchangeApplyFile">
+            <summary>
+            合同附件
+            </summary>
+        </member>
+        <member name="T:WebApi.Models.UnPayExchangeOrder">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.UnPayExchangeOrder.OrderID">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.UnPayExchangeOrder.DeclarePrice">
+            <summary>
+            报关总价
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.UnPayExchangeOrder.CurrentPaidAmount">
+            <summary>
+            本地付汇金额
+            </summary>
+        </member>
+        <member name="P:WebApi.Models.UnPayExchangeOrder.PaidExchangeAmount">
+            <summary>
+            已申请付汇总价
+            </summary>
+        </member>
+        <member name="T:WebApp.App_Utils.HttpFile">
+            <summary>
+            使用Http上传文件，指定文件的名称
+            实例化时获取系统文件的根目录，设置上传的子文件夹及生成日期文件夹
+            返回上传后的文件物理路径、虚拟路径、文件大小、Url
+            </summary>
+        </member>
+        <member name="F:WebApp.App_Utils.HttpFile.FileName">
+            <summary>
+            上传的文件的文件名称
+            </summary>
+        </member>
+        <member name="F:WebApp.App_Utils.HttpFile.ChildFolder">
+            <summary>
+            子文件夹
+            </summary>
+        </member>
+        <member name="F:WebApp.App_Utils.HttpFile.FilePath">
+            <summary>
+            文件路径
+            全文件路径
+            如：D:/File/2018/01/8208861122.png
+            </summary>
+        </member>
+        <member name="P:WebApp.App_Utils.HttpFile.VirtualPath">
+            <summary>
+            获取文件的虚拟路径
+            </summary>
+        </member>
+        <member name="F:WebApp.App_Utils.HttpFile.RootFileFolder">
+            <summary>
+            项目文件根目录
+            </summary>
+        </member>
+        <member name="P:WebApp.App_Utils.HttpFile.DomainUrl">
+            <summary>
+            获取项目域名地址
+            </summary>
+        </member>
+        <member name="M:WebApp.App_Utils.HttpFile.#ctor(System.String)">
+            <summary>
+            文件名称
+            </summary>
+            <param name="fileName"></param>
+        </member>
+        <member name="M:WebApp.App_Utils.HttpFile.SetChildFolder(System.String)">
+            <summary>
+            设置子文件夹
+            </summary>
+            <param name="childFolder"></param>
+        </member>
+        <member name="M:WebApp.App_Utils.HttpFile.CreateDataDirectory">
+            <summary>
+            按日期创建文件夹
+            格式：201902/01，201902/28
+            </summary>
+            <param name="subDirectory">子文件目录</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApp.App_Utils.HttpFile.SaveAs(System.Web.HttpPostedFileBase)">
+            <summary>
+            保存文件
+            </summary>
+            <param name="httpPostedFile">上传的文件</param>
+            <returns>[0]文件的物理路径 [1]文件虚拟路径 例如：Orders/2019/01/89987772.pdf [2]文件的网络url [3]文件的大小</returns>
+        </member>
+        <member name="M:WebApp.App_Utils.HttpFile.SaveAs(System.Web.HttpPostedFile)">
+            <summary>
+            保存文件
+            </summary>
+            <param name="httpPostedFile">上传的文件</param>
+            <returns>
+            [0]文件的物理路径
+            [1]文件虚拟路径 例如：Orders/2019/01/89987772.pdf 
+            [2]文件的网络url
+            [3]文件的大小
+            </returns>
+        </member>
+    </members>
+</doc>

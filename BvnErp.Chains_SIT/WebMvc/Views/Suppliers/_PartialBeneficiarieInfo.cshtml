@@ -1,0 +1,76 @@
+﻿<div id="app1">
+    <el-form :model="form1" status-icon ref="form1" :rules="rules1" label-width="150px">
+        <el-form-item label="银行名称(英文)：" prop="BankName" :rules="[{ required: true, message: '请输入银行名称', trigger: 'blur' },{max:150, message: '银行名称长度不超过150', trigger: 'blur' }]">
+            <el-input v-model="form1.BankName" placeholder="请输入银行名称(英文)" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="银行地址(英文)：" prop="BankAddress" :rules="[{ required: true, message: '请输入银行地址', trigger: 'blur' },{max:250, message: '银行地址长度不超过250', trigger: 'blur' }]">
+            <el-input v-model="form1.BankAddress" placeholder="请输入银行地址(英文)" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="银行账号：" prop="BankAccount">
+            <el-input v-model="form1.BankAccount" placeholder="请输入银行账号" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="银行代码：" prop="SwiftCode" :rules="[{ required: true, message: '请输入银行代码', trigger: 'blur' },{max:50, message: '银行代码长度不超过50', trigger: 'blur' }]">
+            <el-input v-model="form1.SwiftCode" placeholder="请输入银行代码" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="备注：" prop="Summary">
+            <el-input type="textarea" v-model="form1.Summary" :rules="[{max:250, message: '备注长度不超过250', trigger: 'blur' }]"></el-input>
+        </el-form-item>
+    </el-form>
+
+</div>
+
+<script>
+    Vue.component(
+        'my-component',
+        {
+            template: "#app1",
+            data: function () {
+                var validatorBankAccount = function(rule, value, callback){
+                    if (value == '' || value == null) {
+                        callback(new Error('请输入银行账号'));
+                    }
+                    else if (!/^[a-zA-Z0-9\-]+$/.test(value)) {
+                        callback(new Error('银行账号格式错误'));
+                    }
+                    else {
+                        callback();
+                        //var that = this;
+                        //axios({
+                        //    url: "/Suppliers/CheckSupplierBank",
+                        //    method: "post",
+                        //    data: {
+                        //        BankAccount: that.form1.BankAccount,
+                        //        ClientSupplierID: that.form1.ClientSupplierID,
+                        //        ID:that.form1.ID
+                        //    },
+                        //}).then(function (response) {
+                        //    if (response.data.type == "error") {
+                        //        callback(new Error(response.data.msg));
+                        //    } else {
+                        //        callback();
+                        //    }
+                        //}).catch(function (error) {
+                        //    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                        //});
+                    }
+                };
+                return {
+                    form1: @Html.Raw(Json.Encode(Model)),
+                    rules1: {
+                        BankAccount: [{ required: true, validator: validatorBankAccount, trigger: 'blur' },
+                            { max: 50, message: '银行账号长度不超过50', trigger: 'blur' }],
+                    }
+                }
+            },
+            methods: {
+                //消息提示框
+                onAlert: function (type, message) {
+                    this.$message({
+                        message: message,
+                        type: type
+                    });
+                },
+            }
+        });
+</script>
+

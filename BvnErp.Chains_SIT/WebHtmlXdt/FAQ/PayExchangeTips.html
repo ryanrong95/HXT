@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>芯达通- 一站式报关服务平台</title>
+    <meta name="keywords" content="芯达通新手入门之注册指南" />
+    <meta name="description" content="注册指南" />
+    <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
+    <!--[if lt IE 9]>
+      <script src="/Scripts/html5shiv.min.js"></script>
+      <script src="/Scripts/respond.min.js"></script>
+    <![endif]-->
+    <link rel="shortcut icon" href="/Content/images/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="/Content/common.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/style.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/element.css" />
+</head>
+<body>
+    <div class="header"></div>
+    <section id="RegistGuide" class="grayBg">
+        <div id="RegistGuideContent" v-cloak class="w1200 clearfix">
+            <div class="content-left content-boxShadow">
+                <div id="FAQNav">
+                    <h2>{{NavLeftTitle}}</h2>
+                    <ul>
+                        <li v-for="item,index in NavLeftList" v-bind:class="{'active':index==status}">
+                            <i></i>
+                            <a v-bind:href="item.href">{{item.text}}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div v-cloak class="content-right content-boxShadow">
+                <h1>如何申请付汇</h1>
+                <p>第一步：点击待付汇，选择订单付汇，可多个订单付汇，多个订单付汇的交易币种必须相同，供应商至少有一个相同</p>
+                <img src="/Content/images/tu17.png" alt="" />
+                <p>第二步：填写付汇金额，付汇金额要小于等于可付汇金额，确认提交</p>
+                <img src="/Content/images/tu18.png" alt="" />
+                <p>第三步：申请成功之后，弹出付汇委托书导出和上传的界面，可导出和上传付汇委托书</p>
+                <img src="/Content/images/tu20.png" alt="" />
+            </div>
+        </div>
+    </section>
+    <div class="footer"></div>
+    <script src="/Scripts/jquery-3.3.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/vue.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/axios.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/common.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/element.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+        var RegistGuideContent = new Vue({
+            el: '#RegistGuideContent',
+            data: {
+                status: 3,
+                NavLeftTitle: '新手入门',
+                NavLeftList: [],
+            },
+            mounted: function () {
+                this.getNavList();
+            },
+            methods: {
+                getNavList: function () {
+                    var that = this;
+                    axios.get("/Mock/NoviceGuide.json")
+                        .then(that.getDataSucc)
+                        .catch(that.getDataFail)
+                },
+                getDataSucc: function (res) {
+                    var that = this;
+                    res = res.data;
+                    if (res.ret && res.data) {
+                        that.NavLeftList = res.data.NoviceGuideList;
+                    }
+                },
+                getDataFail: function (err) {
+                    console.log(err);
+                },
+            }
+        })
+    </script>
+</body>
+</html>

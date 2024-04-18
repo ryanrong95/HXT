@@ -1,0 +1,254 @@
+﻿
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>会员中心-@Html.Raw(ViewBag.CompanyShortName)-一站式报关服务平台</title>
+    <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+      <script src="js/respond.min.js"></script>
+    <![endif]-->
+    <script src="~/Scripts/vue.min.js"></script>
+    <script src="~/Scripts/elementui.js"></script>
+    <script src="~/Scripts/axios.min.js"></script>
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="~/Scripts/Shared/Common.js"></script>
+    <script src="~/Scripts/polyfill.min.js"></script>
+    <script src="~/Scripts/Shared/Common.js"></script>
+    <script src="~/Scripts/conversion.js"></script>
+    <link rel="stylesheet" type="text/css" href="~/Content/element.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/common.css" />
+
+    <link rel="stylesheet" type="text/css" href="~/Content/style.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/Account/inputlist.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/icons-ump/iconfont.css" />
+</head>
+
+<body>
+    <!--头部-->
+    <header id="header" v-cloak>
+        <div class="w1200 clearfix header_top clearfix">
+            <div class="header_top_left">
+                <a href="@Html.Raw(ViewBag.WebUrl)" class="fl">
+                    <i></i>
+                    <span>@Html.Raw(ViewBag.CompanyShortName)首页</span>
+                </a>
+                <a id="oldSystem" class="order_sys fl"  href="http://old.wl.net.cn/home/shiftsys">
+                    <span>切换旧系统</span>
+                </a>
+            </div>
+            <div class="fr">
+                <ul>
+                    <li class="mr12"><span>您好, @Html.Raw(ViewBag.UserName)<em id="username"></em></span></li>
+                    <li>
+                        <a href="/Home/Logout" class="logout">退出</a>
+                    </li>
+                    <li>
+                        <a href="http://wl.net.cn/FAQ/RegistrationGuide.html" target="_blank">新手入门</a>
+                    </li>
+                    <li>
+                        <a v-on:click="suggestion = true">投诉与建议</a>
+                    </li>
+                </ul>
+                <div class="iphone clearfix">
+                    <div class="iphone_title">报关热线：</div>
+                    <div class="iphone_number">0755-83988698</div>
+                </div>
+            </div>
+        </div>
+        <div class="header_main">
+            <div class="w1200 clearfix">
+                <div class="logo">
+                    <img src="~/Content/img/@Html.Raw(ViewBag.LogoWhite)" />
+                </div>
+                <nav>
+                    <ul class="clearfix nav_item">
+                        <li class="nav_item_li">
+                            <a href="/Home/Index">首页</a>
+                            <i id="indexCur" class="curPos "></i>
+                        </li>
+                        <li class="nav_item_li">
+                            <a href="/Orders/Add">报关</a>
+                            <i id="centerCur" class="curPos "></i>
+                        </li>
+                        <li class="nav_item_li">
+                            <a href="/Products/MyProducts">产品</a>
+                            <i id="productCur" class="curPos "></i>
+                        </li>
+                        <li class="nav_item_li">
+                            <a href="/Account/Client">
+                                <span>账户设置</span>
+                                <i class="nav_item_icon mm"></i>
+                            </a>
+                            <i id="accountCur" class="curPos"></i>
+                            <ul class="nav_item_ul">
+                                <li class="pt19 m0 fln">
+                                    <a href="/Account/Client" class="pl35">
+                                        <span class="nav_span">账户设置</span>
+                                        <i class="nav_item_icon"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/Account/Client">账户信息</a>
+                                </li>
+                                <li>
+                                    <a href="/Suppliers/MySuppliers">供应商</a>
+                                </li>
+                                <li>
+                                    <a href="/Account/Agreement">协议条款</a>
+                                </li>
+                                <li>
+                                    <a href="/Account/Invoice">发票信息</a>
+                                </li>
+                                <li>
+                                    <a href="/Account/MyConsignees">收货地址</a>
+                                </li>
+                                <li>
+                                    <a href="/Account/Password">修改密码</a>
+                                </li>
+                                <li>
+                                    <a href="/Account/Mobile">手机绑定</a>
+                                </li>
+                                <li>
+                                    <a href="/Account/Email">邮箱绑定</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="announce clearfix">
+                    <div class="announce_title">
+                        <a>公告通知</a>
+                    </div>
+                    <div class="announce_content">
+                        <a href="http://gss.mof.gov.cn/zhengwuxinxi/gongzuodongtai/201905/t20190513_3256787.html" target="_blank">
+                            <marquee scrollamount="4">
+                                国务院关税税则委员会发布公告决定对原产于美国的部分进口商品提高加征关税税率
+                            </marquee>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="suggestions" v-if="suggestion">
+            <div class="suggestions-box">
+                <div class="suggestions-title">
+                    投诉建议
+                    <i v-on:click="suggestion=false"></i>
+                </div>
+                <div class="suggestions-content">
+                    <h1>
+                        投诉建议
+                        <span>Suggestions</span>
+                    </h1>
+                    <div class="suggestions-style">
+                        <span>投诉电话：</span><em>0755-83988698</em>
+                        <span>投诉邮箱：</span><em>@Html.Raw("shenzhen@"+ ViewBag.WebHtml)</em>
+                    </div>
+                    <p class="suggestions-text">尊敬的客户 您好！  芯达通对于您的不满深表歉意，请您耐心填写投诉或建议信息，我们将第一时间处理您的反馈</p>
+                    <div class="suggestions-textarea">
+                        <p>内容描述</p>
+                        <textarea placeholder="请填写您的投诉或建议信息" v-model="form.summary"></textarea>
+                    </div>
+                    <div class="suggestions-input">
+                        <span>我们如何联系您？</span>
+                        <input type="text" placeholder="姓名" v-model="form.name" />
+                        <input type="text" placeholder="电话" v-model="form.phone" />
+                    </div>
+                    <div class="suggestions-button">
+                        <button class="btn button nohover" type="button" v-on:click="submitSuggess">提&nbsp;交</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    @RenderBody()
+    <!--底部-->
+    <footer>
+        <p class="footer_text">禁限售规则 - 知识产权保护政策 - 隐私权政策 - 使用条款</p>
+        <p>©️2010-2020 @Html.Raw(ViewBag.WebHtml) 粤ICP备15026887号 版权所有 - @Html.Raw(ViewBag.CompanyShortName)</p>
+    </footer>
+    <script src="/Scripts/jquery.cookie.js"></script>
+    <script>
+        //转成json格式
+        var cookie = $.cookie('user_test_xindatong');
+        if (cookie != null) {
+            var s = '{"' + cookie.replace(/=/g, '":"').replace(/&/g, '","') + '"' + "}";
+            var m = JSON.parse(s); //转成json
+
+            var name = unescape(m.UserName);
+            $("#username").html(m.UserName);
+        }
+        var isshow = '@ViewBag.IsHideOldUrl';
+        if (isshow == "False") {
+            $("#oldSystem").hide();
+        }
+       
+        //转成json格式
+        var header = new Vue({
+            el: "#header",
+            data: {
+                form: {
+                    summary: '',
+                    name: '',
+                    phone: ''
+                },
+                suggestion: false,
+            },
+            methods: {
+                valid: function () {
+                    if (this.form.summary == null || this.form.summary == "") {
+                        this.onAlert("error", "请输入投诉建议");
+                        return false;
+                    }
+                    if (this.form.summary.length > 200) {
+                        this.onAlert("error", "输入投诉建议的字符不超过200个");
+                        return false;
+                    }
+                    if (this.form.name.length > 10) {
+                        this.onAlert("error", "输入姓名的字符不超过10个");
+                        return false;
+                    }
+                    if (this.form.phone.length > 20) {
+                        this.onAlert("error", "输入电话的字符不超过20个");
+                        return false;
+                    }
+                    return true;
+                },
+                closeSuggestions: function () {
+                    this.suggestion = false;
+                },
+                submitSuggess: function () {
+                    if (this.valid()) {
+                        axios({
+                            url: "/Account/Suggestions",
+                            method: "post",
+                            data: this.form
+                        }).then(function (response) {
+                            header.onAlert(response.data.type, response.data.msg);
+                            header.form.summary = "";
+                            header.form.name = "";
+                            header.form.phone = "";
+                            header.suggestion = false;
+                        }).catch(function (error) {
+                            header.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                        });
+                    }
+                },
+                onAlert: function (type, message) {
+                    this.$message({
+                        message: message,
+                        type: type
+                    });
+                },
+            }
+        });
+
+    </script>
+</body>
+
+</html>

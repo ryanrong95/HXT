@@ -1,0 +1,175 @@
+﻿@{
+    ViewBag.Title = "客户服务";
+}
+<link href="~/Content/css/clientService.css" rel="stylesheet" />
+<div id="client_serve" class="company_profile">
+    <div class="company_header">
+        <div class="icon">
+            <img src="~/Content/img/logo-1.png" alt="Alternate Text" />
+        </div>
+        <p class="icon_right">
+            <a href="/Order/Menu_folding">
+                <span><img src="~/Content/img/菜单.png" alt=""></span>
+            </a>
+        </p>
+    </div>
+    <div class="client_serve_bc_img">
+        <p class="txt1">ABOUT US/<span class="txt_us">关于我们</span></p>
+        <p>诚信为本，服务至上——成为深受客户信赖的一站式报关服务平台</p>
+    </div>
+    <div class="clientServiceWrap">
+        <div class="wrap">
+            <p class="title">客户服务</p>
+            <p class="txt1">芯达通为您提供客户服务，报关流程如下：</p>
+            <div class="content">
+                <p>1、报名申请</p>
+                <p>完成网上报名申请后，我们会尽快安排专业的客户经理与您联系.</p>
+            </div>
+            <div class="content">
+                <p>2、签订合作协议</p>
+                <p>
+                    完成网上报名申请后，客户经理将在2个工作日内与您联系，并详细介绍芯达通相关服务.
+                </p>
+                <p>确认合作意愿后，将于您签订《 代理进口报关协议书 》</p>
+            </div>
+            <div class="content">
+                <p>3、分配专业服务顾问</p>
+                <p>
+                    客户经理提交您的产品和开票工厂相关信息到芯达通后台进行审核；
+                </p>
+                <p>审核通过后芯达通将为您分配专职的服务顾问.</p>
+            </div>
+            <div class="content">
+                <p>4、在线下单</p>
+                <p>
+                    您可选择自助下单或人工下单；
+                </p>
+                <p>
+                    您提供进口货物相关资料后，芯达通审核信息无误。即可进口报关
+                </p>
+            </div>
+            <div class="content lastContent">
+                <p>5、第五步：报关</p>
+                <p>
+                    付汇款记至芯达通账号后，将在一个工作日内完成付记{付汇规则}
+                </p>
+                <p>
+                    当日上午16时中国银行现汇卖出价
+                </p>
+                <p>当日上午10:00 - 12:00 收到的付汇款以中国银行</p>
+                <p>
+                    10:00现汇卖出价付汇，12:00以后的顺延至第二个工
+                    作日
+                </p>
+            </div>
+            <p class="title">咨询电话</p>
+            <div class="server_list">
+                <div class="server_title">
+                    <span>业务经理</span>
+                </div>
+                <div class="server_info">
+                    <div class="server_info_detail">
+                        <p class="info_items">
+                            <span class="server_icon">
+                                <img src="~/Content/img/name_server.png" alt="">
+                            </span><span>姓名:</span><span>{{formdata.ServiceManagerName}}</span>
+                        </p>
+                        <p class="info_items">
+                            <span class="server_icon">
+                                <img src="~/Content/img/phone_server.png" alt="">
+                            </span><span>电话:</span><span>{{formdata.ServiceManagerTel}}</span>
+                        </p>
+                        <p class="info_items">
+                            <span class="server_icon">
+                                <img src="~/Content/img/email_server.png" alt="">
+                            </span><span>邮箱:</span><span>{{formdata.ServiceManagerMail}}</span>
+                        </p>
+                    </div>
+                    <div class="server_call" v-on:click="call_server(formdata.ServiceManagerTel)">
+                        <img src="~/Content/img/call.png" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="server_list">
+                <div class="server_title">
+                    <span>跟单员</span>
+                </div>
+                <div class="server_info">
+                    <div class="server_info_detail">
+                        <p class="info_items">
+                            <span class="server_icon">
+                                <img src="~/Content/img/name_server.png" alt="">
+                            </span><span>姓名:</span><span>{{formdata.MerchandiserName}}</span>
+                        </p>
+                        <p class="info_items">
+                            <span class="server_icon">
+                                <img src="~/Content/img/phone_server.png" alt="">
+                            </span><span>电话:</span><span>{{formdata.MerchandiserTel}}</span>
+                        </p>
+                        <p class="info_items">
+                            <span class="server_icon">
+                                <img src="~/Content/img/email_server.png" alt="">
+                            </span><span>邮箱:</span><span>{{formdata.MerchandiserMail}}</span>
+                        </p>
+                    </div>
+                    <div class="server_call" v-on:click="call_server(formdata.MerchandiserTel)">
+                        <img src="~/Content/img/call.png" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="client_serve_content">
+
+                <div class="server_remarks_box">
+                    <div class="remarks_title">注:</div>
+                    <div class="remarks_content">
+                        <p>了解更多进口报关业务请前往 <a href="http://wl.net.cn/">芯达通官网</a> 或直接联系芯达通业务经理--{{formdata.ServiceManagerName}}。</p>
+                        <p>查询报关业务进度请联系芯达通跟单员--{{formdata.MerchandiserName}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="company_foot">
+        <p class="txt1">怎样联系我们？</p>
+        <p class="txt2">电话：0755- 83998698</p>
+        <p class="txt2">传真：0755-83995933</p>
+        <p class="txt2">邮件：shenzhen@wl.net.cn</p>
+        <p class="txt2">地址：深圳市龙岗区坂田吉华路393号英达丰科技园 </p>
+        <div class="links">
+            <span><a href="/Home/CompanyProfile">公司简介</a></span>
+            <span>|</span>
+            <span><a href="/Home/Recruitment">人才招聘</a></span>
+            <span>|</span>
+            <span><a href="/Account/ClientService">客户服务</a></span>
+        </div>
+        <p class="txt3">禁限售规则 - 知识产权保护政策 - 隐私权政策 - 使用条款</p>
+        <p class="txt3">&copy;2019-2020 深圳市芯达通供应链管理有限公司 版权所有</p>
+    </div>
+    <div class="fixedMenu">
+        <ul>
+            <li>
+                <a href="/Account/Index"><i></i><span>会员中心</span></a>
+            </li>
+            <li>
+                <a href="/Order/MyOrders"><i></i><span>我的订单</span></a>
+            </li>
+            <li>
+                <a href="tel:0755-83988698"><i></i><span>报关热线</span></a>
+            </li>
+        </ul>
+    </div>
+</div>
+<script>
+   var client_serve = new Vue({
+        el: "#client_serve",
+        data: {
+            formdata:@Html.Raw(Json.Encode(Model)),
+        },
+        methods: {
+            call_server: function (tel) {
+                window.location.href = "tel:" + tel;
+            }
+        }
+    })
+</script>
+

@@ -1,0 +1,85 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>芯达通- 一站式报关服务平台</title>
+    <meta name="keywords" content="芯达通、报关常见问题、如何代进口报关、芯达通" />
+    <meta name="description" content="账号的密码如何修改？" />
+    <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
+    <!--[if lt IE 9]>
+      <script src="/Scripts/html5shiv.min.js"></script>
+      <script src="/Scripts/respond.min.js"></script>
+    <![endif]-->
+    <link rel="shortcut icon" href="/Content/images/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="/Content/common.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/style.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/element.css" />
+</head>
+<body class="gray">
+    <div class="header"></div>
+    <section id="AccountSecurity" class="grayBg">
+        <div class="w1200 clearfix">
+            <div class="content-left content-boxShadow">
+            </div>
+            <div id="AccSecContent" v-cloak class="content-right content-boxShadow">
+                <h1>香港收货地址</h1>
+                <div class="account">
+                    <p class="mt34">收货公司名称：香港畅运国际物流有限公司</p>
+                    <p class="pl98">
+                        HONGKONG CHANGYUN INTERNATIONAL LOGISTICS CO., LIMITED
+                    </p>
+                    <p>收&nbsp;&nbsp;货&nbsp;&nbsp;&nbsp;地&nbsp;&nbsp;址：香港观塘鸿图道16号志成工业大厦2楼B2室 </p>
+                    <p class="pl98">Unit B2, 2/F.,Houtex Ind. Bldg., 16 Hung To Rd., KwunTong, Kowloon，HK</p>
+                    <p>联&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;系&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;人：林团裕</p>
+                    <p>电<span class="teltip">话：(852)31019258</span></p>
+                    <p class="mt34">注意</p>
+                    <p>1.送货要在运单/送货单上写上客户相应的入仓号</p>
+                    <p>2.本地送货过去的客户带50港币现金入仓费</p>
+                    <p>3.送货文件和标签要完整准确</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="footer"></div>
+    <script src="/Scripts/jquery-3.3.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/vue.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/axios.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/common.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/element.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+        var RegistGuideContent = new Vue({
+            el: '#AccSecContent',
+            beforeMount: function () {
+                $(".content-left").load("/FAQNav.html", function () {
+                    //可以通过改变status的值来改变导航条哪个显示活动状态
+                    FAQNav.status = 3;
+                });
+            },
+            data: {
+                selectItem: -1,//选择是否解决
+            },
+            methods: {
+                selectSolve: function (index) {
+                    this.selectItem = index;
+                },
+                submitselectSolve: function () {
+                    console.log(this.selectItem);
+                    if (this.selectItem != -1) {
+                        //后台提交代码
+                        //axios.post("")
+                        //.then(function (res) {
+
+                        //})
+                        //.catch(function (err) {
+
+                        //})
+                    } else {
+                        alert("您还没有勾选")
+                    }
+
+                }
+            }
+        })
+    </script>
+</body>
+</html>

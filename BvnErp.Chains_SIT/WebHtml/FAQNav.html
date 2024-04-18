@@ -1,0 +1,36 @@
+﻿<div id="FAQNav">
+    <h2>{{NavLeftTitle}}</h2>
+    <ul>
+        <li v-for="item,index in NavLeftList" v-bind:class="{'active':index==status}">
+            <i></i>
+            <a v-bind:href="item.href">{{item.text}}</a>
+        </li>
+    </ul>
+</div>
+<script type="text/javascript">
+    var FAQNav = new Vue({
+        el: '#FAQNav',
+        data: {
+            status: 0,
+            NavLeftTitle:'常见问题',
+            NavLeftList: [
+                {
+                    text: '账号安全',
+                    href:'/FAQ.html'
+                },
+                {
+                    text: '收费标准',
+                    href: '/FAQ/ChargingStandard.html'
+                },
+                {
+                    text: '如何付款',
+                    href: '/FAQ/Payment.html'
+                },
+                {
+                    text: '香港收货地址',
+                    href: '/FAQ/HKReceivingAddress.html'
+                }
+            ],
+        },
+    })
+</script>

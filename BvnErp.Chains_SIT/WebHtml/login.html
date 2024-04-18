@@ -1,0 +1,287 @@
+﻿<div class="login-box" id="login">
+    <i class="login-close" @click="closeLogin"></i>
+    <div class="login-left">
+        <div class="login_content">
+            <h1>账户登录</h1>
+            <!--点击登录的错误提示-->
+            <div class="login_error_hint" v-bind:class="{'active':loginErrorStatus}">
+                {{loginErrorHint}}
+            </div>
+            <div class="btn btn_line mb30" v-bind:class="{'focus':focusStatus1}">
+                <div class="login_icon_left">
+                    <i class="login_user"></i>
+                </div>
+                <input type="text" name="" id="email" v-model.trim="email" value="" placeholder="请输入邮箱账号" class="b0" @focus="addFocus(1)" @blur="addFocus(0)" @keyup="inputEmail"/>
+                <div class="login_icon_right">
+                    <i></i>
+                </div>
+            </div>
+            <div class="btn btn_line mb30" v-bind:class="{'focus':focusStatus2}">
+                <div class="login_icon_left">
+                    <i class="login_psd"></i>
+                </div>
+                <input type="password" name="" id="password" v-model.trim="psd" value="" placeholder="请输入密码" class="b0" @focus="addFocus(2)" @blur="addFocus(3)" @keyup="inputPsd"/>
+            </div>
+            <!--滑块验证开始-->
+            <div class="sliderImg" v-bind:style="{background:bigBg}">
+                <div class="sliderSmImg" v-bind:style="{background:smBg,top:smTop}"></div>
+            </div>
+            <div class="btn btn_bg_gray" id="box" onselectstart="return false;">
+                <div class="bgColor"></div>
+                <div class="txt clearfix"><i class="slider_error_icon"></i><span class="txt_span">请向右拖动滑块完成验证</span></div>
+                <div class="slider" @mousedown="mousedownHandler($event)"><i></i></div>
+            </div>
+            <!--滑块验证结束-->
+            <div class="login_operation clearfix">
+                <i class="checked_no noselect" v-bind:class="{'checked_yes':checkedflag}" @click="selectRemember()"></i>
+                <!--选中添加checked_yes-->
+                <!--<input type="checkbox" name="" id="" value="" style="display: none;" id="checkbox"/>-->
+                <input type="hidden" name="1" id="1" value="" />
+                <label for="1" @click="selectRemember()" class="noselect">记住账号和密码</label>
+                <a href="findPwd.html">忘记密码</a>
+            </div>
+            <button class="btn button blue btn_big" v-bind:disabled="!isCanLoginStatus" id="goLogin" @click="login">登录</button>
+            <div class="login-noAccount">没有账号？<a href="/Applies.html">立即申请</a></div>
+        </div>
+    </div>
+    <div class="login-right">
+        <div class="login-right-img">
+            <img src="/Content/images/erweima.png"/>
+        </div>
+        <div class="login-right-text">
+            <span class="text-line ml8"></span>
+            <span>关注创新恒远公众号</span>
+            <span class="text-line"></span>
+        </div>
+        <p>获得更多资讯</p>
+    </div>
+</div>
+<script>
+//定义了一个获取元素的方法
+function getEle(selector) {
+    return document.querySelector(selector);
+}
+//定义一个获取鼠标当前需要移动多少距离的方法
+function getOffsetX(offset, min, max) {
+    if (offset < min) {
+        offset = min;
+    } else if (offset > max) {
+        offset = max;
+    }
+    return offset;
+}
+//生成0~n随机数的方法
+function rand(n) {
+    return (Math.floor(Math.random() * n));
+}
+
+var login = new Vue({
+        el: "#login",
+        data: {
+            checkedflag: false,
+            focusStatus1: false,
+            focusStatus2: false,
+            loginErrorHint: '',//登录错误提示
+            loginErrorStatus: false,
+            bigBg: '',//滑块背景图链接地址
+            smBg: '',//滑块小图背景图链接地址
+            smTop:'',//滑块小图的top值
+            sliderData: {
+                box: null,
+                bgColor: null,
+                txt: null,
+                slider: null,
+                icon: null,
+                successMoveDistance: null,
+                downX: null,
+                isSuccess: false,
+                sliderImg: null,
+                sliderSmImg: null,
+                errorIcon: null,
+                txtSpan: null,
+                smImgExist: null,
+                smSuccessMoveDistance: null,
+                sliderImgs: [
+                    {
+                        big: 'sliderBg0.png',
+                        small: 'sliderSm0.png',
+                        top:62,
+                        smSucMoveDistance: 164
+                    },
+                    {
+                        big: 'sliderBg1.png',
+                        small: 'sliderSm1.png',
+                        top: 36,
+                        smSucMoveDistance: 105
+                    },
+                    {
+                        big: 'sliderBg2.png',
+                        small: 'sliderSm2.png',
+                        top: 44,
+                        smSucMoveDistance: 172
+                    }
+                ]
+            },
+            isCanLoginStatus: false,//是否可以登录状态
+            email: '',
+            psd:'',
+            MailboxStatus: -1,//邮箱账号状态
+            psdStatus:-1      //密码
+        },
+        mounted: function () {
+            //获取到需要用到的DOM元素
+            this.sliderData.box = getEle("#box"),//容器
+            this.sliderData.bgColor = getEle(".bgColor"),//背景色
+            this.sliderData.txt = getEle(".txt"),//文本
+            this.sliderData.slider = getEle(".slider"),//滑块
+            this.sliderData.icon = getEle(".slider>i"),
+            this.sliderData.successMoveDistance = this.sliderData.box.offsetWidth - this.sliderData.slider.offsetWidth,//解锁需要滑动的距离
+            this.sliderData.downX,//用于存放鼠标按下时的位置
+            this.sliderData.isSuccess = false,//是否验证成功的标志，默认不成功
+            this.sliderData.sliderImg = getEle(".sliderImg"),//login页滑块背景图
+            this.sliderData.sliderSmImg = getEle(".sliderSmImg"),//滑块小图片
+            this.sliderData.errorIcon = getEle(".slider_error_icon"),
+            this.sliderData.txtSpan = getEle(".txt_span"),
+            this.sliderData.smImgExist = true,
+            this.setSlider(0);
+        },
+        methods: {
+            closeLogin: function () {
+                footer.loginStatus = false;
+            },
+            //选择确认或者不确认
+            selectRemember: function () {
+                this.checkedflag = !this.checkedflag;
+            },
+            addFocus: function (n) {
+                if (n == 1) {
+                    this.focusStatus1 = true;
+                } else if (n == 0) {
+                    this.focusStatus1 = false;
+                }
+                if (n == 2) {
+                    this.focusStatus2 = true;
+                } else if (n == 3) {
+                    this.focusStatus2 = false;
+                }
+            },
+            //为滑块大图小图还有成功距离设置
+            setSlider:function(index){
+                this.bigBg = "url(/Content/images/" + this.sliderData.sliderImgs[index].big + ")";
+                this.smBg = "url(/Content/images/" + this.sliderData.sliderImgs[index].small + ")";
+                this.sliderData.smSuccessMoveDistance = this.sliderData.sliderImgs[index].smSucMoveDistance;//小图成功移动的距离(用于login页面的滑块验证)
+                this.smTop = this.sliderData.sliderImgs[index].top + "px";
+            },
+            //鼠标按下事件的方法实现
+            mousedownHandler: function (e) {
+                var randIndex = rand(this.sliderData.sliderImgs.length);
+                this.setSlider(randIndex);
+                this.sliderData.successMoveDistance = this.sliderData.box.offsetWidth - this.sliderData.slider.offsetWidth,//解锁需要滑动的距离
+                this.sliderData.bgColor.style.transition = "";
+                this.sliderData.slider.style.transition = "";
+                this.sliderData.errorIcon.style.display = "none";
+                $(".txt_span").removeClass("error");
+                $(".txt_span").text("请向右拖动滑块完成验证");
+                this.sliderData.sliderImg.style.display = "block";
+                this.sliderData.sliderSmImg.style.transition = "";
+                this.sliderData.sliderSmImg.style.left =10+ "px";
+                var e = e || window.event || e.which;
+                this.sliderData.downX = e.clientX;
+                //在鼠标按下时，分别给鼠标添加移动和松开事件
+                document.onmousemove = this.mousemoveHandler;
+                document.onmouseup = this.mouseupHandler;
+            },
+            //鼠标移动事件的方法实现
+            mousemoveHandler:function(e) {
+                var e = e || window.event || e.which;
+                var moveX = e.clientX;
+                var offsetX = getOffsetX(moveX - this.sliderData.downX, 0, this.sliderData.successMoveDistance);
+                this.sliderData.bgColor.style.width = offsetX + 46 + "px";
+                this.sliderData.slider.style.left = offsetX - 2 + "px";
+                this.sliderData.sliderSmImg.style.left = offsetX - 2 + "px";
+                this.sliderData.errorIcon.style.display = "none";
+                $(".txt_span").removeClass("error");
+                $(".txt_span").text("请向右拖动滑块完成验证");
+                //如果不设置滑块滑动时会出现问题（阻止 浏览器 默认事件）
+                if (e.preventDefault) {
+                    e.preventDefault();
+                } else {
+                    e.returnValue = false;
+                };
+            },
+            //鼠标松开事件的方法实现
+            mouseupHandler:function(e) {
+                var e = e || window.event || e.which;
+                var moveX = e.clientX;
+                var offsetX = getOffsetX(moveX - this.sliderData.downX, 0, this.sliderData.successMoveDistance);
+                if (!this.sliderData.isSuccess) {
+                    this.sliderData.bgColor.style.transition = "";
+                    this.sliderData.slider.style.transition = "";
+                    if (offsetX >= this.sliderData.smSuccessMoveDistance - 3 && offsetX <= this.sliderData.smSuccessMoveDistance + 3) {
+                        this.success();
+                    } else {
+                        this.sliderData.bgColor.style.width = 0 + "px";
+                        this.sliderData.slider.style.left = 0 + "px";
+                        this.sliderData.errorIcon.style.display = "block";
+                        $(".txt_span").addClass("error");
+                        $(".txt_span").text("验证未通过");
+                        this.sliderData.sliderImg.style.display = "none";
+                        this.sliderData.sliderSmImg.style.left = 10 + "px";
+                    }
+                }
+                document.onmousemove = null;
+                document.onmouseup = null;
+            },
+            //滑块成功
+            success: function () {
+                this.sliderData.sliderSmImg.style.left = this.sliderData.smSuccessMoveDistance - 2 + "px";
+                this.sliderData.bgColor.style.backgroundColor = "#FAA613";
+                this.sliderData.slider.className = "slider active";
+                this.sliderData.slider.style.backgroundColor = "#FAA613";
+                this.sliderData.box.style.backgroundColor = "#FAA613";
+                this.sliderData.bgColor.style.width = this.sliderData.successMoveDistance + "px";
+                this.sliderData.slider.style.left = this.sliderData.successMoveDistance - 2 + "px";
+                this.sliderData.txt.innerHTML = "验证通过";
+                this.sliderData.txt.style.color = "#FFFFFF";
+                this.sliderData.txt.style.zIndex = 100;
+                this.sliderData.sliderImg.style.display = "none";
+                this.sliderData.errorIcon.style.display = "none";
+                $(".txt_span").removeClass("error");
+                $(".txt_span").text("请向右拖动滑块完成验证");
+                this.sliderData.isSuccess = true;
+                this.isCanLogin();
+                //滑动成功时，移除鼠标按下事件和鼠标移动事件
+                this.sliderData.slider.onmousedown = null;
+                document.onmousemove = null;
+            },
+            inputEmail: function () {
+                if (this.email != '') {
+                    this.MailboxStatus = 1;
+                } else {
+                    this.MailboxStatus = -1;
+                }
+                this.isCanLogin();
+            },
+            inputPsd: function () {
+                if (this.psd != '') {
+                    this.psdStatus = 1;
+                } else {
+                    this.psdStatus = -1;
+                }
+                this.isCanLogin();
+            },
+            isCanLogin: function () {
+                if (this.MailboxStatus == 1
+                        && this.psdStatus == 1
+                        && this.sliderData.isSuccess) {
+                    this.isCanLoginStatus = true;
+                } else {
+                    this.isCanLoginStatus = false;
+                }
+            },
+            login: function () {
+                console.log("登录")
+            }
+        }
+    })
+</script>

@@ -1,0 +1,338 @@
+﻿@{
+    ViewBag.Title = "付款记录";
+}
+
+<div id="payment" class="payment" v-cloak>
+    <div class="nav_box">
+        <div class="datebox">
+            <p class="fl start_Date" v-if="indexData.startValue!=''" v-on:click="openPicker('picker1')">{{indexData.startValue}}</p>
+            <p class="fl start_Date" v-if="indexData.startValue==''" style="color:#999999" v-on:click="openPicker('picker1')">开始日期</p>
+            <span class="fl">至</span>
+            <p class="fl end_Date" v-if="indexData.endValue!=''" v-on:click="openPicker('picker2')">{{indexData.endValue}}</p>
+            <p class="fl end_Date" v-if="indexData.endValue==''" style="color:#999999" v-on:click="openPicker('picker2')">结束日期</p>
+        </div>
+        <mt-datetime-picker class="picker_show"
+                            ref="picker1"
+                            type="date"
+                            v-on:confirm="handleConfirm('startValue','startDate')"
+                            v-model="indexData.startDate"></mt-datetime-picker>
+        <mt-datetime-picker class="picker_show"
+                            ref="picker2"
+                            type="date"
+                            v-on:confirm="handleConfirm('endValue','endDate')"
+                            v-model="indexData.endDate"></mt-datetime-picker>
+        <button class="btn_search" v-on:click="query">查询</button>
+    </div>
+    <div class="total_account">
+        <ul>
+            <li>
+                <p>{{indexData.formData.TotalAmount}}</p>
+                <p>已支付</p>
+            </li>
+            <li></li>
+            <li>
+                <p>{{indexData.formData.ClearAmount}}</p>
+                <p>已入账</p>
+            </li>
+            <li></li>
+            <li>
+                <p>{{indexData.formData.UnClearAmount}}</p>
+                <p>入账中</p>
+            </li>
+        </ul>
+    </div>
+    <div class="nav_list">
+        <span v-bind:class="{'active':indexData.navStatus=='All'}" v-on:click="clickNav('All')">全部</span>
+        <span v-bind:class="{'active':indexData.navStatus=='Week'}" v-on:click="clickNav('Week')">最近7天</span>
+        <span v-bind:class="{'active':indexData.navStatus=='Month'}" v-on:click="clickNav('Month')">最近30天</span>
+    </div>
+    <div class="nodata" v-if="!indexData.isNullOrder">
+        <p>暂无数据</p>
+    </div>
+    <div v-else class="payRecord set_scroll" v-infinite-scroll="loadMore" ref="viewBox1" v-on:scroll="ss('viewBox1')" 
+         infinite-scroll-disabled="indexData.infiniteScroll"
+         infinite-scroll-distance="20"
+         infinite-scroll-immediate-check="false">
+        <ul class="month">
+            <li class="month_li" v-for="item in indexData.getdata">
+                <div class="title">
+                    <p>{{item.name}}</p>
+                </div>
+                <ul class="day">
+                    <li class="day_li" v-for="child in groupBy(item.nodes,'WeekDay',false)">
+                        <div class="detail clearfix">
+                            <div class="datedetail fl">
+                                <p>{{child.nodes[0].DaysDate}}</p>
+                                <p>{{child.nodes[0].WeeksDate}}</p>
+                            </div>
+                            <div class="content_right fl">
+                                <ul class="detail_list">
+                                    <li v-for="grandchild in groupBy(child.nodes,'ID',false)" v-on:click="closeItem(grandchild.nodes[0].ID)">
+                                        <div class="clearfix detail_up" >
+                                            <div class="wrap_left">
+                                                <p class="account">付款账户：{{grandchild.nodes[0].AccountName}}</p>
+                                                <span>付款金额：{{grandchild.nodes[0].Amount}}</span>
+                                                <span>已入账金额：{{grandchild.nodes[0].ClearAmount}}</span>
+                                            </div>
+                                            <div class="wrap_right">
+                                                <span class="mr30" v-on:click.stop="OpenDetail(grandchild.nodes[0].ID)">明细</span>
+                                                <span v-if="indexData.status!=grandchild.nodes[0].ID" v-on:click.stop="closeItem(grandchild.nodes[0].ID)" class="order_icon el-icon-arrow-down"></span>
+                                                <span v-else class="order_icon el-icon-arrow-up" v-on:click.stop="closeItem(grandchild.nodes[0].ID)"></span>
+                                            </div>
+                                        </div>
+                                        <div v-if="indexData.status==grandchild.nodes[0].ID" class="detail_down">
+                                            <div class="detail_content">
+                                                <span>付款日期：</span>
+                                                <span>{{grandchild.nodes[0].CreateDate}}</span>
+                                            </div>
+                                            <div class="detail_content">
+                                                <span>流水号：</span>
+                                                <span>{{grandchild.nodes[0].SeqNo}}</span>
+                                            </div>
+                                            <div class="detail_content">
+                                                <span>付款账户：</span>
+                                                <span>{{grandchild.nodes[0].AccountName}}</span>
+                                            </div>
+                                            <div class="detail_content">
+                                                <span>付款金额：</span>
+                                                <span>{{grandchild.nodes[0].Amount}}</span>
+                                            </div>
+                                            <div class="detail_content">
+                                                <span>已入账金额：</span>
+                                                <span>{{grandchild.nodes[0].ClearAmount}}</span>
+                                            </div>
+                                            <div class="detail_content">
+                                                <span>操作：</span>
+                                                <span class="check_detail" v-on:click.stop="OpenDetail(grandchild.nodes[0].ID)">查看明细</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <div class="order_kindmore">
+            <mt-spinner v-if="indexData.allTotal>indexData.orginData.length&&indexData.infiniteScroll==false" type="fading-circle"></mt-spinner>
+            <p v-if="indexData.allTotal==indexData.orginData.length&&indexData.infiniteScroll==true&&indexData.allTotal>10">全部加载完成</p>
+        </div>
+    </div>
+</div>
+<script>
+    var payment = new Vue({
+        el: "#payment",
+        data: {
+            indexData: {
+                orginData:[],
+                formData:@Html.Raw(Json.Encode(Model)),
+                getdata: [], //全部订单
+                allIndex: 1,  //全部订单已加载多少页
+                allRows: 10,   //全部订单每页加载的条数
+                allTotal: 0,    //全部订单一共多少条
+                scrollTop: 0, //滚动条位置
+                infiniteScroll: false,
+                navStatus: 'All',
+                startValue: "",
+                endValue:"",
+                startDate: new Date(),
+                endDate: new Date(),
+                isLoading: false,
+                status: "",
+                isNullOrder:true,
+            },
+        },
+        computed: {
+            orginData: function () {
+                return this.indexData.orginData;
+            },
+             isLoading: function () {
+                return this.indexData.isLoading;
+            },
+        },
+        watch: {
+            isLoading: function (val) {
+                this.loading(val);
+            },
+            orginData: function (value) {
+                this.indexData.getdata = this.groupBy(value,"ReceiptDate");
+            }
+        },
+        mounted: function () {
+            var userJsonStr = sessionStorage.getItem('payment');
+            userEntity = JSON.parse(userJsonStr);
+            if (userEntity == null) {
+                this.getData(true);
+            } else {
+                this.indexData = userEntity;
+                this.$nextTick(() => {
+                    this.$refs['viewBox1'].scrollTop = this.indexData.scrollTop;
+                })
+                sessionStorage.removeItem('payment');
+            }
+           
+        },
+        methods: {
+            OpenDetail: function (ID) {
+                sessionStorage.setItem('payment', JSON.stringify(this.indexData));
+                location.href = "/Order/MyOrderRecieved/"+ID;
+            },
+            query: function () {
+                if (this.indexData.startValue == '') {
+                    this.$toast("请选择开始日期");
+                    this.$refs["picker1"].open();
+                    return;
+                }
+                if (this.indexData.endValue == '') {
+                    this.$toast("请选择结束日期");
+                    this.$refs["picker2"].open();
+                    return;
+                }
+                if (this.indexData.endDate < this.indexData.startDate) {
+                    this.$toast("结束日期不能大于开始日期");
+                    return;
+                }
+                var start = this.indexData.startValue;
+                var end = this.indexData.endValue;
+                this.refreshData();
+                this.indexData.startValue = start;
+                this.indexData.endValue = end;
+                this.getData(true)
+            },
+            handleConfirm: function (newValue,value) {
+                var string = (this.indexData[value]).format("yyyy-MM-dd")
+                this.indexData[newValue] = string;
+            },
+            openPicker:function(picker) {
+                this.$refs[picker].open();
+            },
+            refreshData: function () {
+                this.indexData.orginData = [];
+                this.indexData.getdata = [];
+                this.indexData.allIndex = 1;
+                this.indexData.allRows = 10;
+                this.indexData.allTotal = 0;
+                this.indexData.infiniteScroll = false;
+                this.indexData.navStatus = "";
+                this.indexData.startValue = "";
+                this.indexData.endValue = "";
+                this.indexData.isLoading = false;
+                this.indexData.status = "";
+                this.indexData.isNullOrder = true;
+            },
+            //加载
+            loading: function (val) {
+                if (val) {
+                    this.$indicator.open();
+                } else {
+                    this.$indicator.close();
+                }
+            },
+            ss: function (ref) {
+                // 监听这个dom的scroll事件
+                this.$refs[ref].addEventListener('scroll', () => {
+                    this.indexData.scrollTop = this.$refs[ref].scrollTop;
+                }, false)
+            },
+            clickNav: function (nav) {
+                this.refreshData();
+                this.indexData.navStatus = nav;
+                this.getData(true);
+            },
+            getData: function (isLoading) {
+                var that = this;
+                //that.indexData.infiniteScroll = true;
+                that.indexData.isLoading = isLoading;
+                axios({
+                    url: "/Order/GetMyReceiptNotices",
+                    method: "post",
+                    data: {
+                        page: this.indexData.allIndex,
+                        rows: this.indexData.allRows,
+                        dateNav: this.indexData.navStatus,
+                        startDate: this.indexData.startValue,
+                        endDate: this.indexData.endValue,
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                    transformRequest: [function (data) {
+                        var ret = ''
+                        for (var it in data) {
+                            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+                        }
+                        return ret;
+                    }],
+                }).then(function (response) {
+
+                    var data = JSON.parse(response.data.data);
+                    that.indexData.allTotal = data.total;
+                    that.indexData.orginData = that.indexData.orginData.concat(data.list);
+                    that.indexData.isLoading = false;
+                    if (that.indexData.orginData.length == that.indexData.allTotal) {
+                        that.indexData.infiniteScroll = true;
+                    } else {
+                        that.indexData.infiniteScroll = false;
+                    }
+                    if (that.indexData.orginData.length == 0) {
+                        that.indexData.isNullOrder = false;
+                    } else {
+                        that.indexData.isNullOrder = true;
+                    }
+                }).catch(function (error) {
+                    that.$toast("系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            loadMore: function () { //滚动后触发的事件
+                if (this.indexData.allTotal == 0) {
+                    this.indexData.infiniteScroll = true;
+                }
+                if (!this.indexData.infiniteScroll) {
+                    this.indexData.allIndex++;
+                    this.getData(false); //中间的加载消失，显示底部加载
+                }
+            },
+            closeItem: function (id) {
+                if (this.indexData.status == id) {
+                    this.indexData.status = "";
+                } else {
+                    this.indexData.status = id;
+                }
+            },
+            groupBy: function (data, keyname, isReverse) {
+                var oldDataRule = []
+                data.forEach(el => {
+                    var oldObj = {
+                        name: el[keyname],
+                        nodes: []
+                    }
+                    oldObj.nodes.push(el)
+                    oldDataRule.push(oldObj)
+                })
+                /**
+                 * 先去重，后合并
+                */
+                var newData = []
+                var newObj = {}
+                oldDataRule.forEach((el, i) => {
+                    if (!newObj[el.name]) {
+                        newData.push(el);
+                        newObj[el.name] = true;
+                    } else {
+                        newData.forEach(el => {
+                            if (el.name === oldDataRule[i].name) {
+                                el.nodes = el.nodes.concat(oldDataRule[i].nodes);
+                            }
+                        })
+                    }
+                })
+                if (isReverse) {
+                    return newData.reverse();
+                } else {
+                    return newData ;
+                }
+            }
+        },
+    })
+</script>

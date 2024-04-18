@@ -1,0 +1,196 @@
+﻿
+@{
+    ViewBag.Title = "付款记录";
+    Layout = "~/Views/Shared/_LayoutCenter.cshtml";
+    ViewBag.navid = "MyPayment";
+}
+
+<div class="content_right backshow">
+    <h2>付款记录</h2>
+    <div id="myPayment" v-cloak>
+        <div class="payment_nav">
+            <div class="detail_query">
+                <div class="links">
+                    <a v-bind:class="{'active':indexData.navStatus=='All'}" v-on:click="clickNav('All')">全部</a>
+                    <a v-bind:class="{'active':indexData.navStatus=='Week'}" v-on:click="clickNav('Week')">最近7天</a>
+                    <a v-bind:class="{'active':indexData.navStatus=='Month'}" v-on:click="clickNav('Month')">最近30天</a>
+                </div>
+                <div class="datebox">
+                    <el-date-picker v-model="indexData.dataValue"
+                                    type="daterange"
+                                    range-separator="至"
+                                    start-placeholder="开始日期"
+                                    end-placeholder="结束日期">
+                    </el-date-picker>
+                </div>
+                <div class="btn_query">
+                    <el-button size="small" icon="el-icon-search" v-on:click="search">查询</el-button>
+                </div>
+            </div>
+            <div class="total_price">
+                <ul>
+                    <li>
+                        <p>{{indexData.formData.TotalAmount}}</p>
+                        <p>已支付</p>
+                    </li>
+                    <li>
+                        <p>{{indexData.formData.ClearAmount}}</p>
+                        <p>已入账</p>
+                    </li>
+                    <li>
+                        <p>{{indexData.formData.UnClearAmount}}</p>
+                        <p>入账中</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div v-loading="indexData.loading" style="min-height:400px;" v-on:scroll="ss('viewBox1')" ref="viewBox1">
+            <div class="tb_detail">
+                <el-table v-if="!indexData.loading" style="width: 100%;margin-bottom:30px" :data="indexData.dataList" stripe>
+                    <el-table-column label="交易流水号" prop="SeqNo">
+                    </el-table-column>
+                    <el-table-column label="收款银行" prop="AccountBankName">
+                    </el-table-column>
+                    <el-table-column label="付款金额" prop="Amount">
+                    </el-table-column>
+                    <el-table-column label="已入账金额" prop="ClearAmount">
+                    </el-table-column>
+                    <el-table-column label="付款日期" prop="ReceiptDate">
+                    </el-table-column>
+                    <el-table-column label="操作" fixed="right">
+                        <template slot-scope="scope">
+                            <el-button size="mini" v-on:click="openDetail(scope.row)">查看明细</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <div class="foot" v-if="!indexData.loading">
+                    <el-pagination style="float:right;margin-bottom:30px;" v-on:size-change="handleSizeChange"
+                                   v-on:current-change="handleCurrentChange"
+                                   :current-page="indexData.pageIndex"
+                                   :page-sizes="[5, 10, 20, 40]"
+                                   :page-size="indexData.pageSize"
+                                   layout="total, sizes, prev, pager, next, jumper"
+                                   :total="indexData.formData.Total">
+                    </el-pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var myPayment = new Vue({
+        el: "#myPayment",
+        data: function () {
+            return {
+                indexData:{
+                    formData:@Html.Raw(Json.Encode(Model)),
+                    dataList: [],
+                    loading: true,
+                    dataValue: '',
+                    navStatus: 'All',
+                    pageIndex: 1, //初始页
+                    pageSize: 5,    //每页的数据
+                    startDate: "",
+                    endDate: "",
+                    scrollTop: 0, //滚动条位置
+                }
+            }
+        },
+        mounted: function () {
+            var that = this;
+            var userJsonStr = sessionStorage.getItem('MyPayment');
+            userEntity = JSON.parse(userJsonStr);
+            if (userEntity == null) {
+                that.paging();
+            } else {
+                that.indexData = userEntity;
+                that.$nextTick(function () {
+                    that.$refs['viewBox1'].scrollTop = that.indexData.scrollTop;
+                })
+
+                sessionStorage.removeItem('MyPayment');
+            }
+        },
+        methods: {
+            ss: function (ref) {
+                // 监听这个dom的scroll事件
+                var that = this;
+                this.$refs[ref].addEventListener('scroll', function () {
+                    that.indexData.scrollTop = that.$refs[ref].scrollTop;
+                }, false)
+            },
+            search: function () {
+                if (this.indexData.dataValue != "" && this.indexData.dataValue != null) {
+                    this.indexData.navStatus = "";
+                    var start = new Date(this.indexData.dataValue[0]);
+                    var startDate = start.getFullYear() + '-' + (start.getMonth() + 1) + '-' + start.getDate();
+                    var end = new Date(this.indexData.dataValue[1]);
+                    var endDate = end.getFullYear() + '-' + (end.getMonth() + 1) + '-' + end.getDate();
+                    this.indexData.startDate = startDate;
+                    this.indexData.endDate = endDate;
+                    this.paging();
+                }
+            },
+            clickNav: function (nav) {
+                this.indexData.navStatus = nav;
+                this.indexData.startDate = "";
+                this.indexData.endDate = "";
+                this.indexData.dataValue = "";
+                this.paging();
+            },
+            openDetail: function (row) {
+                sessionStorage.setItem('MyPayment', JSON.stringify(this.indexData));
+                location.href = "/PaymentRecord/Details/" + row.ID;
+            },
+            // 初始页currentPage、初始每页数据数pagesize和数据data
+            handleSizeChange: function (size) {
+                this.indexData.pageSize = size;
+                this.paging();
+            },
+            handleCurrentChange: function (currentPage) {
+                this.indexData.pageIndex = currentPage;
+                this.paging();
+            },
+            paging: function () {
+                var that = this;
+                that.indexData.loading = true;
+                axios({
+                    url: "/PaymentRecord/GetMyPaymentList",
+                    method: "post",
+                    data: {
+                        page: this.indexData.pageIndex,
+                        rows: this.indexData.pageSize,
+                        dateNav: this.indexData.navStatus,
+                        startDate: this.indexData.startDate,
+                        endDate: this.indexData.endDate,
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                    transformRequest: [function (data) {
+                        var ret = ''
+                        for (var it in data) {
+                            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+                        }
+                        return ret;
+                    }],
+                }).then(function (response) {
+                    var data = JSON.parse(response.data.data);
+                    that.indexData.dataList = data.list;
+                    that.indexData.formData.Total = data.total;
+                    that.indexData.loading = false;
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                });
+            },
+        }
+    });
+</script>

@@ -1,0 +1,190 @@
+﻿@model WebWeChat.Models.MobileViewModel
+    @{
+        ViewBag.Title = "修改手机绑定";
+        Layout = null;
+    }
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>会员中心</title>
+        <link rel="stylesheet" href="~/Content/css/border.css">
+        <link rel="stylesheet" href="~/Content/css/reset.css">
+        <link rel="stylesheet" href="~/Content/css/index.css">
+        <link rel="stylesheet" href="~/Content/css/element.css">
+        <link rel="stylesheet" href="~/Content/css/mint-ui.css">
+        <script src="~/Scripts/vue.js"></script>
+        <script src="~/Scripts/elementui.js"></script>
+        <script src="~/Scripts/mint-ui.js"></script>
+        <script src="~/Scripts/axios.min.js"></script>
+        <script src="~/Scripts/Shared/Common.js"></script>
+    </head>
+    <body>
+        <div class="second_header">
+            <a onClick="javascript :history.back(-1);"><span class="el-icon-arrow-left icon"></span></a>
+            <div class="second_nav">
+                <span class="header-title">修改手机绑定</span>
+            </div>
+        </div>
+        <div id="phone_bindings" class="bind_user">
+            <div class="bind_content">
+                <div class="bind_content_box">
+                    <div class="input_box">
+                        <span class="input_laber">原手机号:</span>
+                        <span>
+                            <el-input placeholder="请输入原手机号码" v-model="fromdata.Phone" v-on:blur="old_phone"></el-input>
+                            <p v-if='is_old_phone==1' class="error_content">原手机号不能为空</p>
+                            <p v-if='is_old_phone==2' class="error_content">请注意！您输入的手机号过长</p>
+                        </span>
+                    </div>
+                    <div class="input_box">
+                        <span class="input_laber">新手机号:</span>
+                        <span>
+                            <el-input placeholder="请输入新手机号码" v-model="fromdata.NewPhone" v-on:blur='new_phone'></el-input>
+                        </span>
+                        <p v-if='is_new_phone==1' class="error_content">新手机号不能为空</p>
+                        <p v-else-if='is_new_phone==2' class="error_content">请输入正确的手机号码</p>
+                    </div>
+                    <div class="input_box">
+                        <span class="input_laber">验证码:</span>
+                        <span>
+                            <el-input v-on:blur="codenull" v-model="fromdata.Code" placeholder="短信验证码" class="verification_code" type="number" pattern="\d*"></el-input>
+                            <button class="getcode_btn" v-if="verification==1" v-on:click="send_code">发送短信</button>
+                            <button class="getcode_btn2" :disabled="flag" v-if="verification==2">重新发送({{code_number}})</button>
+                            <button class="getcode_btn" v-if="verification==3" v-on:click="send_code">重新发送</button>
+                        </span>
+                        <p v-if='is_codenull==1' class="error_content">验证码不能为空</p>
+                    </div>
+                    <div class="sumbit_btn" v-on:click="sumbit_from">
+                        <div class="sumbit_btn_span">保存</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+<script>
+    var phone_bindings = new Vue({
+        el: "#phone_bindings",
+        data: {
+            fromdata: @Html.Raw(Json.Encode(Model)),
+            is_old_phone: 0,
+            is_new_phone: 0,
+            is_codenull: 0,
+            code_number: 0,
+            flag: false,
+            verification: 1,
+
+        },
+        methods: {
+            old_phone: function () {
+                if (this.fromdata.Phone == "") {
+                    this.is_old_phone = 1
+                }
+                else {
+                    this.is_old_phone = 0
+                }
+            },
+            new_phone: function () {
+                if (this.fromdata.NewPhone == "") {
+                    this.is_new_phone = 1
+                } else if (!ValidMobile(this.fromdata.NewPhone)) {
+                    this.is_new_phone = 2
+                } else {
+                    this.is_new_phone = 0
+                }
+            },
+            codenull: function () {
+                if (this.fromdata.Code == "") {
+                    this.is_codenull = 1
+                } else {
+                    this.is_codenull = 0
+                }
+            },
+            sumbit_from: function () {
+                this.old_phone();
+                this.new_phone();
+                this.codenull();
+
+                if (this.is_old_phone == 0 && this.is_new_phone == 0 && this.is_codenull == 0) {
+                    axios({
+                        url: "/Account/Mobile",
+                        method: "post",
+                        data: phone_bindings.fromdata,
+                    }).then(function (response) {
+                        if (response.data.type == "success") {
+                            phone_bindings.$toast({
+                                message: response.data.msg,
+                                iconClass: 'icon el-icon-check',
+                                duration: 1000
+                            });
+
+                            setTimeout(() => {
+                                window.location.href = "/Account/Settings";
+                            }, 1000);
+                            
+                        } else {
+                            phone_bindings.$toast({
+                                message: response.data.msg,
+                                iconClass: 'icon el-icon-close',
+                                duration: 1000
+                            })
+                        }
+                    }).catch(function (error) {
+                        phone_bindings.$toast({
+                            message: '系统发生错误，请稍后重试或联系客服',
+                            iconClass: 'icon el-icon-close',
+                            duration: 1000
+                        })
+                    });
+                }
+            },
+            send_code: function () {
+                this.new_phone();
+
+                if (this.is_new_phone == 0) {
+                    axios({
+                        url: "/Account/SendCode",
+                        method: "post",
+                        data: {
+                            phone: phone_bindings.fromdata.NewPhone
+                        },
+                    }).then(function (response) {
+                        if (response.data.type == "success") {
+                            phone_bindings.code_number = 60;
+                            phone_bindings.flag = true;
+                            var countdown = phone_bindings.code_number;
+                            phone_bindings.verification = 2;
+                            var that = phone_bindings;
+                            var times = setInterval(function () {
+                                countdown--;
+                                that.verification = 2;
+                                that.code_number = countdown;
+                                if (countdown == 0) {
+                                    phone_bindings.flag = false;
+                                    clearInterval(times);
+                                    that.verification = 3;
+                                }
+                            }, 1000);
+                        } else {
+                            phone_bindings.$toast({
+                                message: '发送短信失败',
+                                iconClass: 'icon el-icon-close'
+                            });
+                        }
+                    }).catch(function (error) {
+                        console.log(error);
+                        phone_bindings.$toast({
+                            message: '系统发生错误，请稍后重试或联系客服',
+                            iconClass: 'icon el-icon-close'
+                        });
+                    });
+                }
+            }
+        },
+
+    })
+</script>

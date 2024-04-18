@@ -1,0 +1,43 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <meta charset="utf-8" />
+
+    [HeaderSrcContext]
+
+</head>
+<body>
+    <script>
+        $(function () {
+            var context = '[context]';
+            var title = '[title]';
+            var url = '[url]';
+            var closed = eval('[closed]');
+            var isTopRedirect = eval('[isTopRedirect]');
+            var myAlert;
+
+            if (top.$ == $) {
+                myAlert = $.messager.alert;
+            } else {
+                myAlert = top.$.messager.alert;
+            }
+
+            myAlert(title, context, 'info', function () {
+                if (closed) {
+                    $.myWindow.close();
+                }
+                if (url.length > 0) {
+                    if (isTopRedirect) {
+                        top.location.replace(url);
+                    } else {
+                        location.replace(url);
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

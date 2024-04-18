@@ -1,0 +1,647 @@
+﻿@model WebMvc.Models.ApplyViewModel
+@{
+    ViewBag.Title = "付汇申请";
+    Layout = "~/Views/Shared/_LayoutCenter.cshtml";
+    ViewBag.navid = "UnPayExchanges";
+}
+<div id="apply" v-cloak class="center_right backshow fl">
+    <div class="breaklist">
+        <span  class="fl first_title">付汇申请</span>
+        <span v-on:click="history.back(-1)" class="fl second_title">返回</span>
+    </div>
+    <div class="content" style="min-height:700px;padding:30px 20px 60px 20px;">
+        <el-form :model="datalist" ref="ruleForm" label-width="185px">
+            <div class="procuctlist">
+                <span class="name">付汇申请</span>
+                <el-table id="addtable" :data="datalist.UnPayExchangeOrders" row-style="height:30px" ref="addtable" class="tb-edit el-tb-edit mt20" style="width: 100%" highlight-current-row>
+                    <el-table-column fixed="left" type="index" width="45">
+                    </el-table-column>
+                    <el-table-column prop="ID" label="订单编号" width="180">
+                    </el-table-column>
+                    <el-table-column label="币种" width="120">
+                        <template scope="scope">
+                            <span>{{datalist.Currency}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="报关总价" width="100">
+                        <template scope="scope">
+                            <span>{{toFixed(2,scope.row.DeclarePrice)}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="已付金额" prop="PaidExchangeAmount" width="100">
+                    </el-table-column>
+                    <el-table-column label="可申请金额" width="100">
+                        <template scope="scope">
+                            <span>
+                                {{allowApplyMoney(scope.row.DeclarePrice,scope.row.PaidExchangeAmount)}}
+                            </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="本次申请金额" prop="CurrentPaidAmount" width="122">
+                        <template scope="scope">
+                            <el-input v-if="scope.row.IsMatchSupplier == false" size="mini" v-model="scope.row.CurrentPaidAmount" v-on:blur="validTotalPrice(scope.row)"></el-input>
+                            <span v-else>{{scope.row.CurrentPaidAmount}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column fixed="right" label="操作" width="80">
+                        <template slot-scope="scope">
+                            <el-button style="padding-left:2px" v-on:click.native.prevent="handleDelete(scope.$index, scope.row)" type="text" icon="el-icon-delete"></el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </div>
+            <div class="pifile mt40">
+                <span class="name"><i class="icon_hui_fujian mr6"></i>合同发票(INVOICE LIST)</span>
+                <div class="item_div" style="font-size:12px;">
+                    <el-upload style="margin-top:20px;width:405px;"
+                               multiple
+                               action="/Orders/UploadOrderFile"
+                               :http-request="httpRequestPI"
+                               accept="image/jpg, image/bmp, image/jpeg, image/gif, image/png, application/pdf"
+                               :show-file-list="false">
+                        <el-button size="small" type="primary" class="el-icon-ump-upload"> 选择文件</el-button>
+                        <div slot="tip" class="el-upload__tip">仅限图片或PDF文件，且文件不超过3M</div>
+                    </el-upload>
+                    <el-table id="addtable" :data="datalist.PayExchangeApplyFiles" row-style="height:30px" ref="addtable" class="tb-edit el-tb-edit mt20" style="width: 100%" highlight-current-row>
+                        <el-table-column prop="name" label="文件名" width="440">
+                        </el-table-column>
+                        <el-table-column label="状态" width="363">
+                            <template slot-scope="scope">
+                                <span>待审核</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column fixed="right" label="操作" width="">
+                            <template slot-scope="scope">
+                                <el-tooltip class="item" effect="dark" content="查看" placement="bottom">
+                                    <el-button style="padding-left:2px" v-on:click.native.prevent="download_file(scope.row.fullURL)" type="text" icon="el-icon-search"></el-button>
+                                </el-tooltip>
+                                <el-tooltip class="item" effect="dark" content="删除" placement="bottom">
+                                    <el-button style="padding-left:2px" v-on:click.native.prevent="handleDeletefile(scope.$index, scope.row)" type="text" icon="el-icon-delete"></el-button>
+                                </el-tooltip>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                    <a id="exportInfoForm" style="display:none" download><span id="ex-li" style="display:none"></span></a>
+                </div>
+            </div>
+            <div class="supplier mt40">
+                <span class="name">供应商信息</span>
+                <div class=" item_div overhide mt20">
+                    <el-form-item label="供应商名称:" prop="Supplier" :rules="[{ required: true, message: '请选择供应商', trigger: 'change' }]">
+                        <el-select v-model="datalist.Supplier" style="width:405px;" v-on:change="changeSupplier" filterable clearable placeholder="请选择">
+                            <el-option v-for="item in SupplierOptions"
+                                       :key="item.ID"
+                                       :label="item.ChineseName"
+                                       :value="item.ID">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="供应商地址:">
+                        <el-select v-model="datalist.SupplierAddress" style="width:405px;" filterable clearable placeholder="请选择">
+                            <el-option v-for="item in SupplierAddressOptions"
+                                       :key="item.value"
+                                       :label="item.text"
+                                       :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="供应商公司全称(英文):">
+                        <el-input readonly v-model="datalist.SupplierEnglishName" style="width:405px;" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="供应商银行名称(英文):" prop="SupplierBank" :rules="[{ required: true, message: '请选择供应商银行名称(英文)', trigger: 'change' }]">
+                        <el-select v-model="datalist.SupplierBank" style="width:405px;" filterable clearable placeholder="请选择">
+                            <el-option v-for="item in SupplierBankOptions"
+                                       :key="item.value"
+                                       :label="item.text"
+                                       :value="item.value">
+                            </el-option>
+                        </el-select>
+                        <br>
+                        <div v-show="bankSensitiveFlag == 2" class="el-form-item__error">
+                            此银行涉及敏感地区，无法申请付汇
+                        </div>
+                    </el-form-item>
+                    <el-form-item label="供应商银行地址(英文):">
+                        <el-input readonly v-model="datalist.SupplierBankAddress" style="width:405px;" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="银行账号:">
+                        <el-input readonly v-model="datalist.SupplierBankAccount" style="width:405px;" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="银行代码:">
+                        <el-input readonly v-model="datalist.SupplierBankCode" style="width:405px;" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="期望付汇日期:">
+                        <el-date-picker type="date" :picker-options="pickerOptions1" placeholder="请选择期望付汇日期" v-model="datalist.ExpectDate" style="width:405px;"></el-date-picker>
+                    </el-form-item>
+                    <el-form-item label="付款方式:" prop="PayType" :rules="[{ required: true, message: '请选择付款方式', trigger: 'change' }]">
+                        <el-select v-model="datalist.PayType" style="width:405px;" filterable clearable placeholder="请选择">
+                            <el-option v-for="item in PayTypeOptions"
+                                       :key="item.value"
+                                       :label="item.text"
+                                       :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="其他相关资料:" prop="Others" :rules="[{max:500, message: '其他相关资料长度不超过500', trigger: 'blur' }]">
+                        <el-input v-model="datalist.Others" type="textarea" style="width:405px;" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="备注:" prop="Summary" :rules="[{max:250, message: '备注长度不超过250', trigger: 'blur' }]">
+                        <el-input v-model="datalist.Summary" type="textarea" style="width:405px;" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <div class="tips">
+                        <p>我司账户信息如下：</p>
+                        <div class="mt6">
+                            <p>开户行：{{datalist.Account}}</p>
+                            <p>开户名：{{datalist.AgentName}}</p>
+                            <p>账号：{{datalist.AccountID}}</p>
+                        </div>
+                    </div>
+                    <el-button size="medium" type="primary" v-on:click="onSubmit" class="submit">提交申请</el-button>
+                </div>
+            </div>
+        </el-form>
+    </div>
+    <el-dialog title="付汇申请成功" :lock-scroll="false" width="500px" :visible.sync="dialogVisible" v-on:close="closeDialog" :close-on-click-modal="false">
+        <div class="files overhide">
+            <div class="fl download mb10">
+                <el-button v-on:click="downloadPDF" class="el-icon-ump-xiazai">
+                    导出付汇委托书
+                </el-button>
+                <a id="exportInfoForm" style="display:none" download><span id="ex-li" style="display:none"></span></a>
+            </div>
+            <div class="fl upload">
+                <el-upload action="/PayExchanges/UploadOrderFile"
+                           :on-remove="handleRemoveFiles"
+                           :http-request="httpRequestPayProxy"
+                           :file-list="PayProxyFiles"
+                           accept="image/jpg, image/bmp, image/jpeg, image/gif, image/png, application/pdf">
+                    <el-button  size="small" class="el-icon-ump-upload"> 上传付汇委托书</el-button>
+                    <div slot="tip" class="el-upload__tip">仅限图片或pdf文件，且文件不超过3M</div>
+                </el-upload>
+            </div>
+        </div>
+        <div slot="footer" class="dialog-footer">
+            <el-button v-on:click="dialogVisible = false">取 消</el-button>
+            <el-button type="primary" v-on:click="onSubmit_Aggreement">提 交</el-button>
+        </div>
+    </el-dialog>
+
+</div>
+<script>
+    var apply = new Vue({
+        el: "#apply",
+        data: function () {
+            return {
+                dialogVisible: false,
+                datalist:@Html.Raw(Json.Encode(Model)),
+                pickerOptions1: {
+                    disabledDate:function(time) {
+                        var today = new Date();
+                        today.setDate(today.getDate() - 1);
+                        return time < today;
+                    },
+                },
+                PayProxyFiles: [], //付汇委托书
+                bankSensitiveFlag: 1, //银行敏感性标志  1-未检测, 2-已检测,是敏感, 3-已检测,不是敏感
+            }
+        },
+        computed: {
+            //供应商
+            SupplierOptions: function () {
+                return JSON.parse(this.datalist.SupplierOptions);
+            },
+            //供应商银行
+            SupplierBankOptions: function () {
+                return JSON.parse(this.datalist.SupplierBankOptions);
+            },
+            //付款方式
+            PayTypeOptions: function () {
+                return JSON.parse(this.datalist.PayTypeOptions);
+            },
+            //供应商
+            Supplier: function () {
+                return this.datalist.Supplier;
+            },
+            //供应商银行
+            SupplierBank: function () {
+                return this.datalist.SupplierBank;
+            },
+            //供应商地址
+            SupplierAddress: function () {
+                return this.datalist.SupplierAddress;
+            },
+            //供应商地址
+            SupplierAddressOptions: function () {
+                return JSON.parse(this.datalist.SupplierAddressOptions);
+            },
+        },
+        watch: {
+            //供应商
+            Supplier: function (value) {
+                if (this.datalist.SupplierOptions != null) {
+                    var item = JSON.parse(this.datalist.SupplierOptions).filter(function (val) {
+                        if (val.ID == value) {
+                            return val;
+                        }
+                    });
+                    if (item.length != 0) {
+                        apply.datalist.SupplierEnglishName = item[0].EnglishName;
+                        apply.datalist.SupplierName = item[0].ChineseName;
+                    }
+                }
+            },
+            //供应商银行
+            SupplierBank: function (value) {
+                if (this.datalist.SupplierBankOptions != null) {
+                    this.bankSensitiveFlag = 1; //检查银行敏感性标志,置为未检测状态
+
+                    apply.datalist.SupplierBankAddress = "";
+                    apply.datalist.SupplierBankAccount = "";
+                    apply.datalist.SupplierBankCode = "";
+                    apply.datalist.SupplierBankName = "";
+
+                    var item = JSON.parse(this.datalist.SupplierBankOptions).filter(function (val) {
+                        if (val.value == value) {
+                            return val;
+                        }
+                    });
+                    if (item.length != 0) {
+                        apply.datalist.SupplierBankAddress = item[0].address;
+                        apply.datalist.SupplierBankAccount = item[0].account;
+                        apply.datalist.SupplierBankCode = item[0].code;
+                        apply.datalist.SupplierBankName = item[0].text;
+
+                        //检查银行敏感性
+                        this.checkSupplierBankSensitive();
+                    }
+                }
+            },
+            //供应商地址
+            SupplierAddress: function (value) {
+                if (this.datalist.SupplierAddressOptions != null) {
+                    var item = JSON.parse(this.datalist.SupplierAddressOptions).filter(function (val) {
+                        if (val.value == value) {
+                            return val;
+                        }
+                    });
+                    if (item.length != 0) {
+                        apply.datalist.SupplierAddressName = item[0].text;
+                    }
+                }
+            },
+        },
+        methods: {
+            //提交委任书
+            onSubmit_Aggreement: function () {
+                if (this.PayProxyFiles.length == 0) {
+                    apply.onAlert("warning", "请上传付汇委托书！");
+                } else {
+                    var list = this.PayProxyFiles[0]
+                    axios({
+                        url: "/PayExchanges/SavePayProxy",
+                        method: "post",
+                        data: {
+                            id: this.datalist.ID,
+                            filename: list.name,
+                            ext: list.fileFormat,
+                            url: list.URL,
+                        },
+                    }).then(function (response) {
+                        this.PayProxyFiles = [];
+                        apply.onAlert(response.data.type, response.data.msg);
+                        setTimeout(function () {  //使用  setTimeout（）方法设定定时2000毫秒
+                            location.href = "/PayExchanges/MyApplies";
+                        }, 2000);
+                    }).catch(function (error) {
+                        apply.onAlert("warning", error);
+                    });
+                }
+            },
+            httpRequestPayProxy: function (options) {
+                var that = this;
+                var file = options.file;
+                var size = file.size / 1024;
+                var imgArr = ["image/jpg", "image/bmp", "image/jpeg", "image/gif", "image/png"];
+                let config = {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                };
+                that.PayProxyFiles = [];
+                if (imgArr.indexOf(file.type) > -1 && size > 500) { //大于500kb的图片压缩
+                    photoCompress(file, { quality: 0.8 }, function (base64Codes) {
+                        var bl = convertBase64UrlToBlob(base64Codes);
+                        var form = new FormData(); // FormData 对象
+                        form.append("file", bl, "file_" + Date.parse(new Date()) + ".jpg"); // 文件对象
+                        //添加请求头
+                        axios.post('/PayExchanges/UploadOrderFile', form, config)
+                            .then(function (response) {
+                                if (response.type != "error") {
+                                    that.PayProxyFiles.push(JSON.parse(response.data.data));
+                                }
+                            });
+                    });
+                } else if (imgArr.indexOf(file.type) <= -1 && size > 3*1024) {
+                    that.onAlert("error", "上传的文件大小不能大于3M");
+                    return;
+                } else {
+                    var form = new FormData(); // FormData 对象
+                    form.append("file", file); // 文件对象
+                    //添加请求头
+                    axios.post('/PayExchanges/UploadOrderFile', form, config)
+                        .then(function (response) {
+                            if (response.type != "error") {
+                                that.PayProxyFiles.push(JSON.parse(response.data.data));
+                            }
+                        });
+                }
+            },
+            httpRequestPI: function (options) {
+                var that = this;
+                var file = options.file;
+                var size = file.size / 1024;
+                var imgArr = ["image/jpg", "image/bmp", "image/jpeg", "image/gif", "image/png"];
+                let config = {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                };
+                if (imgArr.indexOf(file.type) > -1 && size > 500) { //大于500kb的图片压缩
+                    photoCompress(file, { quality: 0.8 }, function (base64Codes) {
+                        var bl = convertBase64UrlToBlob(base64Codes);
+                        var form = new FormData(); // FormData 对象
+                        form.append("file", bl, "file_" + Date.parse(new Date()) + ".jpg"); // 文件对象
+                        //添加请求头
+                        axios.post('/Orders/UploadOrderFile', form, config)
+                            .then(function (response) {
+                                if (response.type != "error") {
+                                    var list = JSON.parse(response.data.data);
+                                    var file = { name: list.name, fileFormat: list.fileFormat, URL: list.URL, fullURL: list.fullURL }
+                                    that.datalist.PayExchangeApplyFiles.push(file);
+                                }
+                            });
+                    });
+                } else if (imgArr.indexOf(file.type) <= -1 && size > 1024*3) {
+                    that.onAlert("error", "上传的文件大小不能大于3M");
+                    return;
+                } else {
+                    var form = new FormData(); // FormData 对象
+                    form.append("file", file); // 文件对象
+                    //添加请求头
+                    axios.post('/Orders/UploadOrderFile', form, config)
+                        .then(function (response) {
+                            if (response.type != "error") {
+                                var list = JSON.parse(response.data.data);
+                                var file = { name: list.name, fileFormat: list.fileFormat, URL: list.URL, fullURL: list.fullURL }
+                                that.datalist.PayExchangeApplyFiles.push(file);
+                            }
+                        });
+                }
+            },
+            //删除付汇委托书
+            handleRemoveFiles: function (file, fileList) {
+                this.PayProxyFiles = this.PayProxyFiles.filter(function (value) {
+                    if (value.name != file.name) {
+                        return value;
+                    }
+                });
+            },
+            
+            download_file: function (url) {
+                $('#exportInfoForm').attr("href", url);
+                $('#exportInfoForm').attr("target", "_blank");
+                $('#ex-li').trigger("click");
+
+            },
+            checkTotalPrice: function () {
+                var list = this.datalist.UnPayExchangeOrders;
+                if (list.length == 0) {
+                    apply.onAlert("error", "付汇的明细至少一条！");
+                    return false;
+                }
+                for (var i = 0; i < list.length; i++) {
+                    if (list[i].PaidAmount < list[i].CurrentPaidAmount) {
+                        apply.onAlert("error", "申请金额不能大于可申请金额！");
+                        return false;
+                    }
+                    if (list[i].CurrentPaidAmount==0) {
+                        apply.onAlert("error", "申请金额不能为0！");
+                        return false;
+                    }
+                }
+                return true;
+            },
+            validTotalPrice: function (row) {
+                if (!ValidDecimal(row["CurrentPaidAmount"])) {
+                    row["CurrentPaidAmount"] = "0";
+                    return;
+                } else {
+                    var val = parseFloat(row["CurrentPaidAmount"]).toFixed(2);
+                    if (val > parseFloat(row["PaidAmount"])) {
+                        apply.onAlert("error", "申请金额不能大于可申请金额！");
+                        row["CurrentPaidAmount"] = "0";
+                    }
+                    else {
+                        row["CurrentPaidAmount"] = val;
+                        apply.getTotalMoney();
+                    }
+                }
+            },
+            //本次申请总金额
+            getTotalMoney: function () {
+                let totalmoney = 0;
+                totalmoney = this.datalist.UnPayExchangeOrders.reduce(function (total, currentValue) {
+                    return total + parseFloat(currentValue.CurrentPaidAmount);
+                }, 0);
+                this.datalist.TotalMoney = (parseFloat(this.datalist.Rate) * parseFloat(totalmoney)).toFixed(2)
+            },
+            //关闭弹框
+            closeDialog: function () {
+                location.href = "/PayExchanges/MyApplies";
+            },
+            allowApplyMoney: function (a, b) {
+                return parseFloat(a - b).toFixed(2)
+            },
+            //下载委任书
+            downloadPDF: function () {
+                axios({
+                    url: "/PayExchanges/DownloadPayProxy",
+                    method: "post",
+                    data: {
+                        id: this.datalist.ID
+                    }
+                }).then(function (response) {
+                    if (response.data.type == "error") {
+                        apply.onAlert(res.data.type, res.data.msg);
+                    } else {
+                        $('#exportInfoForm').attr("href", response.data.data);
+                        $('#exportInfoForm').attr("target", "_blank");
+                        $('#ex-li').trigger("click");
+                    }
+                }).catch(function (error) {
+                    apply.onAlert("warning", error);
+                });
+            },
+            //选择供应商
+            changeSupplier: function () {
+                //先记下原先输入框中的值
+                var oldInputCurrentPaidAmounts = [];
+                for (var i = 0; i < this.datalist.UnPayExchangeOrders.length; i++) {
+                    oldInputCurrentPaidAmounts.push({
+                        IsMatchSupplier: this.datalist.UnPayExchangeOrders[i].IsMatchSupplier,
+                        CurrentPaidAmount: this.datalist.UnPayExchangeOrders[i].CurrentPaidAmount,
+                    });
+                }
+
+                var orderIds = [];
+                for (var i = 0; i < this.datalist.UnPayExchangeOrders.length; i++) {
+                    this.datalist.UnPayExchangeOrders[i].IsMatchSupplier = false;
+                    this.datalist.UnPayExchangeOrders[i].CurrentPaidAmount = this.datalist.UnPayExchangeOrders[i].PaidAmount;
+                    orderIds.push(this.datalist.UnPayExchangeOrders[i].ID);
+                }
+
+                axios.post('/PayExchanges/GetSupplierBankAndAddress', {
+                    data: {
+                        SupplierID: apply.datalist.Supplier,
+                        OrderIDs: orderIds,
+                    }
+                }).then(function (res) {
+                    apply.datalist.SupplierBankOptions = null;
+                    apply.datalist.SupplierBank = "";
+                    apply.datalist.SupplierBankAddress = "";
+                    apply.datalist.SupplierBankAccount = "";
+                    apply.datalist.SupplierBankCode = "";
+                    apply.datalist.SupplierAddressOptions = null;
+                    apply.datalist.SupplierAddress = "";
+                    apply.datalist.SupplierAddressName = "";
+
+                    if (res.data.type == "success") {
+                        var data = JSON.parse(res.data.data);
+                        apply.datalist.SupplierBankOptions = JSON.stringify(data.Data.banks);
+                        apply.datalist.SupplierAddressOptions = JSON.stringify(data.Data.address);
+
+                        //根据获得的每个订单的本次申请金额，对 datalist.UnPayExchangeOrders 中的信息赋值
+                        for (var i = 0; i < apply.datalist.UnPayExchangeOrders.length; i++) {
+                            var thisOrderCurrentPayAmount = data.Data.currentPayAmounts.filter(t => t.OrderID == apply.datalist.UnPayExchangeOrders[i].ID)[0];
+
+                            var isMatchChangedToNotMatch = false;  //是否是由匹配变成不匹配
+                            if (oldInputCurrentPaidAmounts[i].IsMatchSupplier == true && thisOrderCurrentPayAmount.IsMatchSupplier == false) {
+                                isMatchChangedToNotMatch = true;
+                            }
+
+                            apply.datalist.UnPayExchangeOrders[i].IsMatchSupplier = thisOrderCurrentPayAmount.IsMatchSupplier;
+
+                            if (apply.datalist.UnPayExchangeOrders[i].IsMatchSupplier) {
+                                if (thisOrderCurrentPayAmount.CurrentPaidAmount <= apply.datalist.UnPayExchangeOrders[i].PaidAmount) {
+                                    apply.datalist.UnPayExchangeOrders[i].CurrentPaidAmount = thisOrderCurrentPayAmount.CurrentPaidAmount;
+                                } else {
+                                    apply.datalist.UnPayExchangeOrders[i].CurrentPaidAmount = apply.datalist.UnPayExchangeOrders[i].PaidAmount;
+                                }
+                            } else {
+                                if (isMatchChangedToNotMatch) {
+                                    //如果是由匹配变成不匹配, 则输入框中默认输入值为可申请金额。
+                                    //否则不匹配变成不匹配，输入框中的值不变，使用一开始保存的 oldInputCurrentPaidAmounts
+                                    apply.datalist.UnPayExchangeOrders[i].CurrentPaidAmount = apply.datalist.UnPayExchangeOrders[i].PaidAmount;
+                                } else {
+                                    apply.datalist.UnPayExchangeOrders[i].CurrentPaidAmount = oldInputCurrentPaidAmounts[i].CurrentPaidAmount;
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        apply.onAlert(res.data.type, res.data.msg);
+                    }
+                }).catch(function (err) {
+                    apply.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //检查银行敏感性(根据银行地址)
+            checkSupplierBankSensitive: function () {
+                axios.post('/PayExchanges/CheckSupplierBankSensitive', {
+                    data: {
+                        SupplierBankAddress: apply.datalist.SupplierBankAddress,
+                    }
+                }).then(function (res) {
+                    if (res.data.type == "success") {
+                        var data = JSON.parse(res.data.data);
+                        if (data.Data.IsSensitive) {
+                            apply.bankSensitiveFlag = 2; //置为已检测,是敏感
+                        } else {
+                            apply.bankSensitiveFlag = 3; //置为已检测,不是敏感
+                        }
+                    }
+                    else {
+                        apply.onAlert(res.data.type, res.data.msg);
+                    }
+                }).catch(function (err) {
+                    apply.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //订单提交
+            onSubmit: function () {
+                var that = this;
+                if (this.checkTotalPrice()){
+                    this.$refs.ruleForm.validate(function(valid){
+                        if (valid) {
+                            //if (apply.datalist.PayExchangeApplyFiles.length == 0) {
+                            //    apply.onAlert("error", "请上传合同发票(INVOICE LIST)！");
+                            //    return;
+                            //}
+
+                            //银行敏感性标志  1-未检测, 2-已检测,是敏感, 3-已检测,不是敏感
+                            if (apply.bankSensitiveFlag == 1) {
+                                apply.onAlert("warning", "此银行的敏感地区检测未完成");
+                                return;
+                            }
+                            if (apply.bankSensitiveFlag == 2) {
+                                apply.onAlert("warning", "此银行涉及敏感地区，无法申请付汇");
+                                return;
+                            }
+
+                            const loading = that.$loading({
+                                lock: false,
+                                text: 'Loading',
+                                spinner: 'el-icon-loading',
+                                background: 'rgba(0, 0, 0, 0.7)'
+                            });
+                            axios({
+                                url: "/PayExchanges/SubmitApply",
+                                method: "post",
+                                data: apply.datalist,
+                            }).then(function (response) {
+                                loading.close();
+                                if (response.data.type == "error") {
+                                    apply.onAlert(response.data.type, response.data.msg);
+                                } else {
+                                    apply.datalist.ID = response.data.data;
+                                    apply.dialogVisible = true;
+                                }
+                            }).catch(function (error) {
+                                apply.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                                loading.close();
+                            });
+                        } else {
+                            //验证失败
+                            return false;
+                        }
+                    });
+                }
+            },
+            //删除文件
+            handleDeletefile: function (index, r) {
+                apply.datalist.PayExchangeApplyFiles.splice(index, 1)
+            },
+            //删除行
+            handleDelete: function (index, r) {
+                apply.datalist.UnPayExchangeOrders.splice(index, 1)
+            },
+            toFixed: function (num, val) {
+                return val.toFixed(num);
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                });
+            },
+        }
+    });
+</script>
+

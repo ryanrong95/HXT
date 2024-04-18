@@ -1,0 +1,366 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{26285F23-1591-4ECC-8BD0-FA553DA85BE1}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>Needs.Wl.CustomsTool.WinForm</RootNamespace>
+    <AssemblyName>Needs.Wl.CustomsTool.WinForm</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>D:\Vs2015_Projects\__Gpublish\CusToolWinForm\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>4</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>FC56A646F51EA8F2BAD9C68E8161399D76D69B02</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>Needs.Wl.CustomsTool.WinForm_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>BAOGUAN.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\NewSolution\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.6.6\lib\net45\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="RabbitMQ.Client, Version=5.0.0.0, Culture=neutral, PublicKeyToken=89e7d7c5feba84ce, processorArchitecture=MSIL">
+      <HintPath>..\packages\RabbitMQ.Client.5.1.0\lib\net451\RabbitMQ.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Utils\FileLogService.cs" />
+    <Compile Include="App_Utils\MacService.cs" />
+    <Compile Include="App_Utils\XmlHelper.cs" />
+    <Compile Include="App_Utils\XmlService.cs" />
+    <Compile Include="Business\DecReceipt.cs" />
+    <Compile Include="Business\DecSub.cs" />
+    <Compile Include="Business\DecSuccess.cs" />
+    <Compile Include="Business\ManiReceipt.cs" />
+    <Compile Include="Configs\ConstConfig.cs" />
+    <Compile Include="Declared.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Declared.Designer.cs">
+      <DependentUpon>Declared.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Enums\ExceptionEnum.cs" />
+    <Compile Include="Enums\Statement\OperatorEnum.cs" />
+    <Compile Include="Enums\Statement\WordEnum.cs" />
+    <Compile Include="ExceptionInfoUI\ExceptionInfo.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ExceptionInfoUI\ExceptionInfo.Designer.cs">
+      <DependentUpon>ExceptionInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ExceptionInfoUI\FormExceptionDetail.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ExceptionInfoUI\FormExceptionDetail.Designer.cs">
+      <DependentUpon>FormExceptionDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FileSystemWatches\DecFailBoxWatcher.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="FileSystemWatches\DecSubMessageWatcher.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="FileSystemWatches\DecWaitFailWatcher.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="FileSystemWatches\ManifestFailBoxWatcher.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="FileSystemWatches\ManifestWaitFailWatcher.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="FormLoading.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormLoading.Designer.cs">
+      <DependentUpon>FormLoading.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormMain.Designer.cs">
+      <DependentUpon>FormMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DecHead.cs" />
+    <Compile Include="Models\DecHeadFile.cs" />
+    <Compile Include="Models\DecList.cs" />
+    <Compile Include="Models\DecTrace.cs" />
+    <Compile Include="Models\DecTraceExtends.cs" />
+    <Compile Include="Models\ExceptionHandler\AbstractHandler.cs" />
+    <Compile Include="Models\ExceptionHandler\ExceptionHandlerThread.cs" />
+    <Compile Include="Models\ExceptionHandler\ExceptionStrategy.cs" />
+    <Compile Include="Models\ExceptionHandler\PreRestartCustoms.cs" />
+    <Compile Include="Models\ExceptionHandler\PreSendEmail.cs" />
+    <Compile Include="Models\ExceptionHandler\RemindHim.cs" />
+    <Compile Include="Models\ExceptionHandler\ResendMsg.cs" />
+    <Compile Include="Models\ExceptionHandler\Statement.cs" />
+    <Compile Include="Models\ExceptionHandler\Trace\ErrDecTrace.cs" />
+    <Compile Include="Models\ExceptionHandler\Trace\ErrRmftTrace.cs" />
+    <Compile Include="Models\ExceptionSync\ExceptionSyncThread.cs" />
+    <Compile Include="Models\ExceptionXml\ExceptionXml.cs" />
+    <Compile Include="Models\FileModels.cs" />
+    <Compile Include="Models\GenerateExitNotice.cs" />
+    <Compile Include="Models\Hanlders\DecResponseFailedHanlder.cs" />
+    <Compile Include="Models\Hanlders\DecResponseSucceedHanlder.cs" />
+    <Compile Include="Models\Hanlders\MftResponseNormalHanlder.cs" />
+    <Compile Include="Models\Manifest.cs" />
+    <Compile Include="Models\ManifestConsignment.cs" />
+    <Compile Include="Models\ManifestConsignmentTrace.cs" />
+    <Compile Include="Models\ManifestConsignmentTraceExtends.cs" />
+    <Compile Include="Models\Messages\DecImportResponse.cs" />
+    <Compile Include="Models\Messages\DecReceptOrigin.cs" />
+    <Compile Include="Models\Messages\Manifest.cs" />
+    <Compile Include="Models\Statement\HandlerParser.cs" />
+    <Compile Include="Models\Statement\Statement.cs" />
+    <Compile Include="Models\Statement\Tree.cs" />
+    <Compile Include="Models\Statement\Word.cs" />
+    <Compile Include="Models\UploadDecHead.cs" />
+    <Compile Include="Queues\DecReceiptQueue.cs" />
+    <Compile Include="FileSystemWatches\DecMessageWatcher.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="FileSystemWatches\ManifestMessageWatcher.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Queues\DecSubQueue.cs" />
+    <Compile Include="Queues\ManiReceiptQueue.cs" />
+    <Compile Include="Resource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Services\BaseStyleSetting.cs" />
+    <Compile Include="Services\FileIcon.cs" />
+    <Compile Include="Services\Folder.cs" />
+    <Compile Include="Services\IconImageProvider.cs" />
+    <Compile Include="Tool.Customs.cs" />
+    <Compile Include="Services\Company.cs" />
+    <Compile Include="Tool.cs" />
+    <Compile Include="App_Utils\EmailService.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UnDeclare.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UnDeclare.Designer.cs">
+      <DependentUpon>UnDeclare.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UploadControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UploadControl.Designer.cs">
+      <DependentUpon>UploadControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Declare\DecHeadFilesView.cs" />
+    <Compile Include="Views\Declare\DecHeadsView.cs" />
+    <Compile Include="Views\Declare\DecOriginListsView.cs" />
+    <Compile Include="Views\Declare\UnUploadDecHeadsListView.cs" />
+    <Compile Include="Views\Exception\ExceptionRemindView.cs" />
+    <Compile Include="Views\Manifest\ManifestConsignmentsView.cs" />
+    <Compile Include="Views\Manifest\ManifestsView.cs" />
+    <EmbeddedResource Include="Declared.resx">
+      <DependentUpon>Declared.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ExceptionInfoUI\ExceptionInfo.resx">
+      <DependentUpon>ExceptionInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ExceptionInfoUI\FormExceptionDetail.resx">
+      <DependentUpon>FormExceptionDetail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UnDeclare.resx">
+      <DependentUpon>UnDeclare.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UploadControl.resx">
+      <DependentUpon>UploadControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="Configs\folder.json" />
+    <None Include="Configs\kr.json" />
+    <None Include="Content\jsons\CY.json" />
+    <None Include="Content\jsons\HY.json" />
+    <None Include="Content\jsons\KR.json" />
+    <None Include="Content\jsons\WLT.json" />
+    <None Include="Content\jsons\XDT.json" />
+    <None Include="Needs.Wl.CustomsTool.WinForm_TemporaryKey.pfx" />
+    <None Include="Resources\blank.ico" />
+    <None Include="Resources\BAOGUAN.ico" />
+    <EmbeddedResource Include="FileSystemWatches\DecMessageWatcher.resx">
+      <DependentUpon>DecMessageWatcher.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormLoading.resx">
+      <DependentUpon>FormLoading.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormMain.resx">
+      <DependentUpon>FormMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Content Include="BAOGUAN.ico" />
+    <Content Include="Configs\cxhy.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Configs\xdt.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="NLog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <EmbeddedResource Include="Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="NLog.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\NewSolution\Layer.Data\Layer.Data.csproj">
+      <Project>{220cf961-81ef-4288-8d42-54cefbe35086}</Project>
+      <Name>Layer.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\NewSolution\Layer.Linq\Layer.Linq.csproj">
+      <Project>{7031ff1c-1fb9-457c-88fe-9955e07badd3}</Project>
+      <Name>Layer.Linq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\NewSolution\Needs.Erp.Generic\Needs.Erp.Generic.csproj">
+      <Project>{4af55700-a9d6-407b-89fd-fe576a43f916}</Project>
+      <Name>Needs.Erp.Generic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\NewSolution\Needs.Linq\Needs.Linq.csproj">
+      <Project>{8f7ffcb1-97bc-4977-b262-71365ae8ec62}</Project>
+      <Name>Needs.Linq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\NewSolution\Needs.Overall\Needs.Overall.csproj">
+      <Project>{94da4133-a4a4-4e1c-98d6-5f1c023dcdd2}</Project>
+      <Name>Needs.Overall</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\NewSolution\Needs.Underly\Needs.Underly.csproj">
+      <Project>{b775e7d1-cf0e-43bc-a0e4-874db5645a09}</Project>
+      <Name>Needs.Underly</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\NewSolution\Needs.Utils\Needs.Utils.csproj">
+      <Project>{71b45033-2d91-4fad-bb5b-441174260e6a}</Project>
+      <Name>Needs.Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Needs.Chain.Customs.Services\Needs.Ccs.Services.csproj">
+      <Project>{1e17dee0-88dd-4de6-bf0c-b9675cd19395}</Project>
+      <Name>Needs.Ccs.Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Needs.Wl.Models\Needs.Wl.Models.csproj">
+      <Project>{6a51926d-a4ca-45c1-812c-b22741655e42}</Project>
+      <Name>Needs.Wl.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Needs.Wl\Needs.Wl.Admin.Plat.csproj">
+      <Project>{d30641c5-4453-4a9b-be7e-8ce60165fea5}</Project>
+      <Name>Needs.Wl.Admin.Plat</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.6.1 %28x86 和 x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

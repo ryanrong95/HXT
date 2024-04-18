@@ -1,0 +1,61 @@
+﻿<template id="addressinfo">
+    <el-form :model="form1" :rules="rules" status-icon ref="form1" label-width="160px">
+        <el-form-item label="设为默认提货地址：">
+            <el-switch v-model="form1.IsDefault"></el-switch>
+        </el-form-item>
+        <el-form-item label="联系人名称：" prop="Name" :rules="[{ required: true, message: '请输入联系人名称', trigger: 'blur' },{max:150, message: '联系人名称长度不超过150', trigger: 'blur' }]">
+            <el-input v-model="form1.Name" placeholder="请输入联系人名称" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="联系电话：" prop="Mobile">
+            <el-input v-model="form1.Mobile" placeholder="请输入联系电话" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="所在地区：" prop="Address" :rules="[{required: true, message: '请选择地址', trigger: 'change'}]">
+            <el-cascader style="width:60%" :props="cascaderConfig" placeholder="请选择地址" :options="AddressLists" v-model="form1.Address">
+            </el-cascader>
+        </el-form-item>
+        <el-form-item label="" prop="DetailAddress" :rules="[{required: true, message: '请输入公司详细地址', trigger: 'blur'},{max:200, message: '详细地址长度不超过200', trigger: 'blur' }]">
+            <el-input style="width:60%" v-model="form1.DetailAddress" type="textarea" placeholder="请输入详细的道路、楼字、区号等名称"></el-input>
+        </el-form-item>
+        <el-form-item label="备注：" prop="Summary">
+            <el-input type="textarea" v-model="form1.Summary" :rules="[{max:400, message: '备注长度不超过400', trigger: 'blur' }]"></el-input>
+        </el-form-item>
+    </el-form>
+</template>
+<script src="~/Scripts/areaData.js"></script>
+<script>
+    Vue.component(
+        'my-address',
+        {
+            template: "#addressinfo",
+            data: function () {
+                //验证手机号
+                var validateMobile = function(rule, value, callback){
+                    if (value == '' || value == null) {
+                        callback(new Error('请输入联系电话'));
+                    }
+                    callback();
+                };
+                return {
+                    form1: @Html.Raw(Json.Encode(Model)),
+                    AddressLists: $.pccData[0].s.filter(function (data) { if (data.n == "香港") { return data} }), //省市区三级联动数据
+                    cascaderConfig: {
+                        label: 'n',
+                        value: 'n',
+                        children: 's'
+                    },
+                    rules: {
+                        Mobile: [{ required: true, validator: validateMobile, trigger: 'blur' }],
+                    },
+                }
+            },
+            methods: {
+                //消息提示框
+                onAlert: function (type, message) {
+                    this.$message({
+                        message: message,
+                        type: type
+                    });
+                },
+            }
+        });
+</script>

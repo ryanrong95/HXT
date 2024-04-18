@@ -1,0 +1,146 @@
+﻿@{
+    /**/
+
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>我的订单</title>
+    <link rel="stylesheet" href="~/Content/css/border.css">
+    <link rel="stylesheet" href="~/Content/css/reset.css">
+    <link rel="stylesheet" href="~/Content/css/163css.css">
+    <link rel="stylesheet" href="~/Content/css/common.css">
+    <link rel="stylesheet" href="~/Content/css/element.css">
+    <script src="~/Scripts/vue.js"></script>
+    <link rel="stylesheet" href="~/Content/css/index.css">
+    <style>
+        .invoice_content {
+            width: 93%;
+            margin-top: 0.3rem;
+            margin-left: 0.24rem;
+            height: 100%;
+        }
+
+            .invoice_content .itemWrap {
+                margin-bottom: 0.14rem;
+                overflow: hidden;
+            }
+
+                .invoice_content .itemWrap .title {
+                    font-size: 0.3rem;
+                    line-height: 0.33rem;
+                    color: #323232;
+                    font-weight: bold;
+                    margin-bottom: 0.23rem;
+                }
+
+                .invoice_content .itemWrap .subtitle_box {
+                    font-size: 0.28rem;
+                    margin-bottom: 0.12rem;
+                    margin-left: 0.34rem;
+                    line-height: 0.42rem;
+                }
+
+                    .invoice_content .itemWrap .subtitle_box .subtitle {
+                        width: 1.96rem;
+                    }
+
+                    .invoice_content .itemWrap .subtitle_box .unconfirmed_details {
+                        width: calc(100% - 1.96rem);
+                    }
+    </style>
+</head>
+<body>
+    <div id="Account_information" style="background-color: white;">
+        <div class="second_header">
+            <a onClick="javascript :history.back(-1);"><span class="el-icon-arrow-left icon"></span></a>
+            <div class="second_nav">
+                <span class="header-title">发票信息</span>
+            </div>
+        </div>
+
+
+        <div class="invoice_content">
+            <div class="itemWrap">
+                <p class="title">发票信息</p>
+                <div class="left_text">
+                    <div class="subtitle_box">
+                        <span class="subtitle">开票类型：</span>
+                        <span class="unconfirmed_details">{{form.invoice.invoiceType}}</span>
+                    </div>
+                    <div class="subtitle_box">
+                        <span class="subtitle">名称：</span>
+                        <span class="unconfirmed_details">{{form.invoice.invoiceTitle}}</span>
+                    </div>
+                    <div class="subtitle_box">
+                        <span class="subtitle">纳税人识别号：</span>
+                        <span class="unconfirmed_details">{{form.invoice.invoiceTaxCode}}</span>
+                    </div>
+                    <div class="subtitle_box">
+                        <span class="subtitle">地址、电话：</span>
+                        <span class="unconfirmed_details">{{form.invoice.invoiceAddress}}&nbsp;{{form.invoice.invoiceTel}}</span>
+                    </div>
+                    <div class="subtitle_box">
+                        <span class="subtitle">开户行及账号：</span>
+                        <span class="unconfirmed_details">{{form.invoice.invoiceBank}}&nbsp;{{form.invoice.invoiceAccount}}</span>
+                    </div>
+                    <div class="subtitle_box">
+                        <span class="subtitle">收件人姓名：</span>
+                        <span class="unconfirmed_details">{{form.invoice.contact}}</span>
+                    </div>
+                    <div class="subtitle_box">
+                        <span class="subtitle">手机号码：</span>
+                        <span class="unconfirmed_details">{{form.invoice.mobile}}</span>
+                    </div>
+                    <div class="subtitle_box">
+                        <span class="subtitle">地址：</span>
+                        <span class="unconfirmed_details">{{form.invoice.contactAddress}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="itemWrap">
+                <p class="title">发票邮寄信息</p>
+                <div class="left_text">
+                    <div class="subtitle_box">
+                        <span class="subtitle">快递公司：</span>
+                        <span class="unconfirmed_details">{{form.invoice.ExpressCompany}}</span>
+                    </div>
+                    <div class="subtitle_box">
+                        <span class="subtitle">运单号：</span>
+                        <span class="unconfirmed_details">{{form.invoice.ExpressCode}}</span>
+                    </div>
+                    <div class="subtitle_box">
+                        <span class="subtitle">寄出日期：</span>
+                        <span class="unconfirmed_details">{{form.invoice.CreateDate}}</span>
+                    </div>
+                    <div class="subtitle_box">
+                        <span class="subtitle">发票号码：</span>
+                        <span class="unconfirmed_details">{{form.invoice.InvoiceNo}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+    var Account_information = new Vue({
+        el: "#Account_information",
+        data: function () {
+            return {
+                form: @Html.Raw(Json.Encode(Model)),
+            }
+        },
+        methods: {
+
+        }
+    })
+    </script>
+</body>
+
+</html>
+
+
+

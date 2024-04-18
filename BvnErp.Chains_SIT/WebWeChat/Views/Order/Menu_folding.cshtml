@@ -1,0 +1,63 @@
+﻿@{
+    ViewBag.Title = "会员中心";
+}
+
+<div id="Menu_folding" v-cloak>
+    <div class="Menu_header">
+        <span>{{formData.CompanyName}}</span>
+        <span class="el-icon-close" v-on:click="closeMenu"></span>
+    </div>
+    <div class="ment_box">
+        <div class="Menu_content">
+            <div>
+                <p class="Menu_list_title">订单中心</p>
+                <p class="Menu_list">
+                    <a href="/Order/MyOrders">全部订单</a>
+                    <a href="/Order/MyOrders/1">草稿订单</a>
+                    <a href="/Order/MyOrders/2">待归类订单</a>
+                    <a href="/Order/MyOrders/3">待确认订单</a>
+                    <a href="/Order/MyOrders/5">待开票订单</a>
+                    <a href="/Order/MyOrders/6">待收货订单</a>
+                    <a href="/Order/MyOrders/9">已取消订单</a>
+                    <a href="/Order/MyOrders/10">已退回订单</a>
+                </p>
+            </div>
+            <div>
+                <p class="Menu_list_title">付汇中心</p>
+                <p class="Menu_list">
+                    <a v-on:click="no_open" class="no_open">我的付汇</a>
+                </p>
+            </div>
+            <div>
+                <p class="Menu_list_title">产品中心</p>
+                <p class="Menu_list">
+                    <a v-on:click="no_open" class="no_open">我的产品</a>
+                    <a v-on:click="no_open" class="no_open">产品预归类</a>
+                    <a v-on:click="no_open" class="no_open">自定义产品税号</a>
+                </p>
+            </div>
+            <div>
+                <p class="Menu_list_title">付款中心</p>
+                <p class="Menu_list">
+                    <a href="/Order/Payment">付款记录</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var Menu_folding = new Vue({
+        el: "#Menu_folding",
+        data: {
+             formData:@Html.Raw(Json.Encode(Model)),
+        },
+        methods: {
+            no_open: function () {
+                this.$toast("此服务暂未开通")
+            },
+            closeMenu: function () {
+                history.back();
+            }
+        },
+    })
+</script>

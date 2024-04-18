@@ -1,0 +1,476 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="ScWms" Class="SqlDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=172.30.10.197;Initial Catalog=ScWms;User ID=udata;Encrypt=False;TrustServerCertificate=True" SettingsObjectName="Layer.Data.Properties.Settings" SettingsPropertyName="ScWmsConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Companies" Member="Companies">
+    <Type Name="Companies">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Grade" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.WayItems" Member="WayItems">
+    <Type Name="WayItems">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="WaybillID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PackingIndex" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ProductID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Currency" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="UnitPrice" Type="System.Decimal" DbType="Decimal(18,5) NOT NULL" CanBeNull="false" />
+      <Column Name="Weight" Type="System.Decimal" DbType="Decimal(18,7)" CanBeNull="true" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Note" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
+      <Association Name="Waybills_WayItems" Member="Waybills" ThisKey="WaybillID" OtherKey="ID" Type="Waybills" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Contacts" Member="Contacts">
+    <Type Name="Contacts">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Email" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Mobile" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Tel" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CompanyID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.EntryNotices" Member="EntryNotices">
+    <Type Name="EntryNotices">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="InputID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="InApplyID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="WaybillID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ProductID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PackingIndex" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="SortingRequire" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Association Name="StandardProducts_EntryNotices" Member="StandardProducts" ThisKey="ProductID" OtherKey="ID" Type="StandardProducts" IsForeignKey="true" />
+      <Association Name="Waybills_EntryNotices" Member="Waybills" ThisKey="WaybillID" OtherKey="ID" Type="Waybills" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ExitFiles" Member="ExitFiles">
+    <Type Name="ExitFiles">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ExitNoticeID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="OrderID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="URL" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ExitNotices" Member="ExitNotices">
+    <Type Name="ExitNotices">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="OutputID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="OutApplyID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="WaybillID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ProductID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Association Name="ExitNotices_FlowStorages" Member="FlowStorages" ThisKey="ID" OtherKey="ExitNoticeID" Type="FlowStorages" />
+      <Association Name="OutApplies_ExitNotices" Member="OutApplies" ThisKey="OutApplyID" OtherKey="ID" Type="OutApplies" IsForeignKey="true" />
+      <Association Name="Outputs_ExitNotices" Member="Outputs" ThisKey="OutputID" OtherKey="ID" Type="Outputs" IsForeignKey="true" />
+      <Association Name="Waybills_ExitNotices" Member="Waybills" ThisKey="WaybillID" OtherKey="ID" Type="Waybills" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Expenses" Member="Expenses">
+    <Type Name="Expenses">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Type" Type="System.String" DbType="NChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="InputID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="InApplyID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="WaybilID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="SortingID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PickingID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Currency" Type="System.String" DbType="NChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="Price" Type="System.String" DbType="NChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="Currency1" Type="System.String" DbType="NChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="Price1" Type="System.String" DbType="NChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="InApplies_Expenses" Member="InApplies" ThisKey="InApplyID" OtherKey="ID" Type="InApplies" IsForeignKey="true" />
+      <Association Name="Inputs_Expenses" Member="Inputs" ThisKey="InputID" OtherKey="ID" Type="Inputs" IsForeignKey="true" />
+      <Association Name="Pickings_Expenses" Member="Pickings" ThisKey="PickingID" OtherKey="ID" Type="Pickings" IsForeignKey="true" />
+      <Association Name="Sortings_Expenses" Member="Sortings" ThisKey="SortingID" OtherKey="ID" Type="Sortings" IsForeignKey="true" />
+      <Association Name="Waybills_Expenses" Member="Waybills" ThisKey="WaybilID" OtherKey="ID" Type="Waybills" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.FlowStorages" Member="FlowStorages">
+    <Type Name="FlowStorages">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="EntryNoticeID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ExitNoticeID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SortingID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PickingID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="InputID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="InApplyID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ProductID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ShelveID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Weigth" Type="System.Decimal" DbType="Decimal(18,5)" CanBeNull="true" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="FlowStorages_FlowStorages" Member="FlowStorages2" ThisKey="ID" OtherKey="ID" Type="FlowStorages" Cardinality="One" />
+      <Association Name="FlowStorages_Forms" Member="Forms" ThisKey="ID" OtherKey="FlowID" Type="Forms" />
+      <Association Name="FlowStorages_Pickings" Member="Pickings" ThisKey="ID" OtherKey="FlowStorageID" Type="Pickings" />
+      <Association Name="ExitNotices_FlowStorages" Member="ExitNotices" ThisKey="ExitNoticeID" OtherKey="ID" Type="ExitNotices" IsForeignKey="true" />
+      <Association Name="FlowStorages_FlowStorages" Member="FlowStorages1" ThisKey="ID" OtherKey="ID" Type="FlowStorages" IsForeignKey="true" />
+      <Association Name="Shelves_FlowStorages" Member="Shelves" ThisKey="ShelveID" OtherKey="ID" Type="Shelves" IsForeignKey="true" />
+      <Association Name="Sortings_FlowStorages" Member="Sortings" ThisKey="SortingID" OtherKey="ID" Type="Sortings" IsForeignKey="true" />
+      <Association Name="StandardProducts_FlowStorages" Member="StandardProducts" ThisKey="ProductID" OtherKey="ID" Type="StandardProducts" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Forms" Member="Forms">
+    <Type Name="Forms">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="PickingID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="FlowID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="StroeID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="RunID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Output" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Association Name="FlowStorages_Forms" Member="FlowStorages" ThisKey="FlowID" OtherKey="ID" Type="FlowStorages" IsForeignKey="true" />
+      <Association Name="Pickings_Forms" Member="Pickings" ThisKey="PickingID" OtherKey="ID" Type="Pickings" IsForeignKey="true" />
+      <Association Name="RunStorages_Forms" Member="RunStorages" ThisKey="RunID" OtherKey="ID" Type="RunStorages" IsForeignKey="true" />
+      <Association Name="StroeStorages_Forms" Member="StroeStorages" ThisKey="StroeID" OtherKey="ID" Type="StroeStorages" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.InApplies" Member="InApplies">
+    <Type Name="InApplies">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ApplyID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ApplyItemID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Currency" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="UnitPrice" Type="System.Decimal" DbType="Decimal(18,5) NOT NULL" CanBeNull="false" />
+      <Column Name="ProductID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="InApplies_Expenses" Member="Expenses" ThisKey="ID" OtherKey="InApplyID" Type="Expenses" />
+      <Association Name="InApplies_OutApplies" Member="OutApplies" ThisKey="ID" OtherKey="InApplyID" Type="OutApplies" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Inputs" Member="Inputs">
+    <Type Name="Inputs">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="OrderID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="OrderItemID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Currency" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="UnitPrice" Type="System.Decimal" DbType="Decimal(18,5) NOT NULL" CanBeNull="false" />
+      <Column Name="Currency1" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="UnitPrice1" Type="System.Decimal" DbType="Decimal(18,5)" CanBeNull="true" />
+      <Column Name="ProductID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Inputs_Expenses" Member="Expenses" ThisKey="ID" OtherKey="InputID" Type="Expenses" />
+      <Association Name="Inputs_Outputs" Member="Outputs" ThisKey="ID" OtherKey="InputID" Type="Outputs" />
+      <Association Name="StandardProducts_Inputs" Member="StandardProducts" ThisKey="ProductID" OtherKey="ID" Type="StandardProducts" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.OtherProducts" Member="OtherProducts">
+    <Type Name="OtherProducts">
+      <Column Name="ProductID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Format" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.OutApplies" Member="OutApplies">
+    <Type Name="OutApplies">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="InApplyID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ApplyID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ApplyItemID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Currency" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="UnitPrice" Type="System.Decimal" DbType="Decimal(18,5) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="OutApplies_ExitNotices" Member="ExitNotices" ThisKey="ID" OtherKey="OutApplyID" Type="ExitNotices" />
+      <Association Name="InApplies_OutApplies" Member="InApplies" ThisKey="InApplyID" OtherKey="ID" Type="InApplies" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Outputs" Member="Outputs">
+    <Type Name="Outputs">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="InputID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="OrderID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="OrderItemID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Currency" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="UnitPrice" Type="System.Decimal" DbType="Decimal(18,5) NOT NULL" CanBeNull="false" />
+      <Column Name="Currency1" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="UnitPrice1" Type="System.Decimal" DbType="Decimal(18,5)" CanBeNull="true" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Outputs_ExitNotices" Member="ExitNotices" ThisKey="ID" OtherKey="OutputID" Type="ExitNotices" />
+      <Association Name="Inputs_Outputs" Member="Inputs" ThisKey="InputID" OtherKey="ID" Type="Inputs" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Parties" Member="Parties">
+    <Type Name="Parties">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="CompanyID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ContactID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="District" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Address" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="ZipCode" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ClientID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Pickings" Member="Pickings">
+    <Type Name="Pickings">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="FlowStorageID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="StroeSorageID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="RunStorageID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="BoxIndex" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ProductID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Pickings_Expenses" Member="Expenses" ThisKey="ID" OtherKey="PickingID" Type="Expenses" />
+      <Association Name="Pickings_Forms" Member="Forms" ThisKey="ID" OtherKey="PickingID" Type="Forms" />
+      <Association Name="Pickings_StroeStorages" Member="StroeStorages1" ThisKey="ID" OtherKey="PickingID" Type="StroeStorages" />
+      <Association Name="Pickings_TransferItems" Member="TransferItems" ThisKey="ID" OtherKey="PickingID" Type="TransferItems" />
+      <Association Name="FlowStorages_Pickings" Member="FlowStorages" ThisKey="FlowStorageID" OtherKey="ID" Type="FlowStorages" IsForeignKey="true" />
+      <Association Name="StroeStorages_Pickings" Member="StroeStorages" ThisKey="StroeSorageID" OtherKey="ID" Type="StroeStorages" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PrimaryKeys" Member="PrimaryKeys">
+    <Type Name="PrimaryKeys">
+      <Column Name="Name" Type="System.String" DbType="VarChar(10) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Length" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Value" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Day" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Reports" Member="Reports">
+    <Type Name="Reports">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ReporterID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Properties" Type="System.String" DbType="NText NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.RunStorages" Member="RunStorages">
+    <Type Name="RunStorages">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="OrderID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SortingID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PickingID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="InputID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="InApplyID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ProductID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="ShelveCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Prices" Type="System.String" DbType="NChar(10)" CanBeNull="true" />
+      <Association Name="RunStorages_Forms" Member="Forms" ThisKey="ID" OtherKey="RunID" Type="Forms" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Shelves" Member="Shelves">
+    <Type Name="Shelves">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="StockID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="BoxIndex" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="Shelves_FlowStorages" Member="FlowStorages" ThisKey="ID" OtherKey="ShelveID" Type="FlowStorages" />
+      <Association Name="Shelves_StroeStorages" Member="StroeStorages" ThisKey="ID" OtherKey="ShelveID" Type="StroeStorages" />
+      <Association Name="Stocks_Shelves" Member="Stocks" ThisKey="StockID" OtherKey="ID" Type="Stocks" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Sortings" Member="Sortings">
+    <Type Name="Sortings">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="EntryNoticeID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="WaybillID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="BoxIndex" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ProductID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Weight" Type="System.Decimal" DbType="Decimal(18,5)" CanBeNull="true" />
+      <Association Name="Sortings_Expenses" Member="Expenses" ThisKey="ID" OtherKey="SortingID" Type="Expenses" />
+      <Association Name="Sortings_FlowStorages" Member="FlowStorages" ThisKey="ID" OtherKey="SortingID" Type="FlowStorages" />
+      <Association Name="Sortings_StroeStorages" Member="StroeStorages" ThisKey="ID" OtherKey="SortingID" Type="StroeStorages" />
+      <Association Name="Sortings_TransferItems" Member="TransferItems" ThisKey="ID" OtherKey="SortingID" Type="TransferItems" />
+      <Association Name="StandardProducts_Sortings" Member="StandardProducts" ThisKey="ProductID" OtherKey="ID" Type="StandardProducts" IsForeignKey="true" />
+      <Association Name="Waybills_Sortings" Member="Waybills" ThisKey="WaybillID" OtherKey="ID" Type="Waybills" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.StandardProducts" Member="StandardProducts">
+    <Type Name="StandardProducts">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="ManufacturerID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PackageCase" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Packaging" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Batch" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="DateCode" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(300) NOT NULL" CanBeNull="false" />
+      <Column Name="Origin" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="StandardProducts_EntryNotices" Member="EntryNotices" ThisKey="ID" OtherKey="ProductID" Type="EntryNotices" />
+      <Association Name="StandardProducts_FlowStorages" Member="FlowStorages" ThisKey="ID" OtherKey="ProductID" Type="FlowStorages" />
+      <Association Name="StandardProducts_Inputs" Member="Inputs" ThisKey="ID" OtherKey="ProductID" Type="Inputs" />
+      <Association Name="StandardProducts_Sortings" Member="Sortings" ThisKey="ID" OtherKey="ProductID" Type="Sortings" />
+      <Association Name="StandardProducts_StroeStorages" Member="StroeStorages" ThisKey="ID" OtherKey="ProductID" Type="StroeStorages" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Stocks" Member="Stocks">
+    <Type Name="Stocks">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Code" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Stocks_Shelves" Member="Shelves" ThisKey="ID" OtherKey="StockID" Type="Shelves" />
+      <Association Name="Stocks_Stocks" Member="Stocks2" ThisKey="ID" OtherKey="Code" Type="Stocks" />
+      <Association Name="Stocks_Stocks" Member="Stocks1" ThisKey="Code" OtherKey="ID" Type="Stocks" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.StroeStorages" Member="StroeStorages">
+    <Type Name="StroeStorages">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="SortingID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PickingID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="InputID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="InApplyID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Purpose" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ProductID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="ShelveID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Association Name="StroeStorages_Forms" Member="Forms" ThisKey="ID" OtherKey="StroeID" Type="Forms" />
+      <Association Name="StroeStorages_Pickings" Member="Pickings" ThisKey="ID" OtherKey="StroeSorageID" Type="Pickings" />
+      <Association Name="Pickings_StroeStorages" Member="Pickings1" ThisKey="PickingID" OtherKey="ID" Type="Pickings" IsForeignKey="true" />
+      <Association Name="Shelves_StroeStorages" Member="Shelves" ThisKey="ShelveID" OtherKey="ID" Type="Shelves" IsForeignKey="true" />
+      <Association Name="Sortings_StroeStorages" Member="Sortings" ThisKey="SortingID" OtherKey="ID" Type="Sortings" IsForeignKey="true" />
+      <Association Name="StandardProducts_StroeStorages" Member="StandardProducts" ThisKey="ProductID" OtherKey="ID" Type="StandardProducts" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TransferItems" Member="TransferItems">
+    <Type Name="TransferItems">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="TransferID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SortingID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PickingID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="InputID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="InApplyID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Quantity" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ProductID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="StepID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Association Name="Pickings_TransferItems" Member="Pickings" ThisKey="PickingID" OtherKey="ID" Type="Pickings" IsForeignKey="true" />
+      <Association Name="Sortings_TransferItems" Member="Sortings" ThisKey="SortingID" OtherKey="ID" Type="Sortings" IsForeignKey="true" />
+      <Association Name="Transfers_TransferItems" Member="Transfers" ThisKey="TransferID" OtherKey="ID" Type="Transfers" IsForeignKey="true" />
+      <Association Name="TransferSteps_TransferItems" Member="TransferSteps" ThisKey="StepID" OtherKey="ID" Type="TransferSteps" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Transfers" Member="Transfers">
+    <Type Name="Transfers">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Association Name="Transfers_TransferItems" Member="TransferItems" ThisKey="ID" OtherKey="TransferID" Type="TransferItems" />
+      <Association Name="Transfers_TransferSteps" Member="TransferSteps" ThisKey="ID" OtherKey="TransferID" Type="TransferSteps" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TransferSteps" Member="TransferSteps">
+    <Type Name="TransferSteps">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="TransferID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="FromWareID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ToWareID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="WaybillID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="TransferSteps_TransferItems" Member="TransferItems" ThisKey="ID" OtherKey="StepID" Type="TransferItems" />
+      <Association Name="Transfers_TransferSteps" Member="Transfers" ThisKey="TransferID" OtherKey="ID" Type="Transfers" IsForeignKey="true" />
+      <Association Name="Waybills_TransferSteps" Member="Waybills" ThisKey="WaybillID" OtherKey="ID" Type="Waybills" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TransportTerms" Member="TransportTerms">
+    <Type Name="TransportTerms">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TransportMode" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="FreightMode" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PriceClause" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Carrier" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="Origin" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="Destination" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Warehoures" Member="Warehoures">
+    <Type Name="Warehoures">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Code" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Conditions" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ContactID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Waybills" Member="Waybills">
+    <Type Name="Waybills">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Code" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ConsigneeID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="DelivererID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CarrierID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="TransportTermID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Currency" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Price" Type="System.Decimal" DbType="Decimal(18,5) NOT NULL" CanBeNull="false" />
+      <Column Name="InsuredValue" Type="System.Decimal" DbType="Decimal(18,5)" CanBeNull="true" />
+      <Column Name="Weight" Type="System.Decimal" DbType="Decimal(18,5)" CanBeNull="true" />
+      <Column Name="Volume" Type="System.Decimal" DbType="Decimal(18,5)" CanBeNull="true" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Waybills_WayItems" Member="WayItems" ThisKey="ID" OtherKey="WaybillID" Type="WayItems" />
+      <Association Name="Waybills_EntryNotices" Member="EntryNotices" ThisKey="ID" OtherKey="WaybillID" Type="EntryNotices" />
+      <Association Name="Waybills_ExitNotices" Member="ExitNotices" ThisKey="ID" OtherKey="WaybillID" Type="ExitNotices" />
+      <Association Name="Waybills_Expenses" Member="Expenses" ThisKey="ID" OtherKey="WaybilID" Type="Expenses" />
+      <Association Name="Waybills_Sortings" Member="Sortings" ThisKey="ID" OtherKey="WaybillID" Type="Sortings" />
+      <Association Name="Waybills_TransferSteps" Member="TransferSteps" ThisKey="ID" OtherKey="WaybillID" Type="TransferSteps" />
+      <Association Name="Waybills_WayFiles" Member="WayFiles" ThisKey="ID" OtherKey="WaybillID" Type="WayFiles" />
+    </Type>
+  </Table>
+  <Table Name="dbo.WayFiles" Member="WayFiles">
+    <Type Name="WayFiles">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="WaybillID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="WayItemID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Url" Type="System.String" DbType="VarChar(300) NOT NULL" CanBeNull="false" />
+      <Column Name="OrderIndex" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Waybills_WayFiles" Member="Waybills" ThisKey="WaybillID" OtherKey="ID" Type="Waybills" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>

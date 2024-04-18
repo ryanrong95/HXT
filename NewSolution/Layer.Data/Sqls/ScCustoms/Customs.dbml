@@ -1,0 +1,621 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="foricScCustoms" Class="CustomsDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=172.30.10.49,6522;Initial Catalog=foricScCustoms;Persist Security Info=True;User ID=u_v0" SettingsObjectName="Layer.Data.Properties.Settings" SettingsPropertyName="foricScCustomsConnectionString6" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.CustomsElementsDefaults" Member="CustomsElementsDefaults">
+    <Type Name="CustomsElementsDefaults">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="CustomsTariffID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ElementName" Type="System.String" DbType="NVarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="DefaultValue" Type="System.String" DbType="NVarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.DecRequestCerts" Member="DecRequestCerts">
+    <Type Name="DecRequestCerts">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="DeclarationID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="AppCertCode" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ApplOri" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ApplCopyQuan" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="DecHeads_DecRequestCerts" Member="DecHeads" ThisKey="DeclarationID" OtherKey="ID" Type="DecHeads" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.DecTraces" Member="DecTraces">
+    <Type Name="DecTraces">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="DeclarationID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Channel" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="Message" Type="System.String" DbType="NVarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="NoticeDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="FileName" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+      <Column Name="BackupUrl" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Association Name="DecHeads_DecTraces" Member="DecHeads" ThisKey="DeclarationID" OtherKey="ID" Type="DecHeads" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ManifestConsignmentContainers" Member="ManifestConsignmentContainers">
+    <Type Name="ManifestConsignmentContainers">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ManifestConsignmentID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ContainerNo" Type="System.String" DbType="VarChar(11) NOT NULL" CanBeNull="false" />
+      <Association Name="ManifestConsignments_ManifestConsignmentContainers" Member="ManifestConsignments" ThisKey="ManifestConsignmentID" OtherKey="ID" Type="ManifestConsignments" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.EdocRealations" Member="EdocRealations">
+    <Type Name="EdocRealations">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="DeclarationID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="EdocID" Type="System.String" DbType="NVarChar(64) NOT NULL" CanBeNull="false" />
+      <Column Name="EdocCode" Type="System.String" DbType="VarChar(8) NOT NULL" CanBeNull="false" />
+      <Column Name="EdocFomatType" Type="System.String" DbType="VarChar(2) NOT NULL" CanBeNull="false" />
+      <Column Name="OpNote" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="EdocCopId" Type="System.String" DbType="NVarChar(64) NOT NULL" CanBeNull="false" />
+      <Column Name="SignTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="EdocOwnerCode" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="EdocOwnerName" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="EdocSize" Type="System.String" DbType="VarChar(12) NOT NULL" CanBeNull="false" />
+      <Column Name="FileUrl" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.DecOtherPacks" Member="DecOtherPacks">
+    <Type Name="DecOtherPacks">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="DeclarationID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PackQty" Type="System.Decimal" DbType="Decimal(19,5) NOT NULL" CanBeNull="false" />
+      <Column Name="PackType" Type="System.String" DbType="VarChar(2) NOT NULL" CanBeNull="false" />
+      <Association Name="DecHeads_DecOtherPacks" Member="DecHeads" ThisKey="DeclarationID" OtherKey="ID" Type="DecHeads" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ManifestConsignmentItems" Member="ManifestConsignmentItems">
+    <Type Name="ManifestConsignmentItems">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ManifestConsignmentID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="GoodsSeqNo" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="GoodsPackNum" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="GoodsPackType" Type="System.String" DbType="VarChar(2) NOT NULL" CanBeNull="false" />
+      <Column Name="GoodsGrossWt" Type="System.Decimal" DbType="Decimal(18,3) NOT NULL" CanBeNull="false" />
+      <Column Name="GoodsBriefDesc" Type="System.String" DbType="NVarChar(256) NOT NULL" CanBeNull="false" />
+      <Column Name="UndgNo" Type="System.String" DbType="VarChar(4)" CanBeNull="true" />
+      <Column Name="HsCode" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="GoodsDetailDesc" Type="System.String" DbType="NVarChar(512)" CanBeNull="true" />
+      <Association Name="ManifestConsignments_ManifestConsignmentItems" Member="ManifestConsignments" ThisKey="ManifestConsignmentID" OtherKey="ID" Type="ManifestConsignments" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ManifestConsignmentTraces" Member="ManifestConsignmentTraces">
+    <Type Name="ManifestConsignmentTraces">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ManifestConsignmentID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="StatementCode" Type="System.String" DbType="VarChar(5) NOT NULL" CanBeNull="false" />
+      <Column Name="Message" Type="System.String" DbType="NVarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="NoticeDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="FileName" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+      <Column Name="BackupUrl" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Association Name="ManifestConsignments_ManifestConsignmentTraces" Member="ManifestConsignments" ThisKey="ManifestConsignmentID" OtherKey="ID" Type="ManifestConsignments" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.DecHeadFiles" Member="DecHeadFiles">
+    <Type Name="DecHeadFiles">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="DecHeadID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="FileType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="FileFormat" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="Url" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
+      <Association Name="DecHeads_DecHeadFiles" Member="DecHeads" ThisKey="DecHeadID" OtherKey="ID" Type="DecHeads" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.CustomsQuarantines" Member="CustomsQuarantines">
+    <Type Name="CustomsQuarantines">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Origin" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="StartDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="EndDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Manifests" Member="Manifests">
+    <Type Name="Manifests">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="TrafMode" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CustomsCode" Type="System.String" DbType="VarChar(4) NOT NULL" CanBeNull="false" />
+      <Column Name="CarrierCode" Type="System.String" DbType="VarChar(17)" CanBeNull="true" />
+      <Column Name="TransAgentCode" Type="System.String" DbType="VarChar(13)" CanBeNull="true" />
+      <Column Name="LoadingDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="LoadingLocationCode" Type="System.String" DbType="VarChar(4) NOT NULL" CanBeNull="false" />
+      <Column Name="ArrivalDate" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="CustomMaster" Type="System.String" DbType="VarChar(4) NOT NULL" CanBeNull="false" />
+      <Column Name="UnitCode" Type="System.String" DbType="VarChar(18) NOT NULL" CanBeNull="false" />
+      <Column Name="MsgRepName" Type="System.String" DbType="NVarChar(70) NOT NULL" CanBeNull="false" />
+      <Column Name="AdditionalInformation" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="CreateTime" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Association Name="Manifests_ManifestConsignments" Member="ManifestConsignments" ThisKey="ID" OtherKey="ManifestID" Type="ManifestConsignments" />
+    </Type>
+  </Table>
+  <Table Name="dbo.DecContainers" Member="DecContainers">
+    <Type Name="DecContainers">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="DeclarationID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ContainerID" Type="System.String" DbType="VarChar(32) NOT NULL" CanBeNull="false" />
+      <Column Name="ContainerMd" Type="System.String" DbType="VarChar(32)" CanBeNull="true" />
+      <Column Name="GoodsNo" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="LclFlag" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="GoodsContaWt" Type="System.Decimal" DbType="Decimal(19,5)" CanBeNull="true" />
+      <Association Name="DecContainers_DecContainers" Member="DecContainers2" ThisKey="ID" OtherKey="ID" Type="DecContainers" Cardinality="One" />
+      <Association Name="DecContainers_DecContainers" Member="DecContainers1" ThisKey="ID" OtherKey="ID" Type="DecContainers" IsForeignKey="true" />
+      <Association Name="DecHeads_DecContainers" Member="DecHeads" ThisKey="DeclarationID" OtherKey="ID" Type="DecHeads" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.CustomsOriginTariffs" Member="CustomsOriginTariffs">
+    <Type Name="CustomsOriginTariffs">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="CustomsTariffID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Origin" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Rate" Type="System.Decimal" DbType="Decimal(18,2) NOT NULL" CanBeNull="false" />
+      <Column Name="StartDate" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="EndDate" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
+      <Association Name="CustomsTariffs_CustomsOriginTariffs" Member="CustomsTariffs" ThisKey="CustomsTariffID" OtherKey="ID" Type="CustomsTariffs" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.CustomsTariffs" Member="CustomsTariffs">
+    <Type Name="CustomsTariffs">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="HSCode" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="MFN" Type="System.Decimal" DbType="Decimal(18,2) NOT NULL" CanBeNull="false" />
+      <Column Name="General" Type="System.Decimal" DbType="Decimal(18,2) NOT NULL" CanBeNull="false" />
+      <Column Name="AddedValue" Type="System.Decimal" DbType="Decimal(18,2) NOT NULL" CanBeNull="false" />
+      <Column Name="Consume" Type="System.Decimal" DbType="Decimal(18,2)" CanBeNull="true" />
+      <Column Name="Elements" Type="System.String" DbType="NText NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="RegulatoryCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Unit1" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Unit2" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CIQCode" Type="System.String" DbType="VarChar(3)" CanBeNull="true" />
+      <Column Name="InspectionCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
+      <Association Name="CustomsTariffs_CustomsOriginTariffs" Member="CustomsOriginTariffs" ThisKey="ID" OtherKey="CustomsTariffID" Type="CustomsOriginTariffs" />
+    </Type>
+  </Table>
+  <Table Name="dbo.OrderVoyages" Member="OrderVoyages">
+    <Type Name="OrderVoyages">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="OrderID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.DecHeadSpecialTypes" Member="DecHeadSpecialTypes">
+    <Type Name="DecHeadSpecialTypes">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="DecHeadID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.VoyageFiles" Member="VoyageFiles">
+    <Type Name="VoyageFiles">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="VoyageID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="FileType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="FileFormat" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Url" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.DecNoticeVoyages" Member="DecNoticeVoyages">
+    <Type Name="DecNoticeVoyages">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="DecNoticeID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="VoyageID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.OrderChangeNotices" Member="OrderChangeNotices">
+    <Type Name="OrderChangeNotices">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="OderID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ProcessState" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.CustomsCiqCodes" Member="CustomsCiqCodes">
+    <Type Name="CustomsCiqCodes">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(300) NOT NULL" CanBeNull="false" />
+      <Column Name="Category" Type="System.String" DbType="NVarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="InspectionCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(250)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.DecTaxQuotas" Member="DecTaxQuotas">
+    <Type Name="DecTaxQuotas">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="DeclarationID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Tariff" Type="System.Decimal" DbType="Decimal(18,4) NOT NULL" CanBeNull="false" />
+      <Column Name="AddedValueTax" Type="System.Decimal" DbType="Decimal(18,4) NOT NULL" CanBeNull="false" />
+      <Column Name="ExciseTax" Type="System.Decimal" DbType="Decimal(18,4) NOT NULL" CanBeNull="false" />
+      <Column Name="PayStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.OrderChangeNoticeLogs" Member="OrderChangeNoticeLogs">
+    <Type Name="OrderChangeNoticeLogs">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="OrderChangeNoticeID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="OrderID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="OrderItemID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(500) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.DeclarantCandidates" Member="DeclarantCandidates">
+    <Type Name="DeclarantCandidates">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(1000)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ManifestConsignments" Member="ManifestConsignments">
+    <Type Name="ManifestConsignments">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ManifestID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CusMftStatus" Type="System.String" DbType="VarChar(5) NOT NULL" CanBeNull="false" />
+      <Column Name="ConditionCode" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PaymentType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="GovProcedureCode" Type="System.String" DbType="VarChar(4) NOT NULL" CanBeNull="false" />
+      <Column Name="TransitDestination" Type="System.String" DbType="VarChar(4)" CanBeNull="true" />
+      <Column Name="PackNum" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PackType" Type="System.String" DbType="VarChar(2) NOT NULL" CanBeNull="false" />
+      <Column Name="Cube" Type="System.Decimal" DbType="Decimal(18,4)" CanBeNull="true" />
+      <Column Name="GrossWt" Type="System.Decimal" DbType="Decimal(19,5) NOT NULL" CanBeNull="false" />
+      <Column Name="GoodsValue" Type="System.Decimal" DbType="Decimal(18,2) NOT NULL" CanBeNull="false" />
+      <Column Name="Currency" Type="System.String" DbType="VarChar(3) NOT NULL" CanBeNull="false" />
+      <Column Name="GoodsQuantity" Type="System.Decimal" DbType="Decimal(19,5) NOT NULL" CanBeNull="false" />
+      <Column Name="Consolidator" Type="System.String" DbType="VarChar(17)" CanBeNull="true" />
+      <Column Name="ConsigneeName" Type="System.String" DbType="NVarChar(70) NOT NULL" CanBeNull="false" />
+      <Column Name="ConsignorName" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="MarkingUrl" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+      <Column Name="DoubleCheckerAdminID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Association Name="ManifestConsignments_ManifestConsignmentContainers" Member="ManifestConsignmentContainers" ThisKey="ID" OtherKey="ManifestConsignmentID" Type="ManifestConsignmentContainers" />
+      <Association Name="ManifestConsignments_ManifestConsignmentItems" Member="ManifestConsignmentItems" ThisKey="ID" OtherKey="ManifestConsignmentID" Type="ManifestConsignmentItems" />
+      <Association Name="ManifestConsignments_ManifestConsignmentTraces" Member="ManifestConsignmentTraces" ThisKey="ID" OtherKey="ManifestConsignmentID" Type="ManifestConsignmentTraces" />
+      <Association Name="Manifests_ManifestConsignments" Member="Manifests" ThisKey="ManifestID" OtherKey="ID" Type="Manifests" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.DecLists" Member="DecLists">
+    <Type Name="DecLists">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="DecListID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="DeclarationID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="DeclarationNoticeItemID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="OrderID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="OrderItemID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CusDecStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="GNo" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CodeTS" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="ContrItem" Type="System.Decimal" DbType="Decimal(19,0)" CanBeNull="true" />
+      <Column Name="CiqCode" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="GName" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="GModel" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="GQty" Type="System.Decimal" DbType="Decimal(19,5) NOT NULL" CanBeNull="false" />
+      <Column Name="GUnit" Type="System.String" DbType="VarChar(3)" CanBeNull="true" />
+      <Column Name="FirstUnit" Type="System.String" DbType="VarChar(3)" CanBeNull="true" />
+      <Column Name="FirstQty" Type="System.Decimal" DbType="Decimal(19,5)" CanBeNull="true" />
+      <Column Name="SecondUnit" Type="System.String" DbType="VarChar(3)" CanBeNull="true" />
+      <Column Name="SecondQty" Type="System.Decimal" DbType="Decimal(19,5)" CanBeNull="true" />
+      <Column Name="DeclPrice" Type="System.Decimal" DbType="Decimal(19,5) NOT NULL" CanBeNull="false" />
+      <Column Name="DeclTotal" Type="System.Decimal" DbType="Decimal(19,5) NOT NULL" CanBeNull="false" />
+      <Column Name="TradeCurr" Type="System.String" DbType="VarChar(3)" CanBeNull="true" />
+      <Column Name="OriginCountry" Type="System.String" DbType="VarChar(3) NOT NULL" CanBeNull="false" />
+      <Column Name="OrigPlaceCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="DestinationCountry" Type="System.String" DbType="VarChar(3) NOT NULL" CanBeNull="false" />
+      <Column Name="DestCode" Type="System.String" DbType="VarChar(8)" CanBeNull="true" />
+      <Column Name="DistrictCode" Type="System.String" DbType="VarChar(5)" CanBeNull="true" />
+      <Column Name="DutyMode" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="GoodsSpec" Type="System.String" DbType="VarChar(2000)" CanBeNull="true" />
+      <Column Name="GoodsModel" Type="System.String" DbType="VarChar(2000)" CanBeNull="true" />
+      <Column Name="GoodsBrand" Type="System.String" DbType="VarChar(2000)" CanBeNull="true" />
+      <Column Name="CaseNo" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="NetWt" Type="System.Decimal" DbType="Decimal(19,5)" CanBeNull="true" />
+      <Column Name="GrossWt" Type="System.Decimal" DbType="Decimal(19,5)" CanBeNull="true" />
+      <Column Name="Purpose" Type="System.String" DbType="VarChar(4)" CanBeNull="true" />
+      <Column Name="GoodsAttr" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="GoodsBatch" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="CiqName" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
+      <Column Name="TaxedPrice" Type="System.Decimal" DbType="Decimal(18,4)" CanBeNull="true" />
+      <Column Name="InvoicedPrice" Type="System.Decimal" DbType="Decimal(18,4)" CanBeNull="true" />
+      <Column Name="InputID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Association Name="DecHeads_DecLists" Member="DecHeads" ThisKey="DeclarationID" OtherKey="ID" Type="DecHeads" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.OriginsATRateTopView" Member="OriginsATRateTopView">
+    <Type Name="OriginsATRateTopView">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="TariffID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Origin" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Rate" Type="System.Decimal" DbType="Decimal(18,7) NOT NULL" CanBeNull="false" />
+      <Column Name="StartDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="EndDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="ModifyDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ExcludeOriginTariffs" Member="ExcludeOriginTariffs">
+    <Type Name="ExcludeOriginTariffs">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="HSCode" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="ExclusionPeriod" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="Origin" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Voyages" Member="Voyages">
+    <Type Name="Voyages">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="HKLicense" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="DriverName" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="DriverCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CarrierCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="TransportTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CutStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="HKDeclareStatus" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateTime" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="VarChar(500)" CanBeNull="true" />
+      <Column Name="CarrierType" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CarrierName" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="CarrierQueryMark" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="ContactMobile" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CarrierAddress" Type="System.String" DbType="NVarChar(250)" CanBeNull="true" />
+      <Column Name="ContactName" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="ContactFax" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="VehicleType" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="VehicleLicence" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="VehicleWeight" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="VehicleSize" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="DriverMobile" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="DriverHSCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="DriverHKMobile" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="DriverCardNo" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="DriverPortElecNo" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="DriverLaoPaoCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="HKSealNumber" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.DecTaxFlows" Member="DecTaxFlows">
+    <Type Name="DecTaxFlows">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="DecTaxID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="BankName" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="TaxNumber" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="TaxType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PayDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="FillinDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="DeductionTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Amount" Type="System.Decimal" DbType="Decimal(18,4) NOT NULL" CanBeNull="false" />
+      <Column Name="VaildAmount" Type="System.Decimal" DbType="Decimal(18,4)" CanBeNull="true" />
+      <Column Name="DeductionMonth" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
+      <Association Name="DecTaxs_DecTaxFlows" Member="DecTaxs" ThisKey="DecTaxID" OtherKey="ID" Type="DecTaxs" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.DecHeads" Member="DecHeads">
+    <Type Name="DecHeads">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="DeclarationNoticeID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="OrderID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CustomMaster" Type="System.String" DbType="VarChar(4) NOT NULL" CanBeNull="false" />
+      <Column Name="CusDecStatus" Type="System.String" DbType="VarChar(2) NOT NULL" CanBeNull="false" />
+      <Column Name="SeqNo" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PreEntryId" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="EntryId" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="IEPort" Type="System.String" DbType="VarChar(4) NOT NULL" CanBeNull="false" />
+      <Column Name="ManualNo" Type="System.String" DbType="VarChar(12)" CanBeNull="true" />
+      <Column Name="ContrNo" Type="System.String" DbType="VarChar(32) NOT NULL" CanBeNull="false" />
+      <Column Name="IEDate" Type="System.String" DbType="VarChar(8) NOT NULL" CanBeNull="false" />
+      <Column Name="DDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ConsigneeName" Type="System.String" DbType="NVarChar(70) NOT NULL" CanBeNull="false" />
+      <Column Name="ConsigneeScc" Type="System.String" DbType="VarChar(18) NOT NULL" CanBeNull="false" />
+      <Column Name="ConsigneeCusCode" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="ConsigneeCiqCode" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="ConsignorName" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="ConsignorCode" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="OwnerName" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="OwnerScc" Type="System.String" DbType="VarChar(18) NOT NULL" CanBeNull="false" />
+      <Column Name="OwnerCusCode" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="OwnerCiqCode" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="AgentName" Type="System.String" DbType="NVarChar(70) NOT NULL" CanBeNull="false" />
+      <Column Name="AgentScc" Type="System.String" DbType="VarChar(18) NOT NULL" CanBeNull="false" />
+      <Column Name="AgentCusCode" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="AgentCiqCode" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="TrafMode" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="TrafName" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="VoyNo" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="BillNo" Type="System.String" DbType="VarChar(32) NOT NULL" CanBeNull="false" />
+      <Column Name="TradeMode" Type="System.String" DbType="VarChar(4) NOT NULL" CanBeNull="false" />
+      <Column Name="CutMode" Type="System.String" DbType="VarChar(3)" CanBeNull="true" />
+      <Column Name="LicenseNo" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="TradeCountry" Type="System.String" DbType="VarChar(3) NOT NULL" CanBeNull="false" />
+      <Column Name="DistinatePort" Type="System.String" DbType="VarChar(6) NOT NULL" CanBeNull="false" />
+      <Column Name="TransMode" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="FeeCurr" Type="System.String" DbType="VarChar(3)" CanBeNull="true" />
+      <Column Name="FeeMark" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="FeeRate" Type="System.Decimal" DbType="Decimal(19,5)" CanBeNull="true" />
+      <Column Name="InsurCurr" Type="System.String" DbType="VarChar(3)" CanBeNull="true" />
+      <Column Name="InsurMark" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="InsurRate" Type="System.Decimal" DbType="Decimal(19,5)" CanBeNull="true" />
+      <Column Name="OtherCurr" Type="System.String" DbType="VarChar(3)" CanBeNull="true" />
+      <Column Name="OtherMark" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="OtherRate" Type="System.Decimal" DbType="Decimal(19,5)" CanBeNull="true" />
+      <Column Name="PackNo" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="WrapType" Type="System.String" DbType="VarChar(2) NOT NULL" CanBeNull="false" />
+      <Column Name="GrossWt" Type="System.Decimal" DbType="Decimal(19,5) NOT NULL" CanBeNull="false" />
+      <Column Name="NetWt" Type="System.Decimal" DbType="Decimal(19,5) NOT NULL" CanBeNull="false" />
+      <Column Name="TradeAreaCode" Type="System.String" DbType="VarChar(3) NOT NULL" CanBeNull="false" />
+      <Column Name="EntyPortCode" Type="System.String" DbType="VarChar(8) NOT NULL" CanBeNull="false" />
+      <Column Name="GoodsPlace" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="DespPortCode" Type="System.String" DbType="VarChar(8) NOT NULL" CanBeNull="false" />
+      <Column Name="EntryType" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="NoteS" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="MarkNo" Type="System.String" DbType="NVarChar(400) NOT NULL" CanBeNull="false" />
+      <Column Name="PromiseItmes" Type="System.String" DbType="VarChar(32)" CanBeNull="true" />
+      <Column Name="ChkSurety" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Type" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="ApprNo" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="DeclTrnRel" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="BillType" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CustomsExchangeRate" Type="System.Decimal" DbType="Decimal(18,6)" CanBeNull="true" />
+      <Column Name="IsInspection" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsQuarantine" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="IsSuccess" Type="System.Boolean" DbType="Bit" CanBeNull="false" />
+      <Column Name="DeclareName" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="TypistNo" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="InputerID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="OrgCode" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="VsaOrgCode" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="InspOrgCode" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="PurpOrgCode" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="DespDate" Type="System.String" DbType="VarChar(8)" CanBeNull="true" />
+      <Column Name="BLNo" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CorrelationNo" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="CorrelationReasonFlag" Type="System.String" DbType="VarChar(2)" CanBeNull="true" />
+      <Column Name="OrigBoxFlag" Type="System.String" DbType="VarChar(1)" CanBeNull="true" />
+      <Column Name="SpecDeclFlag" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="UseOrgPersonCode" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="UseOrgPersonTel" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="DomesticConsigneeEname" Type="System.String" DbType="VarChar(400)" CanBeNull="true" />
+      <Column Name="OverseasConsignorCname" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="OverseasConsignorAddr" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="CmplDschrgDt" Type="System.String" DbType="VarChar(8)" CanBeNull="true" />
+      <Column Name="CreateTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="MarkingUrl" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+      <Column Name="SwapStatus" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SubmitCustomAdminID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="DoubleCheckerAdminID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="MKImport" Type="System.Boolean" DbType="Bit" CanBeNull="false" />
+      <Column Name="GuaranteeNo" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Association Name="DecHeads_DecRequestCerts" Member="DecRequestCerts" ThisKey="ID" OtherKey="DeclarationID" Type="DecRequestCerts" />
+      <Association Name="DecHeads_DecTraces" Member="DecTraces" ThisKey="ID" OtherKey="DeclarationID" Type="DecTraces" />
+      <Association Name="DecHeads_DecOtherPacks" Member="DecOtherPacks" ThisKey="ID" OtherKey="DeclarationID" Type="DecOtherPacks" />
+      <Association Name="DecHeads_DecHeadFiles" Member="DecHeadFiles" ThisKey="ID" OtherKey="DecHeadID" Type="DecHeadFiles" />
+      <Association Name="DecHeads_DecContainers" Member="DecContainers" ThisKey="ID" OtherKey="DeclarationID" Type="DecContainers" />
+      <Association Name="DecHeads_DecLists" Member="DecLists" ThisKey="ID" OtherKey="DeclarationID" Type="DecLists" />
+      <Association Name="DecHeads_DecLicenseDocus" Member="DecLicenseDocus" ThisKey="ID" OtherKey="DeclarationID" Type="DecLicenseDocus" />
+    </Type>
+  </Table>
+  <Table Name="dbo.DecTaxGuarantees" Member="DecTaxGuarantees">
+    <Type Name="DecTaxGuarantees">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="GuaranteeNo" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="PutOnCustoms" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="GuaranteeAmount" Type="System.Decimal" DbType="Decimal(18,2) NOT NULL" CanBeNull="false" />
+      <Column Name="RemainAmount" Type="System.Decimal" DbType="Decimal(18,2) NOT NULL" CanBeNull="false" />
+      <Column Name="BankName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ApproveDate" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="ValidDate" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PvDataEccn" Member="PvDataEccn">
+    <Type Name="PvDataEccn">
+      <Column Name="PartNumber" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Manufacturer" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="Code" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="LastOrigin" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="ModifyDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.DecTaxs" Member="DecTaxs">
+    <Type Name="DecTaxs">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="InvoiceType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IsUpload" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
+      <Column Name="HandledType" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="IsPutInSto" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="DecTaxs_DecTaxFlows" Member="DecTaxFlows" ThisKey="ID" OtherKey="DecTaxID" Type="DecTaxFlows" />
+    </Type>
+  </Table>
+  <Table Name="dbo.DecLicenseDocus" Member="DecLicenseDocus">
+    <Type Name="DecLicenseDocus">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="DeclarationID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="DocuCode" Type="System.String" DbType="VarChar(1)" CanBeNull="true" />
+      <Column Name="CertCode" Type="System.String" DbType="VarChar(32) NOT NULL" CanBeNull="false" />
+      <Column Name="FileURL" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Association Name="DecHeads_DecLicenseDocus" Member="DecHeads" ThisKey="DeclarationID" OtherKey="ID" Type="DecHeads" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.DecGoodsLimits" Member="DecGoodsLimits">
+    <Type Name="DecGoodsLimits">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="DecListID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="GoodsNo" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="LicTypeCode" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="LicenceNo" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="LicWrtofDetailNo" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="LicWrtofQty" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="LicWrtofQtyUnit" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Column Name="FileUrl" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+    </Type>
+  </Table>
+</Database>

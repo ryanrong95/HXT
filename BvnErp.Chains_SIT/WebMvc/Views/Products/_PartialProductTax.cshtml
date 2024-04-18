@@ -1,0 +1,69 @@
+﻿<template id="info">
+    <el-form :model="form1" :rules="rules1" status-icon ref="form1" label-width="120px">
+        <el-form-item label="品名：" prop="Name" >
+            <el-input v-model="form1.Name" placeholder="请输入品名" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="型号：" prop="Models" :rules="[{ required: true, message: '请输入型号', trigger: 'blur' },{max:150, message: '型号长度不超过150', trigger: 'blur' }]">
+            <el-input v-model="form1.Models" placeholder="请输入型号" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="税务编号：" prop="TaxCode" :rules="[{ required: true, message: '请输入税务编号', trigger: 'blur' },{max:150, message: '税务编号长度不超过150', trigger: 'blur' }]">
+            <el-input v-model="form1.TaxCode" placeholder="请输入税务编号" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="税务名称：" prop="TaxName" :rules="[{ required: true, message: '请输入税务名称', trigger: 'blur' },{max:150, message: '税务名称长度不超过150', trigger: 'blur' }]">
+            <el-input v-model="form1.TaxName" placeholder="请输入税务名称" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="备注：" prop="Summary">
+            <el-input type="textarea" v-model="form1.Summary" :rules="[{max:300, message: '备注长度不超过300', trigger: 'blur' }]"></el-input>
+        </el-form-item>
+    </el-form>
+</template>
+<script>
+    Vue.component(
+        'my-info',
+        {
+            template: "#info",
+            data: function () {
+                var that = this;
+                var validateName = function(rule, value, callback) {
+                    if (value == '' || value == null) {
+                        callback(new Error('请输入品名'));
+                    }
+                    axios({
+                        url: "/Products/CheckProductName",
+                        method: "post",
+                        data: {
+                            Name: that.form1.Name,
+                            ID: that.form1.ID
+                        },
+                    }).then(function (response) {
+                        if (response.data.type == "error") {
+                            callback(new Error(response.data.msg));
+                        } else {
+                            callback();
+                        }
+                    }).catch(function (error) {
+                        that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                    });
+                };
+                return {
+                    form1: @Html.Raw(Json.Encode(Model)),
+                    rules1: {
+                        Name: [{ required: true, validator: validateName, trigger: 'blur' },
+                        { max: 150, message: '品名长度不超过150', trigger: 'blur' }
+                        ],
+                    }
+                }
+            },
+            methods: {
+                //消息提示框
+                onAlert: function (type, message) {
+                    this.$message({
+                        message: message,
+                        type: type
+                    });
+                },
+            }
+        });
+</script>
+
+

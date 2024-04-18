@@ -1,0 +1,52 @@
+﻿@{
+    ViewBag.Title = "收货地址";
+}
+<div class="second_header">
+    <a onClick="javascript :history.back(-1);"><span class="el-icon-arrow-left icon"></span></a>
+    <div class="second_nav">
+        <span class="header-title">收货地址</span>
+    </div>
+</div>
+<div id="delivery_address" class="bind_user" v-cloak>
+    <div class="address_list">
+        <ul>
+            <li v-for="(item,index) in address_list">
+                <div>
+                    <p class="address_name">
+                        <span>{{item.Name}}</span>
+                        <span v-if="item.IsDefault">默认地址</span>
+                    </p>
+                    <p class="address_detail">
+                        <span>收货单位:</span>
+                        <span>{{item.Name}}</span>
+                    </p>
+                    <p class="address_detail">
+                        <span>收货人:</span>
+                        <span>{{item.Consignee}}</span>
+                    </p>
+                    <p class="address_detail">
+                        <span>地址:</span>
+                        <span>{{item.Address}}</span>
+                    </p>
+                    <p class="address_detail">
+                        <span>手机:</span>
+                        <span>{{item.Mobile}}</span>
+                    </p>
+                    <p class="address_detail">
+                        <span>邮箱:</span>
+                        <span>{{item.Mail}}</span>
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+<script>
+    var address = new Vue({
+        el: "#delivery_address",
+        data: {
+            address_list:@Html.Raw(Json.Encode(Model)),
+        }
+    })
+</script>
+

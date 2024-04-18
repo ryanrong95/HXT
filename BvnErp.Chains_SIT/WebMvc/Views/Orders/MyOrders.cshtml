@@ -1,0 +1,618 @@
+﻿@model WebMvc.Models.MyOrdersViewModel
+@{
+    ViewBag.Title = "我的订单";
+    Layout = "~/Views/Shared/_LayoutCenter.cshtml";
+    ViewBag.navid = "MyOrders";
+}
+<style>
+    .el-message {
+        top: 250px;
+        min-width: 150px;
+    }
+
+    .el-message__content {
+        font-size: 16px;
+    }
+
+    .el-message .el-icon-error {
+        font-size: 16px;
+    }
+</style>
+<div class="content_right backshow">
+    <h2>全部订单</h2>
+    <div id="myorder" v-cloak style="padding:30px;min-height:650px;">
+        <div class="queryData">
+            <div>
+                <span class="title">订单编号:</span>
+                <el-input size="mini" v-model="indexData.orderID" placeholder="请输入订单编号" style="width:190px;" auto-complete="off"></el-input>
+                <span class="title">下单时间:</span>
+                <el-date-picker v-model="indexData.dataValue"
+                                size="small"
+                                type="daterange"
+                                range-separator="至"
+                                start-placeholder="开始日期"
+                                end-placeholder="结束日期">
+                </el-date-picker>
+                <span v-if="showIndex==1" v-on:click="changeShowIndex" class="ml16 showtab">更多筛选条件<i class="el-icon-arrow-down"></i></span>
+                <span v-else v-on:click="changeShowIndex" class="ml16 showtab">精简筛选条件<i class="el-icon-arrow-up"></i></span>
+            </div>
+            <div v-if="showIndex==2" class="detailQuery">
+                <span class="title">订单状态:</span>
+                <el-select size="mini" v-model="indexData.orderStatus" filterable clearable placeholder="请选择">
+                    <el-option v-for="item in OrderStatusOptions"
+                               :key="item.value"
+                               :label="item.text"
+                               :value="item.value">
+                    </el-option>
+                </el-select>
+                <span class="title ml40">开票状态:</span>
+                <el-select size="mini" v-model="indexData.invoiceStatus" filterable clearable placeholder="请选择">
+                    <el-option v-for="item in InvoiceStatusOptions"
+                               :key="item.value"
+                               :label="item.text"
+                               :value="item.value">
+                    </el-option>
+                </el-select>
+                <span class="title ml40">付汇状态:</span>
+                <el-select size="mini" v-model="indexData.payExchangeStatus" filterable clearable placeholder="请选择">
+                    <el-option v-for="item in PayExchangeStatusOptions"
+                               :key="item.value"
+                               :label="item.text"
+                               :value="item.value">
+                    </el-option>
+                </el-select>
+            </div>
+            <button v-on:click="search" class="btnQuery"><i></i>搜索</button>
+        </div>
+        <div class="orderlist" ref="viewBox1" v-on:scroll="ss('viewBox1')">
+            <div class="title">
+                <ul class="overhide">
+                    <li class="fl li2" style="width:120px">
+                        <span>订单状态</span>
+                    </li>
+                    <li class="fl li1" style="width:270px">
+                        <span>供应商</span>
+                    </li>
+                    <li class="fl li4" style="width:130px">
+                        <span>开票状态</span>
+                    </li>
+                    <li class="fl li5" style="width:160px">
+                        <span>付汇状态</span>
+                    </li>
+                    <li class="fl li6">
+                        <span>操作</span>
+                    </li>
+                </ul>
+            </div>
+            <div v-loading="indexData.loading" style="min-height:400px;">
+                <div v-for="t of indexData.curItems" style="margin-top:10px">
+                    <div class="main_TitleTop">
+                        <div style="display:block;float:left">
+                            <span class="main_TitleTopOrderNo">
+                                主订单号：{{t.MainOrderID}}
+                            </span>
+                            <span class="main_TitleTopCreateTime">{{t.createTime}}</span>                           
+                        </div>
+                        <div style="display:block;float:right;margin-right:20px" v-if="indexData.isIcgoo">
+                            <img v-show="t.isShowBill" src="~/Content/images/Shape3.png" />
+                            <a v-show="t.isShowBill" v-on:click="OrderBillsForIcgoo(t.MainOrderID)">主对账单</a>
+                            <img src="~/Content/images/Shpae1.png" />
+                            <a v-on:click="orderDetailsForIcgoo(t.MainOrderID)" style="text-align:right">主订单详情</a>
+                        </div>
+                        <div style="display:block;float:right" v-if="!indexData.isIcgoo">
+                            <span v-if="t.isSplit" class="main_TitleSplitReason">您订单中的商品因分批到货[海关特殊申报]要求，拆分报关。</span>
+                        </div>                        
+                    </div>
+                    <div class="main_TitleBottom">
+                        <div style="display:block;float:left">
+                            <span class="main_TitleBottomText" style="margin-left:17px">交易币种：{{t.currency}}</span>
+                            <span class="main_TitleBottomText" style="margin-left:50px">报关总价：{{t.declarePrice.toFixed(2)}}</span>
+                            <span class="main_TitleBottomText" style="margin-left:50px">订单状态：</span>
+                            <span class="main_TitleBottomText" style="color:#FDA100" v-if="t.isSplit">已拆分</span><span class="main_TitleBottomText" style="color:#FDA100" v-else>未拆分</span>
+                        </div>
+                        <div style="display:block;float:left;margin-left:260px">
+                            <img v-show="t.isShowBill" src="~/Content/images/Shape3.png" />
+                            <a v-show="t.isShowBill" v-on:click="OrderBills(t.MainOrderID)">对账单</a>
+                            <img src="~/Content/images/Shpae1.png" />
+                            <a v-on:click="orderDetails(t.MainOrderID)" style="text-align:right">订单详情</a>                          
+                        </div>
+                    </div>
+                    <div v-for="item of t.Orders">
+                        <div class="subTitle">
+                            <div style="display:block;float:left;width:450px">
+                                <span class="subTitleOrderNO" style="margin-left:17px">订单号：{{item.ID}}</span>
+                                <span class="ml14" v-html="item.specialTypeLabel"></span>
+                            </div>
+                            <div style="display:block;float:left;margin-left:10px">
+                                <span class="subTitleDeclarePrice" style="margin-left:100px">报关总价： {{item.DeclarePrice.toFixed(2)}} {{item.Currency}}</span>
+                            </div>                            
+                        </div>
+                        <div class="subItems">
+                            <table class="subItemsTable">
+                                <tr class="cellSplit">
+                                    <td style="width:114px;text-align:center">
+                                        <span>{{item.OrderStatus}}</span><br />
+                                        <a v-on:click="orderTrace(item.ID)">订单跟踪</a>
+                                    </td>
+                                    <td style="width:200px;word-wrap:break-word;word-break:break-all;padding:0 20px;text-align:left">
+                                        <ul>
+                                            <li v-for="(sub_item,index) in item.Suppliers">
+                                                {{index + 1}}. {{sub_item}}
+                                            </li>
+                                        </ul>
+                                    </td>
+                                    <td style="width:116px;text-align:center">
+                                        <p>{{item.InvoiceStatus}}</p>
+                                        <a v-on:click="invoiceDetails(item.ID)">查看发票</a>
+                                    </td>
+                                    <td style="width:138px;text-align:left">
+                                        <div style="padding-left:15px;">
+                                            <p>{{item.PayExchangeStatus}}</p>
+                                            <p>已付汇: {{item.Remittanced}}</p>
+                                            <p>可付汇: {{item.Remittance}}</p>
+                                        </div>
+                                    </td>
+                                    <td style="width:158px;padding:12px 0px;text-align:center">
+                                        <el-button v-if="item.IsBecauseModified" class="tihou mb10" v-on:click="checkOrder(item.ID, item.IsBecauseModified)">订单确认</el-button><!-- 重新确认 -->
+                                        <el-button v-if="item.isUnPay && !item.IsBecauseModified" class="tihou" v-on:click="applyOrder(item.ID,item.IsPrePayExchange,item.DeclareDate)">申请付汇</el-button>                                        
+                                        <el-button v-if="item.isDraft && !item.IsBecauseModified" class="tihou" v-on:click="editOrder(item.ID)">编辑</el-button>
+                                        <el-button v-if="item.isUnConfirm && !item.IsBecauseModified" class="tihou mb10" v-on:click="checkOrder(item.ID, item.IsBecauseModified)">订单确认</el-button>
+                                        <a v-if="item.IsBecauseModified" v-on:click="cancelOrder(item.ID, item.IsBecauseModified)">取消</a>
+                                        <a v-if="item.isUnConfirm && !item.IsBecauseModified" v-on:click="cancelOrder(item.ID, item.IsBecauseModified)">取消</a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="foot" v-if="!indexData.loading">
+                    <el-pagination style="float:right" v-on:size-change="handleSizeChange"
+                                   v-on:current-change="handleCurrentChange"
+                                   :current-page="indexData.pageIndex"
+                                   :page-sizes="[5, 10, 20, 40]"
+                                   :page-size="indexData.pageSize"
+                                   layout="total, sizes, prev, pager, next, jumper"
+                                   :total="indexData.datalist.Total">
+                    </el-pagination>
+                </div>
+            </div>
+            <el-dialog title="订单跟踪" :lock-scroll="false" class="trace_dialog" width="700px" :visible.sync="traceFormVisible">
+                <div class="order-track">
+                    <div class="track-rcol">
+                        <div v-if="list.length>0" class="track-list">
+                            <ul>
+                                <li class="" v-for="item of list">
+                                    <div class="line"></div>
+                                    <i class="dot" v-if="item.isDot"></i>
+                                    <i v-else :class="[item.isCompleted?'complete':'state-icon']"></i>
+                                    <span class="date">
+                                        {{item.Date}}
+                                    </span>
+                                    <span class="time">{{item.Time}}</span>
+                                    <span class="txt">
+                                        <span class="stress-txt">{{item.Step}}</span>
+                                        <span v-html="item.Summary"></span>
+
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <p v-else class="no_data">
+                            暂无数据...
+                        </p>
+                    </div>
+                </div>
+            </el-dialog>
+            <el-dialog title="取消订单" :visible.sync="dialogFormVisible" :lock-scroll="false" :close-on-click-modal="false" width="30%">
+                <el-form status-icon :model="ruleForm" label-width="60px" ref="ruleForm">
+                    <el-form-item label="原因" prop="Cancel_Reason" :rules="[{ required: true, message: '请输入原因', trigger: 'blur' },{max:400, message: '原因长度不超过400', trigger: 'blur' }]">
+                        <el-input v-model="ruleForm.Cancel_Reason" type="textarea" auto-complete="off"></el-input>
+                    </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button v-on:click="dialogFormVisible = false">取 消</el-button>
+                    <el-button type="primary" v-on:click="onSubmit_ruleForm()">确 定</el-button>
+                </div>
+            </el-dialog>
+            <el-dialog title="提货单(自提)" :lock-scroll="false" class="tihuo_dialog" width="500px" :visible.sync="tihuoFormVisible">
+                <ul style="overflow-y:auto; height: 200px;">
+                    <li class="overhide" v-for="(item,index) in tihuo_list">
+                        <i class="icon_wenjian fl mr10"></i>
+                        <span class="fl">
+                            <span class="file_name">提货单号：{{item.Code}}</span>
+                            <span class="file_size">件数：{{item.PackNo}}</span>
+                        </span>
+                        <el-button class="btn_tihuo" type="primary" v-on:click="download_Tihuo(item.ID)">下载</el-button>
+                        <a id="exportInfoForm" style="display:none" download><span id="ex-li" style="display:none"></span></a>
+                    </li>
+                </ul>
+            </el-dialog>
+        </div>
+    </div>
+</div>
+
+<script>
+    var myorder = new Vue({
+        el: "#myorder",
+        data: function () {
+            return {
+                list: [],
+                tihuo_list:[],
+                tihuoFormVisible:false,
+                traceFormVisible: false,
+                dialogFormVisible: false,
+                indexData:{
+                    loading: true,
+                    curItems: [],
+                    datalist:@Html.Raw(Json.Encode(Model)),
+                    pageIndex: 1, //初始页
+                    pageSize: 5,    //每页的数据
+                    scrollTop: 0, //滚动条位置
+                    dataValue: '',
+                    orderStatus: "",
+                    startDate: "",
+                    endDate: "",
+                    invoiceStatus: "",
+                    payExchangeStatus: "",
+                    orderID: "",
+                    isIcgoo: false,
+                },
+                ruleForm: {
+                    Cancel_Reason: "",
+                    ID: "",
+                    IsBecauseModified: "",
+                },
+                showIndex: "1", //下拉标志
+            }
+        },
+        computed: {
+            //订单状态数据源
+            OrderStatusOptions: function () {
+                return JSON.parse(this.indexData.datalist.OrderStatusOptions);
+            },
+            //开票状态数据源
+            InvoiceStatusOptions: function () {
+                return JSON.parse(this.indexData.datalist.InvoiceStatusOptions);
+            },
+            //付汇状态数据源
+            PayExchangeStatusOptions: function () {
+                return JSON.parse(this.indexData.datalist.PayExchangeStatusOptions);
+            },
+        },
+        mounted: function () {
+            var that = this;
+            var userJsonStr = sessionStorage.getItem('myOrders');
+            userEntity = JSON.parse(userJsonStr);
+            if (userEntity == null) {
+                that.paging();
+            } else {
+                that.indexData = userEntity;
+                that.$nextTick(function(){
+                    that.$refs['viewBox1'].scrollTop = that.indexData.scrollTop;
+                })
+
+                sessionStorage.removeItem('myOrders');
+            }
+        },
+        methods: {
+            onSubmit_ruleForm: function () {
+                var that = this;
+                this.$refs.ruleForm.validate(function (valid) {
+                    if (valid) {
+                        that.dialogFormVisible = false;
+                        axios({
+                            url: "/Orders/CancelConfirm",
+                            method: "post",
+                            data: {
+                                orderID: that.ruleForm.ID,
+                                reason: that.ruleForm.Cancel_Reason,
+                                isBecauseModified: that.ruleForm.IsBecauseModified,
+                            }
+                        }).then(function (response) {
+                            if (response.data.type != "error") {
+                                that.paging();
+                            }
+                            that.onAlert(response.data.type, response.data.msg);
+                        }).catch(function (error) {
+                            that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                        });
+                    }
+                });
+            },
+            //订单取消
+            cancelOrder: function (id, isBecauseModified) {
+                var that = this;
+                this.dialogFormVisible = true;
+                setTimeout(function () {
+                    that.$refs.ruleForm.resetFields();
+                    that.ruleForm.Cancel_Reason = "";
+                    that.ruleForm.ID = id;
+                    that.ruleForm.IsBecauseModified = isBecauseModified;
+                }, 0)
+            },
+            //确认订单
+            checkOrder: function (id, isBecauseModified) {
+                location.href = "/Orders/Confirm/?id=" + id + "&v=" + isBecauseModified;
+            },
+             //草稿编辑
+            editOrder: function (id) {
+                sessionStorage.setItem('MyOrders', JSON.stringify(this.indexData));
+                location.href = "/Orders/Edit/?id=" + id + "&v="+'@ViewBag.navid';
+            },
+            //确认订单
+            confirmOrder: function (id) {
+                var that = this;
+                this.$confirm('是否确认收货(包括分批送货)?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                    lockScroll: false,
+                }).then(function () {
+                    axios({
+                        url: "/Orders/ConfirmReceived",
+                        method: "post",
+                        data: {
+                            orderID: id,
+                        }
+                    }).then(function (response) {
+                        if (response.data.type != "error") {
+                            that.paging();
+                        }
+                        that.onAlert(response.data.type, response.data.msg);
+                    }).catch(function (error) {
+                        that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                    });
+                }).catch(function () {
+                });
+            },
+            //是否满足付汇条款：如果是90天内付汇需在报关完成后付汇
+            isAllowPayment: function (orderID, isPrePayExchange, DeclareDate) {
+                //20190924 取消付汇90天限制
+                //if ((!isPrePayExchange) && DeclareDate != null) {
+                //    var curDate = new Date();
+                //    var declareDate = new Date(DeclareDate);
+                //    var minusDays = this.datedifference(curDate, declareDate);
+                //    if (minusDays > 90) {
+                //        this.onAlert("error", "订单号'" + orderID + "'协议条款为'90天内换汇'，需在报关完成90天内付汇！");
+                //        return false;
+                //    }
+                //}
+                return true;
+            },
+            //申请付汇
+            applyOrder: function (orderID, isPrePayExchange, DeclareDate) {
+                if (this.isAllowPayment(orderID, isPrePayExchange, DeclareDate)) {
+                    sessionStorage.setItem('UnPayExchanges', JSON.stringify(this.indexData));
+                    location.href = "/PayExchanges/Apply/" + orderID;
+                }
+            },
+            search: function () {
+                if (this.indexData.dataValue != "" && this.indexData.dataValue != null) {
+                    this.indexData.navStatus = "";
+                    var start = new Date(this.indexData.dataValue[0]);
+                    var startDate = start.getFullYear() + '-' + (start.getMonth() + 1) + '-' + start.getDate();
+                    var end = new Date(this.indexData.dataValue[1]);
+                    var endDate = end.getFullYear() + '-' + (end.getMonth() + 1) + '-' + end.getDate();
+                    this.indexData.startDate = startDate;
+                    this.indexData.endDate = endDate;
+                } else {
+                    this.indexData.startDate = "";
+                    this.indexData.endDate = "";
+                }
+                this.indexData.pageIndex = 1;
+                this.paging();
+            },
+            changeShowIndex: function () {
+                if (this.showIndex == "1") {
+                    this.showIndex = "2";
+                } else {
+                    this.showIndex = "1";
+                }
+            },
+            download_Tihuo: function (id) {
+                var that = this;
+                axios({
+                    url: "/Orders/ImportTihuoFile",
+                    method: "post",
+                    data: {
+                        id: id
+                    }
+                }).then(function (response) {
+                    if (response.data.type == "error") {
+                        that.onAlert(response.data.type, response.data.msg);
+                    } else {
+                        $('#exportInfoForm').attr("href", response.data.data);
+                        $('#exportInfoForm').attr("target", "_blank");
+                        $('#ex-li').trigger("click");
+                    }
+                }).catch(function (error) {
+                    that.onAlert("warning", error);
+                });
+            },
+            export_Tihuo: function (id) {
+                var that = this;
+                that.tihuo_list = [];
+                axios({
+                    url: "/Orders/GetEntryNotice",
+                    method: "post",
+                    data: { id: id },
+                }).then(function (res) {
+                    if (res.data.type == "success") {
+                        that.tihuo_list = that.dataProcessing(JSON.parse(res.data.data))
+                        that.tihuoFormVisible = true;
+                    } else {
+
+                    }
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            orderTrace: function (id) {
+                var that = this;
+                that.list = [];
+                axios({
+                    url: "/Orders/GetTrace",
+                    method: "post",
+                    data: { id: id },
+                }).then(function (res) {
+                    if (res.data.type == "success") {
+                        that.list = that.dataProcessing(JSON.parse(res.data.data))
+                        that.traceFormVisible = true;
+                    } else {
+
+                    }
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            dataProcessing: function (data) {
+                var arr = [];
+                var date = "";
+                var step = "";
+                for (var i = 0; i < data.length; i++) {
+                    var temp = data[i];
+                    if (data[i].Date == date) {
+                        temp.Date = "";
+                    } else {
+                        date = data[i].Date;
+                    }
+                    if (data[i].Step == step) {
+                        temp.isDot = true;
+                        temp.Step = "";
+                    } else {
+                        step = data[i].Step;
+                    }
+                    if (i > 0) {
+                        temp.isCompleted = false;
+                    }
+                    arr.push(temp);
+                }
+                return arr;
+            },
+            ss: function (ref) {
+                // 监听这个dom的scroll事件
+                var that = this;
+                this.$refs[ref].addEventListener('scroll', function() {
+                    that.indexData.scrollTop = that.$refs[ref].scrollTop;
+                }, false)
+            },
+            toFixed: function (num, val) {
+                return parseFloat(val).toFixed(num);
+            },
+            orderDetails: function (id) {
+                sessionStorage.setItem('myOrders', JSON.stringify(this.indexData));
+                location.href = "/Orders/Info/?id=" + id +"&v="+'@ViewBag.navid';
+            },
+            //对账单
+            OrderBills: function (id) {
+                sessionStorage.setItem('myOrders', JSON.stringify(this.indexData));
+                location.href = "/Orders/OrderBills/?id=" + id+"&v="+'@ViewBag.navid';
+            },
+            OrderBillsForIcgoo: function (id) {
+                sessionStorage.setItem('myOrders', JSON.stringify(this.indexData));
+                location.href = "/Orders/OrderBillsForIcgoo/?id=" + id+"&v="+'@ViewBag.navid';
+            },
+            orderDetailsForIcgoo: function (id) {
+                sessionStorage.setItem('myOrders', JSON.stringify(this.indexData));
+                location.href = "/Orders/InfoForIcgoo/?id=" + id+"&v="+'@ViewBag.navid';
+            },
+            //查看发票
+            invoiceDetails: function (id) {
+                sessionStorage.setItem('myOrders', JSON.stringify(this.indexData));
+              location.href = "/Orders/Invoice/?id=" + id +"&v="+'@ViewBag.navid';
+            },
+            // 初始页currentPage、初始每页数据数pagesize和数据data
+            handleSizeChange: function (size) {
+                this.indexData.pageSize = size;
+                this.paging();
+            },
+            handleCurrentChange: function (currentPage) {
+                this.indexData.pageIndex = currentPage;
+                this.paging();
+            },
+            paging: function () {
+                var that = this;
+                that.indexData.loading = true;
+                axios({
+                    url: "/Orders/GetMyOrderList",
+                    method: "post",
+                    data: {
+                        page: this.indexData.pageIndex,
+                        rows: this.indexData.pageSize,
+                        orderStatus: this.indexData.orderStatus,
+                        invoiceStatus: this.indexData.invoiceStatus,
+                        payExchangeStatus: this.indexData.payExchangeStatus,
+                        startDate: this.indexData.startDate,
+                        endDate: this.indexData.endDate,
+                        orderID: this.indexData.orderID,
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                    transformRequest: [function (data) {
+                        var ret = ''
+                        for (var it in data) {
+                            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+                        }
+                        return ret;
+                    }],
+                }).then(function (response) {
+                    var data = JSON.parse(response.data.data);
+                    var MianIDs = [];
+                    var newData = [];
+                    for (var irow = 0; irow < data.list.length; irow++) {
+                        if (MianIDs.indexOf(data.list[irow].MainOrderID) < 0) {
+                            MianIDs.push(data.list[irow].MainOrderID);
+                        }
+                    }
+
+                    for (var i = 0; i < MianIDs.length; i++) {
+                        var d = [];
+                        var isShowBill = false;
+                        var declarePrice = 0;
+                        for (var j = 0; j < data.list.length; j++) {
+                            if (data.list[j].MainOrderID == MianIDs[i]) {
+                                d.push(data.list[j]);
+                                if (data.list[j].isShowBill == true) {
+                                    isShowBill = true;
+                                }
+
+                                declarePrice += data.list[j].DeclarePrice;
+                            }
+                        }
+                        var isSplit = false;
+                        if (d.length > 1) {
+                            isSplit = true;
+                        }
+                        newData.push({
+                            MainOrderID: MianIDs[i],
+                            Orders: d,
+                            isShowBill: isShowBill,
+                            isSplit: isSplit,
+                            createTime: d[0].MainOrderCreateDate,
+                            currency: d[0].Currency,
+                            declarePrice: declarePrice
+                        })
+                    }
+                    debugger
+                    if (data.list[0].OrderType != 200) {
+                        that.indexData.isIcgoo = true;
+                    }
+                    that.indexData.curItems = newData;
+                    that.indexData.datalist.Total = data.total;
+                    that.indexData.loading = false;
+                    }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                });
+            },
+        }
+    });
+</script>

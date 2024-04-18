@@ -1,0 +1,156 @@
+﻿<!--<i class="footer-top-i"></i>-->
+<footer id="footer" v-cloak>
+    <div class="footer-top" @click="toTop">
+        <i></i>
+        <span>TOP</span>
+    </div>
+    <div class="footer_content">
+        <ul v-if="footerList.length" class="clearfix">
+            <li v-for="(item,index) in footerList" v-bind:class="[{'w250':index==0},{'w194':index==1||index==2},{'w96':index==5}]">
+                <i></i>
+                <h3>{{item.title}}</h3>
+                <div v-show="item.content">
+                    <div v-for="page,ind in item.content">
+                        <a v-show="(page.url&&page.text!='归类快速查询')||(!page.url&&page.text!='投诉建议'&&page.text!='归类快速查询')" v-bind:href="page.url" v-bind:class="{'mb0':ind==item.content.length-1}">{{page.text}}</a>
+                        <a v-show="!page.url&&page.text=='归类快速查询'&&isLogin==false" v-bind:class="{'mb0':ind==item.content.length-1}" @click="openLogin">{{page.text}}</a>
+                        <a v-show="page.url&&page.text=='归类快速查询'&&isLogin" v-bind:href="page.url" v-bind:class="{'mb0':ind==item.content.length-1}">{{page.text}}</a>
+                        <a v-show="!page.url&&page.text=='投诉建议'" v-bind:class="{'mb0':ind==item.content.length-1}" @click="openSuggestions">{{page.text}}</a>
+                    </div>
+                </div>
+                <div v-show="index==0" class="line"></div>
+                <div v-show="index==footerList.length-1" class="footer_QRCode">
+                    <img src="/Content/images/erweima.png" alt="Alternate Text" />
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="footer_text">
+        <p class="mb10">禁限售规则 - 知识产权保护政策 - 隐私权政策 - 使用条款</p>
+        <p>©️2010-2020 深圳市创新恒远供应链管理有限公司 版权所有</p>
+    </div>
+    <div class="suggestions" v-show="suggestions"></div>
+    <div class="login" v-show="loginStatus"></div>
+</footer>
+<script>
+    var footer = new Vue({
+        el: '#footer',
+        data: {
+            footerList: [{
+                title: '关于我们',
+                content: [
+                    {
+                        text: '公司简介',
+                        url: '/About.html'
+                    },
+                    {
+                        text: '人才招聘',
+                        url: '/Recruitment.html'
+                    },
+                    {
+                        text: '联系我们',
+                        url: '/Contact.html'
+                    }
+                ]
+            },
+            {
+                title: '服务',
+                content: [
+                    {
+                        text: '进口报关',
+                        url: '/Service.html?activeName=S1'
+                    },
+                    {
+                        text: '付汇',
+                        url: '/Service.html?activeName=S2'
+                    },
+                    {
+                        text: '代收/发货',
+                        url: '/Service.html?activeName=S3'
+                    },
+                    {
+                        text: '代仓储',
+                        url: '/Service.html?activeName=S4'
+                    }
+                ]
+            },
+            {
+                title: '付款及配送',
+                content: [
+                    {
+                        text: '如何付款',
+                        url: '/FAQ/Payment.html'
+                    },
+                    {
+                        text: '香港库房收货地址',
+                        url: '/FAQ/HKReceivingAddress.html'
+                    },
+                    {
+                        text: '收费标准',
+                        url: '/FAQ/ChargingStandard.html'
+                    }
+                ]
+            },
+            {
+                title: '帮助',
+                content: [
+                    {
+                        text: '常见问题',
+                        url: '/FAQ.html'
+                    },
+                    {
+                        text: '新手入门',
+                        url: '/FAQ/RegistrationGuide.html'
+                    },
+                    {
+                        text: '报关流程',
+                        url: '/Procedure.html'
+                    },
+                    {
+                        text: '投诉建议'
+                    }
+                ]
+            },
+            {
+                title: '工具',
+                content: [
+                    {
+                        text: '归类快速查询',
+                        url: ''
+                    },
+                    {
+                        text: '资料下载',
+                        url: '/download.html'
+                    }
+                ]
+            },
+            {
+                title: '关注我们'
+            }
+            ],
+            suggestions: false,
+            loginStatus: false,//登录弹出框展示状态
+            isLogin: false
+        },
+        mounted: function () {
+            this.isLogin = header.isLogin;
+            this.loginStatus = header.loginStatus;
+            if (this.isLogin) {
+                this.footerList[4].content[0].url = '/Sort/Search.html'
+            }
+            $(".suggestions").load("/suggestions.html");
+            $(".login").load("/login.html");
+        },
+        methods: {
+            toTop: function () {
+                document.documentElement.scrollTop = document.body.scrollTop = 0;
+            },
+            openSuggestions: function () {
+                this.suggestions = true;
+            },
+            openLogin: function () {
+                header.loginStatus = true;
+                this.loginStatus = true;
+            }
+        }
+    })
+</script>

@@ -1,0 +1,487 @@
+﻿
+@{
+    ViewBag.Title = "订单确认";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>订单确认</title>
+    <link rel="stylesheet" href="~/Content/css/border.css">
+    <link rel="stylesheet" href="~/Content/css/reset.css">
+    <link rel="stylesheet" href="~/Content/css/element.css">
+    <link rel="stylesheet" href="~/Content/css/mint-ui.css">
+    <link rel="stylesheet" href="~/Content/css/index.css">
+    <link rel="stylesheet" href="~/Content/css/common.css" />
+    <script src="~/Scripts/vue.js"></script>
+    <script src="~/Scripts/elementui.js"></script>
+    <script src="~/Scripts/mint-ui.js"></script>
+    <script src="~/Scripts/clipboard.min.js"></script>
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="~/Scripts/axios.min.js"></script>
+
+    <style>
+        .unconfirmed_details {
+            width: calc(100% - 2.06rem - 0.06rem);
+        }
+
+        .disabled_Submission_btn {
+            display: inline-block;
+            padding: 0.2rem 0.68rem;
+            margin-right: 0.8rem;
+            font-size: 0.3rem;
+            background: #b3b3b3;
+            color: #ffffff;
+            border-radius: 0.1rem;
+        }
+
+        .order_bottons {
+            margin: 0;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+   
+    <div id="unconfirmed_order" v-cloak>
+        <div class="second_header">
+            <a onClick="javascript :history.back(-1);"><span class="el-icon-arrow-left icon"></span></a>
+            <div class="second_nav">
+                <span class="header-title">订单确认</span>
+            </div>
+        </div>
+        <div class="order_box">
+            <ul>
+                <li v-for="(item,index) in items">
+                    <div class="unconfirmed_tiele" v-on:click="showdetail(index)">
+                        <div class="title_box">
+                            <p>{{index+1}}</p>
+                            <p>{{subStr(item.Model, 8)}}</p>
+                            <p>货值:<span class="tax_price">{{item.total}}</span></p>
+                            <p>税费:<span class="tax_price">{{item.tax_price}}</span></p>
+                            <p>
+                                <span v-if="icontrue==true&&showindex==index"
+                                      class="order_icon el-icon-arrow-up"></span>
+                                <span v-else class="order_icon el-icon-arrow-down"></span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="unconfirmed_contents" v-if="showindex==index">
+                        <div class="showindex_back">
+                            <div class="contents_laber">
+                                <p>
+                                    <span class="laber_name">规格型号</span>
+                                    <span class="laber_contents">{{item.Model}}</span>
+                                </p>
+                                <p>
+                                    <span class="laber_name">品名</span>
+                                    <span class="laber_contents">{{item.Name}}</span>
+                                </p>
+                                <p>
+                                    <span class="laber_name">品牌</span>
+                                    <span class="laber_contents">{{item.Manufacturer}}</span>
+                                </p>
+                                <p>
+                                    <span class="laber_name">数量</span>
+                                    <span class="laber_contents">{{item.Quantity}}</span>
+                                </p>
+                                <p>
+                                    <span class="laber_name">单价(USD)</span>
+                                    <span class="laber_contents">{{toFixed(4,item.UnitPrice)}}</span>
+                                </p>
+                                <p>
+                                    <span class="laber_name">总价(USD)</span>
+                                    <span class="laber_contents">{{toFixed(2,item.TotalPrice)}}</span>
+                                </p>
+                                <p>
+                                    <span class="laber_name">报关货值(CNY)</span>
+                                    <span class="laber_contents">{{toFixed(2,item.DeclareValue)}}</span>
+                                </p>
+                                <p>
+                                    <span class="laber_name">关税率</span>
+                                    <span class="laber_contents">{{item.TraiffRate}}</span>
+                                </p>
+                                <p>
+                                    <span class="laber_name">关税(CNY)</span>
+                                    <span class="laber_contents">{{toFixed(2,item.Traiff)}}</span>
+                                </p>
+                                <p>
+                                    <span class="laber_name">增值税率</span>
+                                    <span class="laber_contents">{{item.AddTaxRate}}</span>
+                                </p>
+                                <p>
+                                    <span class="laber_name">增值税(CNY)</span>
+                                    <span class="laber_contents">{{toFixed(2,item.AddTax)}}</span>
+                                </p>
+                                <p>
+                                    <span class="laber_name">代理费(CNY)</span>
+                                    <span class="laber_contents">{{toFixed(2,item.AgencyFee)}}</span>
+                                </p>
+                                <p>
+                                    <span class="laber_name">商检费(CNY)</span>
+                                    <span class="laber_contents">{{toFixed(2,item.InspectionFee)}}</span>
+                                </p>
+                                <p>
+                                    <span class="laber_name">税务合计(CNY)</span>
+                                    <span class="laber_contents">{{toFixed(2,item.TotalTaxFee)}}</span>
+                                </p>
+                                <p>
+                                    <span class="laber_name">报关总金额</span>
+                                    <span class="laber_contents">{{toFixed(2,item.TotalDeclareValue)}}</span>
+                                </p>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </li>
+            </ul>
+            <div class="baoguan">
+                <p class="baoguan_item"><span>报关货值合计(CNY)：</span><span>¥ {{form.Products_DeclareValue}}</span></p>
+                <p class="baoguan_item"><span>税费合计(CNY)：</span><span>¥ {{form.Products_TotalTaxFee}}</span></p>
+                <p class="baoguan_item last_p"><span>报关总金额(CNY)：</span><span>¥ {{form.Products_TotalDeclareValue}}</span></p>
+            </div>
+            <div class="bar_color"></div>
+            <div class="unconfirmed_contents">
+                <div class="kind_box">
+                    <p class="headline">订单信息</p>
+                    <p class="subtitle_box">
+                        <span class="subtitle">订单编号:</span>
+                        <span class="unconfirmed_details" id="order-id">{{form.ID}}</span>
+                        <span class="copys" v-on:click="copy" data-clipboard-target="#order-id">复制</span>
+                    </p>
+                    <p class="subtitle_box">
+                        <span class="subtitle">交货供应商:</span>
+                        <span class="unconfirmed_details">{{form.Supplier}}</span>
+                    </p>
+                    <p class="subtitle_box">
+                        <span class="subtitle">报关总价:</span>
+                        <span class="unconfirmed_details">{{form.Products_TotalPrice}}</span>
+                    </p>
+                    <p class="subtitle_box">
+                        <span class="subtitle">币种:</span>
+                        <span class="unconfirmed_details">{{form.Currency}}</span>
+                    </p>
+                    <p class="subtitle_box">
+                        <span class="subtitle">是否包车:</span>
+                        <span class="unconfirmed_details">{{form.IsFullVehicle}}</span>
+                    </p>
+                    <p class="subtitle_box">
+                        <span class="subtitle">是否代垫货款:</span>
+                        <span class="unconfirmed_details">{{form.IsAdvanceMoneny}}</span>
+                    </p>
+                    <p class="subtitle_box">
+                        <span class="subtitle">包装种类:</span>
+                        <span class="unconfirmed_details">{{form.WrapType}}</span>
+                    </p>
+                    <p class="subtitle_box">
+                        <span class="subtitle">件数:</span>
+                        <span class="unconfirmed_details">{{form.PackNo}}</span>
+                    </p>
+                    <p class="subtitle_box">
+                        <span class="subtitle">下单人:</span>
+                        <span class="unconfirmed_details">{{form.OrderMaker}}</span>
+                    </p>
+                    <p class="subtitle_box">
+                        <span class="subtitle">下单日期:</span>
+                        <span class="unconfirmed_details">{{form.CreateDate}}</span>
+                    </p>
+                    <p class="subtitle_box">
+                        <span class="subtitle">备注:</span>
+                        <span class="unconfirmed_details">{{form.Summary}}</span>
+                    </p>
+                </div>
+                <div class="kind_box">
+                    <p class="headline">香港交货方式</p>
+                    <p class="subtitle_box">
+                        <span class="subtitle">交货方式:</span>
+                        <span class="unconfirmed_details">{{form.HKDeliveryType}}</span>
+                    </p>
+                    <div v-if="form.isPickUp">
+                        <p class="subtitle_box">
+                            <span class="subtitle">联系人、电话:</span>
+                            <span class="unconfirmed_details">{{form.supplierContact}} &nbsp;{{form.supplierContactMobile}}</span>
+                        </p>
+                        <p class="subtitle_box">
+                            <span class="subtitle">地址:</span>
+                            <span class="unconfirmed_details">{{form.SupplierAddress}}</span>
+                        </p>
+                        <p class="subtitle_box">
+                            <span class="subtitle">提货时间:</span>
+                            <span class="unconfirmed_details">{{form.PickupTime}} &nbsp; <a download target="_blank" :href="form.DeliveryFiles">查看提货文件</a></span>
+                        </p>
+                    </div>
+                    <div v-if="!form.isPickUp">
+                        <p class="subtitle_box">
+                            <span class="subtitle">物流单号:</span>
+                            <span class="unconfirmed_details">{{form.WayBillNo}}</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="kind_box">
+                    <p class="headline">国内交货方式</p>
+                    <p class="subtitle_box">
+                        <span class="subtitle">送货方式:</span>
+                        <span class="unconfirmed_details">{{form.SZDeliveryType}}</span>
+                    </p>
+                    <div v-if="!form.isSZPickUp">
+                        <p class="subtitle_box">
+                            <span class="subtitle">联系人、电话:</span>
+                            <span class="unconfirmed_details">{{form.clientContact}} &nbsp;{{form.clientContactMobile}}</span>
+                        </p>
+                        <p class="subtitle_box">
+                            <span class="subtitle">地址:</span>
+                            <span class="unconfirmed_details">{{form.clientConsigneeAddress}}</span>
+                        </p>
+                    </div>
+                    <div v-if="form.isSZPickUp">
+                        <p class="subtitle_box">
+                            <span class="subtitle">提货人、电话:</span>
+                            <span class="unconfirmed_details">{{form.clientContact}} &nbsp;{{form.clientContactMobile}}</span>
+                        </p>
+                        <p class="subtitle_box">
+                            <span class="subtitle">证件号码:</span>
+                            <span class="unconfirmed_details">{{form.IDNumber}}</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="kind_box">
+                    <p class="headline">开票信息</p>
+                    <p class="subtitle_box">
+                        <span class="subtitle">开票类型:</span>
+                        <span class="unconfirmed_details">{{form.invoice.invoiceType}}</span>
+                    </p>
+                    <p class="subtitle_box">
+                        <span class="subtitle">支付方式:</span>
+                        <span class="unconfirmed_details">{{form.invoice.invoiceDeliveryType}}</span>
+                    </p>
+                </div>
+                <div class="corporate_info kind_box">
+                    <p class="subtitle_box">
+                        <span class="subtitle">名称:</span>
+                        <span class="unconfirmed_details">{{form.invoice.invoiceTitle}}</span>
+                    </p>
+                    <p class="subtitle_box">
+                        <span class="subtitle">纳税人识别号:</span>
+                        <span class="unconfirmed_details">{{form.invoice.invoiceTaxCode}}</span>
+                    </p>
+                    <p class="subtitle_box">
+                        <span class="subtitle">地址、电话:</span>
+                        <span class="unconfirmed_details">{{form.invoice.invoiceAddress}} &nbsp;{{form.invoice.invoiceTel}}</span>
+                    </p>
+                    <p class="subtitle_box">
+                        <span class="subtitle">开户行及账号:</span>
+                        <span class="unconfirmed_details">
+                            <i style="margin-bottom: 0.13rem;">{{form.invoice.invoiceBank}}</i>
+                            <i>{{form.invoice.invoiceAccount}}</i>
+                        </span>
+                    </p>
+                </div>
+                <div class="kind_box pb48">
+                    <p class="headline">开票寄送信息</p>
+                    <p class="subtitle_box">
+                        <span class="subtitle">收件人:</span>
+                        <span class="unconfirmed_details">{{form.invoice.contactName}}</span>
+                    </p>
+                    <p class="subtitle_box">
+                        <span class="subtitle">手机、电话:</span>
+                        <span class="unconfirmed_details">
+                            <i style="margin-bottom: 0.13rem;">{{form.invoice.contactMobile}}</i>
+                            <i>{{form.invoice.contactTel}}</i>
+                        </span>
+                    </p>
+                    <p class="subtitle_box">
+                        <span class="subtitle">地址:</span>
+                        <span class="unconfirmed_details">{{form.invoice.contactAddress}}</span>
+                    </p>
+                </div>
+                <div class="bar_color"></div>
+                <div class="payment_mfr">
+                    <div class="voucher_box">
+                        <p class="headline p_nomargin">付汇供应商</p>
+                        <p class="voucher_info" v-if="PayExchangeSupplier.length==0"><span>提示:</span><span> 未选择付汇供应商</span></p>
+                    </div>
+                    <div v-for="(item,index) in PayExchangeSupplier">
+                        <p class="subtitle_box">{{index + 1}}.&nbsp;{{item.Name}}</p>
+                    </div>
+                    <div class="voucher_box">
+                        <p class="headline p_nomargin">合同发票(INVOICE LIST)</p>
+                        <p class="voucher_info" v-if="PIFiles.length==0"><span>提示:</span><span> 未上传</span></p>
+                    </div>
+                    <div v-if="PIFiles.length>0">
+                        <div v-for="item in PIFiles">
+                            <a :href="item.Url" target="_blank">
+                                <p class="subtitle_box row-blue-fujian">
+                                    <span><img /></span>
+                                    <span>{{item.Name}}</span>
+                                </p>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="voucher_box">
+                        <p class="headline p_nomargin">代理报关委托书</p>
+                        <p class="voucher_info" v-if="form.AgentProxyName==null"><span>提示:</span><span> 未上传</span></p>
+                    </div>
+                    <div v-if="form.AgentProxyName!=null">
+                        <a :href="form.AgentProxyURL" target="_blank">
+                            <p class="subtitle_box row-blue-fujian">
+                                <span><img /></span>
+                                <span>{{form.AgentProxyName}} ({{form.AgentProxyStatus}})</span>
+                            </p>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="cheacked_box">
+                    <el-checkbox v-model="check">我已核对订单信息，确认无误</el-checkbox>
+                </div>
+                <div class="order_bottons">
+                    <button :class="{Submission_btn:check, disabled_Submission_btn:!check}" :disabled="!check" v-on:click='Confirm'>提交订单</button>
+                    <button class="cancel_btn" v-on:click='cancelOrder'>取消订单</button>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</body>
+
+</html>
+<script>
+    var unconfirmed_order = new Vue({
+        el: "#unconfirmed_order",
+        data: function () {
+            return {
+                check: false, //单选框状态
+                showindex: -1,
+                icontrue: true,
+                isCancelInputShow:false,
+
+                items: @Html.Raw(Json.Encode(Model.Products)),
+                form: @Html.Raw(Json.Encode(Model)),
+                PayExchangeSupplier: @Html.Raw(Json.Encode(Model.PayExchangeSupplier)),
+                PIFiles: @Html.Raw(Json.Encode(Model.PIFiles)),
+            }
+        },
+        methods: {
+            // 显示对应的数据
+            showdetail: function (index) {
+                if (this.showindex == index) {
+                    this.showindex = -1;
+                    this.icontrue = false;
+                } else {
+                    this.showindex = index;
+                    this.icontrue = true;
+                }
+
+            },
+            copy: function () {
+                var clipboard = new ClipboardJS('.copys');
+                clipboard.on('success', function (e) {
+                    e.clearSelection();
+                    unconfirmed_order.$toast({
+                        message: '复制成功',
+                        duration: 500
+                    });
+                });
+            },
+            toFixed: function (num, val) {
+                return val.toFixed(num);
+            },
+            subStr(str, maxLen) {
+                if (str.length <= maxLen) {
+                    return str;
+                } else {
+                    return str.substr(0, maxLen) + "...";
+                }
+            },
+            Confirm: function () {
+                //if (this.form.AgentProxyURL == null || this.form.AgentProxyURL == '') {
+                //    this.$toast({
+                //        message: '请上传代理报关委托书！',
+                //        iconClass: 'icon el-icon-close'
+                //    });
+                //    return;
+                //}
+
+                axios({
+                    url: "/Order/CheckPreConfirm",
+                    method: "post",
+                    data: {
+                        orderID: unconfirmed_order.form.ID,
+                    }
+                }).then(function (response) {
+                    if (response.data.type == "error") {
+                        unconfirmed_order.$toast({
+                            message: response.data.msg,
+                            iconClass: 'icon el-icon-close'
+                        });
+                    }
+
+                    //提交成功
+                    unconfirmed_order.$toast({
+                        message: '提交成功',
+                        iconClass: 'icon el-icon-check'
+                    });
+
+                    window.location.href = "/Order/MyOrders";
+                }).catch(function (error) {
+                    unconfirmed_order.$toast({
+                        message: '系统发生错误，请稍后重试或联系客服',
+                        iconClass: 'icon el-icon-close'
+                    });
+                });
+            },
+            cancelOrder: function () {
+                this.$messagebox({
+                    $type: 'prompt',
+                    title: '请输入取消原因',
+                    message: ' ',
+                    closeOnClickModal: false,   //点击model背景层不关闭MessageBox
+                    showCancelButton: true,   //不显示取消按钮
+                    inputPattern: /^[\s\S]{1,200}$/,    //正则条件
+                    inputErrorMessage: '请输入原因(不超过200个字)',
+                    showInput: true
+                }).then(({ value, action }) => {
+                    if ("confirm" == action) {
+                        axios({
+                            url: "/Order/CancelConfirm",
+                            method: "post",
+                            data: {
+                                orderID: unconfirmed_order.form.ID,
+                                reason: value,
+                            }
+                        }).then(function (response) {
+                            if (response.data.type != "error") {
+                                //取消成功
+                                unconfirmed_order.$toast({
+                                    message: '取消成功',
+                                    iconClass: 'icon el-icon-check'
+                                });
+
+                                window.location.href = "/Order/MyOrders";
+                            } else {
+                                unconfirmed_order.$toast({
+                                    message: response.data.msg,
+                                    iconClass: 'icon el-icon-close'
+                                });
+                            }
+                        }).catch(function (error) {
+                            unconfirmed_order.$toast("系统发生错误，请稍后重试或联系客服");
+                        });
+                    }
+                }).catch(() => {
+
+                });;
+
+
+            },
+        },
+    })
+</script>

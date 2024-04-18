@@ -1,0 +1,114 @@
+﻿@{
+    ViewBag.Title = "协议条款";
+}
+
+<div class="second_header">
+    <a onClick="javascript :history.back(-1);"><span class="el-icon-arrow-left icon"></span></a>
+    <div class="second_nav">
+        <span class="header-title">协议条款</span>
+    </div>
+</div>
+<div id="agreement" class="bind_user" v-cloak>
+
+    <div class="agreement_content">
+        <div class="itemWrap">
+            <p class="title">协议起始日期</p>
+            <div class="detailWrap">
+                <span>开始:{{agreeData.StartDate}}</span>
+                <span class="content1">结束:{{agreeData.EndDate}}</span>
+            </div>
+        </div>
+        <div class="itemWrap">
+            <p class="title">代理费</p>
+            <div class="detailWrap">
+                <div class="content_left">
+                    <span>代理费率：{{agreeData.AgencyRate}}</span>
+                </div>
+                <div class="content_right">
+                    <span>最低代理费(元)：{{agreeData.MinAgencyFee}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="itemWrap">
+            <p class="title">货款条款</p>
+            <div class="detailWrap">
+                <div class="content_left">
+                    <span>换汇方式：{{agreeData.IsPrePayExchange}}</span>
+                    <span>结算方式：{{agreeData.GoodsPeriodType}}</span>
+                    <span v-if="agreeData.isGoodsAgreedPeriod" class="sp_text">约定期限(天)：{{agreeData.GoodsDaysLimit}}</span>
+                    <span v-if="agreeData.isGoodsMonthly" class="sp_text">结算日期(次月)：{{agreeData.GoodsMonthlyDay}}</span>
+                    <span>汇率类型：{{agreeData.GoodsExchangeRateType}}</span>
+                </div>
+                <div class="content_right">
+                    <span v-if="!agreeData.isGoodsPrePaid">垫款上限（元）：{{agreeData.GoodsUpperLimit}}</span>
+                    <span v-if="agreeData.isGoodsAgreed">约定汇率：{{agreeData.GoodsExchangeRateValue}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="itemWrap">
+            <p class="title">税款条款</p>
+            <div class="detailWrap">
+                <div class="content_left">
+                    <span>结算方式：{{agreeData.TaxPeriodType}}</span>
+                    <span v-if="agreeData.isTaxAgreedPeriod">约定期限(天)：{{agreeData.TaxDaysLimit}}</span>
+                    <span v-if="agreeData.isTaxMonthly">结算日期(次月)：{{agreeData.TaxMonthlyDay}}</span>
+                    <span>汇率类型：{{agreeData.TaxExchangeRateType}}</span>
+                </div>
+                <div class="content_right">
+                    <span v-if="!agreeData.isTaxPrePaid">垫款上限（元）：{{agreeData.TaxUpperLimit}}</span>
+                    <span v-if="agreeData.isTaxAgreed">约定汇率：{{agreeData.TaxExchangeRateValue}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="itemWrap">
+            <p class="title">代理费条款</p>
+            <div class="detailWrap">
+                <div class="content_left">
+                    <span>结算方式：{{agreeData.AgencyFeePeriodType}}</span>
+                    <span v-if="agreeData.isAgencyAgreedPeriod">约定期限(天)：{{agreeData.AgencyDaysLimit}}</span>
+                    <span v-if="agreeData.isAgencyMonthly">结算日期(次月)：{{agreeData.AgencyMonthlyDay}}</span>
+                    <span>汇率类型：{{agreeData.AgencyFeeExchangeRateType}}</span>
+                </div>
+                <div class="content_right">
+                    <span v-if="!agreeData.isAgencyPrePaid">垫款上限（元）：{{agreeData.AgencyFeeUpperLimit}}</span>
+                    <span v-if="agreeData.isAgencyAgreed">约定汇率：{{agreeData.AgencyExchangeRateValue}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="itemWrap">
+            <p class="title">杂费条款</p>
+            <div class="detailWrap">
+                <div class="content_left">
+                    <span>结算方式：{{agreeData.IncidentalPeriodType}}</span>
+                    <span v-if="agreeData.isIncidentalAgreedPeriod">约定期限(天)：{{agreeData.IncidentalDaysLimit}}</span>
+                    <span v-if="agreeData.isIncidentalMonthly">结算日期(次月)：{{agreeData.IncidentalMonthlyDay}}</span>
+                    <span>汇率类型：{{agreeData.IncidentalExchangeRateType}}</span>
+                </div>
+                <div class="content_right">
+                    <span v-if="!agreeData.isIncidentalPrePaid">垫款上限（元）：{{agreeData.IncidentalUpperLimit}}</span>
+                    <span v-if="agreeData.isIncidentalAgreed">约定汇率：{{agreeData.IncidentalExchangeRateValue}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="itemWrap">
+            <p class="title">开票类型/税率</p>
+            <div class="detailWrap">
+                <div class="content_left">
+                    <span>开票类型：{{agreeData.InvoiceType}}</span>
+                </div>
+                <div class="content_right">
+                    <span>税率：{{agreeData.InvoiceRate}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var agreement = new Vue({
+        el: "#agreement",
+        data: {
+           agreeData:@Html.Raw(Json.Encode(Model)),
+        }
+    })
+</script>
+

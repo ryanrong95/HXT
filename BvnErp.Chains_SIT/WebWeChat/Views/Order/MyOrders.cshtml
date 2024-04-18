@@ -1,0 +1,1188 @@
+﻿
+@{
+    /**/
+
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>我的订单</title>
+    <link rel="stylesheet" href="~/Content/css/border.css">
+    <link rel="stylesheet" href="~/Content/css/reset.css">
+    <link rel="stylesheet" href="~/Content/css/163css.css">
+    <link rel="stylesheet" href="~/Content/css/element.css">
+    <link rel="stylesheet" href="~/Content/css/mint-ui.css">
+    <link rel="stylesheet" href="~/Content/css/common.css">
+    <script src="~/Scripts/vue.js"></script>
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="~/Scripts/elementui.js"></script>
+    <script src="~/Scripts/touchslider.js"></script>
+    <script src="~/Scripts/axios.min.js"></script>
+    <script src="~/Scripts/mint-ui.js"></script>
+    <script src="~/Scripts/jquery.cookie.js"></script>
+    <link rel="stylesheet" href="~/Content/css/index.css">
+    <style>
+        .mint-spinner-fading-circle {
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div id="myorder" v-cloak>
+        <div class="box-163css myorder_box">
+            <div class="headerbox">
+                <div class="no_warp">
+                    <div class="find_nav">
+                        <div class="find_nav_left">
+                            <div class="find_nav_list">
+                                <ul id="pagenavi1" class="page">
+                                    <li v-for="(item,index) in navdata" v-on:click.stop="navlist(index,false)"><a v-bind:class="{active:indexData.navIndex==index}">{{item}}</a><span v-bind:class="{spanactive:indexData.navIndex==index}"></span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div v-on:click.stop="updateds" class="filtrates">
+                    <a>筛选</a>
+                    <i class="el-icon-arrow-down unfold_icon"></i>
+                    <span></span>
+                </div>
+            </div>
+
+            <div v-if='indexData.show_condition' class="show_condition">
+                <div class="condition_box">
+                    <div class="condition_list">
+                        <p class="condition_title">订单日期</p>
+                        <div class="item_condition">
+                            <span v-for="(item,index) in order_time" v-on:click.stop="setclass(index,item)"
+                                  :class="{condition_active:indexData.categoryIndex==index}">{{item.text}}</span>
+                        </div>
+                    </div>
+                    <div class="condition_list">
+                        <p class="condition_title">订单状态</p>
+                        <div class="item_condition">
+                            <span v-for="(item,index) in order_status" v-on:click.stop="setstatusindex(index)"
+                                  :class="{condition_active:indexData.statusindex==index}">{{item}}</span>
+                        </div>
+                    </div>
+                    <div class="condition_list">
+                        <p class="condition_title">开票状态</p>
+                        <div class="item_condition">
+                            <span v-for="(item,index) in invoice_list" v-on:click.stop="setinoviceindex(index,item)"
+                                  :class="{condition_active:indexData.inoviceindex==index}">{{item.text}}</span>
+                        </div>
+                    </div>
+                    <div class="condition_list">
+                        <p class="condition_title">付汇状态</p>
+                        <div class="item_condition">
+                            <span v-for="(item,index) in payment_list" v-on:click.stop="setpaymentindex(index,item)"
+                                  :class="{condition_active:indexData.paymentindex==index}">{{item.text}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="condition_btns">
+                    <span v-on:click.stop="set_empty">清空条件</span>
+                    <span v-on:click.stop="confirm_btn">确定</span>
+                </div>
+            </div>
+            <div id="slider1" class="swipe">
+                <ul class="box01_list">
+                    <!-- 全部 -->
+                    <li class="li_list">
+                        <div v-if="!indexData.isNullOrder" ref="viewBox1" v-on:scroll="ss('viewBox1')" class="set_scroll" v-infinite-scroll="loadMore"
+                             infinite-scroll-disabled="indexData.infiniteScroll"
+                             infinite-scroll-distance="20"
+                             infinite-scroll-immediate-check="false">
+                            <div class="listpublic all_order_box" v-on:click="orderDetails(item.ID)" v-for="item in indexData.getdata">
+                                <div class="all_order">
+                                    <div class="all_order_titles">
+                                        <img src="~/Content/img/times.png" alt="">
+                                        <p>
+                                            <span>{{item.CreateDate}}</span>
+                                            <span>{{item.OrderStatus}}</span>
+                                        </p>
+                                    </div>
+                                    <div class="all_order_content">
+                                        <div class="order_number">
+                                            <p>订单编号</p>
+                                            <p>{{item.ID}}</p>
+                                        </div>
+                                        <div class='order_detail'>
+                                            <p class="max_height">{{item.PaySuppliersName}}</p>
+                                            <p class="order_detail_payment">付汇状态：{{item.PayExchangeStatus}}</p>
+                                            <p class="order_detail_payment">可付汇：{{item.Remittance}}</p>
+                                            <p class="order_detail_payment">
+                                                已付汇：{{item.Remittanced}} <span>{{item.InvoiceStatus}}</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="all_order_price">
+                                        <p><span>交易币种：{{item.Currency}}</span></p>
+                                        <p><span>报关总价：<span class="price">{{item.DeclarePrice}}</span></span></p>
+                                        <div class="all_order_invoice">
+                                            <span v-on:click.stop="orderInvoice(item.ID)">查看发票</span>
+                                            <span class="invocelist" v-if="item.isShowLog" v-on:click.stop="newLog(item.ID)">订单跟踪</span>
+                                            <span class="invocelist" v-if="item.isShowBill" v-on:click.stop="orderBills(item.ID)">对账单</span>
+                                            <span class="invocelist details_btn" v-on:click.stop="orderDetails(item.ID)">订单详情</span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="order_kindmore">
+                                <mt-spinner v-if="indexData.allTotal>indexData.getdata.length&&indexData.infiniteScroll==false" type="fading-circle"></mt-spinner>
+                                <p v-if="indexData.allTotal==indexData.getdata.length&&indexData.infiniteScroll==true&&indexData.allTotal>10">全部加载完成</p>
+                            </div>
+                        </div>
+                        <div v-else class="null_orders">
+                            <img src="~/Content/img/null_order.png" alt="">
+                            <p>您还没有相关的订单</p>
+                        </div>
+                    </li>
+                    <!--草稿 draft_data -->
+                    <li>
+                        <div v-if="!indexData.isNullOrder" ref="viewBox2" v-on:scroll="ss('viewBox2')" class="set_scroll" v-infinite-scroll="loadMore"
+                             infinite-scroll-disabled="indexData.infiniteScroll"
+                             infinite-scroll-distance="20"
+                             infinite-scroll-immediate-check="false">
+                            <div class="listpublic all_order_box" v-on:click="orderDetails(item.ID)" v-for="item in indexData.getdata">
+                                <div class="all_order">
+                                    <div class="all_order_titles">
+                                        <img src="~/Content/img/times.png" alt="">
+                                        <p>
+                                            <span>{{item.CreateDate}}</span>
+                                            <span>{{item.OrderStatus}}</span>
+                                        </p>
+                                    </div>
+                                    <div class="all_order_content">
+                                        <div class="order_number">
+                                            <p>订单编号</p>
+                                            <p>{{item.ID}}</p>
+                                        </div>
+                                        <div class='order_detail'>
+                                            <p class="max_height">{{item.PaySuppliersName}}</p>
+                                            <div class="set_top">
+                                                <p class="order_detail_payment">下单人</p>
+                                                <p class="order_detail_payment">{{item.OrderMaker}} </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="all_order_price">
+                                        <p><span>交易币种：{{item.Currency}}</span></p>
+                                        <p><span>报关总价：<span class="price">{{item.DeclarePrice}}</span></span></p>
+                                        <div class="all_order_invoice">
+                                            <span class="invocelist" v-on:click.stop="deleteDraft(item.ID)">删除订单</span>
+                                            <span class="invocelist details_btn" v-on:click.stop="orderDetails(item.ID)">订单详情</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="order_kindmore">
+                                <mt-spinner v-if="indexData.allTotal>indexData.getdata.length&&indexData.infiniteScroll==false" type="fading-circle"></mt-spinner>
+                                <p v-if="indexData.allTotal==indexData.getdata.length&&indexData.infiniteScroll==true&&indexData.allTotal>10">全部加载完成</p>
+                            </div>
+                        </div>
+                        <div v-else class="null_orders">
+                            <img src="~/Content/img/null_order.png" alt="">
+                            <p>您还没有相关的订单</p>
+                        </div>
+                    </li>
+                    <!-- 待归类 classify_data -->
+                    <li>
+                        <div v-if="!indexData.isNullOrder" ref="viewBox3" v-on:scroll="ss('viewBox3')" class="set_scroll" v-infinite-scroll="loadMore"
+                             infinite-scroll-disabled="indexData.infiniteScroll"
+                             infinite-scroll-distance="20"
+                             infinite-scroll-immediate-check="false">
+                            <div class="listpublic all_order_box" v-on:click="orderDetails(item.ID)" v-for="item in indexData.getdata">
+                                <div class="all_order">
+                                    <div class="all_order_titles">
+                                        <img src="~/Content/img/times.png" alt="">
+                                        <p>
+                                            <span>{{item.CreateDate}}</span>
+                                            <span>{{item.OrderStatus}}</span>
+                                        </p>
+                                    </div>
+                                    <div class="all_order_content">
+                                        <div class="order_number">
+                                            <p>订单编号</p>
+                                            <p>{{item.ID}}</p>
+                                        </div>
+                                        <div class='order_detail'>
+                                            <p class="max_height">{{item.Suppliers}}</p>
+                                            <div class="set_top">
+                                                <p class="order_detail_payment">下单人</p>
+                                                <p class="order_detail_payment">{{item.OrderMaker}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="all_order_price">
+                                        <p><span>交易币种：{{item.Currency}}</span></p>
+                                        <p><span>报关总价：<span class="price">{{item.DeclarePrice}}</span></span></p>
+                                        <div class="all_order_invoice">
+                                            <span class="invocelist" v-on:click.stop="newLog(item.ID)">订单跟踪</span>
+                                            <span class="invocelist details_btn" v-on:click.stop="orderDetails(item.ID)">订单详情</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="order_kindmore">
+                                <mt-spinner v-if="indexData.allTotal>indexData.getdata.length&&indexData.infiniteScroll==false" type="fading-circle"></mt-spinner>
+                                <p v-if="indexData.allTotal==indexData.getdata.length&&indexData.infiniteScroll==true&&indexData.allTotal>10">全部加载完成</p>
+                            </div>
+                        </div>
+                        <div v-else class="null_orders">
+                            <img src="~/Content/img/null_order.png" alt="">
+                            <p>您还没有相关的订单</p>
+                        </div>
+                    </li>
+                    <!-- 待确认 -->
+                    <li>
+                        <div v-if="!indexData.isNullOrder" ref="viewBox4" v-on:scroll="ss('viewBox4')" class="set_scroll" v-infinite-scroll="loadMore"
+                             infinite-scroll-disabled="indexData.infiniteScroll"
+                             infinite-scroll-distance="20"
+                             infinite-scroll-immediate-check="false">
+                            <div class="listpublic all_order_box" v-on:click="orderDetails(item.ID)" v-for="item in indexData.getdata">
+                                <div class="all_order">
+                                    <div class="all_order_titles">
+                                        <img src="~/Content/img/times.png" alt="">
+                                        <p>
+                                            <span>{{item.CreateDate}}</span>
+                                            <span>{{item.OrderStatus}}</span>
+                                        </p>
+                                    </div>
+                                    <div class="all_order_content">
+                                        <div class="order_number">
+                                            <p>订单编号</p>
+                                            <p>{{item.ID}}</p>
+                                        </div>
+                                        <div class='order_detail'>
+                                            <p class="max_height">{{item.PaySuppliersName}}</p>
+                                            <div class="set_top">
+                                                <p class="order_detail_payment">下单人</p>
+                                                <p class="order_detail_payment">{{item.OrderMaker}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="all_order_price">
+                                        <p><span>交易币种：{{item.Currency}}</span></p>
+                                        <p><span>报关总价：<span class="price">{{item.DeclarePrice}}</span></span></p>
+                                        <div class="all_order_invoice">
+                                            <span class="invocelist" v-on:click.stop="newLog(item.ID)">订单跟踪</span>
+                                            <span class="invocelist" v-on:click.stop="cancelUnConfirm(item.ID)">取消订单</span>
+                                            <span class="invocelist details_btn" v-on:click.stop="confirmOrder(item.ID)">确认</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="order_kindmore">
+                                <mt-spinner v-if="indexData.allTotal>indexData.getdata.length&&indexData.infiniteScroll==false" type="fading-circle"></mt-spinner>
+                                <p v-if="indexData.allTotal==indexData.getdata.length&&indexData.infiniteScroll==true&&indexData.allTotal>10">全部加载完成</p>
+                            </div>
+                        </div>
+                        <div v-else class="null_orders">
+                            <img src="~/Content/img/null_order.png" alt="">
+                            <p>您还没有相关的订单</p>
+                        </div>
+                    </li>
+                    <!-- 待付汇 -->
+                    <li>
+                        <div v-if="!indexData.isNullOrder" ref="viewBox5" v-on:scroll="ss('viewBox5')" class="set_scroll" v-infinite-scroll="loadMore"
+                             infinite-scroll-disabled="indexData.infiniteScroll"
+                             infinite-scroll-distance="20"
+                             infinite-scroll-immediate-check="false">
+                            <div class="listpublic all_order_box" v-on:click="orderDetails(item.ID)" v-for="item in indexData.getdata">
+                                <div class="all_order">
+                                    <div class="all_order_titles">
+                                        <img src="~/Content/img/times.png" alt="">
+                                        <p>
+                                            <span>{{item.CreateDate}}</span>
+                                            <span>{{item.OrderStatus}}</span>
+                                        </p>
+                                    </div>
+                                    <div class="all_order_content">
+                                        <div class="order_number">
+                                            <p>订单编号</p>
+                                            <p>{{item.ID}}</p>
+                                        </div>
+                                        <div class='order_detail'>
+                                            <p class="max_height">{{item.PaySuppliersName}}</p>
+                                            <p class="order_detail_payment">付汇状态：{{item.PayExchangeStatus}}</p>
+                                            <p class="order_detail_payment">可付汇：{{item.Remittance}}</p>
+                                            <p class="order_detail_payment">
+                                                已付汇：{{item.Remittanced}}
+                                                <span>{{item.PayExchangeType}}</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="all_order_price">
+                                        <p><span>交易币种：{{item.Currency}}</span></p>
+                                        <p><span>报关总价：<span class="price">{{item.DeclarePrice}}</span></span></p>
+                                        <div class="all_order_invoice">
+                                            <span class="invocelist" v-on:click.stop="newLog(item.ID)">订单跟踪</span>
+                                            <span class="invocelist details_btn" v-on:click.stop="orderDetails(item.ID)">订单详情</span>
+                                            <span class="invocelist details_btn" v-if="item.isPaid" v-on:click.stop="payRecord(item.ID)">查看记录</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="order_kindmore">
+                                <mt-spinner v-if="indexData.allTotal>indexData.getdata.length&&indexData.infiniteScroll==false" type="fading-circle"></mt-spinner>
+                                <p v-if="indexData.allTotal==indexData.getdata.length&&indexData.infiniteScroll==true&&indexData.allTotal>10">全部加载完成</p>
+                            </div>
+                        </div>
+                        <div v-else class="null_orders">
+                            <img src="~/Content/img/null_order.png" alt="">
+                            <p>您还没有相关的订单</p>
+                        </div>
+                    </li>
+                    <!-- 待开票 -->
+                    <li>
+                        <div v-if="!indexData.isNullOrder" ref="viewBox6" v-on:scroll="ss('viewBox6')" class="set_scroll" v-infinite-scroll="loadMore"
+                             infinite-scroll-disabled="indexData.infiniteScroll"
+                             infinite-scroll-distance="20"
+                             infinite-scroll-immediate-check="false">
+                            <div class="listpublic all_order_box" v-on:click="orderDetails(item.ID)" v-for="item in indexData.getdata">
+                                <div class="all_order">
+                                    <div class="all_order_titles">
+                                        <img src="~/Content/img/times.png" alt="">
+                                        <p>
+                                            <span>{{item.CreateDate}}</span>
+                                            <span>{{item.OrderStatus}}</span>
+                                        </p>
+                                    </div>
+                                    <div class="all_order_content">
+                                        <div class="order_number">
+                                            <p>订单编号</p>
+                                            <p>{{item.ID}}</p>
+                                        </div>
+                                        <div class='order_detail'>
+                                            <p class="max_height">{{item.Suppliers}}</p>
+                                            <p class="order_detail_payment">付汇状态：{{item.PayExchangeStatus}}</p>
+                                            <p class="order_detail_payment">可付汇：{{item.Remittance}}</p>
+                                            <p class="order_detail_payment">已付汇：{{item.Remittanced}} <span>{{item.InvoiceStatus}}</span></p>
+
+                                        </div>
+                                    </div>
+                                    <div class="all_order_price">
+                                        <p><span>交易币种：{{item.Currency}}</span></p>
+                                        <p><span>报关总价：<span class="price">{{item.DeclarePrice}}</span></span></p>
+                                        <div class="all_order_invoice">
+                                            <span class="invocelist" v-on:click.stop="newLog(item.ID)">订单跟踪</span>
+                                            <span class="invocelist details_btn" v-on:click.stop="orderDetails(item.ID)">订单详情</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="order_kindmore">
+                                <mt-spinner v-if="indexData.allTotal>indexData.getdata.length&&indexData.infiniteScroll==false" type="fading-circle"></mt-spinner>
+                                <p v-if="indexData.allTotal==indexData.getdata.length&&indexData.infiniteScroll==true&&indexData.allTotal>10">全部加载完成</p>
+                            </div>
+                        </div>
+                        <div v-else class="null_orders">
+                            <img src="~/Content/img/null_order.png" alt="">
+                            <p>您还没有相关的订单</p>
+                        </div>
+                    </li>
+                    <!-- 待收货 -->
+                    <li>
+                        <div v-if="!indexData.isNullOrder" ref="viewBox7" v-on:scroll="ss('viewBox7')" class="set_scroll" v-infinite-scroll="loadMore"
+                             infinite-scroll-disabled="indexData.infiniteScroll"
+                             infinite-scroll-distance="20"
+                             infinite-scroll-immediate-check="false">
+                            <div class="listpublic all_order_box" v-on:click="orderDetails(item.ID)" v-for="item in indexData.getdata">
+                                <div class="all_order">
+                                    <div class="all_order_titles">
+                                        <img src="~/Content/img/times.png" alt="">
+                                        <p>
+                                            <span>{{item.CreateDate}}</span>
+                                            <span>{{item.OrderStatus}}</span>
+                                        </p>
+                                    </div>
+                                    <div class="all_order_content">
+                                        <div class="order_number">
+                                            <p>订单编号</p>
+                                            <p>{{item.ID}}</p>
+                                        </div>
+                                        <div class='order_detail'>
+                                            <p class="max_height">{{item.Suppliers}}</p>
+                                            <p class="order_detail_payment">付汇状态：{{item.PayExchangeStatus}}</p>
+                                            <p class="order_detail_payment">可付汇：{{item.Remittance}}</p>
+                                            <p class="order_detail_payment">已付汇：{{item.Remittanced}} <span>{{item.InvoiceStatus}}</span></p>
+
+                                        </div>
+                                    </div>
+                                    <div class="all_order_price">
+                                        <p><span>交易币种：{{item.Currency}}</span></p>
+                                        <p><span>报关总价：<span class="price">{{item.DeclarePrice}}</span></span></p>
+                                        <div class="all_order_invoice">
+                                            <span class="invocelist" v-on:click.stop="newLog(item.ID)">订单跟踪</span>
+                                            <span class="invocelist details_btn" v-on:click.stop="orderDetails(item.ID)">订单详情</span>
+                                            <span class="invocelist details_btn" v-on:click.stop="confirmReceivedOrder(item.ID)">确认收货</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="order_kindmore">
+                                <mt-spinner v-if="indexData.allTotal>indexData.getdata.length&&indexData.infiniteScroll==false" type="fading-circle"></mt-spinner>
+                                <p v-if="indexData.allTotal==indexData.getdata.length&&indexData.infiniteScroll==true&&indexData.allTotal>10">全部加载完成</p>
+                            </div>
+                        </div>
+                        <div v-else class="null_orders">
+                            <img src="~/Content/img/null_order.png" alt="">
+                            <p>您还没有相关的订单</p>
+                        </div>
+                    </li>
+                    <!-- 已完成 -->
+                    <li>
+                        <div v-if="!indexData.isNullOrder" ref="viewBox8" v-on:scroll="ss('viewBox8')" class="set_scroll" v-infinite-scroll="loadMore"
+                             infinite-scroll-disabled="indexData.infiniteScroll"
+                             infinite-scroll-distance="20"
+                             infinite-scroll-immediate-check="false">
+                            <div class="listpublic all_order_box" v-on:click="orderDetails(item.ID)" v-for="item in indexData.getdata">
+                                <div class="all_order">
+                                    <div class="all_order_titles">
+                                        <img src="~/Content/img/times.png" alt="">
+                                        <p>
+                                            <span>{{item.CreateDate}}</span>
+                                            <span>{{item.OrderStatus}}</span>
+                                        </p>
+                                    </div>
+                                    <div class="all_order_content">
+                                        <div class="order_number">
+                                            <p>订单编号</p>
+                                            <p>{{item.ID}}</p>
+                                        </div>
+                                        <div class='order_detail'>
+                                            <p class="max_height">{{item.Suppliers}}</p>
+                                            <p class="order_detail_payment">付汇状态：{{item.PayExchangeStatus}}</p>
+                                            <p class="order_detail_payment">可付汇：{{item.Remittance}}</p>
+                                            <p class="order_detail_payment">
+                                                已付汇：{{item.Remittanced}} <span>{{item.InvoiceStatus}}</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="all_order_price">
+                                        <p><span>交易币种：{{item.Currency}}</span></p>
+                                        <p><span>报关总价：<span class="price">{{item.DeclarePrice}}</span></span></p>
+                                        <div class="all_order_invoice">
+                                            <span v-on:click.stop="orderInvoice(item.ID)">查看发票</span>
+                                            <span class="invocelist" v-on:click.stop="newLog(item.ID)">订单跟踪</span>
+                                            <span class="invocelist details_btn" v-on:click.stop="orderDetails(item.ID)">订单详情</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="order_kindmore">
+                                <mt-spinner v-if="indexData.allTotal>indexData.getdata.length&&indexData.infiniteScroll==false" type="fading-circle"></mt-spinner>
+                                <p v-if="indexData.allTotal==indexData.getdata.length&&indexData.infiniteScroll==true&&indexData.allTotal>10">全部加载完成</p>
+                            </div>
+                        </div>
+                        <div v-else class="null_orders">
+                            <img src="~/Content/img/null_order.png" alt="">
+                            <p>您还没有相关的订单</p>
+                        </div>
+                    </li>
+                    <!-- 已挂起 -->
+                    <li>
+                        <div v-if="!indexData.isNullOrder" ref="viewBox9" v-on:scroll="ss('viewBox9')" class="set_scroll" v-infinite-scroll="loadMore"
+                             infinite-scroll-disabled="indexData.infiniteScroll"
+                             infinite-scroll-distance="20"
+                             infinite-scroll-immediate-check="false">
+                            <div class="listpublic all_order_box" v-on:click="orderDetails(item.ID)" v-for="item in indexData.getdata">
+                                <div class="all_order">
+                                    <div class="all_order_titles">
+                                        <img src="~/Content/img/times.png" alt="">
+                                        <p>
+                                            <span>{{item.CreateDate}}</span>
+                                            <span>{{item.OrderStatus}}</span>
+                                        </p>
+                                    </div>
+                                    <div class="all_order_content">
+                                        <div class="order_number">
+                                            <p>订单编号</p>
+                                            <p>{{item.ID}}</p>
+                                        </div>
+                                        <div class='order_detail'>
+                                            <p class="max_height">{{item.Suppliers}}</p>
+                                            <div class="set_top">
+                                                <p class="order_detail_payment">挂起原因</p>
+                                                <p class="order_detail_payment"><i class="set_no_warp">{{item.HangUpReason}}</i><span>{{item.InvoiceStatus}}</span></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="all_order_price">
+                                        <p><span>交易币种：{{item.Currency}}</span></p>
+                                        <p><span>报关总价：<span class="price">{{item.DeclarePrice}}</span></span></p>
+                                        <div class="all_order_invoice">
+                                            <span class="invocelist" v-on:click.stop="newLog(item.ID)">订单跟踪</span>
+                                            <span class="invocelist details_btn" v-on:click.stop="orderDetails(item.ID)">订单详情</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="order_kindmore">
+                                <mt-spinner v-if="indexData.allTotal>indexData.getdata.length&&indexData.infiniteScroll==false" type="fading-circle"></mt-spinner>
+                                <p v-if="indexData.allTotal==indexData.getdata.length&&indexData.infiniteScroll==true&&indexData.allTotal>10">全部加载完成</p>
+                            </div>
+                        </div>
+                        <div v-else class="null_orders">
+                            <img src="~/Content/img/null_order.png" alt="">
+                            <p>您还没有相关的订单</p>
+                        </div>
+                    </li>
+                    <!-- 已取消 -->
+                    <li>
+                        <div v-if="!indexData.isNullOrder" ref="viewBox10" v-on:scroll="ss('viewBox10')" class="set_scroll" v-infinite-scroll="loadMore"
+                             infinite-scroll-disabled="indexData.infiniteScroll"
+                             infinite-scroll-distance="20"
+                             infinite-scroll-immediate-check="false">
+                            <div class="listpublic all_order_box" v-on:click="orderDetails(item.ID)" v-for="item in indexData.getdata">
+                                <div class="all_order">
+                                    <div class="all_order_titles">
+                                        <img src="~/Content/img/times.png" alt="">
+                                        <p>
+                                            <span>{{item.CreateDate}}</span>
+                                            <span>{{item.OrderStatus}}</span>
+                                        </p>
+                                    </div>
+                                    <div class="all_order_content">
+                                        <div class="order_number">
+                                            <p>订单编号</p>
+                                            <p>{{item.ID}}</p>
+                                        </div>
+                                        <div class='order_detail'>
+                                            <p class="max_height">{{item.Suppliers}}</p>
+                                            <div class="set_top">
+                                                <p class="order_detail_payment">取消原因</p>
+                                                <p class="order_detail_payment"><i class="set_no_warp">{{item.Summary}}</i><span></span></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="all_order_price">
+                                        <p><span>交易币种：{{item.Currency}}</span></p>
+                                        <p><span>报关总价：<span class="price">{{item.DeclarePrice}}</span></span></p>
+                                        <div class="all_order_invoice">
+                                            <span class="invocelist details_btn" v-on:click.stop="orderDetails(item.ID)">订单详情</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="order_kindmore">
+                                <mt-spinner v-if="indexData.allTotal>indexData.getdata.length&&indexData.infiniteScroll==false" type="fading-circle"></mt-spinner>
+                                <p v-if="indexData.allTotal==indexData.getdata.length&&indexData.infiniteScroll==true&&indexData.allTotal>10">全部加载完成</p>
+                            </div>
+                        </div>
+                        <div v-else class="null_orders">
+                            <img src="~/Content/img/null_order.png" alt="">
+                            <p>您还没有相关的订单</p>
+                        </div>
+                    </li>
+                    <!-- 已退回return_data -->
+                    <li>
+                        <div v-if="!indexData.isNullOrder" ref="viewBox11" v-on:scroll="ss('viewBox11')" class="set_scroll" v-infinite-scroll="loadMore"
+                             infinite-scroll-disabled="indexData.infiniteScroll"
+                             infinite-scroll-distance="20"
+                             infinite-scroll-immediate-check="false">
+                            <div class="listpublic all_order_box" v-on:click="orderDetails(item.ID)" v-for="item in indexData.getdata">
+                                <div class="all_order">
+                                    <div class="all_order_titles">
+                                        <img src="~/Content/img/times.png" alt="">
+                                        <p>
+                                            <span>{{item.CreateDate}}</span>
+                                            <span>{{item.OrderStatus}}</span>
+                                        </p>
+                                    </div>
+                                    <div class="all_order_content">
+                                        <div class="order_number">
+                                            <p>订单编号</p>
+                                            <p>{{item.ID}}</p>
+                                        </div>
+                                        <div class='order_detail'>
+                                            <p class="max_height">{{item.Suppliers}}</p>
+                                            <div class="set_top">
+                                                <p class="order_detail_payment">退回原因</p>
+                                                <p class="order_detail_payment"><i class="set_no_warp">{{item.Summary}}</i><span></span></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="all_order_price">
+                                        <p><span>交易币种：{{item.Currency}}</span></p>
+                                        <p><span>报关总价：<span class="price">{{item.DeclarePrice}}</span></span></p>
+                                        <div class="all_order_invoice">
+                                            <span class="invocelist" v-on:click.stop="newLog(item.ID)">订单跟踪</span>
+                                            <span class="invocelist details_btn" v-on:click.stop="orderDetails(item.ID)">订单详情</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="order_kindmore">
+                                <mt-spinner v-if="indexData.allTotal>indexData.getdata.length&&indexData.infiniteScroll==false" type="fading-circle"></mt-spinner>
+                                <p v-if="indexData.allTotal==indexData.getdata.length&&indexData.infiniteScroll==true&&indexData.allTotal>10">全部加载完成</p>
+                            </div>
+                        </div>
+                        <div v-else class="null_orders">
+                            <img src="~/Content/img/null_order.png" alt="">
+                            <p>您还没有相关的订单</p>
+                        </div>
+                    </li>
+                </ul>
+
+            </div>
+
+        </div>
+        <div class="fixedMenu">
+            <ul>
+                <li>
+                    <a href="/Account/Index"><i></i><span>会员中心</span></a>
+                </li>
+                <li>
+                    <a href="/Order/MyOrders"><i></i><span>我的订单</span></a>
+                </li>
+                <li>
+                    <a href="tel:0755-83988698"><i></i><span>报关热线</span></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <script>
+
+
+        var myorder = new Vue({
+            el: "#myorder",
+            data: {
+                indexData: {
+                    infiniteScroll: false,
+                    categoryIndex: 0,
+                    statusindex: 0,
+                    inoviceindex: 0,
+                    paymentindex: 0,
+                    orderDate: "all",
+                    invoiceStatus: "all",
+                    payExchangeStatus: "all",
+                    show_condition: false,
+                    formData:@Html.Raw(Json.Encode(Model)),
+                    getdata: [], //全部订单
+                    allIndex: 1,  //全部订单已加载多少页
+                    allRows: 10,   //全部订单每页加载的条数
+                    allTotal: 0,    //全部订单一共多少条
+                    isLoading: false,
+                    isNullOrder: false,
+                    isFliter: false,   //是否筛选
+                    navIndex: 0,//导航下标
+                    isReturnBack: false, //是否是上级页面返回过来
+                    scrollTop: 0, //滚动条位置
+                    refName:"",  //滚动条ref名称
+                },
+                order_time: [ //订单日期
+                    {
+                        text: "全部订单",
+                        value:"all"
+                    },
+                    {
+                        text: "本月订单",
+                        value:"curMonth",
+                    },
+                    {
+                        text: "三月以内订单",
+                        value:"thrMonth"
+                    },
+                    {
+                        text: "本年订单",
+                        value:"curYear"
+                    }
+                ],
+                order_status:
+                    ["全部状态", "草稿", "待归类", "待确认", "待付汇", "待开票", "待收货", "已完成", "已挂起", "已取消", "已退回"],
+                navdata: ["全部", "草稿", "待归类", "待确认", "待付汇", "待开票", "待收货","已完成", "已挂起", "已取消", "已退回"],
+
+            },
+            watch: {
+                isLoading: function (val) {
+                    this.loading(val);
+                },
+                navIndex: function (val) {
+                    if (!this.isReturnBack) {
+                        this.getData(val, true, true);
+                    } else {
+                        this.isReturnBack = false;
+                    }
+                }
+            },
+            mounted: function () {
+                var userJsonStr = sessionStorage.getItem('user');
+                userEntity = JSON.parse(userJsonStr);
+                if (userEntity == null) {
+                    //先看是否有传递的下标，如果有，给下标复赋值，没有默认为0
+                    //调用滚动事件
+                    if (this.indexData.formData.Index != null && this.indexData.formData.Index != '') {
+                        this.indexData.navIndex = parseInt(this.indexData.formData.Index);
+                    } else {
+                        this.indexData.navIndex = 0;
+                    }
+                    if (this.indexData.navIndex == 0) {
+                        this.getData(this.indexData.navIndex, true, true);
+                    }
+                } else {
+                    this.indexData = userEntity;
+                    if (this.indexData.navIndex != 0) {
+                        this.isReturnBack = true;
+                    }
+                    this.$nextTick(() => {
+                        this.$refs['viewBox' +(this.indexData.navIndex+1)].scrollTop = this.indexData.scrollTop;
+                    })
+                    sessionStorage.removeItem('user');
+                }
+                this.slides();
+            },
+            computed: {
+                navIndex: function () {
+                    return this.indexData.navIndex;
+                },
+                isLoading: function () {
+                    return this.indexData.isLoading;
+                },
+                //开票状态数据源
+                invoice_list: function () {
+                    var arr = JSON.parse(this.indexData.formData.InvoiceStatusOptions);
+                    var obj = {
+                        text: "全部状态",
+                        value: "all",
+                    }
+                    arr.unshift(obj);
+                    return arr;
+                },
+                //付汇状态数据源
+                payment_list: function () {
+                    var arr = JSON.parse(this.indexData.formData.PayExchangeStatusOptions);
+                    var obj = {
+                        text: "全部状态",
+                        value: "all",
+                    }
+                    arr.unshift(obj);
+                    return arr;
+                },
+            },
+            methods: {
+                ss: function (ref) {
+                    // 监听这个dom的scroll事件
+                        this.$refs[ref].addEventListener('scroll', () => {
+                            this.indexData.scrollTop = this.$refs[ref].scrollTop;
+                    }, false)
+                },
+                //确认收货
+                confirmReceivedOrder: function (id) {
+                    var that = this;
+                    this.$messagebox({
+                        title: '提示',
+                        message: "是否确认收货(包括分批送货)？",
+                        showCancelButton: true,
+                        confirmButtonText: "确定",
+                        cancelButtonText: "取消",
+                        confirmButtonClass: "confirm-button",
+                    }).then(action => {
+                        if ("confirm" == action) {
+                            axios({
+                                url: "/Order/ConfirmReceived",
+                                method: "post",
+                                data: {
+                                    orderID: id,
+                                }
+                            }).then(function (response) {
+                                if (response.data.type != "error") {
+                                    that.navlist(6, true)
+                                }
+                                that.$toast(response.data.msg);
+                            }).catch(function (error) {
+                                that.$toast("系统发生错误，请稍后重试或联系客服");
+                            });
+                        }
+                    });
+                },
+                loadMore: function () { //滚动后触发的事件
+                    if (this.indexData.allTotal == 0) {
+                        this.indexData.infiniteScroll = true;
+                    }
+                    if (!this.indexData.infiniteScroll) {
+                        this.indexData.allIndex++;
+                        this.indexData.isFliter = true;
+                        this.getData(this.indexData.navIndex, false,false); //中间的加载消失，显示底部加载
+                    }
+                },
+                confirmOrder: function (id) {
+                    sessionStorage.setItem('user', JSON.stringify(this.indexData));
+                    location.href = "/Order/Confirm/" + id;
+                },
+                //取消待确认订单
+                cancelUnConfirm: function (id) {
+                    var that = this;
+                    this.$messagebox({
+                        $type: 'prompt',
+                        title: '请输入取消原因',
+                        message: ' ',
+                        closeOnClickModal: false,   //点击model背景层不关闭MessageBox
+                        showCancelButton: true,   //不显示取消按钮
+                        inputPattern: /^[\s\S]{1,200}$/,    //正则条件
+                        inputErrorMessage: '请输入原因(不超过200个字)',
+                        showInput: true
+                    }).then(({ value, action }) => {
+                        if ("confirm" == action) {
+                            axios({
+                                url: "/Order/CancelConfirm",
+                                method: "post",
+                                data: {
+                                    orderID: id,
+                                    reason:value,
+                                }
+                            }).then(function (response) {
+                                if (response.data.type != "error") {
+                                    that.navlist(3, true)
+                                }
+                                that.$toast(response.data.msg);
+                            }).catch(function (error) {
+                                that.$toast("系统发生错误，请稍后重试或联系客服");
+                            });
+                        }
+                    });
+                },
+                //删除草稿订单
+                deleteDraft: function (id) {
+                    var that = this;
+                    this.$messagebox({
+                        title: '提示',
+                        message: "是否删除这个草稿订单？",
+                        showCancelButton: true,
+                        confirmButtonText: "确定",
+                        cancelButtonText: "取消",
+                        confirmButtonClass: "confirm-button",
+                    }).then(action => {
+                        if ("confirm" == action) {
+                            axios({
+                                url: "/Order/DeleteOrder",
+                                method: "post",
+                                data: {
+                                    orderID: id,
+                                }
+                            }).then(function (response) {
+                                if (response.data.type != "error") {
+                                    that.navlist(1, true)
+                                }
+                                that.$toast(response.data.msg);
+                                }).catch(function (error) {
+                                    that.$toast("系统发生错误，请稍后重试或联系客服");
+                            });
+                        }
+                    });
+                },
+                //加载
+                loading: function (val) {
+                    if (val) {
+                        this.$indicator.open();
+                    } else {
+                        this.$indicator.close();
+                    }
+                },
+                orderDetails: function (id) {
+                   sessionStorage.setItem('user', JSON.stringify(this.indexData));
+                   location.href = "/Order/Info/" + id;
+                },
+                orderBills: function (id) {
+                    sessionStorage.setItem('user', JSON.stringify(this.indexData));
+                    location.href = "/Order/OrderBills/" + id;
+                },
+                orderInvoice: function (id) {
+                    sessionStorage.setItem('user', JSON.stringify(this.indexData));
+                   location.href = "/Order/Invoice/" + id;
+                },
+                payRecord: function (id) {
+                    sessionStorage.setItem('user', JSON.stringify(this.indexData));
+                    location.href = "/PayExchange/PayRecord/" + id;
+                },
+                getData: function (index, isSlide, isShowLoading) {
+                    //滑动初始化
+                    if (isSlide) {
+                        this.indexData.getdata = [];
+                        this.indexData.allIndex = 1;
+                        this.indexData.allRows = 10;
+                        this.indexData.allTotal = 0;
+                        this.indexData.isNullOrder = false;
+                        this.indexData.infiniteScroll = false;
+                    }
+                    if (!this.indexData.isFliter) {  //是否清除筛选的内容
+                        this.set_empty();
+                    }
+                    var url = "/Order/GetMyOrderList";
+                    if (index == 1) {   //草稿
+                        url = "/Order/GetDraftOrders";
+                    } else if (index == 2) {   //待归类
+                        url = "/Order/GetUnclassified";
+                    } else if (index == 3) {   //待确认
+                        url = "/Order/GetPreConfirmsOrders";
+                    } else if (index == 4) {   //待付汇
+                        url = "/Order/GetUnPayExchanges";
+                    } else if (index == 5) {  //待开票
+                        url = "/Order/GetUnInvoicedOrders";
+                    } else if (index == 6) {  //待收货
+                        url = "/Order/GetUnReceievedOrders";
+                    } else if (index == 7) {  //已完成
+                        url = "/Order/GetCompeletedOrders";
+                    } else if (index == 8) {  //已挂起
+                        url = "/Order/GetHangUpOrders";
+                    } else if (index == 9) {  //已取消
+                        url = "/Order/GetCanceledOrders";
+                    } else if (index == 10) {  //已退回
+                        url = "/Order/GetRejectedOrders";
+                    }
+                    var that = this;
+                    that.indexData.isLoading = isShowLoading;
+                    that.indexData.infiniteScroll = false;
+                    axios({
+                        url: url,
+                        method: "post",
+                        data: {
+                            page: that.indexData.allIndex,
+                            rows: that.indexData.allRows,
+                            orderDate: that.indexData.orderDate,
+                            invoiceStatus: that.indexData.invoiceStatus,
+                            payExchangeStatus: that.indexData.payExchangeStatus,
+                        },
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                        },
+                        transformRequest: [function (data) {
+                            var ret = ''
+                            for (var it in data) {
+                                ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+                            }
+                            return ret;
+                        }],
+                    }).then(function (response) {
+                        var data = JSON.parse(response.data.data);
+                        that.indexData.isLoading = false;
+                        that.indexData.allTotal = data.total;
+                        that.indexData.getdata = that.indexData.getdata.concat(data.list);
+                        if (that.indexData.getdata.length == 0) {
+                            that.indexData.isNullOrder = true;
+                        }
+                        if (that.indexData.getdata.length == that.indexData.allTotal) {
+                            that.indexData.infiniteScroll = true;
+                        } else {
+                            that.indexData.infiniteScroll = false;
+                        }
+                    }).catch(function (error) {
+                        that.$toast("系统发生错误，请稍后重试或联系客服");
+                    });
+                },
+                set_empty: function () {  //清空条件
+                    this.indexData.categoryIndex = 0;
+                    this.indexData.statusindex = 0;
+                    this.indexData.inoviceindex = 0;
+                    this.indexData.paymentindex = 0;
+                    this.indexData.orderDate = "all";
+                    this.indexData.invoiceStatus = "all";
+                    this.indexData.payExchangeStatus = "all";
+                },
+                confirm_btn: function () {
+                    this.indexData.show_condition = false;
+                    this.navlist(this.indexData.statusindex, true) //传递状态的id，控制页面的变动
+                },
+                setclass(index,item) { // 这里我们传入一个当前值
+                    this.indexData.orderDate = item.value;
+                    this.indexData.categoryIndex = index;
+                },
+                setstatusindex(index, item) {
+                    this.indexData.statusindex = index;
+                },
+                setinoviceindex: function (index, item) {
+                    this.indexData.invoiceStatus = item.value;
+                    this.indexData.inoviceindex = index;
+                },
+                setpaymentindex: function (index, item) {
+                    this.indexData.payExchangeStatus = item.value;
+                    this.indexData.paymentindex = index;
+                },
+                updateds: function () { //下划线样式
+                    if (this.indexData.show_condition == true) {
+                        this.indexData.show_condition = false;
+                        $(".filtrates").find("i").addClass("el-icon-arrow-down")
+                        $(".filtrates").find("i").removeClass("el-icon-arrow-up")
+                    } else if (this.indexData.show_condition == false) {
+                        this.indexData.show_condition = true;
+                        $(".filtrates").find("i").removeClass("el-icon-arrow-down")
+                        $(".filtrates").find("i").addClass("el-icon-arrow-up")
+
+                    } else {
+                        this.indexData.show_condition = false
+                    }
+                },
+                navlist: function (index, isQuery) {  // 通过下边控制导航的方法
+                    var curIndex = this.indexData.navIndex;
+                    var nav_w = $(".find_nav_list li").eq(index).width();
+                    $(".find_nav_list li").removeClass("find_nav_cur");
+                    $(".find_nav_list li").find("a").removeClass("active");
+                    $(".find_nav_list li").eq(index).find("a").addClass("active");
+                    $(".find_nav_list li").find("span").removeClass("spanactive");
+                    $(".find_nav_list li").eq(index).find("span").addClass("spanactive");
+                    this.indexData.show_condition = false
+                    var fl_w = $(".find_nav_list").width();
+                    var flb_w = $(".find_nav_left").width();
+                    var fn_w = ($(".find_nav").width() - nav_w) / 2;
+                    var fnl_l;
+                    var fnl_x = parseInt($(".find_nav_list li").eq(index).position().left);
+                    if (fnl_x <= fn_w) {
+                        fnl_l = 0;
+                    } else if (fn_w - fnl_x <= flb_w - fl_w) {
+                        fnl_l = flb_w - fl_w + 30;
+                    } else {
+                        fnl_l = fn_w - fnl_x + 30;
+                    }
+                    $(".find_nav_list").animate({ "left": fnl_l }, 300);
+                    tt.slide(index);
+                    this.indexData.isFliter = isQuery;
+                    if (index == curIndex) {
+                        this.getData(index, true,true);
+                    }
+                },
+                slides: function () { //滑动效果
+                    // 给li定义高度，配合css使li独立滚动
+                    var $window = $(window);
+                    var initialWindowHeight = null;
+
+                    $window.resize(function () {
+                        sliderHeight();
+                    });
+
+                    sliderHeight();
+                    var that = this
+                    function sliderHeight() {
+                        //var wHeight = document.body.scrollHeight
+                        var wHeight = $(window).height();
+                        var sliderHeight = wHeight
+                        $(".swipe li").height(sliderHeight);
+                    }
+                    $(".find_nav_list").css("left", 0);
+                    var nav_w = $(".find_nav_list li").first().width();
+                    $(".find_nav_list li").on('click', function () {//导航栏点击事件
+                        nav_w = $(this).width();
+                        $(".find_nav_list li").find("a").removeClass("active");
+                        $(this).find("a").addClass("active").siblings().removeClass("active");
+                        $(".find_nav_list li").find("span").removeClass("spanactive");
+                        $(this).find("span").addClass("spanactive");
+                        that.indexData.show_condition = false
+
+                        var fn_w = ($(".find_nav").width() - nav_w) / 2;
+                        var fnl_l;
+                        var fnl_x = parseInt($(this).position().left);
+                        if (fnl_x <= fn_w) {
+                            fnl_l = 0;
+                        } else if (fn_w - fnl_x <= flb_w - fl_w) {
+                            fnl_l = flb_w - fl_w + 30;
+                        } else {
+                            fnl_l = fn_w - fnl_x + 30;
+                        }
+                        $(".find_nav_list").animate({ "left": fnl_l }, 300);
+                    });
+                    var fl_w = $(".find_nav_list").width();
+                    var flb_w = $(".find_nav_left").width();
+                    $(".find_nav_list").on('touchstart', function (e) {
+                        var touch1 = e.originalEvent.targetTouches[0];
+                        x1 = touch1.pageX;
+                        y1 = touch1.pageY;
+                        ty_left = parseInt($(this).css("left"));
+                    });
+                    $(".find_nav_list").on('touchmove', function (e) {
+                        var touch2 = e.originalEvent.targetTouches[0];
+                        var x2 = touch2.pageX;
+                        var y2 = touch2.pageY;
+                        if (ty_left + x2 - x1 >= 0) {
+                            $(this).css("left", 0);
+                        } else if (ty_left + x2 - x1 <= flb_w - fl_w) {
+                            $(this).css("left", (flb_w - fl_w) + 30);
+                        } else {
+                            $(this).css("left", (ty_left + x2 - x1) + 30);
+                        }
+                        if (Math.abs(y2 - y1) > 0) {
+                            e.preventDefault(ty_left + x2 - x1);
+                        }
+                    });
+
+                    var page = 'pagenavi1';
+                    var mslide = 'slider1';
+                    var mtitle = 'emtitle';
+                    arrdiv = 'arrdiv';
+                    var as = $("#" + page + "").find("a");
+                    tt = new TouchSlider({
+                        id: mslide,
+                        'auto': '-1',
+                        fx: 'ease-out',
+                        direction: 'left',
+                        speed: 600,
+                        timeout: 3000,
+                        'before': function (index) {
+                            var as = document.getElementById(this.page).getElementsByTagName('a');
+                            as[this.p].className = '';
+                            this.p = index;
+                            fnl_x = parseInt($(".find_nav_list li").eq(this.p).position().left);
+                            nav_w = $(".find_nav_list li").eq(this.p).width();
+                            $(".find_nav_list li").eq(this.p).addClass("find_nav_cur").siblings().removeClass("find_nav_cur");
+                            $(".find_nav_list li").find("span").removeClass("spanactive")
+                            $(".find_nav_list li").eq(this.p).find("span").addClass("spanactive")
+                            var fn_w = ($(".find_nav").width() - nav_w) / 2;
+                            var fnl_l;
+                            if (fnl_x <= fn_w) {
+                                fnl_l = 0;
+                            } else if (fn_w - fnl_x <= flb_w - fl_w) {
+                                fnl_l = (flb_w - fl_w) + 30;
+                            } else {
+                                fnl_l = (fn_w - fnl_x) + 30;
+                            }
+                            $(".find_nav_list").animate({
+                                "left": fnl_l
+                            }, 300);
+                            if (that.indexData.navIndex != index) {
+                                that.indexData.isFliter = false;
+                            }
+                            that.indexData.navIndex = index;
+                            that.indexData.isFliter = false;
+                        },
+                    });
+                    tt.page = page;
+                    tt.p = 0;
+                    if (index != "") {  //如果下标不等于空，则导航条与页面跟随下标滚动
+                        var index = this.indexData.navIndex
+                        var nav_w = $(".find_nav_list li").eq(index).width();
+                        $(".find_nav_list li").removeClass("find_nav_cur");
+                        $(".find_nav_list li").find("a").removeClass("active");
+                        $(".find_nav_list li").eq(index).find("a").addClass("active");
+                        $(".find_nav_list li").find("span").removeClass("spanactive");
+                        $(".find_nav_list li").eq(index).find("span").addClass("spanactive");
+                        this.indexData.show_condition = false
+                        var fl_w = $(".find_nav_list").width();
+                        var flb_w = $(".find_nav_left").width();
+                        var fn_w = ($(".find_nav").width() - nav_w) / 2;
+                        var fnl_l;
+                        var fnl_x = parseInt($(".find_nav_list li").eq(index).position().left);
+                        if (fnl_x <= fn_w) {
+                            fnl_l = 0;
+                        } else if (fn_w - fnl_x <= flb_w - fl_w) {
+                            fnl_l = flb_w - fl_w + 30;
+                        } else {
+                            fnl_l = fn_w - fnl_x + 30;
+                        }
+                        $(".find_nav_list").animate({ "left": fnl_l }, 300);
+                        tt.slide(index)
+                    }
+
+                },
+                newLog: function (id) {
+                    sessionStorage.setItem('user', JSON.stringify(this.indexData));
+                    location.href = "/Order/NewLog/" + id;
+                },
+            },
+        })
+    </script>
+</body>
+</html>

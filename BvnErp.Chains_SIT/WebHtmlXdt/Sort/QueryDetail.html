@@ -1,0 +1,129 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>归类查询-芯达通- 一站式报关服务平台</title>
+    <meta name="keywords" content="归类查询、海关归类、申报要素、芯达通" />
+    <meta name="description" content="产品归类页面" />
+    <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
+    <!--[if lt IE 9]>
+      <script src="/Scripts/html5shiv.min.js"></script>
+      <script src="/Scripts/respond.min.js"></script>
+    <![endif]-->
+    <link rel="shortcut icon" href="/Content/images/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="/Content/common.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/style.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/element.css" />
+</head>
+<body class="gray">
+    <div class="header"></div>
+    <section class="w1200" id="QueryDetail" v-cloak>
+        <div class="content-boxShadow noborder mb20">
+            <h2 class="title">HS编码：{{form.HSCode}} 详情</h2>
+        </div>
+        <div class="content-boxShadow noborder pb66">
+            <h3>税率信息</h3>
+            <div>
+                <div>
+                    <span>进口最惠国税率：</span>
+                    <em>{{form.MFN}}%</em>
+                </div>
+                <div>
+                    <span>普通税率：</span>
+                    <em>{{form.General}}%</em>
+                </div>
+                <div>
+                    <span>增值税率：</span>
+                    <em>{{form.AddedValue}}%</em>
+                </div>
+                <div>
+                    <span>消费税：</span>
+                    <em>{{form.Consume}}%</em>
+                </div>
+                <div>
+                    <span>是否3C：</span>
+                    <em>{{form.IsCCC}}</em>
+                </div>
+            </div>
+            <h3>申报要素</h3>
+            <div>
+                <div v-for="item in form.Elements">
+                    <span>-</span>
+                    <em>{{item}}</em>
+                </div>
+            </div>
+            <h3>CIQ代码（13位海关编码）</h3>
+            <div>
+                <div>
+                    <span>{{form.HSCode}}{{form.CIQCode}}：</span>
+                    <em>{{form.ProName}}</em>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="footer"></div>
+    <script src="/Scripts/jquery-3.3.1.min.js" type="text/javascript" charset="utf-8"></script>
+
+    <script src="/Scripts/vue.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/common.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/element.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+        var aboutus = new Vue({
+            el: '#QueryDetail',
+            mounted: function () {
+                this.getQueryDetailData();
+            },
+            data: {
+                form: {
+                    MFN: "",
+                    General: "",
+                    AddedValue: "",
+                    Consume: "",
+                    IsCCC: "",
+                    Elements: [],
+                    HSCode: "",
+                    CIQCode: "",
+                    ProName: "",
+                }
+            },
+            methods: {
+                getQueryDetailData: function () {
+                    var that = this;
+                    var query = localStorage["detailText"];
+                    this.form.HSCode = query;
+                    $.ajax({
+                        type: "Post",
+                        data: {
+                            query: query
+                        },
+                        url: "https://user.wl.net.cn/WebApi/QueryDetail",    //跨域url http://user1.wl.net.cn/WebApi/QueryDetail
+                        dataType: "jsonp",  //指定 jsonp 请求
+                        jsonpCallback: "queryDetailJsonpCallback", // 指定回调函数
+                        error: function () {
+                            aboutus.onAlert("error", "请求失败！");
+                            setTimeout(function () { location.href = "/Index.html" }, 1000);
+                        },
+                    });
+                },
+                getDataSucc: function (res) {
+                    var that = this;
+                    res = JSON.parse(res.Data);
+                    that.form = res;
+                },
+                //消息提示框
+                onAlert: function (type, message) {
+                    this.$message({
+                        message: message,
+                        type: type
+                    });
+                },
+            }
+        })
+        function queryDetailJsonpCallback(result) {
+            if (result.Type == "success") {
+                aboutus.getDataSucc(result)
+            }
+        }
+    </script>
+</body>
+</html>

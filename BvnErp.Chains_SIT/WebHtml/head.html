@@ -1,0 +1,162 @@
+﻿<header id="header">
+    <div class="header_top_box">
+        <div class="w1200 clearfix header_top">
+            <div class="header_top_left">
+                <a href="https://user.wl.net.cn/Home/Login" class="red" target="_blank" v-if="!isLogin">
+                    您好，请登录
+                </a>
+                <a href="https://user.wl.net.cn/home/index" class="mr20" target="_blank" v-if="isLogin">
+                    您好，{{UserName}}
+                </a>
+                <a href="/Applies.html" id="apply" v-if="!isLogin">
+                    报名申请
+                </a>
+                <a href="https://user.wl.net.cn/home/index" class="memeber_center" target="_blank" v-if="isLogin">
+                    会员中心
+                </a>
+            </div>
+            <div class="fr">
+                <ul>
+                    <li class="firstli">
+                        <a href="">了解创新恒远</a>
+                        <i class="nav_item_icon"></i>
+                        <ul class="nav_item_ul nav_item_ul1">
+                            <li class="pt4">
+                                <a href="" class="pl15">
+                                    <span class="nav_span">了解创新恒远</span>
+                                    <i class="nav_item_icon"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/About.html">公司简介</a>
+                            </li>
+                            <li>
+                                <a href="/Recruitment.html">人才招聘</a>
+                            </li>
+                            <li>
+                                <a href="/Contact.html">联系我们</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="/FAQ/RegistrationGuide.html">新手入门</a>
+                    </li>
+                    <li>
+                        <a href="/FAQ.html">常见问题</a>
+                    </li>
+                    <li>
+                        <a href="/Procedure.html">报关流程</a>
+                    </li>
+                </ul>
+                <div class="iphone clearfix">
+                    <div class="iphone_title">报关热线：</div>
+                    <div class="iphone_number">0755-83988698</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="header_main">
+        <div class="w1200 clearfix">
+            <div class="logo">
+                <a href="/Index.html"></a>
+            </div>
+            <div class="fr">
+                <nav>
+                    <ul class="clearfix nav_item">
+                        <li class="nav_item_li">
+                            <a href="/Index.html">首页</a>
+                        </li>
+                        <li class="nav_item_li">
+                            <a href="">
+                                <span>服务</span>
+                                <i class="nav_item_icon mm"></i>
+                            </a>
+                            <ul class="nav_item_ul nav_item_ul1">
+                                <li class="pt19">
+                                    <a href="" class="pl35">
+                                        <span class="nav_span">服务</span>
+                                        <i class="nav_item_icon"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/Service.html?activeName=S1">进口报关</a>
+                                </li>
+                                <li>
+                                    <a href="/Service.html?activeName=S2">付汇</a>
+                                </li>
+                                <li>
+                                    <a href="/Service.html?activeName=S3">代收/发货</a>
+                                </li>
+                                <li>
+                                    <a href="/Service.html?activeName=S4">代仓储</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav_item_li">
+                            <a href="">
+                                <span>帮助</span>
+                                <i class="nav_item_icon mm"></i>
+                            </a>
+                            <ul class="nav_item_ul nav_item_ul2">
+                                <li class="pt19">
+                                    <a href="" class="pl35">
+                                        <span class="nav_span">帮助</span>
+                                        <i class="nav_item_icon"></i>
+                                    </a>
+                                </li>
+                                <li><a href="/FAQ.html">常见问题</a></li>
+                                <li><a href="/Sort/Search.html">归类查询</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav_item_li">
+                            <a href="/Applies.html" class="btn button applyServer">申请创新恒远服务</a>
+                        </li>
+                        <li class="nav_item_li mr0" v-show="!isLogin">
+                            <a v-bind:href="loginHref" class="btn btn_line login_btn" target="_blank">{{loginText}}</a>
+                        </li>
+                        <li class="nav_item_li mr0" v-show="isLogin">
+                            <a class="btn btn_line login_btn">{{loginText}}</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+<script src="Scripts/jquery.cookie.js"></script>
+<script type="text/javascript">
+    var header = new Vue({
+        el: '#header',
+        data: {
+            isLogin: false,//用户是否登录的状态
+            loginText: '登录',
+            loginHref: 'https://user.wl.net.cn/Home/Login',
+            loginStatus: false,//登录弹出框的展示状态
+            UserName: '',//用户名
+            cookie: ''//cookie值
+        },
+        mounted: function () {
+            var that = this;
+            //模拟登录
+            //转成json格式
+            var cookie = $.cookie('xingdatong_user');
+            if (cookie != null) {
+                var s = '{"' + cookie.replace(/=/g, '":"').replace(/&/g, '","') + '"' + "}";
+                var m = JSON.parse(s); //转成json
+                if (m.name !=null && m.name!="") {
+                    that.isLogin = true;
+                    that.loginText = '已登录';
+                    that.loginHref = 'https://user.wl.net.cn/home/index'
+                    var name = unescape(m.name);
+                    that.UserName = name;
+                }
+            }
+        },
+        methods: {
+            openLogin: function () {
+                this.loginStatus = true;
+                footer.loginStatus = true;
+            }
+        }
+    })
+</script>

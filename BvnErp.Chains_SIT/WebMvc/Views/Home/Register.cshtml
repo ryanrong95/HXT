@@ -1,0 +1,528 @@
+﻿
+@{
+    ViewBag.Title = "会员注册";
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+}
+
+<h2>Register</h2>
+
+<!--注册内容-->
+<section class="register">
+    <div class="w1200" id="app">
+        <!--
+            注册时的状态
+            第一步：step1_active
+                <div class="step_box clearfix step1_active">
+            第二步：step2_active
+                <div class="step_box clearfix step2_active">
+            第三步：step2_active
+                <div class="step_box clearfix step2_active">
+        -->
+        <div class="step_box clearfix step1_active">
+            <div class="step step1">
+                <i></i>
+                <span>1</span>
+                <p>设置用户名</p>
+            </div>
+            <div class="step step2">
+                <i></i>
+                <span>2</span>
+                <p>填写账号信息</p>
+            </div>
+            <div class="step step3">
+                <i></i>
+                <span>3</span>
+                <p>注册成功</p>
+            </div>
+            <div class="step_line1"></div>
+            <div class="step_line2"></div>
+            <div class="step_line_default"></div>
+        </div>
+        <div class="step_content">
+            <!--step0 step1为第一步-->
+            <div class="step0_content">
+                <ul class="input_list">
+                    <li class="clearfix">
+                        <label for="">电子邮箱</label>
+                        <!--
+                            提示input框输入正确还是错误
+                            <div class="input_list_right">默认
+                            <div class="input_list_right input_correct">正确提示
+                            <div class="input_list_right input_error">错误提示
+                        -->
+                        <div class="input_list_right">
+                            <input type="text" name="" id="email" v-model="form.Email" placeholder="请输入邮箱" class="btn btn_line mb30" />
+                            <i class="input_correct_i"></i>
+                            <div class="input_error_hint hintFixed">
+                                <i></i>
+                                <span>邮箱格式不正确，请重新输入</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="clearfix">
+                        <label for="">验证</label>
+                        <div class="input_list_right">
+                            <div class="btn btn_bg_gray" id="box" onselectstart="return false;">
+                                <div class="bgColor"></div>
+                                <div class="txt">请按住滑块，拖到最右边</div>
+                                <div class="slider"><i></i></div>
+                                <input type="hidden" id="isSuccess" v-model="isSuccess" />
+                            </div>
+                        </div>
+                    </li>
+                    <li class="clearfix">
+                        <div class="input_list_right">
+                            <label></label>
+                            <button class="btn btn_bg_gray2 mt70 btn_big" disabled="disabled" id="registerStep1" v-on:click="registerStep1">下一步</button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="step1_content clearfix hidden">
+                <div class="step1_left">
+                    <i></i>
+                </div>
+                <div class="step1_right">
+                    <h2>邮箱验证后，填写账号信息，即可完成注册！</h2>
+                    <p>
+                        只需登录邮箱
+                        <span>{{form.Email}}</span> 点击链接激活即可。
+                    </p>
+                    <a class="btn btn_bg_blue step1_right_a" v-on:click="mailSubmit">立即登录邮箱验证</a>
+                    <div class="bt">
+                        <h3>还没有收到验证邮件？</h3>
+                        <ol>
+                            <li>1.尝试到广告邮件、垃圾邮件目录里找找看</li>
+                            <li>
+                                2.
+                                <a href="/Home/Register" class="hint hint_yellow">再次发送验证邮件</a>
+                            </li>
+                            <li>
+                                3.如果重发注册验证邮件仍然没有收到，
+                                <a href="/Home/Register" class="hint hint_yellow">请更换另一个邮件地址</a>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            <div class="step2_content hidden">
+                <ul class="input_list">
+                    <li class="clearfix mb6">
+                        <label class="black">登录名</label>
+                        <div class="input_list_right">
+                            <em>18962588742@qq.com</em>
+                        </div>
+                    </li>
+                    <li class="clearfix mb2">
+                        <label class="black">请设置登录密码</label>
+                    </li>
+                    <li class="clearfix">
+                        <label for="">登录密码</label>
+                        <div class="input_list_right">
+                            <input type="password" name="" id="psd" value="" placeholder="设置您的登录密码" class="btn btn_line" />
+                            <i class="input_correct_i"></i>
+                            <div class="input_error_hint">
+                                <i></i>
+                                <span>邮箱格式不正确，请重新输入</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="clearfix mb2">
+                        <label for="">密码确认</label>
+                        <div class="input_list_right">
+                            <input type="password" name="" id="Surepsd" value="" placeholder="请再次输入您的密码" class="btn btn_line" />
+                            <i class="input_correct_i"></i>
+                            <div class="input_error_hint">
+                                <i></i>
+                                <span>邮箱格式不正确，请重新输入</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="clearfix mb2">
+                        <label class="black">更多账号信息</label>
+                    </li>
+                    <li class="clearfix">
+                        <label for="">公司名称</label>
+                        <div class="input_list_right">
+                            <input type="text" name="" id="companyName" value="" placeholder="请输入营业执照上的公司名称" class="btn btn_line" />
+                            <i class="input_correct_i"></i>
+                            <div class="input_error_hint">
+                                <i></i>
+                                <span>邮箱格式不正确，请重新输入</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="clearfix">
+                        <label for="">您的姓名</label>
+                        <div class="input_list_right">
+                            <input type="text" name="" id="lastName" value="" placeholder="姓" class="btn btn_line btn_half" />
+                            <input type="text" name="" id="firstName" value="" placeholder="名" class="btn btn_line btn_half" />
+                            <i class="input_correct_i"></i>
+                            <div class="input_error_hint">
+                                <i></i>
+                                <span>邮箱格式不正确，请重新输入</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="clearfix">
+                        <label for="">手机号码</label>
+                        <div class="input_list_right">
+                            <input type="text" name="" id="phoneNumber" value="" placeholder="请输入手机号码" class="btn btn_line" />
+                            <i class="input_correct_i"></i>
+                            <div class="input_error_hint">
+                                <i></i>
+                                <span>邮箱格式不正确，请重新输入</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="clearfix">
+                        <label for="">固定电话</label>
+                        <div class="input_list_right">
+                            <input type="text" name="" value="86" placeholder="86" class="btn btn_line w50" /> -
+                            <input type="text" name="" value="" placeholder="" class="btn btn_line w50 input_tc" /> -
+                            <input type="text" name="" value="" placeholder="" class="btn btn_line w160" />
+                            <i class="input_correct_i"></i>
+                            <div class="input_error_hint">
+                                <i></i>
+                                <span>邮箱格式不正确，请重新输入</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="clearfix">
+                        <label for="">联系地址</label>
+                        <div class="input_list_right mt6 chooseArea">
+                            <div class="btn btn_line btn_smsize select">
+                                <div class="select_box" onclick="OpenSelect(1,event)">
+                                    <span>请选择省份</span>
+                                    <i></i>
+                                </div>
+                                <div class="btn btn_line btn_smsize select_fixed" id="province">
+                                    <!--<span>北京市</span>-->
+                                </div>
+                            </div>
+                            <div class="btn btn_line btn_smsize select">
+                                <div class="select_box" onclick="OpenSelect(2,event)">
+                                    <span>请选择市区</span>
+                                    <i></i>
+                                </div>
+                                <div class="btn btn_line btn_smsize select_fixed" id="city">
+                                    <!--<span>北京市</span>-->
+                                </div>
+                            </div>
+                            <div class="btn btn_line btn_smsize select mr0">
+                                <div class="select_box" onclick="OpenSelect(3,event)">
+                                    <span>请选择县城</span>
+                                    <i></i>
+                                </div>
+                                <div class="btn btn_line btn_smsize select_fixed" id="countySeat">
+                                    <!--<span>东城区</span>-->
+                                </div>
+                            </div>
+                            <!--<input type="text" name="" id="" value="" placeholder="登录密码"  />
+                            <input type="text" name="" id="" value="" placeholder="登录密码" class="btn btn_line btn_smsize" />
+                            <input type="text" name="" id="" value="" placeholder="登录密码" class="btn btn_line btn_smsize" />-->
+                            <i class="input_correct_i"></i>
+                            <div class="input_error_hint">
+                                <i></i>
+                                <span>邮箱格式不正确，请重新输入</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="clearfix mb24">
+                        <label for=""></label>
+                        <div class="input_list_right">
+                            <textarea name="" rows="3" cols="3" placeholder="请输入详细的道路、楼字、小区等名称" class=""></textarea>
+                        </div>
+                    </li>
+                    <li class="clearfix">
+                        <div class="input_list_right">
+                            <label></label>
+                            <button class="btn btn_bg_gray2 btn_big mt34" disabled="disabled" id="registerStep2">确认</button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="step3_content hidden">
+                <div class="step3_hint">
+                    <i></i>
+                    <span>恭喜您完成注册</span>
+                </div>
+                <div class="step3_operation">
+                    <p>
+                        尊敬的用户，您已成功注册芯达通，请
+                        <a href="login.html">点击登录!</a>
+                    </p>
+                    <div class="btn btn_bg_blue step3_operation_a">
+                        <a href="login.html">去登录</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="~/Scripts/Home/js/city.js"></script>
+<script type="text/javascript">
+    var selectedprovince = "", //被选中的省份
+        selectedCity = "", //被选中的市区
+        selectedcountySeat = ""; //被选中的县城
+
+    $(function () {
+        $("input,textarea").placeholder();
+        //goStep(0);//模拟进度条进行到第一步（1）
+        //goStep(1);//模拟进度条进行到第一步（2）
+        //goStep(2);//模拟进度条进行到第二步
+        //goStep(3);//模拟进度条进行到第三步
+
+
+
+        $("#psd").keyup(function () {
+            change($(this));
+        })
+        $("#Surepsd").keyup(function () {
+            change($(this));
+        })
+        $("#companyName").keyup(function () {
+            change($(this));
+        })
+        $("#lastName").keyup(function () {
+            change($(this));
+        })
+        $("#firstName").keyup(function () {
+            change($(this));
+        })
+        $("#phoneNumber").keyup(function () {
+            change($(this));
+        })
+
+        $("#registerStep2").on("click", function () {
+            goStep(3);
+        })
+
+        //选择地址开始
+        addAddressElement(cities, "#province"); //添加省份的地址
+        //选择省份
+        $("#province").find("span").on("click", function (el) {
+            selectedprovince = $(el.target).text();
+            o1("#province", el, selectedprovince);
+            o2(el, "#city", "请选择市区", selectedCity);
+            $("#countySeat").parent().find(".select_box").find("span").text("请选择县城");
+            selectedcountySeat = "";
+            addAddressElement(cities[selectedprovince], "#city"); //根据省份地址添加市区地址
+
+            //选择省份后选择市区
+            $("#city").find("span").on("click", function (e) {
+                selectedCity = $(e.target).text();
+                o1("#city", e, selectedCity);
+                o2(e, "#countySeat", "请选择县城", selectedcountySeat);
+                addcountySeatElement(cities[selectedprovince][selectedCity], "#countySeat"); //根据市区地址添加县城地址
+
+                //选择省份后选择市区后选择县城
+                $("#countySeat").find("span").on("click", function (em) {
+                    selectedcountySeat = $(em.target).text();
+                    o1("#countySeat", em, selectedcountySeat);
+                })
+
+            })
+
+        })
+
+        //选择市区
+        $("#city").find("span").on("click", function (e) {
+            selectedCity = $(e.target).text();
+            o1("#city", e, selectedCity);
+            o2(e, "#countySeat", "请选择县城", selectedcountySeat);
+            addcountySeatElement(cities[selectedprovince][selectedCity], "#countySeat");
+            $("#countySeat").find("span").on("click", function (em) {
+                selectedcountySeat = $(em.target).text();
+                o1("#countySeat", em, selectedcountySeat);
+            })
+        })
+
+        //选择县城
+        $("#countySeat").find("span").on("click", function (em) {
+            selectedcountySeat = $(em.target).text();
+            o1("#countySeat", em, selectedcountySeat);
+        })
+
+        document.onclick = function (e) {
+            $(".select_fixed").hide();
+        }
+
+        //选择地址结束
+    })
+
+    //滑块验证通过的函数
+    function success() {
+        bgColor.style.backgroundColor = "#FAA613";
+        slider.className = "slider active";
+        slider.style.backgroundColor = "#FAA613";
+        box.style.backgroundColor = "#FAA613";
+        bgColor.style.width = successMoveDistance + "px";
+        slider.style.left = successMoveDistance - 2 + "px";
+        txt.innerHTML = "验证通过";
+        txt.style.color = "#FFFFFF";
+        txt.style.zIndex = 100;
+        isSuccess = true;
+        app.$data.isSuccess = true;
+        //滑动成功时，移除鼠标按下事件和鼠标移动事件
+        slider.onmousedown = null;
+        document.onmousemove = null;
+    };
+
+    //打开选择省市区
+    function OpenSelect(flag, e) {
+        var e = e || event;
+        stopFunc(e);
+        if (flag == 1) {
+            $("#province").show();
+        } else if (flag == 2) {
+            $("#city").show();
+        } else if (flag == 3) {
+            $("#countySeat").show();
+        }
+    }
+    //添加省份、市区地址元素
+    function addAddressElement(lists, element) {
+        for (var k in lists) {
+            $('<span>', {
+                text: k,
+            }).appendTo(element);
+        }
+    }
+    //添加县城地址元素
+    function addcountySeatElement(lists, element) {
+        for (var i = 0; i < lists.length; i++) {
+            $('<span />', {
+                text: lists[i],
+            }).appendTo(element);
+        }
+    }
+
+    //选择省/市/县城地址
+    function o1(element, e, val) {
+        $(e.target).addClass("selected").siblings().removeClass("selected");
+        $(element).parent().find(".select_box").find("span").text(val);
+        $(element).hide();
+    }
+    //选择地址选择完上一级后改变下一级的状态（选择完省区改变市区和县城的状态；选择完市区改变县城的状态）
+    function o2(e, element, textContent, selectedItem) {
+        var e = e || event;
+        stopFunc(e);
+        $(element).parent().find(".select_box").find("span").text(textContent);
+        selectedItem = "";
+        $(element).show();
+        $(element).children().remove();
+    }
+
+    //简单写注册第一步邮箱验证逻辑开始
+
+    //简单写注册第一步邮箱验证逻辑结束
+
+    //第二步提示信息的演示看看，正式写代码时可以改或者删了重写，现在只是演示
+    function change(ele) {
+        var $elementVal = ele.val();
+        if ($elementVal != "") {
+            ele.parent().parent().removeClass("mb0");//为她的父级添加class为mb0
+            ele.parent().removeClass("input_error").addClass("input_correct");
+            if ($elementVal == $("#phoneNumber").val()) {
+                $("#registerStep2").removeAttr("disabled");
+                $("#registerStep2").removeClass("btn_bg_gray2").addClass("btn_bg_blue");
+            }
+        } else {
+            ele.parent().removeClass("input_correct").addClass("input_error");
+            ele.parent().parent().addClass("mb0");
+            if ($elementVal == $("#phoneNumber").val()) {
+                $("#registerStep2").prop("disabled", "disabled");
+                $("#registerStep2").removeClass("btn_bg_blue").addClass("btn_bg_gray2");
+            }
+        }
+    }
+</script>
+
+<script>
+    var app = new Vue({
+        el: "#app",
+        data: function () {
+            return {
+                form:@Html.Raw(Json.Encode(Model)),
+                isSuccess: false, //邮箱滑动验证
+            }
+        },
+        created: function () {
+            if (this.form.RegisterType > 0) {
+                this.goStep(this.form.RegisterType);  //跳转步骤
+            }
+        },
+        computed: {
+            Email() {
+                return this.form.Email;
+            },
+        },
+        watch: {
+            Email(newValue, oldValue) {
+                if (this.mailValidation()) {
+                    $("#email").parent().removeClass("input_error").addClass("input_correct");
+                } else {
+                    $("#email").parent().removeClass("input_correct").addClass("input_error");
+                }
+                this.allValidation();
+            },
+            isSuccess(newValue, oldValue) {
+                this.allValidation();
+            }
+        },
+        methods: {
+            //邮箱验证
+            mailValidation: function () {
+                var reg = new RegExp(/^([a-zA-Z0-9._-])+@{@Html.Raw("@");}([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/);
+                return reg.test(this.form.Email);
+            },
+            allValidation: function () {
+                if (this.mailValidation() && this.isSuccess) {
+                    $("#registerStep1").removeAttr("disabled");
+                    $("#registerStep1").removeClass("btn_bg_gray2").addClass("btn_bg_blue");
+                }
+                else {
+                    $("#registerStep1").prop("disabled", "disabled");
+                    $("#registerStep1").removeClass("btn_bg_blue").addClass("btn_bg_gray2");
+                }
+            },
+            //第一步验证
+            registerStep1: function () {
+                goStep(1);
+            },
+            //发送邮件验证地址
+            mailSubmit: function () {
+                axios({
+                    url: "/Home/Register",
+                    method: "post",
+                    data: this.form,
+                }).then(function (response) {
+                    if (response.data.type == "success") {
+                      
+                    } else {
+                       
+                    }
+                }).catch(function (error) {
+                    
+                });
+            },
+            goStep: function (index) {
+                if (index == 0) {
+                    this.goStepFunction("step1_active", ".step0_content");
+                } else if (index == 1) {
+                    this.goStepFunction("step1_active", ".step1_content");
+                } else if (index == 2) {
+                    this.goStepFunction("step2_active", ".step2_content");
+                } else if (index == 3) {
+                    this.goStepFunction("step3_active", ".step3_content");
+                }
+            },
+            goStepFunction: function (className, changeClassName) {
+                $(".step_box").addClass(className);
+                $(".step_content").children().hide();
+                $(".step_content").find(changeClassName).show();
+            }
+        }
+    });
+</script>

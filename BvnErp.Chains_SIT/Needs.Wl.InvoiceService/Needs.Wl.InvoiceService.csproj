@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9D0C2F0B-3C72-439B-AFC2-474DCE1EA655}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Needs.Wl.InvoiceService</RootNamespace>
+    <AssemblyName>Needs.Wl.InvoiceService</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Common.Logging">
+      <HintPath>..\packages\Common.Logging.3.3.1\lib\net40\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging.Core">
+      <HintPath>..\packages\Common.Logging.Core.3.3.1\lib\net40\Common.Logging.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Quartz">
+      <HintPath>..\packages\Quartz.2.5.0\lib\net40\Quartz.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Topshelf">
+      <HintPath>..\packages\Topshelf.3.0.2\Topshelf.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MyJob.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ConvertHelper.cs" />
+    <Compile Include="Services\Enums\BusinessType.cs" />
+    <Compile Include="Services\Enums\InvoiceType.cs" />
+    <Compile Include="Services\Enums\InvoiceVailStatus.cs" />
+    <Compile Include="Services\Enums\Status.cs" />
+    <Compile Include="Services\Enums\TaxMapApiStatus.cs" />
+    <Compile Include="Services\Enums\TaxMapJobLogType.cs" />
+    <Compile Include="Services\InvoiceService.cs" />
+    <Compile Include="Services\InvoiceServiceSimple.cs" />
+    <Compile Include="Services\InvVeri\ResultModel.cs" />
+    <Compile Include="Services\InvVeri\ReturnValue.cs" />
+    <Compile Include="Services\InvVeri\﻿InvoiceInfoForCom.cs" />
+    <Compile Include="Services\Models\InvoiceResult.cs" />
+    <Compile Include="Services\Models\InvoiceResultDetail.cs" />
+    <Compile Include="Services\Models\TaxManage.cs" />
+    <Compile Include="Services\Models\TaxManageMap.cs" />
+    <Compile Include="Services\Models\TaxMap.cs" />
+    <Compile Include="Services\Models\TaxMapJobLog.cs" />
+    <Compile Include="Services\Views\PossibleTaxManageView.cs" />
+    <Compile Include="Services\Views\TaxManageOriginView.cs" />
+    <Compile Include="Services\Views\UnHandledTaxMapView.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\NewSolution\Layer.Data\Layer.Data.csproj">
+      <Project>{220cf961-81ef-4288-8d42-54cefbe35086}</Project>
+      <Name>Layer.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\NewSolution\Layer.Linq\Layer.Linq.csproj">
+      <Project>{7031ff1c-1fb9-457c-88fe-9955e07badd3}</Project>
+      <Name>Layer.Linq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\NewSolution\Needs.Linq\Needs.Linq.csproj">
+      <Project>{8f7ffcb1-97bc-4977-b262-71365ae8ec62}</Project>
+      <Name>Needs.Linq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\NewSolution\Needs.Utils\Needs.Utils.csproj">
+      <Project>{71b45033-2d91-4fad-bb5b-441174260e6a}</Project>
+      <Name>Needs.Utils</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.6.1 %28x86 和 x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

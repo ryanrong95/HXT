@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F3E71DF5-AEC1-458F-966F-46EDE3A0B8A2}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Needs.WL.ConsoleToolApp</RootNamespace>
+    <AssemblyName>Needs.WL.ConsoleToolApp</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\NewSolution\Needs.Underly\bin\Debug\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI">
+      <HintPath>..\..\BvnErp.Chains_SIT\packages\NPOI.2.4.1\lib\net45\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML">
+      <HintPath>..\..\BvnErp.Chains_SIT\packages\NPOI.2.4.1\lib\net45\NPOI.OOXML.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net">
+      <HintPath>..\..\BvnErp.Chains_SIT\packages\NPOI.2.4.1\lib\net45\NPOI.OpenXml4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats">
+      <HintPath>..\..\BvnErp.Chains_SIT\packages\NPOI.2.4.1\lib\net45\NPOI.OpenXmlFormats.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Config\WarehouseAPI.cs" />
+    <Compile Include="DecListRepair.cs" />
+    <Compile Include="HKWarehouse\Handler\ClearingData.cs" />
+    <Compile Include="HKWarehouse\Handler\GetUnSortingList.cs" />
+    <Compile Include="HKWarehouse\Handler\PackingHistory.cs" />
+    <Compile Include="HKWarehouse\vo\ClearingDataVo.cs" />
+    <Compile Include="HKWarehouse\vo\ResponseVo.cs" />
+    <Compile Include="HKWarehouse\vo\UnSortingOrder.cs" />
+    <Compile Include="PayExchange\UpdatePayExchange.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\NewSolution\Layer.Data\Layer.Data.csproj">
+      <Project>{220cf961-81ef-4288-8d42-54cefbe35086}</Project>
+      <Name>Layer.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\NewSolution\Layer.Linq\Layer.Linq.csproj">
+      <Project>{7031ff1c-1fb9-457c-88fe-9955e07badd3}</Project>
+      <Name>Layer.Linq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\NewSolution\Needs.Linq\Needs.Linq.csproj">
+      <Project>{8f7ffcb1-97bc-4977-b262-71365ae8ec62}</Project>
+      <Name>Needs.Linq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\NewSolution\Needs.Overall\Needs.Overall.csproj">
+      <Project>{94da4133-a4a4-4e1c-98d6-5f1c023dcdd2}</Project>
+      <Name>Needs.Overall</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\NewSolution\Needs.Utils\Needs.Utils.csproj">
+      <Project>{71b45033-2d91-4fad-bb5b-441174260e6a}</Project>
+      <Name>Needs.Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Needs.Chain.Customs.Services\Needs.Ccs.Services.csproj">
+      <Project>{1e17dee0-88dd-4de6-bf0c-b9675cd19395}</Project>
+      <Name>Needs.Ccs.Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Needs.Model\Needs.Model.csproj">
+      <Project>{8d4d6c8e-8336-4799-939d-25a458730731}</Project>
+      <Name>Needs.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Needs.Wl.Models\Needs.Wl.Models.csproj">
+      <Project>{6a51926d-a4ca-45c1-812c-b22741655e42}</Project>
+      <Name>Needs.Wl.Models</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

@@ -1,0 +1,94 @@
+﻿
+@{
+    ViewBag.Title = "付款记录";
+}
+
+
+<div class="second_header">
+    <a onClick="javascript :history.back(-1);"><span class="el-icon-arrow-left icon"></span></a>
+    <div class="second_nav">
+        <span class="header-title">付款明细</span>
+    </div>
+</div>
+<div id="orderRecieved" v-cloak>
+    <div class="content_head">
+        <p>付款账户：{{formData.AccountName}}</p>
+        <p>付款日期：{{formData.CreateTime}}</p>
+        <div class="clearfix">
+            <p class="fl mr50">付款金额：{{formData.Amount}}</p>
+            <p class="fl">已入账金额：{{formData.ClearAmount}}</p>
+        </div>
+    </div>
+    <div v-if="formData.Datalist.length>0" class="order_box">
+        <ul>
+            <li v-for="(item,index) in formData.Datalist">
+                <div class="unconfirmed_tiele" v-on:click="showdetail(index)">
+                    <div class="title_box clearfix">
+                        <p>{{index+1}}</p>
+                        <p>费用类型：<span>{{item.FeeType}}</span></p>
+                        <div class="fr content_right">
+                            <span>实收：{{item.Amount}}</span>
+                            <span v-if="icontrue==true&&showindex==index"
+                                  class="order_icon el-icon-arrow-up"></span>
+                            <span v-else class="order_icon el-icon-arrow-down"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="unconfirmed_contents" v-if="showindex==index">
+                    <div class="showindex_back">
+                        <div class="contents_laber">
+                            <p>
+                                <span class="laber_name">收款账户</span>
+                                <span class="laber_contents">{{formData.AccountName}}</span>
+                            </p>
+                            <p>
+                                <span class="laber_name">订单编号</span>
+                                <span class="laber_contents">{{item.OrderID}}</span>
+                            </p>
+                            <p>
+                                <span class="laber_name">费用类型</span>
+                                <span class="laber_contents">{{item.FeeType}}</span>
+                            </p>
+                            <p>
+                                <span class="laber_name">实收</span>
+                                <span class="laber_contents">{{item.Amount}}</span>
+                            </p>
+                            <p>
+                                <span class="laber_name">时间</span>
+                                <span class="laber_contents">{{item.CreateDate}}</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div v-else class="nodata">
+        <p>暂无数据</p>
+    </div>
+</div>
+<script>
+    var orderRecieved = new Vue({
+        el: "#orderRecieved",
+        data: function () {
+            return {
+                formData:@Html.Raw(Json.Encode(Model)),
+                showindex: 0,
+                icontrue: true,
+            }
+        },
+        methods: {
+            // 显示对应的数据
+            showdetail: function (index) {
+                if (this.showindex == index) {
+                    this.showindex = -1;
+                    this.icontrue = false;
+                } else {
+                    this.showindex = index;
+                    this.icontrue = true;
+                }
+
+            },
+        },
+    })
+</script>

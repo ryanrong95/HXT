@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>芯达通- 一站式报关服务平台</title>
+    <meta name="keywords" content="芯达通、报关常见问题、如何代进口报关、芯达通" />
+    <meta name="description" content="如何开通芯达通账号？" />
+    <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
+    <!--[if lt IE 9]>
+      <script src="/Scripts/html5shiv.min.js"></script>
+      <script src="/Scripts/respond.min.js"></script>
+    <![endif]-->
+    <link rel="shortcut icon" href="/Content/images/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="/Content/element.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/common.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/style.css" />
+</head>
+<body class="gray">
+    <div class="header"></div>
+    <section id="FAQ" class="grayBg">
+        <div class="w1200 clearfix">
+            <div class="content-left content-boxShadow">
+            </div>
+            <div id="FAQContent" v-cloak class="content-right content-boxShadow">
+                <h1>账号安全</h1>
+                <ul class="content-right-list" v-loading="loading">
+                    <li v-for="item,index in AccountSecurityList">
+                        <a v-bind:href="item.href">{{item.text}}</a>
+                    </li>
+                </ul>
+                <div class="pr20" v-show="total!=0" style="height:32px;">
+                    <el-pagination background
+                        v-bind:current-page.sync="currentPage"
+                        v-bind:page-size="pageSize"
+                        layout="prev, pager, next"
+                        v-bind:total="total"
+                        @current-change="handleCurrentChange"
+                     >
+                    </el-pagination>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="footer"></div>
+    <script src="/Scripts/jquery-3.3.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/vue.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/axios.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/element.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/common.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+        var FAQContent = new Vue({
+            el: '#FAQContent',
+            beforeMount: function () {
+                $(".content-left").load("FAQNav.html", function () {
+                    //可以通过改变status的值来改变导航条哪个显示活动状态
+                    FAQNav.status = 0;
+                });
+            },
+            data: {
+                AccountSecurityList: [], //账户安全数据列表
+                loading:true,
+                pageSize:10,             //每页展示数据的条数
+                total: 0,               //总条数
+                currentPage:1           //当前页码
+            },
+            mounted: function () {
+                this.getAccountSecurityList();
+            },
+            methods: {
+                getAccountSecurityList: function () {
+                    var that = this;
+                    this.loading = true;
+                    //'/Mock/AccountSecurityList.json'为模拟数据
+                    axios.get("/Mock/AccountSecurityList.json?page=" + that.currentPage)
+                    .then(that.getDataSucc)
+                    .catch(that.getDataFail)
+                },
+                getDataSucc: function (res) {
+                    var that = this;
+                    res = res.data;
+                    console.log(res)
+                    if (res.ret && res.data) {
+                        that.AccountSecurityList = res.data.AccountSecurityList;
+                        that.total = that.AccountSecurityList.length;
+                        that.loading = false;
+                    }
+                },
+                getDataFail: function (err) {
+                    console.log(err);
+                },
+                //当页码改变时，切换数据
+                handleCurrentChange: function (val) {
+                    this.getAccountSecurityList(val, this.pageSize);
+                }
+            }
+        })
+    </script>
+</body>
+</html>

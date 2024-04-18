@@ -1,0 +1,92 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>芯达通- 一站式报关服务平台</title>
+    <meta name="keywords" content="芯达通、报关常见问题、如何代进口报关、芯达通" />
+    <meta name="description" content="账号的密码如何修改？" />
+    <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
+    <!--[if lt IE 9]>
+      <script src="/Scripts/html5shiv.min.js"></script>
+      <script src="/Scripts/respond.min.js"></script>
+    <![endif]-->
+    <link rel="shortcut icon" href="/Content/images/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="/Content/common.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/style.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/element.css" />
+</head>
+<body class="gray">
+    <div class="header"></div>
+    <section id="AccountSecurity" class="grayBg">
+        <div class="w1200 clearfix">
+            <div class="content-left content-boxShadow">
+            </div>
+            <div id="AccSecContent" v-cloak class="content-right content-boxShadow">
+                <h1>账号的密码如何找回？<a href="/FAQ.html">返回</a></h1>
+                <p class="mb34 mt34">找回密码，请参考以下步骤：</p>
+                <p>第一步：登陆界面-忘记密码</p>
+                <img src="/Content/images/tu6.jpg" alt="" />
+                <p>第二步：填写邮箱，验证身份</p>
+                <img src="/Content/images/tu7.png" alt="" />
+                <p>第三步：发送邮件</p>
+                <img src="/Content/images/tu8.png" alt="" />
+                <p>第四步：查收邮件</p>
+                <img src="/Content/images/tu9.png" alt="" />
+                <p>第五步：重置密码</p>
+                <img src="/Content/images/tu10.png" alt="" />
+                <!--<p>以上问题是否已解决</p>
+                <div class="AccSecContent-opera">
+                    <div>
+                        <i @click="selectSolve(1)" v-bind:class="{'select':selectItem==1}"></i>
+                        <span @click="selectSolve(1)">是，已解决</span>
+                        <i @click="selectSolve(0)" v-bind:class="{'select':selectItem==0}"></i>
+                        <span @click="selectSolve(0)">否，未解决</span>
+                    </div>
+                    <button type="button" class="btn button" @click="submitselectSolve">提 交</button>
+                </div>-->
+            </div>
+        </div>
+    </section>
+    <div class="footer"></div>
+    <script src="/Scripts/jquery-3.3.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/vue.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/axios.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/common.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/element.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+        var RegistGuideContent = new Vue({
+            el: '#AccSecContent',
+            beforeMount: function () {
+                $(".content-left").load("/FAQNav.html", function () {
+                    //可以通过改变status的值来改变导航条哪个显示活动状态
+                    FAQNav.status = 0;
+                });
+            },
+            data: {
+                selectItem: -1,//选择是否解决
+            },
+            methods: {
+                selectSolve: function (index) {
+                    this.selectItem = index;
+                },
+                submitselectSolve: function () {
+                    console.log(this.selectItem);
+                    if (this.selectItem != -1) {
+                        //后台提交代码
+                        //axios.post("")
+                        //.then(function (res) {
+
+                        //})
+                        //.catch(function (err) {
+
+                        //})
+                    } else {
+                        alert("您还没有勾选")
+                    }
+
+                }
+            }
+        })
+    </script>
+</body>
+</html>

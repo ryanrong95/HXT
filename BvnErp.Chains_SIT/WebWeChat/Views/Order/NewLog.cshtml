@@ -1,0 +1,97 @@
+﻿
+@{
+    ViewBag.Title = "订单跟踪";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>订单跟踪</title>
+    <link rel="stylesheet" href="~/Content/css/border.css">
+    <link rel="stylesheet" href="~/Content/css/reset.css">
+    <link rel="stylesheet" href="~/Content/css/element.css">
+    @*<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">*@
+    <link rel="stylesheet" href="~/Content/css/mint-ui.css">
+    <link rel="stylesheet" href="~/Content/css/index.css">
+    <script src="~/Scripts/vue.js"></script>
+    <script src="~/Scripts/elementui.js"></script>
+    <script src="~/Scripts/mint-ui.js"></script>
+</head>
+
+<body>
+    <div class="second_header">
+        <a onClick="javascript :history.back(-1);"><span class="el-icon-arrow-left icon"></span></a>
+        <div class="second_nav">
+            <span class="header-title">订单跟踪</span>
+        </div>
+    </div>
+    <div id="order_tracking">
+
+        <div class="tracking_number">
+            订单编号：@ViewBag.OrderId
+        </div>
+        <div class="order_logistics">
+            <p class="title_name">订单跟踪</p>
+            <div class="block">
+
+                <ul class="el-timeline">
+                    <li class="el-timeline-item" v-for="(item,index) in datas">
+                        <div class="el-timeline-item__tail"></div>
+                        <div class="el-timeline-item__node el-timeline-item__node--large">
+                            <img class="icon_img" v-if="index==0" src="~/Content/img/present.png" alt="">
+                            <img class="icon_img" v-if="!item.isDot && index!=0" src="~/Content/img/trace_node.png" alt="">
+                            <img class="icon_img_grey" v-if="item.isDot" src="~/Content/img/grey_icon.png" alt="">
+                        </div>
+                        <div class="el-timeline-item__wrapper">
+                            <div>
+                                <p v-if="index!=0 && !item.isDot" class="title">{{item.Step}}</p>
+                                <p v-if="index==0 && !item.isDot" class="present_title">{{item.Step}}</p>
+                                <p v-if="index==0" class="present_time"> {{item.Summary}}</p>
+                                <p v-else class="el-timeline-item__content"> {{item.Summary}}</p>
+                            </div>
+                            <div class="el-timeline-item__timestamp is-bottom">
+                                {{item.CreateDate}}
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>
+<script>
+    var supplier_list = new Vue({
+        el: "#order_tracking",
+        data: {
+            datas: @Html.Raw(Json.Encode(Model)),
+        },
+        mounted() {
+            var data = this.datas;
+            var arr = [];
+            var step = "";
+            for (var i = 0; i < data.length; i++) {
+                var temp = data[i];
+                if (data[i].Step == step) {
+                    temp.isDot = true;
+                } else {
+                    step = data[i].Step;
+                }
+                arr.push(temp);
+            }
+            console.log(arr)
+            this.list = arr;
+        },
+        methods: {
+
+        }
+    })
+</script>

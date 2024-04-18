@@ -1,0 +1,249 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>芯达通- 一站式报关服务平台</title>
+    <meta name="keywords" content="进口报关、芯片进口报关、电子元器件进口报关、集成电路进口报关、报关、清关、报检、跨境运输、跨境仓储、香港代收货、香港代发货、香港代仓储、付汇" />
+    <meta name="description" content="专注芯片、电子元器件、集成电路进口报关。芯达通，平台链接物流商、原料供应商、贸易商、生产企业等交易参与方，为供应链上下游中小微企业提供优质跨境物流配给、报关报检、实时跨境支付等综合交易服务。 平台利用互联网、云计算、大数据等信息前沿技术构建起一条基于交易的数据产业链，形成从交易服务供给，到交易数据的挖掘、清洗和标准化，再到经过智能处理后形成的商业数据产品，最后将数据产品再应用于交易的商业闭环，搭建起一个基于大数据应用的交易生态圈。" />
+    <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
+    <!--[if lt IE 9]>
+      <script src="/Scripts/html5shiv.min.js"></script>
+      <script src="/Scripts/respond.min.js"></script>
+    <![endif]-->
+    <link rel="shortcut icon" href="/Content/images/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="/Content/element.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/common.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/index.css" />
+</head>
+<body>
+    <div class="header header-home"></div>
+    <div id="home" v-cloak>
+        <div class="home-banner">
+            <el-carousel>
+                <el-carousel-item v-for="item,i in bannerList" v-bind:key="item">
+                    <div class="home-banner-item" v-bind:style="{backgroundImage:item}">
+                        <!--<div class="w1200" v-if="i==0">
+                            <div class="banner-title">
+                                <h1>芯达通</h1>
+                                <h2>全新上线</h2>
+                                <h3>一站式报关服务平台</h3>
+                                <div class="banner-light"></div>
+                            </div>
+                        </div>-->
+                    </div>
+                </el-carousel-item>
+            </el-carousel>
+            <div class="announce">
+                <ul>
+                    <li v-for="announceItem in announceList" class="clearfix">
+                        <a v-on:click="searchNotice(announceItem)">
+                            <img v-bind:src="announceItem.imgSrc" v-bind:alt="announceItem.imgAlt" />
+                            <div class="announceContent">
+                                <p>{{announceItem.text}}</p>
+                                <span>{{announceItem.date}}</span>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+                <div class="announce-href"><a href="">公告通知 》</a></div>
+            </div>
+        </div>
+        <div class="w1200 home-proxy">
+            <ul class="w1200 clearfix">
+                <li v-for="item,index in proxyList" class="clearfix" v-bind:class="[{'mr10':index==1},{'mr0':index==3}]">
+                    <a v-bind:href="item.href">
+                        <div class="home-proxy-img" v-bind:class="item.imgClass"></div>
+                        <div class="home-proxy-text">
+                            <h3>{{item.title}}</h3>
+                            <p>{{item.text}}</p>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="home-proClassify">
+            <h2 class="home-title w1200">产品归类</h2>
+            <div class="home-proClassify-search">
+                <input class="btn btn_line" type="text" v-model.trim="searchVal" placeholder="输入产品名称/型号" />
+                <button type="button" class="btn button" @click="searchPro()">查&nbsp;&nbsp;&nbsp;询</button>
+            </div>
+        </div>
+        <div class="home-Cooperation">
+            <h2 class="home-title w1200"><a href="/Procedure.html">报关流程</a></h2>
+            <div class="home-Cooperation-process">
+                <div class="home-Cooperation-process-img">
+                    <ul>
+                        <li class="li1"><img src="Content/images/baoming.png" /><i></i></li>
+                        <li class="li2"><img src="Content/images/hezuo.png" /><i></i></li>
+                        <li class="li3"><img src="Content/images/fuwu.png" /><i></i></li>
+                        <li class="li4"><img src="Content/images/ERP.png" /><i></i></li>
+                        <li class="li5"><img src="Content/images/haiguan.png" /><i></i></li>
+                    </ul>
+                </div>
+                <ul class="home-Cooperation-process-text">
+                    <li>
+                        1.在线申请
+                    </li>
+                    <li>
+                        2.签订合同
+                    </li>
+                    <li>
+                        3.分配顾问
+                    </li>
+                    <li>
+                        4.在线下单
+                    </li>
+                    <li>
+                        5.报关
+                    </li>
+                </ul>
+            </div>
+            <div class="btn btn_line home-Cooperation-apply">
+                <a href="Applies.html">申请芯达通服务</a>
+            </div>
+        </div>
+        <div class="home-service">
+            <h2 class="home-title w1200">VIP一对一服务</h2>
+            <ul class="w1200 clearfix">
+                <li v-for="item,index in ServerList" class="clearfix" v-bind:class="{'mr0':index==3}">
+                    <div class="home-service-img">
+                        <img v-bind:src="item.imgSrc" />
+                    </div>
+                    <div class="home-service-text">
+                        <h3>{{item.title}}</h3>
+                        <p class="ellipsis">{{item.text}}</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer"></div>
+    <script src="/Scripts/jquery-3.3.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/vue.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/axios.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/element.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+        $(".header").load("head.html", function () {
+            $(".footer").load("foot.html");
+        });
+        $(function () {
+            //滚动条事件
+            $(window).scroll(function () {
+                //获取滚动条的滑动距离
+                //获取要定位元素距离浏览器顶部的距离
+                var scroH = $(this).scrollTop();
+                var navH = $("#header").height();
+                //滚动条的滑动距离大于等于定位元素距离浏览器顶部的距离，就固定，反之就不固定
+                if (scroH > navH) {
+                    $(".header").removeClass("header-home");
+                    $(".header_top_box").addClass("transport");
+                    $(".header_main").addClass("transport");
+                } else if (scroH <= navH) {
+                    $(".header").addClass("header-home");
+                    $(".header_top_box").removeClass("transport");
+                    $(".header_main").removeClass("transport");
+                }
+            })
+            $(".home-Cooperation").mouseover(function () {
+                $(".home-Cooperation").animate({
+                    'background-position': 'center 76%',
+                    'background-size': '45%'
+                }, 800)
+            });
+        });
+        var home = new Vue({
+            el: '#home',
+            data: {
+                //banner图的链接
+                bannerList: [
+                    //'url(/Content/images/banner-1.png)',
+                    //'url(/Content/images/banner-2.png)',
+                    'url(/Content/images/banner-3.png)'
+                ],
+                //公告列表
+                announceList: [],
+                //代理列表
+                proxyList: [{
+                    imgClass: 'home-proxy-img1',
+                    title: '代报关',
+                    text: '优质通关资质，高效通关能力，专业进口服务能力，客户资金安全保障,进口垫税服务',
+                    href: '/Service.html?activeName=S1'
+                },
+                {
+                    imgClass: 'home-proxy-img2',
+                    title: '代收货',
+                    text: '即将上线,敬请期待...',
+                    href: '/Service.html?activeName=S2'
+                },
+                {
+                    imgClass: 'home-proxy-img3',
+                    title: '代发货',
+                    text: '即将上线,敬请期待...',
+                    href: '/Service.html?activeName=S3'
+                },
+                {
+                    imgClass: 'home-proxy-img4',
+                    title: '代仓储',
+                    text: '即将上线,敬请期待...',
+                    href: '/Service.html?activeName=S4'
+                }],
+                searchVal: '',//搜索值
+                //服务列表
+                ServerList: [{
+                    imgSrc: '/Content/images/chahua-1.png',
+                    title: '自有库房',
+                    text: '香港、深圳自有库房，安全有保障'
+                },
+                {
+                    imgSrc: '/Content/images/chahua-2.png',
+                    title: '本地化服务',
+                    text: '深圳芯达通10年专业进口报关'
+                },
+                {
+                    imgSrc: '/Content/images/chahua-3.png',
+                    title: '资金服务',
+                    text: '代垫税款、货款，最长期限可达30天'
+                },
+                {
+                    imgSrc: '/Content/images/chahua-4.png',
+                    title: '一对一',
+                    text: '专业跟单员全程服务'
+                }]
+            },
+            mounted: function () {
+                //获取公告列表
+                this.getAnnounceList();
+            },
+            methods: {
+                searchNotice: function (item) {
+                    localStorage.setItem("NoticeID", item.noticeID);
+                    location.href = 'Notice/NoticeDetail.html';
+                },
+                searchPro: function () {
+                    if (window.localStorage) {
+                        localStorage.searchText = this.searchVal;
+                        location.href = '/Sort/Query.html';
+
+                    } else {
+                       // alert("NOT SUPPORT");
+                    }   
+                },
+                //获取公告列表
+                getAnnounceList: function () {
+                    var that = this;
+                    axios.get("/Mock/home.json")
+                        .then(function (res) {
+                            res = res.data;
+                            if (res.ret && res.data && res.total) {
+                                that.announceList = res.data.announceList;
+                            }
+                        })
+                        .catch(function (err) {
+                            console.log(err);
+                        })
+                }
+            }
+        })
+    </script>
+</body>
+</html>

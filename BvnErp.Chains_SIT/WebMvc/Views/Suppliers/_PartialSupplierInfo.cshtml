@@ -1,0 +1,89 @@
+﻿<template id="info">
+    <el-form :model="form1" :rules="rules1" status-icon ref="form1" label-width="150px">
+        <el-form-item label="供应商中文名称" prop="ChineseName">
+            <el-input v-model="form1.ChineseName" placeholder="请输入供应商中文名称" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="供应商英文名称" prop="Name">
+            <el-input v-model="form1.Name" placeholder="请输入供应商英文名称" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="备注" prop="Summary">
+            <el-input type="textarea" v-model="form1.Summary" :rules="[{max:400, message: '备注长度不超过400', trigger: 'blur' }]"></el-input>
+        </el-form-item>
+    </el-form>
+</template>
+<script>
+    Vue.component(
+        'my-supplier',
+        {
+            template: "#info",
+            data: function () {
+                //var validateChineseName = (rule, value, callback) => {
+                //    if (value == '' || value == null) {
+                //        callback(new Error('请输入供应商中文名称'));
+                //    }
+                //    else {
+                //        var that = this;
+                //        axios({
+                //            url: "/Suppliers/CheckSupplierChineseName",
+                //            method: "post",
+                //            data: {
+                //                ChineseName: that.form1.ChineseName,
+                //                ID: that.form1.ID
+                //            },
+                //        }).then(function (response) {
+                //            if (response.data.type == "error") {
+                //                callback(new Error(response.data.msg));
+                //            } else {
+                //                callback();
+                //            }
+                //        }).catch(function (error) {
+                //            that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                //        });
+                //    }
+
+                //};
+                var that = this;
+                var validateName = function(rule, value, callback) {
+                    if (value == '' || value == null) {
+                        callback(new Error('供应商英文名称'));
+                    }
+                    axios({
+                        url: "/Suppliers/CheckSupplierName",
+                        method: "post",
+                        data: {
+                            Name: that.form1.Name,
+                            ID: that.form1.ID
+                        },
+                    }).then(function (response) {
+                        if (response.data.type == "error") {
+                            callback(new Error(response.data.msg));
+                        } else {
+                            callback();
+                        }
+                    }).catch(function (error) {
+                        that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                    });
+                };
+                return {
+                    form1: @Html.Raw(Json.Encode(Model)),
+                    rules1: {
+                        ChineseName: [{ required: true, message: '请输入联系人供应商中文名称', trigger: 'blur' },
+                                { max: 150, message: '供应商中文名称长度不超过150', trigger: 'blur' }
+                            ],
+                            Name: [{ required: true, validator: validateName, trigger: 'blur' },
+                                { max: 150, message: '供应商英文名称长度不超过150', trigger: 'blur' }
+                            ],
+                    }
+                }
+            },
+            methods: {
+                //消息提示框
+                onAlert: function (type, message) {
+                    this.$message({
+                        message: message,
+                        type: type
+                    });
+                },
+            }
+        });
+</script>

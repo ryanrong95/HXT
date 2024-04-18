@@ -1,0 +1,177 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>关于芯达通- 一站式报关服务平台</title>
+    <meta name="keywords" content="人才招聘、报关员、跟单员、代理报关销售招聘" />
+    <meta name="description" content="芯达通人才招聘" />
+    <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
+    <!--[if lt IE 9]>
+      <script src="/Scripts/html5shiv.min.js"></script>
+      <script src="/Scripts/respond.min.js"></script>
+    <![endif]-->
+    <link rel="shortcut icon" href="/Content/images/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="/Content/common.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/style.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/element.css" />
+</head>
+<body>
+    <div class="header"></div>
+    <section id="Recruitment" v-cloak>
+        <div class="us-title">
+            <div class="us-title-text">
+                <h1><span class="us-title-text-en">RECRUITMENT/</span><span class="us-title-text-ch">人才招聘</span></h1>
+                <p>深圳芯达通：无限动力，无限人生——芯达通邀您一起畅想未来！</p>
+            </div>
+        </div>
+        <div class="h2 h2_center">
+            <div class="h2_line"></div>
+            <h2>人才招聘</h2>
+            <p>RECRUITMENT</p>
+        </div>
+        <div class="Recruitment-content w1200">
+            <div class="Recruitment-content-talentConcept">
+                <div class="h2 h2_fs26">
+                    <h2 class="graycolor">TALENT CONCEPT<span>人才观念</span></h2>
+                </div>
+                <p class="us-text">
+                    倡导“以人为本，德才兼备，唯才是举，各尽其能” 的人才观，视员工为公司的宝贵资源和财富，始终坚持“以员工为本”、“让所有员工分享公司经营成果”的理念，努力为员工营造一个积极、简单、和谐的工作氛围，创建一种平等竞争、相互尊重、共同进步的职业发展平台，让每一位员工都能尽情施展自己的才能，最终实现员工与公司的共赢。
+                </p>
+            </div>
+            <div class="Recruitment-content-jobInfo">
+                <div class="h2 h2_fs26">
+                    <h2 class="graycolor">JOB INFORMATION<span>职位信息</span></h2>
+                </div>
+                <table v-for="item in jobInfoList">
+                    <tr>
+                        <th colspan="4">职位需求</th>
+                    </tr>
+                    <tr>
+                        <td width="73">职<span class="ml27">位</span></td>
+                        <td width="516">{{item.position}}</td>
+                        <td width="73">需求人数</td>
+                        <td width="516">{{item.number}}人</td>
+                    </tr>
+                    <tr>
+                        <td width="73">工作性质</td>
+                        <td width="516">{{item.workNature}}</td>
+                        <td width="73">性<span class="ml27">别</span></td>
+                        <td width="516">{{item.gender}}</td>
+                    </tr>
+                    <tr>
+                        <td width="73">学<span class="ml27">历</span></td>
+                        <td width="516">{{item.education}}</td>
+                        <td width="73">工作年限</td>
+                        <td width="516">{{item.workingYears}}</td>
+                    </tr>
+                    <tr>
+                        <td width="73">发布日期</td>
+                        <td width="516">{{item.releaseDate}}</td>
+                        <td width="73">有效日期</td>
+                        <td width="516">{{item.effectiveDate}}</td>
+                    </tr>
+                    <tr>
+                        <td width="73">要<span class="ml27">求</span></td>
+                        <td colspan="3" class="clearfix">
+                            <div class="Recruitment-content-jobInfo-msg">
+                                <p>岗位职责：</p>
+                                <ol>
+                                    <li v-for="(job,index) in item.jobResponsibilities">{{index+1}}.{{job}}</li>
+                                </ol>
+                            </div>
+                            <div class="Recruitment-content-jobInfo-msg mr13">
+                                <p>任职资格：</p>
+                                <ol>
+                                    <li v-for="(qua,index) in item.qualifications">{{index+1}}.{{qua}}</li>
+                                </ol>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="Recruitment-content-resumeDelivery">
+                <div class="h2 h2_fs26">
+                    <h2 class="graycolor">RESUME DELIVERY<span>简历投递</span></h2>
+                </div>
+                <p class="us-text">
+                    有意者请将简历投递至邮箱<a href="">maner@wl.net.cn</a>
+                </p>
+            </div>
+        </div>
+    </section>
+    <div class="footer"></div>
+    <script src="/Scripts/jquery-3.3.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/vue.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/common.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/element.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+        var Recruitment = new Vue({
+            el: "#Recruitment",
+            data: {
+                jobInfoList: [
+                    {
+                        position: '业务员',
+                        number: 3,
+                        workNature: '全职',
+                        gender: '不限',
+                        education: '大专',
+                        workingYears: '	二年以上',
+                        releaseDate: '2018-12-12',
+                        effectiveDate: '长期有效',
+                        jobResponsibilities: [
+                            '开拓市场，维护客户关系，完成公司制定的销售目标。',
+                            '拜访潜在客户，了解客户需求，为客户提供合理的供应链解决方案，不断拓宽客户群体。',
+                            '做好售后服务，反馈客户信息，提升公司服务满意度。'
+                        ],
+                        qualifications: [
+                            '大专及以上学历，相关国际贸易、市场营销、经济类专业优先考虑；',
+                            '了解国际金融结算相关知识、进出口基本流程和一般操作方法；',
+                            '良好的沟通表达能力，较强的学习能力。'
+                        ]
+                    },
+                    {
+                        position: '商务助理',
+                        number: '5',
+                        workNature: '全职',
+                        gender: '女',
+                        education: '大专',
+                        workingYears: '	二年以上',
+                        releaseDate: '2018-12-12',
+                        effectiveDate: '长期有效',
+                        jobResponsibilities: [
+                            '开拓市场，维护客户关系，完成公司制定的销售目标。',
+                            '拜访潜在客户，了解客户需求，为客户提供合理的供应链解决方案，不断拓宽客户群体。',
+                            '做好售后服务，反馈客户信息，提升公司服务满意度。'
+                        ],
+                        qualifications: [
+                            '大专及以上学历，相关国际贸易、市场营销、经济类专业优先考虑；',
+                            '了解国际金融结算相关知识、进出口基本流程和一般操作方法；',
+                            '良好的沟通表达能力，较强的学习能力。'
+                        ]
+                    },
+                    {
+                        position: '客户经理',
+                        number: '10',
+                        workNature: '全职',
+                        gender: '不限',
+                        education: '大专',
+                        workingYears: '	二年以上',
+                        releaseDate: '2018-12-12',
+                        effectiveDate: '长期有效',
+                        jobResponsibilities: [
+                            '开拓市场，维护客户关系，完成公司制定的销售目标。',
+                            '拜访潜在客户，了解客户需求，为客户提供合理的供应链解决方案，不断拓宽客户群体。',
+                            '做好售后服务，反馈客户信息，提升公司服务满意度。'
+                        ],
+                        qualifications: [
+                            '大专及以上学历，相关国际贸易、市场营销、经济类专业优先考虑；',
+                            '了解国际金融结算相关知识、进出口基本流程和一般操作方法；',
+                            '良好的沟通表达能力，较强的学习能力。'
+                        ]
+                    }
+                ]
+            }
+        })
+    </script>
+</body>
+</html>

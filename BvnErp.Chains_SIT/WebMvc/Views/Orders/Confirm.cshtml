@@ -1,0 +1,496 @@
+﻿
+@{
+    /**/
+
+    ViewBag.Title = "订单确认";
+    Layout = "~/Views/Shared/_LayoutCenter.cshtml";
+    ViewBag.navid = "PreConfirms";
+}
+<style>
+    .el-message {
+        top: 250px;
+        min-width: 150px;
+    }
+
+    .el-message__content {
+        font-size: 16px;
+    }
+
+    .el-message .el-icon-error {
+        font-size: 16px;
+    }
+</style>
+<div id="confirm" v-cloak class="center_right backshow fl">
+    <div class="breaklist">
+        <span class="fl first_title">订单确认</span>
+        <span v-on:click="history.back(-1)" class="fl second_title">返回</span>
+    </div>
+    <div class="content">
+        <div v-if="form.IsBecauseModified" style="padding-top: 25px;">
+            <div style="color: #EE6060; font-size: 16px; font-weight: bold; margin-left: 15px;">您的订单信息发生变更，需要重新确认：</div>
+            <div v-if="form.ModelModifiedInfo.length > 0" style="margin-left: 20px; font-size: 14px;">
+                <div v-for="(item,index) in form.ModelModifiedInfo" style="margin-top: 5px;">{{index+1}}. {{item}}</div>
+            </div>
+        </div>
+        @*产品明细*@
+        <div class="products">
+            <div style="" class="productWrap">
+                <table class="complex_tb" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <th class="first_th" style="width:30px;">#</th>
+                        <th style="width:120px;">规格型号</th>
+                        <th style="width:120px;">品名</th>
+                        <th style="width:100px;">品牌</th>
+                        <th style="width:70px;">数量</th>
+                        <th style="width:80px;">单价({{form.CurrencyCode}})</th>
+                        <th style="width:80px;">总价({{form.CurrencyCode}})</th>
+                        <th style="width:110px;">报关货值(CNY)</th>
+                        <th style="width:70px;">关税率</th>
+                        <th style="width:90px;">关税(CNY)</th>
+                        <th style="width:70px;">增值税率</th>
+                        <th style="width:90px;">增值税(CNY)</th>
+                        <th style="width:90px;">代理费(CNY)</th>
+                        <th style="width:90px;">商检费(CNY)</th>
+                        <th style="width:110px;">税费合计(CNY)</th>
+                        <th>报关总金额</th>
+                    </tr>
+                    <tr v-for="(item,index) in items">
+                        <td>{{index+1}}</td>
+                        <td style="word-wrap:break-word;word-break:break-all;padding:0 5px;text-align:left">
+                            {{item.Model}} <p v-if="item.ItemCategoryTypes.length>0 && item.ItemCategoryTypes[0]!=''"> <span class="spacialTip" v-for="sub_item in item.ItemCategoryTypes">{{sub_item}}</span></p>
+                        </td>
+                        <td style="word-wrap:break-word;word-break:break-all;padding:0 5px;text-align:left">{{item.Name}}</td>
+                        <td>{{item.Manufacturer}}</td>
+                        <td>{{item.Quantity}}</td>
+                        <td>{{toFixed(4,item.UnitPrice)}}</td>
+                        <td>{{toFixed(2,item.TotalPrice)}}</td>
+                        <td>{{toFixed(2,item.DeclareValue)}}</td>
+                        <td :class="{red:item.TraiffRate!=0}">{{item.TraiffRate}}</td>
+                        <td v-if="toFixed(2,item.Traiff) > 0" style="background-color: red; color: white;">{{toFixed(2,item.Traiff)}}</td>
+                        <td v-else>{{toFixed(2,item.Traiff)}}</td>
+                        <td>{{item.AddTaxRate}}</td>
+                        <td>{{toFixed(2,item.AddTax)}}</td>
+                        <td>{{toFixed(2,item.AgencyFee)}}</td>
+                        <td v-if="toFixed(2,item.InspectionFee) > 0" style="background-color: red; color: white;">{{toFixed(2,item.InspectionFee)}}</td>
+                        <td v-else>{{toFixed(2,item.InspectionFee)}}</td>
+                        <td>{{toFixed(2,item.TotalTaxFee)}}</td>
+                        <td>{{toFixed(2,item.TotalDeclareValue)}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">合计</td>
+                        <td>{{form.Products_Num}}</td>
+                        <td></td>
+                        <td>{{form.Products_TotalPrice}}</td>
+                        <td>{{form.Products_DeclareValue}}</td>
+                        <td></td>
+                        <td>{{form.Products_Traiff}}</td>
+                        <td></td>
+                        <td>{{form.Products_AddTax}}</td>
+                        <td>{{form.Products_AgencyFee}}</td>
+                        <td>{{form.Products_InspectionFee}}</td>
+                        <td>{{form.Products_TotalTaxFee}}</td>
+                        <td>{{form.Products_TotalDeclareValue}}</td>
+                    </tr>
+                </table>
+            </div>
+            <table class="tb_sum">
+                <tr class="sum_content" style="width:916px;">
+                    <td colspan="16">
+                        <div class="sum_title fl">
+                            <p>报关货值合计(CNY)：</p>
+                            <p>税费合计(CNY)：</p>
+                            <p>报关总金额(CNY)：</p>
+                        </div>
+                        <div class="sum_result fl">
+                            <p>¥ {{form.Products_DeclareValue}}</p>
+                            <p>¥ {{form.Products_TotalTaxFee}}</p>
+                            <p class="total_Price">¥ {{form.Products_TotalDeclareValue}}</p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        @*付汇供应商*@
+        <div class="supplier_information overhide">
+            <div class="fl AgentProxy">
+                <div class="overhide">
+                    <p class="title fl"><i class="icon_hui_fujian mr6"></i>代理报关委托书</p>
+                </div>
+                <a class="upload fl tips" v-if="fileUrl==null">提示：未上传</a>
+                <div class="AgentProxyFile mt16">
+                    <div v-if="fileUrl!=null">
+                        <i class="icon_wenjian fl mr6"></i>
+                        <span class="fl">
+                            <span class="file_name">{{fileName}} ({{fileStatus}})</span>
+                            <a :href="fileUrl" target="_blank">预览</a>
+                        </span>
+                    </div>
+                </div>
+                <div class="AgentProxy_btn overhide mb8" v-if="!form.AgentProxyStatus">
+                    <div class="fl">
+                        <el-button v-on:click="ExportAgentProxy" class="el-icon-ump-xiazai">
+                            导出
+                        </el-button>
+                        <a id="exportInfoForm" style="display:none" download><span id="ex-li" style="display:none"></span></a>
+                    </div>
+                    <div class="fl">
+                        <el-upload class="fl" action="/Orders/UploadOrderFile"
+                                   :http-request="httpRequest"
+                                   :show-file-list="false"
+                                   accept="image/jpg, image/bmp, image/jpeg, image/gif, image/png, application/pdf">
+                            <el-button size="small" class="el-icon-ump-upload"> 上传</el-button>
+                        </el-upload>
+                    </div>
+                </div>
+                <div v-if="!form.AgentProxyStatus" class="file_tip">仅限图片或PDF文件，且文件不超过3M</div>
+            </div>
+            <div class="fl invoice">
+                <div class="overhide">
+                    <p class="title fl"><i class="icon_hui_fujian mr6"></i>合同发票(INVOICE LIST)</p>
+                </div>
+                <a class="upload fl tips" v-if="isVisiableUpload">提示：未上传</a>
+                <div class="PI_files overhide" v-if="!isVisiableUpload">
+                    <ul class="fl">
+                        <li v-for="item in PIFiles">
+                            <i class="icon_wenjian fl mr10"></i>
+                            <span class="fl">
+                                <span class="file_name">{{item.Name}}</span>
+                                <a :href="item.Url" target="_blank">预览</a>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="fl supplier">
+                <p class="title">付汇供应商</p>
+                <p v-if="PayExchangeSupplier.length==0" class="tips">提示：未选择付汇供应商</p>
+                <div class="information">
+                    <ul>
+                        <li v-for="(item,index) in PayExchangeSupplier">
+                            <span class="mb4">{{index + 1}}.&nbsp;&nbsp;{{item.Name}}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        @*订单 交货方式 开票信息*@
+        <div class="detail_information">
+            <ul class="overhide">
+                <li class="first fl overhide">
+                    <div class="wrap fl">
+                        <p class="title">订单信息</p>
+                        <div class="information">
+                            <span>订单编号：{{form.ID}}</span>
+                            <div class="overhide"><span class="fl">交货供应商：</span><span style="margin-left:85px">{{form.Supplier}}</span></div>
+                            <span>报关总价：{{form.Products_TotalPrice}}</span>
+                            <span>币种：{{form.Currency}}</span>
+                            <span>是否包车：{{form.IsFullVehicle}}</span>
+                            <span>是否代垫货款：{{form.IsAdvanceMoneny}}</span>
+                            <span>包装种类：{{form.WrapType}}</span>
+                            <span>件数：{{form.PackNo}}</span>
+                            <span>下单人：{{form.OrderMaker}}</span>
+                            <span>下单日期：{{form.CreateDate}}</span>
+                            <div class="overhide"><span class="fl">备注：</span><span style="margin-left:40px">{{form.Summary}}</span></div>
+                        </div>
+                    </div>
+                </li>
+                <li class="fl"><div class="divider fl"></div></li>
+                <li class="second fl">
+                    <div class="wrap" style="min-height:300px">
+                        <p class="title">香港交货方式</p>
+                        <div class="information">
+                            <span>交货方式：{{form.HKDeliveryType}}</span>
+                            <div v-if="form.isPickUp">
+                                <div class="overhide"><span class="fl">联系人：</span><span style="margin-left:53px;word-wrap:break-word; white-space:normal; word-break:break-all;">{{form.supplierContact}}</span></div>
+                                <div class="overhide"><span class="fl">电话：</span><span style="margin-left:45px;word-wrap:break-word; white-space:normal; word-break:break-all;">{{form.supplierContactMobile}}</span></div>
+                                <div class="overhide"><span class="fl">地址：</span><span style="margin-left:45px;word-wrap:break-word; white-space:normal; word-break:break-all;">{{form.SupplierAddress}}</span></div>
+                                <div class="overhide"><span class="fl">提货时间：{{form.PickupTime}}</span><span style="margin-left:158px"><i class="bule_fujian"></i><a download target="_blank" :href="form.DeliveryFiles">查看提货文件</a></span></div>
+                            </div>
+                            <div v-if="!form.isPickUp" style="margin-bottom:55px;">
+                                <div>
+                                    <span>物流单号：{{form.WayBillNo}}</span>
+                                </div>
+                            </div>
+
+                        </div>
+                        <p class="title2">国内交货方式</p>
+                        <div class="information">
+                            <span>送货方式：{{form.SZDeliveryType}}</span>
+                            <div v-if="!form.isSZPickUp">
+                                <div class="overhide"><span class="fl">联系人：</span><span style="margin-left:53px">{{form.clientContact}}</span></div>
+                                <div class="overhide"><span class="fl">电话：</span><span style="margin-left:45px">{{form.clientContactMobile}}</span></div>
+                                <div class="overhide"><span class="fl">地址：</span><span style="margin-left:45px">{{form.clientConsigneeAddress}}</span></div>
+                            </div>
+                            <div v-if="form.isSZPickUp">
+                                <div class="overhide"><span class="fl">提货人：</span><span style="margin-left:53px">{{form.clientContact}}</span></div>
+                                <div class="overhide"><span class="fl">电话：</span><span style="margin-left:45px">{{form.clientContactMobile}}</span></div>
+                                <div class="overhide"><span class="fl">证件号码：</span><span style="margin-left:45px">{{form.IDNumber}}</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="fl"><div class="divider fl"></div></li>
+                <li class="third fl">
+                    <div class="wrap fl">
+                        <p class="title">开票信息</p>
+                        <div class="information">
+                            <span>开票类型：{{form.invoice.invoiceType}}</span>
+                            <span>交付方式：{{form.invoice.invoiceDeliveryType}}</span>
+                            <span>名称：{{form.invoice.invoiceTitle}}</span>
+                            <span style=" word-break: break-all;">纳税人识别号：{{form.invoice.invoiceTaxCode}}</span>
+                            <span>地址、电话：{{form.invoice.invoiceAddress}} &nbsp;&nbsp;&nbsp;{{form.invoice.invoiceTel}}</span>
+                            <span>开户行及账号：{{form.invoice.invoiceBank}}&nbsp;&nbsp;&nbsp; {{form.invoice.invoiceAccount}}</span>
+                        </div>
+                        <p class="title mt30">开票寄送信息</p>
+                        <div class="information">
+                            <span>收件人：{{form.invoice.contactName}}</span>
+                            <span>手机、电话：{{form.invoice.contactMobile}}&nbsp;&nbsp;&nbsp; {{form.invoice.contactTel}}</span>
+                            <span>地址：{{form.invoice.contactAddress}}</span>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="foot">
+            <div class="check"><el-checkbox v-model="check">我已核对订单信息，确认无误</el-checkbox></div>
+            <div class="overhide">
+                <el-button :class="{submit:true, fl:true, btn_bg_gray2:!check, btn_bg_blue:check}" id="btn_submit" :disabled="!check" v-on:click="Confirm">确认订单</el-button>
+                <el-button class="cancel fl" v-on:click="cancelOrder">取消订单</el-button>
+            </div>
+        </div>
+    </div>
+    <el-dialog title="取消订单" :visible.sync="dialogFormVisible" :lock-scroll="false" :close-on-click-modal="false" width="30%">
+        <el-form status-icon :model="ruleForm" label-width="60px" ref="ruleForm">
+            <el-form-item label="原因" prop="Cancel_Reason" :rules="[{ required: true, message: '请输入原因', trigger: 'blur' },{max:400, message: '原因长度不超过400', trigger: 'blur' }]">
+                <el-input v-model="ruleForm.Cancel_Reason" type="textarea" auto-complete="off"></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button v-on:click="dialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" v-on:click="onSubmit_ruleForm()">确 定</el-button>
+        </div>
+    </el-dialog>
+    <el-dialog class="successdialog" title="订单确认成功" :lock-scroll="false" width="520px" :visible.sync="dialogConfirmVisible" :close-on-click-modal="false">
+        <div class="content">
+            <p>订单确认成功</p>
+        </div>
+        <div class="dialog_foot">
+            <el-button type="primary" v-on:click="orderDetails">查看订单信息</el-button>
+            <el-button type="primary" v-on:click="return_PreComfirms">返回</el-button>
+        </div>
+    </el-dialog>
+    <el-dialog class="successdialog" title="订单取消成功" :lock-scroll="false" width="520px" :visible.sync="dialogCancelVisible" :close-on-click-modal="false">
+        <div class="content">
+            <p>订单取消成功</p>
+        </div>
+        <div class="dialog_foot overhide">
+            <el-button type="primary" style="float:right;margin-right:50px;" v-on:click="return_PreComfirms">返回</el-button>
+        </div>
+    </el-dialog>
+</div>
+<script>
+    var confirm = new Vue({
+        el: "#confirm",
+        data: function () {
+            return {
+                items: @Html.Raw(Json.Encode(Model.Products)),
+                form: @Html.Raw(Json.Encode(Model)),
+                PayExchangeSupplier: @Html.Raw(Json.Encode(Model.PayExchangeSupplier)),
+                PIFiles: @Html.Raw(Json.Encode(Model.PIFiles)),
+                dialogConfirmVisible: false,
+                dialogCancelVisible:false,
+                check: false,
+                isVisiableUpload: false,
+                ruleForm: {
+                    Cancel_Reason: "",
+                },
+                dialogFormVisible: false,
+                fileUrl: "",
+                URL: "",
+                fileName: "",
+                fileFormat: "",
+                fileStatus: "未审核",
+            }
+        },
+        mounted: function () {
+            this.$nextTick(function(){
+                if (confirm.PIFiles.length> 0){
+                    confirm.isVisiableUpload = false;
+                } else {
+                    confirm.isVisiableUpload = true;
+                }
+                if (confirm.form.AgentProxyURL != "") {
+                    confirm.fileUrl = confirm.form.AgentProxyURL;
+                    confirm.fileName = confirm.form.AgentProxyName;
+                }
+                if (this.form.AgentProxyStatus) {
+                    this.fileStatus = "已审核";
+                }
+            })
+        },
+        methods: {
+            httpRequest: function (options) {
+                var that = this;
+                var file = options.file;
+                var size = file.size / 1024;
+                var imgArr = ["image/jpg", "image/bmp", "image/jpeg", "image/gif", "image/png"];
+                let config = {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                };
+                if (imgArr.indexOf(file.type) > -1 && size > 500) { //大于500kb的图片压缩
+                    photoCompress(file, { quality: 0.8 }, function (base64Codes) {
+                        var bl = convertBase64UrlToBlob(base64Codes);
+                        var form = new FormData(); // FormData 对象
+                        form.append("file", bl, "file_" + Date.parse(new Date()) + ".jpg"); // 文件对象
+                        //添加请求头
+                        axios.post('/Orders/UploadOrderFile', form, config)
+                            .then(function (response) {
+                                var file = JSON.parse(response.data.data);
+                                if (response.data.type != "error") {
+                                    that.fileUrl = file.fullURL;
+                                    that.URL = file.URL;
+                                    that.fileName = file.name;
+                                    that.fileFormat = file.fileFormat;
+                                }
+                            });
+                    });
+                } else if (imgArr.indexOf(file.type) <= -1 && size > 1024*3) {
+                    that.onAlert("error", "上传的文件大小不能大于3M");
+                    return;
+                } else {
+                    var form = new FormData(); // FormData 对象
+                    form.append("file", file); // 文件对象
+                    //添加请求头
+                    axios.post('/Orders/UploadOrderFile', form, config)
+                        .then(function (response) {
+                            var file = JSON.parse(response.data.data);
+                            if (response.data.type != "error") {
+                                that.fileUrl = file.fullURL;
+                                that.URL = file.URL;
+                                that.fileName = file.name;
+                                that.fileFormat = file.fileFormat;
+                            }
+                        });
+                }
+            },
+            DownloadAgentProxy: function () {
+                $('#exportInfoForm').attr("href", this.form.AgentProxyURL);
+                $('#exportInfoForm').attr("target", "_blank");
+                $('#ex-li').trigger("click");
+            },
+            ExportAgentProxy: function () {
+                axios({
+                    url: "/Orders/DownloadAgentProxy",
+                    method: "post",
+                    data: {
+                        id: this.form.ID
+                    }
+                }).then(function (response) {
+                    if (response.data.type == "error") {
+                        confirm.onAlert(response.data.type, response.data.msg);
+                    } else {
+                        $('#exportInfoForm').attr("href", response.data.data);
+                        $('#exportInfoForm').attr("target", "_blank");
+                        $('#ex-li').trigger("click");
+                    }
+                }).catch(function (error) {
+                    confirm.onAlert("warning", error);
+                });
+            },
+            toFixed: function (num, val) {
+                return val.toFixed(num);
+            },
+            orderDetails: function () {
+                location.href = "/Orders/Info/?id=" + this.form.ID + "&v=MyOrders";
+            },
+            getDeliveryFiles: function () {
+                location.href = this.form.DeliveryFiles
+            },
+            onSubmit_ruleForm: function () {
+                var that = this;
+                this.$refs.ruleForm.validate(function(valid){
+                    if (valid) {
+                        const loading = that.$loading({
+                            lock: false,
+                            text: 'Loading',
+                            spinner: 'el-icon-loading',
+                            background: 'rgba(0, 0, 0, 0.7)'
+                        });
+                        that.dialogFormVisible = false;
+                        axios({
+                        url: "/Orders/CancelConfirm",
+                        method: "post",
+                        data: {
+                            orderID: that.form.ID,
+                            reason: that.ruleForm.Cancel_Reason,
+                            isBecauseModified: that.form.IsBecauseModified,
+                        }
+                        }).then(function (response) {
+                            loading.close();
+                        if (response.data.type == "error") {
+                            confirm.onAlert(response.data.type, response.data.msg);
+                        }
+                        else {
+                            confirm.dialogCancelVisible = true;
+                        }
+                    }).catch(function (error) {
+                        confirm.onAlert("warning", error);
+                    });
+                    }
+                });
+            },
+            //订单取消
+            cancelOrder: function () {
+                this.ruleForm.Cancel_Reason = "";
+                this.dialogFormVisible = true;
+            },
+            //返回待确认订单
+            return_PreComfirms: function () {
+                location.href = "/Orders/PreConfirms";
+            },
+            //确认订单
+            Confirm: function () {
+                //if (confirm.form.AgentProxyFiles.length == 0 && (this.form.AgentProxyURL == null || this.form.AgentProxyURL =='')) {
+                //    this.onAlert("warning", "请上传代理报关委托书！");
+                //    return;
+                //}
+                var that = this;
+                const loading = this.$loading({
+                    lock: false,
+                    text: 'Loading',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.7)'
+                });
+                axios({
+                    url: "/Orders/CheckPreConfirm",
+                    method: "post",
+                    data: {
+                        orderID: this.form.ID,
+                        URL: that.URL,
+                        name: that.fileName,
+                        fileFormat: that.fileFormat,
+                        isBecauseModified: that.form.IsBecauseModified,
+                    }
+                }).then(function (response) {
+                    loading.close();
+                    if (response.data.type == "error") {
+                        confirm.onAlert(response.data.type, response.data.msg);
+                    }
+                    else {
+                        confirm.dialogConfirmVisible = true;
+                    }
+                }).catch(function (error) {
+                    confirm.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                });
+            },
+        }
+    });
+</script>
+

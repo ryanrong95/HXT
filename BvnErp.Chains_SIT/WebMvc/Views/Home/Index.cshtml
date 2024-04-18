@@ -1,0 +1,467 @@
+﻿@model WebMvc.Models.IndexViewModel
+@using Needs.Utils.Converters;
+@{
+
+    ViewBag.Title = "会员中心的首页";
+    Layout = "~/Views/Shared/_LayoutCenter.cshtml";
+    ViewBag.navid = "Index";
+}
+<style>
+    .el-message {
+        top: 450px;
+        min-width: 150px;
+    }
+
+    .el-message__content {
+        font-size: 16px;
+    }
+
+    .el-message .el-icon-error {
+        font-size: 16px;
+    }
+</style>
+<div id="memberCenter" v-cloak>
+    <div class="memberCenter_center">
+        <div class="memberCenter_center_content pay">
+            <h2>应付款<a href="/PaymentRecord/MyPayment" class="vieworder"><span>查看付款记录</span><span style="position:relative;top:-1px;" class="ml6">》</span></a></h2>
+            <ul class="clearfix">
+                <li class="mr6">
+                    <p class="money">
+                        ¥{{formdata.ProductPayable}}
+                    </p>
+                    <p class="money_title">货款</p>
+                    <div class="money_detail">
+                        <div class="money_detail_box pt10">
+                            <span>垫款上限:</span>
+                            <em>{{formdata.ProductUpperLimit}}</em>
+                        </div>
+                        <div class="money_detail_box">
+                            <span>可用垫款:</span>
+                            <em>
+                                {{formdata.AvailableProductFee}}
+                            </em>
+                        </div>
+                    </div>
+                </li>
+                <li class="mr6">
+                    <p class="money">
+                        ¥{{formdata.TaxPayable}}
+                    </p>
+                    <p class="money_title">税款</p>
+                    <div class="money_detail">
+                        <div class="money_detail_box pt10">
+                            <span>垫款上限:</span>
+                            <em>
+                                {{formdata.TaxUpperLimit}}
+                            </em>
+                        </div>
+                        <div class="money_detail_box">
+                            <span>可用垫款:</span>
+                            <em>
+                                {{formdata.AvailableTaxFee}}
+                            </em>
+                        </div>
+                    </div>
+                </li>
+                <li class="mr6">
+                    <p class="money">
+                        ¥{{formdata.AgencyFeePayable}}
+                    </p>
+                    <p class="money_title">代理费</p>
+                    <div class="money_detail">
+                        <div class="money_detail_box pt10">
+                            <span>垫款上限:</span>
+                            <em>{{formdata.AgencyUpperLimit}}</em>
+                        </div>
+                        <div class="money_detail_box">
+                            <span>可用垫款:</span>
+                            <em>
+                                {{formdata.AvailableAgencyFee}}
+                            </em>
+                        </div>
+                    </div>
+                </li>
+                <li class="mr6">
+                    <p class="money">
+                        ¥{{formdata.IncidentalPayable}}
+                    </p>
+                    <p class="money_title">杂费</p>
+                    <div class="money_detail">
+                        <div class="money_detail_box pt10">
+                            <span>垫款上限:</span>
+                            <em>
+                                {{formdata.IncidentalUpperLimit}}
+                            </em>
+                        </div>
+                        <div class="money_detail_box">
+                            <span>可用垫款:</span>
+                            <em>
+                                {{formdata.AvailableIncidentalFee}}
+                            </em>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <p class="money">¥{{formdata.TotalPayableAmount}}</p>
+                    <p class="money_title">总金额</p>
+
+                </li>
+            </ul>
+        </div>
+        <div class="memberCenter_center_content order" v-loading="loading" style="min-height:500px">
+
+            <h2>
+                我的订单
+                <a href="/Orders/MyOrders" class="vieworder"><span>查看全部订单</span><span style="position:relative;top:-1px;" class="ml6">》</span></a>
+            </h2>
+            <ul class="order_status clearfix">
+                <li>
+                    <a href="/Orders/PreConfirms">
+                        <i class="i1">
+                            <em>{{formdata.UnConfirmCount}}</em>
+                        </i>
+                        <span>待确认</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/Orders/UnInvoicedOrders">
+                        <i class="i2">
+                            <em>{{formdata.UnInvoiceCount}}</em>
+                        </i>
+                        <span>待开票</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/Orders/HangUpOrders">
+                        <i class="i3">
+                            <em>{{formdata.HangUpCount}}</em>
+                        </i>
+                        <span>挂起</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/PayExchanges/UnPayExchanges">
+                        <i class="i4">
+                            <em>{{formdata.UnPayExchangeCount}}</em>
+                        </i>
+                        <span>待付汇</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/Orders/UnReceivedOrders">
+                        <i class="i5">
+                            <em>{{formdata.CompeletedCount}}</em>
+                        </i>
+                        <span>待收货</span>
+                    </a>
+                </li>
+            </ul><div v-if="!loading">
+                <ul class="order_details_list" v-if="OrderList.length>0">
+                    <li class="clearfix" v-for="item,index in OrderList">
+                        <div v-if="index<listShowLength" class="order_details_list_box">
+                            <div class="order_number">
+                                <h4>订单编号</h4>
+                                <p>{{item.ID}}</p>
+                            </div>
+                            <div class="order_content">
+                                <p class="express" v-html="item.Summary"></p>
+                                <div>
+                                    <span>{{item.Status}}</span>
+                                    <em class="em_font">|</em>
+                                    <span class="date">{{item.CreateDate}}</span>
+                                </div>
+                            </div>
+                            <div class="order_view">
+                                <a v-on:click="orderDetails(item.ID)">查看详情</a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <p class="order_viewmore" v-on:click="viewMoreOrder" v-if="viewmoreStatus">
+                    <span v-text="viewMoreText">点击显示更多订单</span>
+                    <i v-if="viewIconStatus"></i>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="memberCenter_right">
+        <div class="WarehouseNo">
+            <h3>入仓号：{{formdata.ClientCode}}</h3>
+            <div class="WarehouseNo_what">
+                <el-tooltip placement="top" popper-class="atooltip">
+                    <div style="line-height:20px" slot="content">入仓号是您的货物进入我们仓库的唯一标识，是我司确认货物的唯一途径，<br />请务必将您的入仓号填写在运单或外包装上。</div>
+                    <el-button type="text">什么是入仓号？</el-button>
+                </el-tooltip>
+            </div>
+        </div>
+        <div class="custService">
+            <h2>客户服务</h2>
+            <div class="custService_content">
+                <div class="mb29">
+                    <p>业务经理</p>
+                    <div class="mb10">
+                        <i class="person_icon"></i>
+                        <span>姓名：</span>
+                        <em>{{formdata.ServiceManagerName}}</em>
+                    </div>
+                    <div class="mb10">
+                        <i class="iphone_icon"></i>
+                        <span>电话：</span>
+                        <em>{{formdata.ServiceManagerTel}}</em>
+                    </div>
+                    <div>
+                        <i class="email_icon"></i>
+                        <span>邮箱：</span>
+                        <em :title=formdata.ServiceManagerMail>{{formdata.ServiceManagerMail}}</em>
+                    </div>
+                </div>
+                <div>
+                    <p>跟单员</p>
+                    <div class="mb10">
+                        <i class="person_icon"></i>
+                        <span>姓名：</span>
+                        <em>{{formdata.MerchandiserName}}</em>
+                    </div>
+                    <div class="mb10">
+                        <i class="iphone_icon"></i>
+                        <span>电话：</span>
+                        <em>{{formdata.MerchandiserTel}}</em>
+                    </div>
+                    <div>
+                        <i class="email_icon "></i>
+                        <span>邮箱：</span>
+                        <em :title=formdata.MerchandiserMail>{{formdata.MerchandiserMail}}</em>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="Service">
+            <h2>服务</h2>
+            <ul class="clearfix">
+                <li>
+                    <a href="http://www.boc.cn/sourcedb/whpj/" target="_blank">
+                        <i class="i1"></i>
+                        <span>实时汇率</span>
+                    </a>
+                </li>
+                <li>
+                    <a v-on:click="unDevelop">
+                        <i class="i2"></i>
+                        <span>海关汇率</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="http://wl.net.cn/Sort/Search.html" target="_blank">
+                        <i class="i3"></i>
+                        <span>归类查询</span>
+                    </a>
+                </li>
+                <li>
+                    <a v-on:click="unDevelop">
+                        <i class="i4"></i>
+                        <span>收费标准</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <el-dialog title="系统提示" :visible.sync="dialogFormVisible" :close-on-click-modal="false" custom-class="dialogwidth" :lock-scroll="false">
+        <p class="tips">尊敬的客户，由于您使用的是系统默认密码，为了保障您的账户及信息安全，请重置密码。</p>
+        <el-form :model="formdata" status-icon ref="ruleForm" label-width="120px" :rules="rules">
+            <el-form-item label="手机号码：">
+                <el-input v-model="formdata.Mobile" style="width:80%;" :readonly="true" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="短信验证码：" prop="Code" :rules="[{required: true, message: '请输入短信验证码', trigger: 'blur'}]">
+                <el-input v-model="formdata.Code" style="width:35%;" id="Code" placeholder="请输入验证码" auto-complete="off"></el-input>
+                <el-button style="padding-left:20px;margin-left:43px;" size="medium" :disabled="buttonDisable" type="primary" v-on:click="sendSms('ruleForm')">{{buttonTxt}}</el-button>
+            </el-form-item>
+            <el-form-item label="新密码：" prop="NewPassword">
+                <el-input type="password" v-model="formdata.NewPassword" placeholder="请输入新密码(6-12位字母、数字)" style="width:80%" auto-complete="new-password"></el-input>
+            </el-form-item>
+
+            <el-form-item label="确认密码：" prop="ConfirmPassword">
+                <el-input type="password" v-model="formdata.ConfirmPassword" placeholder="请输入新密码" style="width:80%" auto-complete="off"></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer overhide">
+            <el-button class="btn_changePassword fl" size="medium" type="primary" v-on:click="onSubmit_ruleForm()">修改默认密码</el-button>
+            <el-button style="font-size:16px" class="fl" v-on:click="dialogFormVisible = false" type="text">跳过本次提醒</el-button>
+
+        </div>
+    </el-dialog>
+
+</div>
+<script type="text/javascript">
+    var memberCenter = new Vue({
+        el: "#memberCenter",
+        data: function () {
+            var that = this;
+            var validateNewPass = function(rule, value, callback){
+                if (value == '' || value == null) {
+                    callback(new Error('请输入新密码'));
+                }
+                else if (!ValidPassword(value)) {
+                    callback(new Error('请输入新密码(6-12位字母+数字)'));
+                }
+                else if (that.formdata.ConfirmPassword != '' && that.formdata
+                    .ConfirmPassword != null) {
+                    that.$refs.ruleForm.validateField('ConfirmPassword');
+                }
+                callback();
+            };
+            var validateConfirmPass = function(rule, value, callback){
+                if (value == '' || value == null) {
+                    callback(new Error('请再次输入新密码'));
+                } else if (value !== that.formdata.NewPassword) {
+                    callback(new Error('两次输入密码不一致!'));
+                } else {
+                    callback();
+                }
+            };
+            return {
+                buttonDisable: false,
+                buttonTxt: "获取短信验证码",
+                dialogFormVisible: false,
+                //订单列表数据
+                OrderList:[],		    //展示的订单列表数据
+                formdata:@Html.Raw(Json.Encode(Model)),
+                dd: -1,
+                dt: -1,
+                listShowLength: 0,
+                viewMoreText: "点击显示更多订单",
+                viewmoreStatus: true,		//点击显示更多订单是否显示
+                viewIconStatus: true,
+                rules: {
+                    NewPassword: [
+                        { required: true, validator: validateNewPass, trigger: 'blur' }
+                    ],
+                    ConfirmPassword: [
+                        { required: true, validator: validateConfirmPass, trigger: 'blur' }
+                    ]
+                },
+                loading: true
+            }
+        },
+        mounted: function () {
+
+            //初始化增加一行空的数据
+            this.$nextTick(function(){
+                memberCenter.dialogFormVisible = memberCenter.formdata.IsOriginPassWord;
+                this.getOrderData();
+            })
+        },
+        methods: {
+            unDevelop: function () {
+                this.$message({
+                    showClose: true,
+                    message: '提示：正在开发中',
+                    type: 'warning',
+                   // duration: 0
+                });
+            },
+            getOrderData: function () {
+                var that = this;
+                axios({
+                    url: "/Home/GetOrderData",
+                    method: "post",
+                    data: this.formdata,
+                }).then(function (response) {
+                    var data = JSON.parse(response.data.data);
+                    that.formdata = data;
+                    that.OrderList = data.Orderlist;
+                    that.loading = false;
+                    if (that.OrderList.length <= 3) {
+                        that.listShowLength = that.OrderList.length;
+                        that.viewmoreStatus = false;
+                    } else {
+                        that.listShowLength = 3;
+                    }
+                }).catch(function (error) {
+                    memberCenter.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            onSubmit_ruleForm: function () {
+                var that = this;
+                this.$refs.ruleForm.validate(function(valid){
+                    if (valid) {
+                        axios({
+                            url: "/Home/Password",
+                            method: "post",
+                            data: {
+                                Code: that.formdata.Code,
+                                NewPassword: that.formdata.NewPassword
+                            },
+                        }).then(function (response) {
+                            if (response.data.type == "success") {
+                                that.dialogFormVisible = false;
+                            }
+                            that.onAlert(response.data.type, response.data.msg);
+                        }).catch(function (error) {
+                            that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                        });
+                    } else {
+                        //验证失败
+                        return false;
+                    }
+                });
+            },
+            //发送短信
+            sendSms: function (ruleForm) {
+                if (this.formdata.Mobile == "" || this.formdata.Mobile == null) {
+                    this.onAlert("warning", "该账户未绑定手机号码");
+                    return;
+                }
+                memberCenter.buttonDisable = true;
+                var time = 60;
+                axios({
+                    url: "/Home/SendCode",
+                    method: "post",
+                }).then(function (response) {
+                    var t = setInterval(function () {
+                        time--;
+                        memberCenter.buttonTxt = time + "秒后重新获取";
+                        if (time == 0) {
+                            clearInterval(t);
+                            memberCenter.buttonTxt = "发送短信";
+                            memberCenter.buttonDisable = false;
+                        }
+                    }, 1000)
+                }).catch(function (error) {
+                    memberCenter.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            orderDetails: function (id) {
+                location.href = "/Orders/Info/?id=" + id + "&v=MyOrders";
+            },
+            //点击查看更多详情
+            viewMoreOrder: function () {
+                //查看全部订单，则跳转到全部订单页面
+                if (this.viewMoreText == "查看全部订单") {
+                    this.viewmoreStatus = true;
+                    this.viewIconStatus = false;
+                    window.location.href = "/Orders/MyOrders";
+                    //跳转页面
+                } else {
+                    //如果订单列表不大于10条就展示所有数据，并且点击显示更多订单消失
+                    if (this.OrderList.length <= 10) {
+                        this.listShowLength = this.OrderList.length;
+                        this.viewmoreStatus = false;
+                    } else {
+                        //否则的话显示10条订单信息，将显示更多订单变为查看全部订单
+                        this.listShowLength = 10;
+                        this.viewMoreText = "查看全部订单"
+                        this.viewmoreStatus = true;
+                        this.viewIconStatus = false;
+                    }
+                }
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type
+                });
+            },
+        }
+    });
+</script>

@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>创新恒远- 一站式报关服务平台</title>
+    <meta name="keywords" content="创新恒远新手入门之注册指南" />
+    <meta name="description" content="注册指南" />
+    <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
+    <!--[if lt IE 9]>
+      <script src="/Scripts/html5shiv.min.js"></script>
+      <script src="/Scripts/respond.min.js"></script>
+    <![endif]-->
+    <link rel="shortcut icon" href="/Content/images/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="/Content/common.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/style.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/element.css" />
+</head>
+<body>
+    <div class="header"></div>
+    <section id="RegistGuide" class="grayBg">
+        <div id="RegistGuideContent" v-cloak class="w1200 clearfix">
+            <div class="content-left content-boxShadow">
+                <div id="FAQNav">
+                    <h2>{{NavLeftTitle}}</h2>
+                    <ul>
+                        <li v-for="item,index in NavLeftList" v-bind:class="{'active':index==status}">
+                            <i></i>
+                            <a v-bind:href="item.href">{{item.text}}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div v-cloak class="content-right content-boxShadow">
+                <h1>上传报关委托书</h1>
+                <p>第一步：点击待确认，选择待确认的订单，确认的时候可以上传代理报关委托书</p>
+                <img src="/Content/images/tu21.png" alt="" />
+                <p style="text-indent:0px;padding:0px 30px;">第二步：当订单状态为待客户确认或者之后的状态，只要报关委托书没有上传过，或者已上传但文件状态为待审核，用户可以在订单详情中上传报关委托书</p>
+                <img src="/Content/images/tu22.png" alt="" />
+            </div>
+        </div>
+    </section>
+    <div class="footer"></div>
+    <script src="/Scripts/jquery-3.3.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/vue.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/axios.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/common.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/element.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+        var RegistGuideContent = new Vue({
+            el: '#RegistGuideContent',
+            data: {
+                status: 4,
+                NavLeftTitle: '新手入门',
+                NavLeftList: [],
+            },
+            mounted: function () {
+                this.getNavList();
+            },
+            methods: {
+                getNavList: function () {
+                    var that = this;
+                    axios.get("/Mock/NoviceGuide.json")
+                        .then(that.getDataSucc)
+                        .catch(that.getDataFail)
+                },
+                getDataSucc: function (res) {
+                    var that = this;
+                    res = res.data;
+                    if (res.ret && res.data) {
+                        that.NavLeftList = res.data.NoviceGuideList;
+                    }
+                },
+                getDataFail: function (err) {
+                    console.log(err);
+                },
+            }
+        })
+    </script>
+</body>
+</html>

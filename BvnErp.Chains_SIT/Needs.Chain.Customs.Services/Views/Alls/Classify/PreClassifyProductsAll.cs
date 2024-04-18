@@ -1,0 +1,166 @@
+﻿using Layer.Data.Sqls;
+using Needs.Ccs.Services.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Text;
+using System.Threading.Tasks;
+
+
+namespace Needs.Ccs.Services.Views.Alls
+{
+    public class PreClassifyProductsAll : Needs.Linq.Generic.Unique2Classics<Models.PreClassifyProduct, ScCustomsReponsitory>
+    {
+        public PreClassifyProductsAll()
+        {
+        }
+
+        internal PreClassifyProductsAll(ScCustomsReponsitory reponsitory) : base(reponsitory)
+        {
+        }
+
+        protected override IQueryable<Models.PreClassifyProduct> GetIQueryable(
+            Expression<Func<Models.PreClassifyProduct, bool>> expression,
+            LambdaExpression[] orderByAscDateTimeExpressions,
+            LambdaExpression[] orderByDescDateTimeExpressions,
+            string currentAdminID,
+            bool isShowLocked = true,
+            params LambdaExpression[] expressions)
+        {
+            var preProductCategories = new Origins.PreProductCategoriesOrigin(this.Reponsitory);
+            var preProductsView = new Rolls.PreProductsRoll(this.Reponsitory);
+            var linq =  from entity in preProductCategories
+                        join preProduct in preProductsView on entity.PreProductID equals preProduct.ID
+                        //orderby entity.CreateDate
+                        select new Models.PreClassifyProduct
+                       {
+                           ID = entity.ID,
+                           PreProductID = entity.PreProductID,
+                           PreProduct = preProduct,
+                           Model = entity.Model,
+                           Manufacturer = entity.Manufacturer,
+                           ProductName = entity.ProductName,
+                           HSCode = entity.HSCode,
+                           TariffRate = entity.TariffRate,
+                           AddedValueRate = entity.AddedValueRate,
+                           ExciseTaxRate = entity.ExciseTaxRate,
+                           TaxCode = entity.TaxCode,
+                           TaxName = entity.TaxName,
+                           Type = entity.Type,
+                           InspectionFee = entity.InspectionFee,
+                           Unit1 = entity.Unit1,
+                           Unit2 = entity.Unit2,
+                           CIQCode = entity.CIQCode,
+                           Elements = entity.Elements,
+                           ClassifyStatus = entity.ClassifyStatus,
+                           Status = entity.Status,
+                           CreateDate = entity.CreateDate,
+                           UpdateDate = entity.UpdateDate,
+                           ClassifyFirstOperator = entity.ClassifyFirstOperator,
+                           ClassifySecondOperator = entity.ClassifySecondOperator,
+                           Summary = entity.Summary
+                       };
+
+            foreach (var predicate in expressions)
+            {
+                linq = linq.Where(predicate as Expression<Func<PreClassifyProduct, bool>>);
+            }
+
+            if (orderByAscDateTimeExpressions != null && orderByAscDateTimeExpressions.Any())
+            {
+                foreach (var orderByAscDateTimeExpression in orderByAscDateTimeExpressions)
+                {
+                    linq = linq.OrderBy(orderByAscDateTimeExpression as Expression<Func<Models.PreClassifyProduct, DateTime>>);
+                }
+            }
+
+            if (orderByDescDateTimeExpressions != null && orderByDescDateTimeExpressions.Any())
+            {
+                foreach (var orderByDescDateTimeExpression in orderByDescDateTimeExpressions)
+                {
+                    linq = linq.OrderByDescending(orderByDescDateTimeExpression as Expression<Func<Models.PreClassifyProduct, DateTime>>);
+                }
+            }
+
+            linq = linq.Where(expression);
+
+            if (!isShowLocked)
+            {
+                //不显示锁定的
+                var productClassifyLocks = new Origins.ProductClassifyLockOrigin(this.Reponsitory);
+                string[] lockedOrderItemIDs = productClassifyLocks
+                    .Where(t => t.AdminID != currentAdminID)
+                    .Select(t => t.ID).ToArray();
+
+                linq = from p in linq
+                       where !(lockedOrderItemIDs).Contains(p.ID)
+                       select p;
+            }
+
+            return linq;
+        }
+
+        protected override IEnumerable<Models.PreClassifyProduct> OnReadShips(Models.PreClassifyProduct[] results)
+        {
+            var adminsView = new AdminsTopView(this.Reponsitory);
+            var productLocksView = from productLock in this.Reponsitory.ReadTable<Layer.Data.Sqls.ScCustoms.ProductClassifyLocks>()
+                                   join admin in adminsView on productLock.AdminID equals admin.ID
+                                   select new
+                                   {
+                                       productLock.ID,
+                                       productLock.IsLocked,
+                                       productLock.LockDate,
+                                       Locker = admin
+                                   };
+
+            return from result in results
+                   join productLock in productLocksView on result.ID equals productLock.ID into productLocks
+                   from productLock in productLocks.DefaultIfEmpty()
+                   join firstOperator in new AdminsTopView(this.Reponsitory) on result.ClassifyFirstOperator equals firstOperator.ID into firstOperatorAdminsTopView
+                   from firstOperator in firstOperatorAdminsTopView.DefaultIfEmpty()
+                   join secondOperator in new AdminsTopView(this.Reponsitory) on result.ClassifySecondOperator equals secondOperator.ID into secondOperatorAdminsTopView
+                   from secondOperator in secondOperatorAdminsTopView.DefaultIfEmpty()
+
+                   select new Models.PreClassifyProduct
+                   {
+                       ID = result.ID,
+                       ProductName = result.ProductName,
+                       Model = result.Model,
+                       Manufacturer = result.Manufacturer,
+                       ClassifyStatus = result.ClassifyStatus,
+                       IsLocked = productLock == null ? false : productLock.IsLocked,
+                       Locker = productLock == null ? null : productLock.Locker,
+                       LockDate = productLock == null ? null : (DateTime?)productLock.LockDate,
+
+                       HSCode = result.HSCode,
+                       TariffRate = result.TariffRate,
+                       AddedValueRate = result.AddedValueRate,
+                       ExciseTaxRate = result.ExciseTaxRate,
+                       TaxCode = result.TaxCode,
+                       TaxName = result.TaxName,
+                       Type = result.Type,
+                       InspectionFee = result.InspectionFee,
+                       Unit1 = result.Unit1,
+                       Unit2 = result.Unit2,
+                       CIQCode = result.CIQCode,
+                       Elements = result.Elements,
+                       Status = result.Status,
+                       CreateDate = result.CreateDate,
+                       UpdateDate = result.UpdateDate,
+                       Summary = result.Summary,
+
+                       PreProductID = result.PreProductID,
+                       PreProduct = result.PreProduct,
+
+                       ClassifyFirstOperator = result.ClassifyFirstOperator,
+                       ClassifyFirstOperatorName = firstOperator != null ? firstOperator.RealName : string.Empty,
+                       ClassifySecondOperator = result.ClassifySecondOperator,
+                       ClassifySecondOperatorName = secondOperator != null ? secondOperator.RealName : string.Empty,
+
+                       ProductUnionCode = result.PreProduct.ProductUnionCode,
+                   };
+        }
+    }
+
+}

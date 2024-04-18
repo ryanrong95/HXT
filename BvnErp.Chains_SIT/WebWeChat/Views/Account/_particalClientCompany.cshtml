@@ -1,0 +1,65 @@
+﻿
+@{
+    ViewBag.Title = "_particalClientCompany";
+}
+
+<template id="company" v-cloak>
+    <div>
+        <p>
+            <span class="fl">公司名称：</span>
+            <span class="limit_box">{{ruleForm3.Company_Name}}</span>
+        </p>
+        <p>
+            <span class="fl">公司法人：</span>
+            <span class="limit_box">{{ruleForm3.Corporat}}</span>
+        </p>
+        <p>
+            <span class="fl">公司地址：</span>
+            <span class="limit_box">{{ruleForm3.AllAddress}}</span>
+        </p>
+        <p>
+            <span>海关编码：</span>
+            <span>{{ruleForm3.CustomsCode}}</span>
+        </p>
+        <p>
+            <span>统一社会信用代码：</span>
+            <span>{{ruleForm3.Code}}</span>
+        </p>
+        <p>
+            <span>联系人：</span>
+            <span>{{ruleForm3.Contacts}}</span>
+        </p>
+        <p>
+            <span>手机号码：</span>
+            <span>{{ruleForm3.Contacts_Moblie}}</span>
+        </p>
+        <p>
+            <span>电话：</span>
+            <span>{{ruleForm3.Phone}}</span>
+        </p>
+        <p>
+            <span>传真：</span>
+            <span>{{ruleForm3.Fax}}</span>
+        </p>
+        <p>
+            <span>QQ：</span>
+            <span>{{ruleForm3.QQ}}</span>
+        </p>
+    </div>
+</template>
+
+<script>
+    Vue.component(
+        'my-company',
+        {
+            template: "#company",
+            data: function () {
+                return {
+                    ruleForm3: @Html.Raw(Json.Encode(Model)),
+                };
+            },
+            methods: {
+
+            }
+        });
+</script>

@@ -1,0 +1,58 @@
+统一调用路径
+
+一、User:会员统一入口调用路径
+    微信公众号的调用路径：Needs.Wl.User.Plat.WeChatPlat
+   1、调用路径规范：Needs.Wl.User.Plat.UserPlat;
+   2、路径的简化：using UserPlat=Needs.Wl.User.Plat.UserPlat;
+   3、身份验证:Needs.Wl.User.Plat.Identity;  
+   4、需要根据User查询的视图：Needs.Wl.User.Plat.Views;
+   5、当前登录User信息:Needs.Wl.User.Plat.UserPlat.Current;
+      转换对象模型：Needs.Wl.User.Plat.UserPlat.Current.ToUser();
+   6、树结构：
+      1)、需要身份认证
+	    Needs.Wl.User.Plat
+		  |--UserPlat
+			  |--Current--登录User信息
+				  |--MySuppliers() --会员的供应商
+				  |--MyConsignees() --会员(User)的收件地址
+				  |--MyOrders() --我的订单 可以通过MyOrders[id]进行订单对象加载的View
+				  |--OrderContext--订单路径，不进行订单的查询。用于订单子项的调用
+				     |--OrderContext[id]--订单路径，不进行订单的查询。仅仅包含订单ID，用于订单子项的调用，通过非法手段获取订单ID尝试获取订单信息，将抛出异常。
+					     |--OrderContext[id].PackBills()--订单的提货单
+						 |--OrderContext[id].Logs()--订单的操作日志
+						 |--OrderContext[id].Traces()--订单的流程跟踪
+				  |--MyProducts(); --预归类产品
+				  |--MyClassifiedPreProducts();//已完成归类的预归类产品
+				  |--MyDecHeads() - 我的报关单
+				  |--Client; --会员的客户信息
+				     |--Company; --会员的企业信息
+					 |--Suppliers().... --会员客户信息的其他信息，如合同协议、发票信息、收件地址...
+					 |--Users();--会员的账号
+					 |--Files();--会员的文件
+					 |--Suppliers();//供应商信息（通过Client调用供应商信息）
+					 |--Suppliers()[id].Banks();//供应商信息银行账号
+					 |--Suppliers()[id].Addresses();//供应商提货地址
+
+	  2)、不需要身份认证
+	    Needs.Wl.User.Plat
+		  |--UserPlat
+			 |--CustomExchangeRates() --海关汇率
+			 |--RealTimeExchangeRates() --实时汇率
+             |--CustomsQuarantines() --海关检疫检疫地区
+
+二、Admin管理员统一入口
+   1、路径的简化：using AdminPlat=Needs.Wl.Admin.Plat.AdminPlat;
+   2、需要根据Admin查询的视图:Needs.Wl.Admin.Plat.Views;
+   3、当前登录管理员信息:AdminPlat.Current;
+      转换对象模型： AdminPlat.Current.ToAdmin();
+   4、树结构
+      Needs.Wl.Admin.Plat
+			|--AdminPlat
+			   |--Current  --登录后，需要身份认证
+				  |--MyClients()  --我的客户(业务员、跟单员、管理员)根据Admin的角色判断，如果是跟单员，查询分配给该跟单员的客户，如果是业务员，查询分配给该业务员的客户，如果是管理员，查询全部客户。
+				  |--MyOrders()   --我的订单(业务员、跟单员、管理员)，逻辑同上。
+
+		    |--AdminPlat---不需要身份认证
+				  |--CustomExchangeRates() --海关汇率
+				  |--RealTimeExchangeRates() --实时汇率
+                  |--CustomsQuarantines() --海关检疫检疫地区

@@ -1,0 +1,39 @@
+﻿<template id="info">
+    <el-form :model="form1"  status-icon ref="form1" label-width="120px">
+        <el-form-item label="品名：" prop="Name" :rules="[{ required: true, message: '请输入品名', trigger: 'blur' },{max:150, message: '品名长度不超过150', trigger: 'blur' }]">
+            <el-input v-model="form1.Name" placeholder="请输入品名" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="型号：" prop="Models" :rules="[{ required: true, message: '请输入型号', trigger: 'blur' },{max:150, message: '型号长度不超过150', trigger: 'blur' }]">
+            <el-input v-model="form1.Models" placeholder="请输入型号" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="品牌：" prop="Manufacturer" :rules="[{ required: true, message: '请输入品牌', trigger: 'blur' },{max:50, message: '品牌长度不超过50', trigger: 'blur' }]">
+            <el-input v-model="form1.Manufacturer" placeholder="请输入品牌" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="批号：" prop="Batch" :rules="[{max:50, message: '批号长度不超过50', trigger: 'blur' }]">
+            <el-input v-model="form1.Batch" placeholder="请输入批号" auto-complete="off"></el-input>
+        </el-form-item>
+    </el-form>
+</template>
+<script>
+    Vue.component(
+        'my-info',
+        {
+            template: "#info",
+            data: function () {
+                return {
+                    form1: @Html.Raw(Json.Encode(Model)),
+                }
+            },
+            methods: {
+                //消息提示框
+                onAlert: function (type, message) {
+                    this.$message({
+                        message: message,
+                        type: type
+                    });
+                },
+            }
+        });
+</script>
+
+

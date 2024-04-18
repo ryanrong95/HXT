@@ -1,0 +1,136 @@
+﻿
+@{
+    ViewBag.Title = "账户信息";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>账户信息</title>
+    <link rel="stylesheet" href="~/Content/css/index.css">
+    <link rel="stylesheet" href="~/Content/css/element.css">
+    <link rel="stylesheet" href="~/Content/css/mint-ui.css">
+    <script src="~/Scripts/vue.js"></script>
+    <script src="~/Scripts/mint-ui.js"></script>
+    <script src="~/Scripts/axios.min.js"></script>
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <style>
+    </style>
+</head>
+<body>
+    <div id="Account_information" ref="viewBox">
+        <div class="header">
+            <a onClick="javascript :history.back(-1);"><span class="el-icon-arrow-left icon"></span></a>
+            <div class="Account_nav">
+                <p v-on:click="checkbox(1)"><span v-bind:class="{title_active:title_index==1}">账户信息</span><em v-bind:class="{bar_active:title_index==1}"></em></p>
+                <p v-on:click="checkbox(2)"><span v-bind:class="{title_active:title_index==2}">公司信息</span><em v-bind:class="{bar_active:title_index==2}"></em></p>
+            </div>
+        </div>
+        <div class="information_box" prefix="">
+            <div v-if="title_index==1" class="account">
+                <p>
+                    <span>客户编码：</span>
+                    <span>{{ruleForm1.ID}}</span>
+                </p>
+                <p>
+                    <span>登录名：</span>
+                    <span>{{ruleForm1.User_Name}}</span>
+                    <span v-on:click="exitpwd">修改登录名</span>
+                </p>
+                <p>
+                    <span>手机号码：</span>
+                    <span>{{ruleForm1.Mobile}}</span>
+                    <span v-on:click="exitphone">修改手机号</span>
+                </p>
+                <p>
+                    <span>邮箱：</span>
+                    <span>{{ruleForm1.Mail}}</span>
+                </p>
+            </div>
+            <div v-if="title_index==2" class="company">
+                <my-company ref="header"></my-company>
+            </div>
+        </div>
+        <div class="fixedMenu">
+            <ul>
+                <li>
+                    <a href="/Account/Index"><i></i><span>会员中心</span></a>
+                </li>
+                <li>
+                    <a href="/Order/MyOrders"><i></i><span>我的订单</span></a>
+                </li>
+                <li>
+                    <a href="tel:0755-83988698"><i></i><span>报关热线</span></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
+@{Html.RenderAction("_ParticalClientCompany", "Account");}
+<script>
+    var Account_information = new Vue({
+        el: "#Account_information",
+        data: function () {
+            return {
+                title_index: 1,
+                ruleForm1:@Html.Raw(Json.Encode(Model)),
+            }
+        },
+        mounted: function () {
+            
+        },
+        methods: {
+            checkbox: function (index) {
+                this.title_index = index;
+            },
+            exitphone: function () {
+                window.location.href = "/Account/Mobile";
+            },
+            exitpwd: function () {
+                var that = this;
+                this.$messagebox({
+                    $type: 'prompt',
+                    title: '请输入新的登录名',
+                    message: ' ',
+                    closeOnClickModal: false,   //点击model背景层不关闭MessageBox
+                    showCancelButton: true,   //不显示取消按钮
+                    inputErrorMessage: '请输入登录名(不超过20个字)',
+                    showInput: true,
+                    inputValidator: (val) => {
+                        if (val === null) {
+                            return true;//初始化的值为null，不做处理的话，刚打开MessageBox就会校验出错，影响用户体验
+                        }
+                        return /^[\s\S]{1,20}$/.test(val)
+                    }
+                   
+                }).then(({ value, action }) => {
+                    if ("confirm" == action) {
+                        that.$refs['viewBox'].scrollTop = 0;
+                        if (value != "" && value != null) {
+                            axios({
+                                url: "/Account/ChangeUserName",
+                                method: "post",
+                                data: {
+                                    username: value,
+                                }
+                            }).then(function (response) {
+                                if (response.data.type != "error") {
+                                    that.ruleForm1.User_Name = value;
+                                }
+                                that.$toast(response.data.msg);
+                            }).catch(function (error) {
+                                that.$toast("系统发生错误，请稍后重试或联系客服");
+                            });
+                        }
+                    }
+                    }).catch(() => { that.$refs['viewBox'].scrollTop = 0;}) ;
+            }
+        }
+    })
+</script>
+

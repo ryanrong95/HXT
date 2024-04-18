@@ -1,0 +1,390 @@
+﻿@{
+    ViewBag.Title = "注册申请";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>注册申请</title>
+    <link rel="stylesheet" href="~/Content/css/border.css">
+    <link rel="stylesheet" href="~/Content/css/reset.css">
+    <link rel="stylesheet" href="~/Content/css/element.css">
+    <link rel="stylesheet" href="~/Content/css/mint-ui.css">
+    <link rel="stylesheet" href="~/Content/css/index.css">
+
+    <link href="~/Content/css/register.css" rel="stylesheet" />
+    <script src="~/Scripts/vue.js"></script>
+    <script src="~/Scripts/elementui.js"></script>
+    <script src="~/Scripts/mint-ui.js"></script>
+    <script src="~/Scripts/axios.min.js"></script>
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+    <div class="main" id="register">
+        <div class="top"></div>
+        <div class="register_form">
+            <div class="input_bg" :class="{'red':CompanyStatus}">
+                <i class="icon"></i>
+                <input type="text" name="" id="" placeholder="公司名称"  v-model.trim="CompanyVal" v-on:blur="changeCompany">
+                <p class="error error1" v-show="CompanyStatus">{{CompanyText}}</p>
+            </div>
+            <div class="input_bg">
+                <i class="icon"></i>
+                <input type="text" name="" id="" placeholder="用户名" v-model.trim="UserVal" v-on:blur="changeUser">
+                <p class="error error1" v-show="UserStatus">{{UserText}}</p>
+            </div>
+            <div class="input_bg">
+                <i class="icon"></i>
+                <input  type="password" name="" id="" placeholder="登录密码" v-model.trim="NewPasswordVal" v-on:blur="changeNewPassword">
+                <p class="error error1" v-show="NewPasswordStatus">{{NewPasswordText}}</p>
+            </div>
+            <div class="input_bg">
+                <i class="icon"></i>
+                <input  type="password" name="" id="" placeholder="确认密码" v-model.trim="SecondPasswordVal" v-on:blur="changeSecondPassword">
+                <p class="error error1" v-show="SecondPasswordStatus">{{SecondPasswordText}}</p>
+            </div>
+            <div class="input_bg">
+                <i class="icon"></i>
+                <input type="text" name="" id="" placeholder="联系人" v-model.trim="ContactVal" v-on:blur="changeContact">
+                <p class="error error1" v-show="ContactStatus">{{ContactText}}</p>
+            </div>
+            <div class="input_bg">
+                <i class="icon"></i>
+                <input type="text" name="" id="" placeholder="手机号" v-model.trim="PhoneVal" v-on:blur="changePhone">
+                <p class="error error1" v-show="PhoneStatus">{{PhoneText}}</p>
+            </div>
+            <div class="input_bg">
+                <i class="icon"></i>
+                <input type="text" name="" id="" placeholder="手机验证码" v-model.trim="CodeVal" v-on:blur="changeCode">
+                <a class="get_code" v-on:click="verifyCode" :disabled="codeAbled">获取验证码</a>
+                <p class="error error1" v-show="CodeStatus">{{CodeText}}</p>
+            </div>
+            <div class="confirm_protocol">
+                <el-checkbox v-model="checked">我同意<a href="">《注册与使用协议》</a></el-checkbox>
+                <!-- <input type="checkbox" name="" id=""> -->
+            </div>
+            <div class="btn_line">
+                <input type="button" value="立即注册" v-on:click="apply" class="btn_register">
+            </div>
+            <p class="back_login">
+                已拥有账号，<a href="/home/login">返回登录</a>
+            </p>
+        </div>
+    </div>
+    <script>
+        var register = new Vue({
+            el: "#register",
+            data: {
+                isChecked: false,
+                //企业名称
+                CompanyVal: '',
+                CompanyStatus: false,
+                CompanyText: '',
+                //用户名称
+                UserVal: '',
+                UserStatus: false,
+                UserText: '',
+                //新密码
+                NewPasswordVal: '',
+                NewPasswordStatus: false,
+                NewPasswordText: '',
+                //验证密码
+                SecondPasswordVal: '',
+                SecondPasswordStatus: false,
+                SecondPasswordText: '',
+                //联系人
+                ContactVal: '',
+                ContactStatus: false,
+                ContactText: '',
+                //手机号码
+                PhoneVal: '',
+                PhoneStatus: false,
+                PhoneText: '',
+                codeAbled: false,  //联系人
+                //验证码
+                CodeVal: '',
+                CodeStatus: -1,
+                CodeText: '',
+                codeActive: 1,
+                checked: false,
+                ////公司名称
+                //company: '',
+                //errorStatus1: true
+            },
+            methods: {
+                verifyCode: function () {
+                    if (this.changePhone()) {
+                        this.sendSms();
+                    }
+                },
+                //发送短信
+                sendSms: function (ruleForm) {
+                    var that = this;
+                    var time = 60;
+                    axios({
+                        url: "/Home/SendCode",
+                        method: "post",
+                        data: {
+                            phone: that.PhoneVal,
+                        },
+                    }).then(function (response) {
+                        var t = setInterval(function () {
+                            time--;
+                            $('.get_code').html(time + "S后再次发送");
+                            //that.codeActive = -1;
+                            that.codeAbled = true;
+                            if (time == 0) {
+                                clearInterval(t);
+                                $('.get_code').html("发送短信");
+                                //that.codeActive = 1;
+                                that.codeAbled = false;
+                            }
+                        },
+                            1000);
+                    }).catch(function (error) {
+                        that.$toast({
+                            message: '系统发生错误，请稍后重试或联系客服',
+                            iconClass: 'icon el-icon-close'
+                        });
+                    });
+                },
+                changeCheck: function () {
+                    this.isChecked = !this.isChecked;
+                },
+                //填写用户名称
+                changeUser: function () {
+                    if (this.UserVal == "") {
+                        this.UserStatus = true;
+                        this.UserText = "用户名称不能为空";
+                        return false;
+                    } else {
+                        this.checkUser()
+                        this.UserStatus = false;
+                        return true;
+                    }
+
+                },
+                //验证用户
+                checkUser: function () {
+                    var that = this;
+                    axios({
+                        url: "/Home/CheckUserName",
+                        method: "post",
+                        data: {
+                            name: that.UserVal
+                        },
+                    }).then(function (response) {
+                        if (response.data.type == "error") {
+                            that.UserStatus = true;
+                            that.UserText = "该用户名已经注册，不可使用";
+                            return false;
+                        } else {
+                            that.UserStatus = false;
+                            return true;
+                        }
+                    }).catch(function (error) {
+                        that.$toast({
+                            message: '系统发生错误，请稍后重试或联系客服',
+                            iconClass: 'icon el-icon-close'
+                        });
+                    });
+                },
+                //填写企业名称
+                changeCompany: function () {
+                    if (this.CompanyVal == "") {
+                        this.CompanyStatus = true;
+                        this.CompanyText = "企业名称不能为空";
+                        return false;
+                    } else  {
+                        this.checkCompany();
+                        this.CompanyStatus = false;
+                        return true;
+                    }
+                },
+                //验证企业
+                checkCompany: function () {
+                    var that = this;
+                    axios({
+                        url: "/Home/CheckCompanyName",
+                        method: "post",
+                        data: {
+                            name: that.CompanyVal
+                        },
+                    }).then(function (response) {
+                        if (response.data.type == "error") {
+                            that.CompanyStatus = true;
+                            that.CompanyText = "该企业名已经注册，不可使用";
+                            return false;
+                        } else {
+                            that.CompanyStatus = false;
+                            return true;
+                        }
+                    }).catch(function (error) {
+                        that.$toast({
+                            message: '系统发生错误，请稍后重试或联系客服',
+                            iconClass: 'icon el-icon-close'
+                        });
+                    });
+                },
+                //验证新密码
+                changeNewPassword: function () {
+                    if (this.NewPasswordVal == "") {
+                        this.NewPasswordStatus = true;
+                        this.NewPasswordText = "新密码不能为空";
+                        return false;
+                    } else if (!this.ValidPassword(this.NewPasswordVal)) {
+                        this.NewPasswordStatus = true;
+                        this.NewPasswordText = "请输入新密码(6-12位字母+数字)";
+                        return false;
+                    } else {
+                        this.NewPasswordStatus = false;
+                        return true;
+                    }
+                },
+                //验证确认密码
+                changeSecondPassword: function () {
+                    if (this.SecondPasswordVal == "") {
+                        this.SecondPasswordStatus = true;
+                        this.SecondPasswordText = "确认密码不能为空";
+                        return false;
+                    } else if (this.SecondPasswordVal != this.NewPasswordVal) {
+                        this.SecondPasswordStatus = true;
+                        this.SecondPasswordText = "两次密码输入不一致";
+                        return false;
+                    } else if (!this.ValidPassword(this.SecondPasswordVal)) {
+                        this.SecondPasswordStatus = true;
+                        this.SecondPasswordText = "请输入密码(6-12位字母+数字)";
+                        return false;
+                    } else {
+                        this.SecondPasswordStatus = false;
+                        return true;
+                    }
+                },
+                //验证联系人
+                changeContact: function () {
+                    if (this.ContactVal == "") {
+                        this.ContactStatus = true;
+                        this.ContactText = "联系人不能为空";
+                        return false;
+                    } else {
+                        this.ContactStatus = false;
+                        return true;
+                    }
+                },
+                //填写手机
+                changePhone: function () {
+                    if (this.PhoneVal == "") {
+                        this.PhoneStatus = true;
+                        this.PhoneText = "手机不能为空";
+                        return false;
+                    } else if (!(/^1[3456789]\d{9}$/.test(this.PhoneVal))) {
+                        this.PhoneStatus = true;
+                        this.PhoneText = "手机号码有误，请重填";
+                        return false;
+                    } else {
+                        this.PhoneStatus = false;
+                        return true;
+                    }
+                },
+                //填写验证码
+                changeCode: function () {
+                    if (this.CodeVal == "") {
+                        this.CodeStatus = true;
+                        this.CodeText = "验证码不能为空";
+                        return false;
+                    } else {
+                        this.CodeStatus = false;
+                        return true;
+                    }
+                },
+                checkVal: function () {
+                    this.changeCompany();
+                    this.changeUser();
+                    this.changeNewPassword()
+                    this.changeSecondPassword()
+                    this.changeContact()
+                    this.changePhone()
+                    this.changeCode()
+                    //if (!this.CompanyStatus) {
+                        
+                    //    return false;
+                    //} else if (this.UserStatus) {
+                        
+                    //    return false;
+                    //} else if ( && this.changeSecondPassword() && this.changeContact() && this.changePhone() && this.changeCode()) {
+                    //    return true;
+                    //} else {
+                    //    return false;
+                    //}
+                },
+                apply: function () {
+                    var that = this;
+                    this.checkVal();
+                    if (!this.CompanyStatus && !this.UserStatus && !this.SecondPasswordStatus && !this.ContactStatus && !this.PhoneStatus && !this.CodeStatus) {
+                        if (!this.checked) {
+                            //提交成功
+                            this.$toast({
+                                message: '请选择同意《注册与使用协议》',
+                                iconClass: 'icon el-icon-check'
+                            });
+                            //that.onAlert("warning", "请选择同意《注册与使用协议》");
+                        } else {
+                            const loading = that.$loading({
+                                lock: false,
+                                text: 'Loading',
+                                spinner: 'el-icon-loading',
+                                background: 'rgba(0, 0, 0, 0.7)'
+                            });
+                            axios({
+                                url: "/Home/RegisterApply",
+                                method: "post",
+                                data: {
+                                    Company: that.CompanyVal,
+                                    User: that.UserVal,
+                                    Password: that.NewPasswordVal,
+                                    Contact: that.ContactVal,
+                                    Phone: that.PhoneVal,
+                                    Code: that.CodeVal
+                                }
+                            }).then(function (response) {
+                                loading.close();
+                                if (response.data.type == "success") {
+                                    that.$toast({
+                                        message: '注册申请成功！工作人员会仔细审核您的信息，请耐心等待，保持电话畅通。',
+                                        iconClass: 'icon el-icon-check'
+                                    });
+                                    setInterval(function () { location.href = "/account/index" }, 3000);
+                                } else {
+                                    that.$toast({
+                                        message: response.data.msg,
+                                        iconClass: 'icon el-icon-close'
+                                    });
+
+                                }
+                            }).catch(function (error) {
+                                that.$toast({
+                                    message: '系统发生错误，请稍后重试或联系客服',
+                                    iconClass: 'icon el-icon-close'
+                                });
+                            });}
+                        
+                    }
+                },
+                //验证密码
+                ValidPassword: function (str) {
+                    var reg = /^(?![A-Z]+$)(?![a-z]+$)(?!\d+$)\S{6,12}$/;
+                    if (reg.test(str) === false) {
+                        return false;
+                    }
+                    return true;
+                },
+            },
+
+        })
+    </script>
+</body>
+</html>

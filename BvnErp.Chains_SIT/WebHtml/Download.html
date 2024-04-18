@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>创新恒远- 一站式报关服务平台</title>
+    <meta name="keywords" content="报关资料下载、报关委托书、付汇委托书、海关资料下载" />
+    <meta name="description" content="报关委托书、付汇委托书免费下载,进口报关都需要哪些资料，哪里可以下载？" />
+    <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
+    <!--[if lt IE 9]>
+      <script src="/Scripts/html5shiv.min.js"></script>
+      <script src="/Scripts/respond.min.js"></script>
+    <![endif]-->
+    <link rel="shortcut icon" href="/Content/images/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="/Content/element.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/common.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/style.css" />
+</head>
+<body>
+    <div class="header"></div>
+    <section id="download" v-cloak>
+        <div class="download-banner">
+            <div class="w1200">
+                <h2>报关文件资料</h2>  
+                <h3>一键下载</h3>
+            </div>
+        </div>
+        <div class="download-data-box">
+            <div class="h2 h2_center">
+                <div class="h2_line"></div>
+                <h2>资料下载</h2>
+                <p>DATA DOWNLOAD</p>
+            </div>
+            <table class="w1200" v-loading="loading">
+                <tr>
+                    <th width="516">文件名称</th>
+                    <th width="516">文件类型</th>
+                    <th width="516">文件大小</th>
+                    <th width="516">上传时间</th>
+                    <th width="516">文件操作</th>
+                </tr>
+                <tr v-for="item in downList">
+                    <td>{{item.FileName}}</td>
+                    <td>{{item.FileType}}</td>
+                    <td>{{item.FileSize}}</td>
+                    <td>{{item.UploadTime}}</td>
+                    <td><a v-bind:href="item.FileUrl" v-bind:download="item.FileUrl">下载<i></i></a></td>
+                </tr>
+            </table>
+        </div>
+    </section>
+    <div class="footer"></div>
+    <script src="/Scripts/jquery-3.3.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/vue.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/axios.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/element.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/common.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+        var aboutus = new Vue({
+            el: '#download',
+            data: {
+                downList: [],
+                loading: true
+            },
+            mounted: function () {
+                this.getDownList();
+            },
+            methods: {
+                getDownList: function () {
+                    this.loading = true;
+                    var that = this;
+                    axios.get("/Mock/downloadList.json")
+                    .then(that.getDataSucc)
+                    .catch(that.getDataFail)
+                },
+                getDataSucc: function (res) {
+                    var that = this;
+                    res = res.data;
+                    if (res.ret && res.data) {
+                        that.downList = res.data.downList;
+                        that.loading = false;
+                    }
+                },
+                getDataFail: function (err) {
+                    console.log(err);
+                }
+            }
+        })
+    </script>
+</body>
+</html>

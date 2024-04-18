@@ -1,0 +1,172 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_LayoutAccount.cshtml";
+    ViewBag.Title = "基本信息";
+    ViewBag.navid = "Client";
+}
+<div id="client" v-cloak class="backshow boxshadow">
+    <h2 style="border:0px;">{{ruleForm1.Company_Name}}</h2>
+    <div>
+        <el-tabs v-model="activeName" v-on:tab-click="handleClick">
+            <el-tab-pane class="panelContent" style="height:480px;" label="账户信息" name="BasicInfo">
+                <table style="margin-left:30px;margin-top:25px;color:#666666;font-size:16px; line-height:35px;">
+                    <tr>
+                        <td colspan="2">客户编码：{{ruleForm1.ID}}</td>
+                    </tr>
+                    <tr>
+                        <td>登录名：{{ruleForm1.User_Name}}</td>
+                        <td>
+                            <a v-on:click="edit_LoginName">修改登录名</a>
+
+                        </td>
+                        <td>
+                            <span class="hint_text">可用于登录，请牢记哦</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>手机号码：{{ruleForm1.Mobile}}</td>
+                        <td>
+                            <a href="/Account/Mobile">修改手机号</a>
+                        </td>
+                        <td>
+                            <span v-if="showMobile" class="hint_text">已绑定</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>邮箱：{{ruleForm1.Mail}}</td>
+                        <td>
+                            <a href="/Account/Email">修改邮箱</a>
+
+                        </td>
+                        <td>
+                            <span v-if="showEmail" class="hint_text">已绑定</span>
+                        </td>
+                    </tr>
+                </table>
+            </el-tab-pane>
+            <el-tab-pane class="panelContent" style="height:467px;" label="公司信息" name="companyInfo">
+                <my-company ref="header"></my-company>
+            </el-tab-pane>
+        </el-tabs>
+    </div>
+    <el-dialog title="修改登录名" :lock-scroll="false" :visible.sync="dialogFormVisible" :close-on-click-modal="false" width="30%">
+        <el-form :model="ruleForm" status-icon ref="ruleForm" label-width="80px" :rules="rules">
+            <el-form-item label="登录名" prop="User_Name">
+                <el-input v-model="ruleForm.User_Name" auto-complete="off"></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button v-on:click="dialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" v-on:click="onSubmit_ruleForm('ruleForm')">确 定</el-button>
+        </div>
+    </el-dialog>
+</div>
+@{Html.RenderAction("_ParticalClientCompany", "Account");}
+<script>
+
+    var client = new Vue({
+        el: "#client",
+        data: function () {
+            var validateName =function (rule, value, callback){
+                if (value == '' || value == null) {
+                    callback(new Error('请输入登录名'));
+                }
+                else {
+                    axios({
+                        url: "/Account/CheckName",
+                        method: "post",
+                        data: {
+                            name: client.ruleForm.User_Name
+                        },
+                    }).then(function (response) {
+                        if (response.data.type == "error") {
+                            callback(new Error("该登录名已经注册，不可使用"));
+                        } else {
+                            callback();
+                        }
+                    }).catch(function (error) {
+                        client.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                    });
+                }
+
+            };
+            return {
+                showMobile: false,
+                showEmail: false,
+                dialogFormVisible:false,
+                activeName: "BasicInfo",
+                //基本信息
+                ruleForm1:@Html.Raw(Json.Encode(Model)),
+                //登录名弹框
+                ruleForm: {
+                    User_Name:"",
+                },
+                rules: {
+                    User_Name: [{ required: true, validator: validateName, trigger: 'blur' },
+                        { min: 1, max: 150, message: '长度在 1 到 150个字符', trigger: 'blur' }
+                    ],
+                },
+                success: false,
+            };
+        },
+        mounted: function () {
+            this.showMobile = (this.ruleForm1.Mobile == null || this.ruleForm1.Mobile == "") ? false : true;
+            this.showEmail = (this.ruleForm1.Mail == null || this.ruleForm1.Mail == "") ? false : true;
+        },
+        methods: {
+            //修改手机号码
+            edit_Mobile: function () {
+                window.location.href = "/Account/Mobile";
+            },
+            //点击修改登录名
+            edit_LoginName: function () {
+                client.dialogFormVisible = true;
+                setTimeout(function(){
+                    client.ruleForm.User_Name = client.ruleForm1.User_Name;
+                }, 0);
+            },
+
+            handleClick: function (tab, event) {
+
+            },
+            //登录名修改提交
+            onSubmit_ruleForm: function (ruleForm) {
+                this.$refs.ruleForm.validate(function(valid){
+                    if (valid) {
+                        console.log("aaa")
+                        client.dialogFormVisible = false; //关闭弹窗
+                        console.log("bbb")
+                        axios({
+                            url: "/Account/ChangeUserName",
+                            method: "post",
+                            data: {
+                                username: client.ruleForm.User_Name
+                            },
+                        }).then(function (response) {
+                            if (response.data.type == "success") {
+                                client.ruleForm1.User_Name = client.ruleForm.User_Name;
+                            }
+                            client.$refs.ruleForm.resetFields();
+                            client.onAlert(response.data.type, response.data.msg);
+                        }).catch(function (error) {
+                            client.onAlert("warning", "修改登录名失败,请稍后重试或联系您的业务员");
+                        });
+                    } else {
+                        //验证失败
+                        return false;
+                    }
+                });
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type
+                });
+            },
+        },
+    });
+</script>
+
+
+

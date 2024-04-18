@@ -1,0 +1,334 @@
+﻿@model WebMvc.Models.PreConfirmsViewModel
+@{
+    /**/
+
+    ViewBag.Title = "待确认订单";
+    Layout = "~/Views/Shared/_LayoutCenter.cshtml";
+    ViewBag.navid = "PreConfirms";
+}
+<style>
+    .el-message {
+        top: 250px;
+        min-width: 150px;
+    }
+
+    .el-message__content {
+        font-size: 16px;
+    }
+
+    .el-message .el-icon-error {
+        font-size: 16px;
+    }
+</style>
+<div class="content_right backshow">
+    <h2>待确认</h2>
+    <div id="preconfirm" v-cloak style="padding:20px;min-height:650px;">
+        <div class="orderlist">
+            <div class="title">
+                <ul class="overhide">
+                    <li class="fl" style="width:215px">订单详情</li>
+                    <li class="fl" style="width:100px">订单状态</li>
+                    <li class="fl" style="width:180px">供应商</li>
+                    <li class="fl" style="width:100px">收件人</li>
+                    <li class="fl" style="width:117px">下单人</li>
+                    <li class="fl" style="width:196px">操作</li>
+                </ul>
+            </div>
+            <div v-loading="indexData.loading" style="min-height:400px;" v-on:scroll="ss('viewBox1')" ref="viewBox1">
+                <div v-if="!indexData.loading">
+                    <table class="myorder" border="0" cellspacing="0" cellpadding="0" v-for="item of indexData.items">
+                        <tr>
+                            <th class="overhide" colspan="6">
+                                <div class="fl">
+                                    <span class="lignt_text">
+                                        订单号：
+                                    </span>
+                                    <span>{{item.ID}}</span>
+                                </div>
+                                <div class="fl txtdate">
+                                    <span class="lignt_text">{{item.CreateDate}}</span>
+                                </div>
+                                <div class="fr" style="width:196px;text-align:center;">
+                                    <a v-on:click="orderDetails(item.ID)">订单详情</a>
+                                </div>
+                            </th>
+                        </tr>
+                        <tr class="cell">
+                            <td style="width:214px;text-align:left">
+                                <div style="padding-left:60px;">
+                                    <p>交易币种 {{item.Currency}}</p>
+                                    <p>报关总价 {{item.DeclarePrice.toFixed(2)}}</p>
+                                </div>
+                            </td>
+                            <td style="width:98px">
+                                <span>{{item.OrderStatus}}</span><br />
+                                <a v-on:click="orderTrace(item.ID)">订单跟踪</a>
+                            </td>
+                            <td style="width:138px;word-wrap:break-word;word-break:break-all;padding:0 20px;text-align:left">
+                                <span>{{item.Suppliers}}</span>
+                            </td>
+                            <td style="width:100px">
+                                <span>{{item.Contact}}</span>
+                            </td>
+                            <td style="width:76px;word-wrap:break-word;word-break:break-all;padding:0 20px;text-align:left">
+                                <span>{{item.OrderMaker}}</span>
+                            </td>
+                            <td style="width:196px;">
+                                <div class="overhide">
+                                    <a style="margin-left:48px;" class="fl" v-on:click="invoiceDetails(item.ID)">查看发票</a>
+                                    <span class="fl division_line"></span>
+                                    <a class="fl" v-on:click="cancelOrder(item.ID, item.IsBecauseModified)">取消</a>
+                                </div>
+                                <el-button class="confirm" v-on:click="confirmOrder(item.ID, item.IsBecauseModified)">订单确认</el-button>
+                            </td>
+                        </tr>
+                    </table>
+                    <div v-if="indexData.items.length > 0" class="foot">
+                        <el-pagination style="float:right" v-on:size-change="handleSizeChange"
+                                       v-on:current-change="handleCurrentChange"
+                                       :current-page="indexData.pageIndex"
+                                       :page-sizes="[5, 10, 20, 40]"
+                                       :page-size="indexData.pageSize"
+                                       layout="total, sizes, prev, pager, next, jumper"
+                                       :total="indexData.total">
+                        </el-pagination>
+                    </div>
+                    <div v-else>
+                        <div class="nodata-container">
+                            <el-row class="nodata-row1">
+                                <img src="~/Content/img/nodata.png" />
+                            </el-row>
+                            <el-row class="nodata-row2">
+                                <span class="nodata-info">暂无数据！</span>
+                            </el-row>
+                            <el-row class="nodata-row3">
+                                <button class="nodata-button" v-on:click="location.href='/Orders/MyOrders'">查看全部订单</button>
+                                <button class="nodata-button" v-on:click="location.href='/Home/Index'">返回首页</button>
+                            </el-row>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <el-dialog title="取消订单" :visible.sync="dialogFormVisible" :lock-scroll="false" :close-on-click-modal="false" width="30%">
+            <el-form status-icon :model="ruleForm" label-width="60px" ref="ruleForm">
+                <el-form-item label="原因" prop="Cancel_Reason" :rules="[{ required: true, message: '请输入原因', trigger: 'blur' },{max:400, message: '原因长度不超过400', trigger: 'blur' }]">
+                    <el-input v-model="ruleForm.Cancel_Reason" type="textarea" auto-complete="off"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button v-on:click="dialogFormVisible = false">取 消</el-button>
+                <el-button type="primary" v-on:click="onSubmit_ruleForm()">确 定</el-button>
+            </div>
+        </el-dialog>
+        <el-dialog title="订单跟踪" :lock-scroll="false" class="trace_dialog" width="700px" :visible.sync="traceFormVisible">
+            <div class="order-track">
+                <div class="track-rcol">
+                    <div v-if="list.length>0" class="track-list">
+                        <ul>
+                            <li class="" v-for="item of list">
+                                <div class="line"></div>
+                                <i class="dot" v-if="item.isDot"></i>
+                                <i v-else :class="[item.isCompleted?'complete':'state-icon']"></i>
+                                <span class="date">
+                                    {{item.Date}}
+                                </span>
+                                <span class="time">{{item.Time}}</span>
+                                <span class="txt">
+                                    <span class="stress-txt">{{item.Step}}</span>
+                                    <span v-html="item.Summary"></span>
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                    <p v-else class="no_data">
+                        暂无数据...
+                    </p>
+                </div>
+            </div>
+        </el-dialog>
+    </div>
+</div>
+<script>
+    var preconfirm = new Vue({
+        el: "#preconfirm",
+        data: function () {
+            return {
+                traceFormVisible: false,
+                list: [],
+                indexData: {
+                    loading: true,
+                    total: 0,
+                    items: [],
+                    pageIndex: 1, //初始页
+                    pageSize: 5,    //每页的数据
+                    scrollTop: 0, //滚动条位置
+                },
+                ruleForm: {
+                    Cancel_Reason: "",
+                    ID: "",
+                    IsBecauseModified: "",
+                },
+                dialogFormVisible: false,
+            }
+        },
+        mounted: function () {
+            var that = this;
+            var userJsonStr = sessionStorage.getItem('PreConfirms');
+            userEntity = JSON.parse(userJsonStr);
+            if (userEntity == null) {
+                that.paging();
+            } else {
+                that.indexData = userEntity;
+                that.$nextTick(function () {
+                    that.$refs['viewBox1'].scrollTop = that.indexData.scrollTop;
+                })
+
+                sessionStorage.removeItem('PreConfirms');
+            }
+        },
+        methods: {
+            orderTrace: function (id) {
+                var that = this;
+                that.list = [];
+                axios({
+                    url: "/Orders/GetTrace",
+                    method: "post",
+                    data: { id: id },
+                }).then(function (res) {
+                    if (res.data.type == "success") {
+                        that.list = that.dataProcessing(JSON.parse(res.data.data))
+                        that.traceFormVisible = true;
+                    } else {
+
+                    }
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            dataProcessing: function (data) {
+                var arr = [];
+                var date = "";
+                var step = "";
+                for (var i = 0; i < data.length; i++) {
+                    var temp = data[i];
+                    if (data[i].Date == date) {
+                        temp.Date = "";
+                    } else {
+                        date = data[i].Date;
+                    }
+                    if (data[i].Step == step) {
+                        temp.isDot = true;
+                        temp.Step = "";
+                    } else {
+                        step = data[i].Step;
+                    }
+                    if (i > 0) {
+                        temp.isCompleted = false;
+                    }
+                    arr.push(temp);
+                }
+                return arr;
+            },
+            ss: function (ref) {
+                // 监听这个dom的scroll事件
+                var that = this;
+                this.$refs[ref].addEventListener('scroll', function () {
+                    that.indexData.scrollTop = that.$refs[ref].scrollTop;
+                }, false)
+            },
+            paging: function () {
+                var that = this;
+                that.indexData.loading = true;
+                axios({
+                    url: "/Orders/GetPreConfirmsOrders",
+                    method: "post",
+                    data: {
+                        page: this.indexData.pageIndex,
+                        rows: this.indexData.pageSize,
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                    transformRequest: [function (data) {
+                        var ret = ''
+                        for (var it in data) {
+                            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+                        }
+                        return ret;
+                    }],
+                }).then(function (response) {
+                    var data = JSON.parse(response.data.data);
+                    that.indexData.items = data.list;
+                    that.indexData.total = data.total;
+                    that.indexData.loading = false;
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            orderDetails: function (id) {
+                sessionStorage.setItem('PreConfirms', JSON.stringify(this.indexData));
+                location.href = "/Orders/Info/?id=" + id +"&v="+'@ViewBag.navid';
+            },
+            onSubmit_ruleForm: function () {
+
+                this.$refs.ruleForm.validate(function(valid){
+                    if (valid) {
+                        preconfirm.dialogFormVisible = false;
+                        axios({
+                            url: "/Orders/CancelConfirm",
+                            method: "post",
+                            data: {
+                                orderID: preconfirm.ruleForm.ID,
+                                reason: preconfirm.ruleForm.Cancel_Reason,
+                                isBecauseModified: preconfirm.ruleForm.IsBecauseModified,
+                            }
+                        }).then(function (response) {
+                            if (response.data.type != "error") {
+                                preconfirm.paging();
+                            }
+                            preconfirm.onAlert(response.data.type, response.data.msg);
+                        }).catch(function (error) {
+                            preconfirm.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                        });
+                    }
+                });
+            },
+            //订单取消
+            cancelOrder: function (id, isBecauseModified) {
+                this.dialogFormVisible = true;
+                setTimeout(function(){
+                    preconfirm.$refs.ruleForm.resetFields();
+                    preconfirm.ruleForm.Cancel_Reason = "";
+                    preconfirm.ruleForm.ID = id;
+                    preconfirm.ruleForm.IsBecauseModified = isBecauseModified;
+                }, 0)
+            },
+            //确认订单
+            confirmOrder: function (id, isBecauseModified) {
+                location.href = "/Orders/Confirm/?id=" + id + "&v=" + isBecauseModified;
+            },
+            invoiceDetails: function (id) {
+                sessionStorage.setItem('PreConfirms', JSON.stringify(this.indexData));
+                location.href = "/Orders/Invoice/?id=" + id +"&v="+'@ViewBag.navid';
+            },
+            // 初始页currentPage、初始每页数据数pagesize和数据data
+            handleSizeChange: function (size) {
+                this.indexData.pageSize = size;
+                this.paging();
+            },
+            handleCurrentChange: function (currentPage) {
+                this.indexData.pageIndex = currentPage;
+                this.paging();
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                });
+            },
+        }
+    });
+</script>
+

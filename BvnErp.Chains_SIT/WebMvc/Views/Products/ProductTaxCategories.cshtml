@@ -1,0 +1,231 @@
+﻿@{
+    ViewBag.Title = "自定义产品税号";
+    Layout = "~/Views/Shared/_LayoutCenter.cshtml";
+    ViewBag.navid = "ProductTaxCategories";
+}
+
+<div class="content_right backshow">
+    <h2>自定义产品税号</h2>
+    <div id="proTax" v-cloak>
+        <div class="buttonlist">
+            <el-row>
+                <el-col :span="12">
+                    <el-button type="primary" size="mini" v-on:click="add_Tax">新增</el-button>
+                </el-col>
+            </el-row>
+        </div>
+        <div v-loading="loading"  style="min-height:400px;">
+            <div v-if="!loading">
+                <div class="content">
+                    <el-table style="width: 100%;"
+                              :data="dataList"
+                              stripe>
+                        <el-table-column label="序号" type="index" width="48">
+                        </el-table-column>
+                        <el-table-column label="品名" prop="Name">
+                        </el-table-column>
+                        <el-table-column label="型号" prop="Model">
+                        </el-table-column>
+                        <el-table-column label="税务编号" prop="TaxCode">
+                        </el-table-column>
+                        <el-table-column label="税务名称" prop="TaxName">
+                        </el-table-column>
+                        <el-table-column label="状态" prop="TaxStatus">
+                        </el-table-column>
+                        <el-table-column label="操作" fixed="right" style="border-right: 1px solid #ebeef5" width="200">
+                            <template slot="header" slot-scope="scope">
+                                <div class="el-input el-input--mini" style="padding-left:0px;padding-right:0px;">
+                                    <input type="text" autocomplete="off" placeholder="请输入品名或者型号" v-model="search_data" class="el-input__inner">
+                                </div>
+                            </template>
+                            <template slot-scope="scope">
+                                <el-button size="mini"
+                                           v-on:click="edit_Supperlier(scope.$index, scope.row)" v-if="!scope.row.isExamine">编辑</el-button>
+                                <el-button size="mini"
+                                           type="danger"
+                                           v-on:click="delete_Supperlier(scope.$index, scope.row)">删除</el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                    <div class="overhide">
+                        <el-pagination class="fr" style="margin-top:20px;margin-bottom:30px" v-on:size-change="handleSizeChange"
+                                       v-on:current-change="handleCurrentChange"
+                                       :current-page="pageIndex"
+                                       :page-sizes="[5, 10, 20, 40]"
+                                       :page-size="pageSize"
+                                       layout="total, sizes, prev, pager, next, jumper"
+                                       :total="total">
+                        </el-pagination>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <el-dialog :title="dialogFormName" :lock-scroll="false" width="40%" :visible.sync="dialogFormVisible" :close-on-click-modal="false">
+            <my-info ref="header"></my-info>
+            <div slot="footer" class="dialog-footer">
+                <el-button v-on:click="dialogFormVisible = false">取 消</el-button>
+                <el-button type="primary" v-on:click="onSubmit_ruleForm()">确 定</el-button>
+            </div>
+        </el-dialog>
+    </div>
+</div>
+@{Html.RenderAction("_PartialProductTax", "Products");}
+
+<script>
+    var proTax = new Vue({
+        el: "#proTax",
+        data: function () {
+            return {
+                loading: true,
+                total: 0,
+                pageIndex: 1, //初始页
+                pageSize: 10,    //每页的数据
+                search_data: "",  //模糊查询的名称
+                dialogFormVisible: false,  //弹框
+                dialogFormName: "",  //弹框名称
+                dataList:[],  //表格真实数据
+            }
+        },
+        watch: {
+            //模糊查询
+            search_data: function (val, oldVal) {
+                this.paging();
+            }
+        },
+        mounted: function () {
+            this.paging();
+        },
+        methods: {
+            paging: function () {
+                var that = this;
+                that.loading = true;
+                axios({
+                    url: "/Products/GetProductTaxCategories",
+                    method: "post",
+                    data: {
+                        page: this.pageIndex,
+                        rows: this.pageSize,
+                        query: this.search_data
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                    transformRequest: [function (data) {
+                        var ret = ''
+                        for (var it in data) {
+                            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+                        }
+                        return ret;
+                    }],
+                }).then(function (response) {
+                    var data = JSON.parse(response.data.data);
+                    that.dataList = data.list;
+                    that.total = data.total;
+                    that.loading = false;
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            getdata: function () {
+                return Promise.resolve(this.$refs.header.form1);
+            },
+            //提交
+            onSubmit_ruleForm: function () {
+                this.$refs.header.$refs.form1.validate(function(valid) {
+                    if (valid) {
+                        proTax.dialogFormVisible = false;
+                        axios({
+                            url: "/Products/_partialproTaxInfo",
+                            method: "post",
+                            data: proTax.$refs.header.form1
+                        }).then(function (response) {
+                            proTax.$refs.header.$refs.form1.resetFields();
+                            proTax.paging(); //刷新列表
+                            proTax.onAlert(response.data.type, response.data.msg);
+                        }).catch(function (error) {
+                            proTax.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                        });
+                    } else {
+                        //验证失败
+                    }
+                });
+
+            },
+            //编辑
+            edit_Supperlier: function (index, row) {
+                axios.get('/Products/GetProductTaxInfo', {  //params参数必写 , 如果没有参数传{}也可以
+                    params: {
+                        id: row.ID
+                    }
+                }).then(function (res) {
+                    proTax.dialogFormName = "编辑产品税号";
+                    proTax.dialogFormVisible = true;
+                    setTimeout(function()
+                    {
+                        proTax.$refs.header.$refs.form1.resetFields();
+                        proTax.$refs.header.form1 = JSON.parse(res.data.data);
+                    }, 0);
+                    }).catch(function (err) {
+                    proTax.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+
+            },
+            //新增
+            add_Tax: function () {
+                proTax.dialogFormName = "新增产品税号";
+                proTax.dialogFormVisible = true;
+                setTimeout(function(){
+                    proTax.$refs.header.$refs.form1.resetFields();
+                    proTax.$refs.header.form1.ID = "";
+                }, 0)
+            },
+            //删除
+            delete_Supperlier: function (index, row) {
+                this.$confirm('您确定要删除"' + row.Name+'"吗？', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                    lockScroll: false,
+                }).then(function(){
+                    axios({
+                        url: "/Products/DelProductTax",
+                        method: "post",
+                        data: {
+                            id:row.ID
+                        }
+                    }).then(function (response) {
+                        proTax.paging();
+                        proTax.onAlert(response.data.type, response.data.msg);
+                    }).catch(function (error) {
+                        proTax.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                    });
+                }).catch(function(){
+                    //取消
+                });
+            },
+            // 初始页currentPage、初始每页数据数pagesize和数据data
+            handleSizeChange: function (size) {
+                this.pageSize = size;
+                this.paging();
+            },
+            handleCurrentChange: function (currentPage) {
+                this.pageIndex = currentPage;
+                this.paging();
+            },
+            //弹框关闭后事件
+            dialog_Closed: function () {
+                //初始化列表值
+                proTax.$refs.header.$refs.form1.resetFields();
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type
+                });
+            },
+        }
+    });
+</script>
+

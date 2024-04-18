@@ -1,0 +1,100 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Needs.Ccs.Services.Models
+{
+    public class CgSorting
+    {
+        #region 属性
+        /// <summary>
+        /// 唯一码，四位年+2位月+2位日+6位流水
+        /// </summary>
+        public string ID { get; set; }
+
+        /// <summary>
+        /// 进项ID
+        /// </summary>
+        public string InputID { get; set; }
+
+        /// <summary>
+        ///通知编号 
+        /// </summary>
+        public string NoticeID { get; set; }
+
+        /// <summary>
+        ///运单编号 
+        /// </summary>
+        public string WaybillID { get; set; }
+
+        /// <summary>
+        /// 装箱信息（箱号）
+        /// </summary>
+        public string BoxCode { get; set; }
+
+        /// <summary>
+        /// 分拣数量
+        /// </summary>
+        public decimal Quantity { get; set; }
+
+        /// <summary>
+        /// 分拣人ID
+        /// </summary>
+        public string AdminID { get; set; }
+
+        /// <summary>
+        /// 创建时间(发生时间)
+        /// </summary>
+        public DateTime CreateDate { get; set; }
+
+        /// <summary>
+        /// 重量
+        /// </summary>
+        public decimal? Weight { get; set; }
+
+
+        private decimal? netWeight;
+        /// <summary>
+        /// 净重(默认逻辑NetWeight = Weight * 0.7d)
+        /// </summary>
+        public decimal? NetWeight
+        {
+            get
+            {
+                if (this.netWeight == null)
+                {
+                    if (this.Weight == null)
+                    {
+                        this.netWeight = null;
+                    }
+                    else
+                    {
+                        this.netWeight = this.Weight * (decimal)0.7d;
+                    }
+                }
+                return this.netWeight;
+            }
+            set
+            {
+                this.netWeight = value;
+            }
+        }
+
+        /// <summary>
+        /// 体积
+        /// </summary>
+        public decimal? Volume { get; set; }
+        #endregion
+
+        #region 扩展属性
+
+        /// <summary>
+        /// 分拣人
+        /// </summary>
+        //public CgAdmin Admin { get; set; }
+
+        #endregion
+    }
+}

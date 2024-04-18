@@ -1,0 +1,76 @@
+﻿
+@{
+    ViewBag.Title = "运单详情";
+    Layout = "~/Views/Shared/_LayoutCenter.cshtml";
+}
+
+<div id="invoice" class="center_right backshow fl">
+    <div class="breaklist">
+        <span class="fl first_title">运单详情</span>
+        <span v-on:click="history.back(-1)" class="fl second_title">返回</span>
+    </div>
+    <div class="content">
+        <el-table style="width: 100%;"
+                  :data="form"
+                  stripe>
+            <el-table-column label="序号" type="index" >
+            </el-table-column>
+            <el-table-column label="品名" prop="ProductName">
+            </el-table-column>
+            <el-table-column label="型号" prop="Model">
+            </el-table-column>
+            <el-table-column label="品牌" prop="Manufacturer">
+            </el-table-column>
+            <el-table-column label="批号" prop="Qty">
+            </el-table-column>
+        </el-table>
+
+            @*<div class="title">
+                <ul class="overhide">
+                    <li class="fl" style="width:282px">序号</li>
+                    <li class="fl" style="width:202px">产品名称</li>
+                    <li class="fl" style="width:102px">型号</li>
+                    <li class="fl" style="width:102px">品牌</li>
+                    <li class="fl" style="width:282px">数量</li>
+                </ul>
+            </div>
+            <div>
+                <table border="0" cellspacing="0" cellpadding="0" v-for="(item,index) in form">
+                    <tr>
+                        <td>
+                            <p>{{index+1}}</p>
+                        </td>
+                        <td>
+                            <p>{{item.ProductName}}</p>
+                        </td>
+                        <td>
+                            <span>{{item.Model}}</span>
+                        </td>
+                        <td>
+                            <span>{{item.Manufacturer}}</span>
+                        </td>
+                        <td>
+                            <span>{{item.Qty}}</span>
+                        </td>
+                    </tr>
+                </table>
+            </div>*@
+    </div>
+</div>
+<script>
+    var invoice = new Vue({
+        el: "#invoice",
+        data: function () {
+            return {
+                form: @Html.Raw(Json.Encode(Model)),
+            }
+        },
+        methods: {
+        },
+        created: function () {
+            debugger
+            console.log(this.form)
+        }
+    });
+</script>
+

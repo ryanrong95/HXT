@@ -1,0 +1,395 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="PvbErm" Class="PvbErmDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=172.30.10.199,5311;Initial Catalog=PvbErm;User ID=udata" SettingsObjectName="Layer.Data.Properties.Settings" SettingsPropertyName="PvbErmConnectionString1" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.WageItems" Member="WageItems">
+    <Type Name="WageItems">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="IsCalc" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsImport" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Formula" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="CalcOrder" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="OrderIndex" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="WageItems_MapsPostion" Member="MapsPostion" ThisKey="ID" OtherKey="WageItemID" Type="MapsPostion" />
+    </Type>
+  </Table>
+  <Table Name="dbo.AdminsInquiry" Member="AdminsInquiry">
+    <Type Name="AdminsInquiry">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="LeagueID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="DutyPurchace" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DutySales" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Advantages" Member="Advantages">
+    <Type Name="Advantages">
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Manufacturers" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="PartNumbers" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.BankCards" Member="BankCards">
+    <Type Name="BankCards">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Bank" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="BankAddress" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="Account" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SwiftCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Staffs_BankCards" Member="Staffs" ThisKey="ID" OtherKey="ID" Type="Staffs" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Contacts" Member="Contacts">
+    <Type Name="Contacts">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Tel" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Mobile" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="QQ" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Email" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Wx" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Labours" Member="Labours">
+    <Type Name="Labours">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="EntryDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="EntryCompany" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="EnterpriseID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="LeaveDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="SigningTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ContractPeriod" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ContractType" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Staffs_Labours" Member="Staffs" ThisKey="ID" OtherKey="ID" Type="Staffs" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Leagues" Member="Leagues">
+    <Type Name="Leagues">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Category" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="FatherID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="RoleID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Logs_Errors" Member="Logs_Errors">
+    <Type Name="Logs_Errors">
+      <Column Name="ID" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Page" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="Codes" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Message" Type="System.String" DbType="NVarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="Source" Type="System.String" DbType="NVarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="Stack" Type="System.String" DbType="NVarChar(2000) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Logs_Notice" Member="Logs_Notice">
+    <Type Name="Logs_Notice">
+      <Column Name="ID" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Title" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Context" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Readed" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="ReadDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.MapsLeague" Member="MapsLeague">
+    <Type Name="MapsLeague">
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="LeagueID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.MapsPostion" Member="MapsPostion">
+    <Type Name="MapsPostion">
+      <Column Name="PostionID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="WageItemID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="WageItems_MapsPostion" Member="WageItems" ThisKey="WageItemID" OtherKey="ID" Type="WageItems" IsForeignKey="true" />
+      <Association Name="Postions_MapsPostion" Member="Postions" ThisKey="PostionID" OtherKey="ID" Type="Postions" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.MapsRole" Member="MapsRole">
+    <Type Name="MapsRole">
+      <Column Name="MenuID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="RoleID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="Menus_MapsRole" Member="Menus" ThisKey="MenuID" OtherKey="ID" Type="Menus" IsForeignKey="true" />
+      <Association Name="Roles_MapsRole" Member="Roles" ThisKey="RoleID" OtherKey="ID" Type="Roles" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.MapsWageItem" Member="MapsWageItem">
+    <Type Name="MapsWageItem">
+      <Column Name="StaffID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="WageItemID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="DefaultValue" Type="System.Decimal" DbType="Decimal(18,5)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Menus" Member="Menus">
+    <Type Name="Menus">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="FatherID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Company" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="RightUrl" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+      <Column Name="IconUrl" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+      <Column Name="FirstUrl" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+      <Column Name="LogoUrl" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+      <Column Name="HelpUrl" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+      <Column Name="OrderIndex" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Menus_MapsRole" Member="MapsRole" ThisKey="ID" OtherKey="MenuID" Type="MapsRole" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Oplogs" Member="Oplogs">
+    <Type Name="Oplogs">
+      <Column Name="ID" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Url" Type="System.String" DbType="NVarChar(300) NOT NULL" CanBeNull="false" />
+      <Column Name="Sys" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Operation" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Remark" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Particles" Member="Particles">
+    <Type Name="Particles">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="UrlCode" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Url" Type="System.String" DbType="VarChar(2000) NOT NULL" CanBeNull="false" />
+      <Column Name="Context" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ParticleSettings" Member="ParticleSettings">
+    <Type Name="ParticleSettings">
+      <Column Name="RoleID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="UrlCode" Type="System.String" DbType="VarChar(200) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Url" Type="System.String" DbType="VarChar(2000) NOT NULL" CanBeNull="false" />
+      <Column Name="Context" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Pasts_MapsWageItem" Member="Pasts_MapsWageItem">
+    <Type Name="Pasts_MapsWageItem">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="StaffID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="WageItemID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="DefaultValue" Type="System.Decimal" DbType="Decimal(18,5)" CanBeNull="true" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PayBills" Member="PayBills">
+    <Type Name="PayBills">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="StaffID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ClosedData" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="DateIndex" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreaetDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="PayBills_PayItems" Member="PayItems" ThisKey="ID" OtherKey="PayID" Type="PayItems" />
+      <Association Name="Staffs_PayBills" Member="Staffs" ThisKey="StaffID" OtherKey="ID" Type="Staffs" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PayItems" Member="PayItems">
+    <Type Name="PayItems">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="PayID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="Value" Type="System.Decimal" DbType="Decimal(18,5) NOT NULL" CanBeNull="false" />
+      <Column Name="DateIndex" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="WageItemFormula" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="ActualFormula" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="PayBills_PayItems" Member="PayBills" ThisKey="PayID" OtherKey="ID" Type="PayBills" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PersonalRates" Member="PersonalRates">
+    <Type Name="PersonalRates">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Levels" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="BeginAmount" Type="System.Decimal" DbType="Decimal(18,5) NOT NULL" CanBeNull="false" />
+      <Column Name="EndAmount" Type="System.Decimal" DbType="Decimal(18,5) NOT NULL" CanBeNull="false" />
+      <Column Name="Rate" Type="System.Decimal" DbType="Decimal(18,5) NOT NULL" CanBeNull="false" />
+      <Column Name="Deduction" Type="System.Decimal" DbType="Decimal(18,5) NOT NULL" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Personals" Member="Personals">
+    <Type Name="Personals">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="IDCard" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Image" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+      <Column Name="NativePlace" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="HomeAddress" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="PassAddress" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="Volk" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PoliticalOutlook" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Height" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="Weight" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="Blood" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Education" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="GraduatInstitutions" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Major" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="IsMarry" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="Staffs_Personals" Member="Staffs" ThisKey="ID" OtherKey="ID" Type="Staffs" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Postions" Member="Postions">
+    <Type Name="Postions">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Postions_MapsPostion" Member="MapsPostion" ThisKey="ID" OtherKey="PostionID" Type="MapsPostion" />
+      <Association Name="Postions_Staffs" Member="Staffs" ThisKey="ID" OtherKey="PostionID" Type="Staffs" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PrimaryKeys" Member="PrimaryKeys">
+    <Type Name="PrimaryKeys">
+      <Column Name="Name" Type="System.String" DbType="VarChar(10) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Length" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Value" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Day" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Roles" Member="Roles">
+    <Type Name="Roles">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Roles_MapsRole" Member="MapsRole" ThisKey="ID" OtherKey="RoleID" Type="MapsRole" />
+      <Association Name="Roles_Admins" Member="Admins" ThisKey="ID" OtherKey="RoleID" Type="Admins" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Staffs" Member="Staffs">
+    <Type Name="Staffs">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Code" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SelCode" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Gender" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DyjCompanyCode" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="DyjDepartmentCode" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="WorkCity" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="LeagueID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="PostionID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="AssessmentMethod" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="AssessmentTime" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Staffs_BankCards" Member="BankCards" ThisKey="ID" OtherKey="ID" Type="BankCards" Cardinality="One" />
+      <Association Name="Staffs_Labours" Member="Labours" ThisKey="ID" OtherKey="ID" Type="Labours" Cardinality="One" />
+      <Association Name="Staffs_PayBills" Member="PayBills" ThisKey="ID" OtherKey="StaffID" Type="PayBills" />
+      <Association Name="Staffs_Personals" Member="Personals" ThisKey="ID" OtherKey="ID" Type="Personals" Cardinality="One" />
+      <Association Name="Staffs_Admins" Member="Admins" ThisKey="ID" OtherKey="StaffID" Type="Admins" />
+      <Association Name="Postions_Staffs" Member="Postions" ThisKey="PostionID" OtherKey="ID" Type="Postions" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Temp_InitData" Member="Temp_InitData">
+    <Type Name="Temp_InitData">
+      <Column Name="CityName" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CompanyName" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CompanyCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="DeptCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="StaffCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="StaffName" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Postion" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="IdCard" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="BankAccount" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Tokens" Member="Tokens">
+    <Type Name="Tokens">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="OutID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Token" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Admins_Tokens" Member="Admins" ThisKey="OutID" OtherKey="ID" Type="Admins" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.AdminAdvantagesTopView" Member="AdminAdvantagesTopView">
+    <Type Name="AdminAdvantagesTopView">
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Manufacturers" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="PartNumbers" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.AdminsBussinessTopView" Member="AdminsBussinessTopView">
+    <Type Name="AdminsBussinessTopView">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="StaffID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="UserName" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="RealName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SelCode" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="LastLoginDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.AdminsTopView" Member="AdminsTopView">
+    <Type Name="AdminsTopView">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="StaffID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="UserName" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="RealName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SelCode" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="LastLoginDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="RoleID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="RoleName" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="RoleStatus" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.CompaniesTopView" Member="CompaniesTopView">
+    <Type Name="CompaniesTopView">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Range" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="District" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Admins" Member="Admins">
+    <Type Name="Admins">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="StaffID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="UserName" Type="System.String" DbType="NVarChar(150) NOT NULL" CanBeNull="false" />
+      <Column Name="RealName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Password" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="SelCode" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="RoleID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="LastLoginDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="OriginID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Association Name="Admins_Tokens" Member="Tokens" ThisKey="ID" OtherKey="OutID" Type="Tokens" />
+      <Association Name="Roles_Admins" Member="Roles" ThisKey="RoleID" OtherKey="ID" Type="Roles" IsForeignKey="true" />
+      <Association Name="Staffs_Admins" Member="Staffs" ThisKey="StaffID" OtherKey="ID" Type="Staffs" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>

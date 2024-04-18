@@ -1,0 +1,405 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>芯达通- 一站式报关服务平台</title>
+    <meta name="keywords" content="进口报关、芯片进口报关、电子元器件进口报关、集成电路进口报关、报关、清关、报检、跨境运输、跨境仓储、香港代收货、香港代发货、香港代仓储、付汇" />
+    <meta name="description" content="专注芯片、电子元器件、集成电路进口报关。芯达通，平台链接物流商、原料供应商、贸易商、生产企业等交易参与方，为供应链上下游中小微企业提供优质跨境物流配给、报关报检、实时跨境支付等综合交易服务。 平台利用互联网、云计算、大数据等信息前沿技术构建起一条基于交易的数据产业链，形成从交易服务供给，到交易数据的挖掘、清洗和标准化，再到经过智能处理后形成的商业数据产品，最后将数据产品再应用于交易的商业闭环，搭建起一个基于大数据应用的交易生态圈。" />
+    <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
+    <!--[if lt IE 9]>
+      <script src="/Scripts/html5shiv.min.js"></script>
+      <script src="/Scripts/respond.min.js"></script>
+    <![endif]-->
+    <link rel="shortcut icon" href="/Content/images/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="/Content/element.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/common.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/index.css" />
+</head>
+<body>
+    <div class="header"></div>
+    <div id="home" v-cloak>
+        <div class="home-banner">
+            <el-carousel>
+                <el-carousel-item v-for="item,i in bannerList" v-bind:key="item">
+                    <div class="home-banner-item" v-bind:style="{backgroundImage:item}">
+                        <!--<div class="w1200" v-if="i==0">
+                            <div class="banner-title">
+                                <h1>芯达通</h1>
+                                <h2>全新上线</h2>
+                                <h3>一站式报关服务平台</h3>
+                                <div class="banner-light"></div>
+                            </div>
+                        </div>-->
+                    </div>
+                </el-carousel-item>
+            </el-carousel>
+            <div class="right_login">
+                <div class="person_top">
+                    <img src="/Content/images/person.png" />
+                    <div class="person_login">
+                        <span v-if="isLogin">已登录</span>
+                        <a href="https://user.for-ic.net/Home/Login" class="login_link" v-if="!isLogin">立即登录</a>
+                    </div>
+                    <p>
+                        为您打造聚物流、商流、信息流、资金流
+                        综合型服务项目
+                    </p>
+                </div>
+                <div class="person_bottom">
+                    <img src="/Content/images/ewm.png" />
+                    <div class="person_ewm_text">
+                        <p class="p1">关注微信公众号</p>
+                        <p>掌握订单实时状态</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="w1200 home-proxy">
+            <ul class="w1200 clearfix">
+                <li v-for="item,index in proxyList" class="clearfix" v-bind:class="[{'mr10':index==1},{'mr0':index==3}]">
+                    <a v-bind:href="item.href">
+                        <div class="home-proxy-img" v-bind:class="item.imgClass"></div>
+                        <div class="home-proxy-text">
+                            <h3>{{item.title}}</h3>
+                            <p>{{item.text}}</p>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="apply_process">
+            <img src="/Content/images/process.jpg">
+        </div>
+        <div class="contents">
+            <div class="c_notices">
+                <i class="sign"></i>
+                <div class="c_notices_r">
+                    <div class="cn_title">
+                        <span>公告通知</span>
+                        <a href="/Notice/NoticeDetail.html" class="more">更多</a>
+                    </div>
+                    <div class="cn_list">
+                        <ul>
+                            <li v-for="announceItem,index in announceList">
+                                <div class="cn_list_word">
+                                    <em v-bind:class="{hot:index==0}"></em>
+                                    <a v-on:click="searchNotice(announceItem)">{{announceItem.text}}</a>
+                                </div>
+                                <span class="date">{{announceItem.date}}</span>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="c_notices c_questions">
+                <i class="sign"></i>
+                <div class="c_notices_r">
+                    <div class="cn_title">
+                        <span>常见问题</span>
+                        <a href="/FAQ.html" class="more">更多</a>
+                    </div>
+                    <div class="cq_list">
+                        <div class="cq_list_l cq_list_common">
+                            <p><a href="">如何用芯达通平台下单？</a></p>
+                            <p><a href="">芯达通进口代理服务流程介绍</a></p>
+                            <p><a href="">登录账号的手机号如何修改？</a></p>
+                            <p><a href="">国际快递是否需要报关？</a></p>
+                            <p><a href="">如何申请芯达通服务？</a></p>
+                        </div>
+                        <div class="cq_list_r cq_list_common">
+                            <p><a href="">新客户如何进行备案？</a></p>
+                            <p><a href="">芯达通是怎么收费的？</a></p>
+                            <p><a href="">忘记密码如何处理？</a></p>
+                            <p><a href="">物流发票如何申请？</a></p>
+                            <p><a href="">如何实时掌控订单状态？</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="home-proClassify">
+            <h2 class="home-title w1200"><i class="sign"></i><span>产品归类</span></h2>
+            <div class="home-proClassify-search w1200">
+                <input class="btn btn_line" type="text" v-model.trim="searchVal" placeholder="请输入产品名称/型号" />
+                <button type="button" class="btn button" @click="searchPro()">查&nbsp;&nbsp;&nbsp;询</button>
+            </div>
+        </div>
+        <div class="service w1200">
+            <div class="service_title">
+                <i class="sign"></i>
+                <span>服务优势</span>
+            </div>
+            <div class="service_con">
+                <div class="service_con_l">
+                    <i>0755-83988698</i>
+                </div>
+                <div class="service_con_r">
+                    <div class="scr_num">
+                        <ul>
+                            <li class="active"><span>1</span><i></i></li>
+                            <li class="li2"><span>2</span><i></i></li>
+                            <li class="li3"><span>3</span><i></i></li>
+                            <li class="li4"><span>4</span><i></i></li>
+                        </ul>
+                    </div>
+                    <div class="src_display_all">
+                        <div class="scr_display active">
+                            <img src="/Content/images/service_img1.png" />
+                            <div class="scr_display_desc">
+                                <h5>本地化专业服务</h5>
+                                <hr />
+                                <div class="scr_display_text">
+                                    <p>
+                                        <span class="name">本地服务：</span>
+                                        <span class="desc">
+                                            为芯达通客户提供本地化、贴身化、个性化的低成本进口配套服务。
+                                        </span>
+                                    </p>
+                                    <p>
+                                        <span class="name">管理方针：</span>
+                                        <span class="desc">
+                                            严格人员管理，确保健康安全，创造良好环境，坚持持续改进，达到客户满意。
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="scr_display">
+                            <img src="/Content/images/service_img2.png" />
+                            <div class="scr_display_desc">
+                                <h5>自有库房</h5>
+                                <hr />
+                                <div class="scr_display_text">
+                                    <p>
+                                        <span class="name">真实库房：</span>
+                                        <span class="desc">
+                                            香港拥有中转货仓10000平方英尺，深圳有大型仓库10000平米，对物流各环节进行
+                                            计划、协调、控制和优化，通过建立快速响应机制，灵活的服务产品组合。
+                                        </span>
+                                    </p>
+                                    <p>
+                                        <span class="name">仓储理货：</span>
+                                        <span class="desc">
+                                            仓储理货管理高效、安全，具有货物储存货架，配备专业的仓储管理软件和仓储管理人员，
+                                            为客户提供高效快速中转物流配送和长期仓储服务。
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="scr_display">
+                            <img src="/Content/images/service_img1.png" />
+                            <div class="scr_display_desc">
+                                <h5>资金服务</h5>
+                                <hr />
+                                <div class="scr_display_text">
+                                    <p>
+                                        <span class="name">代付货款：</span>
+                                        <span class="desc">
+                                            芯达通与多家银行保持密切合作关系，资金实力雄厚，香港收货时可代客户垫付货
+                                            款，解决资金流问题，缓解资金压力。
+                                        </span>
+                                    </p>
+                                    <p>
+                                        <span class="name">代收货款：</span>
+                                        <span class="desc">
+                                            根据客户要求向收货方收取货款，保障您的资金安全，并及时帮您回拢资金。
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="scr_display">
+                            <img src="/Content/images/service_img2.png" />
+                            <div class="scr_display_desc">
+                                <h5>一对一服务</h5>
+                                <hr />
+                                <div class="scr_display_text">
+                                    <p>
+                                        <span class="name">专业服务：</span>
+                                        <span class="desc">
+                                            芯达通指定专业跟单员全程为您提供报关服务。
+                                        </span>
+                                    </p>
+                                    <p>
+                                        <span class="name">服务宗旨：</span>
+                                        <span class="desc">
+                                            我们坚持以“诚信合法经营、发挥员工无限潜能、为客户创造无限价值、给社会
+                                            带来无限效益。在管理、业务、流程及文化建设上持续创新，为客户提供更专业
+                                            高效物流服务是我们矢志不渝的使命和追求。”
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="entrance">
+            <div class="w1200">
+                <div class="entrance_top">
+                    <ul>
+                        <li>
+                            <a href="/FAQ/RegistrationGuide.html">
+                                <img src="/Content/images/xinshourumen.png" />
+                                <p>新手入门</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/Procedure.html">
+                                <img src="/Content/images/liucheng.png" />
+                                <p>报关流程</p>
+                            </a>
+                        </li>
+                        <li class="nomargin">
+                            <a href="/download.html">
+                                <img src="/Content/images/xiazai.png" />
+                                <p>资料下载</p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="entrance_bottom">
+                    <ul>
+                        <li>为您详细介绍芯达通服务平台相关业务</li>
+                        <li>为您提供报关手续及流程，减少时间成本</li>
+                        <li class="nomargin">为您提供报关资料，可供使用</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <div class="footer"></div>
+    <script src="/Scripts/jquery-3.3.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/vue.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/axios.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/element.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+
+        $(function () {
+            //滚动条事件
+            $(window).scroll(function () {
+                //获取滚动条的滑动距离
+                //获取要定位元素距离浏览器顶部的距离
+                var scroH = $(this).scrollTop();
+                var navH = $("#header").height();
+                //滚动条的滑动距离大于等于定位元素距离浏览器顶部的距离，就固定，反之就不固定
+                if (scroH > navH) {
+                    $(".header").removeClass("header-home");
+                    $(".header_top_box").addClass("transport");
+                    $(".header_main").addClass("transport");
+                } else if (scroH <= navH) {
+                    $(".header").addClass("header-home");
+                    $(".header_top_box").removeClass("transport");
+                    $(".header_main").removeClass("transport");
+                }
+            })
+            $(".home-Cooperation").mouseover(function () {
+                $(".home-Cooperation").animate({
+                    'background-position': 'center 76%',
+                    'background-size': '45%'
+                }, 800)
+            });
+            //服务优势切换效果
+            $(".scr_num li").hover(function () {
+                $(this).addClass('active').siblings().removeClass('active');
+                $('.src_display_all>div').eq($(this).index()).stop().show().siblings().stop().hide();
+            });
+            
+        });
+        var home = new Vue({
+            el: '#home',
+            data: {
+                //banner图的链接
+                bannerList: [
+                    'url(/Content/images/banner-1.jpg)',
+                    'url(/Content/images/banner-2.jpg)',
+                   // 'url(/Content/images/banner-3.png)'
+                ],
+                //公告列表
+                announceList: [],
+                //代理列表
+                proxyList: [{
+                    imgClass: 'home-proxy-img1',
+                    title: '代报关',
+                    text: '优质通关资质，高效通关能力，专业进口服务能力，客户资金安全保障,进口垫税服务',
+                    href: '/Service.html?activeName=S1'
+                },
+                {
+                    imgClass: 'home-proxy-img2',
+                    title: '代收货',
+                    text: '即将上线,敬请期待...',
+                    href: '/Service.html?activeName=S2'
+                },
+                {
+                    imgClass: 'home-proxy-img3',
+                    title: '代发货',
+                    text: '即将上线,敬请期待...',
+                    href: '/Service.html?activeName=S3'
+                },
+                {
+                    imgClass: 'home-proxy-img4',
+                    title: '代仓储',
+                    text: '即将上线,敬请期待...',
+                    href: '/Service.html?activeName=S4'
+                }],
+                searchVal: '',//搜索值
+                isLogin: false
+                //loginText: "立即登录"
+            },
+            created: function () {
+                var that = this;;
+                $(".header").load("head.html", function () {
+                    that.isLogin = header.isLogin;
+                    //if (that.isLogin) {
+                    //    that.loginText = "已登录";
+                    //} else {
+                    //    that.loginText = "立即登录";
+                    //}
+                    $(".footer").load("foot.html");
+                });
+            },
+            mounted: function () {
+                //获取公告列表
+                this.getAnnounceList();
+            },
+            methods: {
+                searchPro: function () {
+                    if (window.localStorage) {
+                        localStorage.searchText = this.searchVal;
+                        location.href = '/Sort/Query.html';
+
+                    } else {
+                        // alert("NOT SUPPORT");
+                    }
+                },
+                //获取公告列表
+                getAnnounceList: function () {
+                    var that = this;
+                    axios.get("/Mock/home.json")
+                        .then(function (res) {
+                            console.log(res.data);
+                            res = res.data;
+
+                            if (res.ret && res.data && res.total) {
+                                that.announceList = res.data.announceList;
+                            }
+                        })
+                        .catch(function (err) {
+                            console.log(err);
+                        })
+                },
+                //跳转到公告详情页
+                searchNotice: function (item) {
+                    localStorage.setItem("NoticeID", item.noticeID);
+                    location.href = 'Notice/NoticeDetail.html';
+                }
+
+            }
+        })
+    </script>
+</body>
+</html>

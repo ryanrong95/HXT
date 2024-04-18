@@ -1,0 +1,247 @@
+﻿@{
+    ViewBag.Title = "草稿";
+    Layout = "~/Views/Shared/_LayoutCenter.cshtml";
+    ViewBag.navid = "DraftOrders";
+}
+<style>
+    .el-message {
+        top: 250px;
+        min-width: 150px;
+    }
+
+    .el-message__content {
+        font-size: 16px;
+    }
+
+    .el-message .el-icon-error {
+        font-size: 16px;
+    }
+</style>
+<div class="content_right backshow">
+    <h2>草稿</h2>
+    <div id="draftorder" v-cloak style="padding:30px;min-height:650px;">
+        <div class="orderlist">
+            <div class="title">
+                <ul class="overhide">
+                    <li class="fl" style="width:226px">
+                        <span>订单</span>
+                    </li>
+                    <li class="fl" style="width:136px">
+                        <span>订单状态</span>
+                    </li>
+                    <li class="fl" style="width:217px">
+                        <span>供应商</span>
+                    </li>
+                    <li class="fl" style="width:119px">
+                        <span>下单人</span>
+                    </li>
+                    <li class="fl" style="width:189px">
+                        <span>操作</span>
+                    </li>
+                </ul>
+            </div>
+            <div v-loading="indexData.loading"  style="min-height:400px;" v-on:scroll="ss('viewBox1')" ref="viewBox1">
+                <div v-if="!indexData.loading">
+                    <div class="order">
+                        <table class="myorder" border="0" cellspacing="0" cellpadding="0" v-for="item of indexData.curItems">
+                            <tr>
+                                <th class="overhide" colspan="6">
+                                    <div class="fl">
+                                        <span class="lignt_text">
+                                            订单号：
+                                        </span>
+                                        <span>{{item.ID}}</span>
+                                    </div>
+                                    <div class="fl txtdate">
+                                        <span class="lignt_text">{{item.CreateDate}}</span>
+                                    </div>
+                                </th>
+                            </tr>
+                            <tr class="cell">
+                                <td style="width:225px;text-align:left">
+                                    <div style="padding-left:60px;">
+                                        <p>交易币种 {{item.Currency}}</p>
+                                        <p>报关总价 {{item.DeclarePrice.toFixed(2)}}</p>
+                                    </div>
+
+                                </td>
+                                <td style="width:134px">
+                                    <span>{{item.OrderStatus}}</span>
+                                </td>
+                                <td style="width:176px;word-wrap:break-word;word-break:break-all;padding:0 20px;text-align:left">
+                                    <span>{{item.Suppliers}}</span>
+                                </td>
+                                <td style="width:77px;word-wrap:break-word;word-break:break-all;padding:0 20px;text-align:left">
+                                    <span>{{item.OrderMaker}}</span>
+                                </td>
+                                <td style="width:189px;">
+                                    <div style="line-height:20px;">
+                                        <div class="overhide">
+                                            <a style="margin-left:46px;" class="fl" v-on:click="orderDetails(item.ID)">订单详情</a>
+                                            <span class="fl division_line"></span>
+                                            <a class="fl" v-on:click="deleteOrder(item.ID)">删除</a>
+                                        </div>
+
+
+                                        <el-button class="confirm" v-on:click="editOrder(item.ID)">编辑</el-button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div v-if="indexData.curItems.length > 0" class="foot">
+                        <el-pagination style="float:right" v-on:size-change="handleSizeChange"
+                                       v-on:current-change="handleCurrentChange"
+                                       :current-page="indexData.pageIndex"
+                                       :page-sizes="[5, 10, 20, 40]"
+                                       :page-size="indexData.pageSize"
+                                       layout="total, sizes, prev, pager, next, jumper"
+                                       :total="indexData.total">
+                        </el-pagination>
+                    </div>
+                    <div v-else>
+                        <div class="nodata-container">
+                            <el-row class="nodata-row1">
+                                <img src="~/Content/img/nodata.png" />
+                            </el-row>
+                            <el-row class="nodata-row2">
+                                <span class="nodata-info">暂无数据！</span>
+                            </el-row>
+                            <el-row class="nodata-row3">
+                                <button class="nodata-button" v-on:click="location.href='/Orders/MyOrders'">查看全部订单</button>
+                                <button class="nodata-button" v-on:click="location.href='/Home/Index'">返回首页</button>
+                            </el-row>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    var draftorder = new Vue({
+        el: "#draftorder",
+        data: function () {
+            return {
+                indexData: {
+                    loading: true,
+                    total: 0,
+                    curItems: [],
+                    pageIndex: 1, //初始页
+                    pageSize: 5,    //每页的数据
+                    scrollTop: 0, //滚动条位置
+                }
+            }
+        },
+        mounted: function () {
+            var that = this;
+            var userJsonStr = sessionStorage.getItem('DraftOrders');
+            userEntity = JSON.parse(userJsonStr);
+            if (userEntity == null) {
+                that.paging();
+            } else {
+                that.indexData = userEntity;
+                that.$nextTick(function () {
+                    that.$refs['viewBox1'].scrollTop = that.indexData.scrollTop;
+                })
+
+                sessionStorage.removeItem('DraftOrders');
+            }
+        },
+        methods: {
+            ss: function (ref) {
+                // 监听这个dom的scroll事件
+                var that = this;
+                this.$refs[ref].addEventListener('scroll', function () {
+                    that.indexData.scrollTop = that.$refs[ref].scrollTop;
+                }, false)
+            },
+            paging: function () {
+                var that = this;
+                that.indexData.loading = true;
+                axios({
+                    url: "/Orders/GetDraftOrders",
+                    method: "post",
+                    data: {
+                        page: this.indexData.pageIndex,
+                        rows: this.indexData.pageSize,
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                    transformRequest: [function (data) {
+                        var ret = ''
+                        for (var it in data) {
+                            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+                        }
+                        return ret;
+                    }],
+                }).then(function (response) {
+                    var data = JSON.parse(response.data.data);
+                    that.indexData.curItems = data.list;
+                    that.indexData.total = data.total;
+                    that.indexData.loading = false;
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //草稿编辑
+            editOrder: function (id) {
+                sessionStorage.setItem('DraftOrders', JSON.stringify(this.indexData));
+                location.href = "/Orders/Edit/?id=" + id + "&v="+'@ViewBag.navid';
+            },
+            //删除订单
+            deleteOrder: function (id) {
+                this.$confirm('是否删除该订单?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                    lockScroll: false,
+                }).then(function(){
+                    axios({
+                        url: "/Orders/DeleteOrder",
+                        method: "post",
+                        data: {
+                            orderID: id,
+                        }
+                    }).then(function (response) {
+                        if (response.data.type != "error") {
+                            draftorder.paging();
+                        }
+                        draftorder.onAlert(response.data.type, response.data.msg);
+                    }).catch(function (error) {
+                        draftorder.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                    });
+                }).catch(function() {
+                });
+            },
+            orderDetails: function (id) {
+                sessionStorage.setItem('DraftOrders', JSON.stringify(this.indexData));
+                location.href = "/Orders/Info/?id=" + id +"&v="+'@ViewBag.navid';
+            },
+            //查看发票
+            invoiceDetails: function (id) {
+                sessionStorage.setItem('DraftOrders', JSON.stringify(this.indexData));
+              location.href = "/Orders/Invoice/?id=" + id +"&v="+'@ViewBag.navid';
+            },
+            // 初始页currentPage、初始每页数据数pagesize和数据data
+            handleSizeChange: function (size) {
+                this.indexData.pageSize = size; 
+                this.paging();
+            },
+            handleCurrentChange: function (currentPage) {
+                this.indexData.pageIndex = currentPage;
+                this.paging();
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                });
+            },
+        }
+    });
+</script>

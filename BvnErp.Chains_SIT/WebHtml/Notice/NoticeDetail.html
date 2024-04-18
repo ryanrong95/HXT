@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>芯达通- 一站式报关服务平台</title>
+    <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
+    <!--[if lt IE 9]>
+      <script src="/Scripts/html5shiv.min.js"></script>
+      <script src="/Scripts/respond.min.js"></script>
+    <![endif]-->
+    <link rel="shortcut icon" href="/Content/images/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="/Content/common.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/style.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/element.css" />
+</head>
+<body class="gray">
+    <div class="header"></div>
+    <section id="NoticeSection"  class="grayBg">
+        <div id="NoticeContent" v-cloak class="w1200 clearfix">
+            <div class="content-left content-boxShadow">
+                <div>
+                    <h2>{{NavLeftTitle}}</h2>
+                    <ul>
+                        <li v-for="item,index in NavLeftList" v-bind:class="{'active':index==status}">
+                            <i></i>
+                            <a v-on:click="ChooseNotice(item,index)">{{item.text}}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div v-cloak class="content-right content-boxShadow">
+                <h2 class="notice_title">{{curItem.text}}</h2>
+                <p class="content_detail" v-html='curItem.Content'>
+
+                </p>
+            </div>
+        </div>
+    </section>
+    <div class="footer"></div>
+    <script src="/Scripts/jquery-3.3.1.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/vue.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/axios.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/common.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/Scripts/element.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+        var NoticeContent = new Vue({
+            el: '#NoticeContent',
+            data: {
+                status: 0,
+                NavLeftTitle: '公告通知',
+                curItem: {
+                    text: '',
+                    NoticeID: '',
+                    Content: '',
+                },
+                NavLeftList: [
+                    {
+                        text: '新系统上线通知',
+                        NoticeID: '1',
+                        Content: '<p style="margin-bottom:20px;">尊敬的芯达通客户您好：</p><p>经过一年的成长，芯达通一站式报关服务平台的业务迎来了爆发增长，原有的系统已经无法承载现有的业务量。经过程序员6个月的努力，迎来第一次版本升级，新旧数据将在6月1号前完成同步。</p ></br></br></br><p style="text-align:right;">芯达通</p><p style="text-align:right;">2019年5月10日</p>',
+                    },
+                    {
+                        text: '五一劳动节放假通知',
+                        NoticeID: '2',
+                        Content: '<p style="margin-bottom:20px;">尊敬的芯达通客户您好：</p><p> 根据国务院办公厅《关于修改<全国年节及纪念日放假办法>的决定》，芯达通放假安排如下：</p><p>2019年五一放假4天，从5月1日-5月4日，4月28日（星期日）、5月5日（星期日）上班。</p></br></br></br><p style="text-align:right;">芯达通</p><p style="text-align:right;">2019年4月30日</p>',
+                    },
+                    {
+                        text: '清明节放假通知',
+                        NoticeID: '3',
+                        Content: '<p style="margin-bottom:20px;">尊敬的芯达通客户您好：</p><p> 根据国务院办公厅《关于修改<全国年节及纪念日放假办法>的决定》，芯达通放假安排如下：</p><p>2019年5月1日至4日放假，共4天。4月28日（星期天）、5月5日（星期天）正常上班。</p></br></br></br><p style="text-align:right;">芯达通</p><p style="text-align:right;">2019年3月30日</p>',
+                    },
+                ],
+            },
+            mounted: function () {
+                var that = this;
+                var id = localStorage.getItem("NoticeID");
+                if (id != null && id != "") {
+                    that.NavLeftList.filter(function (value,index) {
+                        if (value.NoticeID == id) {
+                            that.curItem = value;
+                            that.status = index;
+                          
+                        }
+                    });
+                    localStorage.clear();
+                } else {
+                    if (that.NavLeftList.length > 0) {
+                        that.curItem = that.NavLeftList[0];
+                    }
+                } 
+            },
+            methods: {
+                ChooseNotice: function (item,index) {
+                    this.status = index;
+                    this.curItem = item;
+                }
+            }
+        })
+    </script>
+</body>
+</html>

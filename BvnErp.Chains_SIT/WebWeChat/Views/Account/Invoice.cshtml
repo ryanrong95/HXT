@@ -1,0 +1,113 @@
+﻿@{
+    ViewBag.Title = "发票信息";
+}
+<style>
+    #invoice {
+        width: 100%;
+        height: 100%;
+    }
+
+    .invoice_content {
+        width: 93%;
+        margin-top: 0.3rem;
+        margin-left: 0.24rem;
+        height: 100%;
+    }
+
+        .invoice_content .itemWrap {
+            margin-bottom: 0.14rem;
+            overflow: hidden;
+        }
+
+            .invoice_content .itemWrap .title {
+                font-size: 0.3rem;
+                line-height: 0.33rem;
+                color: #323232;
+                font-weight: bold;
+                margin-bottom: 0.23rem;
+            }
+
+            .invoice_content .itemWrap .subtitle_box {
+                font-size: 0.28rem;
+                margin-bottom: 0.12rem;
+                margin-left: 0.34rem;
+                line-height: 0.42rem;
+            }
+
+                .invoice_content .itemWrap .subtitle_box .subtitle {
+                    width: 1.96rem;
+                }
+
+                .invoice_content .itemWrap .subtitle_box .unconfirmed_details {
+                    width: calc(100% - 1.96rem);
+                }
+</style>
+<div class="second_header">
+    <a onClick="javascript :history.back(-1);"><span class="el-icon-arrow-left icon"></span></a>
+    <div class="second_nav">
+        <span class="header-title">发票信息</span>
+    </div>
+</div>
+<div id="invoice" class="bind_user">
+    <div class="invoice_content">
+        <div class="itemWrap">
+            <p class="title">发票信息</p>
+            <div class="left_text">
+                <div class="subtitle_box">
+                    <span class="subtitle">名称：</span>
+                    <span class="unconfirmed_details">{{formData.Title}}</span>
+                </div>
+                <div class="subtitle_box">
+                    <span class="subtitle">纳税人识别号：</span>
+                    <span class="unconfirmed_details">{{formData.TaxCode}}</span>
+                </div>
+                <div class="subtitle_box">
+                    <span class="subtitle">地址、电话：</span>
+                    <span class="unconfirmed_details">{{formData.Address}}&nbsp;&nbsp;{{formData.Tel}}</span>
+                </div>
+                <div class="subtitle_box">
+                    <span class="subtitle">开户行及账号：</span>
+                    <span class="unconfirmed_details">{{formData.BankName}}<br />{{formData.BankAccount}}</span>
+                </div>
+                <div class="subtitle_box">
+                    <span class="subtitle">发票交付方式：</span>
+                    <span class="unconfirmed_details">{{formData.InvoiceDeliveryTypeName}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="itemWrap">
+            <p class="title">发票收件地址</p>
+            <div class="left_text">
+                <div class="subtitle_box">
+                    <span class="subtitle">收件人姓名：</span>
+                    <span class="unconfirmed_details">{{formData.ConsigneeName}}</span>
+                </div>
+                <div class="subtitle_box">
+                    <span class="subtitle">收件地址：</span>
+                    <span class="unconfirmed_details">{{formData.ConsigneeAllAddress}}</span>
+                </div>
+                <div class="subtitle_box">
+                    <span class="subtitle">手机：</span>
+                    <span class="unconfirmed_details">{{formData.ConsigneeMobile}}</span>
+                </div>
+                <div class="subtitle_box">
+                    <span class="subtitle">电话：</span>
+                    <span class="unconfirmed_details">{{formData.ConsigneeTel}}</span>
+                </div>
+                <div class="subtitle_box">
+                    <span class="subtitle">邮箱：</span>
+                    <span class="unconfirmed_details">{{formData.ConsigneeEmail}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var agreement = new Vue({
+        el: "#invoice",
+        data: {
+           formData:@Html.Raw(Json.Encode(Model)),
+        }
+    })
+</script>
+

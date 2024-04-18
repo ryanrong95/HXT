@@ -1,0 +1,177 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="BvnErp" Class="SqlDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=172.30.10.199;Initial Catalog=BvnErp;User ID=udata" SettingsObjectName="Layer.Data.Properties.Settings" SettingsPropertyName="BvnErpConnectionString3" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Admins" Member="Admins">
+    <Type Name="Admins">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="UserName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="RealName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Password" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="LoginDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300) NOT NULL" CanBeNull="false" />
+      <Association Name="Admins_MapsAdmin" Member="MapsAdmin" ThisKey="ID" OtherKey="MainID" Type="MapsAdmin" />
+      <Association Name="Admins_MapsAdmin1" Member="MapsAdmin1" ThisKey="ID" OtherKey="SubID" Type="MapsAdmin" />
+      <Association Name="Admins_MapsAdminRole" Member="MapsAdminRole" ThisKey="ID" OtherKey="AdminID" Type="MapsAdminRole" />
+      <Association Name="Admins_MapsAdminClient" Member="MapsAdminClient" ThisKey="ID" OtherKey="AdminID" Type="MapsAdminClient" />
+      <Association Name="Admins_MapsAdminClient_En" Member="MapsAdminClient_En" ThisKey="ID" OtherKey="AdminID" Type="MapsAdminClient_En" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TopMapsAdminClient" Member="TopMapsAdminClient">
+    <Type Name="TopMapsAdminClient">
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ClientID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.MapsAdmin" Member="MapsAdmin">
+    <Type Name="MapsAdmin">
+      <Column Name="MainID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="SubID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="Admins_MapsAdmin" Member="Admins" ThisKey="MainID" OtherKey="ID" Type="Admins" IsForeignKey="true" />
+      <Association Name="Admins_MapsAdmin1" Member="Admins1" ThisKey="SubID" OtherKey="ID" Type="Admins" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.MapsAdminRole" Member="MapsAdminRole">
+    <Type Name="MapsAdminRole">
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="RoleID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="Admins_MapsAdminRole" Member="Admins" ThisKey="AdminID" OtherKey="ID" Type="Admins" IsForeignKey="true" />
+      <Association Name="Roles_MapsAdminRole" Member="Roles" ThisKey="RoleID" OtherKey="ID" Type="Roles" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.MapsRoleMenu" Member="MapsRoleMenu">
+    <Type Name="MapsRoleMenu">
+      <Column Name="RoleID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="MenuID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="Menus_MapsRoleMenu" Member="Menus" ThisKey="MenuID" OtherKey="ID" Type="Menus" IsForeignKey="true" />
+      <Association Name="Roles_MapsRoleMenu" Member="Roles" ThisKey="RoleID" OtherKey="ID" Type="Roles" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.MapsRoleUnite" Member="MapsRoleUnite">
+    <Type Name="MapsRoleUnite">
+      <Column Name="RoleID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="RoleUniteID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="Roles_MapsRoleUnite" Member="Roles" ThisKey="RoleID" OtherKey="ID" Type="Roles" IsForeignKey="true" />
+      <Association Name="RoleUnites_MapsRoleUnite" Member="RoleUnites" ThisKey="RoleUniteID" OtherKey="ID" Type="RoleUnites" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Menus" Member="Menus">
+    <Type Name="Menus">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="FatherID" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Icon" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+      <Column Name="Url" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300) NOT NULL" CanBeNull="false" />
+      <Column Name="OrderIndex" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Menus_MapsRoleMenu" Member="MapsRoleMenu" ThisKey="ID" OtherKey="MenuID" Type="MapsRoleMenu" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PrimaryKeys" Member="PrimaryKeys">
+    <Type Name="PrimaryKeys">
+      <Column Name="Name" Type="System.String" DbType="VarChar(10) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Length" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Value" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Day" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Roles" Member="Roles">
+    <Type Name="Roles">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
+      <Association Name="Roles_MapsAdminRole" Member="MapsAdminRole" ThisKey="ID" OtherKey="RoleID" Type="MapsAdminRole" />
+      <Association Name="Roles_MapsRoleMenu" Member="MapsRoleMenu" ThisKey="ID" OtherKey="RoleID" Type="MapsRoleMenu" />
+      <Association Name="Roles_MapsRoleUnite" Member="MapsRoleUnite" ThisKey="ID" OtherKey="RoleID" Type="MapsRoleUnite" />
+    </Type>
+  </Table>
+  <Table Name="dbo.RoleUnites" Member="RoleUnites">
+    <Type Name="RoleUnites">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Menu" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Title" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Url" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="RoleUnites_MapsRoleUnite" Member="MapsRoleUnite" ThisKey="ID" OtherKey="RoleUniteID" Type="MapsRoleUnite" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Tokens" Member="Tokens">
+    <Type Name="Tokens">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="OutID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Token" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.AdminsTopView" Member="AdminsTopView">
+    <Type Name="AdminsTopView">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="UserName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="RealName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Password" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="LoginDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(300) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ClientsTopView" Member="ClientsTopView">
+    <Type Name="ClientsTopView">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="UserName" Type="System.String" DbType="NVarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="Email" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="Mobile" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Password" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.MapsAdminClient" Member="MapsAdminClient">
+    <Type Name="MapsAdminClient">
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ClientID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Type" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="Admins_MapsAdminClient" Member="Admins" ThisKey="AdminID" OtherKey="ID" Type="Admins" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.MapsAdminClient_En" Member="MapsAdminClient_En">
+    <Type Name="MapsAdminClient_En">
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ClientID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Type" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="Admins_MapsAdminClient_En" Member="Admins" ThisKey="AdminID" OtherKey="ID" Type="Admins" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ClientsTopView_En" Member="ClientsTopView_En">
+    <Type Name="ClientsTopView_En">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="UserName" Type="System.String" DbType="NVarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="Email" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="Mobile" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Password" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TopMapsAdminClient_En" Member="TopMapsAdminClient_En">
+    <Type Name="TopMapsAdminClient_En">
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ClientID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+</Database>

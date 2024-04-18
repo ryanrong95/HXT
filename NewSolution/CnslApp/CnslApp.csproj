@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D9FE2042-436E-48CC-8A65-EDA5FC0F621E}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CnslApp</RootNamespace>
+    <AssemblyName>CnslApp</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Class1.cs" />
+    <Compile Include="Otr\IFile.cs" />
+    <Compile Include="Otr\IPricebreak.cs" />
+    <Compile Include="Otr\IInventory.cs" />
+    <Compile Include="Otr\IProductDetail.cs" />
+    <Compile Include="Otr\IStandardProduct.cs" />
+    <Compile Include="Otr\Suppliers\ICatalogues.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Otr\Suppliers\IProduct.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Needs.Configuration\Needs.Configuration.csproj">
+      <Project>{ed05393f-6462-4439-9f33-b0e73b33c1e1}</Project>
+      <Name>Needs.Configuration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Needs.Erp.Generic\Needs.Erp.Generic.csproj">
+      <Project>{4af55700-a9d6-407b-89fd-fe576a43f916}</Project>
+      <Name>Needs.Erp.Generic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Needs.Erp\Needs.Erp.csproj">
+      <Project>{7227064a-f097-4610-af56-8a93f0fdd760}</Project>
+      <Name>Needs.Erp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Needs.Interpreter\Needs.Interpreter.csproj">
+      <Project>{ee31fd26-9c32-4286-aba4-79f3707e082b}</Project>
+      <Name>Needs.Interpreter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Needs.Linq\Needs.Linq.csproj">
+      <Project>{8f7ffcb1-97bc-4977-b262-71365ae8ec62}</Project>
+      <Name>Needs.Linq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Needs.Overall\Needs.Overall.csproj">
+      <Project>{94da4133-a4a4-4e1c-98d6-5f1c023dcdd2}</Project>
+      <Name>Needs.Overall</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Needs.Settings\Needs.Settings.csproj">
+      <Project>{90c1ea68-3014-4612-a365-2cd3c3405054}</Project>
+      <Name>Needs.Settings</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Needs.Underly\Needs.Underly.csproj">
+      <Project>{b775e7d1-cf0e-43bc-a0e4-874db5645a09}</Project>
+      <Name>Needs.Underly</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Otr\TextFile1.txt" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

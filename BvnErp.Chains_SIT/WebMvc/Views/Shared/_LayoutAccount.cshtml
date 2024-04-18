@@ -1,0 +1,69 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<section class="accountSetting clearfix">
+    <div class="w1200 clearfix">
+        <div class="memberCenter_left">
+            <h2 id="mem_center">会员中心</h2>
+            <div class="member_left_list">
+                <p>账户设置</p>
+                <ul id="nav_left">
+                    <li id="Client">
+                        <i></i>
+                        <a href="/Account/Client">账户信息</a>
+                    </li>
+                    <li id="Agreement" class="">
+                        <i></i>
+                        <a href="/Account/Agreement">协议条款</a>
+                    </li>
+                    <li id="Invoice" class="">
+                        <i></i>
+                        <a href="/Account/Invoice">发票信息</a>
+                    </li>
+                    <li id="MyConsignees" class="">
+                        <i></i>
+                        <a href="/Account/MyConsignees">收货地址</a>
+                    </li>
+                    <li id="MySuppliers" class="">
+                        <i></i>
+                        <a href="/Suppliers/MySuppliers">供应商</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="member_left_list">
+                <p>账户安全</p> <ul>
+                    <li id="Password" class="">
+                        <i></i>
+                        <a href="/Account/Password">修改密码</a>
+                    </li>
+                    <li id="Mobile">
+                        <i></i>
+                        <a href="/Account/Mobile">手机绑定</a>
+                    </li>
+                    <li id="Email" class="">
+                        <i></i> <a href="/Account/Email">邮箱绑定</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="memberCenter_right">
+            @RenderBody()
+        </div>
+    </div>
+</section>
+
+<script>
+    var id = '@ViewBag.navid';
+    if (id != "" && id != null) {
+        $("#" + id).addClass("active");
+    }
+    else {
+        $("#BasicInfo").addClass("active");
+    }
+    $("#accountCur").addClass("active").prev("a").addClass("active");
+    $("#mem_center").click(function () {
+        location.href = "/Home/Index";
+    })
+</script>
+

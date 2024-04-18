@@ -1,0 +1,392 @@
+﻿
+@{
+    ViewBag.Title = "我的付汇";
+    Layout = "~/Views/Shared/_LayoutCenter.cshtml";
+    ViewBag.navid = "MyApplies";
+}
+<style>
+    .el-message {
+        top: 250px;
+        min-width: 150px;
+    }
+
+    .el-message__content {
+        font-size: 16px;
+    }
+
+    .el-message .el-icon-error {
+        font-size: 16px;
+    }
+</style>
+<div class="content_right backshow">
+    <h2>我的付汇</h2>
+    <div id="myapply" v-cloak style="padding:30px;min-height:650px;">
+        <div class="orderlist">
+            <div class="title">
+                <ul class="overhide">
+                    <li class="fl li1">
+                        <el-dropdown v-on:command="applyDatechange">
+                            <span class="el-dropdown-link">
+                                {{applyDateName}}<i class="el-icon-arrow-down el-icon--right"></i>
+                            </span>
+                            <el-dropdown-menu slot="dropdown">
+                                <el-dropdown-item command="all">全部申请</el-dropdown-item>
+                                <el-dropdown-item v-for="item of applyDateoptions" :command="item">{{item.text}}</el-dropdown-item>
+                            </el-dropdown-menu>
+                        </el-dropdown>
+                    </li>
+                    <li class="fl li2">
+                        <el-dropdown v-on:command="applyStatuschange">
+                            <span class="el-dropdown-link">
+                                {{applyStatusName}}<i class="el-icon-arrow-down el-icon--right"></i>
+                            </span>
+                            <el-dropdown-menu slot="dropdown">
+                                <el-dropdown-item command="all">全部状态</el-dropdown-item>
+                                <el-dropdown-item :command="item" v-for="item of ApplyStatusOptions">{{item.text}}</el-dropdown-item>
+                            </el-dropdown-menu>
+                        </el-dropdown>
+                    </li>
+                    <li class="fl li3">
+                        <span>供应商</span>
+                    </li>
+                    <li class="fl li4">
+                        <span>付款日期</span>
+                    </li>
+                    <li class="fl li5">
+                        <span>申请人</span>
+                    </li>
+                    <li class="fl li6">
+                        <span>操作</span>
+                    </li>
+                </ul>
+            </div>
+            <div v-loading="loading" style="min-height:400px;">
+                <div v-if="!loading">
+                    <div class="order">
+                        <table class="myorder" border="0" cellspacing="0" cellpadding="0" v-for="item of curItems">
+                            <tr>
+                                <th class="overhide" colspan="6">
+                                    <div class="fl">
+                                        <span class="lignt_text">
+                                            申请单号：
+                                        </span>
+                                        <span>{{item.ID}}</span>
+                                    </div>
+                                    <div class="fl txtdate">
+                                        <span class="lignt_text">{{item.CreateDate}}</span>
+                                    </div>
+                                </th>
+                            </tr>
+                            <tr class="cell">
+                                <td style="width:215px;text-align:left">
+                                    <div style="padding-left:60px;">
+                                        <p>币种 {{item.Currency}}</p>
+                                        <p>付汇金额 {{parseFloat(item.TotalAmount).toFixed(2)}}</p>
+                                    </div>
+
+                                </td>
+                                <td style="width:114px">
+                                    <span>{{item.ApplyStatus}}</span>
+                                </td>
+                                <td style="width:100px;word-wrap:break-word;word-break:break-all;padding:0 20px;text-align:left">
+                                    <span>{{item.Supplier}}</span>
+                                </td>
+                                <td style="width:116px">
+                                    <p>{{item.CompletedDate}}</p>
+                                </td>
+                                <td style="width:138px;">
+                                    <p>{{item.Applier}}</p>
+                                </td>
+                                <td style="width:158px;">
+                                    <div v-if="item.isDelete" style="line-height:20px" class="overhide">
+                                        <a style="margin-left:30px;" class="fl" v-on:click="applyDetails(item.ID)">查看详情</a>
+                                        <span class="fl division_line"></span>
+                                        <a class="fl" v-on:click="deleteApply(item.ID)">删除</a>
+                                    </div>
+                                    <a v-if="!item.isDelete" v-on:click="applyDetails(item.ID)">查看详情</a>
+                                    <el-button v-if="item.isUploadFile" class="confirm" v-on:click="uploadFile(item.ID)">上传付汇委托书</el-button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="foot">
+                        <el-pagination style="float:right" v-on:size-change="handleSizeChange"
+                                       v-on:current-change="handleCurrentChange"
+                                       :current-page="pageIndex"
+                                       :page-sizes="[5, 10, 20, 40]"
+                                       :page-size="pageSize"
+                                       layout="total, sizes, prev, pager, next, jumper"
+                                       :total="total">
+                        </el-pagination>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <el-dialog title="上传付汇委托书" :lock-scroll="false" width="500px" :visible.sync="dialogVisible" :close-on-click-modal="false" v-on:close="dialog_Closed">
+            <div class="files overhide">
+                <div class="fl download mb10">
+                    <el-button v-on:click="downloadPDF" class="el-icon-ump-xiazai">
+                        导出付汇委托书
+                    </el-button>
+                    <a id="exportInfoForm" style="display:none" download><span id="ex-li" style="display:none"></span></a>
+                </div>
+                <div class="fl upload">
+                    <el-upload action="/PayExchanges/UploadOrderFile"
+                               :http-request="httpRequest"
+                               :file-list="fileList"
+                               :on-remove="handleRemoveFiles"
+                               accept="image/jpg, image/bmp, image/jpeg, image/gif, image/png, application/pdf">
+                        <el-button size="small" class="el-icon-ump-upload">上传付汇委托书</el-button>
+                        <div slot="tip" class="el-upload__tip">仅限图片或PDF文件，且文件不超过3M</div>
+                    </el-upload>
+                </div>
+            </div>
+            <div slot="footer" class="dialog-footer">
+                <el-button v-on:click="dialogVisible = false">取 消</el-button>
+                <el-button type="primary" v-on:click="onSubmit">提 交</el-button>
+            </div>
+        </el-dialog>
+    </div>
+</div>
+
+
+<script>
+    var myapply = new Vue({
+        el: "#myapply",
+        data: function () {
+            return {
+                loading: true,
+                total: 0,
+                applyID:"",
+                dialogVisible:false,
+                curItems: [],
+                datalist:@Html.Raw(Json.Encode(Model)),
+                allChecked: false,
+                pageIndex: 1, //初始页
+                pageSize: 5,    //每页的数据
+                applyDateName:"申请日期",
+                applyStatusName: "状态",
+                applyDate:"all",
+                applyStatus: "all",
+                applyDateoptions: [{ value: "curMonth", text: "本月申请" },
+                                   { value: "thrMonth", text: "三个月内申请" },
+                                   { value: "curYear", text: "本年申请" }
+                ],
+                fileList: [],
+            }
+        },
+        computed: {
+            //状态数据源
+            ApplyStatusOptions: function () {
+                return JSON.parse(this.datalist.ApplyStatusOptions);
+            },
+        },
+        mounted: function () {
+            this.paging();
+        },
+        methods: {
+            paging: function () {
+                var that = this;
+                that.loading = true;
+                axios({
+                    url: "/PayExchanges/GetApplies",
+                    method: "post",
+                    data: {
+                        page: this.pageIndex,
+                        rows: this.pageSize,
+                        applyStatus: this.applyStatus,
+                        applyDate: this.applyDate,
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                    transformRequest: [function (data) {
+                        var ret = ''
+                        for (var it in data) {
+                            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+                        }
+                        return ret;
+                    }],
+                }).then(function (response) {
+                    var data = JSON.parse(response.data.data);
+                    that.curItems = data.list;
+                    that.total = data.total;
+                    that.loading = false;
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            dialog_Closed: function () {
+                this.fileList = [];
+            },
+            handleRemoveFiles: function (file, fileList) {
+                this.fileList = this.fileList.filter(function (value) {
+                    if (value != file.name) {
+                        return value;
+                    }
+                });
+            },
+            httpRequest: function (options) {
+                var that = this;
+                var file = options.file;
+                var size = file.size / 1024;
+                var imgArr = ["image/jpg", "image/bmp", "image/jpeg", "image/gif", "image/png"];
+                let config = {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                };
+                that.fileList = [];
+                if (imgArr.indexOf(file.type) > -1 && size > 500) { //大于500kb的图片压缩
+                    photoCompress(file, { quality: 0.8 }, function (base64Codes) {
+                        var bl = convertBase64UrlToBlob(base64Codes);
+                        var form = new FormData(); // FormData 对象
+                        form.append("file", bl, "file_" + Date.parse(new Date()) + ".jpg"); // 文件对象
+                        //添加请求头
+                        axios.post('/Orders/UploadPickUpFile', form, config)
+                            .then(function (response) {
+                                if (response.type == "error") {
+                                    that.onAlert(response.type, response.msg)
+                                }
+                                else {
+                                    that.fileList.push(JSON.parse(response.data.data));
+                                }
+                            });
+                    });
+                } else if (imgArr.indexOf(file.type) <= -1 && size > 1024*3) {
+                    that.onAlert("error", "上传的文件大小不能大于3M");
+                    return;
+                } else {
+                    var form = new FormData(); // FormData 对象
+                    form.append("file", file); // 文件对象
+                    //添加请求头
+                    axios.post('/Orders/UploadPickUpFile', form, config)
+                        .then(function (response) {
+                            if (response.type == "error") {
+                                that.onAlert(response.type, response.msg)
+                            }
+                            else {
+                                that.fileList.push(JSON.parse(response.data.data));
+                            }
+                        });
+                }
+            },
+            //删除申请
+            deleteApply: function (id) {
+                this.$confirm('是否删除该申请?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                    lockScroll: false,
+                }).then(function() {
+                    axios({
+                        url: "/PayExchanges/DeleteApply",
+                        method: "post",
+                        data: {
+                            id: id,
+                        }
+                    }).then(function (response) {
+                        if (response.data.type != "error") {
+                            myapply.paging();
+                        }
+                        myapply.onAlert(response.data.type, response.data.msg);
+                    }).catch(function (error) {
+                        myapply.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                    });
+                }).catch(function() {
+                });
+            },
+            //下载委任书
+            downloadPDF: function () {
+                axios({
+                    url: "/PayExchanges/DownloadPayProxy",
+                    method: "post",
+                    data: {
+                        id: this.applyID
+                    },
+                }).then(function (response) {
+                    if (response.data.type == "error") {
+                        myapply.onAlert(res.data.type, res.data.msg);
+                    } else {
+                        $('#exportInfoForm').attr("href", response.data.data);
+                        $('#ex-li').trigger("click");
+                    }
+                }).catch(function (error) {
+                    myapply.onAlert("warning", error);
+                });
+            },
+            onSubmit: function () {
+                if (this.fileList.length == 0) {
+                    myapply.onAlert("warning", "请上传付汇委托书！");
+                } else {
+                    var list = this.fileList[0];
+                    axios({
+                        url: "/PayExchanges/SavePayProxy",
+                        method: "post",
+                        data: {
+                            id: this.applyID,
+                            filename: list.name,
+                            ext: list.fileFormat,
+                            url: list.URL,
+                        },
+                    }).then(function (response) {
+                        this.fileList = [];
+                        if (response.data.type != "error") {
+                            myapply.dialogVisible = false;
+                        }
+                        myapply.onAlert(response.data.type, response.data.msg);
+                    }).catch(function (error) {
+                        myapply.onAlert("warning", error);
+                    });
+                }
+            },
+            //上传付汇委任书
+            uploadFile: function (id) {
+                    this.applyID = id;
+                this.dialogVisible = true;
+            },
+            applyDetails: function (id) {
+                location.href = "/PayExchanges/ApplyInfo/?id=" + id;
+            },
+            //订单时间 改变
+            applyDatechange: function (item) {
+                if (item == "all") {
+                    this.applyDateName = "申请";
+                    this.applyDate = "all";
+                }
+                else {
+                    this.applyDateName = item.text;
+                    this.applyDate = item.value;
+                }
+                this.paging();
+            },
+             //订单状态改变
+            applyStatuschange: function (item) {
+                if (item == "all") {
+                    this.applyStatusName = "状态";
+                    this.applyStatus = "all";
+                }
+                else {
+                    this.applyStatusName = item.text;
+                    this.applyStatus = item.value;
+                }
+                this.paging();
+            },
+            // 初始页currentPage、初始每页数据数pagesize和数据data
+            handleSizeChange: function (size) {
+                this.pageSize = size;
+                this.paging();
+            },
+            handleCurrentChange: function (currentPage) {
+                this.pageIndex = currentPage;
+                this.paging();
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                });
+            },
+        }
+    });
+</script>
+

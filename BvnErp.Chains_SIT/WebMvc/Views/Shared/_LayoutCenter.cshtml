@@ -1,0 +1,155 @@
+﻿@{
+                /**/
+
+                /**/
+                Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!--会员中心首页-->
+<section class="memberCenter clearfix">
+    <div class="w1200 clearfix">
+        <div class="memberCenter_left">
+            <h2 id="mem_center">首页</h2>
+            <div class="member_left_list">
+                <a class="center_add_btn" href="/Orders/Add"><i class="el-icon-plus"></i>新增订单</a>
+                <div id="divOrder">
+                    <p>订单中心</p>
+                    <ul>
+                        <li id="DraftOrders">
+                            <i></i>
+                            <a href="/Orders/DraftOrders">草稿</a>
+                        </li>
+                        <li id="PreConfirms">
+                            <i></i>
+                            <a href="/Orders/PreConfirms">待确认</a>
+                        </li>
+                        <li id="UnPayExchanges">
+                            <i></i>
+                            <a v-if="isShow==true" href="/PayExchanges/UnPayExchangesInside">待付汇</a>
+                            <a v-else href="/PayExchanges/UnPayExchanges">待付汇</a>
+                        </li>
+                        <li id="UnInvoicedOrders">
+                            <i></i>
+                            <a href="/Orders/UnInvoicedOrders">待开票</a>
+                        </li>
+                        <li id="UnReceivedOrders">
+                            <i></i>
+                            <a href="/Orders/UnReceivedOrders">待收货</a>
+                        </li>
+                        @*<li id="CompeletedOrders">
+            <i></i>
+            <a href="/Orders/CompeletedOrders">已完成</a>
+        </li>
+        <li id="HangUpOrders">
+            <i></i>
+            <a href="/Orders/HangUpOrders">已挂起</a>
+        </li>*@
+                        <li id="RejectedOrders">
+                            <i></i>
+                            <a href="/Orders/RejectedOrders">已退回</a>
+                        </li>
+                        @*<li id="CanceledOrders">
+            <i></i>
+            <a href="/Orders/CanceledOrders">已取消</a>
+        </li>*@
+                        <li id="MyOrders">
+                            <i></i>
+                            <a href="/Orders/MyOrders">全部订单</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="member_left_list" id="divPayment">
+                <p>付汇中心</p>
+                <ul>
+                    <li id="MyApplies">
+                        <i></i>
+                        <a href="/PayExchanges/MyApplies">我的付汇</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="member_left_list" style="display:none" id="divProcuct">
+                <p>产品中心</p> <ul>
+                    <li id="MyProducts">
+                        <i></i>
+                        <a href="/Products/MyProducts">我的产品</a>
+                    </li>
+                    <li id="MyPreProducts" class="">
+                        <i></i>
+                        <a href="/Products/MyPreProducts">产品预归类</a>
+                    </li>
+                    @*<li id="ProductTaxCategories">
+                    <i></i>
+                    <a href="/Products/ProductTaxCategories">自定义产品税号</a>
+                </li>*@
+                </ul>
+            </div>
+            <div class="member_left_list" style="display:none" id="divPayTax">
+                <p>缴税记录</p>
+                <ul>
+                    <li id="TaxRecord">
+                        <i></i>
+                        <a href="/Reports/TaxRecord">缴税记录</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="member_left_list" style="display:none" id="divDeclare">
+                <p>报关信息</p>
+                <ul>
+                    <li id="DeclareOrder">
+                        <i></i>
+                        <a href="/Declare/DeclareOrder">报关单</a>
+                    </li>
+                    <li id="DeclareData">
+                        <i></i>
+                        <a href="/Declare/DeclareData">报关数据</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        @RenderBody()
+    </div>
+</section>
+<script>
+     //获取视图传来的id
+      var id = '@ViewBag.navid';
+      if (id != "" && id != null) {
+          $("#" + id).addClass("active");
+      }
+      else {
+          $("#Index").addClass("active");
+    }
+    if (id == "Index") {
+        $("#indexCur").addClass("active").prev("a").addClass("active");
+        $("#mem_center").html("首页");
+    } else if (id == "MyProducts" || id =="MyPreProducts") {
+        $("#productCur").addClass("active").prev("a").addClass("active");
+        $("#mem_center").html("产品");
+        $("#divProcuct").show();
+        $(".center_add_btn").html("<i class='el-icon-plus'></i>新增产品").removeAttr("href").click(function () {
+            if (id == "MyProducts") {
+                product.add_Tax();
+            } else {
+                preproduct.add_Tax();
+            }
+        });
+        $("#divOrder").hide();
+        $("#divPayment").hide();
+    }
+    else {
+        $("#centerCur").addClass("active").prev("a").addClass("active");
+        $("#mem_center").html("报关");
+        $("#divPayTax").show();
+        if ('@ViewBag.IsInside' == "y") {
+            $("#divDeclare").show();
+        }
+    }
+
+
+    new Vue({
+        el: '#UnPayExchanges',
+        data: {
+            isShow: '@ViewBag.IsInside' == "y" ? true : false
+        }
+
+    });
+</script>

@@ -1,0 +1,548 @@
+﻿@{
+    ViewBag.Title = "UnPayExchangesInside";
+}
+@{
+    /**/
+    ViewBag.Title = "待付汇订单";
+    Layout = "~/Views/Shared/_LayoutCenter.cshtml";
+    ViewBag.navid = "UnPayExchangesInside";
+}
+<style>
+    .el-message {
+        top: 250px;
+        min-width: 150px;
+    }
+
+    .el-message__content {
+        font-size: 16px;
+    }
+
+    .el-message .el-icon-error {
+        font-size: 16px;
+    }
+    .submit {
+        width: 110px;
+        height: 30px;
+        line-height: 1;
+        white-space: nowrap;
+        cursor: pointer;
+        text-align: center;
+        font-weight: 500;
+        font-size: 14px;
+        border-radius: 4px;
+        border: 1px solid #dcdfe6;
+     
+        color: #fff;
+        background-color: #31b0f3;
+        border-color: #31b0f3;
+    }
+
+  .tip {
+        color: #31b0f3;
+    }
+
+    #mypayinside {
+        margin: 16px 20px 30px;
+        min-height: 660px;
+    }
+
+        #mypayinside .dataList table {
+            width: 100%;
+            text-align: center;
+            font-size: 13px;
+            color: #666666;
+        }
+
+        #mypayinside .foot {
+            width: 100%;
+            height: 50px;
+            margin-bottom: 30px;
+            margin-top: 20px;
+        }
+
+    .el-input__inner {
+        height: 30px;
+        line-height: 30px;
+        padding: 0 10px;
+    }
+</style>
+<div class="content_right backshow">
+    <h2>待付汇</h2>
+    <div id="mypayinside" v-cloak style="padding:30px;min-height:650px;">
+        <div class="queryData">
+            <div>
+                <span class="title1 title">下单时间:</span>
+                <el-date-picker size="small" v-model="initData.dataValue"
+                                type="daterange"
+                                range-separator="至"
+                                start-placeholder="开始日期"
+                                end-placeholder="结束日期">
+                </el-date-picker>
+                <span class="title1 title">供应商:</span>
+                <el-input size="small" placeholder="请输入供应商" style="width:190px;"  v-model="initData.supplierName"></el-input>
+            </div>
+            <div>
+                <span class="title1 title">订单编号:</span>
+                <el-input placeholder="请输入订单编号 ,分隔" style="width:310px;height:18px;"  v-model="initData.mainOrderId"></el-input>
+                <span class=" title1 title">币种:</span>
+                <el-select size="mini" v-model="initData.currency" filterable clearable placeholder="请选择">
+                    <el-option v-for="item in CurrencyOptions"
+                               :key="item.value"
+                               :label="item.text"
+                               :value="item.value">
+                    </el-option>
+                </el-select>
+                <button class="btnQuery ml28" v-on:click="queryData"><i></i>查询</button>
+                <button class="btnQuery ml12 el-icon-delete" v-on:click="clearData">清空</button>
+            </div>
+        </div>
+
+        <div style="margin-top:20px;">
+            <form name="form" action="/PayExchanges/Apply" method="post" onsubmit="return applySubmit()">
+                <input hidden type="text" name="id" id="id" />
+                <input type="submit" class="submit" value="批量申请付汇" />
+              <span class="tip">如何选择？多个订单一起付汇，需要选择相同交易币种及供应商订单</span>
+              <span style="font-size:15px;font-size:small; color:red;margin-left:100px">未付汇合计: {{total()}}</span>
+            </form>
+            @*<el-button v-on:click="applyOrders" type="primary">申请付汇</el-button>*@
+        </div>
+
+        <div class="dataList mt12 check" v-loading="initData.loading">
+            <table class="taxRecordTb" border="0" cellspacing="0" cellpadding="0" style="text-align:center">
+                <tr>
+                    <th style="width:40px"><el-checkbox v-model="initData.allCheck" v-on:change="handleallCheck"></el-checkbox></th>
+                    <th width="125">订单编号</th>
+                    <th width="180">子订单</th>
+                    <th width="500">供应商名称</th>
+                    <th width="100">报关总价</th>
+                    <th width="60">币种</th>
+                    <th width="130">付汇状态</th>
+                    <th width="100">已付汇</th>
+                    <th width="100">未付汇</th>
+                    <th width="150">操作</th>
+                </tr>
+                <tr v-for="(item,index) of dataList" :key="item.ID">
+                    <td style="text-align:center">
+                        <el-checkbox v-model="item.isCheck" v-on:change="singlecheck(item.ID,item.isCheck)"></el-checkbox>
+                    </td>
+                    <td v-if="item.rowSpan>0" style="width:125px;text-align:center" :rowspan="item.rowSpan">
+                        <span>{{item.MainOrderID}} </span>
+                        <a v-on:click="orderDetails(item.MainOrderID)">订单详情</a>
+                    </td>
+                    <td>{{item.ID}}</td>
+                    <td style="word-wrap:break-word;word-break:break-all;padding:0 3px;text-align:left;width:300px">
+                        <ul style="line-height: 25px;margin-top: 5px;">
+                            <li v-for="(sub_item,index) in item.PaySuppliersName" style="margin-left:2px">
+                                {{index + 1}}. {{sub_item}}
+                            </li>
+                        </ul>
+                    </td>
+                    <td>{{item.DeclarePrice.toFixed(2)}}</td>
+                    <td>{{item.Currency}}</td>
+                    <td>{{item.PayExchangeStatus}}</td>
+                    <td>
+                        {{item.Remittanced}}
+                        <ul>
+                            <li><a v-on:click="payDetails(item.ID)">查看</a></li>
+                        </ul>
+
+                    </td>
+                    <td>{{item.Remittance}}</td>
+                    <td><a v-on:click="applyOrder(item.ID,item.IsPrePayExchange,item.DeclareDate)">申请付汇</a> </td>
+                </tr>
+            </table>
+        </div>
+        <div class="foot" v-if="!initData.loading">
+            <el-pagination style="float:right" v-on:size-change="handleSizeChange"
+                           v-on:current-change="handleCurrentChange"
+                           :current-page="initData.pageIndex"
+                           :page-sizes="[10, 20, 50, 100]"
+                           :page-size="initData.pageSize"
+                           layout="total, sizes, prev, pager, next, jumper"
+                           :total="initData.total">
+            </el-pagination>
+        </div>
+        <el-dialog title="付汇记录" :lock-scroll="false" width="600px" :visible.sync="dialogFormVisible" :close-on-click-modal="false">
+            <el-table :data="initData.tableData"
+                      border
+                      style="width: 100%">
+                <el-table-column label="#" type="index">
+                </el-table-column>
+                <el-table-column prop="ApplyTime"
+                                 label="申请时间">
+                </el-table-column>
+                <el-table-column prop="SupplierName"
+                                 label="供应商">
+                </el-table-column>
+                <el-table-column prop="Applier"
+                                 label="申请人">
+                </el-table-column>
+                <el-table-column prop="Amount"
+                                 label="付汇金额">
+                </el-table-column>
+                <el-table-column prop="Status"
+                                 label="状态">
+                </el-table-column>
+            </el-table>
+        </el-dialog>
+    </div>
+</div>
+<style lang="less" scoped>
+    .hidden {
+        display: none
+    }
+</style>
+<script>
+
+    function applySubmit() {
+
+        var ids = [];
+        var curency = [];
+        var supplier = [];
+        pay.dataList.filter(function (value, index) {
+            if (value.isCheck) {
+                ids.push(value.ID)
+                curency.push(value.Currency)
+                var arry = new Array();
+                for (var i = 0; i < value.PaySuppliers.length; i++) {
+                    arry.push(value.PaySuppliers[i]);
+
+                }
+                supplier.push(arry);
+            }
+        });
+        if (ids.length == 0) {
+            pay.onAlert("error", "请选择订单！");
+            return false;
+        }
+        //货币去重
+        var uniqueCurrency = curency.filter(function (element, index, self) {
+            return self.indexOf(element) === index;
+        });
+        if (uniqueCurrency.length != 1) {
+            pay.onAlert("error", "请选择相同的交易币种！");
+            return false;
+        }
+        var intersection = []; //供应商交集
+        for (var i = 0; i < supplier.length; i++) {
+            if (i == 0) {
+                intersection = supplier[i];
+            } else {
+                intersection = intersection.filter(function (v) {
+                    if (supplier[i].includes(v)) {
+                        return v;
+                    }
+                });
+                intersection = intersection.filter(function (v) {
+                    if (supplier[i].includes(v)) {
+                        return v;
+                    }
+                });
+
+                if (intersection.length == 0) {
+                    pay.onAlert("error", "请选择相同的供应商。");
+                    return false;
+                }
+            }
+        }
+
+        $("#id").val(ids.join(','));
+        return true;
+    }
+
+    var pay= new Vue({
+        el: "#mypayinside",
+        data: function () {
+            return {
+                dataList: [],
+                initData: {
+                    loading: true,
+                    pageIndex: 1, //初始页
+                    pageSize: 20,    //每页的数据
+                    total: 0,
+                    allCheck: false,
+                    mainOrderId: "",
+                    supplierName: "",
+                    startDate: "",
+                    endDate: "",
+                    dataValue: "",
+                    dataValueMonth: new Date(),
+                    currencylist:@Html.Raw(Json.Encode(Model)),
+                    currencyName: "交易币种",
+                    currency: "",
+                    tableData: [], //查看付汇
+                    rowSpan:""
+                },
+                //showIndex: "1", //下拉标志
+                dialogFormVisible: false
+            }
+        },
+        computed: {
+            CurrencyOptions: function () {
+                return JSON.parse(this.initData.currencylist.CurrencyOptions);
+            }
+        },
+        mounted: function () {
+            this.queryData();
+        },
+        methods: {
+
+            //清空数据
+            clearData: function () {
+                this.initData.supplierName = "";
+                this.initData.mainOrderId = "";
+                this.initData.decHeadID = "";
+                this.initData.models = "";
+                this.initData.startDate = "";
+                this.initData.endDate = "";
+                this.initData.dataValue = "";
+                this.initData.pageIndex = 1;
+                this.initData.dataValueMonth = "";
+                this.initData.Currency = "";
+                this.initData.allCheck = false;
+                this.paging();
+            },
+            //查询数据
+            queryData: function () {
+                if (this.initData.dataValue != "" && this.initData.dataValue != null) {
+                    var start = new Date(this.initData.dataValue[0]);
+                    var startDate = start.getFullYear() + '-' + (start.getMonth() + 1) + '-' + start.getDate();
+                    var end = new Date(this.initData.dataValue[1]);
+                    var endDate = end.getFullYear() + '-' + (end.getMonth() + 1) + '-' + end.getDate();
+                    this.initData.startDate = startDate;
+                    this.initData.endDate = endDate;
+                } else {
+                    this.initData.startDate = "";
+                    this.initData.endDate = "";
+                }
+
+
+                this.initData.pageIndex = 1;
+                this.paging();
+            },
+            handleallCheck: function () {
+                var that = this;
+                this.dataList.forEach(function (val, index) {
+                    val.isCheck = that.initData.allCheck;
+                });
+
+            },
+            //是否全选
+            isAllcheck: function () {
+                var flag = true;
+                this.dataList.forEach(function (val, index) {
+                    if (!val.isCheck) {
+                        flag = false;
+                    }
+                });
+                this.initData.allCheck = flag;
+            },
+            singlecheck: function (id, ischeck) {
+                this.dataList.filter(function (data) {
+                    console.log(data);
+                    if (data.ID == id) {
+                        data.isCheck = ischeck;
+                    }
+                });
+                this.isAllcheck();
+            },
+
+            total: function (i) {
+                var togglePrice = 0;
+                this.dataList.forEach(function (data) {
+                    if (data.isCheck) {
+                        togglePrice += data.Remittance;
+                    }
+                });
+                return togglePrice.toFixed(2);
+            },
+            // 初始页currentPage、初始每页数据数pagesize和数据data
+            handleSizeChange: function (size) {
+                this.initData.pageSize = size;
+                this.paging();
+            },
+            handleCurrentChange: function (currentPage) {
+                this.initData.pageIndex = currentPage;
+                this.paging();
+            },
+            paging: function () {
+                var that = this;
+                that.initData.loading = true;
+                that.initData.allChecked = false;
+                axios({
+                    url: "/PayExchanges/GetUnPayExchangesInside",
+                    method: "post",
+                    data: {
+                        page: this.initData.pageIndex,
+                        rows: this.initData.pageSize,
+                        currency: this.initData.currency,
+                        supplierName: this.initData.supplierName,
+                        mainOrderId: this.initData.mainOrderId,
+                        startDate: this.initData.startDate,
+                        endDate: this.initData.endDate,
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                    transformRequest: [function (data) {
+                        var ret = ''
+                        for (var it in data) {
+                            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+                        }
+                        return ret;
+                    }],
+                }).then(function (response) {
+                    var data = JSON.parse(response.data.data);
+                    var tempList = data.list;
+                    console.log(tempList);
+                    if (tempList.length > 0) {
+
+                    var KEY_ROWSPAN = "rowSpan";
+                    var KEY_NAME = "MainOrderID";
+                    var k = 0;
+                    tempList[k][KEY_ROWSPAN] = 1;
+                    for (var i = k + 1; i <= tempList.length - 1; i++) {
+                        if (
+                            tempList[k][KEY_NAME] === tempList[i][KEY_NAME] &&
+                            tempList[k][KEY_NAME] !== ""
+                        ) {
+                            tempList[i][KEY_ROWSPAN] = 0;
+                            tempList[k][KEY_ROWSPAN]++;
+                        } else {
+                            k = i;
+                            tempList[k][KEY_ROWSPAN] = 1;
+                            continue;
+                        }
+                    }
+
+                    }
+
+                    //console.log('tempList',tempList)
+                    
+                    //console.log(tempList)
+                    that.dataList = tempList;
+                    that.initData.total = data.total;
+                    that.initData.loading = false;
+
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                });
+            },
+            //changeShowIndex: function () {
+            //    if (this.showIndex == "1") {
+            //        this.showIndex = "2";
+            //    } else {
+            //        this.showIndex = "1";
+            //    }
+            //},
+             orderDetails: function (id) {
+                 sessionStorage.setItem('UnPayExchanges', JSON.stringify(this.initData));
+                location.href = "/Orders/Info/?id=" + id + "&v=" + '@ViewBag.navid';
+            },
+            //是否满足付汇条款：如果是90天内付汇需在报关完成后付汇
+            isAllowPayment: function (orderID, isPrePayExchange, DeclareDate) {
+                return true;
+            },
+            //多选申请付汇
+            applyOrders: function () {
+                var ids = [];
+                var curency = [];
+                var supplier = [];
+                this.dataList.filter(function (value, index) {
+                    if (value.isCheck) {
+                        ids.push(value.ID)
+                        curency.push(value.Currency)
+                        var arry = new Array();
+                        for (var i = 0; i < value.PaySuppliers.length; i++) {
+                            arry.push(value.PaySuppliers[i]);
+
+                        }
+                        supplier.push(arry);
+                    }
+                });
+                if (ids.length == 0) {
+                    this.onAlert("error", "请选择订单！");
+                    return;
+                }
+                //货币去重
+                var uniqueCurrency = curency.filter(function (element, index, self) {
+                    return self.indexOf(element) === index;
+                });
+                if (uniqueCurrency.length != 1) {
+                    this.onAlert("error", "请选择相同的交易币种！");
+                    return;
+                }
+                var intersection = []; //供应商交集
+                for (var i = 0; i < supplier.length; i++) {
+                    if (i == 0) {
+                        intersection = supplier[i];
+                    } else {
+                        intersection = intersection.filter(function (v) {
+                            if (supplier[i].includes(v)) {
+                                return v;
+                            }
+                        });
+                        intersection = intersection.filter(function (v) {
+                            if (supplier[i].includes(v)) {
+                                return v;
+                            }
+                        });
+
+                        if (intersection.length == 0) {
+                            this.onAlert("error", "请选择相同的供应商。");
+                            return;
+                        }
+                    }
+                }
+
+               // location.href = "/PayExchanges/Apply/" + ids.join(',');
+
+                //axios({
+                //    url: "/PayExchanges/Apply",
+                //    method: "post",
+                //    data: {
+                //        id: JSON.stringify(ids)
+                //    }
+                //}).then(function (response) {
+                //    if (response.data.type == "error") {
+                //        this.onAlert(response.data.type, response.data.msg);
+                //    }
+                //    }).catch(function (error) {
+                //        this.onAlert("warning", error);
+                //});
+
+            },
+            //申请付汇
+            applyOrder: function (orderID, isPrePayExchange, DeclareDate) {
+                if (this.isAllowPayment(orderID, isPrePayExchange, DeclareDate)) {
+                    sessionStorage.setItem('UnPayExchanges', JSON.stringify(this.initData));
+                    location.href = "/PayExchanges/Apply/" + orderID;
+                }
+            },
+            //付汇记录
+            payDetails: function (id) {
+                axios({
+                    url: "/PayExchanges/GetPayRecord",
+                    method: "post",
+                    data: { id: id },
+                }).then(function (res) {
+                    if (res.data.type == "success") {
+                        pay.initData.tableData = JSON.parse(res.data.data);
+                        pay.dialogFormVisible = true;
+                    }
+                }).catch(function (error) {
+                    pay.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+        }
+    });
+
+</script>
+

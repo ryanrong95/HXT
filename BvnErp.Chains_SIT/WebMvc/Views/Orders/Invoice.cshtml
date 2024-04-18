@@ -1,0 +1,112 @@
+﻿
+@{
+    ViewBag.Title = "发票详情";
+    Layout = "~/Views/Shared/_LayoutCenter.cshtml";
+}
+
+<div id="invoice" class="center_right backshow fl">
+    <div class="breaklist">
+        <span class="fl first_title">发票详情</span>
+        <span v-on:click="history.back(-1)" class="fl second_title">返回</span>
+    </div>
+    <div class="content">
+        @*产品明细*@
+        <div>
+            <table border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <th class="first_th" colspan="2">订单号：{{form.ID}}</th>
+                </tr>
+                <tr>
+                    <td style="width:150px;">开票类型</td>
+                    <td>{{form.invoice.invoiceType}}</td>
+                </tr>
+                <tr>
+                    <td>名称</td>
+                    <td>{{form.invoice.invoiceTitle}}</td>
+                </tr>
+                <tr>
+                    <td>纳税人识别号</td>
+                    <td>{{form.invoice.invoiceTaxCode}}</td>
+                </tr>
+                <tr>
+                    <td>地址、电话</td>
+                    <td>{{form.invoice.invoiceAddress}}&nbsp;、&nbsp;{{form.invoice.invoiceTel}}</td>
+                </tr>
+                <tr>
+                    <td>开户行及账号</td>
+                    <td>{{form.invoice.invoiceBank}}&nbsp;、&nbsp;{{form.invoice.invoiceAccount}}</td>
+                </tr>
+                <tr>
+                    <td>收件人姓名</td>
+                    <td>{{form.invoice.contact}}</td>
+                </tr>
+                <tr>
+                    <td>电话</td>
+                    <td>{{form.invoice.mobile}}</td>
+                </tr>
+                <tr>
+                    <td>收件地址</td>
+                    <td>{{form.invoice.contactAddress}}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="mail_detail">
+            <table border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <th class="first_th" colspan="2">邮寄信息</th>
+                </tr>
+                <tr>
+                    <td style="width:150px;">快递公司</td>
+                    <td>{{form.invoice.ExpressCompany}}</td>
+                </tr>
+                <tr>
+                    <td>运单号</td>
+                    <td>{{form.invoice.ExpressCode}}</td>
+                </tr>
+                <tr>
+                    <td>发票号码</td>
+                    <td>{{form.invoice.InvoiceNo}}</td>
+                </tr>
+                <tr>
+                    <td>寄出日期</td>
+                    <td>{{form.invoice.CreateDate}}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="mail_detail" v-if="form.IsCustomsInvoice">
+            <table border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <th class="first_th" colspan="2">海关发票</th>
+                </tr>
+                <tr v-if="form.IsTariffInvoice">
+                    <td>海关关税发票</td>
+                    <td v-if="form.TariffInvoice!='' && form.TariffInvoice!=null"><a :href="form.TariffInvoice" target="_blank" style="color:#31b0f3">预览</a></td>
+                    <td v-else style="color:#999999">暂未上传海关关税发票</td>
+                </tr>
+                <tr v-if="form.IsAddInvoice">
+                    <td style="width:150px;">海关增值税发票</td>
+                    <td v-if="form.VATInvoice!='' && form.VATInvoice!=null"><a :href="form.VATInvoice" target="_blank" style="color:#31b0f3">预览</a></td>
+                    <td v-else style="color:#999999">暂未上传海关增值税发票</td>
+                </tr>
+                <tr v-if="form.IsConsumptionTax">
+                    <td style="width:150px;">海关消费税发票</td>
+                    <td v-if="form.ConsumptionTaxInvoice!='' && form.ConsumptionTaxInvoice!=null"><a :href="form.ConsumptionTaxInvoice" target="_blank" style="color:#31b0f3">预览</a></td>
+                    <td v-else style="color:#999999">暂未上传海关消费税发票</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    var invoice = new Vue({
+        el: "#invoice",
+        data: function () {
+            return {
+                form: @Html.Raw(Json.Encode(Model)),
+            }
+        },
+        methods: {
+        }
+    });
+</script>
+

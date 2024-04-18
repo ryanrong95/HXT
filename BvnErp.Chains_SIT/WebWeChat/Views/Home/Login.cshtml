@@ -1,0 +1,110 @@
+﻿@{
+    ViewBag.Title = "登录";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>登录</title>
+    <link rel="stylesheet" href="~/Content/css/border.css">
+    <link rel="stylesheet" href="~/Content/css/reset.css">
+    <link rel="stylesheet" href="~/Content/css/element.css">
+    <link rel="stylesheet" href="~/Content/css/mint-ui.css">
+    <link rel="stylesheet" href="~/Content/css/index.css">
+    <link rel="stylesheet" href="~/Content/css/login.css">
+    <script src="~/Scripts/vue.js"></script>
+    <script src="~/Scripts/elementui.js"></script>
+    <script src="~/Scripts/mint-ui.js"></script>
+    <script src="~/Scripts/axios.min.js"></script>
+
+    <style>
+        .shuoming p {
+            text-indent: -0.2rem;
+            margin-left: 0.26rem;
+        }
+
+        .contents_laber p {
+            height: auto;
+            min-height: 30px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="logins">
+        <div class="login_logo">
+            <img src="~/Content/img/logo.png" alt="">
+        </div>
+        <div class="login_input_box">
+            <el-input v-model="formdata.Name" class="login_input" placeholder="用户名/邮箱/手机号码" v-on:blur="NameisNull" v-on:keyup.native="NameisNull" autocapitalize="off"></el-input>
+            <p class="error_hint">
+                <span v-if="is_Namenull==1">用户名/邮箱/手机号码</span>
+            </p>
+            <el-input type="password" v-model="formdata.Password" class="login_input" placeholder="请输入密码" v-on:blur="PasswordisNull" v-on:keyup.native="PasswordisNull"></el-input>
+            <p class="error_hint">
+                <span v-if="is_Passwordnull==1">请输入密码</span>
+            </p>
+            <button v-on:click="sumbit_btns" class="login_btn">{{loginTxt}}</button>
+        </div>
+    </div>
+    <script>
+
+    var login = new Vue({
+        el: "#logins",
+        data: {
+            formdata: @Html.Raw(Json.Encode(Model)),
+            is_Namenull: 0,
+            is_Passwordnull: 0,
+            loginTxt:"登录",
+        },
+        methods: {
+            NameisNull: function () {
+                if (this.formdata.Name == null || this.formdata.Name == "") {
+                    this.is_Namenull = 1;
+                } else {
+                    this.is_Namenull = 0;
+                }
+            },
+            PasswordisNull: function () {
+                if (this.formdata.Password == null || this.formdata.Password == "") {
+                    this.is_Passwordnull = 1;
+                } else {
+                    this.is_Passwordnull = 0;
+                }
+            },
+            sumbit_btns: function () {
+                var that = this;
+                that.NameisNull();
+                that.PasswordisNull();
+                if (this.is_Namenull == 0 && this.is_Passwordnull == 0) {
+                    that.loginTxt = "正在登录...";
+                    axios({
+                        url: "/Home/Login",
+                        method: "post",
+                        data: that.formdata,
+                    }).then(function (response) {
+                        if (response.data.type == "success") {
+                            if (login.formdata.Url != "") {
+                                window.location.href = login.formdata.Url;
+                            } else {
+                                window.location.href = "/Account/Index";
+                            }
+                        } else {
+                            that.loginTxt = "登录";
+                            that.$messagebox('登录失败', '账号或密码错误，请重新输入');
+                        }
+                    }).catch(function (error) {
+                    });
+                    // this.$toast('保存成功')
+                }
+            },
+        },
+
+    })
+    </script>
+</body>
+</html>

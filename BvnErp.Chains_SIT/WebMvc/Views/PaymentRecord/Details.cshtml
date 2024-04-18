@@ -1,0 +1,110 @@
+﻿
+@{
+    ViewBag.Title = "付款明细";
+    Layout = "~/Views/Shared/_LayoutCenter.cshtml";
+    ViewBag.navid = "MyPayment";
+}
+
+<div id="orderRecieved" v-cloak class="center_right backshow fl">
+    <div class="breaklist">
+        <span class="fl first_title">付款明细</span>
+        <span v-on:click="history.back(-1)" class="fl second_title">返回</span>
+    </div>
+    <div class="orderRecieved_content">
+        <p class="mb10">交易流水号：{{formData.SeqNo}}</p>
+        <p class="mb10">收款银行：{{formData.AccountBankName}}  &nbsp;<span> {{formData.AccountBankAccount}} </span></p>
+        <p> <span>付款时间：{{formData.CreateTime}}</span><span>付款金额：{{formData.Amount}} <span style="font-size:13px">{{formData.Currency}}</span></span><span>已入账金额：{{formData.ClearAmount}} <span style="font-size:13px">{{formData.Currency}}</span></span></p>
+        <div class="tb_Recieved">
+            <div v-loading="loading" style="min-height:400px;">
+                <el-table v-if="!loading" style="width: 100%;margin-bottom:30px" :data="dataList" stripe>
+                    <el-table-column label="序号" type="index" width="48">
+                    </el-table-column>
+                    <el-table-column label="时间" prop="CreateDate">
+                    </el-table-column>
+                    <el-table-column label="订单编号" prop="OrderID">
+                    </el-table-column>
+                    <el-table-column label="费用类型" prop="FeeType">
+                    </el-table-column>
+                    <el-table-column label="实收" prop="Amount">
+                    </el-table-column>
+                </el-table>
+                <div class="foot" v-if="!loading">
+                    <el-pagination style="float:right;margin-bottom:30px;" v-on:size-change="handleSizeChange"
+                                   v-on:current-change="handleCurrentChange"
+                                   :current-page="pageIndex"
+                                   :page-sizes="[10,20,40,50]"
+                                   :page-size="pageSize"
+                                   layout="total, sizes, prev, pager, next, jumper"
+                                   :total="formData.Total">
+                    </el-pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    var orderRecieved = new Vue({
+        el: "#orderRecieved",
+        data: function () {
+            return {
+                formData:@Html.Raw(Json.Encode(Model)),
+                dataList:[],
+                loading: true,
+                pageIndex: 1, //初始页
+                pageSize: 10,    //每页的数据
+            }
+        },
+        mounted: function () {
+            this.paging();
+        },
+        methods: {
+            // 初始页currentPage、初始每页数据数pagesize和数据data
+            handleSizeChange: function (size) {
+                this.pageSize = size;
+                this.paging();
+            },
+            handleCurrentChange: function (currentPage) {
+                this.pageIndex = currentPage;
+                this.paging();
+            },
+            paging: function () {
+                var that = this;
+                that.loading = true;
+                axios({
+                    url: "/PaymentRecord/GetDetailsList",
+                    method: "post",
+                    data: {
+                        page: this.pageIndex,
+                        rows: this.pageSize,
+                        id: this.formData.ID,
+                    },
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                    transformRequest: [function (data) {
+                        var ret = ''
+                        for (var it in data) {
+                            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+                        }
+                        return ret;
+                    }],
+                }).then(function (response) {
+                    var data = JSON.parse(response.data.data);
+                    that.dataList = data.list;
+                    that.formData.Total = data.total;
+                    that.loading = false;
+                }).catch(function (error) {
+                    that.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                });
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type,
+                });
+            }
+        }
+    });
+</script>

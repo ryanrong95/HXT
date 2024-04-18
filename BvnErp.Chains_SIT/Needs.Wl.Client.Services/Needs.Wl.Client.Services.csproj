@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{29E5B5A0-AF0E-4162-8ACC-CDE27380E6A9}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Needs.Wl.Client.Services</RootNamespace>
+    <AssemblyName>Needs.Wl.Client.Services</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\ClientPaymentRecord.cs" />
+    <Compile Include="Models\CustomsTaxReport.cs" />
+    <Compile Include="Models\ClassifiedPreProduct.cs" />
+    <Compile Include="Models\OrderPayExchangeRecord.cs" />
+    <Compile Include="Models\UserPayExchangeApply.cs" />
+    <Compile Include="PageModels\AllUnReceivedExitNoticeViewModel.cs" />
+    <Compile Include="PageModels\ApiClassifyProduct.cs" />
+    <Compile Include="PageModels\DeclareOrderViewModel.cs" />
+    <Compile Include="PageModels\DraftOrderViewModel.cs" />
+    <Compile Include="PageModels\UnComfirmOrder.cs" />
+    <Compile Include="PageModels\RejectedOrder.cs" />
+    <Compile Include="PageModels\AllOrderViewModel.cs" />
+    <Compile Include="PageModels\UnReceivedOrder.cs" />
+    <Compile Include="PageModels\UnInvocieOrder.cs" />
+    <Compile Include="PageModels\UnPayExchangeOrder.cs" />
+    <Compile Include="UserSubmitPayExchange.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SupplierUtils.cs" />
+    <Compile Include="UserUtils.cs" />
+    <Compile Include="Views\ClientClassedPreProductsView.cs" />
+    <Compile Include="Views\ClientPreProductsView.cs" />
+    <Compile Include="Views\ClientProductsView.cs" />
+    <Compile Include="Views\ClientProductTaxCategoriesView.cs" />
+    <Compile Include="Views\ClientSuppliersView.cs" />
+    <Compile Include="Views\ClientConsigneesView.cs" />
+    <Compile Include="Views\PaymentRecordReceivedsView.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Extends\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\NewSolution\Layer.Data\Layer.Data.csproj">
+      <Project>{220cf961-81ef-4288-8d42-54cefbe35086}</Project>
+      <Name>Layer.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\NewSolution\Layer.Linq\Layer.Linq.csproj">
+      <Project>{7031ff1c-1fb9-457c-88fe-9955e07badd3}</Project>
+      <Name>Layer.Linq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\NewSolution\Needs.Linq\Needs.Linq.csproj">
+      <Project>{8f7ffcb1-97bc-4977-b262-71365ae8ec62}</Project>
+      <Name>Needs.Linq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\NewSolution\Needs.Overall\Needs.Overall.csproj">
+      <Project>{94da4133-a4a4-4e1c-98d6-5f1c023dcdd2}</Project>
+      <Name>Needs.Overall</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\NewSolution\Needs.Utils\Needs.Utils.csproj">
+      <Project>{71b45033-2d91-4fad-bb5b-441174260e6a}</Project>
+      <Name>Needs.Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Needs.AppSettings\Needs.Wl.Settings.csproj">
+      <Project>{3a2d88f8-c789-4c8b-8a75-aafb2b207020}</Project>
+      <Name>Needs.Wl.Settings</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Needs.Model\Needs.Model.csproj">
+      <Project>{8d4d6c8e-8336-4799-939d-25a458730731}</Project>
+      <Name>Needs.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Needs.Wl.Logs.Services\Needs.Wl.Logs.Services.csproj">
+      <Project>{a59a84c3-c2d7-47d1-83af-d5397bf7e433}</Project>
+      <Name>Needs.Wl.Logs.Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Needs.Wl.Models\Needs.Wl.Models.csproj">
+      <Project>{6a51926d-a4ca-45c1-812c-b22741655e42}</Project>
+      <Name>Needs.Wl.Models</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

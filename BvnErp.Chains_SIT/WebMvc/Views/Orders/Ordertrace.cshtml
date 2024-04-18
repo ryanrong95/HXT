@@ -1,0 +1,74 @@
+﻿@{
+    ViewBag.Title = "订单跟踪";
+    Layout = "~/Views/Shared/_LayoutCenter.cshtml";
+}
+
+<div id="trace" v-cloak class="center_right backshow fl">
+    <div class="breaklist">
+        <span   class="fl first_title">订单跟踪</span>
+        <span class="fl second_title" v-on:click="history.back(-1)">返回</span>
+    </div>
+    <div class="order-track">
+        <div class="track-rcol">
+            <div v-if="list.length>0" class="track-list">
+                <ul>
+                    <li class="" v-for="item of list">
+                        <div class="line"></div>
+                        <i class="dot" v-if="item.isDot"></i>
+                        <i v-else :class="[item.isCompleted?'complete':'state-icon']"></i>
+                        <span class="date">
+                            {{item.Date}}
+                        </span>
+                        <span class="time">{{item.Time}}</span>
+                        <span class="txt">
+                            <span class="stress-txt">{{item.Step}}</span>{{item.Summary}}
+                        </span>
+                    </li>
+                </ul>
+            </div>
+            <p v-else class="no_data">
+                暂无数据...
+            </p>
+        </div>
+    </div>
+</div>
+<script>
+
+    var trace = new Vue({
+        el: "#trace",
+        data: function () {
+            return {
+                form: @Html.Raw(Json.Encode(Model)),
+                list: [],
+            }
+        },
+        mounted: function () {
+            var data = this.form;
+            var arr = [];
+            var date = "";
+            var step = "";
+            for (var i = 0; i < data.length; i++) {
+                var temp = data[i];
+                if (data[i].Date == date) {
+                    temp.Date = "";
+                } else {
+                    date = data[i].Date;
+                }
+                if (data[i].Step == step) {
+                    temp.isDot = true;
+                } else {
+                    step = data[i].Step;
+                }
+                if (i > 0) {
+                    temp.isCompleted = false;
+                }
+                arr.push(temp);
+            }
+            this.list = arr;
+        },
+        methods: {
+
+        }
+    });
+</script>
+

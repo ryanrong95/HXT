@@ -1,0 +1,128 @@
+﻿
+@{
+    ViewBag.Title = "账户设置";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>账号设置</title>
+    <link rel="stylesheet" href="~/Content/css/index.css">
+    <link rel="stylesheet" href="~/Content/css/element.css">
+    <link rel="stylesheet" href="~/Content/css/mint-ui.css">
+    <script src="~/Scripts/vue.js"></script>
+    <script src="~/Scripts/mint-ui.js"></script>
+    <script src="~/Scripts/axios.min.js"></script>
+</head>
+<body>
+    <div id="Account_settings">
+        <div class="second_header">
+            <a onClick="javascript :history.back(-1);"><span class="el-icon-arrow-left icon"></span></a>
+            <div class="second_nav">
+                <span class="header-title">账号设置</span>
+            </div>
+        </div>
+        <div class="info_box">
+            <div v-for="(item,index) in info_data" v-on:click="info_herfs(index,item.url)" v-bind:class="{info_li_backs:info_class==index}">
+                <p>
+                    <span>{{item.name}}</span>
+                    <span class="el-icon-arrow-right"></span>
+                </p>
+            </div>
+        </div>
+        <div class="info_box">
+            <div v-for="(item,index) in settdata" v-on:click="setting_herfs(index,item.url)" v-bind:class="{info_li_backs:settingclass==index}">
+                <p>
+                    <span>{{item.name}}</span>
+                    <span class="el-icon-arrow-right"></span>
+                </p>
+            </div>
+        </div>
+        <div class="logout">
+            <span v-on:click="logout">退出登录</span>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+    var Account_information = new Vue({
+        el: "#Account_settings",
+        data: {
+            info_class: -1,
+            settingclass: -1,
+            info_data: [
+                {
+                    name: "账户信息",
+                    url: "/Account/Client"
+                },
+                {
+                    name: "协议条款",
+                    url: "/Account/Agreement"
+                },
+                {
+                    name: "发票信息",
+                    url: "/Account/Invoice"
+                },
+                {
+                    name: "收货地址",
+                    url: "/Account/MyConsignees"
+                },
+                {
+                    name: "供应商",
+                    url: "/Supplier/MySuppliers"
+                },
+            ],
+            settdata: [
+                {
+                    name: "修改密码",
+                    url: "/Account/Password"
+                },
+                {
+                    name: "手机绑定",
+                    url: "/Account/Mobile"
+                },
+            ],
+
+        },
+        methods: {
+            info_herfs: function (index, url) {
+                this.settingclass = -1;
+                this.info_class = index;
+                window.location.href = url;
+            },
+            setting_herfs: function (index, url) {
+                this.info_class = -1;
+                this.settingclass = index;
+                window.location.href = url;
+            },
+            logout: function () {
+                var that = this;
+                this.$messagebox({
+                    title: '提示',
+                    message: "确定退出登录",
+                    showCancelButton: true,
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                    confirmButtonClass: "confirm-button",
+                }).then(action => {
+                    if ("confirm" == action) {
+                        axios({
+                            url: "/Account/Logout",
+                            method: "post",
+                            data: {
+                            }
+                        }).then(function (response) {
+                            location.href = "/Account/Index";
+                        }).catch(function (error) {
+                            that.$toast("系统发生错误，请稍后重试或联系客服");
+                        });
+                    }
+                });
+            }
+        }
+    })
+</script>

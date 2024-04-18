@@ -1,0 +1,226 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Index.aspx.cs" Inherits="WebApp.Client.Index" %>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <uc:EasyUI runat="server" />
+    <link href="../Content/Ccs.css" rel="stylesheet" />
+    <script type="text/javascript">
+        var id = '<%=this.Model.ID%>';
+        var Source = '<%=this.Model.Source%>';
+        var CompanyName = '<%=this.Model.CompanyName%>';
+        var AdminID = '<%=this.Model.AdminID%>';
+        var isServiceManager = '<%=this.Model.isServiceManager%>'
+        if ('<%=this.Model.ServiceType != null%>' == 'True') {
+            serviceType = '<%=this.Model.ServiceType != null ? this.Model.ServiceType:""%>';
+        }
+        var tabInfos = []; //用于保存tab信息, 如果需要强制刷新, 则从这里取出信息
+
+        $(function () {
+            $('#tt').tabs({
+                border: false,
+                tabWidth: 120,
+                onSelect: function (title, index) {
+                    var userAgent = navigator.userAgent;
+                    if (userAgent.indexOf("Firefox") > -1) {
+                        for (var i = 0; i < tabInfos.length; i++) {
+                            if (tabInfos[i].title == title) {
+                                tabInfos[i].mandot = tabInfos[i].mandot + 1;
+                                break;
+                            }
+                        }
+
+                        //if (title == "补充协议" || title == "发票信息") {
+                        if (title != "") {  //所有标签都这么做
+                            var themandot = 100;
+                            var thecontent = "";
+
+                            for (var i = 0; i < tabInfos.length; i++) {
+                                if (tabInfos[i].title == title) {
+                                    themandot = tabInfos[i].mandot;
+                                    thecontent = tabInfos[i].content;
+                                    break;
+                                }
+                            }
+
+                            if (themandot <= 1) {
+                                var tab = $('#tt').tabs('getTab', index);
+                                var content = thecontent;
+
+                                $('#tt').tabs('update', {
+                                    tab: tab,
+                                    options: {
+                                        title: title,
+                                        content: content,
+                                    }
+                                });
+                            }
+                        }
+                    }
+                },
+            });
+
+            var isadd = id == "" || CompanyName.indexOf("reg-") != -1 ? true : false;
+            if (isadd) {
+                addTab("基本信息", "Edit.aspx?ID=" + id, "Info", false);
+                addTab("补充协议", "Agreement.aspx?ID=" + id, "Agreement", isadd);
+                addTab("代仓储协议", "WsAgreement.aspx?ID=" + id, "WsAgreement", isadd);
+                addTab("发票信息", "Invoice.aspx?ID=" + id, "Invoice", isadd);
+                addTab("收件地址", "Consignee/List.aspx?ID=" + id, "Consignee", isadd);
+                addTab("供应商", "Supplier/List.aspx?ID=" + id, "Supplier", isadd);
+                addTab("会员账号", "User/List.aspx?ID=" + id, "Info", isadd);
+                addTab("文件", "File/List.aspx?ID=" + id, "File", isadd);
+                addTab("日志", "Logs.aspx?ID=" + id, "Log", isadd);
+            }
+            else if (!isadd) {
+                switch (serviceType) {
+                    case '<%=Needs.Ccs.Services.Enums.ServiceType.Warehouse.GetHashCode()%>':
+                        addTab("基本信息", "Edit.aspx?ID=" + id, "Info", false);
+                        addTab("代仓储协议", "WsAgreement.aspx?ID=" + id, "WsAgreement", isadd);
+                        addTab("收件地址", "Consignee/List.aspx?ID=" + id, "Consignee", isadd);
+                        addTab("供应商", "Supplier/List.aspx?ID=" + id, "Supplier", isadd);
+                        addTab("会员账号", "User/List.aspx?ID=" + id, "Info", isadd);
+                        addTab("文件", "File/List.aspx?ID=" + id, "File", isadd);
+                        addTab("风控文件", "RiskFile/List.aspx?ID=" + id, "File", isadd);
+                        addTab("日志", "Logs.aspx?ID=" + id, "Log", isadd);
+                        break;
+                    case '<%=Needs.Ccs.Services.Enums.ServiceType.Customs.GetHashCode()%>':
+                        addTab("基本信息", "Edit.aspx?ID=" + id, "Info", false);
+                        addTab("补充协议", "Agreement.aspx?ID=" + id, "Agreement", isadd);
+                        addTab("发票信息", "Invoice.aspx?ID=" + id, "Invoice", isadd);
+                        addTab("收件地址", "Consignee/List.aspx?ID=" + id, "Consignee", isadd);
+                        addTab("供应商", "Supplier/List.aspx?ID=" + id, "Supplier", isadd);
+                        addTab("会员账号", "User/List.aspx?ID=" + id, "Info", isadd);
+                        addTab("文件", "File/List.aspx?ID=" + id, "File", isadd);
+                        addTab("风控文件", "RiskFile/List.aspx?ID=" + id, "File", isadd);
+                        addTab("日志", "Logs.aspx?ID=" + id, "Log", isadd);
+                        break;
+                    case '<%=Needs.Ccs.Services.Enums.ServiceType.Both.GetHashCode()%>':
+                        addTab("基本信息", "Edit.aspx?ID=" + id, "Info", false);
+                        /*  if (Source == "ApproveView") {*/
+                        addTab("补充协议", "Agreement.aspx?ID=" + id, "Agreement", isadd);
+                        addTab("代仓储协议", "WsAgreement.aspx?ID=" + id, "WsAgreement", isadd);
+                        //}
+                        //else if (Source == "Assign") {
+                        //    addTab("补充协议", "Agreement.aspx?ID=" + id, "Agreement", isadd);
+                        //    addTab("代仓储协议", "WsAgreement.aspx?ID=" + id, "WsAgreement", isadd);
+                        //}
+                        //else if (Source == "View") {
+                        //    if (isServiceManager == "True") {
+                        //        addTab("补充协议", "Agreement.aspx?ID=" + id, "Agreement", isadd);
+                        //    }
+                        //    if (isStorageServiceManager == "True") {
+                        //        addTab("代仓储协议", "WsAgreement.aspx?ID=" + id, "WsAgreement", isadd);
+                        //    }
+                        //}
+                        //else {
+                        //    if (isServiceManager == "True") {
+                        //        addTab("补充协议", "Agreement.aspx?ID=" + id, "Agreement", isadd);
+                        //    }
+                        //    if (isStorageServiceManager == "True") {
+                        //        addTab("代仓储协议", "WsAgreement.aspx?ID=" + id, "WsAgreement", isadd);
+                        //    }
+                        //}
+                        addTab("发票信息", "Invoice.aspx?ID=" + id, "Invoice", isadd);
+                        addTab("收件地址", "Consignee/List.aspx?ID=" + id, "Consignee", isadd);
+                        addTab("供应商", "Supplier/List.aspx?ID=" + id, "Supplier", isadd);
+                        addTab("会员账号", "User/List.aspx?ID=" + id, "Info", isadd);
+                        addTab("文件", "File/List.aspx?ID=" + id, "File", isadd);
+                        addTab("风控文件", "RiskFile/List.aspx?ID=" + id, "File", isadd);
+                        addTab("日志", "Logs.aspx?ID=" + id, "Log", isadd);
+                        break;
+                    default:
+                        addTab("基本信息", "Edit.aspx?ID=" + id, "Info", false);
+                        addTab("补充协议", "Agreement.aspx?ID=" + id, "Agreement", isadd);
+                        addTab("发票信息", "Invoice.aspx?ID=" + id, "Invoice", isadd);
+                        addTab("收件地址", "Consignee/List.aspx?ID=" + id, "Consignee", isadd);
+                        addTab("供应商", "Supplier/List.aspx?ID=" + id, "Supplier", isadd);
+                        addTab("会员账号", "User/List.aspx?ID=" + id, "Info", isadd);
+                        addTab("文件", "File/List.aspx?ID=" + id, "File", isadd);
+                        addTab("风控文件", "RiskFile/List.aspx?ID=" + id, "File", isadd);
+                        addTab("日志", "Logs.aspx?ID=" + id, "Log", isadd);
+                }
+
+            }
+
+
+            $('#tt').tabs('select', 0);//第一个选中
+        });
+
+        function addTab(title, href, id, dis) {
+            var tt = $('#tt');
+            if (tt.tabs('exists', title)) {
+                //如果tab已经存在,则选中并刷新该tab                   
+                tt.tabs('select', title);
+                refreshTab({ tabTitle: title, url: href });
+            } else {
+                var content = "";
+                if (href) {
+                    content = '<iframe id="' + id + '" scrolling="no" frameborder="0" data-source="' + Source + '"  src="' + href + '"style="width:100%;height:900px;"></iframe>';
+                }
+                else {
+                    content = '未实现';
+                }
+                tt.tabs('add', {
+                    title: title,
+                    closable: false,
+                    content: content,
+                    disabled: dis,
+                });
+
+                //将tab信息添加到 tabInfos 中
+                tabInfos.push({
+                    title: title,
+                    content: content,
+                    mandot: 0,
+                });
+            }
+        }
+    </script>
+    <script>
+
+        //约定示例
+        top.$.backLiebiao = {
+            kkk: 1,
+            Ruturn: function () {
+                //var source = window.parent.frames.Source;//$('#ClientInfo').data('source');
+                switch (Source) {
+                    case 'Add':
+                        u = 'New/List.aspx';
+                        break;
+                    case 'Assign':
+                        u = 'Approval/List.aspx';
+                        break;
+                    case 'ClerkView':
+                        u = 'New/List.aspx';
+                        break;
+                    case 'ApproveView':
+                        u = 'Approval/List.aspx';
+                        break;
+                    case 'QualifiedView':
+                        u = 'Control/QualifiedList.aspx';
+                        break;
+                    case 'ServiceManagerView':
+                        u = 'ServiceManagerView/List.aspx';
+                        break;
+                    default:
+                        u = 'View/List.aspx';
+                        break;
+                }
+                var url = location.pathname.replace(/Index.aspx/ig, u);
+                window.location = url;
+            }
+        };
+
+    </script>
+
+</head>
+<body>
+    <div>
+        <div id="tt" class="easyui-tabs">
+        </div>
+    </div>
+</body>
+</html>

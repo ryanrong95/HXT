@@ -1,0 +1,378 @@
+﻿@model WebMvc.Models.InvoiceAndConsigneeModel
+@{
+    ViewBag.Title = "Invoice";
+    Layout = "~/Views/Shared/_LayoutAccount.cshtml";
+    ViewBag.navid = "Invoice";
+}
+
+<div id="invoice" v-cloak>
+    @*发票信息开始*@
+    <div class="backshow">
+        <div class="block_title">
+            <h2>发票信息</h2>
+            <a v-if="invoiceRuleForm.IsMain" class=" ftx-05" v-on:click="invoiceIsShow=false">修改</a>
+        </div>
+        @*发票信息显示开始*@
+        <div style="padding:20px;height:100%" v-if="invoiceIsShow">
+            <ul class="BasicInfo">
+                <li class="clearfix">
+                    <div class=" cl">
+                        <span class="label w110">名称：</span>
+                        <em class="fl">{{invoiceRuleForm.Title}}</em>
+                    </div>
+                </li>
+                <li class="clearfix">
+                    <div class=" cl">
+                        <span class="label w110">纳税人识别号：</span>
+                        <em class="fl">{{invoiceRuleForm.TaxCode}}</em>
+                    </div>
+                </li>
+                <li class="clearfix">
+                    <div class=" cl">
+                        <span class="label w110">地址、电话：</span>
+                        <em class="fl">{{invoiceRuleForm.Address}} {{invoiceRuleForm.Tel}}</em>
+                    </div>
+                </li>
+                <li class="clearfix">
+                    <div class="cl">
+                        <span class="label w110">开户行及账号：</span>
+                        <em class="fl">{{invoiceRuleForm.BankName}} {{invoiceRuleForm.BankAccount}}</em>
+                    </div>
+                </li>
+                <li class="clearfix">
+                    <div class=" cl">
+                        <span class="label w110">发票交付方式：</span>
+                        <em class="fl">{{invoiceRuleForm.InvoiceDeliveryTypeName}}</em>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        @*发票信息显示结束*@
+        @*发票信息编辑开始*@
+        <div v-if="!invoiceIsShow">
+            <el-form :model="invoiceRuleForm" :rules="invoiceRules" status-icon ref="invoiceRuleForm" label-width="135px" class="elform_padding">
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item label="名称：" prop="Title" :rules="[{required: true, message: '请输入名称', trigger: 'blur'},{max:150, message: '名称长度不超过150', trigger: 'blur' }]">
+                            <el-input v-model="invoiceRuleForm.Title" placeholder="请输入发票名称" style="width:70%" auto-complete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item label="纳税人识别号：" prop="TaxCode" :rules="[{required: true, message: '请输入纳税人识别号', trigger: 'blur'},{max:50, message: '纳税人识别号长度不超过50', trigger: 'blur' }]">
+                            <el-input v-model="invoiceRuleForm.TaxCode" placeholder="请输入纳税人识别号" style="width:70%" auto-complete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="地址、电话：" prop="Address" :rules="[{required: true, message: '请输入地址', trigger: 'blur'},{max:250, message: '地址长度不超过250', trigger: 'blur' }]">
+                            <el-input v-model="invoiceRuleForm.Address" placeholder="请输入地址" auto-complete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="" label-width="10px" prop="Tel" :rules="[{required: true, message: '请输入电话', trigger: 'blur'},{max:50, message: '电话长度不超过50', trigger: 'blur' }]">
+                            <el-input v-model="invoiceRuleForm.Tel" placeholder="请输入电话" auto-complete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="开户行及账号：" prop="BankName" :rules="[{required: true, message: '请输入开户行', trigger: 'blur'},{max:150, message: '开户行长度不超过150', trigger: 'blur' }]">
+                            <el-input v-model="invoiceRuleForm.BankName" placeholder="请输入开户行" auto-complete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="" label-width="10px" prop="BankAccount">
+                            <el-input v-model="invoiceRuleForm.BankAccount" placeholder="请输入账号" auto-complete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item label="发票交付方式：" prop="InvoiceDeliveryType" :rules="[{required: true, message: '请选择发票交付方式', trigger: 'change'}]">
+                            <el-select v-model="invoiceRuleForm.InvoiceDeliveryType" clearable placeholder="请选择" style="width:324px;">
+                                <el-option v-for="item in InvoiceDeliveryTypeOptions" :label="item.text" :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item>
+                            <el-button type="primary" v-on:click="onInvoiceSubmit('invoiceRuleForm')">保存</el-button>
+                            <el-button  v-on:click="onInvoiceCancel()">取消</el-button>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+        </div>
+        @*发票信息编辑结束*@
+    </div>
+    @*发票收件地址开始*@
+    <div class="backshow" style="margin-top:20px;">
+        <div class="block_title">
+            <h2>发票收件地址</h2>
+            <a v-if="invoiceRuleForm.IsMain"  class="ftx-05" v-on:click="consigneeIsShow=false">修改</a>
+        </div>
+        @*发票收件地址显示开始*@
+        <div style="padding:20px;height:100%" v-if="consigneeIsShow">
+            <ul class="BasicInfo">
+                <li class="clearfix">
+                    <div class=" cl">
+                        <span class="label w95">收件人姓名：</span>
+                        <em class="fl">{{consigneeRuleForm.ConsigneeName}}</em>
+                    </div>
+                </li>
+                <li class="clearfix">
+                    <div class=" cl">
+                        <span class="label w95">地址：</span>
+                        <em class="fl">{{consigneeRuleForm.ConsigneeAllAddress}}</em>
+                    </div>
+                </li>
+                <li class="clearfix">
+                    <div class=" cl">
+                        <span class="label w95">手机：</span>
+                        <em class="fl">{{consigneeRuleForm.ConsigneeMobile}}</em>
+                    </div>
+                </li>
+                <li class="clearfix">
+                    <div class="cl">
+                        <span class="label w95">电话：</span>
+                        <em class="fl">{{consigneeRuleForm.ConsigneeTel}}</em>
+                    </div>
+                </li>
+                <li class="clearfix">
+                    <div class=" cl">
+                        <span class="label w95">邮箱：</span>
+                        <em class="fl">{{consigneeRuleForm.ConsigneeEmail}}</em>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        @*发票收件地址显示结束*@
+
+        @*发票收件地址编辑开始*@
+        <div v-if="!consigneeIsShow">
+            <el-form :model="consigneeRuleForm" :rules="consigneeRules" status-icon ref="consigneeRuleForm" label-width="120px" class="elform_padding">
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item label="收件人姓名：" prop="ConsigneeName" :rules="[{required: true, message: '请输入收件人名称', trigger: 'blur'},{max:150, message: '收件人名称长度不超过150', trigger: 'blur' }]">
+                            <el-input v-model="consigneeRuleForm.ConsigneeName" placeholder="请输入收件人名称" style="width:70%" auto-complete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item label="地址：" prop="ConsigneeAddress" :rules="[{required: true, message: '请选择地址', trigger: 'change'}]">
+                            <el-cascader style="width:40%" :props="cascaderConfig" placeholder="请选择地址" :options="AddressLists" v-model="consigneeRuleForm.ConsigneeAddress">
+                            </el-cascader>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item label="" prop="ConsigneeDetailAddress" :rules="[{required: true, message: '请输入详细地址', trigger: 'blur'},{max:200, message: '详细地址长度不超过200', trigger: 'blur' }]">
+                            <el-input style="width:40%" v-model="consigneeRuleForm.ConsigneeDetailAddress" type="textarea" placeholder="请输入详细的道路、楼字、区号等名称"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item label="手机：" prop="ConsigneeMobile">
+                            <el-input v-model="consigneeRuleForm.ConsigneeMobile" placeholder="请输入手机号码" style="width:70%" auto-complete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item label="电话：" prop="ConsigneeTel">
+                            <el-input v-model="consigneeRuleForm.ConsigneeTel" placeholder="请输入电话号码" style="width:70%" auto-complete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item label="邮箱：" prop="ConsigneeEmail">
+                            <el-input v-model="consigneeRuleForm.ConsigneeEmail" placeholder="请输入邮箱" style="width:70%" auto-complete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item>
+                            <el-button type="primary" v-on:click="onConsigneeSubmit('consigneeRuleForm')">保存</el-button>
+                            <el-button  v-on:click="onConsigneeCancel()">取消</el-button>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+        </div>
+        @*发票收件地址编辑结束*@
+    </div>
+    @*发票收件地址结束*@
+</div>
+<script src="~/Scripts/areaData.js"></script>
+<script>
+    var invoice = new Vue({
+        el: "#invoice",
+        data: function () {
+            var validateBankAccount = function(rule, value, callback){
+                if (value == '' || value == null) {
+                    callback(new Error('请输入银行账号'));
+                }
+                else if (!/^[0-9\s]*$/.test(value)) {
+                    callback(new Error('请输入数字或者空格'));
+                }
+                else if (value.toString().length >50) {
+                    callback(new Error('银行账号长度不超过50'));
+                }
+                callback();
+            };
+            //验证手机号
+            var validateMobile = function(rule, value, callback){
+                if (value == '' || value == null) {
+                    callback(new Error('请输入手机号'));
+                }
+                else if (!/^1[3|4|5|7|8][0-9]\d{8}$/.test(value)) {
+                    callback(new Error('请输入正确的手机号码'));
+                }
+                callback();
+            };
+            //验证数字
+            var validateNumber =function (rule, value, callback){
+                if (value != '' && value != null) {
+                    if (!/^[0-9]*$/.test(value)) {
+                        callback(new Error('请输入数字'));
+                    }
+                }
+                callback();
+            };
+            //验证邮箱
+            var validateMail = function(rule, value, callback){
+                    if (value != '' && value != null) {
+                        var reg = new RegExp(/^([a-zA-Z0-9._-])+@{@Html.Raw("@");}([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/);
+                        if (!reg.test(value)) {
+                            callback(new Error('请输入正确的邮箱地址'));
+                        }
+                    }
+                    callback();
+                };
+            return {
+                invoiceIsShow: true,   //是否显示开票信息查看
+                consigneeIsShow: true,   //是否显示开票收货地址查看
+                invoiceRuleForm: @Html.Raw(Json.Encode(Model.invoice)),
+                consigneeRuleForm: @Html.Raw(Json.Encode(Model.consignee)),
+                invoiceRules: {
+                    BankAccount: [{ required: true, validator: validateBankAccount, trigger: 'blur' }
+                        , { max: 50, message: '银行账号长度不超过50', trigger: 'blur' }]
+                },
+                consigneeRules: {
+                    ConsigneeMobile: [{ required: true, validator: validateMobile, trigger: 'blur' }],
+                    ConsigneeTel: [{ required: false, validator: validateNumber, trigger: 'blur' },
+                    { max: 50, message: '电话长度不超过50', trigger: 'blur' }],
+                    ConsigneeEmail: [{ validator: validateMail, trigger: 'blur' },
+                    { max: 50, message: '邮箱地址长度不超过50', trigger: 'blur' }],
+                },
+                AddressLists: $.pccData[0].s, //省市区三级联动数据
+                cascaderConfig: {
+                    label: 'n',
+                    value: 'n',
+                    children: 's'
+                },
+            };
+        },
+        mounted: function () {
+            //主账号第一次新增的时候显示编辑页面
+            if (this.invoiceRuleForm.IsMain) {
+                this.invoiceIsShow = !(this.invoiceRuleForm.Title == null || this.invoiceRuleForm.Title == "");
+                this.consigneeIsShow = !(this.consigneeRuleForm.ConsigneeName == null || this.consigneeRuleForm.ConsigneeName == "");
+            }
+
+        },
+        computed: {
+            InvoiceDeliveryTypeOptions: function () {
+                return JSON.parse(this.invoiceRuleForm.InvoiceDeliveryTypeOptions);
+            }
+        },
+        methods: {
+            //发票信息提交
+            onInvoiceSubmit: function (invoiceRuleForm) {
+                this.$refs.invoiceRuleForm.validate(function(valid) {
+                    if (valid) {
+                        axios({
+                            url: "/Account/Invoice",
+                            method: "post",
+                            data: invoice.invoiceRuleForm,
+                        }).then(function (response) {
+                            invoice.refreshData();
+                            invoice.invoiceIsShow = true;
+                            invoice.onAlert(response.data.type, response.data.msg);
+                        }).catch(function (error) {
+                            console.log(error);
+                            invoice.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                        });
+                    } else {
+                        //验证失败
+                        return false;
+                    }
+                });
+            },
+            //发票收件地址提交
+            onConsigneeSubmit: function () {
+                this.$refs.consigneeRuleForm.validate(function(valid) {
+                    if (valid) {
+                        axios({
+                            url: "/Account/InvoiceConsigee",
+                            method: "post",
+                            data: invoice.consigneeRuleForm,
+                        }).then(function (response) {
+                            invoice.refreshData();
+                            invoice.consigneeIsShow = true;
+                            invoice.onAlert(response.data.type, response.data.msg);
+                        }).catch(function (error) {
+                            invoice.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                        });
+                    } else {
+                        //验证失败
+                        return false;
+                    }
+                });
+            },
+            //刷新数据
+            refreshData: function () {
+                 axios({
+                    url: "/Account/GetInvoiceData",
+                    method: "get",
+                }).then(function (response) {
+                    invoice.invoiceRuleForm = JSON.parse(response.data.data).invoice;
+                    invoice.consigneeRuleForm = JSON.parse(response.data.data).consignee;
+
+                }).catch(function (error) {
+                    invoice.onAlert("warning", "系统发生错误，请稍后重试或联系客服");
+                    });
+            },
+            //发票地址修改取消
+            onConsigneeCancel: function () {
+                this.refreshData();
+                invoice.consigneeIsShow = true;
+
+            },
+            //发票信息修改取消
+            onInvoiceCancel: function () {
+                this.refreshData();
+                invoice.invoiceIsShow = true;
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type
+                });
+            },
+        },
+    });
+</script>
+

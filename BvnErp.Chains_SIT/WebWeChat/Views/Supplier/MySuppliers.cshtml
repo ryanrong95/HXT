@@ -1,0 +1,139 @@
+﻿
+@{
+    ViewBag.Title = "供应商列表";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>供应商列表</title>
+    <link rel="stylesheet" href="~/Content/css/border.css">
+    <link rel="stylesheet" href="~/Content/css/reset.css">
+    <link rel="stylesheet" href="~/Content/css/element.css">
+    <link rel="stylesheet" href="~/Content/css/mint-ui.css">
+    <link rel="stylesheet" href="~/Content/css/index.css">
+    <script src="~/Scripts/vue.js"></script>
+    <script src="~/Scripts/elementui.js"></script>
+    <script src="~/Scripts/mint-ui.js"></script>
+</head>
+<body>
+    <div id="supplier_list" v-cloak>
+        <div class="second_header">
+            <a onClick="javascript :history.back(-1);"><span class="el-icon-arrow-left icon"></span></a>
+            <div class="second_nav">
+                <span class="header-title">供应商列表</span>
+            </div>
+        </div>
+        <div v-if="dataList.length>0">
+            <ul v-if="dataList.length<=5" class="ul_borders">
+                <li v-for="(item,index) in dataList">
+                    <div class="unconfirmed_tiele" v-on:click="closeItem(index)">
+                        <div class="title_box">
+                            <p>{{index+1}}</p>
+                            <p class="supplier_name">{{item.ChineseName}}</p>
+                            <p class="supplier_icon">
+                                <span v-if="arr.indexOf(index)==-1" class="order_icon el-icon-arrow-up"></span>
+                                <span v-else class="order_icon el-icon-arrow-down"></span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="unconfirmed_contents" v-if="arr.indexOf(index)==-1">
+                        <div class="showindex_back">
+                            <div class="contents_laber">
+                                <p>
+                                    <span class="laber_name">供应商中文名称</span>
+                                    <span class="laber_contents">{{item.ChineseName}}</span>
+                                </p>
+                                <p>
+                                    <span class="laber_name">供应商英文名称</span>
+                                    <span class="laber_contents">{{item.Name}}</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <ul v-else class="ul_borders">
+                <li v-for="(item,index) in dataList">
+                    <div class="unconfirmed_tiele" v-on:click="item_list(index)">
+                        <div class="title_box">
+                            <p>{{index+1}}</p>
+                            <p class="supplier_name">{{item.ChineseName}}</p>
+                            <p class="supplier_icon">
+                                <span v-if="li_index==index" class="order_icon el-icon-arrow-up"></span>
+                                <span v-else class="order_icon el-icon-arrow-down"></span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="unconfirmed_contents" v-if="li_index==index">
+                        <div class="showindex_back">
+                            <div class="contents_laber">
+                                <p>
+                                    <span class="laber_name">供应商中文名称</span>
+                                    <span class="laber_contents">{{item.ChineseName}}</span>
+                                </p>
+                                <p>
+                                    <span class="laber_name">供应商英文名称</span>
+                                    <span class="laber_contents">{{item.Name}}</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div v-else class="no_data_all">
+            <img src="~/Content/img/no_data.png" alt="">
+            <p>暂无数据</p>
+            <a href="/Account/Settings">返回</a>
+        </div>
+        <div class="fixedMenu">
+            <ul>
+                <li>
+                    <a href="/Account/Index"><i></i><span>会员中心</span></a>
+                </li>
+                <li>
+                    <a href="/Order/MyOrders"><i></i><span>我的订单</span></a>
+                </li>
+                <li>
+                    <a href="tel:0755-83988698"><i></i><span>报关热线</span></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+    var supplier_list = new Vue({
+        el: "#supplier_list",
+        data: function () {
+            return {
+                arr: [],
+                li_index: 0,
+                dataList:@Html.Raw(Json.Encode(Model)),  //表格真实数据
+            }            
+        },
+        mounted() {
+
+        },
+        methods: {
+            closeItem: function (item) {
+                if (this.arr.indexOf(item) == -1) {
+                    this.arr.push(item)
+                } else {
+                    var arr = this.arr;
+                    this.arr = arr.filter(function (i) {
+                        return i != item;
+                    })
+                }
+            },
+            item_list: function (index) {
+                this.li_index = index
+            }
+        }
+    })
+</script>

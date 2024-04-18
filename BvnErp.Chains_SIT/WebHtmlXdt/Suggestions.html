@@ -1,0 +1,106 @@
+﻿<div class="suggestions-box" id="suggestions">
+    <div class="suggestions-title">
+        投诉建议
+        <i @click="closeSuggestions"></i>
+    </div>
+    <div class="suggestions-content">
+        <h1>
+            投诉建议
+            <span>Suggestions</span>
+        </h1>
+        <div class="suggestions-style">
+            <span>投诉电话：</span><em>0755-83988698</em>
+            <span>投诉邮箱：</span><em>shenzhen@wl.net.cn</em>
+        </div>
+        <p class="suggestions-text">尊敬的客户 您好！  芯达通对于您的不满深表歉意，请您耐心填写投诉或建议信息，我们将第一时间处理您的反馈</p>
+        <div class="suggestions-textarea">
+            <p>内容描述</p>
+            <textarea placeholder="请填写您的投诉或建议信息" v-model="form.summary"></textarea>
+        </div>
+        <div class="suggestions-input">
+            <span>我们如何联系您？</span>
+            <input type="text" placeholder="姓名" v-model="form.name"/>
+            <input type="text" placeholder="电话" v-model="form.phone"/>
+        </div>
+        <div class="suggestions-button">
+            <button class="btn button nohover" type="button" @click="submitSuggess">提&nbsp;交</button>
+        </div>
+    </div>
+</div>
+<script>
+    var suggesstions = new Vue({
+        el: "#suggestions",
+        data: {
+            form: {
+                name: '',
+                phone: '',
+                summary: ''
+            }
+        },
+        methods: {
+            valid: function () {
+                console.log(this.form)
+                if (this.form.summary == null || this.form.summary == "") {
+                    this.onAlert("error", "请输入投诉建议");
+                    return false;
+                }
+                if (this.form.summary.length > 200) {
+                    this.onAlert("error", "输入投诉建议的字符不超过200个");
+                    return false;
+                }
+                if (this.form.name.length > 10) {
+                    this.onAlert("error", "输入姓名的字符不超过10个");
+                    return false;
+                }
+                if (this.form.phone.length > 20) {
+                    this.onAlert("error", "输入电话的字符不超过20个");
+                    return false;
+                }
+                return true;
+            },
+            closeSuggestions: function () {
+                footer.suggestions = false;
+            },
+            submitSuggess: function () {
+                if (this.valid()) {
+                    $.ajax({
+                        type: "Post",
+                        data: this.form,
+                        url: "https://user.wl.net.cn/WebApi/Suggestions",    //跨域url
+                        dataType: "jsonp",  //指定 jsonp 请求
+                        jsonpCallback: "suggestJsonpCallback", // 指定回调函数
+                        error: function () {
+                            suggesstions.onAlert("error", "请求失败！");
+                        }
+                    });
+                }
+               
+            },
+            //消息提示框
+            onAlert: function (type, message) {
+                this.$message({
+                    message: message,
+                    type: type
+                });
+            },
+        }
+    })
+    function suggestJsonpCallback(result) {
+        if (result.Type == "success") {
+            suggesstions.form.phone = "";
+            suggesstions.form.name = "";
+            suggesstions.form.summary = "";
+            footer.suggestions = false;
+            suggesstions.$alert('提交成功！非常感谢您提出的宝贵建议', '提示', {
+                confirmButtonText: '确定',
+                lockScroll: false,
+                confirmButtonClass: "el-button--warning",
+                callback: action => {
+                    location.href = "/Index.html";
+                }
+            });
+        } else {
+            suggesstions.onAlert(result.Type, result.Msg);
+        }
+    }
+</script>
