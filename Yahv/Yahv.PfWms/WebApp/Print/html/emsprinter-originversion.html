@@ -1,0 +1,487 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ems快递单打印</title>
+    <script type="text/javascript" src="/Print/js/vue.js"></script>
+    <script type="text/javascript" src="/Print/js/vue-barcode.js"></script>
+    <script type="text/javascript" src="/Print/js/jquery-1.3.2.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: '黑体', 'Arial' !important;
+        }
+
+        .left {
+            float: left;
+        }
+
+        .right {
+            float: right;
+        }
+
+        .clearfix:after {
+            content: '\20';
+            display: block;
+            height: 0;
+            clear: both;
+        }
+
+        .clearfix {
+            zoom: 1;
+        }
+
+        .ems {
+            width: 100mm;
+            height: 208mm;
+            padding-top: 2mm;
+            background-color: #fff;
+            margin: 0 auto;
+        }
+
+        .ems_main {
+            width: 96mm;
+            height: 206mm;
+            border: 1px dashed #000;
+            margin: 0 auto;
+        }
+
+        /* 第一联 */
+        .ems_m1 {
+            height: 19mm;
+            border-bottom: 1px dashed #000;
+        }
+
+        .m1_left {
+            width: 40mm;
+            height: 12mm;
+            padding-top: 7mm;
+            border-right: 1px dashed #000;
+        }
+
+        .m1_left p {
+            font-size: 24px;
+            text-align: center;
+        }
+
+        .m1_left span {
+            display: inline-block;
+            padding-left: 1mm;
+        }
+
+        .m1_right {
+            width: 55mm;
+            height: 18mm;
+            text-align: center;
+            padding-top: 1px;
+        }
+
+        .m1_left .time {
+            text-align: left;
+        }
+        .m1_left .time span{
+            display: inline-block;
+            font-size: 10px;
+            transform: scale(0.75);
+            width: 120%;
+            margin-left: -6mm;
+        }
+        
+
+        .erweima {
+            width: 53mm;
+            height: 13mm;
+        }
+
+        .m1_right p,
+        .p2_esm_m1_left p {
+            font-size: 14px;
+            margin-top:-3px;
+        }
+
+        .ems_m2 {
+            width: 100%;
+            height: 9mm;
+            line-height: 9mm;
+            text-align: center;
+            border-bottom: 1px dashed #000;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .ems_m3 {
+            height: 19mm;
+            border-bottom: 1px dashed #000;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 0 1mm;
+        }
+
+        .ems_m4 {
+            height: 7mm;
+            border-bottom: 1px dashed #000;
+            font-size: 12px;
+        }
+
+        .ems_m5 {
+            height: 14mm;
+            border-bottom: 1px dashed #000;
+            font-size: 12px;
+        }
+
+        .m5_left {
+            width: 54mm;
+            height: 12mm;
+            padding-left: 1mm;
+            padding-top: 2mm;
+            border-right: 1px dashed #000;
+        }
+
+        .m5_right {
+            height: 100%;
+            width: 40mm;
+        }
+
+        .m5_right .note p {
+            font-size: 10px;
+            transform: scale(0.75);
+            margin-top: -1px;
+            margin-left: -7mm;
+            width: 139%;
+        }
+
+        .ems_m6 {
+            height: 16mm;
+            border-bottom: 1px dashed #000;
+            font-size: 12px;
+        }
+
+        .separation {
+            height: 3mm;
+            border-bottom: 1px dashed #000;
+        }
+        .address_margin{
+            margin-left:32px;
+        }
+        .address_margin2{
+            margin-left:25px;
+        }
+        .cargo_info{
+            font-size: 14px;
+        }
+        .extra_info{
+            font-size: 16px;
+        }
+        /* 第二联 */
+        .p2_esm_m1 {
+            height: 15mm;
+            border-bottom: 1px dashed #000;
+        }
+
+        .p2_esm_m1_left .erweima {
+            width: 48mm;
+            height: 9mm;
+        }
+
+        .p2_esm_m1_left {
+            width: 52mm;
+            text-align: center;
+            padding-top:2px;
+        }
+
+        .p2_esm_m1_right {
+            width: 44mm;
+            text-align: center;
+            padding-top: 4mm
+        }
+
+        .p2_esm_m1_right .logo {
+            width: 30mm;
+            height: 7mm;
+        }
+
+        .p2_esm_m2 {
+            height: 17mm;
+            border-bottom: 1px dashed #000;
+            font-size: 12px;
+        }
+
+        .p2_esm_m2_left {
+            width: 55mm;
+            height: 100%;
+            border-right: 1px dashed #000;
+        }
+
+        .p2_esm_m2_right {
+            width: 40mm;
+            height: 100%;
+        }
+
+        .p2_esm_m4 {
+            height: 7mm;
+            border-bottom: 1px dashed #000;
+            font-size: 12px;
+        }
+
+        .p2_esm_m4_left {
+            width: 68mm;
+            line-height: 7mm;
+            text-align: center;
+            border-right: 1px dashed #000;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="ems" id="ems">
+        <div class="ems_main">
+            <!-- 第一联 -->
+            <div>
+                <!-- 第一联第一行 -->
+                <div class="clearfix ems_m1">
+                    <div class="left m1_left">
+                        <p>{{BaseProductNo}}</p>  <!--标准快递-->
+                        <div class="time"><span>时间:{{print_data.EmsRequestModel.CreatedTime}}</span></div>  
+                    </div>
+                    <div class="left m1_right">
+                        <barcode :value="print_data.EmsRequestModel.WaybillNo" v-bind:options="barcode_option" tag="svg" class="erweima"></barcode>
+                        <p>{{print_data.EmsRequestModel.WaybillNo}}</p>   <!--条形码-->
+                    </div>
+                </div>
+                <!-- 第一联第二行 -->
+                <div class="ems_m2">
+                    {{print_data.EmsResponseModel.RouteCode}}
+                </div>
+                <!-- 第一联第三行 -收件人信息-->
+                <div class="ems_m3">
+                    <p>收: {{print_data.EmsRequestModel.Receiver.Name}} {{print_data.EmsRequestModel.Receiver.Mobile}}</p>
+                    <p class="address_margin">{{GetReceiverAddress}}</p>
+                </div>
+                <!-- 第一联第四行 -寄件人信息-->
+                <div class="ems_m4">
+                    <p>寄: {{print_data.EmsRequestModel.Sender.Name}} {{print_data.EmsRequestModel.Sender.Mobile}}</p>
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;{{GetSenderAddress}}</p>
+                </div>
+                <!-- 第一联第五行 -->
+                <div class="clearfix ems_m5">
+                    <div class="left m5_left">
+                        <p>付款方式：{{PaymentMode}}</p>
+                        <p>计费重量(KG):</p>    <!--计费重量 这一项不用显示值 -->
+                        <p>保价金额(元):{{print_data.EmsRequestModel.InsuranceAmount}}</p>
+                    </div>
+                    <div class="left m5_right">
+                        <p>收件人\代收人:</p>
+                        <p>签收时间:&nbsp;&nbsp;年&nbsp;&nbsp;月&nbsp;&nbsp;时&nbsp;&nbsp;日</p>
+                        <div class="note">
+                            <p>快件递达收货人地址，经收件人或经收件人允许的代收人签字，视为递达。</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- 第一联第六行 -->
+                <div class="ems_m6">
+                    <p><span>件数:{{GetCargosNums}}</span>&nbsp;&nbsp;&nbsp;<span>重量(KG):{{print_data.EmsRequestModel.Weight}}</span></p>
+                    <p>配货信息：<span class="cargo_info">{{GetCargos}}</span></p>
+                </div>
+            </div>
+            <!-- 分隔带 -->
+            <div class="separation"></div>
+            <!-- 第二联 -->
+            <div class="page2">
+                <!-- 第二联第一行 -->
+                <div class="clearfix p2_esm_m1">
+                    <div class="left p2_esm_m1_left">
+                        <barcode :value="print_data.EmsRequestModel.WaybillNo" v-bind:options="barcode_option" tag="svg" class="erweima"></barcode>
+                        <p>{{print_data.EmsRequestModel.WaybillNo}}</p>   <!--条形码-->
+                    </div>
+                    <div class="left p2_esm_m1_right">
+                        <img src="../image/logo.png" alt="" class="logo">
+                    </div>
+                </div>
+                <!-- 第二联第二行 -->
+                <div class="clearfix p2_esm_m2">
+                    <div class="left p2_esm_m2_left">
+                        <p>收: {{print_data.EmsRequestModel.Receiver.Name}} {{print_data.EmsRequestModel.Receiver.Mobile}}</p>
+                        <p class="address_margin2">{{GetReceiverAddress}}</p>
+                    </div>
+                    <div class="left p2_esm_m2_right">
+                        <p>寄: {{print_data.EmsRequestModel.Sender.Name}} {{print_data.EmsRequestModel.Sender.Mobile}}</p>
+                        <p class="address_margin2">{{GetSenderAddress}}</p>
+                    </div>
+                </div>
+                <!-- 第二联第三行 -->
+                <div class="clearfix p2_esm_m2">
+                    <!-- extra_info -->
+                    <div class="left" style="width:10mm;">备注:</div>
+                    <div class="left extra_info" style="width:80mm;">{{print_data.EmsRequestModel.PickupNotes}}</div>
+                </div>
+                <!-- 第二联第四行 -->
+                <div class="clearfix p2_esm_m4">
+                    <div class="left p2_esm_m4_left">
+                        <span>网址:www.ems.com.cn</span>
+                        <span>客服电话:11183</span>
+                    </div>
+                    <div class="left p2_esm_m4_right"></div>
+                </div>
+            </div>
+            <!-- 分隔带 -->
+            <div class="separation"></div>
+            <!-- 第三联 -->
+            <div class="page2">
+                <!-- 第三联第一行 -->
+                <div class="clearfix p2_esm_m1">
+                    <div class="left p2_esm_m1_left">
+                        <barcode :value="print_data.EmsRequestModel.WaybillNo" v-bind:options="barcode_option" tag="svg" class="erweima"></barcode>
+                        <p>{{print_data.EmsRequestModel.WaybillNo}}</p>   <!--条形码-->
+                    </div>
+                    <div class="left p2_esm_m1_right">
+                        <img src="../image/logo.png" alt="" class="logo">
+                    </div>
+                </div>
+                <!-- 第三联第二行 -->
+                <div class="clearfix p2_esm_m2">
+                    <div class="left p2_esm_m2_left">
+                        <p>收: {{print_data.EmsRequestModel.Receiver.Name}} {{print_data.EmsRequestModel.Receiver.Mobile}}</p>
+                        <p class="address_margin2">{{GetReceiverAddress}}</p>
+                    </div>
+                    <div class="left p2_esm_m2_right">
+                        <p>寄: {{print_data.EmsRequestModel.Sender.Name}} {{print_data.EmsRequestModel.Sender.Mobile}}</p>
+                        <p class="address_margin2">{{GetSenderAddress}}</p>
+                    </div>
+                </div>
+                <!-- 第三联第三行 -->
+                <div class="clearfix p2_esm_m2">
+                    <!-- extra_info -->
+                    <div class="left" style="width:10mm;">备注:</div>
+                    <div class="left extra_info" style="width:80mm;">{{print_data.EmsRequestModel.PickupNotes}}</div>
+                </div>
+                <!-- 第三联第四行 -->
+                <div class="clearfix p2_esm_m4">
+                    <div class="left p2_esm_m4_left">
+                        <span>网址:www.ems.com.cn</span>
+                        <span>客服电话:11183</span>
+                    </div>
+                    <div class="left p2_esm_m4_right"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            console.log(window)
+            var getmodel = null;
+            if (window['model']) {
+               getmodel = model
+            } else {
+               getmodel = null;
+            }
+
+
+            var Vue = window.Vue;
+            var VueBarcode = window.VueBarcode;
+            Vue.component('barcode', VueBarcode);
+
+            new Vue({
+                el: "#ems",
+                data: {
+                    print_data: getmodel,
+
+                    // print_data: {
+                    //     "EmsRequestModel": {
+                    //         "CreatedTime": "2021-12-30 11:50:21", "LogisticsProvider": "B", "EcommerceNo": "DKH",
+                    //         "EcommerceUserId": "8af14b36-aace-4bb3-b04e-df5fbf871f0a", "SenderType": 1, "SenderNo": "", "InnerChannel": "",
+                    //         "LogisticsOrderNo": "order0001", "BatchNo": "", "WaybillNo": "1105417686726", "OneBillFlag": "", "SubmailNo": "",
+                    //         "OneBillFeeType": "", "ContentsAttribute": "1", "BaseProductNo": "1", "BizProductNo": "", "Weight": "0.01", "Volume": "0.01",
+                    //         "Length": "", "Width": "", "Height": "", "PostageTotal": "", "PickupNotes": "小心轻放", "InsuranceFlag": "", "InsuranceAmount": "10元",
+                    //         "DeliverType": "", "DeliverPreDate": "", "PickupType": "", "PickupPreBeginTime": "", "PickupPreEndTime": "", "PaymentMode": "1", "CodFlag": "",
+                    //         "CodAmount": "", "ReceiptFlag": "", "ReceiptWaybillNo": "", "ElectronicPreferentialNo": "", "ElectronicPreferentialAmount": "",
+                    //         "ValuableFlag": "", "SenderSafetyCode": "", "ReceiverSafetyCode": "", "Note": "", "ProjectId": "", "Sender": {
+                    //             "Name": "Taylor", "PostCode": "",
+                    //             "Phone": null, "Mobile": "15018442396", "Prov": "上海", "City": "上海市", "County": "青浦", "Address": "明珠路73号4层501"
+                    //         }, "Pickup": null, "Receiver": {
+                    //             "Name": "Yann", "PostCode": "", "Phone": null, "Mobile": "15018442396", "Prov": "北京", "City": "北京",
+                    //             "County": "朝阳区", "Address": "三里屯街道雅秀大厦"
+                    //         }, "Cargos": { "Cargo": [{ "CargoName": "客户器件", "CargoCategory": null, "CargoQuantity": "2", "CargoValue": "0", "CargoWeight": "0" },
+                    //         { "CargoName": "客户器件2", "CargoCategory": null, "CargoQuantity": "3", "CargoValue": "0", "CargoWeight": "0" },
+                    //         { "CargoName": "客户器件3", "CargoCategory": null, "CargoQuantity": "4", "CargoValue": "0", "CargoWeight": "0" }] }
+                    //     }, "EmsResponseModel": {
+                    //         "Success": true, "WaybillNo": "1105417686726", "RouteCode": "010-京-朝阳05-工体A27-*", "PackageCode": "",
+                    //         "PackageCodeName": "010-京", "MarkDestinationCode": "010-京", "MarkDestinationName": "010-京"
+                    //     }
+                    // },
+                    barcode_option: {
+                        displayValue: false, //是否默认显示条形码数据
+                        //textPosition  :'top', //条形码数据显示的位置
+                        background: "#fff", //条形码背景颜色
+                        valid: function (valid) { },
+                        width: "1px", //单个条形码的宽度
+                        height: "53px",
+                        fontSize: "16px", //字体大小
+                        format: "CODE128", //选择要使用的条形码类型
+                        margin: 2
+                    },
+                    BaseProductNo: '', //基础快递类型：1：标准快递  
+                    PaymentMode:'', //付款方式：非必填 1:寄件人 2:收件人 
+                    Cargos:'',//货物信息
+
+                },
+                created(){
+                    this.JudgeBaseProductNo();
+                    this.GetPaymentMode();
+                },
+                computed:{
+                    //获取收件人的完整地址
+                    GetReceiverAddress(){
+                        return this.print_data.EmsRequestModel.Receiver.Prov +' '+ this.print_data.EmsRequestModel.Receiver.City +' '+
+                        this.print_data.EmsRequestModel.Receiver.County  +' '+ this.print_data.EmsRequestModel.Receiver.Address 
+                    },
+                    //获取寄件人的完整地址
+                    GetSenderAddress(){
+                        return this.print_data.EmsRequestModel.Sender.Prov +' '+ this.print_data.EmsRequestModel.Sender.City +' '+
+                        this.print_data.EmsRequestModel.Sender.County  +' '+ this.print_data.EmsRequestModel.Sender.Address 
+                    },
+                    //获取货物信息
+                    GetCargos(){
+                        let cargoInfo='';
+                        this.print_data.EmsRequestModel.Cargos.Cargo.forEach(item=>{
+                            cargoInfo+=item.CargoName+' ';
+                        })
+                        return cargoInfo;
+                    },
+                    //获取货物的数量
+                    GetCargosNums(){
+                        let cargoNum=0;
+                        this.print_data.EmsRequestModel.Cargos.Cargo.forEach(item=>{
+                            cargoNum+=Number(item.CargoQuantity);
+                        })
+                        return cargoNum;
+                    }
+                },
+                methods:{
+                    //判断快递类型
+                    JudgeBaseProductNo(){
+                        let num=this.print_data.EmsRequestModel.BaseProductNo;
+                        if(num==1){
+                            this.BaseProductNo="标准快递"
+                        } 
+                    },
+                    // 判断付款方式
+                    GetPaymentMode(){
+                        let num=this.print_data.EmsRequestModel.PaymentMode;
+                        console.log(num)
+                        if(num==1){
+                            this.PaymentMode="寄件人"
+                        } else if(num==2){
+                            this.PaymentMode="收件人"
+                        }
+                    },
+                },
+            })
+        })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,163 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>箱号</title>
+    <script type="text/javascript" src="/Print/js/vue.js"></script>
+    <script type="text/javascript" src="/Print/js/vue-barcode.js"></script>
+    <script type="text/javascript" src="/Print/js/jquery-1.3.2.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body, html {
+            background: #ffffff;
+            width: 100%;
+            height: 100%;
+        }
+
+        #app {
+            width: 363px;
+            height: 363px;
+            margin: 0 auto;
+        }
+
+        .product {
+            width: 10cm;
+            height: 10cm;
+            /*overflow: hidden;*/
+            border: 1px solid #ddd;
+            font-size: 16px;
+            margin: 0 auto;
+        }
+
+        .boxprint {
+            margin: 0;
+            padding: 10px;
+        }
+
+        .barcodebox {
+            padding: 10px;
+            padding-bottom: 0px;
+            padding-top: 5px;
+            line-height: 1;
+        }
+
+        .setem {
+            font-size: 14px;
+            font-style: normal;
+        }
+
+        .nameitem .widthset {
+            /*float: left;*/
+            /*width: 50%;*/
+            line-height: 22px;
+        }
+
+        .itemp {
+            line-height: 20px;
+        }
+
+        .setleft {
+            padding-left: 5px;
+        }
+
+        .boxdiv {
+            clear:both;
+            padding:3mm;
+        }
+        .Client {
+            padding-bottom:2mm;
+        }
+        .boxdiv .Client span {
+            font-size:16px;
+            font-weight:bold;
+        }
+        .Boxinginfo {
+            font-size:14px;
+            padding-top:10mm
+        }
+        .Boxinginfo span {
+            margin-bottom:6mm;
+        }
+        .leftspan {
+            display:inline-block;
+            width: 45%;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="product">
+            <div class="boxdiv">
+                <p class="Client">
+                    <!--<h3 style="float:left">小米通讯技术有限公司</h3>
+                    <h4 style="float:left;margin-top:1mm;padding-left:1mm">(WL030)</h4>-->
+                    <span>入仓号：</span>
+                    <span style="margin-top:1mm;padding-left:1mm">{{print_data.EnterCode}}</span>
+                </p>
+                <div style="text-align:center;margin-top:15px">
+                    <barcode value="print_data.ID" v-bind:options="barcode_option" tag="svg"></barcode>
+                    <h4>{{print_data.ID}}</h4>
+                </div>
+                <div class="Boxinginfo">
+                    <p>
+                        <span class="leftspan">数&nbsp;&nbsp;&nbsp;&nbsp;量：{{print_data.Quantity}}</span>
+                        <span>毛重：{{print_data.Weight}}</span>
+                    </p>
+                    <p>
+                        <span class="leftspan">装箱人：{{print_data.AdminID}}</span>
+                        <span>封箱时间：{{print_data.CreateDate}}</span>
+                    </p>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+    //var model = {
+    //    obj: {
+    //        ID: "NL200408001",
+    //        EnterCode: 'wl00002',
+    //        AdminID: "张三",
+    //        CreateDate: 2020-04-05,
+    //        Quantity: 10000,
+    //        Weight: 1000
+    //    }
+    //}
+    $(function () {
+        var getmodel = null;
+        if (window['model']) {
+            getmodel = model
+        } else {
+            getmodel = null;
+        }
+
+        var Vue = window.Vue;
+        var VueBarcode = window.VueBarcode;
+        Vue.component('barcode', VueBarcode);
+
+        new Vue({
+            el: '#app',
+            data: {
+                print_data: getmodel,
+                barcode_option: {
+                    displayValue: false, //是否默认显示条形码数据
+                    //textPosition  :'top', //条形码数据显示的位置
+                    background: "#fff", //条形码背景颜色
+                    valid: function (valid) { },
+                    width: "1px", //单个条形码的宽度
+                    height: "60px",
+                    fontSize: "16px", //字体大小
+                    format: "CODE128", //选择要使用的条形码类型
+                    margin: 2
+                }
+            },
+            mounted() { }
+        });
+    })
+</script>

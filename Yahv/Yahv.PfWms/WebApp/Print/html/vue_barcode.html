@@ -1,0 +1,198 @@
+﻿<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+        <script type="text/javascript" src="/Print/js/vue.js"></script>
+        <script type="text/javascript" src="/Print/js/vue-barcode.js"></script>
+        <script type="text/javascript" src="/Print/js/jquery-1.3.2.min.js"></script>
+		<style type="text/css">
+			* {
+				margin: 0;
+				padding: 0;
+			}
+			
+			body,html {
+				background: #F5F5DC;
+				width: 100%;
+				height: 100%;
+			}
+			
+			.barcodebox {
+				float: left;
+				min-width: 45%;
+				max-width: 100%;
+                line-height:30px;
+			}
+			
+			#app {
+				background: #fff;
+				/*padding: 0.3cm;*/
+				/*max-width: 70%;
+				margin: 20px auto;*/
+			}
+			
+			.logs {
+				vertical-align: middle;
+			}
+			
+			.logtitle {
+				margin-bottom: 0.5cm;
+			}
+			
+			.names {
+				font-size: 9px;
+			}
+			
+			.style1 {
+				    width: 20cm;
+				    height: 10cm;
+				    transform: rotate(-90deg);
+				    /*margin: 0 auto;*/
+				    transform-origin: bottom;
+			}
+			.style2 {
+				width: 10cm;
+				height: 10cm;
+				/*transform: rotate(-90deg);*/
+				/*margin: 0 auto;*/
+			}
+			.style3{
+				    width: 10cm;
+				    height: 5cm;
+				    transform: rotate(-90deg);
+				    transform-origin: bottom;
+			}
+			.barcodes{
+				    padding: 10px;
+			}
+            .contents {
+                width:10cm;
+                height:10cm;
+            }
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<div class="contents">
+				<!--<div class="logtitle">
+				    <img class="logs" :src="logs" />
+				    <span>{{titles}}</span>
+			   </div>-->
+			 <div class="barcodes">
+                <div><barcode v-bind:value="values" v-bind:options="barcode_option" tag="svg"></barcode></div>
+				<div v-for="(v,k) in arrys" :key="k" class="barcodebox">
+				  <p class="names">{{v.name}}：{{v.value}}</p>
+			   </div>
+			  </div>
+		   </div>	
+	</div>
+    
+	</body>
+
+</html>
+<script type="text/javascript">
+    var model = {
+        ID: 111,
+        inputsID: 869769579657597,//产品ID
+        Catalog: 111111,//品名
+        PartNumber: 1111111,//型号
+        Quantity: 200,//数量
+        Manufacturer: 11111,//品牌
+        Packing: 11111,//包装
+        PackageCase: 1111111,//封装
+        origin: 111111,//产地
+    }
+
+    var obj = null;
+    if (window(model)) {
+        obj = model
+    } else {
+        obj = null;
+    }
+	window.addEventListener('DOMContentLoaded', function() {
+		var Vue = window.Vue;
+		var VueBarcode = window.VueBarcode;
+		Vue.component('barcode', VueBarcode);
+
+		new Vue({
+			el: '#app',
+			data: {
+				logs: "b1b.png",
+				titles: "www.b1b.com",
+				width:"10",
+				height: "10",
+                values:'12121212121212121212',
+				arrys: [{
+						name: 'PO',
+						value: '1111111111',
+						codeType: 'code128'
+				    },
+                    {
+                        name: '大苏打撒旦',
+                        value: '的发射点发',
+                        codeType: 'code128'
+                    },
+					{
+						name: 'Mfr.#',
+						value: 'Ver3333333',
+						codeType: 'code128'
+					},
+                    
+					{
+					    name: 'Invoicce.#',
+					    value: '047972437',
+					    codeType: 'code128'
+					},
+					{
+						name: 'Cust.#',
+						value: 'AD620ARZ-01',
+						codeType: 'code128'
+					},
+					{
+						name: 'QTY',
+						value: '450000000',
+						codeType: 'code128'
+					},
+					{
+						name: '实打实打算',
+						value: '反对发射点',
+						codeType: 'code128'
+					},
+					{
+						name: 'Origin',
+						value: 'MY',
+						codeType: 'code128'
+					},
+					{
+						name: 'Invoicce.#',
+						value: '047972437',
+						codeType: 'code128'
+					},
+				],
+				barcode_option: {
+
+					        displayValue: false, //是否默认显示条形码数据
+					         //textPosition  :'top', //条形码数据显示的位置
+					        background: '#fff', //条形码背景颜色
+					        valid: function(valid) {},
+					        width: '1.7px', //单个条形码的宽度
+					        height: '40px',
+					        fontSize: '16px' //字体大小
+
+					     },
+			},
+			mounted(){
+				if(this.width=="10"&&this.height=="20") {
+					$("#app").addClass("style1")
+				}else if(this.width=="10"&&this.height=="10"){
+					$("#app").addClass("style2")
+				}else if(this.width=="5"&&this.height=="10"){
+					$("#app").addClass("style3")
+				}
+			}
+		});
+	});
+</script>

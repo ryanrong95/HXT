@@ -1,0 +1,66 @@
+﻿<style type="text/css">
+    /*html, body {  border: 1px solid red; width: 100mm; height: 210mm; }*/
+    .print_paper { margin-left: 25px; }
+    * { font-weight: bolder; }
+</style>
+<script>
+    //分辨率：1920*1080
+    var config = {
+        "receive_h1": 80,
+        "receive_h2": 87.5
+    };
+    var configArr = [
+        {
+            screen_width: 1920,
+            screen_height: 1080,
+            receive_h1: 420,
+            receive_h2: 87.5
+        },
+        {
+            screen_width: 1440,
+            screen_height: 900,
+            receive_h1: 420,
+            receive_h2: 87.5
+        }
+    ]
+
+    for (var i = 0; i < configArr.length; i++) {
+        if ((window.screen.width == configArr[i].screen_width) && (window.screen.height == configArr[i].screen_height)) {
+            config = {
+                "receive_h1": configArr[i].receive_h1,
+                "receive_h2": configArr[i].receive_h2
+            };
+            break;
+        }
+    }
+</script>
+<script>
+    var correct = function () {
+        //document.getElementsByClassName('text')[4].style.height = config.receive_h1 + 'px';
+        //document.getElementsByClassName('text')[5].rows[1].style.height = config.receive_h2 + 'px';
+        document.getElementsByClassName('hline').style.width = '400px';
+        document.getElementsByClassName('image')[1].style.display = 'none';
+        document.getElementsByClassName('image')[0].style.top = 420 + 'px';
+        document.getElementsByClassName('image')[3].style.top = 420 + 'px';
+        document.getElementsByClassName('text')[2].style.top = 420 + 'px';
+        document.getElementsByClassName('text')[3].style.top = 420 + 'px';
+        document.getElementsByClassName('text')[4].style.top =435 + 'px';
+        document.getElementsByClassName('text')[5].style.top = 450 + 'px';
+        document.getElementsByClassName('text')[6].style.top = 465 + 'px';
+        document.getElementsByClassName('text')[7].style.top = 465 + 'px';
+        document.getElementsByClassName('text')[8].style.top = 465 + 'px';
+        document.getElementsByClassName('text')[9].style.top = 465 + 'px';
+        document.getElementsByClassName('text')[10].style.top = 465 + 'px';
+        document.getElementsByClassName('text')[11].style.top = 480 + 'px';
+        //if (config) {
+        //    try {
+        //        document.getElementsByClassName('text')[4].style.height = config.receive_h1 + 'px';
+        //        document.getElementsByClassName('text')[5].rows[1].style.height = config.receive_h2 + 'px';
+        //        document.getElementsByClassName('image')[1].style.display = 'none';
+        //        document.getElementsByClassName('image')[0].style.top = '420px'
+        //        document.getElementsByClassName('image')[3].style.top = '420px'
+        //    } catch (e) {
+        //    }
+        //}
+    };
+</script>

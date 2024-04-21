@@ -1,0 +1,33 @@
+﻿执行顺序如下:
+--以下为需要在PvWms数据库操作
+1. 删除Inputs表中DateCode, Origin字段
+AlterTable_PvWms_Inputs_20200219_suliang.sql
+
+2. Notices表中新增Origin, StorageID字段
+AlterTable_PvWms_Notices_20200219_suliang.sql
+
+3. 删除Storages表中NoticeID字段
+AlterTable_PvWms_Storages_20200219_suliang.sql
+
+4. 删除Outputs表中StorageID字段
+AlterTable_PvWms_Outputs_20200225_suliang.sql
+
+5. 新增表Logs_Declare表
+CreateTable_PvWms_Logs_Declare_20200225_chenhan.sql
+
+6. 新增表Logs_DeclareItem
+CreateTable_PvWms_Logs_DeclareItem_20200225_chenhan.sql
+
+--以下为需要在PvWms数据库操作
+7. Waybills表中新增OrderID, Source, NoticeType字段
+AlterTable_PvCenter_Waybills_20200225_suliang.sql
+
+8.更新新增的OrderID, Source, NoticeType字段的值
+UpdateTable_PvCenter_Waybills_20200221_chenhan.sql
+
+9.删除Waybills表中错误的值
+DeleteWrongRows_PvCenter_Waybills_20200225_suliang.sql
+
+
+
+
