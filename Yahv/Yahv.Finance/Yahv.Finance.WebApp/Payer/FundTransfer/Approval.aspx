@@ -1,0 +1,382 @@
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Uc/Works.Master" AutoEventWireup="true" CodeBehind="Approval.aspx.cs" Inherits="Yahv.Finance.WebApp.Payer.FundTransfer.Approval" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="cphHead" runat="server">
+    <script src="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/ajaxPrexUrl.js"></script>
+    <script src="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/jquery-easyui-extension/jqueryform.js"></script>
+    <script src="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/standard-easyui/scripts/easyui.jl.js"></script>
+    <script src="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/standard-easyui/scripts/easyui.jl.static.js"></script>
+    <script>
+        $(function () {
+            //提交
+            $('#btnSubmit').click(function () {
+                //验证
+                var isValid = $('form').form('enableValidation').form('validate');
+                if (!isValid) {
+                    return false;
+                }
+
+                var data = new FormData($('form')[0]);
+                ajaxLoading();
+                $.post({
+                    url: '?action=Submit&&id=' + getQueryString('id'),
+                    data: data,
+                    dataType: 'JSON',
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    success: function (result) {
+                        ajaxLoadEnd();
+                        if (result.success) {
+                            top.$.timeouts.alert({ position: "TC", msg: result.data, type: "success" });
+                            top.$.myDialog.close();
+                        } else {
+                            top.$.messager.alert('操作提示', result.data, 'error');
+                        }
+                    }
+                });
+
+                return false;
+            });
+
+            //调拨分类
+            //$("#AccountCatalogID").combotree({
+            //    data: eval(model.AccountCatalogs),
+            //    onBeforeSelect: function (node) {
+            //        if (node.children != null) {
+            //            top.$.messager.alert('操作提示', "请您选择子节点!", 'error');
+            //            return false;
+            //        }
+            //    },
+            //    required: true,
+            //    onLoadSuccess: function (node, data) {
+            //        if (model.Data) {
+            //            $('#AccountCatalogID').combotree('setValue', { id: model.Data.AccountCatalogID });
+            //        }
+            //    }
+            //});
+            $('#AccountCatalogID').combobox({
+                data: model.AccountCatalogs,
+                textField: 'text',
+                valueField: 'value',
+                required: true
+            });
+
+            //附件列表展示
+            $('#file').myDatagrid({
+                actionName: 'filedata',
+                border: false,
+                showHeader: false,
+                pagination: false,
+                rownumbers: false,
+                fitcolumns: true,
+                rowStyler: function (index, row) {
+                    return 'background-color:white;';
+                },
+                loadFilter: function (data) {
+                    if (data.total == 0) {
+                        $('#unUpload').css('display', 'block');
+                    } else {
+                        $('#unUpload').css('display', 'none');
+                    }
+
+                    return data;
+                },
+                onLoadSuccess: function (data) {
+                    var panel = $("#fileContainer");
+                    var header = panel.find('div.datagrid-header');
+                    header.css({
+                        'visibility': 'hidden'
+                    });
+                    var tr = panel.find('div.datagrid-body tr');
+                    tr.each(function () {
+                        var td = $(this).children('td');
+                        td.css({
+                            'border-width': '0'
+                        });
+                    });
+
+                    var unUploadHeight = data.total * 36 + 100;//ryan 根据附件个数 动态计算高度
+
+                    $("#unUpload").next().find(".datagrid-wrap").height(unUploadHeight);
+                    $("#unUpload").next().find(".datagrid-wrap").find(".datagrid-view").height(unUploadHeight);
+                    $("#unUpload").next().find(".datagrid-wrap").find(".datagrid-view").find(".datagrid-view2").height(unUploadHeight);
+                    $("#unUpload").next().find(".datagrid-wrap").find(".datagrid-view").find(".datagrid-view2").height(unUploadHeight);
+                    $("#unUpload").next().find(".datagrid-wrap").find(".datagrid-view").find(".datagrid-view2").find(".datagrid-body").height(unUploadHeight);
+                }
+            });
+
+            $("#appraval").radio({
+                name: "radio_result", //input统一的name值
+                data: model.ApprovalStatus,
+                valueField: 'value',//value值
+                labelField: 'text',
+                onChange: function (checked) {
+                    $("#sp_approval").show();
+                    $('#tr_approve').show();
+                    $("#Comments").textbox({ required: false });
+
+                    var val = $('input[name="radio_result"]:checked').val();
+
+                    //驳回
+                    if (val == 2) {
+                        $("#sp_approval").hide();
+                        $('#tr_approve').hide();
+
+                        $("#Comments").textbox({ required: true });
+                    }
+
+                    //结束
+                    if (val == 200) {
+                        $("#sp_approval").hide();
+                        $('#tr_approve').hide();
+                    }
+                }
+            });
+
+            //审批人
+            $('#NextApproverID').combobox({
+                url: '?action=getAdmins',
+                valueField: "value",
+                textField: "text",
+                multiple: false,
+                editable: true,
+                required: false,
+                filter: function (q, row) {
+                    var opts = $(this).combobox('options');
+                    return row.text != null && row.text.indexOf(q) > -1;
+                }
+            });
+
+            //审批日志
+            $("#tabLogs").myDatagrid({
+                fitColumns: true,
+                fit: false,
+                rownumbers: true,
+                pagination: false,
+                actionName: 'getLogs',
+                columns: [[
+                    { field: 'CreateDate', title: '审批时间', width: fixWidth(15) },
+                    { field: 'ApproverName', title: '审批人', width: fixWidth(10) },
+                    { field: 'Status', title: '审批结果', width: fixWidth(10) },
+                    { field: 'Summary', title: '审批意见', width: fixWidth(55) }
+                ]]
+            });
+
+            if (model.Data) {
+                $('form').form('load', model.Data);
+            }
+
+            //指定付款人
+            $('#ExcuterID').combobox({
+                url: '?action=getExcuterIds&payerAccountId=' + $('#PayerAccountID').val(),
+                valueField: "value",
+                textField: "text",
+                multiple: false,
+                editable: true,
+                required: true,
+                filter: function (q, row) {
+                    var opts = $(this).combobox('options');
+                    return row.text != null && row.text.indexOf(q) > -1;
+                },
+                onLoadSuccess: function (data) {
+                    if (model.Data.ExcuterID) {
+                        $('#ExcuterID').combobox('setValue', model.Data.ExcuterID);
+                    }
+                }
+
+
+
+            });
+        });
+    </script>
+    <script>
+        function FileOperation(val, row, index) {
+            var buttons = row.CustomName + '<br/>';
+            buttons += '<a href="#"><span style="color: cornflowerblue;" onclick="View(\'' + row.WebUrl + '\')">预览</span></a>';
+            return buttons;
+        }
+
+        function ShowImg(val, row, index) {
+            return "<img src='../../Content/Images/wenjian.png' />";
+        }
+
+        //预览文件
+        function View(url) {
+            $('#viewfileImg').css('display', 'none');
+            $('#viewfilePdf').css('display', 'none');
+            if (url.toLowerCase().indexOf('pdf') > 0) {
+                $('#viewfilePdf').attr('src', url);
+                $('#viewfilePdf').css("display", "block");
+                $('#viewFileDialog').window('open').window('center');
+            }
+            else if (url.toLowerCase().indexOf('doc') > 0 || url.toLowerCase().indexOf('docx') > 0) {
+                let a = document.createElement('a');
+                document.body.appendChild(a);
+                a.href = url;
+                a.download = "";
+                a.click();
+            }
+            else {
+                $('#viewfileImg').attr('src', url);
+                $('#viewfileImg').css("display", "block");
+                $('#viewFileDialog').window('open').window('center');
+            }
+            $("#unUpload").next().find(".datagrid-wrap").find(".datagrid-view").find(".datagrid-view2").find(".datagrid-body").find(".datagrid-btable")
+                .find("td[field='Btn']").css({ "color": "#000000" });
+
+            $('.window-mask').css('display', 'none');
+        }
+    </script>
+    <style>
+        #unUpload + div td {
+            border: none;
+        }
+    </style>
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="cphForm" runat="server">
+    <div style="padding-bottom: 5px;">
+        <div style="display: none;">
+            <input type="submit" id='btnSubmit' />
+            <input type="hidden" id="PayerAccountID" name="PayerAccountID" />
+        </div>
+        <table class="liebiao">
+            <tr>
+                <td>审批结果
+                </td>
+                <td colspan="3">
+                    <span id="appraval" name="appraval"></span>
+                </td>
+            </tr>
+            <tr id="tr_approve">
+                <td>指定下次审批人
+                </td>
+                <td>
+                    <input id="NextApproverID" name="NextApproverID" class="easyui-combobox" style="width: 200px;" />
+                </td>
+                <td>指定付款人
+                </td>
+                <td>
+                    <input id="ExcuterID" name="ExcuterID" class="easyui-combobox" style="width: 200px;" />
+                </td>
+            </tr>
+            <tr>
+                <td>审批意见
+                </td>
+                <td colspan="3">
+                    <input id="Comments" name="Comments" class="easyui-textbox" data-options="multiline:true" style="width: 80%; height: 40px;" />
+                </td>
+            </tr>
+            <tr>
+                <td>调出账户
+                </td>
+                <td colspan="3">
+                    <input id="PayerAccountName" name="PayerAccountName" class="easyui-textbox" style="width: 200px;" disabled="disabled" />
+                </td>
+            </tr>
+            <tr>
+                <td>调出账号</td>
+                <td>
+                    <input id="PayerCode" name="PayerCode" class="easyui-textbox" style="width: 200px;" disabled="disabled" />
+                </td>
+                <td>调出银行</td>
+                <td>
+                    <input id="PayerBank" name="PayerBank" class="easyui-textbox" style="width: 200px;" disabled="disabled" />
+                </td>
+            </tr>
+            <tr>
+                <td>调出币种 
+                </td>
+                <td>
+                    <input id="PayerCurrency" name="PayerCurrency" class="easyui-textbox" style="width: 200px;" disabled="disabled" />
+                </td>
+                <td>调出金额</td>
+                <td>
+                    <input id="PayerPrice" name="PayerPrice" class="easyui-textbox" style="width: 200px;" disabled="disabled" />
+                </td>
+            </tr>
+            <tr>
+                <td>调入账户
+                </td>
+                <td colspan="3">
+                    <input id="PayeeAccountID" name="PayeeAccountID" class="easyui-textbox" style="width: 200px;" disabled="disabled" />
+                </td>
+            </tr>
+            <tr>
+                <td>调入账号</td>
+                <td>
+                    <input id="PayeeCode" name="PayeeCode" class="easyui-textbox" style="width: 200px;" disabled="disabled" />
+                </td>
+                <td>调入银行</td>
+                <td>
+                    <input id="PayeeBank" name="PayeeBank" class="easyui-textbox" style="width: 200px;" disabled="disabled" />
+                </td>
+            </tr>
+            <tr>
+                <td>调入币种</td>
+                <td>
+                    <input id="PayeeCurrency" name="PayeeCurrency" class="easyui-textbox" style="width: 200px;" disabled="disabled" />
+                </td>
+                <td>调入金额</td>
+                <td>
+                    <input id="PayeePrice" name="PayeePrice" class="easyui-textbox" style="width: 200px;" disabled="disabled" />
+                </td>
+            </tr>
+            <tr>
+                <td>汇率
+                </td>
+                <td>
+                    <input id="Rate" name="Rate" class="easyui-textbox" style="width: 200px;" disabled="disabled" />
+                </td>
+                <%--<td>调拨类型
+                </td>
+                <td>
+                    <input id="AccountCatalogID" name="AccountCatalogID" style="width: 200px;" class="easyui-combotree" disabled="disabled" />
+                </td>--%>
+                <td>用途
+                </td>
+                <td>
+                    <input id="AccountCatalogID" name="AccountCatalogID" style="width: 200px;" class="easyui-combobox" disabled="disabled" />
+                </td>
+            </tr>
+            <tr>
+                <td>申请人</td>
+                <td>
+                    <input id="ApplierID" name="ApplierID" class="easyui-textbox" style="width: 200px;" disabled="disabled" />
+                </td>
+                <td>指定审批人</td>
+                <td>
+                    <input id="ApproverID" name="ApproverID" class="easyui-textbox" style="width: 200px;" disabled="disabled" />
+                </td>
+            </tr>
+            <tr>
+                <td>摘要</td>
+                <td colspan="3">
+                    <input id="Summary" name="Summary" class="easyui-textbox" data-options="multiline:true" style="width: 80%; height: 40px;" disabled="disabled" />
+                </td>
+            </tr>
+            <tr>
+                <td>上传附件</td>
+                <td colspan="3">
+                    <div style="height: 40%; width: 80%; border: 1px solid #d3d3d3; border-radius: 5px; padding: 3px; overflow-y: auto;">
+                        <div id="unUpload" style="margin-left: 5px">
+                            <p>未上传</p>
+                        </div>
+                        <table id="file" data-options="nowrap:false,queryParams:{ action: 'filedata' }">
+                            <thead>
+                                <tr>
+                                    <th data-options="field:'img',formatter:ShowImg">图片</th>
+                                    <th style="width: auto;" data-options="field:'Btn',align:'left',formatter:FileOperation">操作</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <table id="tabLogs" title="审批日志"></table>
+    </div>
+    <div id="viewFileDialog" class="easyui-window" title="查看附件" data-options="iconCls:'pag-list',modal:true,collapsible:false,minimizable:false,maximizable:true,resizable:true,closed:true" style="width: 700px; height: 450px;">
+        <img id="viewfileImg" src="" style="width: auto; height: auto; max-width: 100%; max-height: 100%;" />
+        <iframe id="viewfilePdf" src="" width="100%" height="99%" frameborder="0" scroll="no"></iframe>
+    </div>
+</asp:Content>

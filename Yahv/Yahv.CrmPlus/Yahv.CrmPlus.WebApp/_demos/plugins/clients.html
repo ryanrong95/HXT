@@ -1,0 +1,127 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>客户 - jQuery EasyUI plugin</title>
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/gray/easyui.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/icon.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/icon-yg-cool.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/standard-easyui/styles/plugin.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/customs-easyui/Styles/main.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/customs-easyui/Styles/reset.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/customs-easyui/fonts/iconfont.css" rel="stylesheet" />
+
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.easyui.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/locale/easyui-lang-zh_CN.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/easyui.myDialog.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/easyui.myWindow.fuse.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/easyui.myDialog.fuse.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/standard-easyui/crmPlus/clientRegisterCrmPlus.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/standard-easyui/crmPlus/clientAddressCrmPlus.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/standard-easyui/crmPlus/clientInvoiceCrmPlus.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/standard-easyui/crmPlus/clientPayerCrmPlus.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/standard-easyui/crmPlus/clientContactCrmPlus.js"></script>
+</head>
+<body>
+    <div class="easyui-panel" data-options="title:'客户快速注册插件'" style="width: 100%; padding: 3px 6px;">
+        <form id="form" class="easyui-form" method="post" data-options="novalidate:true">
+            <input id="clientRegisterCrmPlus" name="clientRegisterCrmPlus" style="width: 250px; height: 26px" />
+            <a id="btnSubmit" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存</a>
+        </form>
+    </div>
+
+    <div class="easyui-panel" data-options="title:'客户地址插件'" style="width: 100%; padding: 3px 6px;">
+        <input id="clientAddressCrmPlus" name="clientAddressCrmPlus" style="width: 250px; height: 26px" />
+        <a id="btnclientAddressCrmPlus" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">设置客户ID</a>
+    </div>
+
+    <div class="easyui-panel" data-options="title:'客户发票插件'" style="width: 100%; padding: 3px 6px;">
+        <input id="clientInvoiceCrmPlus" name="clientInvoiceCrmPlus" style="width: 250px; height: 26px" />
+        <a id="btnclientInvoiceCrmPlus" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">设置客户ID</a>
+    </div>
+
+    <div class="easyui-panel" data-options="title:'客户付款人插件'" style="width: 100%; padding: 3px 6px;">
+        <input id="clientPayerCrmPlus" name="clientPayerCrmPlus" style="width: 250px; height: 26px" />
+        <a id="btnclientPayerCrmPlus" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">设置客户ID</a>
+    </div>
+
+    <div class="easyui-panel" data-options="title:'客户联系人插件'" style="width: 100%; padding: 3px 6px;">
+        <input id="clientContactCrmPlus" name="clientContactCrmPlus" style="width: 250px; height: 26px" />
+        <a id="btnclientContactCrmPlus" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">设置客户ID</a>
+    </div>
+
+    <script>
+        $(function () {
+            //客户快速注册插件
+            $('#clientRegisterCrmPlus').clientRegisterCrmPlus({
+                required: true,
+                isRegister: true,
+                onChange: function (newValue, oldValue) {
+                    console.log('clientRegisterCrmPlus.onChange:' + [newValue, oldValue]);
+                },
+                onSelect: function (record) {
+                    console.log('clientRegisterCrmPlus.onSelect:' + [record.ID, record.Name]);
+                }
+            });
+            $('#btnSubmit').click(function () {
+                var data = new FormData($('form')[0]);
+                console.log(data.get('clientRegisterCrmPlus'));
+
+                $('#clientRegisterCrmPlus').clientRegisterCrmPlus('setValue', 'Ep202103290001');
+                console.log($('#clientRegisterCrmPlus').clientRegisterCrmPlus('getData'));
+                console.log($('#clientRegisterCrmPlus').clientRegisterCrmPlus('getName'));
+                console.log($('#clientRegisterCrmPlus').clientRegisterCrmPlus('getValue'));
+            });
+
+            //客户地址插件
+            $('#clientAddressCrmPlus').clientAddressCrmPlus({
+                required: true,
+                //clientID: 'Ep20210115025',
+                onSelect: function (record) {
+                    console.log('clientAddressCrmPlus.onSelect:' + [record.ID, record.Context]);
+                }
+            });
+            $('#btnclientAddressCrmPlus').click(function () {
+                $('#clientAddressCrmPlus').clientAddressCrmPlus('setClientID', 'Ep20210115025');
+            });
+
+            //客户发票插件
+            $('#clientInvoiceCrmPlus').clientInvoiceCrmPlus({
+                required: true,
+                clientID: 'Ep20210115025',
+                onSelect: function (record) {
+                    console.log('clientInvoiceCrmPlus.onSelect:' + [record.ID, record.Bank]);
+                }
+            });
+            $('#btnclientInvoiceCrmPlus').click(function () {
+                $('#clientInvoiceCrmPlus').clientInvoiceCrmPlus('setClientID', 'Ep20210115025');
+            });
+
+            //客户付款人插件
+            $('#clientPayerCrmPlus').clientPayerCrmPlus({
+                required: true,
+                clientID: 'Ep20210115025',
+                onSelect: function (record) {
+                    console.log('clientPayerCrmPlus.onSelect:' + [record.ID, record.Bank]);
+                }
+            });
+            $('#btnclientPayerCrmPlus').click(function () {
+                $('#clientPayerCrmPlus').clientPayerCrmPlus('setClientID', 'Ep20210115025');
+            });
+
+            //客户联系人插件
+            $('#clientContactCrmPlus').clientContactCrmPlus({
+                required: true,
+                clientID: 'Ep20210115025',
+                onSelect: function (record) {
+                    console.log('clientContactCrmPlus.onSelect:' + [record.ID, record.Bank]);
+                }
+            });
+            $('#btnclientContactCrmPlus').click(function () {
+                $('#clientContactCrmPlus').clientContactCrmPlus('setClientID', 'Ep20210115025');
+            });
+        })
+    </script>
+</body>
+</html>

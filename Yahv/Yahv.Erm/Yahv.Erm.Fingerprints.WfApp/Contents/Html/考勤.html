@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>考勤</title>
+    <link href="../Css/main.css" rel="stylesheet" />
+    <script src="../Scripts/gkBrowser.js"></script>
+
+    <script>
+        //var date;
+        //var datetime;
+
+        //setInterval(function () {
+        //    date = GetDate();
+        //    datetime = GetDateTime();
+
+        //    var sender = $('#datetiem');
+        //    if (sender.length > 0) {
+        //        sender.text(datetime);
+        //    }
+
+        //    var sender = $('#welcome');
+        //    if (sender.length > 0) {
+        //        sender.text(date + ',欢迎打卡！');
+        //    }
+        //}, 400);
+    </script>
+</head>
+<body>
+    <div class="allmain" id="app">
+        <div style="text-align:right ;padding-top: 10px;">{{nowContent}}</div>
+        <div style="height: 80% ;padding-top: 10px;">
+            <div class="finger">
+                <div class="content">
+                    <div><img id="imgfinger" src="../Images/i-fingerprint.jpg" /></div>
+                    <div id="fingerInput" class="title-2" @click="fingerInput">请录入指纹</div>
+                    <div v-show="welcomeHit" class="title-3 weight orange">{{welcomeContent}}</div>
+                    <div v-show="fingerHit" class="title-3 weight grean">{{fingerContent}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../Scripts/footer.js"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            data: function () {
+                return {
+                    date: GetDate(),
+                    datetime: GetDateTime(),
+                    welcomeHit: true,
+                    fingerHit: false,
+                    fingerContent: null,
+                    welcomeContent: null,
+                    nowContent: null,
+                    dateContent: null,
+                    timer: 0,
+                }
+            },
+            mounted: function () {
+                this.timer = setInterval(this.timing, 400);
+            },
+            methods: {
+                timing() {
+                    this.dateContent = GetDate();
+                    this.welcomeContent = this.dateContent + ',欢迎打卡！';
+                    this.nowContent = GetDateTime();
+                },
+                open1() {
+                    this.$message('这是一条消息提示');
+                },
+                fingerInput() {
+                    this.$message({
+                        message: '恭喜你，这是一条成功消息',
+                        type: 'success'
+                    });
+
+                    this.welcomeHit = !this.welcomeHit;
+                    this.fingerHit = !this.fingerHit;
+                    this.fingerContent = '张三[A0312]于' + this.dateContent + '成功打卡一次考勤';
+                },
+
+                open3() {
+                    this.$message({
+                        message: '警告哦，这是一条警告消息',
+                        type: 'warning'
+                    });
+                },
+
+                open4() {
+                    this.$message.error('错了哦，这是一条错误消息');
+                }
+            },
+            beforeDestroy() {
+                clearInterval(this.timer);
+            }
+        });
+    </script>
+
+
+</body>
+</html>

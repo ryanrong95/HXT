@@ -1,0 +1,172 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link href="../Css/main.css" rel="stylesheet" />
+    <script src="../Scripts/gkBrowser.js"></script>
+</head>
+<body>
+    <div class="allmain" id="app">
+        <div style="height: 80%;padding-top: 10px;">
+            <table class="table-main">
+                <tr>
+                    <td style="height:50px;" colspan="2">
+                        员工号：{{staffCode}}
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:50%; ">
+                        <div class="title-2" style="width:467px; margin-bottom:50px;color:#CBC8C1 ;text-align:left; text-indent:30%">
+                            您选择的手指：<span id="selectFingle" style="color:green"></span>
+                        </div>
+                        <div>
+                            <img id="b-graycircle" src="../Images/b-graycircle.png" width="25" style="display:none;" />
+                            <img id="hand" src="../Images/hand.png" usemap="#handmap" />
+                            <map name="handmap">
+                                <area shape="circle" coords="10,100,10" href="javascript:void('左手小拇指');" alt="左手小拇指" />
+                                <area shape="circle" coords="33,45,10" href="javascript:void('左手无名指');" alt="左手无名指" />
+                                <area shape="circle" coords="83,15,10" href="javascript:void('左手中指');" alt="左手中指" />
+                                <area shape="circle" coords="141,30,10" href="javascript:void('左手食指');" alt="左手食指" />
+                                <area shape="circle" coords="198,118,10" href="javascript:void('左手大拇指');" alt="左手大拇指" />
+
+                                <area shape="circle" coords="280,118,10" href="javascript:void('右手大拇指');" alt="右手大拇指" />
+                                <area shape="circle" coords="330,30,10" href="javascript:void('右手食指');" alt="右手食指" />
+                                <area shape="circle" coords="389,15,10" href="javascript:void('右手中指');" alt="右手中指" />
+                                <area shape="circle" coords="440,45,10" href="javascript:void('右手无名指');" alt="右手无名指" />
+                                <area shape="circle" coords="461,100,10" href="javascript:void('右手小拇指');" alt="右手小拇指" />
+                            </map>
+                        </div>
+                        <div class="title-2" style="width:467px;   margin:0px auto ; text-align:left;color:#CBC8C1">
+                            为了方便的有效的管理指纹系统请务必按照对应的手指录入指纹，否则将影响您的体验。
+                        </div>
+                    </td>
+                    <td style="text-align:center;">
+                        <div class="finger">
+                            <div class="content">
+                                <div><img id="imgfinger" src="../Images/i-fingerprint.jpg" /></div>
+                                <div id="fingerInput" class="title-2" style="text-align:left;color:#CBC8C1" @click="open2">
+                                    将手指以正确的姿势放在指纹识别区，停留1-2秒。抬起手指再次将手指以正确的姿势放在指纹识别区，连续三次。按压3次为采集了一枚完整的指纹。
+                                </div>
+                                <div id="welcome" class="title-3 weight orange"></div>
+                                <div id="fingerHit" class="title-3 weight grean"></div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <script src="../Scripts/footer.js"></script>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: function () {
+                return {
+                    staffCode: 'AAF34105035',
+                    visible: false
+                }
+            },
+            methods: {
+                open1() {
+                    this.$message('这是一条消息提示');
+                },
+                open2() {
+                    var d = this.$message({
+                        message: '恭喜你，这是一条成功消息',
+                        type: 'success'
+                    });
+                },
+
+                open3() {
+                    this.$message({
+                        message: '警告哦，这是一条警告消息',
+                        type: 'warning'
+                    });
+                },
+
+                open4() {
+                    this.$message.error('错了哦，这是一条错误消息');
+                }
+            }
+        });
+    </script>
+
+    <script>
+        $(function () {
+            function getCircle(index) {
+                var id = '#b-graycircle-' + index;
+                var circle = $(id);
+                return circle;
+            }
+
+            var coords = [];
+            var fnames = [];
+
+            $('[name="handmap"]').find('area').each(function (index, item) {
+                var sender = $('#b-graycircle');
+                var circle = sender.clone();
+                var id = circle.prop('id') + '-' + index;
+                circle.prop('id', id);
+                sender.after(circle);
+                coords.push($(this).prop('coords').split(','));
+                fnames.push($(this).prop('alt'));
+            });
+
+            for (var index = 0; index < coords.length; index++) {
+                var circle = getCircle(index);
+                circle.click(function () {
+                    var src = $(this).prop('src');
+                    if (src.indexOf('green') > -1) {
+                        $(this).prop('src', '../Images/b-graycircle.png');
+                    }
+                    if (src.indexOf('gray') > -1) {
+                        $(this).prop('src', '../Images/b-greencircle.png');
+                    }
+
+                    $('#selectFingle').text(fnames[parseInt($(this).prop('id').split('-')[2])]);
+                });
+            }
+
+            var rzfun = function () {
+                var offset = $('#hand').offset();
+                for (var index = 0; index < coords.length; index++) {
+                    var circle = getCircle(index);
+                    var coord = coords[index];
+                    circle.css({
+                        'cursor': 'pointer',
+                        'position': 'absolute',
+                        'left': offset.left + (parseInt(coord[0]) - parseInt(coord[2])),
+                        'top': offset.top + (parseInt(coord[1]) - parseInt(coord[2]))
+                    }).show();
+                }
+            };
+
+            $(window).resize(function () {
+                rzfun();
+            });
+            setTimeout(function () {
+                $(window).resize();
+            }, 100);
+        });
+    </script>
+</body>
+</html>
+
+
+<!--
+    <img id="b-graycircle" src="../Images/b-graycircle.png" width="20" style="border: 1px dashed green;">
+<img id="b-graycircle-9" src="../Images/b-graycircle.png" width="20" style="border: 1px dashed green; position: absolute; left: 451px; top: 90px;">
+<img id="b-graycircle-8" src="../Images/b-graycircle.png" width="20" style="border: 1px dashed green; position: absolute; left: 430px; top: 35px;">
+<img id="b-graycircle-7" src="../Images/b-graycircle.png" width="20" style="border: 1px dashed green; position: absolute; left: 379px; top: 5px;">
+<img id="b-graycircle-6" src="../Images/b-graycircle.png" width="20" style="border: 1px dashed green; position: absolute; left: 320px; top: 20px;">
+<img id="b-graycircle-5" src="../Images/b-graycircle.png" width="20" style="border: 1px dashed green; position: absolute; left: 270px; top: 108px;">
+<img id="b-graycircle-4" src="../Images/b-graycircle.png" width="20" style="border: 1px dashed green; position: absolute; left: 188px; top: 108px;">
+<img id="b-graycircle-3" src="../Images/b-graycircle.png" width="20" style="border: 1px dashed green; position: absolute; left: 131px; top: 20px;">
+<img id="b-graycircle-2" src="../Images/b-graycircle.png" width="20" style="border: 1px dashed green; position: absolute; left: 73px; top: 5px;">
+<img id="b-graycircle-1" src="../Images/b-graycircle.png" width="20" style="border: 1px dashed green; position: absolute; left: 23px; top: 35px;">
+<img id="b-graycircle-0" src="../Images/b-graycircle.png" width="20" style="border: 1px dashed green; position: absolute; left: 0px; top: 90px;">
+    -->

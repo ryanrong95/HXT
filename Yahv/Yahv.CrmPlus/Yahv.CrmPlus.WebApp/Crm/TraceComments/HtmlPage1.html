@@ -1,0 +1,145 @@
+﻿
+<!DOCTYPE html>
+
+<html>
+<head>
+    <script>var model = { "ID": null };</script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>
+
+    </title>
+
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/gray/easyui.css" rel="stylesheet" />
+
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/icon.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/icon-yg-cool.css" rel="stylesheet" />
+
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.min.js"></script>
+
+
+
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.easyui.min.js"></script>
+    <script>
+        $(function () {
+
+            var topid = '_8d32a52525be458c8ad3c674dd25adb2';
+
+            var current = top.$.myDialogFuse.options;
+
+            var options = current[current.length - 1];
+
+            options.sumbitDialog = function () {
+                $('[type="submit"]').click();
+            };
+
+
+            //alert(options.title);
+
+            if (document.title.length > 0) {
+                options.title = document.title;
+            }
+
+
+
+            var ox = parseInt(options.width);
+            var oy = parseInt(options.height);
+
+            ox = ox <= 100 ? ox * top.$(window).width() / 100 : ox;
+            oy = oy <= 100 ? oy * top.$(window).height() / 100 : oy;
+
+            var x = Math.abs(top.$(window).width() - ox) / 2;
+            var y = Math.abs(top.$(window).height() - oy) / 2;
+
+            options.left = x + "px";
+            options.top = y + "px";
+
+            $(window).focus();
+
+            $('#' + topid).dialog(options);
+
+            $('*').keyup(function (e) {
+                if (e.keyCode == 27) {
+                    $('#' + topid).dialog('close');
+                }
+                e.stopPropagation();
+                return false;
+            });
+        });
+
+
+    </script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/patch.linkbutton.js"></script>
+
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/main.js"></script>
+
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/locale/easyui-lang-zh_CN.js"></script>
+
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/easyui.myDatagrid.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/easyui.myDialog.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/easyui.myWindow.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/easyui.myWindow.fuse.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/easyui.myDialog.fuse.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/standard-easyui/scripts/fixedCombobx.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/standard-easyui/crmPlus/easyui.sfs.js"></script>
+
+    <link href="http://fixed2.b1b.com/Yahv/standard-easyui/styles/plugin.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/customs-easyui/fonts/iconfont.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/customs-easyui/Styles/reset.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/customs-easyui/Styles/main.css" rel="stylesheet" />
+    <style type="text/css">
+        .csrmtitle { font-weight: bold; color: #575765; height: 20px; line-height: 20px; background-color: #F5F5F5; }
+        /*html, body, form { height: 100%; width: 100%; }*/
+    </style>
+
+    <script>
+        $(function () {
+            //新增
+            //$("#btnadd").click(function () {
+            //    $.myDialog({
+            //        title: '添加',
+            //        url: 'Add.aspx?TraceID=' + id,
+            //        width: "750px",
+            //        height: "400px",
+            //        isHaveOk: true,
+            //        onClose: function () {
+            //             grid.myDatagrid('flush');
+            //           // window.location.reload();
+            //        }
+            //    });
+            //})
+        })
+    </script>
+</head>
+<body class="easyui-layout">
+    <div id="_8d32a52525be458c8ad3c674dd25adb2">
+        <form method="post" action="./Add.aspx?TraceID=Tra2021021800000001&amp;pagemode=dialog" id="form1">
+            <div class="aspNetHidden">
+                <input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="KgxgwSxzjDblThGROdIxWI3tphja6NeqjSWBz/Z9SWY1t9QmvtJCJEoTS7JIx8Nig4XWIIKktK0ywHrGuJCmxsNNKbx6eZxNWtIN4ZkXihM=" />
+            </div>
+
+
+
+            <table style="height: 300px; border: solid 1px red; " data-options="fit:true">
+                <tr>
+                    <td style="width: 80px; vertical-align: top;">点评内容：</td>
+                    <td>
+                        <input class="easyui-textbox input" id="Comments" name="Comments"
+                               data-options="required:true, multiline:true,validType:'length[1,350]',tipPosition:'right',fit:true" />
+                    </td>
+                </tr>
+            </table>
+            <div style="text-align: center; padding: 5px; display: none;">
+                <input type="submit" name="ctl00$cphForm$btnSubmit" value="保存" id="btnSubmit" style="display: none;" />
+            </div>
+
+
+
+            <div class="aspNetHidden">
+
+                <input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="F0E89725" />
+                <input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="ZGr8CbmX0jL5gow8vKIAfwh8GMsb09Da3PrpWzNoCieb9ad1nuTI0SDrJTBQA9fdJ5pvZ78rhWrM9AjYFUGEXzWbZH5bbIALtnh9AiIwXu8lTcD4zenA1fjDr0vfqWbj" />
+            </div>
+        </form>
+    </div>
+</body>
+</html>

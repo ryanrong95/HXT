@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>公司 - jQuery EasyUI plugin</title>
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/gray/easyui.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/icon.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/icon-yg-cool.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/standard-easyui/styles/plugin.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/customs-easyui/Styles/main.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/customs-easyui/Styles/reset.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/customs-easyui/fonts/iconfont.css" rel="stylesheet" />
+
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.easyui.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/locale/easyui-lang-zh_CN.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/easyui.myDialog.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/easyui.myWindow.fuse.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/easyui.myDialog.fuse.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/standard-easyui/crmPlus/companyPayerCrmPlus.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/standard-easyui/crmPlus/companyPayeeCrmPlus.js"></script>
+</head>
+<body>
+    <div class="easyui-panel" data-options="title:'公司付款人插件'" style="width: 100%; padding: 3px 6px;">
+        <input id="companyPayerCrmPlus" name="companyPayerCrmPlus" style="width: 250px; height: 26px" />
+        <a id="btncompanyPayerCrmPlus" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">设置公司ID</a>
+    </div>
+
+    <div class="easyui-panel" data-options="title:'公司收款人插件'" style="width: 100%; padding: 3px 6px;">
+        <input id="companyPayeeCrmPlus" name="companyPayeeCrmPlus" style="width: 250px; height: 26px" />
+        <a id="btncompanyPayeeCrmPlus" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">设置公司ID</a>
+    </div>
+
+    <script>
+        $(function () {
+            //公司付款人插件
+            $('#companyPayerCrmPlus').companyPayerCrmPlus({
+                required: true,
+                //companyID: 'Ep20210115025',
+                onSelect: function (record) {
+                    console.log('companyPayerCrmPlus.onSelect:' + [record.ID, record.Bank]);
+                }
+            });
+            $('#btncompanyPayerCrmPlus').click(function () {
+                $('#companyPayerCrmPlus').companyPayerCrmPlus('setCompanyID', 'Ep20210115025');
+            });
+
+            //公司收款人插件
+            $('#companyPayeeCrmPlus').companyPayeeCrmPlus({
+                required: true,
+                //companyID: 'Ep20210302001',
+                onSelect: function (record) {
+                    console.log('companyPayeeCrmPlus.onSelect:' + [record.ID, record.Bank]);
+                }
+            });
+            $('#btncompanyPayeeCrmPlus').click(function () {
+                $('#companyPayeeCrmPlus').companyPayeeCrmPlus('setCompanyID', 'Ep20210302001');
+            });
+        })
+    </script>
+</body>
+</html>

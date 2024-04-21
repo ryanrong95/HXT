@@ -1,0 +1,352 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{857B1780-81AF-4135-BB8F-3931B15B241F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Yahv.Erm.Services</RootNamespace>
+    <AssemblyName>Yahv.Erm.Services</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=1.0.0.999, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>..\..\Yahv.Compiler\packages\SharpZipLib.1.0.0\lib\net45\ICSharpCode.SharpZipLib.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Yahv.Erm.WebApp\Bin\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI, Version=2.4.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\..\Yahv.Compiler\packages\NPOI.2.4.1\lib\net45\NPOI.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NPOI.OOXML, Version=2.4.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\..\Yahv.Compiler\packages\NPOI.2.4.1\lib\net45\NPOI.OOXML.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net, Version=2.4.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\..\Yahv.Compiler\packages\NPOI.2.4.1\lib\net45\NPOI.OpenXml4Net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats, Version=2.4.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\..\Yahv.Compiler\packages\NPOI.2.4.1\lib\net45\NPOI.OpenXmlFormats.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Activities" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Linq.Dynamic, Version=1.0.6132.35681, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\Yahv.Compiler\packages\System.Linq.Dynamic.1.0.7\lib\net40\System.Linq.Dynamic.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="YaHv.Csrm.Services">
+      <HintPath>..\..\Yahv.Csrm\YaHv.Csrm.Services\bin\Debug\YaHv.Csrm.Services.dll</HintPath>
+    </Reference>
+    <Reference Include="Yahv.Plats.Services">
+      <HintPath>..\..\Yahv.Plats\Yahv.Plats.Services\bin\Debug\Yahv.Plats.Services.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AttendanceCalc.cs" />
+    <Compile Include="Common\DYJRSAPI.cs" />
+    <Compile Include="Common\ErmConfig.cs" />
+    <Compile Include="Common\AttendHelper.cs" />
+    <Compile Include="Common\XDTOrganization.cs" />
+    <Compile Include="Common\FileDirectory.cs" />
+    <Compile Include="Enums.PKeyType.cs" />
+    <Compile Include="Enums\Enum.DyjApi.cs" />
+    <Compile Include="Enums\Enums.Application.cs" />
+    <Compile Include="Enums\Enums.cs" />
+    <Compile Include="Enums\Enums.Attendance.cs" />
+    <Compile Include="Extends\PKeyTypeExtend.cs" />
+    <Compile Include="Interfaces\WlAdminApiSetting.cs" />
+    <Compile Include="Models\Origins\SealCertificate.cs" />
+    <Compile Include="Models\Origins\ApplicationContext.cs" />
+    <Compile Include="Models\Origins\ApplyVoteStep.cs" />
+    <Compile Include="Models\Origins\Logs_StaffApproval.cs" />
+    <Compile Include="Models\Origins\Logs_Attend.cs" />
+    <Compile Include="Models\Origins\Calendar.cs" />
+    <Compile Include="Models\Origins\PastsAdminPassword.cs" />
+    <Compile Include="Models\Origins\PastsAttend.cs" />
+    <Compile Include="Models\Origins\RegionAc.cs" />
+    <Compile Include="Models\Origins\Schedule.cs" />
+    <Compile Include="Models\Origins\SchedulePrivate.cs" />
+    <Compile Include="Models\Origins\SchedulePublic.cs" />
+    <Compile Include="Models\Origins\Scheduling.cs" />
+    <Compile Include="Models\Origins\ShiftStaff.cs" />
+    <Compile Include="Models\Origins\StaffWxs.cs" />
+    <Compile Include="Models\Origins\Application.cs" />
+    <Compile Include="Models\Origins\VoteFlow.cs" />
+    <Compile Include="Models\Origins\VoteStep.cs" />
+    <Compile Include="Models\Rolls\AdminWareHouse.cs" />
+    <Compile Include="Models\Rolls\ApprovalStatistic.cs" />
+    <Compile Include="Models\Rolls\Resignation.cs" />
+    <Compile Include="Models\Rolls\StaffContactDto.cs" />
+    <Compile Include="MyRingRole.cs" />
+    <Compile Include="Models\Origins\PastsItem.cs" />
+    <Compile Include="Models\Rolls\PayItemInputer.cs" />
+    <Compile Include="Service References\DYJRSService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Alls\ApplicationsAll.cs" />
+    <Compile Include="Views\Alls\ShiftStaffsAll.cs" />
+    <Compile Include="Views\Alls\SealCertificateAll.cs" />
+    <Compile Include="Views\Alls\Logs_StaffApprovalAll.cs" />
+    <Compile Include="Views\ApprovalsStatisticsView.cs" />
+    <Compile Include="Views\MyInputItems.cs" />
+    <Compile Include="Views\Origins\ApplyVoteStepsOrigin.cs" />
+    <Compile Include="Views\Origins\CalendarsOrigin.cs" />
+    <Compile Include="Views\Origins\Logs_StaffApprovalOrigin.cs" />
+    <Compile Include="Views\Origins\PastsAttendOrigin.cs" />
+    <Compile Include="Views\Origins\RegionsAcOrigin.cs" />
+    <Compile Include="Views\Origins\SchedulesOrigin.cs" />
+    <Compile Include="Views\Origins\SchedulesPrivateOrigin.cs" />
+    <Compile Include="Views\Origins\SchedulesPublicOrigin.cs" />
+    <Compile Include="Views\Origins\SchedulingsOrigin.cs" />
+    <Compile Include="Views\Origins\ApplicationsOrigin.cs" />
+    <Compile Include="Views\Origins\ShiftStaffsOrigin.cs" />
+    <Compile Include="Views\Origins\VacationsOrigin.cs" />
+    <Compile Include="Views\Origins\Logs_AttendOrigin.cs" />
+    <Compile Include="Views\Origins\SealCertificateOrigin.cs" />
+    <Compile Include="Views\Origins\VoteFlowsOrigin.cs" />
+    <Compile Include="Views\Origins\VoteStepsOrigin.cs" />
+    <Compile Include="Views\PastsItemAll.cs" />
+    <Compile Include="Views\Rolls\AdminsWmsRoll.cs" />
+    <Compile Include="Views\Rolls\ApplicationsRoll.cs" />
+    <Compile Include="Views\Rolls\LogsAttendRoll.cs" />
+    <Compile Include="Views\Rolls\MyWareHouseRoll.cs" />
+    <Compile Include="Views\Rolls\PastsAttendRoll.cs" />
+    <Compile Include="Views\Rolls\SchedulesPublicRoll.cs" />
+    <Compile Include="Views\Rolls\StaffVacations_Xdt.cs" />
+    <Compile Include="Views\StaffWxsAll.cs" />
+    <Compile Include="Views\WarehousePlatesTopView.cs" />
+    <Compile Include="VoteFlowManager.chenhan.cs" />
+    <Compile Include="VoteFlowManager.cs" />
+    <Compile Include="WageItemType.cs" />
+    <Compile Include="Enums.Duty.cs" />
+    <Compile Include="Enums.Gender.cs" />
+    <Compile Include="Enums.IsCalc.cs" />
+    <Compile Include="Enums.LeagueType.cs" />
+    <Compile Include="Enums.Bank.cs" />
+    <Compile Include="ExportWages.cs" />
+    <Compile Include="Extends\AdminExtends.cs" />
+    <Compile Include="Extends\AdvantageExtend.cs" />
+    <Compile Include="Extends\PayBillItemExtends.cs" />
+    <Compile Include="Extends\PayItemExtends.cs" />
+    <Compile Include="Extends\PostionExtends.cs" />
+    <Compile Include="Extends\RoleExtends.cs" />
+    <Compile Include="Extends\ToLinqExtends.cs" />
+    <Content Include="FormulaTemple.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Compile Include="Formulas.cs" />
+    <Compile Include="Models\Origins\Admin.cs" />
+    <Compile Include="Models\Origins\Vacation.cs" />
+    <Compile Include="Models\Origins\Advantage.cs" />
+    <Compile Include="Models\Origins\BankCard.cs" />
+    <Compile Include="Models\Origins\Business.cs" />
+    <Compile Include="Models\Origins\Contact.cs" />
+    <Compile Include="Models\Origins\Labour.cs" />
+    <Compile Include="Models\Origins\League.cs" />
+    <Compile Include="Models\Origins\Manufacturer.cs" />
+    <Compile Include="Models\Origins\Menu.cs" />
+    <Compile Include="Models\Origins\ParticleSetting.cs" />
+    <Compile Include="Models\Origins\Particle.cs" />
+    <Compile Include="Models\Origins\PastsWageItem.cs" />
+    <Compile Include="Models\Origins\PayBill.cs" />
+    <Compile Include="Models\Origins\PayItem.cs" />
+    <Compile Include="Models\Origins\Personal.cs" />
+    <Compile Include="Models\Origins\PersonalRate.cs" />
+    <Compile Include="Models\Origins\Postion.cs" />
+    <Compile Include="Models\Origins\Role.cs" />
+    <Compile Include="Models\Origins\Staff.cs" />
+    <Compile Include="Models\Origins\SubTree.cs" />
+    <Compile Include="Models\Origins\WageItem.cs" />
+    <Compile Include="Enums.PaybillStatus.cs" />
+    <Compile Include="Models\Rolls\PayBillItem.cs" />
+    <Compile Include="Models\Rolls\PayWageItem.cs" />
+    <Compile Include="Models\Rolls\StaffPayItem.cs" />
+    <Compile Include="Models\Rolls\StaffWageItem.cs" />
+    <Compile Include="PayItems.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Enums.StaffStatus.cs" />
+    <Compile Include="Enums.Status.cs" />
+    <Compile Include="UploadStaffs.cs" />
+    <Compile Include="UploadWages.cs" />
+    <Compile Include="Views\AdminsAll.cs" />
+    <Compile Include="Views\Origins\AdminsOrigin.cs" />
+    <Compile Include="Views\Origins\AdvantagesOrigin.cs" />
+    <Compile Include="Views\Origins\BankCardsOrigin.cs" />
+    <Compile Include="Views\Origins\ContactsOrigin.cs" />
+    <Compile Include="Views\Origins\LaboursOrigin.cs" />
+    <Compile Include="Views\Origins\LeaguesOrigin.cs" />
+    <Compile Include="Views\Origins\MenusOrigin.cs" />
+    <Compile Include="Views\Origins\ParticlesOrigin.cs" />
+    <Compile Include="Views\Origins\PastsWageItemOrigin.cs" />
+    <Compile Include="Views\Origins\PayBillsOrigin.cs" />
+    <Compile Include="Views\Origins\PayItemsOrigin.cs" />
+    <Compile Include="Views\Origins\PersonalRatesOrigin.cs" />
+    <Compile Include="Views\Origins\PersonalsOrigin.cs" />
+    <Compile Include="Views\Origins\PostionsOrigin.cs" />
+    <Compile Include="Views\Origins\RolesOrigin.cs" />
+    <Compile Include="Views\Origins\StaffsOrigin.cs" />
+    <Compile Include="Views\Origins\WageItemsOrigin.cs" />
+    <Compile Include="Views\ParticleSettingsRoll.cs" />
+    <Compile Include="Views\ParticlesAll.cs" />
+    <Compile Include="Views\PastsWageItemAlls.cs" />
+    <Compile Include="Views\PostionsAll.cs" />
+    <Compile Include="Views\RolesAll.cs" />
+    <Compile Include="Views\Rolls\AdminsRoll.cs" />
+    <Compile Include="Views\Rolls\AdvantageRoll.cs" />
+    <Compile Include="Views\Rolls\BankCardsRoll.cs" />
+    <Compile Include="Views\Rolls\ContactsRoll.cs" />
+    <Compile Include="Views\Rolls\LaboursRoll.cs" />
+    <Compile Include="Views\Rolls\LeaguesRoll.cs" />
+    <Compile Include="Views\Rolls\LeaguesTree.cs" />
+    <Compile Include="Views\Rolls\LeagueSubs.cs" />
+    <Compile Include="Views\Rolls\MenusAllRoll.cs" />
+    <Compile Include="Views\MenusAll.cs" />
+    <Compile Include="Views\Rolls\MypersonalsRoll.cs" />
+    <Compile Include="Views\Rolls\MyWageItemsRoll.cs" />
+    <Compile Include="Views\Rolls\PayBillsRoll.cs" />
+    <Compile Include="Views\Rolls\PayItemsRoll.cs" />
+    <Compile Include="Views\Rolls\PayWageItemRoll.cs" />
+    <Compile Include="Views\Rolls\PersonalRatesRoll.cs" />
+    <Compile Include="Views\Rolls\PersonalsRoll.cs" />
+    <Compile Include="Views\Rolls\RolesRoll.cs" />
+    <Compile Include="Views\Rolls\StaffPayItems.cs" />
+    <Compile Include="Views\Rolls\StaffsRoll.cs" />
+    <Compile Include="Views\StaffAlls.cs" />
+    <Compile Include="Views\WageItemAlls.cs" />
+    <None Include="Jsons\institutions.json" />
+    <None Include="Service References\DYJRSService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\DYJRSService\configuration.svcinfo" />
+    <None Include="Service References\DYJRSService\configuration91.svcinfo" />
+    <None Include="Service References\DYJRSService\RSServer.disco" />
+    <None Include="Service References\DYJRSService\RSServer2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Solutions\Layers.Data\Layers.Data.csproj">
+      <Project>{fed16b15-565b-4ed6-a876-2146eb16b011}</Project>
+      <Name>Layers.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Layers.Linq\Layers.Linq.csproj">
+      <Project>{56c33683-ce9a-4cc5-9cef-92e03bc8f739}</Project>
+      <Name>Layers.Linq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Yahv.Linq\Yahv.Linq.csproj">
+      <Project>{c8c572df-2bba-4483-b332-2652805aef87}</Project>
+      <Name>Yahv.Linq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Yahv.Services\Yahv.Services.csproj">
+      <Project>{ef7c5b21-4ce2-454a-8719-70e6dadacb69}</Project>
+      <Name>Yahv.Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Yahv.Settings\Yahv.Settings.csproj">
+      <Project>{1ddf4a9b-d19a-4d3e-9575-0247975320c8}</Project>
+      <Name>Yahv.Settings</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Yahv.Underly\Yahv.Underly.csproj">
+      <Project>{15b56201-a129-4396-9431-0e5f9da7d9f9}</Project>
+      <Name>Yahv.Underly</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Yahv.Usually\Yahv.Usually.csproj">
+      <Project>{fa84a973-fc0b-4a57-9c6a-9212392f2d1c}</Project>
+      <Name>Yahv.Usually</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Yahv.Utils\Yahv.Utils.csproj">
+      <Project>{870a94d5-f08e-481f-a7ae-b90b5c249882}</Project>
+      <Name>Yahv.Utils</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Enums.PayItemStatus.cs" />
+    <None Include="app.config" />
+    <None Include="packages.config" />
+    <None Include="Service References\DYJRSService\RSServer.wsdl" />
+    <None Include="Service References\DYJRSService\RSServer.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\DYJRSService\RSServer1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\DYJRSService\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

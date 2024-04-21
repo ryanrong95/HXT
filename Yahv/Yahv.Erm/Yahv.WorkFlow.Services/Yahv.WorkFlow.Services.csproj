@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A09B1F7E-CDAC-41A6-910B-F9D6F86165D0}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Yahv.WorkFlow.Services</RootNamespace>
+    <AssemblyName>Yahv.WorkFlow.Services</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Consts.cs" />
+    <Compile Include="Enums\Enums.Application.cs" />
+    <Compile Include="Enums\Enums.VoteFlow.cs" />
+    <Compile Include="Extends\PKeyTypeExtend.cs" />
+    <Compile Include="Models\Origins\Application.cs" />
+    <Compile Include="Models\Origins\ApplyVoteStep.cs" />
+    <Compile Include="Models\Origins\VoteStep.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\Origins\VoteStepsOrigin.cs" />
+    <Compile Include="VoteFlow.cs" />
+    <Compile Include="VoteFlowManager.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Solutions\Layers.Data\Layers.Data.csproj">
+      <Project>{fed16b15-565b-4ed6-a876-2146eb16b011}</Project>
+      <Name>Layers.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Layers.Linq\Layers.Linq.csproj">
+      <Project>{56c33683-ce9a-4cc5-9cef-92e03bc8f739}</Project>
+      <Name>Layers.Linq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Yahv.Linq\Yahv.Linq.csproj">
+      <Project>{c8c572df-2bba-4483-b332-2652805aef87}</Project>
+      <Name>Yahv.Linq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Yahv.Services\Yahv.Services.csproj">
+      <Project>{ef7c5b21-4ce2-454a-8719-70e6dadacb69}</Project>
+      <Name>Yahv.Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Yahv.Underly\Yahv.Underly.csproj">
+      <Project>{15b56201-a129-4396-9431-0e5f9da7d9f9}</Project>
+      <Name>Yahv.Underly</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Yahv.Utils\Yahv.Utils.csproj">
+      <Project>{870a94d5-f08e-481f-a7ae-b90b5c249882}</Project>
+      <Name>Yahv.Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Yahv.Erm.Services\Yahv.Erm.Services.csproj">
+      <Project>{857b1780-81af-4135-bb8f-3931b15b241f}</Project>
+      <Name>Yahv.Erm.Services</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>品牌 - jQuery EasyUI plugin</title>
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/gray/easyui.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/icon.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/icon-yg-cool.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/standard-easyui/styles/plugin.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/customs-easyui/Styles/main.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/customs-easyui/Styles/reset.css" rel="stylesheet" />
+    <link href="http://fixed2.b1b.com/Yahv/customs-easyui/fonts/iconfont.css" rel="stylesheet" />
+
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.easyui.min.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/locale/easyui-lang-zh_CN.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/easyui.myDialog.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/easyui.myWindow.fuse.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/easyui.myDialog.fuse.js"></script>
+    <script src="http://fixed2.b1b.com/Yahv/standard-easyui/crmPlus/agentBrandCrmPlus.js"></script>
+</head>
+<body>
+    <div class="easyui-panel" data-options="title:'代理品牌插件'" style="width: 100%; padding: 3px 6px;">
+        <form id="form" class="easyui-form" method="post" data-options="novalidate:true">
+            <input id="agentBrandCrmPlus" name="agentBrandCrmPlus" style="width: 250px; height: 26px" />
+            <a id="btnSubmit" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存</a>
+        </form>
+    </div>
+
+    <script>
+        $(function () {
+            //客户快速注册插件
+            $('#agentBrandCrmPlus').agentBrandCrmPlus({
+                required: true,
+                isRegister: true,
+                onChange: function (newValue, oldValue) {
+                    console.log('agentBrandCrmPlus.onChange:' + [newValue, oldValue]);
+                },
+                onSelect: function (record) {
+                    console.log('agentBrandCrmPlus.onSelect:' + [record.ID, record.Name]);
+                }
+            });
+            $('#btnSubmit').click(function () {
+                var data = new FormData($('form')[0]);
+                console.log(data.get('agentBrandCrmPlus'));
+
+                $('#agentBrandCrmPlus').agentBrandCrmPlus('setValue', 'be');
+                console.log($('#agentBrandCrmPlus').agentBrandCrmPlus('getData'));
+                console.log($('#agentBrandCrmPlus').agentBrandCrmPlus('getName'));
+                console.log($('#agentBrandCrmPlus').agentBrandCrmPlus('getValue'));
+            });
+        })
+    </script>
+</body>
+</html>
