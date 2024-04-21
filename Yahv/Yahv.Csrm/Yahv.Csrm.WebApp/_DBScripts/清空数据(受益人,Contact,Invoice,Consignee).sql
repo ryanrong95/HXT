@@ -1,0 +1,4 @@
+--delete from [dbo].[Beneficiaries]
+--delete from [dbo].[Contacts]
+--delete from [dbo].[Consignees]
+--delete from [dbo].[Invoices]

@@ -1,0 +1,155 @@
+﻿using System;
+using System.Linq;
+using Yahv.Underly;
+using Yahv.Web.Forms;
+using YaHv.Csrm.Services;
+using YaHv.Csrm.Services.Extends;
+using YaHv.Csrm.Services.Models.Origins;
+using YaHv.Csrm.Services.Views.Rolls;
+
+namespace Yahv.Csrm.WebApp.Crm.MyClients
+{
+    public partial class Edit : BasePage
+    {
+
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (!IsPostBack)
+            {
+                var clientid = Request.QueryString["id"];
+                this.Model.Entity = new ClientsRoll()[clientid];
+                init();
+            }
+        }
+        void init()
+        {
+            //地区类型
+            this.Model.AreaType = ExtendsEnum.ToArray<AreaType>().Select(item => new
+            {
+                value = (int)item,
+                text = item.GetDescription()
+            });
+            //客户类型
+            this.Model.ClientType = ExtendsEnum.ToArray<ClientType>().Select(item => new
+            {
+                value = (int)item,
+                text = item.GetDescription()
+            });
+            //合作类型
+            this.Model.CooperType = ExtendsEnum.ToArray<CooperType>().Select(item => new
+            {
+                value = (int)item,
+                text = item.GetDescription()
+            });
+        }
+        protected void btnSubmit_Click(object sender, EventArgs e)
+        {
+            var id = Request.QueryString["id"];
+            var entity = Erp.Current.Crm.MyClients[id] ?? new TradingClient();
+            entity.Nature = (ClientType)int.Parse(Request["Nature"]);
+            entity.AreaType = (AreaType)int.Parse(Request["Type"]);
+            string taxpernumber = Request.Form["TaxperNumber"].Trim();
+            entity.TaxperNumber = string.IsNullOrWhiteSpace(taxpernumber) ? "" : taxpernumber;
+            string dyjcode = Request["DyjCode"].Trim();
+            entity.DyjCode = string.IsNullOrWhiteSpace(dyjcode) ? "" : dyjcode;
+            string admincode = Request["AdminCode"].Trim();
+            entity.Enterprise = new Enterprise
+            {
+                Name = Request.Form["Name"],
+                AdminCode = string.IsNullOrWhiteSpace(admincode) ? "" : admincode
+            };
+            // entity.saleid = Erp.Current.ID;
+
+
+            ///国家或地区
+            entity.Place = Request["Origin"];
+            // Enum.GetValues(typeof(Origin)).Cast<Origin>().SingleOrDefault(item => item.GetOrigin().Code == Request["Origin"]);
+            //重点客户
+            entity.Major = Request["Major"] != null;
+
+            if (string.IsNullOrEmpty(id))
+            {
+                entity.CompanyID = Request["txt_InternalCompany"];
+                entity.CreatorID = Yahv.Erp.Current.ID;
+                entity.StatusUnnormal += Entity_StatusUnnormal;
+            }
+            entity.EnterSuccess += Clients_EnterSuccess;
+            entity.Enter();
+
+        }
+
+        private void Entity_StatusUnnormal(object sender, Usually.ErrorEventArgs e)
+        {
+            var entity = sender as TradingClient;
+            var Company = new CompaniesRoll()[entity.CompanyID];
+            Easyui.Reload("提示", "客户和" + Company.Enterprise.Name + "已进行合作", Yahv.Web.Controls.Easyui.Sign.Warning);
+        }
+
+        private void Clients_EnterSuccess(object sender, Usually.SuccessEventArgs e)
+        {
+            var entity = sender as TradingClient;
+            //CooperType coopertype = CooperType.None;
+            //CooperType type;
+            //if (Enum.TryParse(Request.QueryString["type"], out type))
+            //{
+            //    coopertype = type;
+            //}
+            //if (!string.IsNullOrEmpty(Request["txt_InternalCompany"]) && type != CooperType.None)
+            //{
+            //    entity.CooperBinding(Request["txt_InternalCompany"], (CooperType)int.Parse(Request["selCooperType"]));
+            //    Yahv.Oplogs.Oplog(Yahv.Erp.Current, Request.Url.ToString(),
+            //                           nameof(Yahv.Systematic.Crm),
+            //                          "AdminBinding", "客户" + entity.ID + "绑定" + Erp.Current.ID, "合作业务" + type.GetDescription());
+            //}
+            //操作日志
+            if (string.IsNullOrEmpty(Request.QueryString["id"]))
+            {
+                Yahv.Oplogs.Oplog(Yahv.Erp.Current, Request.Url.ToString(),
+                                         nameof(Yahv.Systematic.Crm),
+                                        "ClientInsert", "新增客户：" + entity.Enterprise.ID + ",销售公司ID：" + entity.CompanyID, "");
+            }
+            else
+            {
+                Yahv.Oplogs.Oplog(Yahv.Erp.Current, Request.Url.ToString(),
+                                         nameof(Yahv.Systematic.Crm),
+                                        "ClientUpdate", "修改客户信息：" + entity.Enterprise.ID, "");
+            }
+            //Easyui.Alert("提示", "保存成功", Yahv.Web.Controls.Easyui.Sign.Info, true, Web.Controls.Easyui.Method.Window);
+            Easyui.Window.Close("保存成功!", Web.Controls.Easyui.AutoSign.Success);
+        }
+
+
+        protected object CheckEnterprise()
+        {
+            string clientname = Request["clientname"];
+            string companyid = Request["companyid"];
+
+            if (!string.IsNullOrWhiteSpace(clientname))
+            {
+                var clients = new TradingClientsRoll().FirstOrDefault(item => item.Enterprise.Name == clientname);
+                if (clients == null)
+                {
+                    return new { success = true, code = 1 };
+                }
+                else if (!string.IsNullOrWhiteSpace(companyid))
+                {
+                    bool havecompany = clients.Sales.Any(item => item.Company.ID == companyid);
+                    return new
+                    {
+                        code = havecompany ? 2 : 0,
+                        success = !havecompany,
+                        message = havecompany ? "销售公司已被占用，请选择其他公司" : ""
+                    };
+                }
+                else
+                {
+                    return new { code = 1, success = true };
+                }
+            }
+            else
+            {
+                return new { code = 0, success = false, message = "请输入客户名称" };
+            }
+        }
+    }
+}

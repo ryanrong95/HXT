@@ -1,0 +1,134 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{56975D55-B0EE-4392-A5F2-7CCCB76C5EE4}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>YaHv.VcCsrm.Service</RootNamespace>
+    <AssemblyName>YaHv.VcCsrm.Service</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Extends\ToLinqExtends.cs" />
+    <Compile Include="Models\Admin.cs" />
+    <Compile Include="Models\Consignee.cs" />
+    <Compile Include="Models\Contact.cs" />
+    <Compile Include="Models\Contract.cs" />
+    <Compile Include="Models\Enterprise.cs" />
+    <Compile Include="Models\Invoice.cs" />
+    <Compile Include="Models\WsClient.cs" />
+    <Compile Include="Models\WsConsignor.cs" />
+    <Compile Include="Models\WsContract.cs" />
+    <Compile Include="Models\WsPayee.cs" />
+    <Compile Include="Models\WsSupplier.cs" />
+    <Compile Include="WsAdmins.cs" />
+    <Compile Include="PKeyType.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ShipEnterBase.cs" />
+    <Compile Include="Views\Origins\ConsigneesOrigin.cs" />
+    <Compile Include="Views\Origins\ContactsOrigin.cs" />
+    <Compile Include="Views\Origins\ContractsOrigin.cs" />
+    <Compile Include="Views\Origins\EnterprisesOrigin.cs" />
+    <Compile Include="Views\Origins\InvoicesOrigin.cs" />
+    <Compile Include="Views\Origins\WsClientsOrigin.cs" />
+    <Compile Include="Views\Origins\WsConsignorsOrigin.cs" />
+    <Compile Include="Views\Origins\WsContractsOrigin.cs" />
+    <Compile Include="Views\Origins\WsPayeesOrigin.cs" />
+    <Compile Include="Views\Origins\WsSuppliersOrigin.cs" />
+    <Compile Include="Views\Rolls\AdminsAllRoll.cs" />
+    <Compile Include="Views\Rolls\ConsigneesRoll.cs" />
+    <Compile Include="Views\Rolls\ContactsRoll.cs" />
+    <Compile Include="Views\Rolls\InvoicesRoll.cs" />
+    <Compile Include="Views\Rolls\WsClientsRoll.cs" />
+    <Compile Include="Views\Rolls\WsConsignorsRoll.cs" />
+    <Compile Include="Views\Rolls\WsContractsRoll.cs" />
+    <Compile Include="Views\Rolls\WsPayeesRoll.cs" />
+    <Compile Include="Views\Rolls\WsSuppliersRoll.cs" />
+    <Compile Include="MyClients.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Aspose.Words.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Solutions\Layers.Data\Layers.Data.csproj">
+      <Project>{fed16b15-565b-4ed6-a876-2146eb16b011}</Project>
+      <Name>Layers.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Layers.Linq\Layers.Linq.csproj">
+      <Project>{56c33683-ce9a-4cc5-9cef-92e03bc8f739}</Project>
+      <Name>Layers.Linq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Yahv.Linq\Yahv.Linq.csproj">
+      <Project>{c8c572df-2bba-4483-b332-2652805aef87}</Project>
+      <Name>Yahv.Linq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Yahv.Services\Yahv.Services.csproj">
+      <Project>{ef7c5b21-4ce2-454a-8719-70e6dadacb69}</Project>
+      <Name>Yahv.Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Yahv.Underly\Yahv.Underly.csproj">
+      <Project>{15b56201-a129-4396-9431-0e5f9da7d9f9}</Project>
+      <Name>Yahv.Underly</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Yahv.Usually\Yahv.Usually.csproj">
+      <Project>{fa84a973-fc0b-4a57-9c6a-9212392f2d1c}</Project>
+      <Name>Yahv.Usually</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Yahv.Utils\Yahv.Utils.csproj">
+      <Project>{870a94d5-f08e-481f-a7ae-b90b5c249882}</Project>
+      <Name>Yahv.Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Yahv.Web.Erp\Yahv.Web.Erp.csproj">
+      <Project>{e5ac7ed8-2050-4f5f-bf97-ba0956448b80}</Project>
+      <Name>Yahv.Web.Erp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Yahv.Web\Yahv.Web.csproj">
+      <Project>{0e3b1265-0a95-4777-a1f8-16e195737c5f}</Project>
+      <Name>Yahv.Web</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
