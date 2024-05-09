@@ -6,7 +6,7 @@
 <head runat="server">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>包装信息</title>
-    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/gray/easyui.css" rel="stylesheet" />
+    <link href="http://fixed2.szhxt.net/Yahv/jquery-easyui-1.7.6/themes/gray/easyui.css" rel="stylesheet" />
     <uc:EasyUI runat="server" />
    <%-- <script>       
         gvSettings.fatherMenu = '基础数据(XDT)';

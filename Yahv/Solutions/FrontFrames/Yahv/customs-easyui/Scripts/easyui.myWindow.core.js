@@ -1,5 +1,5 @@
-﻿/// <reference path="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.min.js" />
-/// <reference path="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.easyui.min.js" />
+﻿/// <reference path="http://fixed2.szhxt.net/Yahv/jquery-easyui-1.7.6/jquery.min.js" />
+/// <reference path="http://fixed2.szhxt.net/Yahv/jquery-easyui-1.7.6/jquery.easyui.min.js" />
 //增加自动带入f_参数的工作
 (function ($) {
     function getAbsoluteUrl(url) {
@@ -120,7 +120,7 @@
             var doc = top.frames[id].contentDocument;
             if (doc.body) {
                 var script = doc.createElement('script');
-                script.src = 'http://fixed2.b1b.com/Yahv/customs-easyui/controls/topContentWindow.core.js';
+                script.src = 'http://fixed2.szhxt.net/Yahv/customs-easyui/controls/topContentWindow.core.js';
                 doc.body.appendChild(script);
                 clearInterval(writer);
             }

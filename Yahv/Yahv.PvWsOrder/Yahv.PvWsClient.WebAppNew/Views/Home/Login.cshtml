@@ -35,11 +35,12 @@
     <div class="n_register_mid" id="login">
         <div class="wrapper">
             <!-- 登录 -->
-            <div class="n_login_mod" style="padding-top: 45px;">
-                <h3 style="margin-bottom: 35px;">账户登录</h3>
+            <div class="n_login_mod" style="padding-top: 25px;">
+                <h3 style="margin-bottom: 18px; border-bottom: 1px solid rgba(238, 238, 238, 1);height:50px;">用户登录</h3>
+
                 <div class="n_login_input">
                     <div class="clearfix">
-                        <span class="left">用户名:</span>
+                        <span class="left">账号:</span>
                         <input type="text" class="left" :class="{'n_login_error':userStatus}" v-model="form.UserName" v-on:blur="vertifyUser" />
                     </div>
                     <p class="n_login_error" v-show="userStatus" id="uservertify"></p>
@@ -51,30 +52,37 @@
                     </div>
                     <p class="n_login_error" v-show="psdStatus" id="psdvertify"></p>
                 </div>
-                <div class="n_login_check">
+
+                <div class="clearfix n_login_link">
+
+                    <a href="@System.Configuration.ConfigurationManager.AppSettings["DomainForIC"]/register.html" class="left">注册账号</a>
+                    <a href="/ForgetPassword.html" class="right">忘记密码</a>
+                </div>
+                <div class="n_login_button" style="margin-top: 12px;">
+                    <button type="button" v-on:click="submitData">登录</button>
+                </div>
+
+                <div class="n_login_check" style="margin-top:10px;">
                     <input type="checkbox" :class="{'selected':checkStatus}" v-on:click="selectCheck" />
                     <i>记住账号和密码</i>
                 </div>
-                <div class="n_login_button" style="margin-top: 23px;">
-                    <button type="button" v-on:click="submitData">登录</button>
-                </div>
-                <div class="clearfix n_login_link">
-                    <a href="/ForgetPassword.html" class="left">忘记密码</a>
-                    <a href="@System.Configuration.ConfigurationManager.AppSettings["DomainForIC"]/register.html" class="right">注册新用户</a>
-                </div>
-
                 @*<div style="margin-left: -35px; border-top: 1px solid #eee; margin-top: 20px; width: 366px;">
-                    <div style="margin-top: 11px; margin-left: 38px;">
-                        <span style="float: left; color: #323232;">其它方式登录：</span>
-                        <span>
-                            <a href="javascript:void(0);" class="left" v-on:click="">
-                                <img src="~/Content/n_img/cxy.png" style="float: left;" />
-                                <span style="margin-left: 4px; color: #666;">创新云</span>
-                            </a>
-                        </span>
-                    </div>
-                </div>*@
-
+            <div style="margin-top: 11px; margin-left: 38px;">
+                <span style="float: left; color: #323232;">其它方式登录：</span>
+                <span>
+                    <a href="javascript:void(0);" class="left" v-on:click="">
+                        <img src="~/Content/n_img/cxy.png" style="float: left;" />
+                        <span style="margin-left: 4px; color: #666;">创新云</span>
+                    </a>
+                </span>
+            </div>
+        </div>*@
+            <div style=" text-align: left; padding-top: 30px;">
+                <span>登录即代表您已同意</span>
+                <a style=" cursor: pointer;">《用户协议》</a>
+                <span>和</span> 
+                <a style=" cursor: pointer;">《隐私政策》</a>
+            </div>
             </div>
         </div>
     </div>

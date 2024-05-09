@@ -88,15 +88,14 @@
                     <a v-if="item.IsConfirm && !item.IsCancel" v-on:click="confirm(item.ID)">确认</a>
                 </td>
             </tr>
-            <tr v-if="indexData.dataList.length==0">
-                <td colspan="8">暂无数据</td>
-            </tr>
+            <tr v-if="indexData.dataList.length==0"><td colspan="8" style="height:500px"><img src="/Content/hxt_img/list_nodata.png" style="height:64px;width:87px;" /><label style="display: block; color: currentcolor;">暂无数据</label></td></tr>
+
         </table>
         <div class="foot">
             <el-pagination class="fr" style="margin-top: 20px;" v-on:size-change="handleSizeChange"
                            v-on:current-change="handleCurrentChange"
                            :current-page="indexData.pageIndex"
-                           :page-sizes="[5, 10, 20, 40]"
+                           :page-sizes="[10, 20, 50, 100]"
                            :page-size="indexData.pageSize"
                            layout="total, sizes, prev, pager, next, jumper"
                            :total="indexData.total">

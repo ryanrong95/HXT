@@ -182,7 +182,7 @@ namespace CnsleApp
 
             //Console.WriteLine(k);
 
-            var url = $"{"http://fixed8.ic360.cn"}/Yahv/leftbusiness/";
+            var url = $"{"http://fixed2.szhxt.net"}/Yahv/leftbusiness/";
             //string[] lefts = { "erm.json",     "rfq.json",      "crm.json",   "srm.json", "pfwms.json","cbs.json",
             //                   "wltwms.json",  "cywms.json",    "hywms.json", "xdtwms.json",
             //                   "hycms.json",   "xdtcms.json",   "hyfms.json", "xdtfms.json",

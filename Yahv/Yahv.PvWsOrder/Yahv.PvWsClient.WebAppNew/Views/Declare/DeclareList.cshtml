@@ -5,27 +5,20 @@
     <div class="query_wrap" ref="viewBox1" v-on:scroll="ss('viewBox1')">
         <div class="clearfix">
             <div class="fl">
-                <div class="title label-style">型号:</div>
-                <el-input class="input-style" style="width:120px;" size="mini" v-model="PartNumber" @@keyup.enter.native="queryData" placeholder="请输入完整型号名称"></el-input>
+                @*<div class="title label-style">型号:</div>*@
+                <el-input class="input-style" style="width:160px;" size="mini" v-model="PartNumber" @@keyup.enter.native="queryData" placeholder="请输入完整型号"></el-input>
             </div>
             <div class="fl ml8">
-                <div class="title label-style">订单号:</div>
-                <el-input class="input-style" style="width:120px;" size="mini" v-model="OrderID" @@keyup.enter.native="queryData"></el-input>
+                @*<div class="title label-style">订单号:</div>*@
+                <el-input class="input-style" style="width:130px;" size="mini" v-model="OrderID" @@keyup.enter.native="queryData" placeholder="请输入订单号"></el-input>
             </div>
             <div class="fl ml8">
-                <div class="title label-style">供应商:</div>
-                <el-input class="input-style" style="width:120px;" size="mini" v-model="Supplier" @@keyup.enter.native="queryData"></el-input>
+                @*<div class="title label-style">供应商:</div>*@
+                <el-input class="input-style" style="width:130px;" size="mini" v-model="Supplier" @@keyup.enter.native="queryData" placeholder="请输入供应商"></el-input>
             </div>
-
-            <div class="fr">
-                <button v-on:click="queryData" class="btn btn1">查询</button>
-                <button v-on:click="clearData" class="btn btn2 ml12">重置</button>
-            </div>
-        </div>
-        <div class="clearfix mt20">
-            <div class="fl">
-                <div class="title label-style">订单状态:</div>
-                <el-select style="width:120px;" class="mr16 input-style" size="small" v-model="OrderStatus" filterable clearable>
+            <div class="fl ml8">
+                @*<div class="title label-style">订单状态:</div>*@
+                <el-select style="width:120px;" class="mr16 input-style" size="small" v-model="OrderStatus" filterable clearable placeholder="订单状态">
                     <el-option v-for="item in OrderStatusOptions"
                                :key="item.value"
                                :label="item.text"
@@ -33,19 +26,9 @@
                     </el-option>
                 </el-select>
             </div>
-            @*<div class="fl ml8">
-                <div class="title label-style">开票状态:</div>
-                <el-select style="width:120px;" class="mr16 input-style" size="small" v-model="InvoiceStatus" filterable clearable>
-                    <el-option v-for="item in InvoiceStatusOptions"
-                               :key="item.value"
-                               :label="item.text"
-                               :value="item.value">
-                    </el-option>
-                </el-select>
-            </div>*@
             <div class="fl ml8">
-                <div class="title label-style">付汇状态:</div>
-                <el-select style="width:120px;" class="mr16 input-style" size="small" v-model="RemittanceStatus" filterable clearable>
+                @*<div class="title label-style">付汇状态:</div>*@
+                <el-select style="width:120px;" class="mr16 input-style" size="small" v-model="RemittanceStatus" filterable clearable placeholder="付汇状态">
                     <el-option v-for="item in RemittanceStatusOptions"
                                :key="item.value"
                                :label="item.text"
@@ -54,9 +37,50 @@
                 </el-select>
             </div>
             <div class="fl ml8">
-                <div class="title label-style">下单日期:</div>
+                @*<div class="title label-style">下单日期:</div>*@
                 <date-picker-daterange ref="datePickerDaterange" class="fl"></date-picker-daterange>
             </div>
+
+        </div>
+        <div class="clearfix">
+            <div class="fl mt10">
+                <button v-on:click="queryData" class="btn btn1">查询</button>
+                <button v-on:click="clearData" class="btn btn2 ml12">重置</button>
+            </div>
+            <!--<div class="fl">-->
+            @*<div class="title label-style">订单状态:</div>*@
+            <!--<el-select style="width:110px;" class="mr16 input-style" size="small" v-model="OrderStatus" filterable clearable placeholder="请选择订单状态">
+                    <el-option v-for="item in OrderStatusOptions"
+                               :key="item.value"
+                               :label="item.text"
+                               :value="item.value">
+                    </el-option>
+                </el-select>
+            </div>-->
+            @*<div class="fl ml8">
+                    <div class="title label-style">开票状态:</div>
+                    <el-select style="width:120px;" class="mr16 input-style" size="small" v-model="InvoiceStatus" filterable clearable>
+                        <el-option v-for="item in InvoiceStatusOptions"
+                                   :key="item.value"
+                                   :label="item.text"
+                                   :value="item.value">
+                        </el-option>
+                    </el-select>
+                </div>*@
+            <!--<div class="fl ml8">-->
+            @*<div class="title label-style">付汇状态:</div>*@
+            <!--<el-select style="width:100px;" class="mr16 input-style" size="small" v-model="RemittanceStatus" filterable clearable placeholder="请选择付汇状态">
+                    <el-option v-for="item in RemittanceStatusOptions"
+                               :key="item.value"
+                               :label="item.text"
+                               :value="item.value">
+                    </el-option>
+                </el-select>
+            </div>
+            <div class="fl ml8">-->
+            @*<div class="title label-style">下单日期:</div>*@
+            <!--<date-picker-daterange ref="datePickerDaterange" class="fl"></date-picker-daterange>
+            </div>-->
         </div>
     </div>
     <div class="tb_wrap" v-loading="loading">
@@ -84,16 +108,19 @@
                 <td>{{item.TotalPrice}}</td>
                 <td>{{item.OrderStatus}}</td>
                 <td class="operate">
-                    <a v-on:click="detail(item)">查看</a>@*<a v-if="item.IsReturn" v-on:click="returnBack(item.ID)">修改</a><a v-if="item.IsEdit" v-on:click="edit(item.ID)">修改</a>*@<a v-on:click="cancel(item.ID)" v-if="item.IsCancel">取消</a>
+                    <a v-on:click="detail(item)">查看</a>@*<a v-if="item.IsReturn" v-on:click="returnBack(item.ID)">修改</a><a v-if="item.IsEdit" v-on:click="edit(item.ID)">修改</a>*@
+                    <a  v-if="item.OrderStatus=='待确认'" v-on:click="confirm(item)">确认</a>
+                    <a v-on:click="cancel(item.ID)" v-if="item.IsCancel">取消</a>
+
                 </td>
             </tr>
-            <tr v-if="indexData.dataList.length==0"><td colspan="10">暂无数据</td></tr>
+            <tr v-if="indexData.dataList.length==0"><td colspan="10" style="height:500px"><img src="/Content/hxt_img/list_nodata.png" style="height:64px;width:87px;" /><label style="display: block; color: currentcolor;">暂无数据</label></td></tr>
         </table>
         <div class="foot">
             <el-pagination class="fr" style="margin-top:20px;" v-on:size-change="handleSizeChange"
                            v-on:current-change="handleCurrentChange"
                            :current-page="indexData.pageIndex"
-                           :page-sizes="[5, 10, 20, 40]"
+                           :page-sizes="[10, 20, 50, 100]"
                            :page-size="indexData.pageSize"
                            layout="total, sizes, prev, pager, next, jumper"
                            :total="indexData.total">
@@ -109,7 +136,7 @@
     }
 
     .input-style {
-        width: 180px !important;
+        width: 180px;
     }
 </style>
 @{Html.RenderAction("_DatePickerDateRange", "Home");}
@@ -144,7 +171,7 @@
             this.OrderStatusOptions = @Html.Raw(Json.Encode(@ViewBag.OrderStatusOptions));
             this.InvoiceStatusOptions = @Html.Raw(Json.Encode(@ViewBag.InvoiceStatusOptions));
             this.RemittanceStatusOptions = @Html.Raw(Json.Encode(@ViewBag.RemittanceStatusOptions));
-            this.$refs.datePickerDaterange.orderDateSimpleBtnClicked('30天');
+            this.$refs.datePickerDaterange.orderDateSimpleBtnClicked('近三个月');
             this.OrderStatus = '@(ViewBag.DefaultOrderStatus)';
             this.init();
         },
@@ -215,6 +242,18 @@
                                                                    + "/" + "@(ViewContext.RouteData.Values["action"].ToString())");
                 }
             },
+            //报关订单确认详情
+            confirm: function(item){
+                //是否为转报关
+                if(item.IsTransfer){
+                    commonSkipUrl(item.ID, '/Declare/TransDecConfirm',"/" + "@(ViewContext.RouteData.Values["controller"].ToString())"
+                                                                    + "/" + "@(ViewContext.RouteData.Values["action"].ToString())");
+                }
+                else{
+                    commonSkipUrl(item.ID, '/Declare/DeclareConfirm',"/" + "@(ViewContext.RouteData.Values["controller"].ToString())"
+                                                                   + "/" + "@(ViewContext.RouteData.Values["action"].ToString())");
+                }
+            },
             //查询数据
             queryData: function () {
                 this.dataValue = this.$refs.datePickerDaterange.getDataValue();
@@ -234,7 +273,7 @@
             },
             //重置数据
             clearData: function () {
-                this.$refs.datePickerDaterange.orderDateSimpleBtnClicked('30天');
+                this.$refs.datePickerDaterange.orderDateSimpleBtnClicked('近三个月');
                 this.dataValue = "";
                 this.startDate = "";
                 this.endDate = "";

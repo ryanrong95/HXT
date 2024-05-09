@@ -1,52 +1,40 @@
-﻿@{ ViewBag.subTitle = "海关发票"; }
+﻿
 <link href="~/Content/css/tab.css" rel="stylesheet" />
-<!-- tab start-->
-<div class="clearfix tab_switch">
-    <ul>
-        <li>
-            <a href="/Bills/MyInvoices">我的发票<i></i></a>
-        </li>
-        @if ((ViewBag.IsCustoms == false && ViewBag.IsWarehouse == false) || ViewBag.IsCustoms)
-        {
-<li class="active">
-    <a href="/Bills/MyCusInvoices">海关发票<i></i></a>
-</li>}
-    </ul>
-</div>
-<!-- tab end -->
+
 <div id="vMyCusInvoices" v-cloak class="tab_content">
     <div class="query_wrap clearfix" ref="viewBox1" v-on:scroll="ss('viewBox1')">
         <div class="clearfix">
             <div class="fl">
-                <div class="title label-style">订单号:</div>
-                <el-input class="input-style" style="width: 150px;" size="mini" v-model="OrderID" @@keyup.enter.native="queryData"></el-input>
+                <el-input class="input-style" style="width: 150px;" size="mini" v-model="OrderID" @@keyup.enter.native="queryData" placeholder="订单号"></el-input>
             </div>
-            <div class="fl ml20">
-                <div class="title label-style">合同号:</div>
-                <el-input class="input-style" style="width: 150px;" size="mini" v-model="ContrNo" @@keyup.enter.native="queryData"></el-input>
+            <div class="fl ml8">
+                <el-input class="input-style" style="width: 150px;" size="mini" v-model="ContrNo" @@keyup.enter.native="queryData" placeholder="合同号"></el-input>
             </div>
-            <div class="fl ml20">
-                <div class="title label-style">报关日期:</div>
+            <div class="fl ml8">
                 <date-picker-daterange ref="datePickerDaterange" class="fl"></date-picker-daterange>
             </div>
 
             <div class="fr">
                 <button v-on:click="queryData" class="btn btn1">查询</button>
-                <button v-on:click="clearData" class="btn btn2 ml12">重置</button>
+                <button v-on:click="clearData" class="btn btn2 ml10">重置</button>
             </div>
         </div>
-        <div class="clearfix mt20">
-            @*<button class="btn btn1" v-on:click="importExcel">导出</button>*@
-            <button class="btn btn1" v-on:click="importEntryList">导出报关单</button>
-            <button class="btn btn1 ml18" v-on:click="importCTaxList">导出关税单</button>
-            <button class="btn btn1 ml18" v-on:click="importATaxList">导出增值税单</button>
-            <a id="exportInfoForm" style="display: none" download>
-                <span id="ex-li" style="display: none"></span>
-            </a>
-        </div>
+
+
+            <div class="fl mt10">
+                @*<button class="btn btn1" v-on:click="importExcel">导出</button>*@
+                <button class="btn btn3" v-on:click="importEntryList">导出报关单</button>
+                <button class="btn btn3 ml12" v-on:click="importCTaxList">导出关税单</button>
+                <button class="btn btn3 ml12" v-on:click="importATaxList">导出增值税单</button>
+                <a id="exportInfoForm" style="display: none" download>
+                    <span id="ex-li" style="display: none"></span>
+                </a>
+            </div>
+     
+
     </div>
     <div class="tb_wrap" v-loading="loading">
-        <div class="tb_over_wrap mt30">
+        <div class="tb_over_wrap mt20">
             <table class="common_tb1" style="width: 1400px">
                 <tr>
                     <th width="36px">
@@ -55,8 +43,8 @@
                     <th>报关日期</th>
                     <th>发票日期</th>
                     <th>发票号</th>
-                    <th>小订单号</th>
-                    <th>主订单号</th>
+                    <th>订单号</th>
+                    @*<th>主订单号</th>*@
                     <th>报关金额</th>
                     <th>代理费</th>
                     <th>报关单下载</th>
@@ -72,7 +60,7 @@
                     <td>{{item.InvoiceDate}}</td>
                     <td>{{item.InvoiceNo}}</td>
                     <td>{{item.TinyOrderID}}</td>
-                    <td>{{item.OrderID}}</td>
+                    @*<td>{{item.OrderID}}</td>*@
                     <td>{{item.DeclarePrice}}</td>
                     <td>{{item.AgencyAmount}}</td>
                     <td>
@@ -91,16 +79,15 @@
                         <a v-if="item.IsShow" v-on:click="Detail(item.TinyOrderID)">查看</a>
                     </td>
                 </tr>
-                <tr v-if="indexData.dataList.length==0">
-                    <td colspan="13">暂无数据</td>
-                </tr>
+                <tr v-if="indexData.dataList.length==0"><td colspan="8" style="height:500px"><img src="/Content/hxt_img/list_nodata.png" style="height:64px;width:87px;" /><label style="display: block; color: currentcolor;">暂无数据</label></td></tr>
+                @*13*@
             </table>
         </div>
         <div class="foot">
             <el-pagination class="fr" style="margin-top: 20px;" v-on:size-change="handleSizeChange"
                            v-on:current-change="handleCurrentChange"
                            :current-page="indexData.pageIndex"
-                           :page-sizes="[5, 10, 20, 40]"
+                           :page-sizes="[10, 20, 50, 100]"
                            :page-size="indexData.pageSize"
                            layout="total, sizes, prev, pager, next, jumper"
                            :total="indexData.total">
@@ -116,7 +103,7 @@
     }
 
     .input-style {
-        width: 180px !important;
+        width: 120px !important;
     }
 </style>
 @{Html.RenderAction("_DatePickerDateRange", "Home");}
@@ -162,7 +149,7 @@
 
             this.OrderTypeOptions = @Html.Raw(Json.Encode(@ViewBag.OrderTypeOptions));
             this.InvoiceStatusOptions = @Html.Raw(Json.Encode(@ViewBag.InvoiceStatusOptions));
-            this.$refs.datePickerDaterange.orderDateSimpleBtnClicked('30天');
+            this.$refs.datePickerDaterange.orderDateSimpleBtnClicked('近三个月');
             this.init();
         },
         methods: {
@@ -395,7 +382,7 @@
             },
             //重置数据
             clearData: function () {
-                this.$refs.datePickerDaterange.orderDateSimpleBtnClicked('30天');
+                this.$refs.datePickerDaterange.orderDateSimpleBtnClicked('近三个月');
                 // this.dataValue = "";
                 this.startDate = "";
                 this.endDate = "";

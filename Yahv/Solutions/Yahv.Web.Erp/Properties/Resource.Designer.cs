@@ -19,7 +19,7 @@ namespace Yahv.Web.Erp.Properties {
     // 类通过类似于 ResGen 或 Visual Studio 的工具自动生成的。
     // 若要添加或移除成员，请编辑 .ResX 文件，然后重新运行 ResGen
     // (以 /str 作为命令选项)，或重新生成 VS 项目。
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resource {
@@ -47,8 +47,8 @@ namespace Yahv.Web.Erp.Properties {
         }
         
         /// <summary>
-        ///   使用此强类型资源类，为所有资源查找
-        ///   重写当前线程的 CurrentUICulture 属性。
+        ///   重写当前线程的 CurrentUICulture 属性，对
+        ///   使用此强类型资源类的所有资源查找执行重写。
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
         internal static global::System.Globalization.CultureInfo Culture {
@@ -84,15 +84,26 @@ namespace Yahv.Web.Erp.Properties {
         }
         
         /// <summary>
-        ///   查找类似 &lt;script&gt;
+        ///   查找类似 &lt;!--&lt;script&gt;
         ///    if ($ &amp;&amp; $.fn.toText) {
         ///        $(function () {
-        ///            $(&apos;[easyui-input=&quot;true&quot;]&apos;).toText();
+        ///            //$(&apos;[easyui-input=&quot;true&quot;]&apos;).toText();
+        ///            var arry = &apos;[value]&apos;.split(&apos;,&apos;);
+        ///            for (var index = 0; index &lt; arry.length; index++) {
+        ///                $(&apos;[&apos; + arry[index] + &apos;]&apos;).toText();
+        ///            }
+        ///
         ///        });
         ///    } else {
         ///        alert(&quot;请引用jquery与easyui.jl.js&quot;);
         ///    }
-        ///&lt;/script&gt; 的本地化字符串。
+        ///&lt;/script&gt;--&gt;
+        ///
+        ///&lt;!--&lt;script&gt;
+        ///
+        ///    $(function () {
+        ///        //$(&apos;[easyui-input=&quot;true&quot;]&apos;).toText();
+        ///        var arry = &apos;[value]&apos;.spli [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
         internal static string toText {
             get {

@@ -28,7 +28,9 @@ namespace WinApp.Services
         /// <summary>
         /// 域名
         /// </summary>
-        public const string DomainName = "hv.warehouse.b1b.com";
+        //public const string DomainName = "hv.warehouse.b1b.com";
+
+        public const string DomainName = "warehouse0.szhxt.net";
 
         /// <summary>
         /// Api接口配置
@@ -48,7 +50,7 @@ namespace WinApp.Services
         /// <summary>
         /// 域名
         /// </summary>
-        public const string DomainName = "warehouse0.ic360.cn";
+        public const string DomainName = "warehouse0.szhxt.net";
 
         /// <summary>
         /// Api接口配置
@@ -73,6 +75,7 @@ namespace WinApp.Services
         public const string DomainName = "warehouse.for-ic.net:60077";
 
         const string ApiUrlName = "erp8.wapi.for-ic.net:60077";
+        //const string ApiUrlName = "api0.szhxt.net";
         static public readonly string ApiUrlPrex = $"{SchemeName}://{DomainName}/wmsapi";
 #endif
     }

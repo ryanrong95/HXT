@@ -20,49 +20,49 @@ namespace Yahv.Systematic
 
         #region Views
 
-        /// <summary>
-        /// 采购单(陈翰修改)
-        /// </summary>
-        public Yahv.RFQ.Services.Views.MyPurchasesView Purchases_chenhan
-        {
-            get
-            {
-                return new Yahv.RFQ.Services.Views.MyPurchasesView(this.admin);
-            }
-        }
+        ///// <summary>
+        ///// 采购单(陈翰修改)
+        ///// </summary>
+        //public Yahv.RFQ.Services.Views.MyPurchasesView Purchases_chenhan
+        //{
+        //    get
+        //    {
+        //        return new Yahv.RFQ.Services.Views.MyPurchasesView(this.admin);
+        //    }
+        //}
 
-        /// <summary>
-        /// 询报价业务下的管理员
-        /// </summary>
-        public Yahv.RFQ.Services.AdminsView Admins
-        {
-            get
-            {
-                return new Yahv.RFQ.Services.AdminsView();
-            }
-        }
+        ///// <summary>
+        ///// 询报价业务下的管理员
+        ///// </summary>
+        //public Yahv.RFQ.Services.AdminsView Admins
+        //{
+        //    get
+        //    {
+        //        return new Yahv.RFQ.Services.AdminsView();
+        //    }
+        //}
 
-        /// <summary>
-        /// 我的优势型号
-        /// </summary>
-        public Yahv.RFQ.Services.Views.Rolls.AdvantagePNOsRoll AdvantagePNOs
-        {
-            get
-            {
-                return new Yahv.RFQ.Services.Views.Rolls.AdvantagePNOsRoll(this.admin);
-            }
-        }
+        ///// <summary>
+        ///// 我的优势型号
+        ///// </summary>
+        //public Yahv.RFQ.Services.Views.Rolls.AdvantagePNOsRoll AdvantagePNOs
+        //{
+        //    get
+        //    {
+        //        return new Yahv.RFQ.Services.Views.Rolls.AdvantagePNOsRoll(this.admin);
+        //    }
+        //}
 
-        /// <summary>
-        /// 我的积压库存
-        /// </summary>
-        public Yahv.RFQ.Services.Views.Rolls.OverStocksRoll OverStocks
-        {
-            get
-            {
-                return new Yahv.RFQ.Services.Views.Rolls.OverStocksRoll(this.admin);
-            }
-        }
+        ///// <summary>
+        ///// 我的积压库存
+        ///// </summary>
+        //public Yahv.RFQ.Services.Views.Rolls.OverStocksRoll OverStocks
+        //{
+        //    get
+        //    {
+        //        return new Yahv.RFQ.Services.Views.Rolls.OverStocksRoll(this.admin);
+        //    }
+        //}
 
         #endregion
 

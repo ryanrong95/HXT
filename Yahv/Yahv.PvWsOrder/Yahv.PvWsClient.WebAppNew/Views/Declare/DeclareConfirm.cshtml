@@ -1,6 +1,6 @@
 ﻿@{
     ViewBag.title = "待确认订单";
-    ViewBag.subTitle = "报关订单确认报价详情";
+    ViewBag.subTitle = "确认订单";
 }
 <div id="vDeclareConfirm" v-cloak class="order_detail">
     <div class="info_item_wrap">
@@ -36,8 +36,8 @@
                 <th style="width:110px;">报关货值(CNY)</th>
                 <th style="width:70px;">关税率</th>
                 <th style="width:90px;">关税(CNY)</th>
-                <th style="width:70px;">消费税率</th>
-                <th style="width:90px;">消费税(CNY)</th>
+                @*<th style="width:70px;">消费税率</th>
+                <th style="width:90px;">消费税(CNY)</th>*@
                 <th style="width:70px;">增值税率</th>
                 <th style="width:90px;">增值税(CNY)</th>
                 <th style="width:90px;">代理费(CNY)</th>
@@ -64,8 +64,8 @@
                 <td>{{item.DeclareValue}}</td>
                 <td :class="{'txt_red':item.TraiffRate>0,'font_bold':item.TraiffRate>0}">{{item.TraiffRate}}</td>
                 <td>{{item.Traiff}}</td>
-                <td :class="{'txt_red':item.ExciseTaxRate>0,'font_bold':item.ExciseTaxRate>0}">{{item.ExciseTaxRate}}</td>
-                <td>{{item.ExcisePrice}}</td>
+                @*<td :class="{'txt_red':item.ExciseTaxRate>0,'font_bold':item.ExciseTaxRate>0}">{{item.ExciseTaxRate}}</td>
+                <td>{{item.ExcisePrice}}</td>*@
                 <td>{{item.AddTaxRate}}</td>
                 <td>{{item.AddTax}}</td>
                 <td>{{item.AgencyFee}}</td>
@@ -528,7 +528,8 @@
             },
             //返回待确认订单
             back: function () {
-                location.href = "/Declare/UnConfirmedDecList";
+                //location.href = "/Declare/UnConfirmedDecList";
+                location.href = "/Declare/DeclareList";
             },
             //消息提示框
             onAlert: function (type, message) {

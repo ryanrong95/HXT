@@ -7,30 +7,30 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>测试人</title>
 
-    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/metro/easyui.css" rel="stylesheet" />
-    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/metro/jl-cool.css" rel="stylesheet" />
+    <link href="http://fixed2.szhxt.net/Yahv/jquery-easyui-1.7.6/themes/metro/easyui.css" rel="stylesheet" />
+    <link href="http://fixed2.szhxt.net/Yahv/jquery-easyui-1.7.6/themes/metro/jl-cool.css" rel="stylesheet" />
 
-    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/icon.css" rel="stylesheet" />
-    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/icon-jl-cool.css" rel="stylesheet" />
-    <link href="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/themes/icon-yg-cool.css" rel="stylesheet" />
+    <link href="http://fixed2.szhxt.net/Yahv/jquery-easyui-1.7.6/themes/icon.css" rel="stylesheet" />
+    <link href="http://fixed2.szhxt.net/Yahv/jquery-easyui-1.7.6/themes/icon-jl-cool.css" rel="stylesheet" />
+    <link href="http://fixed2.szhxt.net/Yahv/jquery-easyui-1.7.6/themes/icon-yg-cool.css" rel="stylesheet" />
 
 
 
-    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.min.js"></script>
-    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.easyui.min.js"></script>
-    <script src="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/locale/easyui-lang-zh_CN.js"></script>
+    <script src="http://fixed2.szhxt.net/Yahv/jquery-easyui-1.7.6/jquery.min.js"></script>
+    <script src="http://fixed2.szhxt.net/Yahv/jquery-easyui-1.7.6/jquery.easyui.min.js"></script>
+    <script src="http://fixed2.szhxt.net/Yahv/jquery-easyui-1.7.6/locale/easyui-lang-zh_CN.js"></script>
 
-    <link href="http://fixed2.b1b.com/Yahv/customs-easyui/Styles/main.css" rel="stylesheet" />
+    <link href="http://fixed2.szhxt.net/Yahv/customs-easyui/Styles/main.css" rel="stylesheet" />
 
-    <link href="http://fixed2.b1b.com/Yahv/standard-easyui/iconfont/iconfont.css" rel="stylesheet" />
-    <link href="http://fixed2.b1b.com/Yahv/standard-easyui/styles/plugin.css" rel="stylesheet" />
+    <link href="http://fixed2.szhxt.net/Yahv/standard-easyui/iconfont/iconfont.css" rel="stylesheet" />
+    <link href="http://fixed2.szhxt.net/Yahv/standard-easyui/styles/plugin.css" rel="stylesheet" />
 
-    <script src="http://fixed2.b1b.com/Yahv/standard-easyui/scripts/timeouts.js"></script>
+    <script src="http://fixed2.szhxt.net/Yahv/standard-easyui/scripts/timeouts.js"></script>
 
-    <script src="http://fixed2.b1b.com/Yahv/customs-easyui/Scripts/main.js"></script>
-    <script src="http://fixed2.b1b.com/Yahv/ajaxPrexUrl.js"></script>
-    <script src="http://fixed2.b1b.com/Yahv/standard-easyui/scripts/easyui.jl.js"></script>
-    <script src="http://fixed2.b1b.com/Yahv/standard-easyui/scripts/timeouts.js"></script>
+    <script src="http://fixed2.szhxt.net/Yahv/customs-easyui/Scripts/main.js"></script>
+    <script src="http://fixed2.szhxt.net/Yahv/ajaxPrexUrl.js"></script>
+    <script src="http://fixed2.szhxt.net/Yahv/standard-easyui/scripts/easyui.jl.js"></script>
+    <script src="http://fixed2.szhxt.net/Yahv/standard-easyui/scripts/timeouts.js"></script>
 
     <script>
         $(function () {

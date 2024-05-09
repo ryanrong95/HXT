@@ -1,45 +1,20 @@
-﻿@{
-    ViewBag.subTitle = "付汇申请";
-}
+﻿
 <link href="~/Content/css/tab.css" rel="stylesheet" />
-<!-- tab start-->
-<div class="clearfix tab_switch">
-    <ul>
-        <li class="active">
-            <a href="/PayExchange/UnPayExchange">付汇申请<i></i></a>
-        </li>
-        <li>
-            <a href="/PayExchange/MyApplies">我的付汇<i></i></a>
-        </li>
-    </ul>
-</div>
-<!-- tab end -->
+
 <div id="vUnPay" v-cloak class="tab_content">
     <div class="query_wrap">
         <div class="clearfix">
             <div class="fl">
-                <div class="title label-style">供应商:</div>
-                <el-input style="width:200px;" size="mini" v-model="supplierName" @@keyup.enter.native="queryData"></el-input>
+                <el-input style="width:120px;" size="mini" v-model="supplierName" @@keyup.enter.native="queryData" placeholder="供应商"></el-input>
             </div>
             <div class="fl ml8">
-                <div class="title label-style">订单号:</div>
-                <el-input style="width:180px; " size="mini" v-model="orderID" @@keyup.enter.native="queryData" placeholder="多订单以逗号分隔"></el-input>
+                <el-input style="width:120px; " size="mini" v-model="orderID" @@keyup.enter.native="queryData" placeholder="订单号"></el-input>
             </div>
-            @*<div><span class="red_tip">可以输入多个订单号，订单之间逗号或者分号隔开。</span></div>*@
             <div class="fl ml8">
-                <div class="title label-style">选择日期:</div>
                 <date-picker-daterange ref="datePickerDaterange" class="fl"></date-picker-daterange>
             </div>
-
-            <div class="fr">
-                <button v-on:click="queryData" class="btn btn1">查询</button>
-                <button v-on:click="clearData" class="btn btn2 ml12">重置</button>
-            </div>
-        </div>
-        <div class="clearfix mt20">
-            <div class="fl">
-                <div class="title label-style">付汇状态:</div>
-                <el-select style="width:200px;" class="mr16" size="small" v-model="payStatuses" multiple filterable clearable>
+            <div class="fl ml8">
+                <el-select style="width:200px;" class="mr16" size="small" v-model="payStatuses" multiple filterable clearable placeholder="付汇状态">
                     <el-option v-for="item in ApplyStatusOptions"
                                :key="item.value"
                                :label="item.text"
@@ -47,27 +22,31 @@
                     </el-option>
                 </el-select>
             </div>
+            <div class="fr">
+                <button v-on:click="queryData" class="btn btn1">查询</button>
+                <button v-on:click="clearData" class="btn btn2 ml12">重置</button>
+            </div>
         </div>
     </div>
-    <div class="all_check mt30 mb20">
-        <button class="btn_all" v-on:click="applyOrders">申请付汇</button>
-        <span class="txt_tip ml12">如何选择?多个订单一起付汇，需要选择相同交易币种及供应商订单</span>
+    <div class="all_check mt10 query_wrap">
+        <button class="btn btn3" v-on:click="applyOrders">申请付汇</button>
+        @*<span class="txt_tip ml12">如何选择?多个订单一起付汇，需要选择相同交易币种及供应商订单</span>*@
     </div>
     <div class="tb_wrap" v-loading="loading">
-        <div class="tb_over_wrap mt30">
+        <div class="tb_over_wrap mt20">
             <table class="common_tb1">
                 <tr>
                     <th width="36px"><el-checkbox v-model="allChecked" v-on:change="allCheck"></el-checkbox></th>
                     <th width="76px">下单日期</th>
-                    <th width="135px">订单编号</th>
-                    <th width="160px">子订单</th>
+                    <th width="120px">订单编号</th>
+                    @*<th width="160px">子订单</th>*@
                     <th width="76px">报关日期</th>
-                    <th>供应商名称</th>
+                    <th  width="180px">供应商名称</th>
                     <th width="70px">付汇状态</th>
                     <th width="38px">币种</th>
-                    <th>订单金额</th>
-                    <th>已付汇</th>
-                    <th>未付汇</th>
+                    <th width="80px">订单金额</th>
+                    <th width="70px">已付汇</th>
+                    <th width="70px">未付汇</th>
                     <th width="70px">操作</th>
                 </tr>
                 <template v-for="(item,index) in indexData.dataList">
@@ -75,7 +54,7 @@
                         <td><el-checkbox v-model="m.IsChecked"></el-checkbox></td>
                         <td v-if="i==0" :rowspan="item.Tiny.length">{{item.CreateDateDateString}}</td>
                         <td v-if="i==0" :rowspan="item.Tiny.length">{{item.MainOrderID}}<br /><a v-on:click="detail(item)">查看详情</a></td>
-                        <td>{{m.ID}}</td>
+                        @*<td>{{m.ID}}</td>*@
                         <td>{{m.DDate}}</td>
                         <td><p v-for="supply in m.SuppliersName">{{supply}}</p></td>
                         <td v-if="i==0" :rowspan="item.Tiny.length">{{item.PayExchangeStatus}}</td>
@@ -86,7 +65,8 @@
                         <td><a v-on:click="applyOrder(m.ID)">申请付汇</a></td>
                     </tr>
                 </template>
-                <tr v-if="indexData.dataList.length==0"><td colspan="11">暂无数据</td></tr>
+                <tr v-if="indexData.dataList.length==0"><td colspan="8" style="height:500px"><img src="/Content/hxt_img/list_nodata.png" style="height:64px;width:87px;" /><label style="display: block; color: currentcolor;">暂无数据</label></td></tr>
+                @*11*@
             </table>
         </div>
 
@@ -94,7 +74,7 @@
             <el-pagination class="fr" style="margin-top:20px;" v-on:size-change="handleSizeChange"
                            v-on:current-change="handleCurrentChange"
                            :current-page="indexData.pageIndex"
-                           :page-sizes="[5, 10, 20, 40]"
+                           :page-sizes="[10, 20, 50, 100]"
                            :page-size="indexData.pageSize"
                            layout="total, sizes, prev, pager, next, jumper"
                            :total="indexData.total">
@@ -136,7 +116,7 @@
     }
 
     .input-style {
-        width: 160px !important;
+        width: 120px !important;
     }
 </style>
 @{Html.RenderAction("_DatePickerDateRange", "Home");}

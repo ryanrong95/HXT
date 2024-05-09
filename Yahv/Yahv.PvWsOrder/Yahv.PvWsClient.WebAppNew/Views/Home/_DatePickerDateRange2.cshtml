@@ -6,18 +6,18 @@
                 <li v-on:click="orderDateSimpleBtnClicked('全部')">
                     <el-button class="unselected" type="text" btn-type="全部">全部</el-button>
                 </li>
-                <li v-on:click="orderDateSimpleBtnClicked('今天')">
-                    <el-button class="unselected" type="text" btn-type="今天">今天</el-button>
+                <li v-on:click="orderDateSimpleBtnClicked('近一个月')">
+                    <el-button class="unselected" type="text" btn-type="近一个月">近一个月</el-button>
                 </li>
-                <li v-on:click="orderDateSimpleBtnClicked('昨天')">
-                    <el-button class="unselected" type="text" btn-type="昨天">昨天</el-button>
+                <li v-on:click="orderDateSimpleBtnClicked('近三个月')">
+                    <el-button class="unselected" type="text" btn-type="近三个月">近三个月</el-button>
                 </li>
-                <li v-on:click="orderDateSimpleBtnClicked('7天')">
-                    <el-button class="unselected" type="text" btn-type="7天">7天</el-button>
+                <li v-on:click="orderDateSimpleBtnClicked('今年内')">
+                    <el-button class="unselected" type="text" btn-type="今年内">今年内</el-button>
                 </li>
-                <li v-on:click="orderDateSimpleBtnClicked('30天')">
+                @*<li v-on:click="orderDateSimpleBtnClicked('30天')">
                     <el-button class="unselected" type="text" btn-type="30天">30天</el-button>
-                </li>
+                </li>*@
             </ul>
             <div class="el-divider el-divider--horizontal" :style="{'width': 'calc(' + width + ' - 30px)',}"></div>
             <div class="custom-container">
@@ -180,21 +180,21 @@
                         case '全部':
                             this.dataValue = "";
                             break;
-                        case '今天':
-                            this.dataValue = [new Date(), new Date()];
-                            break;
-                        case '昨天':
-                            var yesterdayDateStamp = new Date().setDate((new Date().getDate() - 1));
-                            this.dataValue = [new Date(yesterdayDateStamp), new Date(yesterdayDateStamp)];
-                            break;
-                        case '7天':
-                            var sevenDayAgoDateStamp = new Date().setDate((new Date().getDate() - 6));  // 包含今天就减6
-                            this.dataValue = [new Date(sevenDayAgoDateStamp), new Date()];
-                            break;
-                        case '30天':
+                        case '近一个月':
                             var thirtyDayAgoDateStamp = new Date().setDate((new Date().getDate() - 29));  // 包含今天就减29
                             this.dataValue = [new Date(thirtyDayAgoDateStamp), new Date()];
                             break;
+                        case '近三个月':
+                            var nintyDayAgoDateStamp = new Date().setDate((new Date().getDate() - 89));  // 包含今天就减89
+                            this.dataValue = [new Date(nintyDayAgoDateStamp), new Date()];
+                            break;
+                        case '今年内':
+                            this.dataValue = [new Date(new Date().getFullYear, 0, 1), new Date(new Date().getFullYear, 11, 31)];
+                            break;
+                        //case '30天':
+                        //    var thirtyDayAgoDateStamp = new Date().setDate((new Date().getDate() - 29));  // 包含今天就减29
+                        //    this.dataValue = [new Date(thirtyDayAgoDateStamp), new Date()];
+                        //    break;
                         default:
                             break;
                     }

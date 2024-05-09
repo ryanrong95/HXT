@@ -4,7 +4,10 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>芯达通供应链</title>
+    <title>华芯通-数智跨境供应链平台</title>
+    <meta name="keywords" content="华芯通">
+    <meta name="description" content="数智跨境供应链平台">
+    <link rel="shortcut icon" type="image/x-icon" href="~/Content/hxt_img/logo_icon_big.ico">
     <link href="~/Content/css/element.css" rel="stylesheet" />
     <link href="~/Content/css/common.css?a=20221110_1040" rel="stylesheet" />
     <link href="~/Content/css/style.css?a=20221110_1040" rel="stylesheet" />
@@ -17,7 +20,7 @@
 
 </head>
 <body>
-    <div class="sidebar">
+    <div class="sidebar" style="display: none;">
         <div>
             <div id="customer" v-cloak v-on:mouseover="toggleKFShow" v-on:mouseleave="toggleKFhide">
                 <a class="fr cus_icon cus_expand">专属客服</a>
@@ -191,46 +194,46 @@
         //$(".sidebar").hide();
         //$(".sidebar-small").show();
 
-        function showSidebar() {
-            $(".sidebar").show();
-            $(".sidebar-small").hide();
-        }
+        //function showSidebar() {
+        //    $(".sidebar").show();
+        //    $(".sidebar-small").hide();
+        //}
 
-        function hideSidebar() {
-            $(".sidebar").hide();
-            $(".sidebar-small").show();
-        }
+        //function hideSidebar() {
+        //    $(".sidebar").hide();
+        //    $(".sidebar-small").show();
+        //}
 
-        function getSidebarDivPosition() {
-            var sidebarDiv = $(".sidebar > div");
+        //function getSidebarDivPosition() {
+        //    var sidebarDiv = $(".sidebar > div");
 
-            var sidebarDiv_OuterWidth = sidebarDiv.outerWidth();
-            //console.log("宽度 = " + sidebarDiv_OuterWidth);
-            var sidebarDiv_Height = sidebarDiv.height();
-            //console.log("高度 = " + sidebarDiv_Height);
+        //    var sidebarDiv_OuterWidth = sidebarDiv.outerWidth();
+        //    //console.log("宽度 = " + sidebarDiv_OuterWidth);
+        //    var sidebarDiv_Height = sidebarDiv.height();
+        //    //console.log("高度 = " + sidebarDiv_Height);
 
-            var sidebarDiv_Top_Y = sidebarDiv.offset().top;
-            //console.log("上_Y = " + sidebarDiv_Top_Y);
-            var sidebarDiv_Buttom_Y = sidebarDiv_Top_Y + sidebarDiv_Height;
-            //console.log("下_Y = " + sidebarDiv_Buttom_Y);
+        //    var sidebarDiv_Top_Y = sidebarDiv.offset().top;
+        //    //console.log("上_Y = " + sidebarDiv_Top_Y);
+        //    var sidebarDiv_Buttom_Y = sidebarDiv_Top_Y + sidebarDiv_Height;
+        //    //console.log("下_Y = " + sidebarDiv_Buttom_Y);
 
-            var sidebarDiv_Left_X = sidebarDiv.offset().left;
-            //console.log("左_X = " + sidebarDiv_Left_X);
-            var sidebarDiv_Right_X = sidebarDiv_Left_X + sidebarDiv_OuterWidth;
-            //console.log("右_X = " + sidebarDiv_Right_X);
+        //    var sidebarDiv_Left_X = sidebarDiv.offset().left;
+        //    //console.log("左_X = " + sidebarDiv_Left_X);
+        //    var sidebarDiv_Right_X = sidebarDiv_Left_X + sidebarDiv_OuterWidth;
+        //    //console.log("右_X = " + sidebarDiv_Right_X);
 
-            return {
-                top_y: sidebarDiv_Top_Y,
-                buttom_y: sidebarDiv_Buttom_Y,
-                left_x: sidebarDiv_Left_X,
-                right_x: sidebarDiv_Right_X,
-            };
-        }
+        //    return {
+        //        top_y: sidebarDiv_Top_Y,
+        //        buttom_y: sidebarDiv_Buttom_Y,
+        //        left_x: sidebarDiv_Left_X,
+        //        right_x: sidebarDiv_Right_X,
+        //    };
+        //}
 
-        function checkInSidebarDiv(top_y, buttom_y, left_x, right_x, mouse_y, mouse_x) {
-            // console.log(top_y, buttom_y, left_x, right_x, mouse_y, mouse_x);
-            return top_y <= mouse_y && mouse_y <= buttom_y && left_x <= mouse_x && mouse_x <= right_x;
-        }
+        //function checkInSidebarDiv(top_y, buttom_y, left_x, right_x, mouse_y, mouse_x) {
+        //    // console.log(top_y, buttom_y, left_x, right_x, mouse_y, mouse_x);
+        //    return top_y <= mouse_y && mouse_y <= buttom_y && left_x <= mouse_x && mouse_x <= right_x;
+        //}
 
         function getCurrentInDivStatus() {
             if (inDivQueue.size() <= 0) {
@@ -263,61 +266,61 @@
         var COMFORTABLE_WIDTH = 1380;
 
         // 记录鼠标位置是否在div区域
-        $(document).mousemove(function (e) {
-            var divPos = getSidebarDivPosition();
-            var inDiv = checkInSidebarDiv(divPos.top_y, divPos.buttom_y, divPos.left_x, divPos.right_x, e.pageY, e.pageX);
-            // console.log(inDiv);
-            inDivQueue.enqueue(inDiv);
-            if (inDivQueue.size() > INDIV_QUEUE_LEN) {
-                inDivQueue.dequeue();
-            }
-        });
+        //$(document).mousemove(function (e) {
+        //    var divPos = getSidebarDivPosition();
+        //    var inDiv = checkInSidebarDiv(divPos.top_y, divPos.buttom_y, divPos.left_x, divPos.right_x, e.pageY, e.pageX);
+        //    // console.log(inDiv);
+        //    inDivQueue.enqueue(inDiv);
+        //    if (inDivQueue.size() > INDIV_QUEUE_LEN) {
+        //        inDivQueue.dequeue();
+        //    }
+        //});
 
 
         // 每一段时间查看一次，是否有移出div区域的动作
-        var currentInDivStatus = null, lastInDivStatus = null;
-        setInterval(function () {
-            // inDivQueue.print();
+        //var currentInDivStatus = null, lastInDivStatus = null;
+        //setInterval(function () {
+        //    // inDivQueue.print();
 
-            currentInDivStatus = getCurrentInDivStatus();
+        //    currentInDivStatus = getCurrentInDivStatus();
 
-            if (currentInDivStatus != null && lastInDivStatus != null && currentInDivStatus != lastInDivStatus) {
-                if (currentInDivStatus == false) {
-                    //console.log("鼠标移出Div区域  " + new Date());
+        //    if (currentInDivStatus != null && lastInDivStatus != null && currentInDivStatus != lastInDivStatus) {
+        //        if (currentInDivStatus == false) {
+        //            //console.log("鼠标移出Div区域  " + new Date());
 
-                    if (window.innerWidth < COMFORTABLE_WIDTH) {
-                        hideSidebar();
-                    }
+        //            if (window.innerWidth < COMFORTABLE_WIDTH) {
+        //                hideSidebar();
+        //            }
 
                     
-                }
-            }
+        //        }
+        //    }
 
-            lastInDivStatus = currentInDivStatus;
-        }, 100);
+        //    lastInDivStatus = currentInDivStatus;
+        //}, 100);
 
-        // 直接hover查看鼠标是否移入sidebar-small
-        $(".sidebar-small > div").mouseover(function () {
-            showSidebar();
-        }).mouseout(function () {
+        //// 直接hover查看鼠标是否移入sidebar-small
+        //$(".sidebar-small > div").mouseover(function () {
+        //    showSidebar();
+        //}).mouseout(function () {
 
-        });
+        //});
 
-        // 初始直接决定一次是否显示sidebar
-        window.addEventListener('load', function () {
-            if (window.innerWidth < COMFORTABLE_WIDTH) {
-                hideSidebar();
-            } else {
-                showSidebar();
-            }
-            window.addEventListener('resize', function () {
-                if (window.innerWidth < COMFORTABLE_WIDTH) {
-                    hideSidebar();
-                } else {
-                    showSidebar();
-                }
-            });
-        });
+        //// 初始直接决定一次是否显示sidebar
+        //window.addEventListener('load', function () {
+        //    if (window.innerWidth < COMFORTABLE_WIDTH) {
+        //        hideSidebar();
+        //    } else {
+        //        showSidebar();
+        //    }
+        //    window.addEventListener('resize', function () {
+        //        if (window.innerWidth < COMFORTABLE_WIDTH) {
+        //            hideSidebar();
+        //        } else {
+        //            showSidebar();
+        //        }
+        //    });
+        //});
 
 
         //$(".sidebar > div").mouseover(function () {
@@ -341,16 +344,16 @@
         <div class="head">
             <div class="w1200 head_inner clearfix">
                 <a class="fl logo" href="@System.Configuration.ConfigurationManager.AppSettings["DomainForIC"]"></a>
-                <div class="fl rate">
+                @*<div class="fl rate">
                     <marquee scrollamount="4" onmouseover=this.stop() onmouseout=this.start()>
                         <span class="mr6">@Html.Raw(ViewBag.DateTimeStr)</span><span>实时汇率：美元 @Html.Raw(ViewBag.USARate);</span><span>港币 @Html.Raw(ViewBag.HKDRate)</span>
                     </marquee>
-                </div>
+                </div>*@
                 <div class="fr back">
-                    <a href="/Home/LoginOut"><i></i>退出登录</a>
+                    <a href="/Home/LoginOut"><i></i>退出</a>
                 </div>
                 <div class="fr user">
-                    <div title="@Html.Raw(ViewBag.UserName),欢迎您！">@Html.Raw(ViewBag.UserName),欢迎您！</div>
+                    <div title="@Html.Raw(ViewBag.UserName)">@Html.Raw(ViewBag.UserName)</div>
                 </div>
             </div>
         </div>
@@ -358,7 +361,7 @@
             <div class="left_list fl">
                 <div id="list" v-cloak>
                     <h2>
-                        <a href="/Home/Index">会员中心</a>
+                        <a href="/Home/Index">首页</a>
                     </h2>
                     <div class="site_list">
                         <dl v-for="(item,index) in lists">
@@ -393,31 +396,31 @@
                                 <text>
                                 {
                                     isShow: true,
-                                    title: '报关订单',
+                                    title: '委托进口',
                                     options: [
                                         {
-                                            text: '新增报关订单',
+                                            text: '快捷下单',
                                             url: '/Declare/DeclareAdd',
                                             navID: 'DeclareAdd'
                                         }, {
-                                        text: '待提交订单',
-                                            url: '/Declare/DeclareListSimple',
-                                            navID: 'DeclareListSimple'
-                                        },
-                                        {
-                                        text: '待确认订单',
-                                            url: '/Declare/UnConfirmedDecList',
-                                            count: 0
-                                        }, {
-                                            text: '收货确认',  /*'待收货订单'*/
-                                            url: '/Declare/UnReceiptedList'
-                                        }, {
-                                            text: '订单列表',
+                                        //text: '待提交订单',
+                                        //    url: '/Declare/DeclareListSimple',
+                                        //    navID: 'DeclareListSimple'
+                                        //},
+                                        //{
+                                        //text: '待确认订单',
+                                        //    url: '/Declare/UnConfirmedDecList',
+                                        //    count: 0
+                                        //}, {
+                                        //    text: '收货确认',  /*'待收货订单'*/
+                                        //    url: '/Declare/UnReceiptedList'
+                                        //}, {
+                                            text: '进口报关',
                                             url: '/Declare/DeclareList',
                                             navID: 'DeclareList'
-                                        }, {
-                                        text: '产品预归类',
-                                            url: '/Products/MyPreProducts'
+                                        //}, {
+                                        //text: '产品预归类',
+                                        //    url: '/Products/MyPreProducts'
                                         },
 
                                         //{
@@ -434,18 +437,18 @@
                                 <text>
                                 {
                                     isShow: true,
-                                    title: '仓储服务订单',
+                                    title: '香港仓储',
                                     iconClass: 'icon2',
                                     options: [
                                         {
-                                            text: '新增收货订单',
+                                            text: '香港收货',
                                             url: '/Orders/StorageAdd'
                                         }, {
-                                            text: '新增发货订单',
+                                            text: '香港出库',
                                             url: '/Orders/DeliveryAdd'
-                                        }, {
-                                            text: '新增租仓订单',
-                                            url: '/LsOrders/Add'
+                                        //}, {
+                                        //    text: '新增租仓订单',
+                                        //    url: '/LsOrders/Add'
                                         }, {
                                             text: '订单列表',
                                             url: '/Orders/ReceivedList'
@@ -461,14 +464,18 @@
                                 iconClass: 'icon3',
                                 options: [
                                     {
-                                        text: '入库单',
-                                        url: '/Storages/InStorage'
-                                    }, {
-                                        text: '出库单',
-                                        url: '/Storages/OutStorage'
-                                    }, {
                                         text: '我的库存',
                                         url: '/Storages/MyStorage'
+                                    },
+                                    {
+                                        text: '入库记录',
+                                        url: '/Storages/InStorage'
+                                    }, {
+                                        text: '出库记录',
+                                        url: '/Storages/OutStorage'
+                                    }, {
+                                        text: '仓库地址',
+                                        url: '/Storages/OutStorage'
                                     }
                                 ]
                             },
@@ -476,23 +483,23 @@
 
                             {
                                 isShow: true,
-                                title: '财务管理',
+                                title: '我的财务',
                                 iconClass: 'icon4',
                                 options: [
                                     @if ((ViewBag.IsCustoms == false && ViewBag.IsWarehouse == false) || ViewBag.IsCustoms)
                                     {
                                         <text>
-                                            //{
-                                            //    text: '付汇申请',
-                                            //    url: '/PayExchange/UnPayExchange'
-                                            //}, {
-                                            //    text: '我的付汇',
-                                            //    url: '/PayExchange/MyApplies'
-                                            //},
                                             {
-                                                text: '我的付汇',
+                                                text: '未付汇清单',
                                                 url: '/PayExchange/UnPayExchange'
+                                            }, {
+                                                text: '我的付汇',
+                                                url: '/PayExchange/MyApplies'
                                             },
+                                            //{
+                                            //    text: '我的付汇',
+                                            //    url: '/PayExchange/UnPayExchange'
+                                            //},
                                         </text>
                                     }
 
@@ -503,25 +510,17 @@
                                             //    text: '代付货款',
                                             //    url: '/Orders/PrePayApplyList'
                                             {
-                                                text: '我的代付款',
+                                                text: '代付款',
                                                 url: '/Orders/ReceivedApplyList'
                                             }, {
                                             //    text: '代收货款',
                                             //    url: '/Orders/ReceivableList'
                                             //},
-                                                text: '我的代收款',
+                                                text: '代收款',
                                                 url: '/Orders/DeliveryApplyList'
                                             },
                                         </text>
                                     }
-                                ]
-                            },
-
-                            {
-                                isShow: true,
-                                title: '账单管理',
-                                iconClass: 'icon5',
-                                options: [
 
                                     @if ((ViewBag.IsCustoms == false && ViewBag.IsWarehouse == false) || ViewBag.IsCustoms)
                                     {
@@ -547,19 +546,30 @@
                                         text: '我的发票',
                                         url: '/Bills/MyInvoices'
                                     },
-
-                                    @*@if ((ViewBag.IsCustoms == false && ViewBag.IsWarehouse == false) || ViewBag.IsCustoms)
-                                    {
-                                        <text>
-                                        {
-                                            text: '海关发票',
-                                            url: '/Bills/MyCusInvoices'
-                                        },
-                                        </text>
-                                    }*@
+                                     @if ((ViewBag.IsCustoms == false && ViewBag.IsWarehouse == false) || ViewBag.IsCustoms)
+                                     {
+                                         <text>
+                                         {
+                                             text: '海关缴款书',
+                                             url: '/Bills/MyCusInvoices'
+                                         },
+                                         </text>
+                                     }
                                 ]
                             },
 
+
+                            {
+                                isShow: true,
+                                title: '产品中心',
+                                iconClass: 'icon6',
+                                options: [
+                                    {
+                                        text: '我的产品',
+                                        url: '/Products/MyPreProducts'
+                                    }
+                                ]
+                            },
 
                                    {
                                 isShow: true,
@@ -577,20 +587,20 @@
                                 iconClass: 'icon7',
                                 options: [
                                     {
-                                        text: '会员基本信息',
+                                        text: '公司资料',
                                         url: '/Account/BaseInformations'
                                     }, {
-                                        text: '发票信息管理',
-                                        url: '/Account/InvoiceInfo'
+                                        text: '服务协议',
+                                        url: '/Account/Agreement'
+                                    //}, {
+                                    //    text: '发票信息管理',
+                                    //    url: '/Account/InvoiceInfo'
                                     }, {
-                                        text: '收货地址管理',
+                                        text: '收货地址',
                                         url: '/Account/MyConsignees'
                                     }, {
-                                        text: '账户安全中心',
+                                        text: '账号管理',
                                         url: '/Account/SecurityCenter'
-                                    }, {
-                                        text: '我的协议书',
-                                        url: '/Account/Agreement'
                                     }
                                 ]
                             }
@@ -713,7 +723,7 @@
         </div>
         <!--底部-->
         <footer id="footer">
-            <div class="footer_top">
+            <!--<div class="footer_top">
                 <div class="clearfix wrapper">
                     <div class="clearfix left classify">
                         <dl>
@@ -766,7 +776,7 @@
                             <dd>
                                 <a target="_blank" href="@System.Configuration.ConfigurationManager.AppSettings["DomainForIC"]/joinUs.html#n_contact">联系方式</a>
                             </dd>
-                        </dl>
+                        </dl>-->
                         @*<dl>
                             <dt>友情链接</dt>
                             <dd>
@@ -779,13 +789,13 @@
                                 <a target="_blank" href="http://www.52solution.com/">我爱方案网</a>
                             </dd>
                         </dl>*@
-                    </div>
+                    <!--</div>
                     <div class="right erweima">
                         <img src="../Content/img/qrcode_for_gh.jpg" alt="" width="126" height="126">
                         <p>关注微信公众号<br>掌握订单实时状态</p>
                     </div>
                 </div>
-            </div>
+            </div>-->
             <div class="footer_bottom">
                 <span>禁限售规则 - 知识产权保护政策 - 隐私权政策 - 使用条款</span>
                 <div style="display: flex; align-items: center; margin: 0 auto; width: 515px;">

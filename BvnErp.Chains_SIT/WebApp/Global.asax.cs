@@ -18,7 +18,7 @@ namespace WebApp
             timer.Enabled = true;
             timer.Interval = 600000;//十分钟
             timer.Start();
-            timer.Elapsed += new System.Timers.ElapsedEventHandler(GlobalTenMinuteTimer);
+           // timer.Elapsed += new System.Timers.ElapsedEventHandler(GlobalTenMinuteTimer);
         }
 
         private void GlobalTenMinuteTimer(object sender, ElapsedEventArgs e)

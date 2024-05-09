@@ -53,6 +53,8 @@ namespace Yahv.PvWsClient.WebAppNew.Controllers
                 StorageTypeInt = (int)storageType,
 
                 AvatarUrl = !string.IsNullOrEmpty(avatarFile?.Url) ? PvWsOrder.Services.PvClientConfig.FileServerUrl + @"/" + avatarFile?.Url.ToUrl() : "",
+
+                invoiceRuleForm = GetData()
             };
 
             return View(model);

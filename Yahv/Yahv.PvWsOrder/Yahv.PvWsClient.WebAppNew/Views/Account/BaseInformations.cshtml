@@ -2,32 +2,9 @@
     ViewBag.title = "会员基本信息";
 }
 <div id="vInformaction" v-cloak>
-    <div class="mt10 Info_div clearfix">
-        <div class="subtitle">
-            <span class="line"></span>
-            <span class="ml16">账户信息</span>
-        </div>
-        <div class="divice"></div>
-        <div class="content fl">
-            <div class="name ml20 mt20">
-                <span class="w106 fl">登录名：</span>
-                <em class="w250 fl">{{ruleForm.UserName}}</em>
-                <a v-on:click="edit_LoginName" class="link ml20 fl">修改登录名</a>
-            </div>
-            <div class="name ml20 mt20">
-                <span class="w106 fl">手机号码：</span>
-                <em class="w250 fl" style="height:21px">{{ruleForm.Mobile}}</em>
-                <a href="/Account/Mobile" class="link ml20">修改手机号</a>
-            </div>
-            <div class="name ml20 mt20">
-                <span class="w106 fl">邮箱：</span>
-                <em class="w250 fl">{{ruleForm.Email}}</em>
-                <a href="/Account/Email" v-if="ruleForm.Email!=''&&ruleForm.Email!=null" class="link ml20 fl">修改邮箱</a>
-            </div>
-        </div>
-    </div>
 
-    <div class="mt30 Info_div clearfix" v-if="(ruleForm.ThePageIsCustoms == true && ruleForm.ThePageIsWarehouse == true) ||
+
+    <div class="mt10 Info_div clearfix" v-if="(ruleForm.ThePageIsCustoms == true && ruleForm.ThePageIsWarehouse == true) ||
                                               (ruleForm.ThePageIsCustoms == true && ruleForm.ThePageIsWarehouse == false)">
         <div class="subtitle">
             <span class="line"></span>
@@ -57,6 +34,68 @@
             </div>
         </div>
     </div>
+
+    <div class="mt30 Info_div clearfix" v-if="(ruleForm.ThePageIsCustoms == true && ruleForm.ThePageIsWarehouse == true) ||
+                                           (ruleForm.ThePageIsCustoms == true && ruleForm.ThePageIsWarehouse == false)">
+        <div class="subtitle">
+            <span class="line"></span>
+            <span class="ml16">开票信息</span>
+        </div>
+        <div class="divice"></div>
+        <div class="content fl">
+
+            <div class="name ml20 mt20">
+                <span class="w150 fl">开票名称：</span>
+                <span>{{ruleForm.invoiceRuleForm.CompanyName}}</span>
+            </div>
+            <div class="name ml20 mt20">
+                <span class="w150 fl">纳税人识别号：</span>
+                <span>{{ruleForm.invoiceRuleForm.TaxperNumber}}</span>
+            </div>
+            <div class="name ml20 mt20">
+                <span class="w150 fl">地址：</span>
+                <span>{{ruleForm.invoiceRuleForm.RegAddress}}</span>
+            </div>
+            @*<div class="name ml20 mt20">
+                    <span>发票类型：</span>
+                    <span>{{invoiceRuleForm.TypeName}}</span>
+                </div>*@
+            <div class="name ml20 mt20">
+                <span class="w150 fl">电话：</span>
+                <span>{{ruleForm.invoiceRuleForm.CompanyTel}}</span>
+            </div>
+            <div class="name ml20 mt20">
+                <span class="w150 fl">开户行及账号：</span>
+                <span>{{ruleForm.invoiceRuleForm.Bank}} {{ruleForm.invoiceRuleForm.Account}}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt30 Info_div clearfix">
+        <div class="subtitle">
+            <span class="line"></span>
+            <span class="ml16">账户信息</span>
+        </div>
+        <div class="divice"></div>
+        <div class="content fl">
+            <div class="name ml20 mt20">
+                <span class="w106 fl">登录名：</span>
+                <em class="w250 fl">{{ruleForm.UserName}}</em>
+                <a v-on:click="edit_LoginName" class="link ml20 fl">修改登录名</a>
+            </div>
+            <div class="name ml20 mt20">
+                <span class="w106 fl">手机号码：</span>
+                <em class="w250 fl" style="height:21px">{{ruleForm.Mobile}}</em>
+                <a href="/Account/Mobile" class="link ml20">修改手机号</a>
+            </div>
+            <div class="name ml20 mt20">
+                <span class="w106 fl">邮箱：</span>
+                <em class="w250 fl">{{ruleForm.Email}}</em>
+                <a href="/Account/Email" v-if="ruleForm.Email!=''&&ruleForm.Email!=null" class="link ml20 fl">修改邮箱</a>
+            </div>
+        </div>
+    </div>
+
     <div class="mt30 Info_div clearfix" v-if="(ruleForm.ThePageIsCustoms == false && ruleForm.ThePageIsWarehouse == true)
                                            && (ruleForm.StorageTypeInt == 1 || ruleForm.StorageTypeInt == 2)">
         <div class="subtitle">
@@ -91,7 +130,7 @@
     <el-dialog title="修改登录名" :lock-scroll="false" :visible.sync="dialogFormVisible" :close-on-click-modal="false" width="30%">
         <el-form :model="ruleForm1" status-icon ref="ruleForm1" label-width="80px" :rules="rules">
             <el-form-item label="登录名" prop="User_Name">
-                <el-input v-model="ruleForm1.User_Name" size="mini"  auto-complete="off"></el-input>
+                <el-input v-model="ruleForm1.User_Name" size="mini" auto-complete="off"></el-input>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">

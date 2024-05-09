@@ -6,27 +6,37 @@
     <div class="query_wrap clearfix">
         <div class="clearfix">
             <div class="fl">
-                <div class="title label-style">型号:</div>
-                <el-input class="input-style" style="width:180px;" size="mini" v-model="partnumber" @@keyup.enter.native="queryData"></el-input>
+                @*<div class="title label-style">型号:</div>*@
+                <el-input class="input-style" style="width:150px;" size="mini" v-model="partnumber" @@keyup.enter.native="queryData" placeholder="请输入型号"></el-input>
             </div>
             <div class="fl ml8">
-                <div class="title label-style">订单号:</div>
-                <el-input class="input-style" style="width:180px;" size="mini" v-model="orderID" @@keyup.enter.native="queryData"></el-input>
+                @*<div class="title label-style">订单号:</div>*@
+                <el-input class="input-style" style="width:150px;" size="mini" v-model="orderID" @@keyup.enter.native="queryData" placeholder="请输入订单号"></el-input>
             </div>
             <div class="fl ml8">
-                <div class="title label-style">入库日期:</div>
+                @*<div class="title label-style">入库日期:</div>*@
                 <date-picker-daterange ref="datePickerDaterange" class="fl"></date-picker-daterange>
             </div>
+            <!--<div class="fl ml8">-->
+                @*<div class="title label-style">库房:</div>*@
+                <!--<el-select class="mr16 input-style" size="small" v-model="WarehouseID" filterable clearable placeholder="请选择库房">
+                    <el-option v-for="item in WareHouseOptions"
+                               :key="item.value"
+                               :label="item.text"
+                               :value="item.value">
+                    </el-option>
+                </el-select>
+            </div>-->
 
             <div class="fr">
                 <button v-on:click="queryData" class="btn btn1">查询</button>
                 <button v-on:click="clearData" class="btn btn2 ml12">重置</button>
             </div>
         </div>
-        <div class="clearfix mt20">
-            <div class="fl">
-                <div class="title label-style">库房:</div>
-                <el-select class="mr16 input-style" size="small" v-model="WarehouseID" filterable clearable>
+        <!--<div class="clearfix mt20">
+            <div class="fl">-->
+                @*<div class="title label-style">库房:</div>*@
+                <!--<el-select class="mr16 input-style" size="small" v-model="WarehouseID" filterable clearable placeholder="请选择库房">
                     <el-option v-for="item in WareHouseOptions"
                                :key="item.value"
                                :label="item.text"
@@ -34,11 +44,11 @@
                     </el-option>
                 </el-select>
             </div>
-        </div>
+        </div>-->
         <div class="clearfix mt20">
-            <button v-on:click="manualOpenCart(1)" class="btn btn1">转报关</button>
-            <button v-on:click="manualOpenCart(2)" class="btn btn1 ml8">代发货</button>
-            <button class="btn btn1 ml20" v-on:click="importExcel">导出</button>
+            <button v-on:click="manualOpenCart(1)" class="btn btn3">转报关</button>
+            <button v-on:click="manualOpenCart(2)" class="btn btn3 ml8">代发货</button>
+            <button class="btn btn3 ml20" v-on:click="importExcel">导出</button>
             <a id="exportInfoForm" style="display:none" download><span id="ex-li" style="display:none"></span></a>
         </div>
     </div>
@@ -82,17 +92,18 @@
                         </div>
                     </td>
                     @*<div class="el-input el-input--mini" style="padding-left:0px;padding-right:0px;">
-                        <input type="text" autocomplete="off" placeholder="请输入型号或者品牌" v-model="search_data" class="el-input__inner" style="height:25px; width: 160px;">
-                    </div>*@
+                <input type="text" autocomplete="off" placeholder="请输入型号或者品牌" v-model="search_data" class="el-input__inner" style="height:25px; width: 160px;">
+            </div>*@
                 </tr>
-                <tr v-if="indexData.dataList.length==0"><td colspan="10">暂无数据</td></tr>
+                <tr v-if="indexData.dataList.length==0"><td colspan="12" style="height:500px"><img src="/Content/hxt_img/list_nodata.png" style="height:64px;width:87px;" /><label style="display: block; color: currentcolor;">暂无数据</label></td></tr>
+
             </table>
         </div>
         <div class="foot">
             <el-pagination class="fr" style="margin-top:20px;" v-on:size-change="handleSizeChange"
                            v-on:current-change="handleCurrentChange"
                            :current-page="indexData.pageIndex"
-                           :page-sizes="[5, 10, 20, 40]"
+                           :page-sizes="[10, 20, 50, 100]"
                            :page-size="indexData.pageSize"
                            layout="total, sizes, prev, pager, next, jumper"
                            :total="indexData.total">
@@ -280,7 +291,7 @@
             this.isOpen = false;
 
             this.WareHouseOptions = @Html.Raw(Json.Encode(@ViewBag.WareHouseOptions));
-            this.$refs.datePickerDaterange.orderDateSimpleBtnClicked('7天');
+            this.$refs.datePickerDaterange.orderDateSimpleBtnClicked('近一个月');
             this.queryData(); // this.paging();
         },
         computed: {

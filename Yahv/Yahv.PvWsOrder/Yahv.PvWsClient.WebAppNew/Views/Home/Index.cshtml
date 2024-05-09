@@ -12,17 +12,18 @@
     <!-- 公司名称 -->
     <div class="clearfix">
         <div class="fl clearfix company_info">
-            <div class="fl company_name">
+            <div class="fl company_name"style="padding-left: 12px;">
+                <h2>欢迎您！</h2>
                 <h2>{{UserName}}</h2>
-                <p>欢迎您在芯达通下单，我们竭诚为您服务！</p>
+                @*<p>欢迎您在芯达通下单，我们竭诚为您服务！</p>*@
             </div>
-            <div class="fl company_code">
-                <p>{{EnterCode}}</p>
-                <span>客户代码(入仓号)</span>
+            <div class="fl company_code" style="display: contents;">
+                <p>入仓号：{{EnterCode}}</p>
+                @*<span>客户代码(入仓号)</span>*@
 
             </div>
         </div>
-        <div class="fl clearfix erweima">
+        <div class="fl clearfix erweima" style="display:none;">
             <img src="~/Content/img/erweima.png" class="fl">
             <div class="fl erweima_text">
                 <h4>关注芯达通微信</h4>
@@ -40,17 +41,21 @@
         </div>
     </div>
     <!-- 我的信用 -->
-    <div class="infos">
+    <div class="infos" style="background: whitesmoke;">
         <table>
             <tbody>
                 <tr class="first_tr">
-                    <td colspan="5">
-                        <span class="info_credit">我的信用额度</span>
-                        <span>总授信额度：<i class="price">¥{{indexData.TotalCredit.TotalCredit}}</i></span>
-                        <span>总消费额：<i class="price">¥{{indexData.TotalCredit.TotalCost}}</i></span>
+                    <td>
+                        @*<span class="info_credit">我的信用额度</span>*@
+                        <span>信用额度：<i class="price">¥{{indexData.TotalCredit.TotalCredit}}</i></span>
+                        
                     </td>
+                    <td>
+                        <span>订单总额：<i class="price">¥{{indexData.TotalCredit.TotalCost}}</i></span>
+                    </td>
+                    <td colspan="2">账户余额：(人民币) ¥{{indexData.TotalCredit.TotalLeft}} ;   (美元)${{indexData.TotalCredit.TotalLeftUSD}} </td>
                 </tr>
-                @if ((ViewBag.ThePageIsCustoms == true && ViewBag.ThePageIsWarehouse == true) || (ViewBag.ThePageIsCustoms == true && ViewBag.ThePageIsWarehouse == false))
+                @*@if ((ViewBag.ThePageIsCustoms == true && ViewBag.ThePageIsWarehouse == true) || (ViewBag.ThePageIsCustoms == true && ViewBag.ThePageIsWarehouse == false))
                 {
                     <tr class="second_tr">
                         <td>
@@ -168,7 +173,7 @@
                             <span>代发货：<a href="/Orders/DeliveryList"><i>{{indexData.DeliveryOrders}}</i></a></span>
                         </td>
                     </tr>
-                }
+                }*@
             </tbody>
         </table>
     </div>

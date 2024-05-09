@@ -1,25 +1,11 @@
-﻿@{
-    ViewBag.subTitle = "我的付汇";
-}
+﻿
 <link href="~/Content/css/tab.css" rel="stylesheet" />
-<!-- tab start-->
-<div class="clearfix tab_switch">
-    <ul>
-        <li>
-            <a href="/PayExchange/UnPayExchange">付汇申请<i></i></a>
-        </li>
-        <li class="active">
-            <a href="/PayExchange/MyApplies">我的付汇<i></i></a>
-        </li>
-    </ul>
-</div>
-<!-- tab end -->
+
 <div id="vMyApplies" v-cloak class="tab_content">
     <div class="query_wrap">
         <div class="clearfix">
             <div class="fl">
-                <div class="title label-style-6word">付汇申请状态:</div>
-                <el-select style="width:120px;" class="mr16 input-style" size="small" v-model="payStatus" filterable clearable>
+                <el-select style="width:120px;" class="mr16 input-style" size="small" v-model="payStatus" filterable clearable placeholder="付汇状态">
                     <el-option v-for="item in ApplyStatusOptions"
                                :key="item.value"
                                :label="item.text"
@@ -28,33 +14,27 @@
                 </el-select>
             </div>
             <div class="fl ml8">
-                <div class="title label-style">订单号:</div>
-                <el-input class="input-style" style="width:120px;" size="mini" v-model="orderID" @@keyup.enter.native="queryData"></el-input>
+                <el-input class="input-style" style="width:120px;" size="mini" v-model="orderID" @@keyup.enter.native="queryData" placeholder="订单号"></el-input>
             </div>
             <div class="fl ml8">
-                <div class="title label-style">供应商:</div>
-                <el-input class="input-style" style="width:120px;" size="mini" v-model="supplierName" @@keyup.enter.native="queryData"></el-input>
+                <el-input class="input-style" style="width:120px;" size="mini" v-model="supplierName" @@keyup.enter.native="queryData" placeholder="供应商"></el-input>
+            </div>
+            <div class="fl ml8">
+                <el-input class="input-style" style="width:120px;" size="mini" v-model="accountName" @@keyup.enter.native="queryData" placeholder="收款方"></el-input>
+            </div>
+            <div class="fl ml8">
+                @*<el-date-picker style="width:250px;" size="small" v-model="dataValue"
+                    type="daterange"
+                    range-separator="至"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期">
+            </el-date-picker>*@
+                <date-picker-daterange ref="datePickerDaterange" class="fl"></date-picker-daterange>
             </div>
 
             <div class="fr">
                 <button v-on:click="queryData" class="btn btn1">查询</button>
                 <button v-on:click="clearData" class="btn btn2 ml12">重置</button>
-            </div>
-        </div>
-        <div class="clearfix mt20">
-            <div class="fl">
-                <div class="title label-style-6word">收款方户名:</div>
-                <el-input class="input-style" style="width:120px;" size="mini" v-model="accountName" @@keyup.enter.native="queryData"></el-input>
-            </div>
-            <div class="fl ml8">
-                <div class="title label-style">选择日期:</div>
-                @*<el-date-picker style="width:250px;" size="small" v-model="dataValue"
-                        type="daterange"
-                        range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期">
-                </el-date-picker>*@
-                <date-picker-daterange ref="datePickerDaterange" class="fl"></date-picker-daterange>
             </div>
         </div>
     </div>
@@ -85,13 +65,14 @@
                     <a v-on:click="deleteApply(item.ID)" v-if="item.isDelete">删除</a>
                 </td>
             </tr>
-            <tr v-if="indexData.dataList.length==0"><td colspan="8">暂无数据</td></tr>
+            <tr v-if="indexData.dataList.length==0"><td colspan="8" style="height:500px"><img src="/Content/hxt_img/list_nodata.png" style="height:64px;width:87px;" /><label style="display: block; color: currentcolor;">暂无数据</label></td></tr>
+
         </table>
         <div class="foot">
             <el-pagination class="fr" style="margin-top:20px;" v-on:size-change="handleSizeChange"
                            v-on:current-change="handleCurrentChange"
                            :current-page="indexData.pageIndex"
-                           :page-sizes="[5, 10, 20, 40]"
+                           :page-sizes="[10, 20, 50, 100]"
                            :page-size="indexData.pageSize"
                            layout="total, sizes, prev, pager, next, jumper"
                            :total="indexData.total">
@@ -153,7 +134,7 @@
     }
 
     .input-style {
-        width: 180px !important;
+        width: 120px !important;
     }
 </style>
 @{Html.RenderAction("_DatePickerDateRange", "Home");}

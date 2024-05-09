@@ -4,42 +4,43 @@
 <div id="supplier" v-cloak class="tab_content">
     <div class="query_wrap clearfix"  ref="viewBox1" v-on:scroll="ss('viewBox1')">
         <div class="fl">
-            <span class="title">供应商名称:</span>
-            <el-input style="width:200px;" size="mini" v-model="indexData.search_data" @@keyup.enter.native="queryData"></el-input>
+            <el-input style="width:200px;" size="mini" v-model="indexData.search_data" @@keyup.enter.native="queryData" placeholder="供应商名称"></el-input>
         </div>
 
         <div class="fr">
-            <button v-on:click="add_Supperlier" class="fl btn1 btn">新增供应商+</button>
+            <button v-on:click="add_Supperlier" class="fl btn3 btn">新增供应商+</button>
             <button class="fl ml20 btn1 btn" v-on:click="paging">查询</button>
         </div>
     </div>
     <div class="tb_wrap" v-loading="loading">
-        <table border="0" cellspacing="0" cellpadding="0" class="common_tb1 mt30">
+        <table border="0" cellspacing="0" cellpadding="0" class="common_tb1 mt20">
             <tr>
                 <th width="36px">序号</th>
-                <th>国家/地区</th>
-                <th>中文名称</th>
                 <th>英文名称</th>
+                <th>国家/地区</th>
+                @*<th>中文名称</th>*@
                 @*<th>等级</th>*@
                 <th>详细地址</th>
                 <th>操作</th>
             </tr>
             <tr v-for="(item,index) in indexData.dataList.slice((indexData.pageIndex-1)*indexData.pageSize,indexData.pageIndex*indexData.pageSize)">
                 <td>{{(indexData.pageIndex-1)*indexData.pageSize+index+1}}</td>
-                <td style="width:50px">{{item.Place}}</td>
-                <td>{{item.ChineseName}}</td>
                 <td>{{item.EnglishName}}</td>
+                <td style="width:80px">{{item.Place}}</td>
+                @*<td>{{item.ChineseName}}</td>*@
+
                 @*<td>{{item.nGrade}}</td>*@
                 <td>{{item.RegAddress}}</td>
                 <td class="operate" style="width:50px"><a v-on:click="edit_Supperlier(item.ID)">详情</a></td>
             </tr>
-            <tr v-if="indexData.dataList.length==0"><td colspan="6">暂无数据</td></tr>
+            <tr v-if="indexData.dataList.length==0"><td colspan="5" style="height:500px"><img src="/Content/hxt_img/list_nodata.png" style="height:64px;width:87px;" /><label style="display: block; color: currentcolor;">暂无数据</label></td></tr>
+
         </table>
         <div class="foot">
             <el-pagination class="fr" style="margin-top:20px;" v-on:size-change="handleSizeChange"
                            v-on:current-change="handleCurrentChange"
                            :current-page="indexData.pageIndex"
-                           :page-sizes="[5, 10, 20, 40]"
+                           :page-sizes="[10, 20, 50, 100]"
                            :page-size="indexData.pageSize"
                            layout="total, sizes, prev, pager, next, jumper"
                            :total="indexData.dataList.length">

@@ -122,23 +122,23 @@ namespace Yahv.Systematic
                 return new Yahv.CrmPlus.Service.Views.Rolls.MySuppliersRoll(this.admin);
             }
         }
-       /// <summary>
-       /// 我的site记录
-       /// </summary>
-        public Yahv.CrmPlus.Service.Views.Rolls.MySiteSupliersRoll MySiteSuppliers
-        {
-            get
-            {
-                return new Yahv.CrmPlus.Service.Views.Rolls.MySiteSupliersRoll(this.admin);
-            }
-        }
-        public Yahv.CrmPlus.Service.Views.Rolls.FixedSuppliersRoll FixedSuppliers
-        {
-            get
-            {
-                return new Yahv.CrmPlus.Service.Views.Rolls.FixedSuppliersRoll();
-            }
-        }
+        ///// <summary>
+        ///// 我的site记录
+        ///// </summary>
+        //public Yahv.CrmPlus.Service.Views.Rolls.MySiteSupliersRoll MySiteSuppliers
+        //{
+        //    get
+        //    {
+        //        return new Yahv.CrmPlus.Service.Views.Rolls.MySiteSupliersRoll(this.admin);
+        //    }
+        //}
+        //public Yahv.CrmPlus.Service.Views.Rolls.FixedSuppliersRoll FixedSuppliers
+        //{
+        //    get
+        //    {
+        //        return new Yahv.CrmPlus.Service.Views.Rolls.FixedSuppliersRoll();
+        //    }
+        //}
         #endregion
 
         #region 我的联系人
@@ -184,27 +184,27 @@ namespace Yahv.Systematic
             }
         }
 
-        /// <summary>
-        ///客户账期申请
-        /// </summary>
-        public Yahv.CrmPlus.Service.Views.Rolls.ClientCreditsApplyRoll ClientCreditsApply
-        {
-            get
-            {
-                return new Yahv.CrmPlus.Service.Views.Rolls.ClientCreditsApplyRoll();
-            }
-        }
+        ///// <summary>
+        /////客户账期申请
+        ///// </summary>
+        //public Yahv.CrmPlus.Service.Views.Rolls.ClientCreditsApplyRoll ClientCreditsApply
+        //{
+        //    get
+        //    {
+        //        return new Yahv.CrmPlus.Service.Views.Rolls.ClientCreditsApplyRoll();
+        //    }
+        //}
 
-        /// <summary>
-        ///客户授信申请
-        /// </summary>
-        public Yahv.CrmPlus.Service.Views.Rolls.ClientCreditFlowsApplyRoll ClientCreditFlowsApply
-        {
-            get
-            {
-                return new Yahv.CrmPlus.Service.Views.Rolls.ClientCreditFlowsApplyRoll(this.admin);
-            }
-        }
+        ///// <summary>
+        /////客户授信申请
+        ///// </summary>
+        //public Yahv.CrmPlus.Service.Views.Rolls.ClientCreditFlowsApplyRoll ClientCreditFlowsApply
+        //{
+        //    get
+        //    {
+        //        return new Yahv.CrmPlus.Service.Views.Rolls.ClientCreditFlowsApplyRoll(this.admin);
+        //    }
+        //}
 
         #endregion
 
@@ -278,59 +278,59 @@ namespace Yahv.Systematic
 
         #endregion
 
-        #region 仓库
-        public Yahv.CrmPlus.Service.Views.Rolls.WareHousesRoll WareHouses
-        {
-            get
-            {
-                return new Yahv.CrmPlus.Service.Views.Rolls.WareHousesRoll();
-            }
-        }
-        #endregion
+        //#region 仓库
+        //public Yahv.CrmPlus.Service.Views.Rolls.WareHousesRoll WareHouses
+        //{
+        //    get
+        //    {
+        //        return new Yahv.CrmPlus.Service.Views.Rolls.WareHousesRoll();
+        //    }
+        //}
+        //#endregion
 
-        /// <summary>
-        /// 门牌
-        /// </summary>
-        public Yahv.CrmPlus.Service.Views.Rolls.oDoorsRoll oDoors
-        {
-            get
-            {
-                return new Yahv.CrmPlus.Service.Views.Rolls.oDoorsRoll();
-            }
-        }
+        ///// <summary>
+        ///// 门牌
+        ///// </summary>
+        //public Yahv.CrmPlus.Service.Views.Rolls.oDoorsRoll oDoors
+        //{
+        //    get
+        //    {
+        //        return new Yahv.CrmPlus.Service.Views.Rolls.oDoorsRoll();
+        //    }
+        //}
 
-        /// <summary>
-        /// 承运商
-        /// </summary>
-        public Yahv.CrmPlus.Service.Views.Rolls.CarriersRoll Carriers
-        {
-            get
-            {
-                return new Yahv.CrmPlus.Service.Views.Rolls.CarriersRoll();
-            }
-        }
+        ///// <summary>
+        ///// 承运商
+        ///// </summary>
+        //public Yahv.CrmPlus.Service.Views.Rolls.CarriersRoll Carriers
+        //{
+        //    get
+        //    {
+        //        return new Yahv.CrmPlus.Service.Views.Rolls.CarriersRoll();
+        //    }
+        //}
 
-        /// <summary>
-        /// 司机
-        /// </summary>
-        public Yahv.CrmPlus.Service.Views.Rolls.oDriversRoll oDrivers
-        {
-            get
-            {
-                return new Yahv.CrmPlus.Service.Views.Rolls.oDriversRoll();
-            }
-        }
+        ///// <summary>
+        ///// 司机
+        ///// </summary>
+        //public Yahv.CrmPlus.Service.Views.Rolls.oDriversRoll oDrivers
+        //{
+        //    get
+        //    {
+        //        return new Yahv.CrmPlus.Service.Views.Rolls.oDriversRoll();
+        //    }
+        //}
 
-        /// <summary>
-        /// 运输工具
-        /// </summary>
-        public Yahv.CrmPlus.Service.Views.Rolls.oTransportsRoll oTransports
-        {
-            get
-            {
-                return new Yahv.CrmPlus.Service.Views.Rolls.oTransportsRoll();
-            }
-        }
+        ///// <summary>
+        ///// 运输工具
+        ///// </summary>
+        //public Yahv.CrmPlus.Service.Views.Rolls.oTransportsRoll oTransports
+        //{
+        //    get
+        //    {
+        //        return new Yahv.CrmPlus.Service.Views.Rolls.oTransportsRoll();
+        //    }
+        //}
 
         #endregion
 

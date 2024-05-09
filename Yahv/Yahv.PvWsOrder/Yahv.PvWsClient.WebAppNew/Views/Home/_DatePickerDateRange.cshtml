@@ -1,8 +1,8 @@
 ﻿<template id="datePicker_dateRange">
     <div class="order-date">
-        <el-button class="unselected" type="text" v-on:click="orderDateSimpleBtnClicked('今日')" btn-type="今日">今日</el-button>
-        <el-button class="unselected" type="text" v-on:click="orderDateSimpleBtnClicked('七日')" btn-type="七日">七日</el-button>
-        <el-button class="unselected" type="text" v-on:click="orderDateSimpleBtnClicked('本月')" btn-type="本月">本月</el-button>
+        <el-button class="unselected" type="text" v-on:click="orderDateSimpleBtnClicked('近一个月')" btn-type="近一个月">近一个月</el-button>
+        <el-button class="unselected" type="text" v-on:click="orderDateSimpleBtnClicked('近三个月')" btn-type="近三个月">近三个月</el-button>
+        <el-button class="unselected" type="text" v-on:click="orderDateSimpleBtnClicked('今年内')" btn-type="今年内">今年内</el-button>
         <el-button class="unselected" type="text" v-on:click="orderDateSimpleBtnClicked('自定义')" btn-type="自定义">自定义</el-button>
         <div id="order-date-picker-container">
             <el-date-picker class="ml6" style="width:250px;" size="small" v-model="dataValue"
@@ -58,17 +58,31 @@
                     $('.order-date .el-button[btn-type="' + type + '"]').removeClass('unselected');
                     var datePicker = $('#order-date-picker-container');
                     switch (type) {
-                        case '今日':
-                            this.dataValue = [new Date(), new Date()];
-                            datePicker.hide();
-                            break;
-                        case '七日':
-                            var sevenDayAgoDateStamp = new Date().setDate((new Date().getDate() - 6));  // 包含今天就减6
+                        //case '今日':
+                        //    this.dataValue = [new Date(), new Date()];
+                        //    datePicker.hide();
+                        //    break;
+                        //case '七日':
+                        //    var sevenDayAgoDateStamp = new Date().setDate((new Date().getDate() - 6));  // 包含今天就减6
+                        //    this.dataValue = [new Date(sevenDayAgoDateStamp), new Date()];
+                        //    datePicker.hide();
+                        //    break;
+                        //case '本月':
+                        //    this.dataValue = [this.getNowMonthFirst(), this.getNowMonthLast()];
+                        //    datePicker.hide();
+                        //    break;
+                        case '近一个月':
+                            var sevenDayAgoDateStamp = new Date().setDate((new Date().getDate() - 29));  // 包含今天就减6
                             this.dataValue = [new Date(sevenDayAgoDateStamp), new Date()];
                             datePicker.hide();
                             break;
-                        case '本月':
-                            this.dataValue = [this.getNowMonthFirst(), this.getNowMonthLast()];
+                        case '近三个月':
+                            var sevenDayAgoDateStamp = new Date().setDate((new Date().getDate() - 89));  // 包含今天就减6
+                            this.dataValue = [new Date(sevenDayAgoDateStamp), new Date()];
+                            datePicker.hide();
+                            break;
+                        case '今年内':
+                            this.dataValue = [this.getFirstDayOfYear(), this.getLastDayOfYear()];
                             datePicker.hide();
                             break;
                         case '自定义':
@@ -90,6 +104,14 @@
                     const enddate = new Date(date.getFullYear(), date.getMonth() + 1, 0);
                     return enddate;
                 },
+                getFirstDayOfYear() {
+                    const date = new Date(new Date().getFullYear, 0, 1);
+                    return date;
+                },
+                getLastDayOfYear() {
+                    const date = new Date(new Date().getFullYear, 11, 31);
+                    return date;
+                }
             },
         });
 </script>

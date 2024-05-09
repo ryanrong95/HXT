@@ -17,8 +17,8 @@ namespace Needs.WL.ConsoleToolApp
     {
         static void Main(string[] args)
         {
-            PayExchange.UpdatePayExchange updatePayExchange = new PayExchange.UpdatePayExchange();
-            updatePayExchange.update();
+            //PayExchange.UpdatePayExchange updatePayExchange = new PayExchange.UpdatePayExchange();
+            //updatePayExchange.update();
 
             //WaybillInfo waybillInfo = new WaybillInfo();
             //waybillInfo.doWaybill();

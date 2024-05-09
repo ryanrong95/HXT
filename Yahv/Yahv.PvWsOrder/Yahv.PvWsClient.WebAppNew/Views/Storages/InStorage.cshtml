@@ -5,16 +5,13 @@
     <div class="query_wrap clearfix">
         <div class="clearfix">
             <div class="fl">
-                <span class="title label-style">型号:</span>
-                <el-input class="input-style" style="width:180px;" size="mini" v-model="PartNumber" @@keyup.enter.native="queryData"></el-input>
+                <el-input class="input-style" style="width:120px;" size="mini" v-model="PartNumber" @@keyup.enter.native="queryData" placeholder="型号"></el-input>
             </div>
             <div class="fl ml11">
-                <span class="title label-style">订单号:</span>
-                <el-input class="input-style" style="width:180px;" size="mini" v-model="OrderID" @@keyup.enter.native="queryData"></el-input>
+                <el-input class="input-style" style="width:120px;" size="mini" v-model="OrderID" @@keyup.enter.native="queryData" placeholder="订单号"></el-input>
             </div>
             <div class="fl ml11">
-                <span class="title label-style">供应商:</span>
-                <el-select class="mr16" size="small" v-model="Supplier" filterable clearable style="width: 180px;">
+                <el-select class="mr16" size="small" v-model="Supplier" filterable clearable style="width: 120px;" placeholder="供应商">
                     <el-option v-for="item in SupplierOptions"
                                :key="item.value"
                                :label="item.text"
@@ -23,15 +20,8 @@
                 </el-select>
             </div>
 
-            <div class="fr">
-                <button v-on:click="queryData" class="btn btn1">查询</button>
-                <button v-on:click="clearData" class="btn btn2 ml12">重置</button>
-            </div>
-        </div>
-        <div class="clearfix mt20">
-            <div class="fl">
-                <span class="title label-style">库房:</span>
-                <el-select class="mr16 input-style" size="small" v-model="WarehouseID" filterable clearable>
+            <div class="fl ml11">
+                <el-select class="mr16 input-style" size="small" v-model="WarehouseID" filterable clearable placeholder="选择库房">
                     <el-option v-for="item in WareHouseOptions"
                                :key="item.value"
                                :label="item.text"
@@ -40,8 +30,7 @@
                 </el-select>
             </div>
             <div class="fl ml11">
-                <span class="title label-style">订单类型:</span>
-                <el-select class="mr16 input-style" size="small" v-model="OrderType" filterable clearable>
+                <el-select class="mr16 input-style" size="small" v-model="OrderType" filterable clearable placeholder="订单类型">
                     <el-option v-for="item in OrderTypeOptions"
                                :key="item.value"
                                :label="item.text"
@@ -50,17 +39,19 @@
                 </el-select>
             </div>
             <div class="fl ml11">
-                <span class="title label-style">入库时间:</span>
                 <date-picker-daterange ref="datePickerDaterange" class="fl"></date-picker-daterange>
             </div>
-        </div>
-        <div class="clearfix mt20">
-            <button class="btn btn1" v-on:click="importExcel">导出</button>
-            <a id="exportInfoForm" style="display:none" download><span id="ex-li" style="display:none"></span></a>
+            <div class="fl mt12">
+                <button v-on:click="queryData" class="btn btn1">查询</button>
+                <button v-on:click="clearData" class="btn btn2 ml10">重置</button>
+                <button class="btn btn3 ml12" v-on:click="importExcel">导出</button>
+                <a id="exportInfoForm" style="display:none" download><span id="ex-li" style="display:none"></span></a>
+            </div>
+
         </div>
     </div>
     <div class="tb_wrap" v-loading="loading">
-        <table border="0" cellspacing="0" cellpadding="0" class="common_tb1 mt30">
+        <table border="0" cellspacing="0" cellpadding="0" class="common_tb1 mt20">
             <tr>
                 <th width="36px"><el-checkbox v-model="allChecked" v-on:change="allCheck"></el-checkbox></th>
                 <th>入库时间</th>
@@ -89,13 +80,14 @@
                 <td>{{item.OrderID}}</td>
                 <td>{{item.OrderType}}</td>
             </tr>
-            <tr v-if="indexData.dataList.length==0"><td colspan="12">暂无数据</td></tr>
+            <tr v-if="indexData.dataList.length==0"><td colspan="12" style="height:500px"><img src="/Content/hxt_img/list_nodata.png" style="height:64px;width:87px;" /><label style="display: block; color: currentcolor;">暂无数据</label></td></tr>
+
         </table>
         <div class="foot">
             <el-pagination class="fr" style="margin-top:20px;" v-on:size-change="handleSizeChange"
                            v-on:current-change="handleCurrentChange"
                            :current-page="indexData.pageIndex"
-                           :page-sizes="[5, 10, 20, 40]"
+                           :page-sizes="[10, 20, 50, 100]"
                            :page-size="indexData.pageSize"
                            layout="total, sizes, prev, pager, next, jumper"
                            :total="indexData.total">
@@ -117,7 +109,7 @@
     }
 
     .input-style {
-        width: 180px !important;
+        width: 120px !important;
     }
 </style>
 @{Html.RenderAction("_DatePickerDateRange", "Home");}
@@ -213,7 +205,7 @@
             },
             //重置数据
             clearData: function () {
-                this.$refs.datePickerDaterange.orderDateSimpleBtnClicked('7天');
+                this.$refs.datePickerDaterange.orderDateSimpleBtnClicked('近一个月');
                 // this.dataValue = "";
                 this.startDate = "";
                 this.endDate = "";

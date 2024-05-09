@@ -23,7 +23,7 @@ namespace Needs.Erp.Models
 
         Limit Limits { get; }
 
-        
+
 
         Publish Publishs { get; }
 
@@ -37,6 +37,6 @@ namespace Needs.Erp.Models
         /// </summary>
         OrderSales OrderSales { get; }
 
-       
+
     }
 }

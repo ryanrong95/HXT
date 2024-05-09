@@ -1,5 +1,5 @@
-﻿/// <reference path="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.min.js" />
-/// <reference path="http://fixed2.b1b.com/Yahv/jquery-easyui-1.7.6/jquery.easyui.min.js" />
+﻿/// <reference path="http://fixed2.szhxt.net/Yahv/jquery-easyui-1.7.6/jquery.min.js" />
+/// <reference path="http://fixed2.szhxt.net/Yahv/jquery-easyui-1.7.6/jquery.easyui.min.js" />
 function mwForClose() {
     var $ = top.window.$;
 

@@ -5,27 +5,16 @@
     <div class="query_wrap" ref="viewBox1" v-on:scroll="ss('viewBox1')">
         <div class="clearfix">
             <div class="fl">
-                <div class="title label-style">品名:</div>
-                <el-input class="input-style" size="mini" @@keydown.native="enterQueryData" v-model="ProductName"></el-input>
+                <el-input class="input-style" size="mini" @@keydown.native="enterQueryData" v-model="ProductName" placeholder="品名"></el-input>
             </div>
-            <div class="fl ml20">
-                <div class="title label-style">型号:</div>
-                <el-input class="input-style" size="mini" @@keydown.native="enterQueryData" v-model="Model"></el-input>
+            <div class="fl ml8">
+                <el-input class="input-style" size="mini" @@keydown.native="enterQueryData" v-model="Model" placeholder="型号"></el-input>
             </div>
-            <div class="fl ml20">
-                <div class="title label-style">品牌:</div>
-                <el-input class="input-style" size="mini" @@keydown.native="enterQueryData" v-model="Manufacturer"></el-input>
+            <div class="fl ml8">
+                <el-input class="input-style" size="mini" @@keydown.native="enterQueryData" v-model="Manufacturer" placeholder="品牌"></el-input>
             </div>
-
-            <div class="fr">
-                <button v-on:click="queryData" class="btn btn1">查询</button>
-                <button v-on:click="clearData" class="btn btn2 ml12">重置</button>
-            </div>
-        </div>
-        <div class="clearfix mt20">
-            <div class="fl">
-                <div class="title label-style">归类状态:</div>
-                <el-select style="width:180px;" class="mr16 input-style" size="small" v-model="classifyStatus" filterable clearable>
+            <div class="fl ml8">
+                <el-select style="width:180px;" class="mr16 input-style" size="small" v-model="classifyStatus" filterable clearable placeholder="归类状态">
                     <el-option v-for="item in ClassifyStatusOptions"
                                :key="item.value"
                                :label="item.text"
@@ -33,14 +22,20 @@
                     </el-option>
                 </el-select>
             </div>
+
+            <div class="fr">
+                <button v-on:click="queryData" class="btn btn1">查询</button>
+                <button v-on:click="clearData" class="btn btn2 ml12">重置</button>
+            </div>
         </div>
+
     </div>
-    <div class="preproduct_wrap mt20">
+    <div class="preproduct_wrap mt10">
         <div class="content">
             <div class="overhide query_wrap ">
-                <button v-on:click="add_preproduct" class="btn btn1 fl" v-if="@(ViewBag.ClientIsValid)">新增</button>
+                <button v-on:click="add_preproduct" class="btn btn3 fl" v-if="@(ViewBag.ClientIsValid)">新增</button>
 
-                <el-button v-on:click="openUploadDialog" size="small" class="btn btn1 fl ml20" type="primary"> 批量导入<i class="el-icon-upload el-icon--right"></i></el-button>
+                <el-button v-on:click="openUploadDialog" size="small" class="btn btn3 fl ml12" type="primary"> 批量导入<i class="el-icon-upload el-icon--right"></i></el-button>
 
                 @*<el-upload class="btn_upload ml20 fl"
                            :before-upload="onBeforeUpload"
@@ -54,7 +49,7 @@
                 <el-button type="primary" v-on:click="downloadTemplates" class=" btn_data fl btn1">
                     下载模板<i class="el-icon-download el-icon--right"></i>
                 </el-button>*@
-                <el-button type="primary" v-on:click="applyOrders" class="el-icon-ump-gouwuchekong fl btn1 ml20">
+                <el-button type="primary" v-on:click="applyOrders" class="el-icon-ump-gouwuchekong fl btn3 ml12" style="margin-bottom:0px;">
                     报关下单<i class="el-icon-shopping-cart-2 el-icon--right"></i>
                 </el-button>
             </div>
@@ -158,13 +153,15 @@
                         </td>
 
                     </tr>
-                    <tr v-if="dataList.length==0"><td colspan="12">暂无数据</td></tr>
+                    @*<tr v-if="dataList.length==0"><td colspan="12">暂无数据</td></tr>*@
+                    <tr v-if="dataList.length==0"><td colspan="12" style="height:500px"><img src="/Content/hxt_img/list_nodata.png" style="height:64px;width:87px;" /><label style="display: block; color: currentcolor;">暂无数据</label></td></tr>
+
                 </table>
                 <div class="foot">
                     <el-pagination class="fr" style="margin-top:20px;" v-on:size-change="handleSizeChange"
                                    v-on:current-change="handleCurrentChange"
                                    :current-page="pageIndex"
-                                   :page-sizes="[5, 10, 20, 40]"
+                                   :page-sizes="[10, 20, 50, 100]"
                                    :page-size="pageSize"
                                    layout="total, sizes, prev, pager, next, jumper"
                                    :total="total">
@@ -233,7 +230,7 @@
     }
 
     .input-style {
-        width: 180px !important;
+        width: 120px !important;
     }
 </style>
 @{Html.RenderAction("_PartialProduct", "Products");}

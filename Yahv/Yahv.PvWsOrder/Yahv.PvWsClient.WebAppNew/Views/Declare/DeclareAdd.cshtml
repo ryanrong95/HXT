@@ -11,40 +11,9 @@
         <span class="title">订单基本信息</span>
     </div>
     <el-form ref="ruleForm" :model="formData" :rules="rules" label-width="130px">
-        <el-form-item class="currency mt20" label="货值币种:" prop="Currency" :rules="[{required: true, message: '请选择币种', trigger: 'change'}]"
-                      style="margin-bottom: 10px;">
-            <el-select :disabled="formData.IsClssified" style="width:128px; float: left;" size="mini" v-model="formData.Currency" filterable clearable placeholder="请选择">
-                <el-option v-for="item in baseData.PayCurrencyOptions"
-                           :key="item.value"
-                           :label="item.text"
-                           :value="item.value">
-                </el-option>
-            </el-select>
-            <div class="fl ml30">
-                <div class="fl">海关汇率:</div>
-                <div id="customRate" class="fl ml11" style="width: 55px;"></div>
-            </div>
-            <div class="fl ml20">
-                <div class="fl">实时汇率:</div>
-                <div id="realTimeRate" class="fl ml11" style="width: 55px;"></div>
-            </div>
-            <div class="fl ml20">
-                <div class="fl">报关类型:</div>
-                <div class="fl ml11">@(ViewBag.DeclareTypeName)</div>
-            </div>
-        </el-form-item>
-        <div>
-            <div class="btn-tb-list clearfix fl" style="margin-bottom: 15px;">
-                <el-button :disabled="!((formData.OrderItems.length==0 && !formData.IsEdit)||!formData.IsTransfer)" class="fl" v-on:click="addSubItems">单条新增+</el-button>
-                <el-button class="btn_upload ml12 fl" v-on:click="dialogUploadVisible=true" :disabled="!((formData.OrderItems.length==0 && !formData.IsEdit)||!formData.IsTransfer) || formData.IsClssified">批量新增<i></i></el-button>
-                @*<el-button v-on:click="openStorage" :disabled="!((formData.OrderItems.length==0 && !formData.IsEdit)||formData.IsTransfer) || formData.IsClssified" class="ml12 fl">库存导入</el-button>*@
-                <el-button v-on:click="openStorage" :disabled="!((!formData.IsEdit)||formData.IsTransfer) || formData.IsClssified" class="fl">库存导入</el-button>
-            </div>
-            @*<div class="fl" style="margin-top: 7px; margin-left: 23px;">
-                <span class="txt_grey txt ml8">批量导入前，请先点击<a class="txt_blue" target="_blank" href="/Template/进口报关产品明细模板.xls">下载导入模板</a></span>
-            </div>*@
-        </div>
-        <div class="tb_wrap mb24">
+
+
+        <div class="tb_wrap">
             <table class="common_tb1 mt20 common_tb">
                 <tr>
                     <th width="36px">序号</th>
@@ -87,14 +56,17 @@
                     <td><i v-on:click="handleSubItemDelete(index)" class="tb_icon_del"></i></td>
                 </tr>
                 @*<tr>
-                        <td colspan="10">
-                            <div class="clearfix add-sub-items-btn" style="margin-left: 20px;">
-                                <el-button type="text" style="font-weight: bold; margin-top: 0;" :disabled="!((formData.OrderItems.length==0 && !formData.IsEdit)||!formData.IsTransfer)" class="fl" v-on:click="addSubItems">添加一行+</el-button>
-                            </div>
-                        </td>
-                    </tr>*@
+                    <td colspan="10">
+                        <div class="clearfix add-sub-items-btn" style="margin-left: 20px;">
+                            <el-button type="text" style="font-weight: bold; margin-top: 0;" :disabled="!((formData.OrderItems.length==0 && !formData.IsEdit)||!formData.IsTransfer)" class="fl" v-on:click="addSubItems">添加一行+</el-button>
+                        </div>
+                    </td>
+                </tr>*@
                 <tr v-if="formData.OrderItems.length>0">
-                    <td colspan="5" class="text_center pr20  txt_tb_bottom">合计：</td>
+                    <td colspan="5" class="text_left pr20  txt_tb_bottom" style="font-weight: 400; color: #666;">
+                    <span class="el-icon-warning" style="color:#e70"></span>
+                    请如实填报产品信息，以避免不必要的法律责任
+                    </td>
                     <td class="txt_tb_bottom text_left">{{totalNum}}</td>
                     <td class="txt_tb_bottom"></td>
                     <td class="txt_tb_bottom text_left">{{totalPrice}}</td>
@@ -106,29 +78,64 @@
                 </tr>
             </table>
         </div>
+        <div>
+            <div class="btn-tb-list clearfix fl" style="margin-bottom: 10px; margin-top: 10px;">
+                <el-button :disabled="!((formData.OrderItems.length==0 && !formData.IsEdit)||!formData.IsTransfer)" class="fl" v-on:click="addSubItems">新增</el-button>
+                <el-button class="btn_upload ml12 fl" v-on:click="dialogUploadVisible=true" :disabled="!((formData.OrderItems.length==0 && !formData.IsEdit)||!formData.IsTransfer) || formData.IsClssified">批量新增<i></i></el-button>
+                @*<el-button v-on:click="openStorage" :disabled="!((formData.OrderItems.length==0 && !formData.IsEdit)||formData.IsTransfer) || formData.IsClssified" class="ml12 fl">库存导入</el-button>*@
+                <el-button v-on:click="openStorage" :disabled="!((!formData.IsEdit)||formData.IsTransfer) || formData.IsClssified" class="fl">库存导入</el-button>
+            </div>
+            @*<div class="fl" style="margin-top: 7px; margin-left: 23px;">
+                <span class="txt_grey txt ml8">批量导入前，请先点击<a class="txt_blue" target="_blank" href="/Template/进口报关产品明细模板.xls">下载导入模板</a></span>
+            </div>*@
+        </div>
         <div class="info-total-wrap clearfix" v-if="!formData.IsTransfer||formData.OrderItems.length==0">
-            <div class="fl">
+            <div class="fl" style="display:none;">
                 <el-form-item label="总箱数:" prop="PackNo">
                     <el-input size="mini" v-model="formData.PackNo" style="width:80px;" auto-complete="off"></el-input>
                 </el-form-item>
             </div>
-            <div class="fl ml110">
+            <div class="fl ml110" style="display:none;" >
                 <el-form-item class="fl " label="毛重(KG):" prop="GrossWeight" :rules="[{ required: false, message: '', trigger: 'blur' }]">
                     <el-input size="mini" v-model="formData.GrossWeight" placeholder="" style="width:80px;" auto-complete="off"></el-input>
                 </el-form-item>
             </div>
         </div>
+
+        <el-form-item class="currency mt10" label="货值币种:" prop="Currency" :rules="[{required: true, message: '请选择币种', trigger: 'change'}]"
+                      style="margin-bottom: 10px;">
+            <el-select :disabled="formData.IsClssified" style="width:128px; float: left;padding-left:12px;" size="mini" v-model="formData.Currency" filterable clearable placeholder="请选择">
+                <el-option v-for="item in baseData.PayCurrencyOptions"
+                           :key="item.value"
+                           :label="item.text"
+                           :value="item.value">
+                </el-option>
+            </el-select>
+            <div class="fl ml30">
+                <div class="fl">海关汇率:</div>
+                <div id="customRate" class="fl ml11" style="width: 55px;"></div>
+            </div>
+            <div class="fl ml20">
+                <div class="fl">实时汇率:</div>
+                <div id="realTimeRate" class="fl ml11" style="width: 55px;"></div>
+            </div>
+            <div class="fl ml20">
+                <div class="fl">报关类型:</div>
+                <div class="fl ml11">@(ViewBag.DeclareTypeName)</div>
+            </div>
+        </el-form-item>
+
         @*<div class="btn-tb-list clearfix">*@
         @*<el-button :disabled="!((formData.OrderItems.length==0 && !formData.IsEdit)||!formData.IsTransfer)" class="fl" v-on:click="addSubItems">添加一行+</el-button>*@
         @*<el-button v-on:click="openStorage" :disabled="!((formData.OrderItems.length==0 && !formData.IsEdit)||formData.IsTransfer) || formData.IsClssified" class="ml12 fl">库存导入</el-button>*@
         @*<el-button class="btn_upload ml12 fl" v-on:click="dialogUploadVisible=true" :disabled="!((formData.OrderItems.length==0 && !formData.IsEdit)||!formData.IsTransfer) || formData.IsClssified">批量导入<i></i></el-button>*@
         @*<span class="txt_grey txt ml8">批量导入前，请先点击<a class="txt_blue" target="_blank" href="/Template/进口报关产品明细模板.xls">下载导入模板</a></span>*@
         @*</div>*@
-        <div class="info_item_wrap mt20">
+        @*<div class="info_item_wrap mt20">
             <span class="icon_img">2</span>
             <span class="title">供应商信息</span>
             <span class="txt_red ml20 tip">请选择供应商，最多可以选三个，请确保和合同发票一致。</span>
-        </div>
+        </div>*@
         <el-form-item class="mt20" label="供应商:" prop="PayExchangeSupplier" :rules="[{required: true, message: '请选择供应商', trigger: 'change',type:'array' }]">
             <el-select v-model="formData.PayExchangeSupplier" v-on:change="handSupplierChange" multiple-limit="3" size="mini" multiple style="width:400px;" placeholder="请选择">
                 <el-option v-for="item in baseData.SupplierOptions"
@@ -141,7 +148,7 @@
         </el-form-item>
         <div class="clearfix mt20">
             <div class="fl w130">
-                <span class="fl txt2 el-form-item__label">合同发票:</span>
+                <span class="fl txt2 el-form-item__label" style="width:130px;">合同发票:</span>
             </div>
             <div class="fl upload_wrap mt6">
                 <el-upload multiple
@@ -163,29 +170,29 @@
             </div>
         </div>
         @*<div class="clearfix mt20">
-                <div class="fl w130">
-                    <span class="fl txt2 el-form-item__label">装箱单:</span>
-                </div>
-                <div class="fl upload_wrap mt6">
-                    <el-upload multiple
-                               ref="PIupload"
-                               :http-request="((item)=>{httpRequestFiles(item,'PackingFiles')})"
-                               action="/Files/UploadOrderFile"
-                               :show-file-list="false"
-                               accept="image/jpg, image/bmp, image/jpeg, image/gif, image/png, application/pdf">
-                        <el-button size="small" class="btn_upload " type="primary">+添加文件</el-button>
-                        <span class="txt_grey ml8">仅限图片或PDF文件，且文件不超过3M</span>
-                    </el-upload>
-                    <ul class="file_item_ul mt10">
-                        <li class="clearfix" v-for="(item,index) in formData.PackingFiles">
-                            <span class="icon1"></span>
-                            <a class="file_name ml6" :href="item.fullURL" target="_blank">{{item.name}}</a>
-                            <span class="icon2 fr" v-on:click="del_file(index,'PackingFiles')"></span>
-                        </li>
-                    </ul>
-                </div>
-            </div>*@
-        <div class="clearfix">
+            <div class="fl w130">
+                <span class="fl txt2 el-form-item__label">装箱单:</span>
+            </div>
+            <div class="fl upload_wrap mt6">
+                <el-upload multiple
+                           ref="PIupload"
+                           :http-request="((item)=>{httpRequestFiles(item,'PackingFiles')})"
+                           action="/Files/UploadOrderFile"
+                           :show-file-list="false"
+                           accept="image/jpg, image/bmp, image/jpeg, image/gif, image/png, application/pdf">
+                    <el-button size="small" class="btn_upload " type="primary">+添加文件</el-button>
+                    <span class="txt_grey ml8">仅限图片或PDF文件，且文件不超过3M</span>
+                </el-upload>
+                <ul class="file_item_ul mt10">
+                    <li class="clearfix" v-for="(item,index) in formData.PackingFiles">
+                        <span class="icon1"></span>
+                        <a class="file_name ml6" :href="item.fullURL" target="_blank">{{item.name}}</a>
+                        <span class="icon2 fr" v-on:click="del_file(index,'PackingFiles')"></span>
+                    </li>
+                </ul>
+            </div>
+        </div>*@
+        <div class="clearfix" style="display:none;">
             <el-form-item class="mt10" label="中港包车:">
                 <el-radio-group v-model="formData.CharteredBus">
                     <el-radio v-for="item of carRadioOptions" :label=item.value>{{item.text}}</el-radio>
@@ -194,7 +201,7 @@
         </div>
         <div v-if="!formData.IsTransfer">
             <div class="info_item_wrap mt20">
-                <span class="icon_img">3</span>
+                <span class="icon_img">2</span>
                 <span class="title">香港收货方式</span>
             </div>
             <div class="clearfix radio_wl mt20">
@@ -282,7 +289,7 @@
                 </el-form-item>
             </div>
         </div>
-        <div v-if="formData.IsTransfer">
+        <div v-if="!formData.IsTransfer">
             <div class="info_item_wrap mt40">
                 <span class="icon_img">3</span>
                 <span class="title">国内发货方式</span>
@@ -380,7 +387,7 @@
     <el-dialog title="报关产品批量导入" class="fh_file" :lock-scroll="false" width="40%" :visible.sync="dialogUploadVisible" :close-on-click-modal="false">
         <div class="font12 txt_grey1 dialog_body txt_left">
             <p>导入步骤：</p>
-            <p class="mt10">第一步：<a class="txt_blue" target="_blank" href="/Template/进口报关产品明细模板.xls">下载导入模板</a>并保存到本地。</p>
+            <p class="mt10">第一步：<a class="txt_yellow" target="_blank" href="/Template/进口报关产品明细模板.xls">下载导入模板</a>并保存到本地。</p>
             <p class="mt10">第二步：请使用EXCEL表格，并按照以下模版格式整理您的产品，其中<span style="color: red;">品名、品牌、规格型号、数量、报关单价、报关总价</span>为必填。</p>
             <table class="batchImportTipTable">
                 <tr>
