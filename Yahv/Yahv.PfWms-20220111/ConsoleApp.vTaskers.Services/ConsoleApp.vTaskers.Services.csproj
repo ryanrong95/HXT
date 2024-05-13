@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{EACAFAFE-25AB-494F-8658-6620398154C8}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ConsoleApp.vTaskers.Services</RootNamespace>
+    <AssemblyName>ConsoleApp.vTaskers.Services</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="LitTools.cs" />
+    <Compile Include="StatisticStorageTasker.cs" />
+    <Compile Include="Taskers.cs" />
+    <Compile Include="DeleteBoxes.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="HKConfirms.cs" />
+    <Compile Include="HKExitTaskers.cs" />
+    <Compile Include="TaskConfig.cs" />
+    <Compile Include="WhFeeRecords.cs" />
+    <Compile Include="WhRecords.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Solutions\Layers.Data\Layers.Data.csproj">
+      <Project>{FED16B15-565B-4ED6-A876-2146EB16B011}</Project>
+      <Name>Layers.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Layers.Linq\Layers.Linq.csproj">
+      <Project>{56c33683-ce9a-4cc5-9cef-92e03bc8f739}</Project>
+      <Name>Layers.Linq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Yahv.Linq\Yahv.Linq.csproj">
+      <Project>{c8c572df-2bba-4483-b332-2652805aef87}</Project>
+      <Name>Yahv.Linq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Yahv.Services\Yahv.Services.csproj">
+      <Project>{EF7C5B21-4CE2-454A-8719-70E6DADACB69}</Project>
+      <Name>Yahv.Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Yahv.Underly\Yahv.Underly.csproj">
+      <Project>{15B56201-A129-4396-9431-0E5F9DA7D9F9}</Project>
+      <Name>Yahv.Underly</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Solutions\Yahv.Utils\Yahv.Utils.csproj">
+      <Project>{870a94d5-f08e-481f-a7ae-b90b5c249882}</Project>
+      <Name>Yahv.Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Yahv.Csrm\Yahv.Payments\Yahv.Payments.csproj">
+      <Project>{66924e27-72e9-4c5a-8cf3-220de6519a1f}</Project>
+      <Name>Yahv.Payments</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Wms.Services\Wms.Services.csproj">
+      <Project>{8f913776-b639-48ad-aafa-bc415a2bf8cd}</Project>
+      <Name>Wms.Services</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
