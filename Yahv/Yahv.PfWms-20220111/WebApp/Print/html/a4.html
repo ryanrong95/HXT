@@ -1,0 +1,626 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>送貨單打印</title>
+    <script type="text/javascript" src="/Print/js/jquery-1.3.2.min.js"></script>
+    <script type="text/javascript" src="/Print/js/vue.js"></script>
+    <script type="text/javascript" src="/Print/js/vue-barcode.js"></script>
+    <script type="text/javascript" src="/Print/js/moment.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body,
+        html {
+            background: #ffffff;
+            width: 100%;
+            height: 100%;
+            font-family: '微软雅黑' !important;
+        }
+
+        #app {
+            width: 210mm;
+            height: auto;
+            margin: 0 auto;
+        }
+
+        .product {
+            width: 210mm;
+            margin: 0 auto;
+        }
+
+        .fl {
+            float: left;
+        }
+
+        .fr {
+            float: right;
+        }
+
+        .clearfix {
+            zoom: 1;
+        }
+
+            .clearfix:after {
+                content: '.';
+                display: block;
+                height: 0;
+                clear: both;
+                visibility: hidden;
+            }
+
+        ul,
+        li {
+            list-style: none;
+        }
+
+        .product {
+            width: 210mm;
+            padding: 5mm;
+        }
+
+        table {
+            width: 100%;
+            margin-bottom: 10px;
+            page-break-inside: auto;
+        }
+
+        tr {
+            page-break-inside: avoid;
+            page-break-after: auto;
+        }
+
+        thead {
+            display: table-header-group;
+        }
+
+        tfoot {
+            display: table-footer-group;
+        }
+
+        tr th {
+            font-size: 14px;
+            height: 30px;
+        }
+
+        tr td {
+            padding: 2px 5px;
+            font-size: 12px;
+            text-align: left;
+            height: 30px;
+        }
+
+        tr th, tr td {
+            border: 1px solid #000;
+        }
+        /*标题*/
+        .tl {
+            width: 100%;
+            height: 66px;
+            text-align: center;
+        }
+
+            .tl span {
+                font-size: 14px;
+                height: 46px;
+                line-height: 46px;
+            }
+
+            .tl .barcode {
+                height: 46px;
+                float: right;
+            }
+
+        .msg1 {
+            margin-bottom: 10px;
+        }
+
+            .msg1 > div {
+                float: left;
+                font-size: 12px;
+                margin-right: 20px;
+            }
+
+                .msg1 > div.fr {
+                    float: right;
+                    margin-right: 0;
+                }
+
+        table.table_data {
+            table-layout: fixed;
+        }
+
+            table.table_data tr td {
+                text-align: center;
+                word-wrap: break-word;
+            }
+
+        /*签字区域*/
+        .print-row {
+            float: right;
+            font-size: 14px;
+            line-height: 20px;
+            margin-top: 15px;
+            margin-right: 120px;
+            margin-bottom: 20px;
+        }
+
+        .mlr5 {
+            margin: 0 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div class="product">
+            <div class="compute_content">
+                <div class="compute_content_1">
+                    <div class="tl clearfix">
+                        <span>{{msg.ConsignorCompany}}送貨單</span>
+                        <barcode v-bind:value="msg.DeliveryOrderID" v-bind:options="barcode_option" tag="svg"
+                                 class="barcode"></barcode>
+                    </div>
+                    <div class="msg1 clearfix">
+                        <div><span>訂單編號：</span><span>{{msg.OrderID}}</span></div>
+                        <div class="fr"><span>總件數：</span><span>{{msg.TotalPieces}}</span></div>
+                    </div>
+                    <table border="1" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td>
+                                <div>收貨人：</div>
+                                <div>{{msg.ConsigneeCompany}}</div>
+                            </td>
+                            <td>
+                                <div>收貨地址：</div>
+                                <div>{{msg.ConsigneeAddress}}</div>
+                            </td>
+                            <td>
+                                <div>聯繫人：<span>{{msg.ConsigneeContact}}</span></div>
+                                <div>電話號碼：<span>{{msg.ConsigneePhone}}</span></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <div>送貨人：<span>{{msg.ConsignorContact}}</span></div>
+                                <div>
+                                    電話：<span style="margin-right:30px;">{{msg.ConsignorPhone}}</span>車牌號：<span>{{msg.ConsignorCarNumber}}</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <table border="1" cellspacing="0" cellpadding="0" class="table_data">
+                    <colgroup>
+                        <col width="6%">
+                        <col width="14%">
+                        <col width="30%">
+                        <col width="30%">
+                        <col width="20%">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>序號</th>
+                            <th>箱號</th>
+                            <th>型號</th>
+                            <th>品牌</th>
+                            <th>數量</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(item,index) in print_data.list" v-if="print_data.list.length>0">
+                            <td>{{index+1}}</td>
+                            <td v-if="print_data.list[0].BoxCode&&print_data.BoxCode_arr.indexOf(index)!=-1&&print_data.BoxCode_arr.length==1"
+                                v-bind:rowspan="print_data.list.length">
+                                {{item.BoxCode}}
+                            </td>
+                            <td v-if="print_data.list[0].BoxCode&&print_data.BoxCode_arr.indexOf(index)!=-1&&print_data.BoxCode_arr.length!=1"
+                                v-bind:rowspan="((print_data.BoxCode_arr.indexOf(index)+1)!=print_data.BoxCode_arr.length)?(print_data.BoxCode_arr[print_data.BoxCode_arr.indexOf(index)+1]-(print_data.BoxCode_arr[print_data.BoxCode_arr.indexOf(index)])):(print_data.list.length-(print_data.BoxCode_arr[print_data.BoxCode_arr.indexOf(index)]))">
+                                {{item.BoxCode}}
+                            </td>
+                            <td v-if="!print_data.list[0].BoxCode">{{item.BoxCode}}</td>
+                            <td>{{item.Product.PartNumber}}</td>
+                            <td>{{item.Product.Manufacturer}}</td>
+                            <td>{{item.Quantity}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="compute_content_2">
+                    <table border="1" cellspacing="0" cellpadding="0">
+                        <tbody>
+                            <tr>
+                                <td style="width: 120px">對本次服務評價：</td>
+                                <td>
+                                    <span>口</span>&nbsp;優秀&nbsp;&nbsp;&nbsp;
+                                    <span>口</span>&nbsp;一般&nbsp;&nbsp;&nbsp;
+                                    <span>口</span>&nbsp;差
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 120px">客戶意見或建議：</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">本公司已如數收到上述貨物和發票，無貨物數量損失，無貨物損壞。</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="clearfix">
+                        <div class="print-row">
+                            <ul>
+                                <li style="margin-bottom:10px;">提貨人簽字/簽章:</li>
+                                <li>提貨日期: _____年 ____月 ____ 日</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        //存储合并单元格的数组
+        function saveArr(data) {
+            var StockCode_arr = [0],
+                BoxCode_arr = [0],
+                StockCode_first = data[0].StockCode,
+                BoxCode_first = data[0].BoxCode;
+            for (var i = 1; i < data.length; i++) {
+                if (StockCode_first != data[i].StockCode) {
+                    StockCode_first = data[i].StockCode;
+                    StockCode_arr.push(i);
+                }
+                if (BoxCode_first != data[i].BoxCode) {
+                    BoxCode_first = data[i].BoxCode;
+                    BoxCode_arr.push(i);
+                }
+            }
+            return {
+                StockCode_arr: StockCode_arr,
+                BoxCode_arr: BoxCode_arr
+            }
+        }
+    </script>
+    <script>
+        var model = {
+            "obj": {
+                "Notices": [{
+                    "Product": {
+                        "ID": "108D8DEACCD73B70DEC3570A1164E977",
+                        "PartNumber": "207528-9",
+                        "Manufacturer": "TE",
+                        "PackageCase": null,
+                        "Packaging": null,
+                        "CreateDate": "\/Date(1569232922183)\/"
+                    },
+                    "Picking": null,
+                    "Output": {
+                        "ID": null,
+                        "InputID": null,
+                        "OrderID": "Order201911150011",
+                        "ItemID": null,
+                        "OwnerID": null,
+                        "SalerID": null,
+                        "CustomerServiceID": null,
+                        "PurchaserID": null,
+                        "Currency": 1,
+                        "Price": 0.0000000,
+                        "StorageID": null,
+                        "CreateDate": "\/Date(-62135596800000)\/"
+                    },
+                    "ID": "NT20191115000011",
+                    "Type": 305,
+                    "WareHouseID": "HK01_WLT",
+                    "WaybillID": "Waybill201911150013",
+                    "InputID": "Ipt2019111400000011",
+                    "OutputID": null,
+                    "ProductID": "108D8DEACCD73B70DEC3570A1164E977",
+                    "Supplier": null,
+                    "DateCode": null,
+                    "Quantity": 2,
+                    "Conditions": {
+                        "DevanningCheck": false,
+                        "Weigh": false,
+                        "CheckNumber": false,
+                        "OnlineDetection": false,
+                        "AttachLabel": false,
+                        "PaintLabel": false,
+                        "Repacking": false,
+                        "PickByValue": false
+                    },
+                    "CreateDate": "\/Date(-62135596800000)\/",
+                    "Status": 100,
+                    "Source": 20,
+                    "Target": 400,
+                    "BoxCode": null,
+                    "Weight": null,
+                    "Volume": null,
+                    "ShelveID": null,
+                    "Files": [],
+                    "Visable": true
+                }, {
+                    "Product": {
+                        "ID": "F403C1EDCA449C362985D7AF108E2291",
+                        "PartNumber": "CRCW0603120RFKEAC",
+                        "Manufacturer": "VISHAY",
+                        "PackageCase": null,
+                        "Packaging": null,
+                        "CreateDate": "\/Date(1568970366230)\/"
+                    },
+                    "Picking": null,
+                    "Output": {
+                        "ID": null,
+                        "InputID": null,
+                        "OrderID": "Order201911150011",
+                        "ItemID": null,
+                        "OwnerID": null,
+                        "SalerID": null,
+                        "CustomerServiceID": null,
+                        "PurchaserID": null,
+                        "Currency": 1,
+                        "Price": 0.0000000,
+                        "StorageID": null,
+                        "CreateDate": "\/Date(-62135596800000)\/"
+                    },
+                    "ID": "NT20191115000012",
+                    "Type": 305,
+                    "WareHouseID": "HK01_WLT",
+                    "WaybillID": "Waybill201911150013",
+                    "InputID": "Ipt2019111400000012",
+                    "OutputID": null,
+                    "ProductID": "F403C1EDCA449C362985D7AF108E2291",
+                    "Supplier": null,
+                    "DateCode": null,
+                    "Quantity": 3,
+                    "Conditions": {
+                        "DevanningCheck": false,
+                        "Weigh": false,
+                        "CheckNumber": false,
+                        "OnlineDetection": false,
+                        "AttachLabel": false,
+                        "PaintLabel": false,
+                        "Repacking": false,
+                        "PickByValue": false
+                    },
+                    "CreateDate": "\/Date(-62135596800000)\/",
+                    "Status": 100,
+                    "Source": 20,
+                    "Target": 400,
+                    "BoxCode": null,
+                    "Weight": null,
+                    "Volume": null,
+                    "ShelveID": null,
+                    "Files": [],
+                    "Visable": true
+                }, {
+                    "Product": {
+                        "ID": "7051DC4E0E95757F1F64E317287E0050",
+                        "PartNumber": "TPS92663QPWPRQ1",
+                        "Manufacturer": "TI",
+                        "PackageCase": null,
+                        "Packaging": null,
+                        "CreateDate": "\/Date(1569232922743)\/"
+                    },
+                    "Picking": null,
+                    "Output": {
+                        "ID": null,
+                        "InputID": null,
+                        "OrderID": "Order201911150011",
+                        "ItemID": null,
+                        "OwnerID": null,
+                        "SalerID": null,
+                        "CustomerServiceID": null,
+                        "PurchaserID": null,
+                        "Currency": 1,
+                        "Price": 0.0000000,
+                        "StorageID": null,
+                        "CreateDate": "\/Date(-62135596800000)\/"
+                    },
+                    "ID": "NT20191115000013",
+                    "Type": 305,
+                    "WareHouseID": "HK01_WLT",
+                    "WaybillID": "Waybill201911150013",
+                    "InputID": "Ipt2019111400000013",
+                    "OutputID": null,
+                    "ProductID": "7051DC4E0E95757F1F64E317287E0050",
+                    "Supplier": null,
+                    "DateCode": null,
+                    "Quantity": 2,
+                    "Conditions": {
+                        "DevanningCheck": false,
+                        "Weigh": false,
+                        "CheckNumber": false,
+                        "OnlineDetection": false,
+                        "AttachLabel": false,
+                        "PaintLabel": false,
+                        "Repacking": false,
+                        "PickByValue": false
+                    },
+                    "CreateDate": "\/Date(-62135596800000)\/",
+                    "Status": 100,
+                    "Source": 20,
+                    "Target": 400,
+                    "BoxCode": null,
+                    "Weight": null,
+                    "Volume": null,
+                    "ShelveID": null,
+                    "Files": [],
+                    "Visable": true
+                }],
+                "ExcuteStatus": 200,
+                "ExcuteStatusDescription": "待处理",
+                "TotalGoodsValue": "¥0.0000",
+                "TotalPieces": 7,
+                "Files": [],
+                "OrderID": "Order201911150011",
+                "WaybillTypeDescription": "送货上门",
+                "Source": 20,
+                "SourceDescription": "代发货",
+                "PlaceDescription": "中国香港",
+                "Conditions": {
+                    "UnBoxed": false,
+                    "PayForFreight": false,
+                    "Repackaging": false,
+                    "VacuumPackaging": false,
+                    "WaterproofPackaging": false,
+                    "AgencyPayment": false,
+                    "AgencyReceive": false,
+                    "ChangePackaging": false,
+                    "LableServices": false,
+                    "AgencyCheck": false
+                },
+                "WaybillID": "Waybill201911150013",
+                "Code": null,
+                "CreateDate": "\/Date(1573806720673)\/",
+                "EnterCode": "NL020",
+                "ClientName": "杭州比一比电子科技有限公司",
+                "WaybillType": 2,
+                "CarrierID": null,
+                "CarrierName": null,
+                "Supplier": null,
+                "Place": "HKG",
+                "ConsignorID": "B32EF70C088270664E184DA7BC2DFA06",
+                "ConsigneeID": null,
+                "Consignee": {
+                    "ID": "21D9CEAB3FF649D088EAD952067FB1B0",
+                    "Company": "小王",
+                    "Place": "HKG",
+                    "Address": "香港 中西区 XX街道XX号",
+                    "Contact": "小王",
+                    "Phone": "15667354241",
+                    "Zipcode": "",
+                    "Email": "",
+                    "CreateDate": "\/Date(1573806721350)\/",
+                    "IDType": null,
+                    "IDNumber": ""
+                },
+                "Consignor": {
+                    "ID": "B32EF70C088270664E184DA7BC2DFA06",
+                    "Company": "香港库房",
+                    "Place": "HKG",
+                    "Address": "",
+                    "Contact": "",
+                    "Phone": "",
+                    "Zipcode": "",
+                    "Email": "",
+                    "CreateDate": "\/Date(1574402792453)\/",
+                    "IDType": 1,
+                    "IDNumber": null
+                },
+                "WayLoading": {
+                    "ID": null,
+                    "TakingDate": null,
+                    "TakingAddress": null,
+                    "TakingContact": null,
+                    "TakingPhone": null,
+                    "CarNumber1": null,
+                    "Driver": null,
+                    "Carload": null,
+                    "CreateDate": null,
+                    "ModifyDate": null,
+                    "CreatorID": null,
+                    "ModifierID": null
+                },
+                "TotalParts": null,
+                "TotalWeight": null,
+                "TotalVolume": null,
+                "VoyageNumber": null,
+                "Summary": null
+            },
+            "Status": 100
+        }
+    </script>
+    <script>
+        $(function () {
+            var obj = null,
+                listdata = null;
+            if (window['model']) {
+                obj = model.obj;
+                listdata = model.obj.Notices;
+            } else {
+                listdata = null;
+                msg = null;
+            }
+
+            var Vue = window.Vue;
+            var VueBarcode = window.VueBarcode;
+            Vue.component('barcode', VueBarcode);
+
+            new Vue({
+                el: '#app',
+                data: {
+                    barcode_option: {
+                        displayValue: true, //是否默认显示条形码数据
+                        //textPosition  :'top', //条形码数据显示的位置
+                        background: "#fff", //条形码背景颜色
+                        valid: function (valid) { },
+                        width: "1.7px", //单个条形码的宽度
+                        height: "40px",
+                        fontSize: "16px", //字体大小
+                        fontFamily: "微软雅黑",
+                        format: "CODE128", //选择要使用的条形码类型
+                        margin: 2
+                    },
+                    msg: {
+                        ConsignorCompany: null,//送货公司
+                        DeliveryOrderID: null,
+
+                        OrderID: null,//订单编号
+                        TotalPieces: null,//总件数
+
+                        ConsigneeCompany: null,//收货人
+                        ConsigneeAddress: null,//收货地址
+                        ConsigneeContact: null,//联系人
+                        ConsigneePhone: null,//电话号码
+
+                        ConsignorContact: null,//送货人
+                        ConsignorPhone: null,//电话
+                        ConsignorCarNumber: null,//车牌号
+                    },
+                    print_data: {//保存打印数据
+                        BoxCode_arr: [],
+                        list: []
+                    }
+                },
+                created() {
+                    this.msg.ConsignorCompany = obj.Consignor.Company;
+
+                    this.msg.DeliveryOrderID = obj.OrderID;
+
+                    this.msg.OrderID = obj.OrderID;
+
+                    this.msg.TotalPieces = obj.TotalPieces;
+
+                    this.msg.ConsigneeCompany = obj.Consignee.Company;
+                    this.msg.ConsigneeAddress = obj.Consignee.Address;
+                    this.msg.ConsigneeContact = obj.Consignee.Contact;
+                    this.msg.ConsigneePhone = obj.Consignee.Phone;
+
+                    this.msg.ConsignorContact = obj.Consignor.Contact;
+                    this.msg.ConsignorPhone = obj.Consignor.Phone;
+                    this.msg.ConsignorCarNumber = obj.WayLoading.CarNumber1;
+
+                    this.print_data.list = listdata;
+                    if (listdata[0].BoxCode) {
+                        var result = saveArr(this.print_data.list);
+                        this.print_data.BoxCode_arr = result.BoxCode_arr;
+                    }
+                },
+                mounted() { },
+                filters: {
+                    showDate: function (val) {
+                        return moment(val).format('YYYY-MM-DD');
+                    }
+                },
+            });
+        })
+    </script>
+</body>
+
+</html>

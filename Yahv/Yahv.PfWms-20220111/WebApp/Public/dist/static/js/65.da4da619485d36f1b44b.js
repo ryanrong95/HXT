@@ -1,0 +1,2 @@
+webpackJsonp([65],{Vlo7:function(e,t,l){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var n={render:function(){var e=this.$createElement,t=this._self._c||e;return t("div",[t("router-view",{key:this.$route.fullPath})],1)},staticRenderFns:[]},r=l("VU/8")(null,n,!1,null,null,null);t.default=r.exports}});
+//# sourceMappingURL=65.da4da619485d36f1b44b.js.map

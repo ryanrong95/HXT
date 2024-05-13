@@ -1,0 +1,55 @@
+﻿/*
+    基于不对目前流程与文档、操作产生更大的变更与影响做如下约定：
+    Product:通过Storage.ProductID中获取
+    InputID:从StorageID中获取
+    Output.InputID也根据StorageID中获取
+    去除Output中的StorageID
+    约定装箱通知与出库通知一定要包涵:StorageID,这将作为我们开发大仓储的精神
+    转运通知得到Output信息后要生成Logs_Declare与Logs_DeclareItem信息，表示：可以申报
+    
+    
+    有关沈忱前端对TinyOrderID的修改的要求做如下约定：
+    陈翰提供UpdateInput(inputID,itemID,tinyOrderID)用于修改进项信息
+    陈翰提供UpdateOuput(outputID,itemID,tinyOrderID)用于修改销项信息，基于订单类型判断一下：
+    报关UpdateInput
+    转报关UpdateOuput
+    为保持所有Notices的结构都是相同的,所以修改Notices装箱通知的结构同Notice的修改入库通知一样.
+*/
+{
+    "Waybill": {
+        "WaybillID": "",
+        "Supplier": "并使用与Notice.Supplier",
+        "Type": "WaybillType",
+        "NoticeType": null, //必要的
+        "Source": "业务来源今日已经重新定义", //必要的
+        "AdminID": "当前操作人ID" //Npc
+    },
+    "Enter": {
+        "Notices": [
+            {
+                "WareHouseID": null, //必要的
+                "StorageID": "按照现在的约定，沈忱发送装箱通知一定要包涵本字段", //必要的
+                "ShelveID": null, //目前的要求下，暂时用不上了。
+                "Output": {
+                    "ID": "", //由调用方增加
+                    "OrderID": "OrderID",
+                    "TinyOrderID": "TinyOrderID",
+                    "ItemID": "ItemID",
+                    "OwnerID": "OwnerID", //目前Owner的用法也是乱的，建议不直接使用！
+                    "SalerID": "SalerID",
+                    "PurchaserID": "PurchaserID",
+                    "Currency": "Currency",
+                    "Price": "Price",
+                    "ReviewerID": "ReviewerID",
+                    "TrackerID": "TrackerID"
+                },
+                "Quantity": 0, //必要的
+                "Conditions": "json", //必要的
+
+                "Weight": null,
+                "NetWeight": null,
+                "Volume": null
+            }
+        ]
+    }
+}

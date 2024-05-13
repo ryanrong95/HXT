@@ -1,0 +1,128 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="text/javascript" src="/Print/js/vue.js"></script>
+    <script type="text/javascript" src="/Print/js/vue-barcode.js"></script>
+    <script type="text/javascript" src="/Print/js/jquery-1.3.2.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body, html {
+            background: #ffffff;
+            width: 100%;
+            height: 100%;
+        }
+
+        .product {
+            width: 100mm;
+            height: 100mm;
+            overflow: hidden;
+            margin:0 auto;
+            /* border: 1px solid #ddd; */
+        }
+
+        .boxprint {
+            margin: 0;
+            padding: 10px;
+        }
+
+        p {
+            font-size: 16px;
+            /* line-height: 32px; */
+            padding: 10px;
+            display: flex;
+            /* display: flex;
+                 justify-content: space-between; */
+        }
+
+            p span {
+                text-align: left;
+                width: 50%;
+            }
+
+        .barcodebox {
+            padding: 10px;
+            padding-bottom: 0px;
+        }
+
+        .setem {
+            font-size: 14px;
+            font-style: normal;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="product">
+            <div v-if="print_data!=null">
+                <div class="barcodebox">
+                    <barcode v-bind:value="print_data.inputsID" v-bind:options="barcode_option" tag="svg"></barcode>
+                     <p>{{print_data.inputsID}}</p>
+                </div>
+                <!-- <p>产品编号:{{print_data.ProductID}}</p> -->
+                <div style="padding:10px;">
+                    <span>型号：<em class="setem">{{print_data.PartNumber}}</em></span>
+                </div>
+                <div style="padding:10px;">
+                    <span>品牌：<em class="setem">{{print_data.Manufacturer}}</em></span>
+                </div>
+                <p>
+                    <span>包装：<em class="setem">{{print_data.Packing}}</em></span>
+                    <span>封装：<em class="setem">{{print_data.PackageCase}}</em></span>
+                </p>
+                <p>
+                    <span>产地：<em class="setem">{{print_data.origin}}</em></span>
+                    <span>数量：<em class="setem">{{print_data.Quantity}}</em></span>
+                </p>
+                <p>
+                    <span>业务：<em class="setem">{{print_data.SourceDes}}</em></span>
+                    <span>跟单员：<em class="setem"></em></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script type="text/javascript">
+    var getmodel=''
+    $(function () {
+        var obj = null;
+        if (window['model']) {
+            getmodel = model
+        } else {
+            getmodel = null;
+        }
+
+        var Vue = window.Vue;
+        var VueBarcode = window.VueBarcode;
+        Vue.component('barcode', VueBarcode);
+
+        new Vue({
+            el: '#app',
+            data: {
+                print_data: getmodel,
+                barcode_option: {
+                    displayValue: false, //是否默认显示条形码数据
+                    //textPosition  :'top', //条形码数据显示的位置
+                    background: "#fff", //条形码背景颜色
+                    valid: function (valid) { },
+                    width: "1.7px", //单个条形码的宽度
+                    height: "40px",
+                    fontSize: "16px", //字体大小
+                    format: "CODE128", //选择要使用的条形码类型
+                    margin: 2
+                }
+            },
+            mounted() { }
+        });
+        //var sizes = getmodel.size
+        //$("#app").css({ "width": sizes.width + "px", "height": sizes.height + "px" })
+    })
+
+</script>

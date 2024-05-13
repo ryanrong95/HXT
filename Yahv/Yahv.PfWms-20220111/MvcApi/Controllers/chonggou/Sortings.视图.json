@@ -1,0 +1,82 @@
+﻿{
+  "Waybill": {
+    "ID": "",
+    "CreateDate": "",
+    "EnterCode": "",
+    "Suppler": "",
+    "ExcuteStatus": "现有的枚举",
+    "Type": "运单的枚举类型",
+    "Code": "",
+    "Source": "从Notcies 中获取", //做只读
+    "OrderID": "从Notcies 中获取", //做只读
+    "CarrierID": "",
+    "CarrierName": "", //返回名词
+    "ConsignorID": "",
+    "ConsignorPlace": "ConsignorID 的WayParters.Place , 使用原产地枚举",
+    "Driver": "",
+    "CarNumber1": "",
+    "TransferID": "待转运时有该值",
+    "Summary": "传递过来"
+  },
+  "Notices": [
+    {
+      "Product": {
+        "PartNumber": null,
+        "Manufacturer": null,
+        "PackageCase": null,
+        "Packaging": null
+      },
+      "Sortings": //用inputID 关联 Noitice
+      [
+        {
+          "ID": null,
+          "BoxCode": null,
+          "Quantity": null,
+
+          //通过Ui的商量，做如下解释
+          //如果inputID与通知一致的就表示本条分拣记录为通知的正常到货 。 如下叫做：caseA
+          //如果发生拆项，caseA的LQuantity（如下叫做：应到数）就应展示为：notice.quentity  -  inputID与通知不一致的sum(sorting.quentity)
+          //如果本条的inputID与通知不一致，应到数就等于分拣数量 sorting.quentity
+          "LQuantity": null,
+
+          "AdminID": null,
+          "CreateDate": null,
+          "Weight": null,
+          "NetWeight": null,
+          "Volume": null,
+          "Input": {
+            "ID": null, //InputID 如果是通知本身的,就可以拆项。如果找不到对应的通知，就不可用拆项
+            "OrderID": null,
+            "TinyOrderID": null,
+            "ItemID": null,
+            "DateCode": null,
+            "Origin": null
+          },
+          "Product": {
+            "PartNumber": null,
+            "Manufacturer": null,
+            "PackageCase": null,
+            "Packaging": null,
+            "DateCode": "来源于Input",
+            "Origin": "来源于Input"
+          }
+        }
+      ],
+      "ID": null,
+      "NoticeID": null,
+      "WaybillID": null,
+      "InputID": null,
+      "DateCode": null,
+      "Quantity": null,
+      "Conditions": null,
+      "Source": null,
+      "BoxCode": null, // 代报关时使用
+      "Weight": null,
+      "NetWeight": null,
+      "Volume": null,
+      "ShelveID": null,
+      "Type": null
+    }
+  ]
+    //,"Status": "入库完成|到货异常"
+}

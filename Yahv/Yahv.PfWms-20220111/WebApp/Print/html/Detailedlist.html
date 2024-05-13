@@ -1,0 +1,240 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>清单打印</title>
+    <script type="text/javascript" src="/Print/js/jquery-1.3.2.min.js"></script>
+    <script type="text/javascript" src="/Print/js/vue.js"></script>
+    <script type="text/javascript" src="/Print/js/vue-barcode.js"></script>
+    <script type="text/javascript" src="/Print/js/moment.js"></script>
+
+    <style>
+      * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body, html {
+            background: #ffffff;
+            width: 100%;
+            height: 100%;
+        }
+
+        #app {
+            width: 210mm;
+            height: auto;
+            margin: 0 auto;
+        }
+
+        .product {
+           width: 210mm;
+           margin: 0 auto;
+        }
+
+        tr td {
+            padding: 2px 5px;
+        }
+
+        .ullist {
+            float: left;
+            min-height: 200px;
+            list-style: none;
+            padding-right: 20px;
+        }
+
+        .ullist {
+            line-height: 28px;
+        }
+
+        table {
+            page-break-inside: auto;
+            width: 100%;
+        }
+
+        tr {
+            page-break-inside: avoid;
+            page-break-after: auto;
+        }
+
+        thead {
+            display: table-header-group;
+        }
+
+        tfoot {
+            display: table-footer-group;
+        }
+    </style>
+   
+
+</head>
+
+<body>
+    <div id="app">
+        <div class="product">
+            <div>
+                <div style="width:100%;min-height:200px;padding-top:2cm">
+                    <h2 style="margin-bottom:10px;">基本信息</h2>
+                    <ul style="width:28%" class="ullist">
+                        <li>
+                            <barcode v-bind:value="waybill.OrderID" v-bind:options="barcode_option" tag="svg"></barcode>
+                        </li>
+                        <li>业务类型：{{waybill.SourceDescription}}</li>
+                        <li>
+                            <!--<span>注意：</span>
+                            <span v-if="waybill.Condition.Antioxidant==true">开箱验货</span>
+                            <span v-if="waybill.Condition.CharteredCar==true">包车</span>
+                            <span v-if="waybill.Condition.ColdStorage==true">冷藏</span>
+                            <span v-if="waybill.Condition.ConstantTemperature==true">恒温</span>
+                            <span v-if="waybill.Condition.Dry==true">干燥</span>
+                            <span v-if="waybill.Condition.EasyBreaking==true">打折</span>
+                            <span v-if="waybill.Condition.ExamineGoods==true">抗氧化</span>
+                            <span v-if="waybill.Condition.Fragile==true">易碎</span>
+                            <span v-if="waybill.Condition.TopValue==true">高价值</span>-->
+                        </li>
+                    </ul>
+                    <ul style="width:28%" class="ullist">
+                        <li>状&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;态：{{waybill.ExcuteStatusDescription}}</li>
+                        <li>通知时间：{{waybill.CreateDate|showDate}}</li>
+                        <li>供&nbsp;&nbsp;应&nbsp;&nbsp;商：{{waybill.Supplier}}</li>
+                        <li>到货方式：{{waybill.WaybillTypeDescription}}</li>
+                    </ul>
+                    <ul style="width:28%" class="ullist">
+                        <li>入仓号：{{waybill.EnterCode}}</li>
+                        <li>运单号：{{waybill.Code}}</li>
+                        <li>承运商：{{waybill.CarrierName}}</li>
+                        <li>输送地：{{waybill.PlaceDescription}}</li>
+                    </ul>
+                </div>
+                <div style="clear:both;">
+                    <h2 style="line-height:40px;">产品列表</h2>
+                    <table border="1" cellspacing="0" cellpadding="0">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>型号</th>
+                                <th>品牌</th>
+                                <th>已到/应到</th>
+                                <th>批次</th>
+                                <th>本次到货</th>
+                                <th>原产地</th>
+                                <th>入库库位</th>
+                                <th>体积</th>
+                                <th>毛重</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(item,index) in print_data">
+                                <td>{{index+1}}</td>
+                                <td >{{item.PartNumber}}</td>
+                                <td >{{item.Manufacturer}}</td>
+                                <td >{{item.SortedQuantity}}/{{item.Quantity}}</td>
+                                <td >{{item.DateCode}}</td>
+                                <td >{{item.TruetoQuantity}}</td>
+                                <td >{{item.Origin}}</td>
+                                <td >{{item.ShelveID}}</td>
+                                <td >{{item.Volume}}</td>
+                                <td >{{item.Weight}}</td>
+                            </tr>
+                        </tbody>
+                        <!--<tfoot>
+                            <tr>
+                                <td>11111111</td>
+                                <td>22222222</td>
+                                <td>2222222222</td>
+                                <td>3333333333333</td>
+                                <td>444444444444</td>
+                                <td>55555555555555</td>
+                                <td>666666666</td>
+                                <td>7777777777</td>
+                                <td>888888888</td>
+                                <td>11111111</td>
+                            </tr>
+                            <tr>
+                                <td>11111111</td>
+                                <td>22222222</td>
+                                <td>2222222222</td>
+                                <td>3333333333333</td>
+                                <td>444444444444</td>
+                                <td>55555555555555</td>
+                                <td>666666666</td>
+                                <td>7777777777</td>
+                                <td>888888888</td>
+                                <td>11111111</td>
+                            </tr>
+                        </tfoot>-->
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+</html>
+<script type="text/javascript">
+
+   
+
+
+
+
+
+	$(function() {
+	var listdata = null;
+	var waybill = null;
+	if(window['model']) {
+		waybill = model.waybill;
+		listdata = model.listdata
+		console.log(listdata)
+	} else {
+		listdata = null;
+		waybill = null;
+	}
+
+	var Vue = window.Vue;
+	var VueBarcode = window.VueBarcode;
+	Vue.component('barcode', VueBarcode);
+
+	new Vue({
+		el: '#app',
+		data: {
+			abc: "房间都是分开核算的开发和思考",
+			print_data: listdata,
+			waybill: waybill,
+			otherlist: [],
+			showelse: false,
+			sss: "fjsdfffffffffffffffffffffffff",
+			barcode_option: {
+				displayValue: true, //是否默认显示条形码数据
+				//textPosition  :'top', //条形码数据显示的位置
+				background: "#fff", //条形码背景颜色
+				valid: function(valid) {},
+				width: "1.7px", //单个条形码的宽度
+				height: "40px",
+				fontSize: "16px", //字体大小
+				format: "CODE128", //选择要使用的条形码类型
+				margin: 2
+			}
+		},
+		created() {
+		},
+		methods: {
+			group(array, subGroupLength) {
+				let index = 0;
+				let newArray = [];
+				while(index < array.length) {
+					newArray.push(array.slice(index, index += subGroupLength));
+				}
+				return newArray;
+			}
+		},
+		filters: {
+			showDate: function(val) {
+				return moment(val).format('YYYY-MM-DD');
+			}
+		},
+	});
+	})
+
+</script>
