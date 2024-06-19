@@ -1,5 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="foricScCustoms" Class="sqlDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=172.30.10.49,6522;Initial Catalog=foricScCustoms;Persist Security Info=True;User ID=u_v0;Packet Size=512" SettingsObjectName="Layers.Data.Properties.Settings" SettingsPropertyName="foricScCustomsConnectionString8" Provider="System.Data.SqlClient" />
   <Table Name="dbo.Companies" Member="Companies">
     <Type Name="Companies">
       <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -229,8 +228,8 @@
       <Association Name="Orders_OrderTraces" Member="OrderTraces" ThisKey="ID" OtherKey="OrderID" Type="OrderTraces" />
       <Association Name="Orders_OrderConsignees" Member="OrderConsignees" ThisKey="ID" OtherKey="OrderID" Type="OrderConsignees" />
       <Association Name="Orders_OrderReceipts" Member="OrderReceipts" ThisKey="ID" OtherKey="OrderID" Type="OrderReceipts" />
-      <Association Name="ClientAgreements_Orders" Member="ClientAgreements" ThisKey="ClientAgreementID" OtherKey="ID" Type="ClientAgreements" IsForeignKey="true" />
       <Association Name="Clients_Orders" Member="Clients" ThisKey="ClientID" OtherKey="ID" Type="Clients" IsForeignKey="true" />
+      <Association Name="ClientAgreements_Orders" Member="ClientAgreements" ThisKey="ClientAgreementID" OtherKey="ID" Type="ClientAgreements" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.DecLists" Member="DecLists">
@@ -376,28 +375,6 @@
       <Column Name="Summary" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
       <Association Name="DecTaxs_DecTaxFlows" Member="DecTaxFlows" ThisKey="ID" OtherKey="DecTaxID" Type="DecTaxFlows" />
       <Association Name="DecHeads_DecTaxs" Member="DecHeads" ThisKey="ID" OtherKey="ID" Type="DecHeads" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.ClientAgreements" Member="ClientAgreements">
-    <Type Name="ClientAgreements">
-      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="ClientID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="StartDate" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
-      <Column Name="EndDate" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
-      <Column Name="AgencyRate" Type="System.Decimal" DbType="Decimal(18,4) NOT NULL" CanBeNull="false" />
-      <Column Name="MinAgencyFee" Type="System.Decimal" DbType="Decimal(18,4) NOT NULL" CanBeNull="false" />
-      <Column Name="IsPrePayExchange" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Column Name="IsLimitNinetyDays" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
-      <Column Name="InvoiceType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="InvoiceTaxRate" Type="System.Decimal" DbType="Decimal(18,4) NOT NULL" CanBeNull="false" />
-      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Column Name="Summary" Type="System.String" DbType="NVarChar(400)" CanBeNull="true" />
-      <Association Name="ClientAgreements_Orders" Member="Orders" ThisKey="ID" OtherKey="ClientAgreementID" Type="Orders" />
-      <Association Name="ClientAgreements_ClientFeeSettlements" Member="ClientFeeSettlements" ThisKey="ID" OtherKey="AgreementID" Type="ClientFeeSettlements" />
-      <Association Name="Clients_ClientAgreements" Member="Clients" ThisKey="ClientID" OtherKey="ID" Type="Clients" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.ClientFeeSettlements" Member="ClientFeeSettlements">
@@ -1182,7 +1159,6 @@
       <Association Name="Clients_ClientInvoices" Member="ClientInvoices" ThisKey="ID" OtherKey="ClientID" Type="ClientInvoices" />
       <Association Name="Clients_ClientInvoiceConsignees" Member="ClientInvoiceConsignees" ThisKey="ID" OtherKey="ClientID" Type="ClientInvoiceConsignees" />
       <Association Name="Clients_Orders" Member="Orders" ThisKey="ID" OtherKey="ClientID" Type="Orders" />
-      <Association Name="Clients_ClientAgreements" Member="ClientAgreements" ThisKey="ID" OtherKey="ClientID" Type="ClientAgreements" />
       <Association Name="Clients_PreProducts" Member="PreProducts" ThisKey="ID" OtherKey="ClientID" Type="PreProducts" />
       <Association Name="Clients_ClientSuppliers" Member="ClientSuppliers" ThisKey="ID" OtherKey="ClientID" Type="ClientSuppliers" />
       <Association Name="Clients_ClientAdmins" Member="ClientAdmins" ThisKey="ID" OtherKey="ClientID" Type="ClientAdmins" />
@@ -1191,7 +1167,33 @@
       <Association Name="Clients_PayExchangeApplies" Member="PayExchangeApplies" ThisKey="ID" OtherKey="ClientID" Type="PayExchangeApplies" />
       <Association Name="Clients_ReceiptNotices" Member="ReceiptNotices" ThisKey="ID" OtherKey="ClientID" Type="ReceiptNotices" />
       <Association Name="Clients_Users" Member="Users" ThisKey="ID" OtherKey="ClientID" Type="Users" />
+      <Association Name="Clients_ClientAgreements" Member="ClientAgreements" ThisKey="ID" OtherKey="ClientID" Type="ClientAgreements" />
       <Association Name="Companies_Clients" Member="Companies" ThisKey="CompanyID" OtherKey="ID" Type="Companies" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ClientAgreements" Member="ClientAgreements">
+    <Type Name="ClientAgreements">
+      <Column Name="ID" Type="System.String" DbType="VarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ClientID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="AgreementCode" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="StartDate" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="EndDate" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="PreAgency" Type="System.Decimal" DbType="Decimal(18,4)" CanBeNull="true" />
+      <Column Name="AgencyRate" Type="System.Decimal" DbType="Decimal(18,4) NOT NULL" CanBeNull="false" />
+      <Column Name="MinAgencyFee" Type="System.Decimal" DbType="Decimal(18,4) NOT NULL" CanBeNull="false" />
+      <Column Name="IsPrePayExchange" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsLimitNinetyDays" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="InvoiceType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="InvoiceTaxRate" Type="System.Decimal" DbType="Decimal(18,4) NOT NULL" CanBeNull="false" />
+      <Column Name="IsTen" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AdminID" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="CreateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="UpdateDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Summary" Type="System.String" DbType="NVarChar(400)" CanBeNull="true" />
+      <Association Name="ClientAgreements_Orders" Member="Orders" ThisKey="ID" OtherKey="ClientAgreementID" Type="Orders" />
+      <Association Name="ClientAgreements_ClientFeeSettlements" Member="ClientFeeSettlements" ThisKey="ID" OtherKey="AgreementID" Type="ClientFeeSettlements" />
+      <Association Name="Clients_ClientAgreements" Member="Clients" ThisKey="ClientID" OtherKey="ID" Type="Clients" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

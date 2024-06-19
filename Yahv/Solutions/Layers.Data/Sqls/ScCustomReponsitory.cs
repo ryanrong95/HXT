@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Layers.Data.Sqls
 {
-    public class ScCustomReponsitory : LinqReponsitory<Sqls.ScCustoms.sqlDataContext>
+    public class ScCustomReponsitory : LinqReponsitory<ScCustoms.sqlDataContext>
     {
         /// <summary>
         /// 默认构造器

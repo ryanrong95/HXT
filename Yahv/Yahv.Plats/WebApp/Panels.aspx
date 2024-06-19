@@ -5,10 +5,10 @@
         $(function () {
         });
     </script>
-    <link href="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/standard-easyui/iconfont/iconfont.css" rel="stylesheet" />
-    <link href="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/standard-easyui/styles/plugin.css" rel="stylesheet" />
+    <link href="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/frontframe/standard-easyui/iconfont/iconfont.css" rel="stylesheet" />
+    <link href="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/frontframe/standard-easyui/styles/plugin.css" rel="stylesheet" />
 
-    <script src="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/standard-easyui/scripts/timeouts.js"></script>
+    <script src="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/frontframe/standard-easyui/scripts/timeouts.js"></script>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="cphForm" runat="server">
 

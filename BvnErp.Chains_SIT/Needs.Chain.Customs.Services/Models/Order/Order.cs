@@ -469,11 +469,10 @@ namespace Needs.Ccs.Services.Models
             {
                 if (premiums == null)
                 {
-                    using (var view = new Views.OrderPremiumsView())
-                    {
-                        var query = view.Where(item => item.OrderID == this.ID && item.Status == Enums.Status.Normal);
-                        this.Premiums = query.ToArray();
-                    }
+                    var view = new Views.OrderPremiumsView().GetOrderPremiums();
+                    var query = view.Where(item => item.OrderID == this.ID && item.Status == Enums.Status.Normal);
+                    this.Premiums = query.ToArray();
+
                 }
                 return this.premiums;
             }
@@ -503,7 +502,7 @@ namespace Needs.Ccs.Services.Models
                 if (agencyFee == 0)
                 {
                     this.AgencyFee = this.Premiums.Where(item => item.Type == Enums.OrderPremiumType.AgencyFee)
-                        .Select(f => f.UnitPrice * f.Count * f.Rate).FirstOrDefault();
+                    .Select(f => f.UnitPrice * f.Count * f.Rate).FirstOrDefault();
                 }
                 return agencyFee;
             }
@@ -1182,10 +1181,11 @@ namespace Needs.Ccs.Services.Models
 
                         customsExchangeRate = customsExchange.Rate;
                         //2023-06-13 九点半付汇客户的账单实时汇率  使用九点半的
-                        realExchangeRate = order.ClientAgreement.IsTen.Value == true ? realExchange.Rate : nineRealExchange.Rate;
+                        realExchangeRate = order.ClientAgreement.IsTen == PEIsTen.Ten ? realExchange.Rate : nineRealExchange.Rate;
 
                         //2023-06-28 税费使用实时汇率的客户,将海关汇率 赋值为 实时汇率
-                        if (order.ClientAgreement.TaxFeeClause.ExchangeRateType == ExchangeRateType.RealTime) {
+                        if (order.ClientAgreement.TaxFeeClause.ExchangeRateType == ExchangeRateType.RealTime)
+                        {
                             customsExchangeRate = realExchangeRate;
                         }
                     }
@@ -1224,10 +1224,13 @@ namespace Needs.Ccs.Services.Models
                 agency.Count = 1;
                 agency.Currency = MultiEnumUtils.ToCode<Enums.Currency>(Enums.Currency.CNY);
                 agency.Rate = 1;
+                var preAgency = (order.ClientAgreement.PreAgency.HasValue && order.ClientAgreement.PreAgency > 0M ) ? order.ClientAgreement.PreAgency.Value : 0M;
+                //增加基础收费20240606
+                //orderAgencyFee += preAgency;
                 switch (orderBillType)
                 {
                     case Enums.OrderBillType.Normal:
-                        agency.UnitPrice = orderAgencyFee < minAgencyFee ? minAgencyFee : orderAgencyFee.ToRound(4);
+                        agency.UnitPrice = orderAgencyFee < minAgencyFee ? minAgencyFee : (orderAgencyFee + preAgency).ToRound(4);
                         break;
 
                     case Enums.OrderBillType.MinAgencyFee:
@@ -1238,7 +1241,6 @@ namespace Needs.Ccs.Services.Models
                         agency.UnitPrice = PointedAgencyFee;
                         break;
                 }
-
 
                 reponsitory.Insert(agency.ToLinq());
 

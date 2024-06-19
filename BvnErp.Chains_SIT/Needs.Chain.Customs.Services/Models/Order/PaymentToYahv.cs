@@ -1,4 +1,5 @@
 ﻿using Needs.Utils.Serializers;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -83,10 +84,11 @@ namespace Needs.Ccs.Services.Models
                     decimal agencyRate = bill.AgencyFeeExchangeRate * this.Agreement.AgencyRate;
                     bool isAverage = false;
                     decimal minAgencyFee = this.Agreement.MinAgencyFee;
+                    var preAgency = (bill.Agreement.PreAgency.HasValue && bill.Agreement.PreAgency > 0M) ?  bill.Agreement.PreAgency.Value : 0M;
                     switch (this.OrderBillType)
                     {
                         case Enums.OrderBillType.Normal:
-                            isAverage = bill.DeclarePrice * agencyRate < minAgencyFee ? true : false;
+                            isAverage = (bill.DeclarePrice * agencyRate + preAgency) < minAgencyFee ? true : false;
                             break;
 
                         case Enums.OrderBillType.MinAgencyFee:
@@ -106,10 +108,13 @@ namespace Needs.Ccs.Services.Models
                     int 型号数量 = bill.Items.Count();
                     decimal aveAgencyFee = AgencyFee / 型号数量;
 
+                    //基础收费平摊金额
+                    var avePreAgency = preAgency / bill.Items.Count();
+
                     List<XdtFeeInfo> listXdtFeeInfo = bill.Items.Select(item => new XdtFeeInfo
                     {
                         OrderItemID = item.ID,
-                        代理费 = isAverage ? aveAgencyFee : (item.TotalPrice * agencyRate * taxpoint),
+                        代理费 = isAverage ? aveAgencyFee : ((item.TotalPrice * agencyRate + avePreAgency) * taxpoint),
                         关税 = item.ImportTax.Value,
                         增值税 = item.AddedValueTax.Value,
                         消费税 = item.ExciseTax?.Value

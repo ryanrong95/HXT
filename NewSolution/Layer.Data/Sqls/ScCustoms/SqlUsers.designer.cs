@@ -108,22 +108,16 @@ namespace Layer.Data.Sqls.ScCustoms
     partial void InsertReferrers(Referrers instance);
     partial void UpdateReferrers(Referrers instance);
     partial void DeleteReferrers(Referrers instance);
-    partial void InsertClientAgreements(ClientAgreements instance);
-    partial void UpdateClientAgreements(ClientAgreements instance);
-    partial void DeleteClientAgreements(ClientAgreements instance);
     partial void InsertClientUnPayExchangeRecord(ClientUnPayExchangeRecord instance);
     partial void UpdateClientUnPayExchangeRecord(ClientUnPayExchangeRecord instance);
     partial void DeleteClientUnPayExchangeRecord(ClientUnPayExchangeRecord instance);
     partial void InsertClients(Clients instance);
     partial void UpdateClients(Clients instance);
     partial void DeleteClients(Clients instance);
+    partial void InsertClientAgreements(ClientAgreements instance);
+    partial void UpdateClientAgreements(ClientAgreements instance);
+    partial void DeleteClientAgreements(ClientAgreements instance);
     #endregion
-		
-		public SqlUsersDataContext() : 
-				base(global::Layer.Data.Properties.Settings.Default.foricScCustomsConnectionString16, mappingSource)
-		{
-			OnCreated();
-		}
 		
 		public SqlUsersDataContext(string connection) : 
 				base(connection, mappingSource)
@@ -373,14 +367,6 @@ namespace Layer.Data.Sqls.ScCustoms
 			}
 		}
 		
-		public System.Data.Linq.Table<ClientAgreements> ClientAgreements
-		{
-			get
-			{
-				return this.GetTable<ClientAgreements>();
-			}
-		}
-		
 		public System.Data.Linq.Table<ClientUnPayExchangeRecord> ClientUnPayExchangeRecord
 		{
 			get
@@ -394,6 +380,14 @@ namespace Layer.Data.Sqls.ScCustoms
 			get
 			{
 				return this.GetTable<Clients>();
+			}
+		}
+		
+		public System.Data.Linq.Table<ClientAgreements> ClientAgreements
+		{
+			get
+			{
+				return this.GetTable<ClientAgreements>();
 			}
 		}
 	}
@@ -8299,497 +8293,6 @@ namespace Layer.Data.Sqls.ScCustoms
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ClientAgreements")]
-	public partial class ClientAgreements : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private string _ID;
-		
-		private string _ClientID;
-		
-		private System.DateTime _StartDate;
-		
-		private System.DateTime _EndDate;
-		
-		private decimal _AgencyRate;
-		
-		private decimal _MinAgencyFee;
-		
-		private bool _IsPrePayExchange;
-		
-		private bool _IsLimitNinetyDays;
-		
-		private int _InvoiceType;
-		
-		private decimal _InvoiceTaxRate;
-		
-		private System.Nullable<bool> _IsTen;
-		
-		private int _Status;
-		
-		private string _AdminID;
-		
-		private System.DateTime _CreateDate;
-		
-		private System.DateTime _UpdateDate;
-		
-		private string _Summary;
-		
-		private EntitySet<ClientFeeSettlements> _ClientFeeSettlements;
-		
-		private EntityRef<Clients> _Clients;
-		
-    #region 可扩展性方法定义
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIDChanging(string value);
-    partial void OnIDChanged();
-    partial void OnClientIDChanging(string value);
-    partial void OnClientIDChanged();
-    partial void OnStartDateChanging(System.DateTime value);
-    partial void OnStartDateChanged();
-    partial void OnEndDateChanging(System.DateTime value);
-    partial void OnEndDateChanged();
-    partial void OnAgencyRateChanging(decimal value);
-    partial void OnAgencyRateChanged();
-    partial void OnMinAgencyFeeChanging(decimal value);
-    partial void OnMinAgencyFeeChanged();
-    partial void OnIsPrePayExchangeChanging(bool value);
-    partial void OnIsPrePayExchangeChanged();
-    partial void OnIsLimitNinetyDaysChanging(bool value);
-    partial void OnIsLimitNinetyDaysChanged();
-    partial void OnInvoiceTypeChanging(int value);
-    partial void OnInvoiceTypeChanged();
-    partial void OnInvoiceTaxRateChanging(decimal value);
-    partial void OnInvoiceTaxRateChanged();
-    partial void OnIsTenChanging(System.Nullable<bool> value);
-    partial void OnIsTenChanged();
-    partial void OnStatusChanging(int value);
-    partial void OnStatusChanged();
-    partial void OnAdminIDChanging(string value);
-    partial void OnAdminIDChanged();
-    partial void OnCreateDateChanging(System.DateTime value);
-    partial void OnCreateDateChanged();
-    partial void OnUpdateDateChanging(System.DateTime value);
-    partial void OnUpdateDateChanged();
-    partial void OnSummaryChanging(string value);
-    partial void OnSummaryChanged();
-    #endregion
-		
-		public ClientAgreements()
-		{
-			this._ClientFeeSettlements = new EntitySet<ClientFeeSettlements>(new Action<ClientFeeSettlements>(this.attach_ClientFeeSettlements), new Action<ClientFeeSettlements>(this.detach_ClientFeeSettlements));
-			this._Clients = default(EntityRef<Clients>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="VarChar(50) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
-		public string ID
-		{
-			get
-			{
-				return this._ID;
-			}
-			set
-			{
-				if ((this._ID != value))
-				{
-					this.OnIDChanging(value);
-					this.SendPropertyChanging();
-					this._ID = value;
-					this.SendPropertyChanged("ID");
-					this.OnIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ClientID", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
-		public string ClientID
-		{
-			get
-			{
-				return this._ClientID;
-			}
-			set
-			{
-				if ((this._ClientID != value))
-				{
-					if (this._Clients.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnClientIDChanging(value);
-					this.SendPropertyChanging();
-					this._ClientID = value;
-					this.SendPropertyChanged("ClientID");
-					this.OnClientIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StartDate", DbType="Date NOT NULL")]
-		public System.DateTime StartDate
-		{
-			get
-			{
-				return this._StartDate;
-			}
-			set
-			{
-				if ((this._StartDate != value))
-				{
-					this.OnStartDateChanging(value);
-					this.SendPropertyChanging();
-					this._StartDate = value;
-					this.SendPropertyChanged("StartDate");
-					this.OnStartDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndDate", DbType="Date NOT NULL")]
-		public System.DateTime EndDate
-		{
-			get
-			{
-				return this._EndDate;
-			}
-			set
-			{
-				if ((this._EndDate != value))
-				{
-					this.OnEndDateChanging(value);
-					this.SendPropertyChanging();
-					this._EndDate = value;
-					this.SendPropertyChanged("EndDate");
-					this.OnEndDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AgencyRate", DbType="Decimal(18,4) NOT NULL")]
-		public decimal AgencyRate
-		{
-			get
-			{
-				return this._AgencyRate;
-			}
-			set
-			{
-				if ((this._AgencyRate != value))
-				{
-					this.OnAgencyRateChanging(value);
-					this.SendPropertyChanging();
-					this._AgencyRate = value;
-					this.SendPropertyChanged("AgencyRate");
-					this.OnAgencyRateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MinAgencyFee", DbType="Decimal(18,4) NOT NULL")]
-		public decimal MinAgencyFee
-		{
-			get
-			{
-				return this._MinAgencyFee;
-			}
-			set
-			{
-				if ((this._MinAgencyFee != value))
-				{
-					this.OnMinAgencyFeeChanging(value);
-					this.SendPropertyChanging();
-					this._MinAgencyFee = value;
-					this.SendPropertyChanged("MinAgencyFee");
-					this.OnMinAgencyFeeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsPrePayExchange", DbType="Bit NOT NULL")]
-		public bool IsPrePayExchange
-		{
-			get
-			{
-				return this._IsPrePayExchange;
-			}
-			set
-			{
-				if ((this._IsPrePayExchange != value))
-				{
-					this.OnIsPrePayExchangeChanging(value);
-					this.SendPropertyChanging();
-					this._IsPrePayExchange = value;
-					this.SendPropertyChanged("IsPrePayExchange");
-					this.OnIsPrePayExchangeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsLimitNinetyDays", DbType="Bit NOT NULL")]
-		public bool IsLimitNinetyDays
-		{
-			get
-			{
-				return this._IsLimitNinetyDays;
-			}
-			set
-			{
-				if ((this._IsLimitNinetyDays != value))
-				{
-					this.OnIsLimitNinetyDaysChanging(value);
-					this.SendPropertyChanging();
-					this._IsLimitNinetyDays = value;
-					this.SendPropertyChanged("IsLimitNinetyDays");
-					this.OnIsLimitNinetyDaysChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InvoiceType", DbType="Int NOT NULL")]
-		public int InvoiceType
-		{
-			get
-			{
-				return this._InvoiceType;
-			}
-			set
-			{
-				if ((this._InvoiceType != value))
-				{
-					this.OnInvoiceTypeChanging(value);
-					this.SendPropertyChanging();
-					this._InvoiceType = value;
-					this.SendPropertyChanged("InvoiceType");
-					this.OnInvoiceTypeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InvoiceTaxRate", DbType="Decimal(18,4) NOT NULL")]
-		public decimal InvoiceTaxRate
-		{
-			get
-			{
-				return this._InvoiceTaxRate;
-			}
-			set
-			{
-				if ((this._InvoiceTaxRate != value))
-				{
-					this.OnInvoiceTaxRateChanging(value);
-					this.SendPropertyChanging();
-					this._InvoiceTaxRate = value;
-					this.SendPropertyChanged("InvoiceTaxRate");
-					this.OnInvoiceTaxRateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsTen", DbType="Bit")]
-		public System.Nullable<bool> IsTen
-		{
-			get
-			{
-				return this._IsTen;
-			}
-			set
-			{
-				if ((this._IsTen != value))
-				{
-					this.OnIsTenChanging(value);
-					this.SendPropertyChanging();
-					this._IsTen = value;
-					this.SendPropertyChanged("IsTen");
-					this.OnIsTenChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="Int NOT NULL")]
-		public int Status
-		{
-			get
-			{
-				return this._Status;
-			}
-			set
-			{
-				if ((this._Status != value))
-				{
-					this.OnStatusChanging(value);
-					this.SendPropertyChanging();
-					this._Status = value;
-					this.SendPropertyChanged("Status");
-					this.OnStatusChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AdminID", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
-		public string AdminID
-		{
-			get
-			{
-				return this._AdminID;
-			}
-			set
-			{
-				if ((this._AdminID != value))
-				{
-					this.OnAdminIDChanging(value);
-					this.SendPropertyChanging();
-					this._AdminID = value;
-					this.SendPropertyChanged("AdminID");
-					this.OnAdminIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreateDate", DbType="DateTime NOT NULL")]
-		public System.DateTime CreateDate
-		{
-			get
-			{
-				return this._CreateDate;
-			}
-			set
-			{
-				if ((this._CreateDate != value))
-				{
-					this.OnCreateDateChanging(value);
-					this.SendPropertyChanging();
-					this._CreateDate = value;
-					this.SendPropertyChanged("CreateDate");
-					this.OnCreateDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UpdateDate", DbType="DateTime NOT NULL")]
-		public System.DateTime UpdateDate
-		{
-			get
-			{
-				return this._UpdateDate;
-			}
-			set
-			{
-				if ((this._UpdateDate != value))
-				{
-					this.OnUpdateDateChanging(value);
-					this.SendPropertyChanging();
-					this._UpdateDate = value;
-					this.SendPropertyChanged("UpdateDate");
-					this.OnUpdateDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Summary", DbType="NVarChar(400)")]
-		public string Summary
-		{
-			get
-			{
-				return this._Summary;
-			}
-			set
-			{
-				if ((this._Summary != value))
-				{
-					this.OnSummaryChanging(value);
-					this.SendPropertyChanging();
-					this._Summary = value;
-					this.SendPropertyChanged("Summary");
-					this.OnSummaryChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ClientAgreements_ClientFeeSettlements", Storage="_ClientFeeSettlements", ThisKey="ID", OtherKey="AgreementID")]
-		public EntitySet<ClientFeeSettlements> ClientFeeSettlements
-		{
-			get
-			{
-				return this._ClientFeeSettlements;
-			}
-			set
-			{
-				this._ClientFeeSettlements.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Clients_ClientAgreements", Storage="_Clients", ThisKey="ClientID", OtherKey="ID", IsForeignKey=true)]
-		public Clients Clients
-		{
-			get
-			{
-				return this._Clients.Entity;
-			}
-			set
-			{
-				Clients previousValue = this._Clients.Entity;
-				if (((previousValue != value) 
-							|| (this._Clients.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Clients.Entity = null;
-						previousValue.ClientAgreements.Remove(this);
-					}
-					this._Clients.Entity = value;
-					if ((value != null))
-					{
-						value.ClientAgreements.Add(this);
-						this._ClientID = value.ID;
-					}
-					else
-					{
-						this._ClientID = default(string);
-					}
-					this.SendPropertyChanged("Clients");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_ClientFeeSettlements(ClientFeeSettlements entity)
-		{
-			this.SendPropertyChanging();
-			entity.ClientAgreements = this;
-		}
-		
-		private void detach_ClientFeeSettlements(ClientFeeSettlements entity)
-		{
-			this.SendPropertyChanging();
-			entity.ClientAgreements = null;
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ClientUnPayExchangeRecord")]
 	public partial class ClientUnPayExchangeRecord : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -10371,6 +9874,545 @@ namespace Layer.Data.Sqls.ScCustoms
 		{
 			this.SendPropertyChanging();
 			entity.Clients = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ClientAgreements")]
+	public partial class ClientAgreements : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private string _ID;
+		
+		private string _ClientID;
+		
+		private string _AgreementCode;
+		
+		private System.DateTime _StartDate;
+		
+		private System.DateTime _EndDate;
+		
+		private System.Nullable<decimal> _PreAgency;
+		
+		private decimal _AgencyRate;
+		
+		private decimal _MinAgencyFee;
+		
+		private bool _IsPrePayExchange;
+		
+		private bool _IsLimitNinetyDays;
+		
+		private int _InvoiceType;
+		
+		private decimal _InvoiceTaxRate;
+		
+		private System.Nullable<int> _IsTen;
+		
+		private int _Status;
+		
+		private string _AdminID;
+		
+		private System.DateTime _CreateDate;
+		
+		private System.DateTime _UpdateDate;
+		
+		private string _Summary;
+		
+		private EntitySet<ClientFeeSettlements> _ClientFeeSettlements;
+		
+		private EntityRef<Clients> _Clients;
+		
+    #region 可扩展性方法定义
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(string value);
+    partial void OnIDChanged();
+    partial void OnClientIDChanging(string value);
+    partial void OnClientIDChanged();
+    partial void OnAgreementCodeChanging(string value);
+    partial void OnAgreementCodeChanged();
+    partial void OnStartDateChanging(System.DateTime value);
+    partial void OnStartDateChanged();
+    partial void OnEndDateChanging(System.DateTime value);
+    partial void OnEndDateChanged();
+    partial void OnPreAgencyChanging(System.Nullable<decimal> value);
+    partial void OnPreAgencyChanged();
+    partial void OnAgencyRateChanging(decimal value);
+    partial void OnAgencyRateChanged();
+    partial void OnMinAgencyFeeChanging(decimal value);
+    partial void OnMinAgencyFeeChanged();
+    partial void OnIsPrePayExchangeChanging(bool value);
+    partial void OnIsPrePayExchangeChanged();
+    partial void OnIsLimitNinetyDaysChanging(bool value);
+    partial void OnIsLimitNinetyDaysChanged();
+    partial void OnInvoiceTypeChanging(int value);
+    partial void OnInvoiceTypeChanged();
+    partial void OnInvoiceTaxRateChanging(decimal value);
+    partial void OnInvoiceTaxRateChanged();
+    partial void OnIsTenChanging(System.Nullable<int> value);
+    partial void OnIsTenChanged();
+    partial void OnStatusChanging(int value);
+    partial void OnStatusChanged();
+    partial void OnAdminIDChanging(string value);
+    partial void OnAdminIDChanged();
+    partial void OnCreateDateChanging(System.DateTime value);
+    partial void OnCreateDateChanged();
+    partial void OnUpdateDateChanging(System.DateTime value);
+    partial void OnUpdateDateChanged();
+    partial void OnSummaryChanging(string value);
+    partial void OnSummaryChanged();
+    #endregion
+		
+		public ClientAgreements()
+		{
+			this._ClientFeeSettlements = new EntitySet<ClientFeeSettlements>(new Action<ClientFeeSettlements>(this.attach_ClientFeeSettlements), new Action<ClientFeeSettlements>(this.detach_ClientFeeSettlements));
+			this._Clients = default(EntityRef<Clients>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="VarChar(50) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		public string ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ClientID", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		public string ClientID
+		{
+			get
+			{
+				return this._ClientID;
+			}
+			set
+			{
+				if ((this._ClientID != value))
+				{
+					if (this._Clients.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnClientIDChanging(value);
+					this.SendPropertyChanging();
+					this._ClientID = value;
+					this.SendPropertyChanged("ClientID");
+					this.OnClientIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AgreementCode", DbType="VarChar(50)")]
+		public string AgreementCode
+		{
+			get
+			{
+				return this._AgreementCode;
+			}
+			set
+			{
+				if ((this._AgreementCode != value))
+				{
+					this.OnAgreementCodeChanging(value);
+					this.SendPropertyChanging();
+					this._AgreementCode = value;
+					this.SendPropertyChanged("AgreementCode");
+					this.OnAgreementCodeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StartDate", DbType="Date NOT NULL")]
+		public System.DateTime StartDate
+		{
+			get
+			{
+				return this._StartDate;
+			}
+			set
+			{
+				if ((this._StartDate != value))
+				{
+					this.OnStartDateChanging(value);
+					this.SendPropertyChanging();
+					this._StartDate = value;
+					this.SendPropertyChanged("StartDate");
+					this.OnStartDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EndDate", DbType="Date NOT NULL")]
+		public System.DateTime EndDate
+		{
+			get
+			{
+				return this._EndDate;
+			}
+			set
+			{
+				if ((this._EndDate != value))
+				{
+					this.OnEndDateChanging(value);
+					this.SendPropertyChanging();
+					this._EndDate = value;
+					this.SendPropertyChanged("EndDate");
+					this.OnEndDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PreAgency", DbType="Decimal(18,4)")]
+		public System.Nullable<decimal> PreAgency
+		{
+			get
+			{
+				return this._PreAgency;
+			}
+			set
+			{
+				if ((this._PreAgency != value))
+				{
+					this.OnPreAgencyChanging(value);
+					this.SendPropertyChanging();
+					this._PreAgency = value;
+					this.SendPropertyChanged("PreAgency");
+					this.OnPreAgencyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AgencyRate", DbType="Decimal(18,4) NOT NULL")]
+		public decimal AgencyRate
+		{
+			get
+			{
+				return this._AgencyRate;
+			}
+			set
+			{
+				if ((this._AgencyRate != value))
+				{
+					this.OnAgencyRateChanging(value);
+					this.SendPropertyChanging();
+					this._AgencyRate = value;
+					this.SendPropertyChanged("AgencyRate");
+					this.OnAgencyRateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MinAgencyFee", DbType="Decimal(18,4) NOT NULL")]
+		public decimal MinAgencyFee
+		{
+			get
+			{
+				return this._MinAgencyFee;
+			}
+			set
+			{
+				if ((this._MinAgencyFee != value))
+				{
+					this.OnMinAgencyFeeChanging(value);
+					this.SendPropertyChanging();
+					this._MinAgencyFee = value;
+					this.SendPropertyChanged("MinAgencyFee");
+					this.OnMinAgencyFeeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsPrePayExchange", DbType="Bit NOT NULL")]
+		public bool IsPrePayExchange
+		{
+			get
+			{
+				return this._IsPrePayExchange;
+			}
+			set
+			{
+				if ((this._IsPrePayExchange != value))
+				{
+					this.OnIsPrePayExchangeChanging(value);
+					this.SendPropertyChanging();
+					this._IsPrePayExchange = value;
+					this.SendPropertyChanged("IsPrePayExchange");
+					this.OnIsPrePayExchangeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsLimitNinetyDays", DbType="Bit NOT NULL")]
+		public bool IsLimitNinetyDays
+		{
+			get
+			{
+				return this._IsLimitNinetyDays;
+			}
+			set
+			{
+				if ((this._IsLimitNinetyDays != value))
+				{
+					this.OnIsLimitNinetyDaysChanging(value);
+					this.SendPropertyChanging();
+					this._IsLimitNinetyDays = value;
+					this.SendPropertyChanged("IsLimitNinetyDays");
+					this.OnIsLimitNinetyDaysChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InvoiceType", DbType="Int NOT NULL")]
+		public int InvoiceType
+		{
+			get
+			{
+				return this._InvoiceType;
+			}
+			set
+			{
+				if ((this._InvoiceType != value))
+				{
+					this.OnInvoiceTypeChanging(value);
+					this.SendPropertyChanging();
+					this._InvoiceType = value;
+					this.SendPropertyChanged("InvoiceType");
+					this.OnInvoiceTypeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InvoiceTaxRate", DbType="Decimal(18,4) NOT NULL")]
+		public decimal InvoiceTaxRate
+		{
+			get
+			{
+				return this._InvoiceTaxRate;
+			}
+			set
+			{
+				if ((this._InvoiceTaxRate != value))
+				{
+					this.OnInvoiceTaxRateChanging(value);
+					this.SendPropertyChanging();
+					this._InvoiceTaxRate = value;
+					this.SendPropertyChanged("InvoiceTaxRate");
+					this.OnInvoiceTaxRateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsTen", DbType="Int")]
+		public System.Nullable<int> IsTen
+		{
+			get
+			{
+				return this._IsTen;
+			}
+			set
+			{
+				if ((this._IsTen != value))
+				{
+					this.OnIsTenChanging(value);
+					this.SendPropertyChanging();
+					this._IsTen = value;
+					this.SendPropertyChanged("IsTen");
+					this.OnIsTenChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="Int NOT NULL")]
+		public int Status
+		{
+			get
+			{
+				return this._Status;
+			}
+			set
+			{
+				if ((this._Status != value))
+				{
+					this.OnStatusChanging(value);
+					this.SendPropertyChanging();
+					this._Status = value;
+					this.SendPropertyChanged("Status");
+					this.OnStatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AdminID", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		public string AdminID
+		{
+			get
+			{
+				return this._AdminID;
+			}
+			set
+			{
+				if ((this._AdminID != value))
+				{
+					this.OnAdminIDChanging(value);
+					this.SendPropertyChanging();
+					this._AdminID = value;
+					this.SendPropertyChanged("AdminID");
+					this.OnAdminIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreateDate", DbType="DateTime NOT NULL")]
+		public System.DateTime CreateDate
+		{
+			get
+			{
+				return this._CreateDate;
+			}
+			set
+			{
+				if ((this._CreateDate != value))
+				{
+					this.OnCreateDateChanging(value);
+					this.SendPropertyChanging();
+					this._CreateDate = value;
+					this.SendPropertyChanged("CreateDate");
+					this.OnCreateDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UpdateDate", DbType="DateTime NOT NULL")]
+		public System.DateTime UpdateDate
+		{
+			get
+			{
+				return this._UpdateDate;
+			}
+			set
+			{
+				if ((this._UpdateDate != value))
+				{
+					this.OnUpdateDateChanging(value);
+					this.SendPropertyChanging();
+					this._UpdateDate = value;
+					this.SendPropertyChanged("UpdateDate");
+					this.OnUpdateDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Summary", DbType="NVarChar(400)")]
+		public string Summary
+		{
+			get
+			{
+				return this._Summary;
+			}
+			set
+			{
+				if ((this._Summary != value))
+				{
+					this.OnSummaryChanging(value);
+					this.SendPropertyChanging();
+					this._Summary = value;
+					this.SendPropertyChanged("Summary");
+					this.OnSummaryChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ClientAgreements_ClientFeeSettlements", Storage="_ClientFeeSettlements", ThisKey="ID", OtherKey="AgreementID")]
+		public EntitySet<ClientFeeSettlements> ClientFeeSettlements
+		{
+			get
+			{
+				return this._ClientFeeSettlements;
+			}
+			set
+			{
+				this._ClientFeeSettlements.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Clients_ClientAgreements", Storage="_Clients", ThisKey="ClientID", OtherKey="ID", IsForeignKey=true)]
+		public Clients Clients
+		{
+			get
+			{
+				return this._Clients.Entity;
+			}
+			set
+			{
+				Clients previousValue = this._Clients.Entity;
+				if (((previousValue != value) 
+							|| (this._Clients.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Clients.Entity = null;
+						previousValue.ClientAgreements.Remove(this);
+					}
+					this._Clients.Entity = value;
+					if ((value != null))
+					{
+						value.ClientAgreements.Add(this);
+						this._ClientID = value.ID;
+					}
+					else
+					{
+						this._ClientID = default(string);
+					}
+					this.SendPropertyChanged("Clients");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_ClientFeeSettlements(ClientFeeSettlements entity)
+		{
+			this.SendPropertyChanging();
+			entity.ClientAgreements = this;
+		}
+		
+		private void detach_ClientFeeSettlements(ClientFeeSettlements entity)
+		{
+			this.SendPropertyChanging();
+			entity.ClientAgreements = null;
 		}
 	}
 }

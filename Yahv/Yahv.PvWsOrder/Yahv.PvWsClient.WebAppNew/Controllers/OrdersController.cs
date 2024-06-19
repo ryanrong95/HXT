@@ -1303,7 +1303,7 @@ namespace Yahv.PvWsClient.WebAppNew.Controllers
                     {
                         PartNumber = item.PartNumber.Trim(),
                         Manufacturer = item.Manufacturer.Trim(),
-                        PackageCase = item.PackageCase?.Trim(),
+                        //PackageCase = item.PackageCase?.Trim(),
                     },
                     ID = item.ID,
                     Name = item.Name?.Trim(),

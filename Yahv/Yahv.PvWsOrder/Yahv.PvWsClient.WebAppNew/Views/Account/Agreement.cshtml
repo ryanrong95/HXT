@@ -2,9 +2,48 @@
     ViewBag.title = "我的协议书";
 }
 <link href="~/Content/css/tab.css" rel="stylesheet" />
-<div id="agree" v-cloak>
+<style>
+    .agreement {
+        color: #333;
+        margin: 20px;
+        font-size: 13px;
+    }
+
+        .agreement .codiv {
+            margin-top: 15px;
+        }
+
+            .agreement .codiv h4 {
+                margin-bottom: 10px;
+            }
+
+        .agreement p {
+            text-indent: 2em;
+            line-height: 22px;
+        }
+
+        .agreement .tbsty {
+            border: 1px solid #333;
+            width: 100%
+        }
+
+            .agreement .tbsty td {
+                border: 1px solid #333;
+                padding: 5px 12px;
+            }
+
+            .agreement .tbsty p {
+                text-indent: 0em !important;
+            }
+
+            .agreement .tbsty tr td:first-child {
+                text-align: center;
+                font-weight: bold;
+            }
+</style>
+<div id="agree" v-cloak >
     <!-- tab start-->
-    <div class="clearfix tab_switch account-agreement">
+    <div class="clearfix tab_switch account-agreement" style="display:none;">
         <ul>
             <li tabname="报关协议" v-if="agreeData.ThePageIsCustoms">
                 <a v-on:click="selectAgreement('报关协议')">报关协议<i></i></a>
@@ -16,162 +55,401 @@
     </div>
     <!-- tab end -->
 
-    <div v-if="agreeData.ThePageIsCustoms" v-show="tabname == '报关协议'">
-        <p class="title">报关协议书</p>
-        <div class="content">
-            <div class="agree_item">
-                <div class="aggree_name clearfix">
-                    <span class="line fl"></span><span class="ml14">报关类型：{{agreeData.InvoiceName}}</span>
-                </div>
-                <div class="divice"></div>
-                <div class="agree_content clearfix">
-                    <div class="agree_content_left fl">
-                        <span class="xy_text">协议开始日期：{{agreeData.StartDate}}</span>
-                    </div>
-                    <div class="agree_content_right fl">
-                        <span class="xy_text">协议结束日期：{{agreeData.EndDate}}</span>
-                    </div>
-                </div>
+    <div v-if="agreeData.ThePageIsCustoms" v-show="tabname == '报关协议'" style="height:1050px;overflow-y:auto;">
+        <p class="title">供应链服务协议</p>
+        <div class="content agreement" >
+            <div class="codiv">
+                <h3 style="margin-left: 25px;">甲方（委托方）：{{agreeData.ClientName}}</h3>
+                <p>注册地址：{{agreeData.ClientRegAddress}}</p>
+                <p>法定代表人：{{agreeData.ClientCorporation}}</p>
             </div>
-            <div class="agree_item">
-                <div class="aggree_name clearfix">
-                    <span class="line fl"></span><span class="ml14">代理费</span>
-                </div>
-                <div class="divice"></div>
-                <div class="agree_content clearfix">
-                    <div class="agree_content_left fl">
-                        <span class="xy_text">代理费率：{{agreeData.AgencyRate}}</span>
-                    </div>
-                    <div class="agree_content_right fl">
-                        <span class="xy_text">最低代理费（元）：{{agreeData.MinAgencyFee}}</span>
-                    </div>
-                </div>
+            <div class="codiv">
+                <h3 style="margin-left: 25px;">乙方（受托方）：深圳市华芯通供应链管理有限公司</h3>
+                <p>注册地址：深圳市龙华区龙华街道富康社区东环二路110号中执时代广场B栋16H</p>
+                <p>法定代表人：杜珂</p>
             </div>
-            <div class="agree_item">
-                <div class="aggree_name clearfix">
-                    <span class="line fl"></span><span class="ml14">货款条款</span>
-                </div>
-                <div class="divice"></div>
-                <div class="agree_content clearfix">
-                    <div class="agree_content_left fl">
-                        <span class="xy_text">换汇方式：{{agreeData.IsPrePayExchange}}</span>
-                        <span class="xy_text">结算方式：{{agreeData.GoodsPeriodType}}</span>
-                        <span v-if="agreeData.isGoodsAgreedPeriod" class="xy_text">约定期限(天)：{{agreeData.GoodsDaysLimit}}</span>
-                        <span v-if="agreeData.isGoodsMonthly" class="xy_text">结算日期(次月)：{{agreeData.GoodsMonthlyDay}}</span>
-                        <span class="xy_text">汇率类型：{{agreeData.GoodsExchangeRateType}}</span>
-                    </div>
-                    <div class="agree_content_right fl">
-                        <span v-if="!agreeData.isGoodsPrePaid" class="xy_text">垫款上限（元）：{{agreeData.GoodsUpperLimit}}</span>
-                        <span v-if="agreeData.isGoodsAgreed" class="xy_text">约定汇率：{{agreeData.GoodsExchangeRateValue}}</span>
-                    </div>
-                </div>
+            <div class="codiv">
+                <p>
+                    根据《中华人民共和国民法典》及其他相关法律法规的规定，甲乙双方经友好协商，在平等互利的基础上，就甲方将境内外供应链及配套综合服务委托给乙方相关事宜，订立此供应链服务协议，以资双方共同遵照履行。
+                </p>
             </div>
-            <div class="agree_item">
-                <div class="aggree_name clearfix">
-                    <span class="line fl"></span><span class="ml14">税款条款</span>
-                </div>
-                <div class="divice"></div>
-                <div class="agree_content clearfix">
-                    <div class="agree_content_left fl">
-                        <span class="xy_text">结算方式：{{agreeData.TaxPeriodType}}</span>
-                        <span v-if="agreeData.isTaxAgreedPeriod" class="xy_text">约定期限(天)：{{agreeData.TaxDaysLimit}}</span>
-                        <span v-if="agreeData.isTaxMonthly" class="xy_text">结算日期(次月)：{{agreeData.TaxMonthlyDay}}</span>
-                        <span class="xy_text">汇率类型：{{agreeData.TaxExchangeRateType}}</span>
-                    </div>
-                    <div class="agree_content_right fl">
-                        <span v-if="!agreeData.isTaxPrePaid" class="xy_text">垫款上限（元）：{{agreeData.TaxUpperLimit}}</span>
-                        <span v-if="agreeData.isTaxAgreed" class="xy_text">约定汇率：{{agreeData.TaxExchangeRateValue}}</span>
-                    </div>
-                </div>
+
+            <div class="codiv">
+                <h4>第一条  供应链服务项目</h4>
+                <p>1.1乙方根据甲方提出的供应链业务需求，与甲方确认供应链服务流程或方案，该流程或方案包括而不限于报关口岸、运输方式、垫付货款、垫付税金、垫付其他费用、结算方式、收费标准等事项。</p>
+                <p>1.2 乙方根据甲方委托代为执行供应链综合服务，该服务包括但不限于乙方受托采购、接收、查验、包装、整理、仓储、装卸、商检、报关、运输等服务。</p>
+                <p>1.3 芯通网（https://www.szhxd.net）作为乙方提供的操作平台，乙方为甲方设立登录账号和密码，甲方凭账号和密码登录芯通网提交各项需求服务或资料。甲方应妥善保管上述账号及其密码，并明确同意通过上述账号进行的任何操作（包括但不限于网上签订的合同、网上提交的各类订单、网上点击同意的各类规则协议、相关订单的财务结算等）均应被视为甲方行为，其法律后果由甲方承担。甲乙双方以此协议为基础在芯通网上进行信息确认及业务操作，双方负有严格保密义务，违者承担法律责任。</p>
             </div>
-            <div class="agree_item">
-                <div class="aggree_name clearfix">
-                    <span class="line fl"></span><span class="ml14">代理费条款</span>
-                </div>
-                <div class="divice"></div>
-                <div class="agree_content clearfix">
-                    <div class="agree_content_left fl">
-                        <span class="xy_text">结算方式：{{agreeData.AgencyFeePeriodType}}</span>
-                        <span v-if="agreeData.isAgencyAgreedPeriod" class="xy_text">约定期限(天)：{{agreeData.AgencyDaysLimit}}</span>
-                        <span v-if="agreeData.isAgencyMonthly" class="xy_text">结算日期(次月)：{{agreeData.AgencyMonthlyDay}}</span>
-                        <span class="xy_text">汇率类型：{{agreeData.AgencyFeeExchangeRateType}}</span>
-                    </div>
-                    <div class="agree_content_right fl">
-                        <span v-if="!agreeData.isAgencyPrePaid" class="xy_text">垫款上限（元）：{{agreeData.AgencyFeeUpperLimit}}</span>
-                        <span v-if="agreeData.isAgencyAgreed" class="xy_text">约定汇率：{{agreeData.AgencyExchangeRateValue}}</span>
-                    </div>
-                </div>
+            <div class="codiv">
+                <h4>第二条  收费标准及付款方式</h4>
+                <p>2.1 收费标准：乙方代理本协议所涉业务应向甲方收取的全部应付款项详见附件一《收费标准及结算方式》。附件一为本协议不可缺少的组成部分，与本协议具有同等法律效力，传真件、扫描件及照片同等有效。</p>
+                <p>2.2 订单结算按以下方式操作：</p>
+                <p>2.2.1 乙方或乙方委托的第三方在境外接收货物时无需代甲方垫付货款，在货物进口报关过程中甲方付款期限如下：</p>
+                <p>2.2.1.1 乙方未给予甲方信用额度，在每批货物报关前，甲方应将全部应付款支付给乙方；</p>
+                <p>2.2.1.2 乙方给予甲方信用额度内并在约定付款期内，乙方安排报关，并先行送达货物给甲方，甲方应在约定付款期内将全部应付款支付给乙方。</p>
+                <p>2.2.2 甲方需乙方或乙方委托的第三方预先垫付境外供应商货款的，除按约定支付应付款外，甲方另需支付资金利息。</p>
+                <p>2.2.2.1 资金利息按乙方实际垫款金额、资金占用日利率（0.04%）及实际垫款天数计算。</p>
+                <p>2.2.2.2 在本协议第2.2.2条的前提下，甲方指定境外供货商在乙方垫款后一个月仍未供货，甲方确认在前述期满次日一次性向乙方返还实际垫付货款及资金利息（详见第2.2.2.1条）。</p>
+                <p>2.2.3 如乙方同意延长甲方付款期限，则甲方付款方式及期限按本协议附件一《收费标准及结算方式》执行。</p>
+                <p>2.2.4 乙方给予甲方代垫货款或费用信用额度内并在约定付款期内，乙方安排报关，并先行送达货物给甲方，甲方应在约定付款期内将全部应付款支付给乙方。</p>
+                <p>2.3 如甲方指定境外供货商同意延长甲方付款期限，即乙方或乙方委托的第三方在境外接收货物时无需代甲方支付货款，后乙方在收到甲方应付货款按约定向境外供货商付款。</p>
+                <p>2.3.1 鉴于上述情况，在货物报关进口后180天，甲方仍未通过乙方支付境外货款，则每逾期一日甲方按未付款总额日千分之三支付违约金。</p>
+                <p>2.3.2 甲方应在外管局要求的有效期内安排付汇，付汇手续费实结。</p>
+                <p>2.4 乙方收取的服务费不含应由甲方承担的下列费用：补缴海关补征少计漏计的关税、增值税、消费税、补缴少计漏计税款滞纳金、罚金、罚款，及乙方支付、代付垫付境外货款银行手续费及其他不可预见的费用。</p>
+                <p>2.5 特别约定：如甲方要求乙方垫付应付款并延长付款周期的情况下，甲方必须提供完整的企业资料并按乙方之调查要求提供真实可靠有效的经营和财务资料和其他一切可能影响支付能力评估的报告以及乙方认可的担保。</p>
+                <p>2.6 乙方按约定给甲方开具发票。</p>
             </div>
-            <div class="agree_item">
-                <div class="aggree_name clearfix">
-                    <span class="line fl"></span><span class="ml14">杂费条款</span>
-                </div>
-                <div class="divice"></div>
-                <div class="agree_content clearfix">
-                    <div class="agree_content_left fl">
-                        <span class="xy_text">结算方式：{{agreeData.IncidentalPeriodType}}</span>
-                        <span v-if="agreeData.isIncidentalAgreedPeriod" class="xy_text">约定期限(天)：{{agreeData.IncidentalDaysLimit}}</span>
-                        <span v-if="agreeData.isIncidentalMonthly" class="xy_text">结算日期(次月)：{{agreeData.IncidentalMonthlyDay}}</span>
-                        <span class="xy_text">汇率类型：{{agreeData.IncidentalExchangeRateType}}</span>
-                    </div>
-                    <div class="agree_content_right fl">
-                        <span v-if="!agreeData.isIncidentalPrePaid" class="xy_text">垫款上限（元）：{{agreeData.IncidentalUpperLimit}}</span>
-                        <span v-if="agreeData.isIncidentalAgreed" class="xy_text">约定汇率：{{agreeData.IncidentalExchangeRateValue}}</span>
-                    </div>
-                </div>
+            <div class="codiv">
+                <h4>第三条  甲乙双方的权利义务</h4>
+                <p>3.1甲方必须在乙方系统上向乙方提供完整的进口货物单证和资料（包括货物产品名称、规格型号、数量、进口单价、产地、装箱情况等）并保证其真实、准确；如海关、国检对乙方的进口申报提出质疑，甲方应当按要求提供采购订单、原厂发票、贸易关系说明、样品、运保单、资金结算凭证等资料；若因甲方提供的货物单证、资料与货物的实际情况不符及甲方其他原因而导致乙方报关、清关等过程中遭受任何损失的，甲方应负责足额赔偿；如因甲方货物未在香港完成进口清关，产生相对应的罚款由甲方承担。</p>
+                <p>3.2甲方应按照本协议第二条的约定，及时将购买货物所需的全部货款、代理费及委托乙方代为支付的各项费用付至乙方帐户。</p>
+                <p>3.3 除本协议第4.3条款中所述的货物责任之外，甲方不得就货物价格发生变动、货物质量纠纷、货物知识产权纠纷、货物安装、维修、退货、换货、迟延交货、不交货等其他任何纠纷或事宜向乙方要求索赔或要求乙方承担任何责任、履行任何义务。甲方如因与境外供货商或其他方解决上述纠纷或事宜导致乙方支付有关费用或遭受任何损失的，甲方须给予乙方充分补偿。</p>
+                <p>3.4 乙方按照甲方确认的《委托进口货物确认单》内容代甲方办理货物的进口报关手续。</p>
+                <p>3.5 乙方在收到甲方按照本协议第二条支付的货款后，代甲方办理对外付汇手续。乙方按照甲方确认的《付款委托确认书》内容代甲方对外付款。甲方在乙方需要时，要将业务委托文件原件邮寄给乙方。</p>
+                <p>3.6 甲方授权甲方人员（见附件二 《授权书》）对《委托进口货物确认单》及《付款委托确认书》进行确认。如甲方授权人员发生变化，须提前一周邮件或书面知会乙方，否则因甲方授权人员离职或其他原因导致的在货物委托进口、付款及收发货等方面产生的损失由甲方承担。</p>
+                <p>3.7 <span style="font-weight: 600;">HONGKONG EXPRESS INTERNATIONAL LOGISTICS LIMITED 香港速逹國際物流有限公司</span>（以下简称“速逹”）是乙方为进行国际贸易及跨境物流行业所必需的仓储、交易等经营而依法合作的香港公司。甲方同意其所委托的代理进口货物的境外部分将由速逹负责实施。当甲方要求乙方先行支付境外货款时，乙方指定速逹向甲方指定供货商支付美金或其它外币货款。当速逹在境外已支付货款给甲方指定的供货方后，甲方便不得以任何理由取消当次委托。否则，甲方同意向乙方支付全部损失。</p>
+                <p>3.8 乙方提供的本条约定的供应链服务，乙方有权分包给其它第三方。</p>
             </div>
-            <div class="agree_item">
-                <div class="aggree_name clearfix">
-                    <span class="line fl"></span><span class="ml14">开票类型/税率</span>
-                </div>
-                <div class="divice"></div>
-                <div class="agree_content clearfix">
-                    <div class="agree_content_left fl">
-                        <span class="xy_text">开票类型：{{agreeData.InvoiceType}}</span>
-                    </div>
-                    <div class="agree_content_right fl">
-                        <span class="xy_text">税率：{{agreeData.InvoiceRate}}</span>
-                    </div>
-                </div>
+            <div class="codiv">
+                <h4>第四条  货物交付、验收以及风险承担</h4>
+                <p>4.1 乙方在收到货物时，乙方有权对货物外包装做必要的检查。若外包装不是原厂包装而是其他包装（包括但不限于透明胶纸等），乙方可对每一型号至少打开一箱货物检验内在货物与外包装描述的货物是否一致；若外包装是原厂包装，乙方无需打开包装验货。若外包装完好，乙方或乙方指定的收货方可视其内在货物完好，并按包装箱标示及装箱清单验收；若外包装破损或有其他异样，乙方应及时通知甲方，由甲方决定相关货物进一步地处理并书面告知乙方，由此产生的费用和风险由甲方承担。</p>
+                <p>4.2 乙方向甲方或其指定收货方交货的，若外包装完好，甲方或甲方指定收货方不得向乙方提出异议；若甲方或甲方指定收货方收货验收时发现异样的，应由甲方与其指定境外供货商协商解决，与乙方无关。在此情况下，乙方可向甲方提供协助。</p>
+                <p>4.3 从乙方收到货物时起至乙方将货物交付给甲方或甲方指定收货方为止，货物由于乙方不当装运或者乙方提供供应链服务中的其他过失所遭受的损坏、灭失由乙方负责，除此之外，乙方不再对甲方承担与之相关的任何其它责任或风险。</p>
+                <p>4.4 从乙方收到货物时起至乙方将货物交付给甲方或甲方指定收货方为止，由甲方委托乙方办理货物保险。委托乙方投保的，乙方按照保险公司的赔偿金额赔偿给甲方，但甲方有责任和义务协助乙方向保险公司索赔，因甲方无法提供必要资料、迟延提供资料或无法配合保险公司查勘等事宜导致无法赔付或影响赔付金额的, 甲方应承担相应责任。</p>
             </div>
-            <div class="agree_item">
-                <div class="aggree_name clearfix">
-                    <span class="line fl"></span><span class="ml14">导出与上传</span>
-                </div>
-                <div class="divice"></div>
-                <div class="agree_content clearfix">
-                    <div class="upload_wrap2 mt20">
-                        <p v-if="agreeData.FileUrl==''" class="tip mt16">提示：未上传</p>
-                        <div v-else class="upload_wrap1 mt20">
-                            <ul>
-                                <li class="clearfix">
-                                    <div class="file_icon fl"></div>
-                                    <div class="fl c_right">
-                                        <p class="file_name">{{agreeData.FileName}}</p>
-                                        <a :href="agreeData.FileUrl" target="_blank" class="link">预览</a>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <div>
-                            <div class="clearfix mt26">
-                                <button v-on:click="declare_download_file" class="fl">导出</button>
-                                <a id="exportInfoForm" style="display: none" download>
-                                    <span id="ex-li" style="display: none"></span>
-                                </a>
-                                <el-upload class="fl" action=""
-                                           :show-file-list="false"
-                                           :http-request="httpRequest"
-                                           accept="image/jpg, image/bmp, image/jpeg, image/gif, image/png, application/pdf">
-                                    <button class="ml14">上传</button>
-                                </el-upload>
-                            </div>
-                            <p class="tip mt10">仅限图片、PDF文件，且文件不超过3M</p>
-                        </div>
-                    </div>
-                </div>
+            <div class="codiv">
+                <h4>第五条  违约责任</h4>
+                <p>5.1 如甲方未按照本协议第四条的规定及时支付有关款项，应按逾期支付款项的0.05％/日的标准向乙方支付滞纳金，且乙方有权暂停代理行为，由此造成的损失由甲方承担；逾期付款超过30日的，乙方有权解除本协议并要求甲方赔偿因此遭受的一切损失。</p>
+                <p>5.2 在甲方按照本合同第二条的规定支付全部款项前，乙方有权留置代理甲方进口的货物。若甲方迟延付款超过30日，乙方有权变卖留置的货物，并就变卖后的价款优先受偿。</p>
+                <p>5.3 如甲方未能及时提取货物，应承担延迟提货期间发生的货物仓储费及其它费用；甲方逾期超过90日不提货的，乙方有权解除本协议并变卖未提取货物，并就变卖后的价款优先受偿。</p>
+                <p>5.4 甲方拒绝履行本协议下的义务或乙方为履行本协议而提出的合理要求，而导致乙方不能提供本协议下供应链服务的，由此产生的一切损失由甲方全部承担，如造成乙方损失的，甲方应足额赔偿。</p>
             </div>
+            <div class="codiv">
+                <h4>第六条  保密条款</h4>
+                <p>本协议任何一方均有义务保守对方商业秘密，未经对方的事先书面同意，不得向任何第三方披露对方商业秘密，亦不得将该等商业秘密用于履行本协议之外的其他目的。但根据有关政府机关或法院要求透露的不在此限，保密义务的有效期限为本协议签署之日起五年。</p>
+            </div>
+
+            <div class="codiv">
+                <h4>第七条  争议的解决</h4>
+                <p>7.1境外供货商存在违约行为，甲方决定向境外供货商索赔的，乙方应根据甲方的书面通知，协助甲方向境外供货商提出索赔。乙方因此而支付的有关费用或者受到的任何损失，应由甲方给予充分补偿。</p>
+                <p>7.2 甲乙双方同意，在执行本协议过程中所发生的纠纷应首先通过友好协商解决；协商不成的，任何一方均可向协议签订地人民法院提请诉讼，本协议适用中华人民共和国法律。</p>
+                <p>7.3 如因非乙方原因，境外供货商向乙方提起仲裁或诉讼时，乙方应及时书面通知甲方，甲方有义务协助乙方搜集证据，并应为有关交涉提供必要的支持和方便。乙方因此而支付的有关费用或者受到的任何损失，应由甲方给予充分补偿。</p>
+            </div>
+
+            <div class="codiv">
+                <h4>第八条  其他约定</h4>
+                <p>8.1 本协议有效期自{{agreeData.StartDate}}起至{{agreeData.EndDate}}止，为期【{{agreeData.Year}}】年。本协议到期前，如甲乙双方未解约或重新签订，则本协议自动无限期顺延。若合同变更，则双方签署《补充协议》为主合同的有效附件，具有同等法律地位。</p>
+                <p>8.2 甲乙双方或者境外供货商因不可抗力（包括自然灾害、如台风、地震、洪水、冰雹；政府行为，如征收、征用； 社会异常事件，如罢工、骚乱三方面）导致全部或者部分货物不能进口、损坏或灭失的，乙方不承担责任，但应立即将该情况通知甲方。</p>
+                <p>8.3 本协议签署地：深圳。</p>
+                <p>8.4本协议一式两份，甲乙双方各持一份，具有同等法律效力。本协议由双方加盖公章（或合同专用章）后生效。</p>
+            </div>
+
+
+            <p class="title mt30">收费标准及结算方式</p>
+
+            <div class="mt20">
+                <table class="tbsty">
+                    @*<thead width="20%"></thead>
+        <thead width="15%"></thead>
+        <thead width="65%"></thead>*@
+                    <th width="15%"></th>
+                    <th width="15%"></th>
+                    <th width="60%"></th>
+
+                    <tr>
+                        <td>协议期限</td>
+                        <td colspan="2" style="font-weight:bold;">{{agreeData.StartDate}}  至  {{agreeData.EndDate}}</td>
+                    </tr>
+                    <tr>
+                        <td>约定汇率</td>
+                        <td colspan="2">
+                            <p>付汇汇率：付款当天中国银行{{agreeData.IsTen}}之后第一个外汇卖出价</p>
+                            <p>税费汇率：{{agreeData.TaxExchangeRateName}}</p>
+                            <p>服务费汇率：{{agreeData.AgencyExchangeRateName}}</p>
+                        </td>
+                    </tr>
+
+                    <!---------------------结算公式---------------------->
+                    <tr>
+                        <td rowspan="6">结算公式</td>
+                        <td style="font-weight:bold;text-align:center;">海关完税价格</td>
+                        <td>外币货值×税费汇率＋运费＋保费＋杂费</td>
+                    </tr>
+                    <tr>
+                        <td>货款</td>
+                        <td>外币货值×付汇汇率</td>
+                    </tr>
+                    <tr>
+                        <td>关税金额</td>
+                        <td>海关完税价格×关税率</td>
+                    </tr>
+                    <tr>
+                        <td>增值税金额</td>
+                        <td>(海关完税价格＋关税金额)×增值税率</td>
+                    </tr>
+                    <tr>
+                        <td>服务费金额</td>
+                        <td>外币货值×服务费汇率×服务费率×{{agreeData.InvoiceRateValue}}</td>
+                    </tr>
+                    <tr><td colspan="2" style="text-align:left;">注：海关要求申报的运费、保费、杂费金额为外币货值的千分之二</td></tr>
+
+                    <!---------------------发票类别---------------------->
+                    <tr>
+                        <td>发票类别</td>
+                        <td colspan="2">{{agreeData.InvoiceTypeDescription}}</td>
+                    </tr>
+
+                    <!---------------------具体报价及<br>结算约定---------------------->
+                    <tr>
+                        <td rowspan="5">具体报价及<br>结算约定</td>
+                        <td style="font-weight:bold;text-align:center;">货款</td>
+                        <td>
+                            @*<p>{{agreeData.GoodsPaymentPre}}</p>*@
+                            <p>{{agreeData.GoodsPaymentPeriod}}</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>税款</td>
+                        <td>
+                            @*<p>{{agreeData.TaxPaymentPre}}</p>*@
+                            <p>{{agreeData.TaxPaymentPeriod}}</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>服务费</td>
+                        <td>
+                            <p>服务费率：<span style="text-decoration: underline;">{{agreeData.AgencyRate}}</span>，最低消费<span style="text-decoration: underline;">{{agreeData.MinimumAgent}}</span>元/单<p>
+                                @*<p>{{agreeData.AgentPaymentPre}}</p>*@
+                            <p>{{agreeData.AgentPaymentPeriod}}</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>杂费</td>
+                        <td>
+                            @*<p>{{agreeData.OtherPaymentPre}}</p>*@
+                            <p>{{agreeData.OtherPaymentPeriod}}</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="text-align:left;">提醒：如有超出信用额度或账期逾期情况出现，受托方有权拒绝操作后续订单。</td>
+                    </tr>
+
+                    <!---------------------额外逾期资金占用费---------------------->
+                    <tr>
+                        <td rowspan="3">额外逾期资金占用费</td>
+                        <td style="font-weight:bold;text-align:center;">收费类别</td>
+                        <td>
+                            全部应收款
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>费率（天）</td>
+                        <td>
+                            <span style="text-decoration: underline;">0.05%</span> / 天
+                        </td>
+                    </tr>
+                    <tr><td colspan="2" style="text-align:left;">注：额外逾期资金占用费 = 逾期金额×逾期天数×逾期资金占用费率</td></tr>
+
+                    <!---------------------费用说明---------------------->
+                    <tr>
+                        <td>费用说明</td>
+                        <td colspan="2">
+                            <p><span style="font-weight:bold;">服务费包含：</span> 普通货物在受托方香港收货点至深圳卸货点的装货费、运输费（不含多次配送费用）、文件费、香港出口清关费、深圳进口报关费、进口批文费、打单费、查车费。</p>
+                            <p>
+                                <span style="font-weight:bold;">
+                                    服务费不包含：
+                                </span>
+                            <p>仓储及仓储操作费用；</p>
+                            <p>商检货物报关报检费用；</p>
+                            <p>银行收付款产生的费用；</p>
+                            <p>特殊货物的装卸、运输、保险等费用；</p>
+                            <p>货物到达受托方境外仓库之前及受托方境内仓库发货之后产生的费用；</p>
+                            <p>特别关税、进口废弃电器电子产品处理基金、消费税；</p>
+                            <p>其它应由委托方支付的费用。</p>
+                            <p>
+                                <span style="font-weight:bold;">
+                                    (如无特殊说明，费用均以人民币结算)
+                                </span>
+                            </p>
+                        </td>>
+                    </tr>
+                </table>
+
+            </div>
+
+
         </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        @*<div class="content">
+                <div class="agree_item">
+                    <div class="aggree_name clearfix">
+                        <span class="line fl"></span><span class="ml14">报关类型：{{agreeData.InvoiceName}}</span>
+                    </div>
+                    <div class="divice"></div>
+                    <div class="agree_content clearfix">
+                        <div class="agree_content_left fl">
+                            <span class="xy_text">协议开始日期：{{agreeData.StartDate}}</span>
+                        </div>
+                        <div class="agree_content_right fl">
+                            <span class="xy_text">协议结束日期：{{agreeData.EndDate}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="agree_item">
+                    <div class="aggree_name clearfix">
+                        <span class="line fl"></span><span class="ml14">代理费</span>
+                    </div>
+                    <div class="divice"></div>
+                    <div class="agree_content clearfix">
+                        <div class="agree_content_left fl">
+                            <span class="xy_text">代理费率：{{agreeData.AgencyRate}}</span>
+                        </div>
+                        <div class="agree_content_right fl">
+                            <span class="xy_text">最低代理费（元）：{{agreeData.MinAgencyFee}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="agree_item">
+                    <div class="aggree_name clearfix">
+                        <span class="line fl"></span><span class="ml14">货款条款</span>
+                    </div>
+                    <div class="divice"></div>
+                    <div class="agree_content clearfix">
+                        <div class="agree_content_left fl">
+                            <span class="xy_text">换汇方式：{{agreeData.IsPrePayExchange}}</span>
+                            <span class="xy_text">结算方式：{{agreeData.GoodsPeriodType}}</span>
+                            <span v-if="agreeData.isGoodsAgreedPeriod" class="xy_text">约定期限(天)：{{agreeData.GoodsDaysLimit}}</span>
+                            <span v-if="agreeData.isGoodsMonthly" class="xy_text">结算日期(次月)：{{agreeData.GoodsMonthlyDay}}</span>
+                            <span class="xy_text">汇率类型：{{agreeData.GoodsExchangeRateType}}</span>
+                        </div>
+                        <div class="agree_content_right fl">
+                            <span v-if="!agreeData.isGoodsPrePaid" class="xy_text">垫款上限（元）：{{agreeData.GoodsUpperLimit}}</span>
+                            <span v-if="agreeData.isGoodsAgreed" class="xy_text">约定汇率：{{agreeData.GoodsExchangeRateValue}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="agree_item">
+                    <div class="aggree_name clearfix">
+                        <span class="line fl"></span><span class="ml14">税款条款</span>
+                    </div>
+                    <div class="divice"></div>
+                    <div class="agree_content clearfix">
+                        <div class="agree_content_left fl">
+                            <span class="xy_text">结算方式：{{agreeData.TaxPeriodType}}</span>
+                            <span v-if="agreeData.isTaxAgreedPeriod" class="xy_text">约定期限(天)：{{agreeData.TaxDaysLimit}}</span>
+                            <span v-if="agreeData.isTaxMonthly" class="xy_text">结算日期(次月)：{{agreeData.TaxMonthlyDay}}</span>
+                            <span class="xy_text">汇率类型：{{agreeData.TaxExchangeRateType}}</span>
+                        </div>
+                        <div class="agree_content_right fl">
+                            <span v-if="!agreeData.isTaxPrePaid" class="xy_text">垫款上限（元）：{{agreeData.TaxUpperLimit}}</span>
+                            <span v-if="agreeData.isTaxAgreed" class="xy_text">约定汇率：{{agreeData.TaxExchangeRateValue}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="agree_item">
+                    <div class="aggree_name clearfix">
+                        <span class="line fl"></span><span class="ml14">代理费条款</span>
+                    </div>
+                    <div class="divice"></div>
+                    <div class="agree_content clearfix">
+                        <div class="agree_content_left fl">
+                            <span class="xy_text">结算方式：{{agreeData.AgencyFeePeriodType}}</span>
+                            <span v-if="agreeData.isAgencyAgreedPeriod" class="xy_text">约定期限(天)：{{agreeData.AgencyDaysLimit}}</span>
+                            <span v-if="agreeData.isAgencyMonthly" class="xy_text">结算日期(次月)：{{agreeData.AgencyMonthlyDay}}</span>
+                            <span class="xy_text">汇率类型：{{agreeData.AgencyFeeExchangeRateType}}</span>
+                        </div>
+                        <div class="agree_content_right fl">
+                            <span v-if="!agreeData.isAgencyPrePaid" class="xy_text">垫款上限（元）：{{agreeData.AgencyFeeUpperLimit}}</span>
+                            <span v-if="agreeData.isAgencyAgreed" class="xy_text">约定汇率：{{agreeData.AgencyExchangeRateValue}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="agree_item">
+                    <div class="aggree_name clearfix">
+                        <span class="line fl"></span><span class="ml14">杂费条款</span>
+                    </div>
+                    <div class="divice"></div>
+                    <div class="agree_content clearfix">
+                        <div class="agree_content_left fl">
+                            <span class="xy_text">结算方式：{{agreeData.IncidentalPeriodType}}</span>
+                            <span v-if="agreeData.isIncidentalAgreedPeriod" class="xy_text">约定期限(天)：{{agreeData.IncidentalDaysLimit}}</span>
+                            <span v-if="agreeData.isIncidentalMonthly" class="xy_text">结算日期(次月)：{{agreeData.IncidentalMonthlyDay}}</span>
+                            <span class="xy_text">汇率类型：{{agreeData.IncidentalExchangeRateType}}</span>
+                        </div>
+                        <div class="agree_content_right fl">
+                            <span v-if="!agreeData.isIncidentalPrePaid" class="xy_text">垫款上限（元）：{{agreeData.IncidentalUpperLimit}}</span>
+                            <span v-if="agreeData.isIncidentalAgreed" class="xy_text">约定汇率：{{agreeData.IncidentalExchangeRateValue}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="agree_item">
+                    <div class="aggree_name clearfix">
+                        <span class="line fl"></span><span class="ml14">开票类型/税率</span>
+                    </div>
+                    <div class="divice"></div>
+                    <div class="agree_content clearfix">
+                        <div class="agree_content_left fl">
+                            <span class="xy_text">开票类型：{{agreeData.InvoiceType}}</span>
+                        </div>
+                        <div class="agree_content_right fl">
+                            <span class="xy_text">税率：{{agreeData.InvoiceRate}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="agree_item">
+                    <div class="aggree_name clearfix">
+                        <span class="line fl"></span><span class="ml14">导出与上传</span>
+                    </div>
+                    <div class="divice"></div>
+                    <div class="agree_content clearfix">
+                        <div class="upload_wrap2 mt20">
+                            <p v-if="agreeData.FileUrl==''" class="tip mt16">提示：未上传</p>
+                            <div v-else class="upload_wrap1 mt20">
+                                <ul>
+                                    <li class="clearfix">
+                                        <div class="file_icon fl"></div>
+                                        <div class="fl c_right">
+                                            <p class="file_name">{{agreeData.FileName}}</p>
+                                            <a :href="agreeData.FileUrl" target="_blank" class="link">预览</a>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div>
+                                <div class="clearfix mt26">
+                                    <button v-on:click="declare_download_file" class="fl">导出</button>
+                                    <a id="exportInfoForm" style="display: none" download>
+                                        <span id="ex-li" style="display: none"></span>
+                                    </a>
+                                    <el-upload class="fl" action=""
+                                               :show-file-list="false"
+                                               :http-request="httpRequest"
+                                               accept="image/jpg, image/bmp, image/jpeg, image/gif, image/png, application/pdf">
+                                        <button class="ml14">上传</button>
+                                    </el-upload>
+                                </div>
+                                <p class="tip mt10">仅限图片、PDF文件，且文件不超过3M</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
     </div>
     @*<div v-if="agreeData.ThePageIsCustoms && agreeData.ThePageIsWarehouse" style="margin-top: 60px;"></div>*@
     <div v-if="agreeData.ThePageIsWarehouse" v-show="tabname == '仓储协议'">

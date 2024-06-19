@@ -178,7 +178,7 @@ namespace WebApp.PayExchange
             }
             else if (RateType == Needs.Ccs.Services.Enums.ExchangeRateType.RealTime)
             {
-                if (order.Client.Agreement.IsTen.HasValue && order.Client.Agreement.IsTen.Value)
+                if (order.Client.Agreement.IsTen == PEIsTen.Nine)
                 {
                     exchangeRate = new Needs.Ccs.Services.Views.NineRealTimeExchangeRatesView(order.Currency).ToRate();
                 }

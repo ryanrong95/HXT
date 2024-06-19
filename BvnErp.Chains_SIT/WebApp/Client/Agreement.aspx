@@ -67,6 +67,7 @@
         var ExchangeRateTypeGood = eval('(<%=this.Model.ExchangeRateTypeGood%>)');
         var ExchangeRateTypeAgree = eval('(<%=this.Model.ExchangeRateTypeAgree%>)');
         var InvoiceRate = eval('(<%=this.Model.InvoiceRate%>)');
+        var PEIsTen = eval('(<%=this.Model.PEIsTen%>)');
 
         if ('<%=this.Model.ServiceFile != null%>' == 'True') {
             ServiceFile = eval('(<%=this.Model.ServiceFile != null ? this.Model.ServiceFile:""%>)');
@@ -79,7 +80,7 @@
         if ('<%=this.Model.AdvanceMoneyApply != null%>' == 'True') {
             AdvanceMoneyApply = eval('(<%=this.Model.AdvanceMoneyApply != null ? this.Model.AdvanceMoneyApply:""%>)');
         }
-        var ClientStatus = '<%=this.Model.ClientStatus%>';
+        var ClientStatus = '<%=this.Model?.ClientStatus%>';
 
         //返回按钮显示or隐藏  this.Model.From  
         var from = eval('(<%=this.Model.From%>)');
@@ -115,6 +116,19 @@
                     $('#InvoiceRate').combobox("setValue", '<%=Needs.Ccs.Services.Enums.InvoiceRate.SixPercent.GetHashCode()%>');
                 }
             });
+
+            $('#PEIsTen').combobox({
+                data: PEIsTen,
+                onLoadSuccess: function () {
+                    if ('<%=this.Model.ClientAgreementData != null%>' == 'True') {
+                        $('#PEIsTen').combobox("setValue", ClientAgreementData.IsTen);
+                    }
+                    else {
+                        $('#PEIsTen').combobox("setValue", '<%=Needs.Ccs.Services.Enums.PEIsTen.Ten.GetHashCode()%>');
+                    }
+                }
+            });
+
             $('#InvoiceType').combobox({
                 data: InvoiceType,
                 onSelect: function (record) {
@@ -161,6 +175,7 @@
                 $('#StartDate').datebox('setValue', ClientAgreementData.StartDate);
                 $('#EndDate').datebox('setValue', ClientAgreementData.EndDate);
 
+                $('#PreAgency').textbox('setValue', ClientAgreementData.PreAgency);
                 $('#AgencyRate').textbox('setValue', ClientAgreementData.AgencyRate);
                 $('#MinAgencyFee').textbox('setValue', ClientAgreementData.MinAgencyFee);
 
@@ -169,13 +184,6 @@
                 }
                 if (ClientAgreementData.IsLimitNinetyDays) {
                     document.getElementById('IsLimitNinetyDays').checked = true;
-                }
-                //换汇汇率
-                if (ClientAgreementData.IsTen) {
-                    document.getElementById('Ten').checked = true;
-                }
-                else {
-                    document.getElementById('NineThirty').checked = true;
                 }
 
                 $('#Summary').textbox('setValue', ClientAgreementData.Summary);
@@ -232,7 +240,7 @@
                 //换汇方式赋初值
                 document.getElementById('IsLimitNinetyDays').checked = true;
                 //换汇汇率赋初值
-                document.getElementById('Ten').checked = true;
+                //document.getElementById('Ten').checked = true;
                 //四种款项赋初值
                 initDom("Goods", '<%=Needs.Ccs.Services.Enums.PeriodType.PrePaid.GetHashCode()%>', '<%=Needs.Ccs.Services.Enums.ExchangeRateType.RealTime.GetHashCode()%>');
                 initDom("Tax", '<%=Needs.Ccs.Services.Enums.PeriodType.PrePaid.GetHashCode()%>', '<%=Needs.Ccs.Services.Enums.ExchangeRateType.Custom.GetHashCode()%>');
@@ -251,8 +259,8 @@
                     $.messager.alert("消息", message);
                     return;
                 }
-                //根据客户等级，限制协议额度上限  2020-08-31 by yeshuangshuang
-                //与庆永经理商定，会存在大客户的情况：默认显示限额，业务可以手动修改，由风控及经理审批额度
+            //根据客户等级，限制协议额度上限  2020-08-31 by yeshuangshuang
+            //与庆永经理商定，会存在大客户的情况：默认显示限额，业务可以手动修改，由风控及经理审批额度
                 <%--if (window.parent.frames.Source == "Add") {
                     //会员等级
                     var Rank = "九级";
@@ -332,7 +340,7 @@
                 else if (ClientStatus != '<%=Needs.Ccs.Services.Enums.ClientStatus.Verifying.GetHashCode()%>' && ClientStatus != '<%=Needs.Ccs.Services.Enums.ClientStatus.Auditing.GetHashCode()%>') {
                     var param = { AgreementID: AgreementID };
                     MaskUtil.mask();
-                    $.post('?action=ExportAgreement', { AgreementID: AgreementID }, function (result) {
+                    $.post('?action=ExportAgreementNew', { AgreementID: AgreementID }, function (result) {
                         var rel = JSON.parse(result);
                         $.messager.alert('消息', rel.message, 'info', function () {
                             MaskUtil.unmask();
@@ -623,6 +631,8 @@
                 $('#IncidentalPeriodType').combobox('enable');
                 $('#StartDate').datebox('enable');
                 $('#EndDate').datebox('enable');
+                $('#PreAgency').textbox('enable');
+                $('#PreAgency').textbox('readonly', false);	// 禁用只读模式
                 $('#AgencyRate').textbox('enable');
                 $('#AgencyRate').textbox('readonly', false);	// 禁用只读模式
                 $('#MinAgencyFee').textbox('enable');
@@ -836,20 +846,24 @@
                 <div class="divContent" style="border: 0">
                     <table class="oprationTable" style="margin: 10px; width: 100%">
                         <tr>
-                            <th style="width: 8%"></th>
-                            <th style="width: 8%"></th>
-                            <th style="width: 8%"></th>
-                            <th style="width: 30%"></th>
+                            <th style="width: 12%"></th>
+                            <th style="width: 20%"></th>
+                            <th style="width: 12%"></th>
+                            <th style="width: 20%"></th>
+                            <th style="width: 12%"></th>
+                            <th style="width: 20%"></th>
                         </tr>
                         <tr>
                             <td class="lbl">开始日期：</td>
                             <td>
-                                <input class="easyui-datebox" id="StartDate" data-options="valueField:'value',textField:'text',editable:false,required:true" style="width: 200px" />
+                                <input class="easyui-datebox" id="StartDate" data-options="valueField:'value',textField:'text',editable:false,required:true" style="width: 150px" />
                             </td>
                             <td class="lbl">结束日期：</td>
                             <td>
-                                <input class="easyui-datebox" id="EndDate" data-options="valueField:'value',textField:'text',editable:false,required:true" style="width: 200px" />
+                                <input class="easyui-datebox" id="EndDate" data-options="valueField:'value',textField:'text',editable:false,required:true" style="width: 150px" />
                             </td>
+                            <td></td>
+                            <td></td>
                         </tr>
                         <tr>
                             <td>&nbsp</td>
@@ -858,12 +872,18 @@
                             <td class="lbl">代理费率：</td>
                             <td>
                                 <input class="easyui-textbox" id="AgencyRate"
-                                    data-options="required:true,validType:'agencyrate'" style="width: 200px" />
+                                    data-options="required:true,validType:'agencyrate'" style="width: 150px" />
+                            </td>
+
+                            <td class="lbl">基础代理费：</td>
+                            <td>
+                                <input class="easyui-textbox" id="PreAgency"
+                                    data-options="validType:'numbercheck'" style="width: 150px" />
                             </td>
                             <td class="lbl">最低代理费：</td>
                             <td>
                                 <input class="easyui-textbox" id="MinAgencyFee"
-                                    data-options="required:true,validType:'numbercheck'" style="width: 200px" />
+                                    data-options="required:true,validType:'numbercheck'" style="width: 150px" />
                             </td>
                         </tr>
                         <tr>
@@ -871,18 +891,16 @@
                         </tr>
                         <tr>
                             <td class="lbl">换汇方式：</td>
-                            <td>
+                            <td colspan="2">
                                 <span class="radioSpan">
                                     <input type="radio" class="ircheckbox" id="IsLimitNinetyDays" name="IsPrePayExchange" value="0">90天内换汇</input>
                                     <input type="radio" class="ircheckbox" id="IsPrePayExchange" name="IsPrePayExchange" value="1">预换汇</input>
                                 </span>
                             </td>
-                             <td class="lbl">换汇汇率：</td>
-                            <td>
-                                <span class="radioSpan">
-                                    <input type="radio" class="ircheckbox" id="NineThirty" name="PeRateType" value="0">9:30</input>
-                                    <input type="radio" class="ircheckbox" id="Ten" name="PeRateType" value="1">10:00</input>
-                                </span>
+                            <td class="lbl">换汇汇率：</td>
+                            <td colspan="2">
+                                <input class="easyui-combobox" id="PEIsTen"
+                                    data-options="valueField:'Key',textField:'Value',limitToList:true,required:true,editable:false" style="width: 150px" />
                             </td>
                         </tr>
                     </table>

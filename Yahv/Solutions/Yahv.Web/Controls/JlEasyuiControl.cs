@@ -22,28 +22,28 @@ namespace Yahv.Web.Controls
             };
 
             dictionary.Add(typeof(Easyui.AutoAlert).FullName,
-                getHtml($"{Underly.DomainConfig.Fixed}/Yahv/customs-easyui/controls/autoAlert.js"));
+                getHtml($"{Underly.DomainConfig.Fixed}/frontframe/customs-easyui/controls/autoAlert.js"));
 
             dictionary.Add(typeof(Easyui.AutoRedirect).FullName,
-                getHtml($"{Underly.DomainConfig.Fixed}/Yahv/customs-easyui/controls/autoRedirect.html"));
+                getHtml($"{Underly.DomainConfig.Fixed}/frontframe/customs-easyui/controls/autoRedirect.html"));
 
             dictionary.Add(typeof(Easyui.AutoCloseDialog).FullName,
-                getHtml($"{Underly.DomainConfig.Fixed}/Yahv/customs-easyui/controls/autoCloseDialog.html"));
+                getHtml($"{Underly.DomainConfig.Fixed}/frontframe/customs-easyui/controls/autoCloseDialog.html"));
             dictionary.Add(typeof(Easyui.AutoCloseWindow).FullName,
-                getHtml($"{Underly.DomainConfig.Fixed}/Yahv/customs-easyui/controls/autoCloseWindow.html"));
+                getHtml($"{Underly.DomainConfig.Fixed}/frontframe/customs-easyui/controls/autoCloseWindow.html"));
 
             dictionary.Add(typeof(Easyui.TopCloseDialog).FullName,
-             getHtml($"{Underly.DomainConfig.Fixed}/Yahv/customs-easyui/controls/topCloseDialog.html"));
+             getHtml($"{Underly.DomainConfig.Fixed}/frontframe/customs-easyui/controls/topCloseDialog.html"));
 
             dictionary.Add(typeof(Easyui.TopCloseWindow).FullName,
-                getHtml($"{Underly.DomainConfig.Fixed}/Yahv/customs-easyui/controls/topCloseWindow.html"));
+                getHtml($"{Underly.DomainConfig.Fixed}/frontframe/customs-easyui/controls/topCloseWindow.html"));
 
 
             //新对话框的内容中使用的js
             dictionary.Add(typeof(Easyui.jsTopWindow).FullName,
-                getHtml($"{Underly.DomainConfig.Fixed}/Yahv/customs-easyui/controls/topContentWindow.js"));
+                getHtml($"{Underly.DomainConfig.Fixed}/frontframe/customs-easyui/controls/topContentWindow.js"));
             dictionary.Add(typeof(Easyui.jsTopDialog).FullName,
-                getHtml($"{Underly.DomainConfig.Fixed}/Yahv/customs-easyui/controls/topContentDialog.js"));
+                getHtml($"{Underly.DomainConfig.Fixed}/frontframe/customs-easyui/controls/topContentDialog.js"));
         }
 
         string html;

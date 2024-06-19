@@ -184,7 +184,7 @@ namespace Yahv.Web.Forms
                                 {
                                     TopID = guid
                                 }.Execute();
-                                //regex_js_start = new Regex(@"<script.*?src="".*?/Yahv/customs-easyui/Scripts/easyui.myDialog.fuse.js""(.*?/>|>\s*</script>)", RegexOptions.IgnoreCase);
+                                //regex_js_start = new Regex(@"<script.*?src="".*?/frontframe/customs-easyui/Scripts/easyui.myDialog.fuse.js""(.*?/>|>\s*</script>)", RegexOptions.IgnoreCase);
                             }
                             if (mode == PageMode.Window)
                             {
@@ -192,7 +192,7 @@ namespace Yahv.Web.Forms
                                 {
                                     TopID = guid
                                 }.Execute();
-                                //regex_js_start = new Regex(@"<script.*?src="".*?/Yahv/customs-easyui/Scripts/easyui.myWindow.fuse.js""(.*?/>|>\s*</script>)", RegexOptions.IgnoreCase);
+                                //regex_js_start = new Regex(@"<script.*?src="".*?/frontframe/customs-easyui/Scripts/easyui.myWindow.fuse.js""(.*?/>|>\s*</script>)", RegexOptions.IgnoreCase);
                             }
 
                             //var regex_body = new Regex(@"<body[^>]*>([\s\S]*)<\/body>", RegexOptions.IgnoreCase | RegexOptions.Singleline);

@@ -210,11 +210,11 @@ namespace Yahv.PvWsClient.Model
         /// <summary>
         /// 条款协议
         /// </summary>
-        public Yahv.PvWsOrder.Services.XDTClientView.ClientAgreementView MyAgreement
+        public Yahv.PvWsOrder.Services.XDTClientView.ClientAgreementView<ScCustomReponsitory> MyAgreement
         {
             get
             {
-                return new PvWsOrder.Services.XDTClientView.ClientAgreementView(this);
+                return new PvWsOrder.Services.XDTClientView.ClientAgreementView<ScCustomReponsitory>(this);
             }
         }
 

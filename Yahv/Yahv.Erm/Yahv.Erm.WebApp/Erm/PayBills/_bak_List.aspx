@@ -3,8 +3,8 @@
 <%@ Import Namespace="Yahv.Utils.Serializers" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="cphHead" runat="server">
-    <script src="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/handsontable/dist/handsontable.full.min.js"></script>
-    <link href="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/handsontable/dist/handsontable.full.min.css" rel="stylesheet">
+    <script src="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/frontframe/handsontable/dist/handsontable.full.min.js"></script>
+    <link href="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/frontframe/handsontable/dist/handsontable.full.min.css" rel="stylesheet">
 
     <script>
         var ht;

@@ -16,7 +16,7 @@
     <script src="~/Scripts/elementui.js"></script>
     <script src="~/Scripts/axios.min.js"></script>
     <script src="~/Scripts/Shared/Common.js?a=20221110_1040"></script>
-    <script type="text/javascript" src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+    @*<script type="text/javascript" src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>*@
 
 </head>
 <body>
@@ -87,8 +87,8 @@
                 <div class="fr n_sidebar_expand cus_list" v-show="phShow">
                     <i class="n_se_arrow"></i>
                     <div class="n_se_con">
-                        <p>热线电话：</p>
-                        <span>400-833-8321</span>
+                        <p>服务热线：</p>
+                        <span>0755-29360458</span>
                     </div>
                 </div>
             </div>
@@ -102,7 +102,7 @@
                     <div class="n_se_con">
                         <img src="/Content/img/n_erweima.png" />
                         <p>扫码关注官方微信</p>
-                        <span>芯达通</span>
+                        <span>华芯通</span>
                     </div>
                 </div>
             </div>
@@ -292,7 +292,7 @@
         //                hideSidebar();
         //            }
 
-                    
+
         //        }
         //    }
 
@@ -336,19 +336,19 @@
         //});
 
 
-        
 
-        
+
+
     </script>
     <div>
         <div class="head">
             <div class="w1200 head_inner clearfix">
                 <a class="fl logo" href="@System.Configuration.ConfigurationManager.AppSettings["DomainForIC"]"></a>
                 @*<div class="fl rate">
-                    <marquee scrollamount="4" onmouseover=this.stop() onmouseout=this.start()>
-                        <span class="mr6">@Html.Raw(ViewBag.DateTimeStr)</span><span>实时汇率：美元 @Html.Raw(ViewBag.USARate);</span><span>港币 @Html.Raw(ViewBag.HKDRate)</span>
-                    </marquee>
-                </div>*@
+                        <marquee scrollamount="4" onmouseover=this.stop() onmouseout=this.start()>
+                            <span class="mr6">@Html.Raw(ViewBag.DateTimeStr)</span><span>实时汇率：美元 @Html.Raw(ViewBag.USARate);</span><span>港币 @Html.Raw(ViewBag.HKDRate)</span>
+                        </marquee>
+                    </div>*@
                 <div class="fr back">
                     <a href="/Home/LoginOut"><i></i>退出</a>
                 </div>
@@ -396,10 +396,15 @@
                                 <text>
                                 {
                                     isShow: true,
-                                    title: '委托进口',
+                                    title: @if (ViewBag.HasExport == false) {
+                                    <text>'委托进口'</text>
+                                    }
+                                    else {
+                                   <text>'委托进出口'</text>
+                                    } ,
                                     options: [
                                         {
-                                            text: '快捷下单',
+                                        text: '进口下单',
                                             url: '/Declare/DeclareAdd',
                                             navID: 'DeclareAdd'
                                         }, {
@@ -415,7 +420,7 @@
                                         //    text: '收货确认',  /*'待收货订单'*/
                                         //    url: '/Declare/UnReceiptedList'
                                         //}, {
-                                            text: '进口报关',
+                                        text: '进口订单',
                                             url: '/Declare/DeclareList',
                                             navID: 'DeclareList'
                                         //}, {
@@ -444,7 +449,7 @@
                                             text: '香港收货',
                                             url: '/Orders/StorageAdd'
                                         }, {
-                                            text: '香港出库',
+                                            text: '香港发货',
                                             url: '/Orders/DeliveryAdd'
                                         //}, {
                                         //    text: '新增租仓订单',
@@ -475,7 +480,7 @@
                                         url: '/Storages/OutStorage'
                                     }, {
                                         text: '仓库地址',
-                                        url: '/Storages/OutStorage'
+                                        url: '/Account/StorageInfo'
                                     }
                                 ]
                             },
@@ -682,15 +687,15 @@
                         </el-breadcrumb-item>
                     </el-breadcrumb>
                     @*<div>
-                        <span style="color: red; cursor:pointer; font-size: 15px;" v-on:click="movenotice">关于芯达通香港仓--畅运搬迁通知</span>
-                    </div>*@
+                            <span style="color: red; cursor:pointer; font-size: 15px;" v-on:click="movenotice">关于芯达通香港仓--畅运搬迁通知</span>
+                        </div>*@
 
-                    <el-dialog title="" :lock-scroll="false" width="60%"
-                               :visible.sync="dialogMoveNoticeVisible" :close-on-click-modal="false">
-                        <div>
-                            <iframe style="height: 420px;" src="/Home/MoveNotice"></iframe>
-                        </div>
-                    </el-dialog>
+                    @*<el-dialog title="" :lock-scroll="false" width="60%"
+                                   :visible.sync="dialogMoveNoticeVisible" :close-on-click-modal="false">
+                            <div>
+                                <iframe style="height: 420px;" src="/Home/MoveNotice"></iframe>
+                            </div>
+                        </el-dialog>*@
                 </div>
                 <script>
                 var break_nav = new Vue({
@@ -702,13 +707,13 @@
                             subIndex: list.active,
                             title: '@ViewBag.title',
                             subTitle: '@ViewBag.subTitle',
-                            dialogMoveNoticeVisible: false,
+                            //dialogMoveNoticeVisible: false,
                         }
                     },
                     methods: {
-                        movenotice: function () {
-                            this.dialogMoveNoticeVisible = true;
-                        },
+                        //movenotice: function () {
+                        //    this.dialogMoveNoticeVisible = true;
+                        //},
                     },
                     mounted: function() {
                     }
@@ -777,19 +782,19 @@
                                 <a target="_blank" href="@System.Configuration.ConfigurationManager.AppSettings["DomainForIC"]/joinUs.html#n_contact">联系方式</a>
                             </dd>
                         </dl>-->
-                        @*<dl>
-                            <dt>友情链接</dt>
-                            <dd>
-                                <a target="_blank" href="https://www.ic.net.cn/">IC交易网</a>
-                            </dd>
-                            <dd>
-                                <a target="_blank" href="http://www.iclab-cn.com/">创芯在线检测中心</a>
-                            </dd>
-                            <dd>
-                                <a target="_blank" href="http://www.52solution.com/">我爱方案网</a>
-                            </dd>
-                        </dl>*@
-                    <!--</div>
+            @*<dl>
+                    <dt>友情链接</dt>
+                    <dd>
+                        <a target="_blank" href="https://www.ic.net.cn/">IC交易网</a>
+                    </dd>
+                    <dd>
+                        <a target="_blank" href="http://www.iclab-cn.com/">创芯在线检测中心</a>
+                    </dd>
+                    <dd>
+                        <a target="_blank" href="http://www.52solution.com/">我爱方案网</a>
+                    </dd>
+                </dl>*@
+            <!--</div>
                     <div class="right erweima">
                         <img src="../Content/img/qrcode_for_gh.jpg" alt="" width="126" height="126">
                         <p>关注微信公众号<br>掌握订单实时状态</p>
@@ -797,13 +802,12 @@
                 </div>
             </div>-->
             <div class="footer_bottom">
-                <span>禁限售规则 - 知识产权保护政策 - 隐私权政策 - 使用条款</span>
-                <div style="display: flex; align-items: center; margin: 0 auto; width: 515px;">
-                    <span>©️2010-2023 深圳市芯达通供应链管理有限公司 版权所有 |&nbsp;</span>
+                <span>©️2024深圳市华芯通供应链管理有限公司 版权所有 - 隐私权政策 - 使用条款</span>
+                <div style="align-items: center; margin: 0 auto; ">
+                    <a href="https://beian.miit.gov.cn/#/Integrated/index" target="_blank" style="color: #fff;">粤ICP备2024260250号</a>
                     <img src="/Content/img/gonganlogo.png" style="margin-top: -3px;" />
-                    <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44030702003264" target="_blank" style="color: #fff;">粤公网安备 44030702003264号</a>
+                    <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=" target="_blank" style="color: #fff;">粤公网安备  号</a>
                 </div>
-                <a href="https://beian.miit.gov.cn/#/Integrated/index" target="_blank" style="color: #fff;">粤ICP备20066739号</a>
             </div>
         </footer>
     </div>

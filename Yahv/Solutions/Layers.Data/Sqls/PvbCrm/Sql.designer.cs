@@ -213,21 +213,20 @@ namespace Layers.Data.Sqls.PvbCrm
     partial void InsertWsSuppliers(WsSuppliers instance);
     partial void UpdateWsSuppliers(WsSuppliers instance);
     partial void DeleteWsSuppliers(WsSuppliers instance);
-    partial void InsertWsClients(WsClients instance);
-    partial void UpdateWsClients(WsClients instance);
-    partial void DeleteWsClients(WsClients instance);
     partial void InsertLogs_Receivable(Logs_Receivable instance);
     partial void UpdateLogs_Receivable(Logs_Receivable instance);
     partial void DeleteLogs_Receivable(Logs_Receivable instance);
-    #endregion
-		
-		public SqlDataContext() : 
-				base(global::Layers.Data.Properties.Settings.Default.PvbCrmConnectionString1, mappingSource)
-		{
-			OnCreated();
-		}
-		
-		public SqlDataContext(string connection) : 
+    partial void InsertWsClients(WsClients instance);
+    partial void UpdateWsClients(WsClients instance);
+    partial void DeleteWsClients(WsClients instance);
+        #endregion
+        public SqlDataContext() :
+                base(global::Layers.Data.Properties.Settings.Default.PvbCrmConnectionString, mappingSource)
+        {
+            OnCreated();
+        }
+
+        public SqlDataContext(string connection) : 
 				base(connection, mappingSource)
 		{
 			OnCreated();
@@ -1291,14 +1290,6 @@ namespace Layers.Data.Sqls.PvbCrm
 			}
 		}
 		
-		public System.Data.Linq.Table<WsClientsTopView> WsClientsTopView
-		{
-			get
-			{
-				return this.GetTable<WsClientsTopView>();
-			}
-		}
-		
 		public System.Data.Linq.Table<wsnSupplierConsignor> wsnSupplierConsignor
 		{
 			get
@@ -1371,19 +1362,27 @@ namespace Layers.Data.Sqls.PvbCrm
 			}
 		}
 		
-		public System.Data.Linq.Table<WsClients> WsClients
-		{
-			get
-			{
-				return this.GetTable<WsClients>();
-			}
-		}
-		
 		public System.Data.Linq.Table<Logs_Receivable> Logs_Receivable
 		{
 			get
 			{
 				return this.GetTable<Logs_Receivable>();
+			}
+		}
+		
+		public System.Data.Linq.Table<WsClientsTopView> WsClientsTopView
+		{
+			get
+			{
+				return this.GetTable<WsClientsTopView>();
+			}
+		}
+		
+		public System.Data.Linq.Table<WsClients> WsClients
+		{
+			get
+			{
+				return this.GetTable<WsClients>();
 			}
 		}
 		
@@ -42856,357 +42855,6 @@ namespace Layers.Data.Sqls.PvbCrm
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.WsClientsTopView")]
-	public partial class WsClientsTopView
-	{
-		
-		private string _ID;
-		
-		private string _Name;
-		
-		private string _AdminCode;
-		
-		private string _Corporation;
-		
-		private string _RegAddress;
-		
-		private string _Uscc;
-		
-		private int _Grade;
-		
-		private bool _Vip;
-		
-		private string _EnterCode;
-		
-		private string _CustomsCode;
-		
-		private int _Status;
-		
-		private System.DateTime _CreateDate;
-		
-		private System.DateTime _UpdateDate;
-		
-		private string _AdminID;
-		
-		private int _ClientNature;
-		
-		private int _ServiceType;
-		
-		private bool _IsDeclaretion;
-		
-		private bool _IsStorageService;
-		
-		private int _StorageType;
-		
-		public WsClientsTopView()
-		{
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
-		public string ID
-		{
-			get
-			{
-				return this._ID;
-			}
-			set
-			{
-				if ((this._ID != value))
-				{
-					this._ID = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(150)")]
-		public string Name
-		{
-			get
-			{
-				return this._Name;
-			}
-			set
-			{
-				if ((this._Name != value))
-				{
-					this._Name = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AdminCode", DbType="VarChar(50)")]
-		public string AdminCode
-		{
-			get
-			{
-				return this._AdminCode;
-			}
-			set
-			{
-				if ((this._AdminCode != value))
-				{
-					this._AdminCode = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Corporation", DbType="NVarChar(50)")]
-		public string Corporation
-		{
-			get
-			{
-				return this._Corporation;
-			}
-			set
-			{
-				if ((this._Corporation != value))
-				{
-					this._Corporation = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RegAddress", DbType="NVarChar(150)")]
-		public string RegAddress
-		{
-			get
-			{
-				return this._RegAddress;
-			}
-			set
-			{
-				if ((this._RegAddress != value))
-				{
-					this._RegAddress = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Uscc", DbType="VarChar(150)")]
-		public string Uscc
-		{
-			get
-			{
-				return this._Uscc;
-			}
-			set
-			{
-				if ((this._Uscc != value))
-				{
-					this._Uscc = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Grade", DbType="Int NOT NULL")]
-		public int Grade
-		{
-			get
-			{
-				return this._Grade;
-			}
-			set
-			{
-				if ((this._Grade != value))
-				{
-					this._Grade = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Vip", DbType="Bit NOT NULL")]
-		public bool Vip
-		{
-			get
-			{
-				return this._Vip;
-			}
-			set
-			{
-				if ((this._Vip != value))
-				{
-					this._Vip = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EnterCode", DbType="VarChar(50)")]
-		public string EnterCode
-		{
-			get
-			{
-				return this._EnterCode;
-			}
-			set
-			{
-				if ((this._EnterCode != value))
-				{
-					this._EnterCode = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CustomsCode", DbType="VarChar(150)")]
-		public string CustomsCode
-		{
-			get
-			{
-				return this._CustomsCode;
-			}
-			set
-			{
-				if ((this._CustomsCode != value))
-				{
-					this._CustomsCode = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="Int NOT NULL")]
-		public int Status
-		{
-			get
-			{
-				return this._Status;
-			}
-			set
-			{
-				if ((this._Status != value))
-				{
-					this._Status = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreateDate", DbType="DateTime NOT NULL")]
-		public System.DateTime CreateDate
-		{
-			get
-			{
-				return this._CreateDate;
-			}
-			set
-			{
-				if ((this._CreateDate != value))
-				{
-					this._CreateDate = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UpdateDate", DbType="DateTime NOT NULL")]
-		public System.DateTime UpdateDate
-		{
-			get
-			{
-				return this._UpdateDate;
-			}
-			set
-			{
-				if ((this._UpdateDate != value))
-				{
-					this._UpdateDate = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AdminID", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
-		public string AdminID
-		{
-			get
-			{
-				return this._AdminID;
-			}
-			set
-			{
-				if ((this._AdminID != value))
-				{
-					this._AdminID = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ClientNature", DbType="Int NOT NULL")]
-		public int ClientNature
-		{
-			get
-			{
-				return this._ClientNature;
-			}
-			set
-			{
-				if ((this._ClientNature != value))
-				{
-					this._ClientNature = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ServiceType", DbType="Int NOT NULL")]
-		public int ServiceType
-		{
-			get
-			{
-				return this._ServiceType;
-			}
-			set
-			{
-				if ((this._ServiceType != value))
-				{
-					this._ServiceType = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsDeclaretion", DbType="Bit NOT NULL")]
-		public bool IsDeclaretion
-		{
-			get
-			{
-				return this._IsDeclaretion;
-			}
-			set
-			{
-				if ((this._IsDeclaretion != value))
-				{
-					this._IsDeclaretion = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsStorageService", DbType="Bit NOT NULL")]
-		public bool IsStorageService
-		{
-			get
-			{
-				return this._IsStorageService;
-			}
-			set
-			{
-				if ((this._IsStorageService != value))
-				{
-					this._IsStorageService = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StorageType", DbType="Int NOT NULL")]
-		public int StorageType
-		{
-			get
-			{
-				return this._StorageType;
-			}
-			set
-			{
-				if ((this._StorageType != value))
-				{
-					this._StorageType = value;
-				}
-			}
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.wsnSupplierConsignor")]
 	public partial class wsnSupplierConsignor
 	{
@@ -45934,493 +45582,6 @@ namespace Layers.Data.Sqls.PvbCrm
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.WsClients")]
-	public partial class WsClients : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private string _ID;
-		
-		private int _Grade;
-		
-		private bool _Vip;
-		
-		private string _EnterCode;
-		
-		private string _CustomsCode;
-		
-		private int _Status;
-		
-		private string _AdminID;
-		
-		private string _Summary;
-		
-		private System.DateTime _CreateDate;
-		
-		private System.DateTime _UpdateDate;
-		
-		private int _Nature;
-		
-		private string _Place;
-		
-		private int _ServiceType;
-		
-		private bool _IsDeclaretion;
-		
-		private bool _IsStorageService;
-		
-		private int _StorageType;
-		
-		private int _ChargeWH;
-		
-		private EntityRef<Enterprises> _Enterprises;
-		
-    #region 可扩展性方法定义
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIDChanging(string value);
-    partial void OnIDChanged();
-    partial void OnGradeChanging(int value);
-    partial void OnGradeChanged();
-    partial void OnVipChanging(bool value);
-    partial void OnVipChanged();
-    partial void OnEnterCodeChanging(string value);
-    partial void OnEnterCodeChanged();
-    partial void OnCustomsCodeChanging(string value);
-    partial void OnCustomsCodeChanged();
-    partial void OnStatusChanging(int value);
-    partial void OnStatusChanged();
-    partial void OnAdminIDChanging(string value);
-    partial void OnAdminIDChanged();
-    partial void OnSummaryChanging(string value);
-    partial void OnSummaryChanged();
-    partial void OnCreateDateChanging(System.DateTime value);
-    partial void OnCreateDateChanged();
-    partial void OnUpdateDateChanging(System.DateTime value);
-    partial void OnUpdateDateChanged();
-    partial void OnNatureChanging(int value);
-    partial void OnNatureChanged();
-    partial void OnPlaceChanging(string value);
-    partial void OnPlaceChanged();
-    partial void OnServiceTypeChanging(int value);
-    partial void OnServiceTypeChanged();
-    partial void OnIsDeclaretionChanging(bool value);
-    partial void OnIsDeclaretionChanged();
-    partial void OnIsStorageServiceChanging(bool value);
-    partial void OnIsStorageServiceChanged();
-    partial void OnStorageTypeChanging(int value);
-    partial void OnStorageTypeChanged();
-    partial void OnChargeWHChanging(int value);
-    partial void OnChargeWHChanged();
-    #endregion
-		
-		public WsClients()
-		{
-			this._Enterprises = default(EntityRef<Enterprises>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="VarChar(50) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
-		public string ID
-		{
-			get
-			{
-				return this._ID;
-			}
-			set
-			{
-				if ((this._ID != value))
-				{
-					if (this._Enterprises.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnIDChanging(value);
-					this.SendPropertyChanging();
-					this._ID = value;
-					this.SendPropertyChanged("ID");
-					this.OnIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Grade", DbType="Int NOT NULL")]
-		public int Grade
-		{
-			get
-			{
-				return this._Grade;
-			}
-			set
-			{
-				if ((this._Grade != value))
-				{
-					this.OnGradeChanging(value);
-					this.SendPropertyChanging();
-					this._Grade = value;
-					this.SendPropertyChanged("Grade");
-					this.OnGradeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Vip", DbType="Bit NOT NULL")]
-		public bool Vip
-		{
-			get
-			{
-				return this._Vip;
-			}
-			set
-			{
-				if ((this._Vip != value))
-				{
-					this.OnVipChanging(value);
-					this.SendPropertyChanging();
-					this._Vip = value;
-					this.SendPropertyChanged("Vip");
-					this.OnVipChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EnterCode", DbType="VarChar(50)")]
-		public string EnterCode
-		{
-			get
-			{
-				return this._EnterCode;
-			}
-			set
-			{
-				if ((this._EnterCode != value))
-				{
-					this.OnEnterCodeChanging(value);
-					this.SendPropertyChanging();
-					this._EnterCode = value;
-					this.SendPropertyChanged("EnterCode");
-					this.OnEnterCodeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CustomsCode", DbType="VarChar(150)")]
-		public string CustomsCode
-		{
-			get
-			{
-				return this._CustomsCode;
-			}
-			set
-			{
-				if ((this._CustomsCode != value))
-				{
-					this.OnCustomsCodeChanging(value);
-					this.SendPropertyChanging();
-					this._CustomsCode = value;
-					this.SendPropertyChanged("CustomsCode");
-					this.OnCustomsCodeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="Int NOT NULL")]
-		public int Status
-		{
-			get
-			{
-				return this._Status;
-			}
-			set
-			{
-				if ((this._Status != value))
-				{
-					this.OnStatusChanging(value);
-					this.SendPropertyChanging();
-					this._Status = value;
-					this.SendPropertyChanged("Status");
-					this.OnStatusChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AdminID", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
-		public string AdminID
-		{
-			get
-			{
-				return this._AdminID;
-			}
-			set
-			{
-				if ((this._AdminID != value))
-				{
-					this.OnAdminIDChanging(value);
-					this.SendPropertyChanging();
-					this._AdminID = value;
-					this.SendPropertyChanged("AdminID");
-					this.OnAdminIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Summary", DbType="VarChar(500)")]
-		public string Summary
-		{
-			get
-			{
-				return this._Summary;
-			}
-			set
-			{
-				if ((this._Summary != value))
-				{
-					this.OnSummaryChanging(value);
-					this.SendPropertyChanging();
-					this._Summary = value;
-					this.SendPropertyChanged("Summary");
-					this.OnSummaryChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreateDate", DbType="DateTime NOT NULL")]
-		public System.DateTime CreateDate
-		{
-			get
-			{
-				return this._CreateDate;
-			}
-			set
-			{
-				if ((this._CreateDate != value))
-				{
-					this.OnCreateDateChanging(value);
-					this.SendPropertyChanging();
-					this._CreateDate = value;
-					this.SendPropertyChanged("CreateDate");
-					this.OnCreateDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UpdateDate", DbType="DateTime NOT NULL")]
-		public System.DateTime UpdateDate
-		{
-			get
-			{
-				return this._UpdateDate;
-			}
-			set
-			{
-				if ((this._UpdateDate != value))
-				{
-					this.OnUpdateDateChanging(value);
-					this.SendPropertyChanging();
-					this._UpdateDate = value;
-					this.SendPropertyChanged("UpdateDate");
-					this.OnUpdateDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Nature", DbType="Int NOT NULL")]
-		public int Nature
-		{
-			get
-			{
-				return this._Nature;
-			}
-			set
-			{
-				if ((this._Nature != value))
-				{
-					this.OnNatureChanging(value);
-					this.SendPropertyChanging();
-					this._Nature = value;
-					this.SendPropertyChanged("Nature");
-					this.OnNatureChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Place", DbType="VarChar(50)")]
-		public string Place
-		{
-			get
-			{
-				return this._Place;
-			}
-			set
-			{
-				if ((this._Place != value))
-				{
-					this.OnPlaceChanging(value);
-					this.SendPropertyChanging();
-					this._Place = value;
-					this.SendPropertyChanged("Place");
-					this.OnPlaceChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ServiceType", DbType="Int NOT NULL")]
-		public int ServiceType
-		{
-			get
-			{
-				return this._ServiceType;
-			}
-			set
-			{
-				if ((this._ServiceType != value))
-				{
-					this.OnServiceTypeChanging(value);
-					this.SendPropertyChanging();
-					this._ServiceType = value;
-					this.SendPropertyChanged("ServiceType");
-					this.OnServiceTypeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsDeclaretion", DbType="Bit NOT NULL")]
-		public bool IsDeclaretion
-		{
-			get
-			{
-				return this._IsDeclaretion;
-			}
-			set
-			{
-				if ((this._IsDeclaretion != value))
-				{
-					this.OnIsDeclaretionChanging(value);
-					this.SendPropertyChanging();
-					this._IsDeclaretion = value;
-					this.SendPropertyChanged("IsDeclaretion");
-					this.OnIsDeclaretionChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsStorageService", DbType="Bit NOT NULL")]
-		public bool IsStorageService
-		{
-			get
-			{
-				return this._IsStorageService;
-			}
-			set
-			{
-				if ((this._IsStorageService != value))
-				{
-					this.OnIsStorageServiceChanging(value);
-					this.SendPropertyChanging();
-					this._IsStorageService = value;
-					this.SendPropertyChanged("IsStorageService");
-					this.OnIsStorageServiceChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StorageType", DbType="Int NOT NULL")]
-		public int StorageType
-		{
-			get
-			{
-				return this._StorageType;
-			}
-			set
-			{
-				if ((this._StorageType != value))
-				{
-					this.OnStorageTypeChanging(value);
-					this.SendPropertyChanging();
-					this._StorageType = value;
-					this.SendPropertyChanged("StorageType");
-					this.OnStorageTypeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ChargeWH", DbType="Int NOT NULL")]
-		public int ChargeWH
-		{
-			get
-			{
-				return this._ChargeWH;
-			}
-			set
-			{
-				if ((this._ChargeWH != value))
-				{
-					this.OnChargeWHChanging(value);
-					this.SendPropertyChanging();
-					this._ChargeWH = value;
-					this.SendPropertyChanged("ChargeWH");
-					this.OnChargeWHChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Enterprises_WsClients", Storage="_Enterprises", ThisKey="ID", OtherKey="ID", IsForeignKey=true)]
-		public Enterprises Enterprises
-		{
-			get
-			{
-				return this._Enterprises.Entity;
-			}
-			set
-			{
-				Enterprises previousValue = this._Enterprises.Entity;
-				if (((previousValue != value) 
-							|| (this._Enterprises.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Enterprises.Entity = null;
-						previousValue.WsClients = null;
-					}
-					this._Enterprises.Entity = value;
-					if ((value != null))
-					{
-						value.WsClients = this;
-						this._ID = value.ID;
-					}
-					else
-					{
-						this._ID = default(string);
-					}
-					this.SendPropertyChanged("Enterprises");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Logs_Receivable")]
 	public partial class Logs_Receivable : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -47346,6 +46507,904 @@ namespace Layers.Data.Sqls.PvbCrm
 					this._Data = value;
 					this.SendPropertyChanged("Data");
 					this.OnDataChanged();
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.WsClientsTopView")]
+	public partial class WsClientsTopView
+	{
+		
+		private string _ID;
+		
+		private string _Name;
+		
+		private string _AdminCode;
+		
+		private string _Corporation;
+		
+		private string _RegAddress;
+		
+		private string _Uscc;
+		
+		private int _Grade;
+		
+		private bool _Vip;
+		
+		private string _EnterCode;
+		
+		private string _CustomsCode;
+		
+		private int _Status;
+		
+		private System.DateTime _CreateDate;
+		
+		private System.DateTime _UpdateDate;
+		
+		private string _AdminID;
+		
+		private int _ClientNature;
+		
+		private int _ServiceType;
+		
+		private bool _IsDeclaretion;
+		
+		private bool _IsStorageService;
+		
+		private int _StorageType;
+		
+		private int _ChargeWH;
+		
+		private System.Nullable<bool> _HasExport;
+		
+		public WsClientsTopView()
+		{
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		public string ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this._ID = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(150) NOT NULL", CanBeNull=false)]
+		public string Name
+		{
+			get
+			{
+				return this._Name;
+			}
+			set
+			{
+				if ((this._Name != value))
+				{
+					this._Name = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AdminCode", DbType="VarChar(50)")]
+		public string AdminCode
+		{
+			get
+			{
+				return this._AdminCode;
+			}
+			set
+			{
+				if ((this._AdminCode != value))
+				{
+					this._AdminCode = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Corporation", DbType="NVarChar(50)")]
+		public string Corporation
+		{
+			get
+			{
+				return this._Corporation;
+			}
+			set
+			{
+				if ((this._Corporation != value))
+				{
+					this._Corporation = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RegAddress", DbType="NVarChar(150)")]
+		public string RegAddress
+		{
+			get
+			{
+				return this._RegAddress;
+			}
+			set
+			{
+				if ((this._RegAddress != value))
+				{
+					this._RegAddress = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Uscc", DbType="VarChar(150)")]
+		public string Uscc
+		{
+			get
+			{
+				return this._Uscc;
+			}
+			set
+			{
+				if ((this._Uscc != value))
+				{
+					this._Uscc = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Grade", DbType="Int NOT NULL")]
+		public int Grade
+		{
+			get
+			{
+				return this._Grade;
+			}
+			set
+			{
+				if ((this._Grade != value))
+				{
+					this._Grade = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Vip", DbType="Bit NOT NULL")]
+		public bool Vip
+		{
+			get
+			{
+				return this._Vip;
+			}
+			set
+			{
+				if ((this._Vip != value))
+				{
+					this._Vip = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EnterCode", DbType="VarChar(50)")]
+		public string EnterCode
+		{
+			get
+			{
+				return this._EnterCode;
+			}
+			set
+			{
+				if ((this._EnterCode != value))
+				{
+					this._EnterCode = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CustomsCode", DbType="VarChar(150)")]
+		public string CustomsCode
+		{
+			get
+			{
+				return this._CustomsCode;
+			}
+			set
+			{
+				if ((this._CustomsCode != value))
+				{
+					this._CustomsCode = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="Int NOT NULL")]
+		public int Status
+		{
+			get
+			{
+				return this._Status;
+			}
+			set
+			{
+				if ((this._Status != value))
+				{
+					this._Status = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreateDate", DbType="DateTime NOT NULL")]
+		public System.DateTime CreateDate
+		{
+			get
+			{
+				return this._CreateDate;
+			}
+			set
+			{
+				if ((this._CreateDate != value))
+				{
+					this._CreateDate = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UpdateDate", DbType="DateTime NOT NULL")]
+		public System.DateTime UpdateDate
+		{
+			get
+			{
+				return this._UpdateDate;
+			}
+			set
+			{
+				if ((this._UpdateDate != value))
+				{
+					this._UpdateDate = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AdminID", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		public string AdminID
+		{
+			get
+			{
+				return this._AdminID;
+			}
+			set
+			{
+				if ((this._AdminID != value))
+				{
+					this._AdminID = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ClientNature", DbType="Int NOT NULL")]
+		public int ClientNature
+		{
+			get
+			{
+				return this._ClientNature;
+			}
+			set
+			{
+				if ((this._ClientNature != value))
+				{
+					this._ClientNature = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ServiceType", DbType="Int NOT NULL")]
+		public int ServiceType
+		{
+			get
+			{
+				return this._ServiceType;
+			}
+			set
+			{
+				if ((this._ServiceType != value))
+				{
+					this._ServiceType = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsDeclaretion", DbType="Bit NOT NULL")]
+		public bool IsDeclaretion
+		{
+			get
+			{
+				return this._IsDeclaretion;
+			}
+			set
+			{
+				if ((this._IsDeclaretion != value))
+				{
+					this._IsDeclaretion = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsStorageService", DbType="Bit NOT NULL")]
+		public bool IsStorageService
+		{
+			get
+			{
+				return this._IsStorageService;
+			}
+			set
+			{
+				if ((this._IsStorageService != value))
+				{
+					this._IsStorageService = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StorageType", DbType="Int NOT NULL")]
+		public int StorageType
+		{
+			get
+			{
+				return this._StorageType;
+			}
+			set
+			{
+				if ((this._StorageType != value))
+				{
+					this._StorageType = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ChargeWH", DbType="Int NOT NULL")]
+		public int ChargeWH
+		{
+			get
+			{
+				return this._ChargeWH;
+			}
+			set
+			{
+				if ((this._ChargeWH != value))
+				{
+					this._ChargeWH = value;
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_HasExport", DbType="Bit")]
+		public System.Nullable<bool> HasExport
+		{
+			get
+			{
+				return this._HasExport;
+			}
+			set
+			{
+				if ((this._HasExport != value))
+				{
+					this._HasExport = value;
+				}
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.WsClients")]
+	public partial class WsClients : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private string _ID;
+		
+		private int _Grade;
+		
+		private bool _Vip;
+		
+		private string _EnterCode;
+		
+		private string _CustomsCode;
+		
+		private int _Status;
+		
+		private string _AdminID;
+		
+		private string _Summary;
+		
+		private System.DateTime _CreateDate;
+		
+		private System.DateTime _UpdateDate;
+		
+		private string _Place;
+		
+		private int _Nature;
+		
+		private int _ServiceType;
+		
+		private bool _IsDeclaretion;
+		
+		private bool _IsStorageService;
+		
+		private int _StorageType;
+		
+		private int _ChargeWH;
+		
+		private System.Nullable<bool> _HasExport;
+		
+		private EntityRef<Enterprises> _Enterprises;
+		
+    #region 可扩展性方法定义
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(string value);
+    partial void OnIDChanged();
+    partial void OnGradeChanging(int value);
+    partial void OnGradeChanged();
+    partial void OnVipChanging(bool value);
+    partial void OnVipChanged();
+    partial void OnEnterCodeChanging(string value);
+    partial void OnEnterCodeChanged();
+    partial void OnCustomsCodeChanging(string value);
+    partial void OnCustomsCodeChanged();
+    partial void OnStatusChanging(int value);
+    partial void OnStatusChanged();
+    partial void OnAdminIDChanging(string value);
+    partial void OnAdminIDChanged();
+    partial void OnSummaryChanging(string value);
+    partial void OnSummaryChanged();
+    partial void OnCreateDateChanging(System.DateTime value);
+    partial void OnCreateDateChanged();
+    partial void OnUpdateDateChanging(System.DateTime value);
+    partial void OnUpdateDateChanged();
+    partial void OnPlaceChanging(string value);
+    partial void OnPlaceChanged();
+    partial void OnNatureChanging(int value);
+    partial void OnNatureChanged();
+    partial void OnServiceTypeChanging(int value);
+    partial void OnServiceTypeChanged();
+    partial void OnIsDeclaretionChanging(bool value);
+    partial void OnIsDeclaretionChanged();
+    partial void OnIsStorageServiceChanging(bool value);
+    partial void OnIsStorageServiceChanged();
+    partial void OnStorageTypeChanging(int value);
+    partial void OnStorageTypeChanged();
+    partial void OnChargeWHChanging(int value);
+    partial void OnChargeWHChanged();
+    partial void OnHasExportChanging(System.Nullable<bool> value);
+    partial void OnHasExportChanged();
+    #endregion
+		
+		public WsClients()
+		{
+			this._Enterprises = default(EntityRef<Enterprises>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", DbType="VarChar(50) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		public string ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					if (this._Enterprises.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Grade", DbType="Int NOT NULL")]
+		public int Grade
+		{
+			get
+			{
+				return this._Grade;
+			}
+			set
+			{
+				if ((this._Grade != value))
+				{
+					this.OnGradeChanging(value);
+					this.SendPropertyChanging();
+					this._Grade = value;
+					this.SendPropertyChanged("Grade");
+					this.OnGradeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Vip", DbType="Bit NOT NULL")]
+		public bool Vip
+		{
+			get
+			{
+				return this._Vip;
+			}
+			set
+			{
+				if ((this._Vip != value))
+				{
+					this.OnVipChanging(value);
+					this.SendPropertyChanging();
+					this._Vip = value;
+					this.SendPropertyChanged("Vip");
+					this.OnVipChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EnterCode", DbType="VarChar(50)")]
+		public string EnterCode
+		{
+			get
+			{
+				return this._EnterCode;
+			}
+			set
+			{
+				if ((this._EnterCode != value))
+				{
+					this.OnEnterCodeChanging(value);
+					this.SendPropertyChanging();
+					this._EnterCode = value;
+					this.SendPropertyChanged("EnterCode");
+					this.OnEnterCodeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CustomsCode", DbType="VarChar(150)")]
+		public string CustomsCode
+		{
+			get
+			{
+				return this._CustomsCode;
+			}
+			set
+			{
+				if ((this._CustomsCode != value))
+				{
+					this.OnCustomsCodeChanging(value);
+					this.SendPropertyChanging();
+					this._CustomsCode = value;
+					this.SendPropertyChanged("CustomsCode");
+					this.OnCustomsCodeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="Int NOT NULL")]
+		public int Status
+		{
+			get
+			{
+				return this._Status;
+			}
+			set
+			{
+				if ((this._Status != value))
+				{
+					this.OnStatusChanging(value);
+					this.SendPropertyChanging();
+					this._Status = value;
+					this.SendPropertyChanged("Status");
+					this.OnStatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AdminID", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		public string AdminID
+		{
+			get
+			{
+				return this._AdminID;
+			}
+			set
+			{
+				if ((this._AdminID != value))
+				{
+					this.OnAdminIDChanging(value);
+					this.SendPropertyChanging();
+					this._AdminID = value;
+					this.SendPropertyChanged("AdminID");
+					this.OnAdminIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Summary", DbType="VarChar(500)")]
+		public string Summary
+		{
+			get
+			{
+				return this._Summary;
+			}
+			set
+			{
+				if ((this._Summary != value))
+				{
+					this.OnSummaryChanging(value);
+					this.SendPropertyChanging();
+					this._Summary = value;
+					this.SendPropertyChanged("Summary");
+					this.OnSummaryChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CreateDate", DbType="DateTime NOT NULL")]
+		public System.DateTime CreateDate
+		{
+			get
+			{
+				return this._CreateDate;
+			}
+			set
+			{
+				if ((this._CreateDate != value))
+				{
+					this.OnCreateDateChanging(value);
+					this.SendPropertyChanging();
+					this._CreateDate = value;
+					this.SendPropertyChanged("CreateDate");
+					this.OnCreateDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UpdateDate", DbType="DateTime NOT NULL")]
+		public System.DateTime UpdateDate
+		{
+			get
+			{
+				return this._UpdateDate;
+			}
+			set
+			{
+				if ((this._UpdateDate != value))
+				{
+					this.OnUpdateDateChanging(value);
+					this.SendPropertyChanging();
+					this._UpdateDate = value;
+					this.SendPropertyChanged("UpdateDate");
+					this.OnUpdateDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Place", DbType="VarChar(50)")]
+		public string Place
+		{
+			get
+			{
+				return this._Place;
+			}
+			set
+			{
+				if ((this._Place != value))
+				{
+					this.OnPlaceChanging(value);
+					this.SendPropertyChanging();
+					this._Place = value;
+					this.SendPropertyChanged("Place");
+					this.OnPlaceChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Nature", DbType="Int NOT NULL")]
+		public int Nature
+		{
+			get
+			{
+				return this._Nature;
+			}
+			set
+			{
+				if ((this._Nature != value))
+				{
+					this.OnNatureChanging(value);
+					this.SendPropertyChanging();
+					this._Nature = value;
+					this.SendPropertyChanged("Nature");
+					this.OnNatureChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ServiceType", DbType="Int NOT NULL")]
+		public int ServiceType
+		{
+			get
+			{
+				return this._ServiceType;
+			}
+			set
+			{
+				if ((this._ServiceType != value))
+				{
+					this.OnServiceTypeChanging(value);
+					this.SendPropertyChanging();
+					this._ServiceType = value;
+					this.SendPropertyChanged("ServiceType");
+					this.OnServiceTypeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsDeclaretion", DbType="Bit NOT NULL")]
+		public bool IsDeclaretion
+		{
+			get
+			{
+				return this._IsDeclaretion;
+			}
+			set
+			{
+				if ((this._IsDeclaretion != value))
+				{
+					this.OnIsDeclaretionChanging(value);
+					this.SendPropertyChanging();
+					this._IsDeclaretion = value;
+					this.SendPropertyChanged("IsDeclaretion");
+					this.OnIsDeclaretionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsStorageService", DbType="Bit NOT NULL")]
+		public bool IsStorageService
+		{
+			get
+			{
+				return this._IsStorageService;
+			}
+			set
+			{
+				if ((this._IsStorageService != value))
+				{
+					this.OnIsStorageServiceChanging(value);
+					this.SendPropertyChanging();
+					this._IsStorageService = value;
+					this.SendPropertyChanged("IsStorageService");
+					this.OnIsStorageServiceChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StorageType", DbType="Int NOT NULL")]
+		public int StorageType
+		{
+			get
+			{
+				return this._StorageType;
+			}
+			set
+			{
+				if ((this._StorageType != value))
+				{
+					this.OnStorageTypeChanging(value);
+					this.SendPropertyChanging();
+					this._StorageType = value;
+					this.SendPropertyChanged("StorageType");
+					this.OnStorageTypeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ChargeWH", DbType="Int NOT NULL")]
+		public int ChargeWH
+		{
+			get
+			{
+				return this._ChargeWH;
+			}
+			set
+			{
+				if ((this._ChargeWH != value))
+				{
+					this.OnChargeWHChanging(value);
+					this.SendPropertyChanging();
+					this._ChargeWH = value;
+					this.SendPropertyChanged("ChargeWH");
+					this.OnChargeWHChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_HasExport", DbType="Bit")]
+		public System.Nullable<bool> HasExport
+		{
+			get
+			{
+				return this._HasExport;
+			}
+			set
+			{
+				if ((this._HasExport != value))
+				{
+					this.OnHasExportChanging(value);
+					this.SendPropertyChanging();
+					this._HasExport = value;
+					this.SendPropertyChanged("HasExport");
+					this.OnHasExportChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Enterprises_WsClients", Storage="_Enterprises", ThisKey="ID", OtherKey="ID", IsForeignKey=true)]
+		public Enterprises Enterprises
+		{
+			get
+			{
+				return this._Enterprises.Entity;
+			}
+			set
+			{
+				Enterprises previousValue = this._Enterprises.Entity;
+				if (((previousValue != value) 
+							|| (this._Enterprises.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Enterprises.Entity = null;
+						previousValue.WsClients = null;
+					}
+					this._Enterprises.Entity = value;
+					if ((value != null))
+					{
+						value.WsClients = this;
+						this._ID = value.ID;
+					}
+					else
+					{
+						this._ID = default(string);
+					}
+					this.SendPropertyChanged("Enterprises");
 				}
 			}
 		}

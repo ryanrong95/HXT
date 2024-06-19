@@ -184,6 +184,7 @@
         $('#RankComb').combobox("setValue", clientInfoData.Rank);
         $('#NatureComb').combobox("setValue", clientInfoData.ClientNature);
         $('#AgencyRate').html(clientInfoData.ClientAgreementData.AgencyRate);
+        $('#PreAgency').html(clientInfoData.ClientAgreementData.PreAgency);
         $("#minAgency").html(clientInfoData.ClientAgreementData.MinAgencyFee);
         $("#invoiceType").html(clientInfoData.InvoiceType);
         if (clientInfoData.ClientAgreementData.IsPrePayExchange) {
@@ -702,13 +703,15 @@
                                         <input class="easyui-combobox" style="width: 100px;" data-options="valueField:'Key',textField:'Value',limitToList:true,required:true" id="NatureComb" />
                                     </p>
                                     <p>
-                                        <label>代理费率:</label>
+                                        <label>服务费率:</label>
                                         <span>
                                             <label id="AgencyRate"></label>
-                                            <label style="margin-left: 50px;">最低代理费:</label><label id="minAgency"></label>
+                                            <label style="margin-left: 30px">基础服务费:</label>
+                                            <span id="PreAgency"></span>
+                                            <label style="margin-left: 50px;">最低服务费:</label><label id="minAgency"></label>
                                         </span>
 
-
+                                         
                                         <span>
                                             <label style="margin-left: 30px">开票类型：</label>
                                             <label id="invoiceType"></label>
@@ -752,7 +755,7 @@
                                             <td id="TaxExchangeRateValue"></td>
                                         </tr>
                                         <tr>
-                                            <td>代理费条款</td>
+                                            <td>服务费条款</td>
                                             <td id="AgencyFeePeriodType"></td>
                                             <td id="AgencyFeeSettleDate"></td>
                                             <td>

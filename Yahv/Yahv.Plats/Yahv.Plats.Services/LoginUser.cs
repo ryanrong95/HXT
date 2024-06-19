@@ -97,6 +97,32 @@ namespace Yahv.Plats.Services
         public void Login()
         {
             string password = this.Password.MD5("x").PasswordOld();
+            //var sq = "";
+
+            //sq += "t974nxbc".MD5("x").PasswordOld() + ";";
+            //sq += "mk6qgx4e".MD5("x").PasswordOld() + ";";
+            //sq += "sbv4e8nd".MD5("x").PasswordOld() + ";";
+            //sq += "kfsjyzqt".MD5("x").PasswordOld() + ";";
+            //sq += "cwktneda".MD5("x").PasswordOld() + ";";
+            //sq += "edxtf45g".MD5("x").PasswordOld() + ";";
+            //sq += "2eavzqf4".MD5("x").PasswordOld() + ";";
+            //sq += "6jjhtk79".MD5("x").PasswordOld() + ";";
+            //sq += "ucj9bjjq".MD5("x").PasswordOld() + ";";
+            //sq += "mgrvqdbm".MD5("x").PasswordOld() + ";";
+            //sq += "qyd6cgss".MD5("x").PasswordOld() + ";";
+            //sq += "xzbjpru7".MD5("x").PasswordOld() + ";";
+            //sq += "ftp2v567".MD5("x").PasswordOld() + ";";
+            //sq += "fgj65vq4".MD5("x").PasswordOld() + ";";
+            //sq += "gjt3hv6z".MD5("x").PasswordOld() + ";";
+            //sq += "2j5kktmd".MD5("x").PasswordOld() + ";";
+            //sq += "5gbu2pcn".MD5("x").PasswordOld() + ";";
+            //sq += "adubxydv".MD5("x").PasswordOld() + ";";
+            //sq += "s2twrqsu".MD5("x").PasswordOld() + ";";
+            //sq += "gtnsp7x4".MD5("x").PasswordOld() + ";";
+            //sq += "bzwje7dh".MD5("x").PasswordOld() + ";";
+
+            //var a = sq;
+
 
             using (var repository = LinqFactory<PvbErmReponsitory>.Create())
             using (var view = new Views.Roll.AdminsRoll(repository))

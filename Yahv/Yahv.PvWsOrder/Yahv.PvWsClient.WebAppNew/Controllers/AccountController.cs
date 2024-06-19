@@ -51,6 +51,7 @@ namespace Yahv.PvWsClient.WebAppNew.Controllers
                 ThePageIsCustoms = (serviceType & ServiceType.Customs) == ServiceType.Customs,
                 ThePageIsWarehouse = (serviceType & ServiceType.Warehouse) == ServiceType.Warehouse,
                 StorageTypeInt = (int)storageType,
+                ThePageHasExport = Client.HasExport.Value,
 
                 AvatarUrl = !string.IsNullOrEmpty(avatarFile?.Url) ? PvWsOrder.Services.PvClientConfig.FileServerUrl + @"/" + avatarFile?.Url.ToUrl() : "",
 
@@ -371,7 +372,7 @@ namespace Yahv.PvWsClient.WebAppNew.Controllers
                 else
                 {
                     return base.JsonResult(VueMsgType.error, "操作失败");
-                }   
+                }
             }
             catch (Exception ex)
             {
@@ -604,13 +605,193 @@ namespace Yahv.PvWsClient.WebAppNew.Controllers
             CenterFileDescription fileStorageAgreement = null;
             fileStorageAgreement = new CenterFilesView().FirstOrDefault(item => item.ClientID == current.XDTClientID && item.Type == (int)FileType.StorageAgreement);
 
+            #region 计算年份
+
+            var years = agree?.EndDate.Year - agree?.StartDate.Year;
+            var y = "";
+            //1=壹，2=贰，3=叁，4=肆，5=伍，6=陆，7=柒，8=捌，9=玖，10=拾。
+            switch (years)
+            {
+                case 1:
+                    y = "壹";
+                    break;
+                case 2:
+                    y = "贰";
+                    break;
+                case 3:
+                    y = "叁";
+                    break;
+                case 4:
+                    y = "肆";
+                    break;
+                case 5:
+                    y = "伍";
+                    break;
+                case 6:
+                    y = "陆";
+                    break;
+                case 7:
+                    y = "柒";
+                    break;
+                case 8:
+                    y = "捌";
+                    break;
+                case 9:
+                    y = "玖";
+                    break;
+                case 10:
+                    y = "拾";
+                    break;
+                default:
+                    break;
+            }
+
+            #endregion
+
+            #region 汇率约定
+
+            //付汇汇率
+            var PEIsTen = agree.IsTen == Yahv.PvWsOrder.Services.XDTClientView.PEIsTen.Ten ? "10:00" : "09:30";
+
+            //税费汇率
+            var TaxExchangeRateName = "";
+            if (taxFeeClause.ExchangeRateType == PvWsOrder.Services.XDTClientView.ExchangeRateType.Custom)
+            {
+                TaxExchangeRateName = "进口当月海关汇率";
+            }
+            else if (taxFeeClause.ExchangeRateType == PvWsOrder.Services.XDTClientView.ExchangeRateType.RealTime)
+            {
+                TaxExchangeRateName = "进口当天中国银行10:00之后第一个外汇卖出价";
+            }
+            else
+            {
+                TaxExchangeRateName = "双方约定汇率";
+            }
+
+            //服务费汇率
+            var AgencyExchangeRateName = "";
+            if (agencyFeeClause.ExchangeRateType == PvWsOrder.Services.XDTClientView.ExchangeRateType.Custom)
+            {
+                AgencyExchangeRateName = "进口当月海关汇率";
+            }
+            else if (agencyFeeClause.ExchangeRateType == PvWsOrder.Services.XDTClientView.ExchangeRateType.RealTime)
+            {
+                AgencyExchangeRateName = "进口当天中国银行10:00之后第一个外汇卖出价";
+            }
+            else
+            {
+                AgencyExchangeRateName = "双方约定汇率";
+            }
+
+            #endregion
+
+            #region 账期类型额度
+
+            string  GoodsPaymentPeriod,  TaxPaymentPeriod,  AgentPaymentPeriod,  OtherPaymentPeriod, AgencyRate, MinimumAgent  = "";
+
+
+            var preAgency = (agree.PreAgency.HasValue && agree.PreAgency > 0) ? (agree.PreAgency.Value.ToRound(2).ToString() + "元 + ") : "";
+            AgencyRate = preAgency + (agree.AgencyRate * 100M).ToRound(2).ToString() + "%";
+            MinimumAgent = agree.MinAgencyFee.ToRound(2).ToString();
+
+            //税款
+            if (productFeeClause.PeriodType == Yahv.PvWsOrder.Services.XDTClientView.PeriodType.PrePaid)
+            {
+                //GoodsPaymentPre = "☑无信用额度";
+                GoodsPaymentPeriod = "无信用额度";
+            }
+            else if (productFeeClause.PeriodType == Yahv.PvWsOrder.Services.XDTClientView.PeriodType.AgreedPeriod)
+            {
+                //GoodsPaymentPre = "□无信用额度";
+                GoodsPaymentPeriod = "信用额度：约定期限，进口" + productFeeClause.DaysLimit.Value.ToString() + "天；额度：" + productFeeClause.UpperLimit.Value.ToRound(2).ToString() + "元";
+            }
+            else
+            {
+                //GoodsPaymentPre = "□无信用额度";
+                GoodsPaymentPeriod = "信用额度：月结，次月" + productFeeClause.MonthlyDay.Value.ToString() + "日；额度：" + productFeeClause.UpperLimit.Value.ToRound(2).ToString() + "元";
+            }
+
+            //税款
+            if (taxFeeClause.PeriodType == Yahv.PvWsOrder.Services.XDTClientView.PeriodType.PrePaid)
+            {
+                //TaxPaymentPre = "无信用额度";
+                TaxPaymentPeriod = "无信用额度";
+            }
+            else if (taxFeeClause.PeriodType == Yahv.PvWsOrder.Services.XDTClientView.PeriodType.AgreedPeriod)
+            {
+                //TaxPaymentPre = "□无信用额度";
+                TaxPaymentPeriod = "信用额度：约定期限，进口" + taxFeeClause.DaysLimit.Value.ToString() + "天；额度：" + taxFeeClause.UpperLimit.Value.ToRound(2).ToString() + "元";
+            }
+            else
+            {
+                //TaxPaymentPre = "□无信用额度";
+                TaxPaymentPeriod = "信用额度：月结，次月" + taxFeeClause.MonthlyDay.Value.ToString() + "日；额度：" + taxFeeClause.UpperLimit.Value.ToRound(2).ToString() + "元";
+            }
+
+            //服务费
+            if (agencyFeeClause.PeriodType == Yahv.PvWsOrder.Services.XDTClientView.PeriodType.PrePaid)
+            {
+                //AgentPaymentPre = "☑无信用额度";
+                AgentPaymentPeriod = "无信用额度";
+            }
+            else if (agencyFeeClause.PeriodType == Yahv.PvWsOrder.Services.XDTClientView.PeriodType.AgreedPeriod)
+            {
+                //AgentPaymentPre = "□无信用额度";
+                AgentPaymentPeriod = "信用额度：约定期限，进口" + agencyFeeClause.DaysLimit.Value.ToString() + "天；额度：" + agencyFeeClause.UpperLimit.Value.ToRound(2).ToString() + "元";
+            }
+            else
+            {
+                //AgentPaymentPre = "□无信用额度";
+                AgentPaymentPeriod = "信用额度：月结，次月" + agencyFeeClause.MonthlyDay.Value.ToString() + "日；额度：" + agencyFeeClause.UpperLimit.Value.ToRound(2).ToString() + "元";
+            }
+
+            //杂费
+            if (incidentalFeeClause.PeriodType == Yahv.PvWsOrder.Services.XDTClientView.PeriodType.PrePaid)
+            {
+                //OtherPaymentPre = "☑无信用额度";
+                OtherPaymentPeriod = "无信用额度";
+            }
+            else if (incidentalFeeClause.PeriodType == Yahv.PvWsOrder.Services.XDTClientView.PeriodType.AgreedPeriod)
+            {
+                //OtherPaymentPre = "□无信用额度";
+                OtherPaymentPeriod = "信用额度：约定期限，进口" + incidentalFeeClause.DaysLimit.Value.ToString() + "天；额度：" + incidentalFeeClause.UpperLimit.Value.ToRound(2).ToString() + "元";
+            }
+            else
+            {
+                //OtherPaymentPre = "□无信用额度";
+                OtherPaymentPeriod = "信用额度：月结，次月" + incidentalFeeClause.MonthlyDay.Value.ToString() + "日；额度：" + incidentalFeeClause.UpperLimit.Value.ToRound(2).ToString() + "元";
+            }
+
+
+
+            #endregion
+
             var data = new
             {
+                ClientName = client.Name,
+                ClientRegAddress = client.RegAddress,
+                ClientCorporation = client.Corporation,
                 StartDate = agree?.StartDate.ToString("yyyy年MM月dd日"),
                 EndDate = agree?.EndDate.ToString("yyyy年MM月dd日"),
-                AgencyRate = agree?.AgencyRate.ToString(CultureInfo.InvariantCulture),
+                Year = y,
+                IsTen = PEIsTen,
+                InvoiceRateValue = Math.Round((decimal)(1M + agree?.InvoiceTaxRate), 2,MidpointRounding.AwayFromZero).ToString(),
+                InvoiceTypeDescription = agree?.InvoiceType == PvWsOrder.Services.XDTClientView.Invoice.Full ? "签署内贸合同，受托方以进口货物价款、关税、增值税、消费税、服务费向委托方开具税率为13%的增值税专用发票" : "受托方向委托方提供海关进口关税专用缴款书、海关进口增值税专用缴款书和报关单，受托方以所收服务费开具税率为6%的增值税专用发票",
+                //GoodsPaymentPre,
+                GoodsPaymentPeriod,
+                //TaxPaymentPre,
+                TaxPaymentPeriod,
+                //AgentPaymentPre,
+                AgentPaymentPeriod,
+                //OtherPaymentPre,
+                OtherPaymentPeriod,
+                AgencyRate,
+                MinimumAgent,
+
+                //AgencyRate = agree?.AgencyRate.ToString(CultureInfo.InvariantCulture),
                 MinAgencyFee = agree?.MinAgencyFee.ToString(CultureInfo.InvariantCulture),
                 IsPrePayExchange = agree == null ? "" : agree.IsPrePayExchange ? "预换汇" : "90天内换汇",
+
                 GoodsPeriodType = productFeeClause?.PeriodType.GetDescription(),
                 GoodsExchangeRateType = productFeeClause?.ExchangeRateType.GetDescription(),
                 GoodsUpperLimit = productFeeClause?.UpperLimit.ToString(),
@@ -621,6 +802,7 @@ namespace Yahv.PvWsClient.WebAppNew.Controllers
                 GoodsMonthlyDay = productFeeClause?.MonthlyDay.ToString(),
                 isGoodsAgreed = productFeeClause?.ExchangeRateType == PvWsOrder.Services.XDTClientView.ExchangeRateType.Agreed,//是否为约定汇率
                 GoodsExchangeRateValue = productFeeClause?.ExchangeRateValue.ToString(),
+
                 TaxPeriodType = taxFeeClause?.PeriodType.GetDescription(),
                 TaxExchangeRateType = taxFeeClause?.ExchangeRateType.GetDescription(),
                 TaxUpperLimit = taxFeeClause?.UpperLimit.ToString(),
@@ -631,6 +813,8 @@ namespace Yahv.PvWsClient.WebAppNew.Controllers
                 TaxMonthlyDay = taxFeeClause?.MonthlyDay.ToString(),
                 isTaxAgreed = taxFeeClause != null && taxFeeClause.ExchangeRateType == PvWsOrder.Services.XDTClientView.ExchangeRateType.Agreed,//是否为约定汇率
                 TaxExchangeRateValue = taxFeeClause?.ExchangeRateValue.ToString(),
+                TaxExchangeRateName = TaxExchangeRateName,//
+
                 AgencyFeePeriodType = agencyFeeClause?.PeriodType.GetDescription(),
                 AgencyFeeExchangeRateType = agencyFeeClause?.ExchangeRateType.GetDescription(),
                 AgencyFeeUpperLimit = agencyFeeClause?.UpperLimit.ToString(),
@@ -641,6 +825,8 @@ namespace Yahv.PvWsClient.WebAppNew.Controllers
                 AgencyMonthlyDay = agencyFeeClause?.MonthlyDay.ToString(),
                 isAgencyAgreed = agencyFeeClause?.ExchangeRateType == PvWsOrder.Services.XDTClientView.ExchangeRateType.Agreed,//是否为约定汇率
                 AgencyExchangeRateValue = agencyFeeClause?.ExchangeRateValue.ToString(),
+                AgencyExchangeRateName = AgencyExchangeRateName,//
+
                 IncidentalPeriodType = incidentalFeeClause?.PeriodType.GetDescription(),
                 IncidentalExchangeRateType = incidentalFeeClause?.ExchangeRateType.GetDescription(),
                 IncidentalUpperLimit = incidentalFeeClause?.UpperLimit.ToString(),
@@ -651,6 +837,7 @@ namespace Yahv.PvWsClient.WebAppNew.Controllers
                 IncidentalMonthlyDay = incidentalFeeClause?.MonthlyDay.ToString(),
                 isIncidentalAgreed = incidentalFeeClause?.ExchangeRateType == PvWsOrder.Services.XDTClientView.ExchangeRateType.Agreed,//是否为约定汇率
                 IncidentalExchangeRateValue = incidentalFeeClause?.ExchangeRateValue.ToString(),
+
                 InvoiceType = agree?.InvoiceType.GetDescription(),
                 InvoiceRate = agree?.InvoiceTaxRate.ToString(CultureInfo.InvariantCulture),
                 InvoiceName = agree?.InvoiceType == PvWsOrder.Services.XDTClientView.Invoice.Full ? "单抬头" : "双抬头",
@@ -1808,5 +1995,11 @@ namespace Yahv.PvWsClient.WebAppNew.Controllers
 
         #endregion
 
+
+        [UserAuthorize(UserAuthorize = true, InformalMembership = true)]
+        public ActionResult StorageInfo()
+        {  
+            return View();  
+        }
     }
 }

@@ -33,22 +33,6 @@ namespace Yahv.Erm.Services.Common
                 return ConfigurationManager.AppSettings["LabourEnterpriseName"];
             }
         }
-
-        static public string LabourEnterpriseID2
-        {
-            get
-            {
-                return ConfigurationManager.AppSettings["LabourEnterpriseID2"];
-            }
-        }
-
-        static public string LabourEnterpriseName2
-        {
-            get
-            {
-                return ConfigurationManager.AppSettings["LabourEnterpriseName2"];
-            }
-        }
     }
 
     public static class XdtInfoHelper

@@ -21,8 +21,8 @@ namespace Yahv.Web.Controls
                 }
             };
 
-            dictionary.Add(typeof(Easyui.Alert).FullName, getHtml($"{Yahv.Underly.DomainConfig.Fixed}/Yahv/customs-easyui/controls/alert.js"));
-            dictionary.Add(typeof(Easyui.Redirect).FullName, getHtml($"{Yahv.Underly.DomainConfig.Fixed}/Yahv/customs-easyui/controls/Redirect.html"));
+            dictionary.Add(typeof(Easyui.Alert).FullName, getHtml($"{Yahv.Underly.DomainConfig.Fixed}/frontframe/customs-easyui/controls/alert.js"));
+            dictionary.Add(typeof(Easyui.Redirect).FullName, getHtml($"{Yahv.Underly.DomainConfig.Fixed}/frontframe/customs-easyui/controls/Redirect.html"));
 
         }
 

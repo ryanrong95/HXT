@@ -26,7 +26,7 @@ namespace Yahv.Erm.Services.Common
         /// <param name="TempletePath">模板路径</param>
         public static void ExportRoster(string filePath, string TempletePath, DateTime date = default(DateTime))
         {
-            var staffs = new Views.StaffAlls().Where(item => item.Labour.EnterpriseID == ErmConfig.LabourEnterpriseID || item.Labour.EnterpriseID == ErmConfig.LabourEnterpriseID2);
+            var staffs = new Views.StaffAlls().Where(item => item.Labour.EnterpriseID == ErmConfig.LabourEnterpriseID);
             //正常员工
             var onStaffs = staffs.Where(item =>
             (item.Status == StaffStatus.Normal && item.Labour.EntryDate <= date) ||

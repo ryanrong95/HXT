@@ -1,7 +1,7 @@
 ﻿
 <template id="special">
     <el-form :model="form1" :rules="rules1" status-icon ref="form1" label-width="130px">
-        <el-form-item label="选择服务项目：" prop="Type" :rules="[{ required: true, message: '选择服务项目', trigger: 'change' }]">
+        <el-form-item label="服务项目：" prop="Type" :rules="[{ required: true, message: '选择服务项目', trigger: 'change' }]">
             <el-select size="mini" style="width:50%" v-model="form1.Type" v-on:change="typeChange" filterable clearable placeholder="请选择">
                 <el-option v-for="item in baseData.SpecialTypeOptions"
                            :key="item.value"
@@ -82,7 +82,7 @@
             </div>
         </div>
         <div v-if="form1.Type=='2'">
-            <el-form-item class="mt20" label="上传换箱单文件:" prop="FileName" :rules="[{ required: true, message: '上传换箱单文件', trigger: 'change' }]">
+            <el-form-item class="mt20" label="换箱单文件:" prop="FileName" :rules="[{ required: true, message: '上传换箱单文件', trigger: 'change' }]">
                 <div class="  upload_wrap clearfix">
                     <el-upload class="fl mr20" action="/PayExchanges/UploadOrderFile"
                                :show-file-list="false"

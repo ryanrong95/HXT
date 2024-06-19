@@ -83,6 +83,12 @@ namespace Yahv.Services.Models
         /// 仓储类型/客户身份
         /// </summary>
         public WsIdentity StorageType { set; get; }
+
+        /// <summary>
+        /// 是否含有出口业务
+        /// </summary>
+        public bool? HasExport { set; get; }
+
         #endregion
     }
 

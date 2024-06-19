@@ -50,6 +50,24 @@ namespace Needs.Ccs.Services.Enums
     }
 
     /// <summary>
+    /// 付汇汇率类型
+    /// </summary>
+    public enum PEIsTen
+    {
+        /// <summary>
+        /// 九点半
+        /// </summary>
+        [Description("9:30")]
+        Nine = 0,
+
+        /// <summary>
+        /// 十点
+        /// </summary>
+        [Description("10:00")]
+        Ten = 1,
+    }
+
+    /// <summary>
     /// TaxMapApiStatus 
     /// </summary>
     public enum TaxMapApiStatus

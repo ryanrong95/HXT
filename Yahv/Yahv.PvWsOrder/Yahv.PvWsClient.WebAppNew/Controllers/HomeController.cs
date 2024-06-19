@@ -65,15 +65,32 @@ namespace Yahv.PvWsClient.WebAppNew.Controllers
 
             bool isCustoms = false;
             bool isWarehouse = false;
+            bool HasExport = client.HasExport.Value;
             ServiceType serviceType = client.ServiceType;
             isCustoms = (serviceType & ServiceType.Customs) == ServiceType.Customs;
             isWarehouse = (serviceType & ServiceType.Warehouse) == ServiceType.Warehouse;
             ViewBag.ThePageIsCustoms = isCustoms;
             ViewBag.ThePageIsWarehouse = isWarehouse;
+            ViewBag.ThePageHasExport = HasExport;
 
             bool isCustomsInfoOK = isCustoms & client.IsDeclaretion;
             bool isWarehouseInfoOK = isWarehouse & client.IsStorageService;
             ViewBag.IsValid = (isCustomsInfoOK || isWarehouseInfoOK) ? "1" : "0";
+
+            //汇率查询
+            //var realTimeExchangeRates = Yahv.Alls.Current.RealTimeExchangeRates;
+            //var linq = (from rate in realTimeExchangeRates
+            //            group rate by new { rate.Code } into g
+            //            select g.OrderByDescending(t => t.UpdateDate).First()).ToList();
+            //var data = linq.Select(item => new
+            //{
+            //    item.ID,
+            //    item.Code,
+            //    item.Name,
+            //    item.Rate,
+            //    UpdateDate = item.UpdateDate.ToString("yyyy-MM-dd HH:mm:ss"),
+            //}).OrderByDescending(t => t.Code).Take(6).ToList();
+            //ViewBag.RealTimeExchangeRate = data.Json();
 
             if (IsMobileLogin())
             {
@@ -248,6 +265,7 @@ namespace Yahv.PvWsClient.WebAppNew.Controllers
                 AvatarUrl = !string.IsNullOrEmpty(item?.AvatarUrl) ? PvWsOrder.Services.PvClientConfig.FileServerUrl + @"/" + item?.AvatarUrl.ToUrl() : "",
             }).ToList();
         }
+
 
         #region 登录
         /// <summary>
@@ -1269,10 +1287,11 @@ namespace Yahv.PvWsClient.WebAppNew.Controllers
             var data = linq.Select(item => new
             {
                 item.ID,
+                item.Code,
                 item.Name,
                 item.Rate,
                 UpdateDate = item.UpdateDate.ToString("yyyy-MM-dd HH:mm:ss"),
-            }).ToList();
+            }).OrderByDescending(t => t.Code).Take(6).ToList();
 
             return base.JsonResult(VueMsgType.success, "", data.Json());
         }
@@ -1292,10 +1311,11 @@ namespace Yahv.PvWsClient.WebAppNew.Controllers
             var data = linq.Select(item => new
             {
                 item.ID,
+                item.Code,
                 item.Name,
                 item.Rate,
                 UpdateDate = DateTime.Now.ToString("yyyy-MM"),  // item.UpdateDate.ToString("yyyy-MM-dd HH:mm:ss"),
-            }).ToList();
+            }).OrderByDescending(t => t.Code).Take(6).ToList();
 
             return base.JsonResult(VueMsgType.success, "", data.Json());
         }
@@ -1429,7 +1449,7 @@ namespace Yahv.PvWsClient.WebAppNew.Controllers
             info.Add(new
             {
                 name = "香港库房地址",
-                address = "香港新界沙田安丽街11号企业中心23楼19-21室",
+                address = "香港九龙观塘成业街27号日昇中心1204室",
             });
 
 

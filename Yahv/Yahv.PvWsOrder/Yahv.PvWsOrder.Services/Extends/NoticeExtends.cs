@@ -218,7 +218,7 @@ namespace Yahv.PvWsOrder.Services.Extends
                 WaybillID = order.OutWaybill.ID,
                 InputID = item.InputID,
                 OutputID = item.OutputID,
-                ProductID = item.Product.ID,
+                ProductID = item.ProductID,
                 DateCode = item.DateCode,
                 Quantity = item.Quantity,
                 Source = CgNoticeSource.AgentSend,

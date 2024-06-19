@@ -37,7 +37,7 @@ namespace Needs.Ccs.Services.Models
         /// <summary>
         /// 代理费上限变更
         /// </summary>
-        [Description("代理费上限变更")]
+        [Description("服务费上限变更")]
         AgencyFeeUpperLimitChange =4,
 
         /// <summary>

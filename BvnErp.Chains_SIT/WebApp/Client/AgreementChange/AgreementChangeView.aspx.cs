@@ -114,8 +114,8 @@ namespace WebApp.Client.AgreementChange
                     });
                 }
 
-                //代理费
-                var AgencyFee = AgreementApplyItem.Where(t => t.AgreementChangeType == AgreementChangeType.AgencyRate || t.AgreementChangeType == AgreementChangeType.MinAgencyFee).ToList();
+                //服务费
+                var AgencyFee = AgreementApplyItem.Where(t => t.AgreementChangeType == AgreementChangeType.AgencyRate || t.AgreementChangeType == AgreementChangeType.MinAgencyFee || t.AgreementChangeType == AgreementChangeType.PreAgency).ToList();
                 StartDate = "";
                 OldValue = "";
                 NewValue = "";
@@ -123,33 +123,54 @@ namespace WebApp.Client.AgreementChange
                 {
                     if (item.AgreementChangeType == Needs.Ccs.Services.Enums.AgreementChangeType.AgencyRate)
                     {
-                        StartDate = "代理费";
-                        OldValue = "代理费率：" + Convert.ToDouble(item.OldValue).ToString();
-                        NewValue = "代理费率：" + Convert.ToDouble(item.NewValue).ToString();
+                        StartDate = "服务费";
+                        OldValue = OldValue + "; 服务费率：" + Convert.ToDouble(item.OldValue).ToString();
+                        NewValue = NewValue + "; 服务费率：" + Convert.ToDouble(item.NewValue).ToString();
                     }
-                    if (item.AgreementChangeType == Needs.Ccs.Services.Enums.AgreementChangeType.MinAgencyFee)
+                    if (item.AgreementChangeType == Needs.Ccs.Services.Enums.AgreementChangeType.PreAgency)
                     {
-                        if (StartDate == "代理费")
+                        if (StartDate == "服务费")
                         {
                             if (!string.IsNullOrEmpty(item.OldValue))
                             {
-                                OldValue = OldValue + "; 最低代理费：" + Convert.ToDouble(item.OldValue).ToString();
+                                OldValue = OldValue + "; 基础服务费：" + Convert.ToDouble(item.OldValue).ToString();
                             }
                             if (!string.IsNullOrEmpty(item.NewValue))
                             {
-                                NewValue = NewValue + "; 最低代理费：" + Convert.ToDouble(item.NewValue).ToString();
+                                NewValue = NewValue + "; 最低服务费：" + Convert.ToDouble(item.NewValue).ToString();
                             }
                         }
                         else
                         {
-                            StartDate = "代理费";
-                            OldValue = "最低代理费：" + Convert.ToDouble(item.OldValue).ToString();
-                            NewValue = "最低代理费：" + Convert.ToDouble(item.NewValue).ToString();
+                            StartDate = "服务费";
+                            OldValue = OldValue + "基础服务费：" + Convert.ToDouble(item.OldValue).ToString();
+                            NewValue = NewValue + "基础服务费：" + Convert.ToDouble(item.NewValue).ToString();
+                        }
+
+                    }
+                    if (item.AgreementChangeType == Needs.Ccs.Services.Enums.AgreementChangeType.MinAgencyFee)
+                    {
+                        if (StartDate == "服务费")
+                        {
+                            if (!string.IsNullOrEmpty(item.OldValue))
+                            {
+                                OldValue = OldValue + "; 最低服务费：" + Convert.ToDouble(item.OldValue).ToString();
+                            }
+                            if (!string.IsNullOrEmpty(item.NewValue))
+                            {
+                                NewValue = NewValue + "; 最低服务费：" + Convert.ToDouble(item.NewValue).ToString();
+                            }
+                        }
+                        else
+                        {
+                            StartDate = "服务费";
+                            OldValue = OldValue + "最低服务费：" + Convert.ToDouble(item.OldValue).ToString();
+                            NewValue = NewValue + "最低服务费：" + Convert.ToDouble(item.NewValue).ToString();
                         }
 
                     }
                 }
-                if (StartDate == "代理费")
+                if (StartDate == "服务费")
                 {
                     list.Add(new AgreementChangeDateil
                     {
@@ -350,7 +371,7 @@ namespace WebApp.Client.AgreementChange
                     });
                 }
 
-                //代理费条款
+                //服务费条款
                 var Agency = AgreementApplyItem.Where(t => t.AgreementChangeType == AgreementChangeType.AgencyPeriodType
                 || t.AgreementChangeType == AgreementChangeType.AgencyDaysLimit
                 || t.AgreementChangeType == AgreementChangeType.AgencyMonthlyDay
@@ -362,7 +383,7 @@ namespace WebApp.Client.AgreementChange
                 NewValue = "";
                 foreach (var item in Agency)
                 {
-                    StartDate = "代理费条款";
+                    StartDate = "服务费条款";
                     if (item.AgreementChangeType == AgreementChangeType.AgencyPeriodType)
                     {
 
@@ -421,7 +442,7 @@ namespace WebApp.Client.AgreementChange
                     }
                     if (item.AgreementChangeType == AgreementChangeType.AgencyExchangeRateType)
                     {
-                        StartDate = "代理费条款";
+                        StartDate = "服务费条款";
                         if (item.OldValue == ExchangeRateType.Agreed.ToString())
                         {
                             OldValue = OldValue + "汇率类型：" + ExchangeRateType.Agreed.GetDescription();
@@ -468,7 +489,7 @@ namespace WebApp.Client.AgreementChange
                         }
                     }
                 }
-                if (StartDate == "代理费条款")
+                if (StartDate == "服务费条款")
                 {
                     list.Add(new AgreementChangeDateil
                     {
@@ -700,7 +721,7 @@ namespace WebApp.Client.AgreementChange
                 {
                     var agreement = Needs.Wl.Admin.Plat.AdminPlat.Current.Clients.ClientAgreements[clientAgreement.ID];
                     //创建文件夹
-                    var fileName = DateTime.Now.Ticks + "补充协议.docx";
+                    var fileName = agreement.AgreementCode + "补充协议.docx";
                     FileDirectory file = new FileDirectory(fileName);
                     file.SetChildFolder(Needs.Ccs.Services.SysConfig.Dowload);
                     file.CreateDataDirectory();
@@ -838,8 +859,19 @@ namespace WebApp.Client.AgreementChange
 
                             #endregion
 
-                            #region 代理费
-                            //代理费率
+                            #region 服务费
+                            //预收服务费
+                            var preAgency = AgreementApplyItem.FirstOrDefault(t => t.AgreementChangeType == AgreementChangeType.PreAgency);
+                            if (preAgency != null)
+                            {
+                                clientAgreement.PreAgency = Convert.ToDecimal(preAgency.NewValue);
+                            }
+                            else
+                            {
+                                clientAgreement.PreAgency = agreement.PreAgency;
+                            }
+
+                            //服务费率
                             var agencyRate = AgreementApplyItem.FirstOrDefault(t => t.AgreementChangeType == AgreementChangeType.AgencyRate);
                             if (agencyRate != null)
                             {
@@ -849,7 +881,7 @@ namespace WebApp.Client.AgreementChange
                             {
                                 clientAgreement.AgencyRate = agreement.AgencyRate;
                             }
-                            //最低代理费
+                            //最低服务费
                             var minAgencyFee = AgreementApplyItem.FirstOrDefault(t => t.AgreementChangeType == AgreementChangeType.MinAgencyFee);
                             if (minAgencyFee != null)
                             {
@@ -881,8 +913,11 @@ namespace WebApp.Client.AgreementChange
                             var IsTenType = AgreementApplyItem.FirstOrDefault(t => t.AgreementChangeType == AgreementChangeType.IsTenType);
                             if (IsTenType != null)
                             {
-                                clientAgreement.IsTen = !Convert.ToBoolean(IsTenType.OldValue);
-                              
+                                clientAgreement.IsTen = (PEIsTen)Enum.Parse(typeof(PEIsTen), IsTenType.NewValue);
+                            }
+                            else 
+                            {
+                                clientAgreement.IsTen = agreement.IsTen;
                             }
                             #endregion
 
@@ -986,8 +1021,8 @@ namespace WebApp.Client.AgreementChange
                             clientAgreement.TaxFeeClause.AdminID = agreement.TaxFeeClause.AdminID;
                             #endregion
 
-                            #region 代理费
-                            //代理费
+                            #region 服务费
+                            //服务费
                             clientAgreement.AgencyFeeClause.AgreementID = clientAgreement.ID;
                             clientAgreement.AgencyFeeClause.FeeType = Needs.Ccs.Services.Enums.FeeType.AgencyFee;
                             var agencyPeriodType = AgreementApplyItem.FirstOrDefault(t => t.AgreementChangeType == AgreementChangeType.AgencyPeriodType);

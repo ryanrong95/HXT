@@ -407,7 +407,7 @@
         function Submit() {
             //验证复核时间
             var ss = document.getElementById('checkTime').innerHTML;
-            var needss = ModelCount * 4 + 60;
+            var needss = ModelCount * 4 + 30;
             if ((ss < needss) && IsReturnd != "True") {
                 $.messager.alert('info', '核对时间太短，请仔细核对！');
                 return;

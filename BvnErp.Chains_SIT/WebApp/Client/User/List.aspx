@@ -73,7 +73,7 @@
             $.messager.confirm('确认', '确认重置密码？', function (r) {
                 if (r) {
                     $.post('?action=ResetPassword', { ID: clientID.ID, UserID: userid }, function () {
-                        $.messager.alert('消息', "密码已重置为：XDT123");
+                        $.messager.alert('消息', "密码已重置为：HXT123");
                     });
                 }
             });

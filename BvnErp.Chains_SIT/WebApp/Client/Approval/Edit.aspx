@@ -151,7 +151,7 @@
     }
     ///加载数据
     function decLoadDecheadData() {
-
+        $('#PreAgency').html(clientInfoData.ClientAgreementData.PreAgency);
         $('#AgencyRate').html(clientInfoData.ClientAgreementData.AgencyRate);
         $("#minAgency").html(clientInfoData.ClientAgreementData.MinAgencyFee);
         $("#invoiceType").html(clientInfoData.InvoiceType);
@@ -541,26 +541,28 @@
                                     
                                     <p class="dechead">
                                        
-                                        <label style="font-weight:bold">代理费率:</label>
+                                        <label style="font-weight:bold">服务费率:</label>
                                         <span>
                                             <label id="AgencyRate"></label>
-                                            <label style="margin-left: 50px;font-weight:bold">最低代理费:</label><label id="minAgency"></label>
+                                            <label style="margin-left: 20px; font-weight:bold">基础服务费:</label>
+                                            <span id="PreAgency"></span>
+                                            <label style="margin-left: 20px;font-weight:bold">最低服务费:</label><label id="minAgency"></label>
                                         </span>
 
 
                                         <span>
-                                            <label style="margin-left: 30px;font-weight:bold">开票类型：</label>
+                                            <label style="margin-left: 20px;font-weight:bold">开票类型：</label>
                                             <label id="invoiceType"></label>
                                         </span>
-                                         <label style="margin-left: 30px;font-weight:bold">会员类型:</label> <span id="Nature"></span>
+                                         <label style="margin-left: 20px;font-weight:bold">会员类型:</label> <span id="Nature"></span>
 
 
                                     </p>
                                     <p class="dechead">
                                        <label style="font-weight:bold">换汇方式:</label> <span id="swapType">0.15%</span>
-                                         <label style="margin-left: 30px;">换汇汇率：</label>
+                                         <label style="margin-left: 20px;font-weight:bold">换汇汇率：</label>
                                         <span id="IsTenType"></span>
-                                        <label style="margin-left: 30px;font-weight:bold">合同期限：</label><span id="StartDate"> </span>
+                                        <label style="margin-left: 20px;font-weight:bold">合同期限：</label><span id="StartDate"> </span>
                                         <label style="margin: 5px;font-weight:bold">至</label><span id="EndDate"></span>
                                     </p>
                                      <p class="storage">
@@ -591,7 +593,7 @@
                                             <td id="TaxExchangeRateValue"></td>
                                         </tr>
                                         <tr>
-                                            <td>代理费条款</td>
+                                            <td>服务费条款</td>
                                             <td id="AgencyFeePeriodType"></td>
                                             <td id="AgencyFeeSettleDate"></td>
                                             <td id="AgencyFeeUpperLimit"></td>

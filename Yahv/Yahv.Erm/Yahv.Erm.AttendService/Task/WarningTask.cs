@@ -29,7 +29,7 @@ namespace Yahv.Erm.AttendService
         public void Init()
         {
             var staffs = new Erm.Services.Views.StaffAlls()
-                .Where(item => item.Labour.EnterpriseID == Services.Common.ErmConfig.LabourEnterpriseID || item.Labour.EnterpriseID == Services.Common.ErmConfig.LabourEnterpriseID2)
+                .Where(item => item.Labour.EnterpriseID == Services.Common.ErmConfig.LabourEnterpriseID)
                 .Where(item => item.Status == StaffStatus.Normal || item.Status == StaffStatus.Period).ToArray();
 
             var fileView = new Yahv.Services.Views.CenterFilesTopView()

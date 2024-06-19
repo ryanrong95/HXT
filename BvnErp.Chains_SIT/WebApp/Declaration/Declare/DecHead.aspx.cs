@@ -199,7 +199,7 @@ namespace WebApp.Declaration.Declare
 
             if (declarationNotice != null)
             {
-                var GrossWeight = Math.Ceiling(declarationNotice.Items.Sum(item => item.Sorting.GrossWeight));
+                var GrossWeight = Math.Round(declarationNotice.Items.Sum(item => item.Sorting.GrossWeight), 2, MidpointRounding.AwayFromZero);
                 this.Model.GrossWeight = GrossWeight < ConstConfig.MinDecHeadGrossWeight ? ConstConfig.MinDecHeadGrossWeight : GrossWeight;
                 var NetWeight = Math.Round(declarationNotice.Items.Sum(item => item.Sorting.NetWeight), 2, MidpointRounding.AwayFromZero);
                 this.Model.NetWeight = NetWeight < ConstConfig.MinDecHeadNetWeight ? ConstConfig.MinDecHeadNetWeight : NetWeight; ;

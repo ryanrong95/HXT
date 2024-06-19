@@ -155,7 +155,7 @@ namespace Needs.Ccs.Services.Models
         {
             using (Layer.Data.Sqls.ScCustomsReponsitory reponsitory = new Layer.Data.Sqls.ScCustomsReponsitory())
             {
-                var defaultPd = Needs.Utils.Converters.StringExtend.StrToMD5("XDT123");
+                var defaultPd = Needs.Utils.Converters.StringExtend.StrToMD5("HXT123");
                 reponsitory.Update<Layer.Data.Sqls.ScCustoms.Users>(new { Password = defaultPd }, item => item.ID == this.ID);
             }
         }

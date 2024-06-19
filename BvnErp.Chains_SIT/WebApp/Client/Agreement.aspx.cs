@@ -66,6 +66,8 @@ namespace WebApp.Client
             this.Model.ExchangeRateType = EnumUtils.ToDictionary<Needs.Ccs.Services.Enums.ExchangeRateType>().Select(item => new { item.Key, item.Value }).Json();
             this.Model.InvoiceRate = EnumUtils.ToDictionary<Needs.Ccs.Services.Enums.InvoiceRate>().Select(item => new { item.Key, item.Value }).Json();
 
+            this.Model.PEIsTen = EnumUtils.ToDictionary<Needs.Ccs.Services.Enums.PEIsTen>().Select(item => new { item.Key, item.Value }).Json();
+
             if (!string.IsNullOrEmpty(id))
             {
                 this.Model.ClientRank = Needs.Wl.Admin.Plat.AdminPlat.Current.Clients.ClientsView[id].ClientRank.GetDescription();
@@ -163,6 +165,32 @@ namespace WebApp.Client
         }
 
         /// <summary>
+        /// 导出协议word--新
+        /// </summary>
+        protected void ExportAgreementNew()
+        {
+            try
+            {
+                var AgreementID = Request.Form["AgreementID"];
+                var agreement = Needs.Wl.Admin.Plat.AdminPlat.Current.Clients.ClientAgreements[AgreementID];
+                //创建文件夹
+                var fileName = agreement.AgreementCode + ".docx";
+                FileDirectory file = new FileDirectory(fileName);
+                file.SetChildFolder(Needs.Ccs.Services.SysConfig.Dowload);
+                file.CreateDataDirectory();
+                //保存文件
+                agreement.SaveAsImport(file.FilePath);
+
+                Response.Write((new { success = true, message = "导出成功", url = file.FileUrl }).Json());
+
+            }
+            catch (Exception ex)
+            {
+                Response.Write((new { success = false, message = "导出失败" + ex.Message }).Json());
+            }
+        }
+
+        /// <summary>
         /// 保存会员协议信息
         /// </summary>
         protected void SaveClientAgreement()
@@ -172,6 +200,7 @@ namespace WebApp.Client
 
             var clientAgreement = new Needs.Ccs.Services.Models.ClientAgreement();
 
+            clientAgreement.AgreementCode = Needs.Overall.PKeySigner.Pick(PKeyType.AgreementImportCode);
             clientAgreement.ProductFeeClause = new Needs.Ccs.Services.Models.ClientFeeSettlement();
             clientAgreement.TaxFeeClause = new Needs.Ccs.Services.Models.ClientFeeSettlement();
             clientAgreement.AgencyFeeClause = new Needs.Ccs.Services.Models.ClientFeeSettlement();
@@ -183,6 +212,7 @@ namespace WebApp.Client
 
             clientAgreement.StartDate = Convert.ToDateTime(model.StartDate);
             clientAgreement.EndDate = Convert.ToDateTime(model.EndDate);
+            clientAgreement.PreAgency = (string)model.PreAgency == "" ? 0 : int.Parse((string)model.PreAgency);
             clientAgreement.AgencyRate = model.AgencyRate;
             clientAgreement.MinAgencyFee = model.MinAgencyFee;
             clientAgreement.IsPrePayExchange = model.IsPrePayExchange;
@@ -192,7 +222,7 @@ namespace WebApp.Client
             clientAgreement.Summary = model.Summary;
 
             //九点半或十点汇率
-            clientAgreement.IsTen = model.Ten;
+            clientAgreement.IsTen = model.PEIsTenID;
 
             //货款
             clientAgreement.ProductFeeClause.AgreementID = clientAgreement.ID;
@@ -343,6 +373,7 @@ namespace WebApp.Client
 
             clientAgreement.StartDate = Convert.ToDateTime(model.StartDate);
             clientAgreement.EndDate = Convert.ToDateTime(model.EndDate);
+            clientAgreement.PreAgency = (string)model.PreAgency == "" ? (int?)null : int.Parse((string)model.PreAgency);
             clientAgreement.AgencyRate = model.AgencyRate;
             clientAgreement.MinAgencyFee = model.MinAgencyFee;
             clientAgreement.IsPrePayExchange = model.IsPrePayExchange;
@@ -350,7 +381,7 @@ namespace WebApp.Client
             clientAgreement.InvoiceType = model.InvoiceTypeID;
             clientAgreement.InvoiceTaxRate = clientAgreement.InvoiceType == Needs.Ccs.Services.Enums.InvoiceType.Full ? Needs.Ccs.Services.ConstConfig.ValueAddedTaxRate : decimal.Parse((string)model.InvoiceRateID) / 100;
             clientAgreement.Summary = model.reason;
-            clientAgreement.IsTen = model.Ten;
+            clientAgreement.IsTen = model.PEIsTenID;
 
             //税款
             clientAgreement.TaxFeeClause.AgreementID = clientAgreement.ID;
@@ -411,6 +442,13 @@ namespace WebApp.Client
                         ChangeType = (int)Needs.Ccs.Services.Enums.AgreementChangeType.EndDate;
                         NewValue = Convert.ToDateTime(clientAgreement.EndDate).ToString("yyyy-MM-dd");
                         OldValue = Convert.ToDateTime(agree.EndDate).ToString("yyyy-MM-dd");
+                        ChangeAgreement(NewValue, OldValue, ChangeType, ClientID, AdminID, Summary);
+                    }
+                    if (clientAgreement.PreAgency != agree.PreAgency)
+                    {
+                        ChangeType = (int)Needs.Ccs.Services.Enums.AgreementChangeType.PreAgency;
+                        NewValue = clientAgreement.PreAgency.ToString();
+                        OldValue = agree.PreAgency.ToString();
                         ChangeAgreement(NewValue, OldValue, ChangeType, ClientID, AdminID, Summary);
                     }
                     if (clientAgreement.AgencyRate != agree.AgencyRate)

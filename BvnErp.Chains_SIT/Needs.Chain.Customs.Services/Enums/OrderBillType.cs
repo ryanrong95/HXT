@@ -18,13 +18,13 @@ namespace Needs.Ccs.Services.Enums
         /// <summary>
         /// 按最小代理费收
         /// </summary>
-        [Description("最低代理费")]
+        [Description("最低服务费")]
         MinAgencyFee = 2,
 
         /// <summary>
         /// 按固定金额收
         /// </summary>
-        [Description("指定代理费")]
+        [Description("指定服务费")]
         Pointed = 3
     }
 }

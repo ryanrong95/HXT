@@ -67,7 +67,7 @@
                 }
             });
 
-            InitDialog(exceed);
+            /*InitDialog(exceed);*/
         });
 
         //列表框按钮加载

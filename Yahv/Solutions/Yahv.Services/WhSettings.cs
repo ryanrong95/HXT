@@ -127,12 +127,12 @@ namespace Yahv.Services
             var door2 = new WhDoor
             {
                 ID = "HK02",
-                Name = "香港畅运库房",
-                Address = "新界沙田安丽街11号企业中心23楼19-21室", //"香港九龍觀塘成業街27號日昇中心3樓318室",
+                Name = "香港速逹國際物流",
+                Address = "香港九龙观塘成业街27号日昇中心1204室", //"香港九龍觀塘成業街27號日昇中心3樓318室",
                 Enterprise = new WhEnterprise
                 {
                     ID = "8C7BF4F7F1DE9F69E1D96C96DAF6768E",
-                    Name = "香港畅运国际物流有限公司"
+                    Name = "香港速逹國際物流有限公司"
                 }
             };
 
@@ -172,23 +172,12 @@ namespace Yahv.Services
             var door6 = new WhDoor
             {
                 ID = "TH01",
-                Name = "英达丰",
-                Address = "深圳市龙岗区吉华路393号英达丰科技园A栋101",
+                Name = "中执广场",
+                Address = "深圳市龙华区龙华街道富康社区东环二路110号中执时代广场B栋16H",
                 Enterprise = new WhEnterprise
                 {
                     ID = "TH01",
-                    Name = "英达丰"
-                }
-            };
-            var door7 = new WhDoor
-            {
-                ID = "TH02",
-                Name = "华强北",
-                Address = "深圳市福田区中航路7-1号鼎诚大厦一楼",
-                Enterprise = new WhEnterprise
-                {
-                    ID = "TH02",
-                    Name = "华强北"
+                    Name = "中执广场"
                 }
             };
 
@@ -209,7 +198,7 @@ namespace Yahv.Services
             {
                 ID = "TH",
                 Name = "提货地址",
-                Doors = new WhDoor[] { door6, door7 },
+                Doors = new WhDoor[] { door6 },
             };
 
             #endregion

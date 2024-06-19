@@ -132,7 +132,7 @@ namespace WebApp.Order.Bill
 
                 var bill = getModel(MainOrderID);
 
-                string fileName = DateTime.Now.Ticks + ".pdf";
+                string fileName = "对账单" + DateTime.Now.ToString("MMddHHmmss") + ".pdf";
                 FileDirectory fileDic = new FileDirectory(fileName);
                 fileDic.SetChildFolder(Needs.Ccs.Services.SysConfig.Dowload);
                 fileDic.CreateDataDirectory();
@@ -335,6 +335,7 @@ namespace WebApp.Order.Bill
 
                 viewModel.ClientName = model.OrderBill.Client.Company.Name;
                 viewModel.ClientTel = model.OrderBill.Client.Company.Contact.Tel;
+                viewModel.ClientAddress = model.OrderBill.Client.Company.Address;
                 viewModel.ClientCode = model.OrderBill.Client.ClientCode;
                 viewModel.Currency = model.OrderBill.Currency;
                 viewModel.IsLoan = model.OrderBill.IsLoan;
@@ -344,6 +345,7 @@ namespace WebApp.Order.Bill
                 var NoTransPremiumInsurance = System.Configuration.ConfigurationManager.AppSettings["NoTransPremiumInsurance"];
                 viewModel.HasYBZ = !NoTransPremiumInsurance.Split(',').Contains(model.OrderBill.Client.ClientCode);
 
+                viewModel.Agreement = model.OrderBill.Agreement;
                 //  viewModel.DueDate = model.OrderBill.GetDueDate().ToString("yyyy年MM月dd日");
                 //1.存在部分垫资，其中已还款，但是日期最近，也显示已还款那笔垫资的订单
                 //2.不考虑已退单存在垫资的订单

@@ -10,6 +10,7 @@ using Needs.Utils.Descriptions;
 using Needs.Wl.Warehouse.Services.Views;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Org.BouncyCastle.Asn1.Ocsp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,6 +36,9 @@ namespace WebApi.Controllers
         /// <returns></returns>
         public ActionResult UnSortingList(JPost jpost)
         {
+            if (jpost["OPTIONS"] == "True")
+                return null;
+
             int page = jpost["PageIndex"];
             int rows = jpost["PageSize"];
             string OrderID = jpost["OrderID"];
@@ -136,6 +140,9 @@ namespace WebApi.Controllers
         /// <returns></returns>
         public ActionResult SealedList(JPost jpost)
         {
+            if (jpost["OPTIONS"] == "True")
+                return null;
+
             int page = jpost["PageIndex"];
             int rows = jpost["PageSize"];
             string OrderID = jpost["OrderID"];
@@ -238,6 +245,9 @@ namespace WebApi.Controllers
         /// <returns></returns>
         public ActionResult SortingBasicInfo(string entryNoticeID)
         {
+            if (string.IsNullOrEmpty(entryNoticeID))
+                return null;
+
             BasicInfo basicInfo = new BasicInfo();
             basicInfo.EntryNoticeID = entryNoticeID;
 
@@ -323,6 +333,9 @@ namespace WebApi.Controllers
         {
             try
             {
+                if (jpost["OPTIONS"] == "True")
+                    return null;
+
                 string orderID = jpost["orderID"];
                 string CarrierID = jpost["CarrierID"];
                 string DriverID = jpost["DriverID"];
@@ -360,6 +373,9 @@ namespace WebApi.Controllers
         {
             try
             {
+                if (jpost["OPTIONS"] == "True")
+                    return null;
+
                 string orderID = jpost["orderID"];
                 int DeliveryNoticeStatus = jpost["deliveryNoticeStatus"];
 
@@ -544,6 +560,9 @@ namespace WebApi.Controllers
         /// <param name="orderID"></param>
         public ActionResult LoadPackedProduct(string orderID)
         {
+            if (string.IsNullOrEmpty(orderID))
+                return null;
+
             using (var query = new Needs.Ccs.Services.Views.PackedProductsViewNew(orderID))
             {
                 var view = query;
@@ -576,6 +595,9 @@ namespace WebApi.Controllers
         /// <returns></returns>
         public ActionResult LoadPackedProductWayBill(string orderID)
         {
+            if (string.IsNullOrEmpty(orderID))
+                return null;
+
             PackedProductsView view = new PackedProductsView(orderID);
             view.AllowPaging = false;
             var list = view.ToList();
@@ -605,6 +627,9 @@ namespace WebApi.Controllers
         {
             try
             {
+                if (jpost["OPTIONS"] == "True")
+                    return null;
+
                 var requestModel = jpost.ToObject<JObject>();
                 List<string> innerBoxes = JsonConvert.DeserializeObject<List<string>>(requestModel["boxes"].ToString());
                 int innerCount = new CalculateContext(CompanyTypeEnums.Icgoo, innerBoxes).CalculatePacks();
@@ -626,6 +651,9 @@ namespace WebApi.Controllers
         {
             try
             {
+                if (jpost["OPTIONS"] == "True")
+                    return null;
+
                 var requestModel = jpost.ToObject<PackingInfo>();
                 var hkSorting = new Needs.Ccs.Services.Models.HKSortingContext();
                 var XdtAdminId = new AdminsTopView2().FirstOrDefault(t => t.ID == requestModel.AdminID)?.OriginID;
@@ -679,6 +707,9 @@ namespace WebApi.Controllers
         /// <returns></returns>
         public ActionResult BoxIndexValidate(JPost jpost)
         {
+            if (jpost["OPTIONS"] == "True")
+                return null;
+
             string BoxIndex = jpost["BoxIndex"];
             DateTime PackingDate = Convert.ToDateTime(jpost["PackingDate"]);
             DateTime PackingEnd = Convert.ToDateTime(jpost["PackingDate"] + " 23:59");
@@ -716,6 +747,9 @@ namespace WebApi.Controllers
 
         private int[] GetCaseNumbers(string CaseNumber)
         {
+            if (string.IsNullOrEmpty(CaseNumber))
+                return null;
+
             //外单多个订单一个箱子到货，使用特殊箱号 2022-02-21 ryan
             //处理特殊箱号：WL06-1   WL06-01
             List<int> list = new List<int>();
@@ -744,6 +778,8 @@ namespace WebApi.Controllers
 
         private int[] GetCaseNumbers(IQueryable<Needs.Ccs.Services.Models.Packing> packings)
         {
+            if (packings == null)
+                return null;
 
             List<int> list = new List<int>();
             foreach (var packing in packings)
@@ -759,6 +795,8 @@ namespace WebApi.Controllers
 
         private int[] GetCaseNumbers(IQueryable<Needs.Ccs.Services.Models.UnExpectedOrderItem> packings)
         {
+            if (packings == null)
+                return null;
 
             List<int> list = new List<int>();
             foreach (var packing in packings)
@@ -776,6 +814,9 @@ namespace WebApi.Controllers
         /// <returns></returns>
         public ActionResult OrderWaybillInfo(string orderID)
         {
+            if (string.IsNullOrEmpty(orderID))
+                return null;
+
             using (Layer.Data.Sqls.ScCustomsReponsitory reponsitory = new Layer.Data.Sqls.ScCustomsReponsitory())
             {
                 var list = (from orderWaybill in reponsitory.ReadTable<Layer.Data.Sqls.ScCustoms.OrderWaybills>()
@@ -829,6 +870,9 @@ namespace WebApi.Controllers
         {
             try
             {
+                if (jpost["OPTIONS"] == "True")
+                    return null;
+
                 string PackingID = jpost["PackingID"];
                 string PackingDate = jpost["PackingDate"];
                 string NewBoxIndex = jpost["NewBoxIndex"];
@@ -893,6 +937,9 @@ namespace WebApi.Controllers
         {
             try
             {
+                if (jpost["OPTIONS"] == "True")
+                    return null;
+
                 string UnExpectedID = jpost["UnExpectedID"];
                 string PackingDate = jpost["PackingDate"];
                 string NewBoxIndex = jpost["NewBoxIndex"];
@@ -944,6 +991,9 @@ namespace WebApi.Controllers
         {
             try
             {
+                if (packings == null)
+                    return null;
+
                 PackingSensitiveCheck check = new PackingSensitiveCheck(packings);
                 string sensitiveAreas = "";
                 bool alert = check.Check(out sensitiveAreas);
@@ -965,6 +1015,9 @@ namespace WebApi.Controllers
         {
             try
             {
+                if (string.IsNullOrEmpty(orderID))
+                    return null;
+
                 using (Layer.Data.Sqls.ScCustomsReponsitory reponsitory = new Layer.Data.Sqls.ScCustomsReponsitory())
                 {
                     var UnExpected = reponsitory.ReadTable<Layer.Data.Sqls.ScCustoms.UnExpectedOrderItem>().Where(t => t.OrderID == orderID &&
@@ -993,6 +1046,9 @@ namespace WebApi.Controllers
         /// <returns></returns>
         public ActionResult HKOperationLog(JPost jpost)
         {
+            if (jpost["OPTIONS"] == "True")
+                return null;
+
             int page = jpost["PageIndex"];
             int rows = jpost["PageSize"];
             string OrderID = jpost["OrderID"];
@@ -1020,6 +1076,9 @@ namespace WebApi.Controllers
         {
             try
             {
+                if (jpost["OPTIONS"] == "True")
+                    return null;
+
                 string PackingID = jpost["PackingID"];
                 string EntryNoticeID = jpost["EntryNoticeID"];
                 string AdminID = jpost["AdminID"];
@@ -1051,6 +1110,9 @@ namespace WebApi.Controllers
         {
             try
             {
+                if (jpost["OPTIONS"] == "True")
+                    return null;
+
                 string EntryNoticeID = jpost["EntryNoticeID"];
                 string AdminID = jpost["AdminID"];
                 string OrderID = jpost["OrderID"];
@@ -1101,6 +1163,9 @@ namespace WebApi.Controllers
         {
             try
             {
+                if (jpost["OPTIONS"] == "True")
+                    return null;
+
                 string PackingID = jpost["PackingID"];
                 var packing = new Needs.Ccs.Services.Views.PackingsView().Where(item => item.ID == PackingID).FirstOrDefault();
                 packing.CancelSealed();
@@ -1125,6 +1190,10 @@ namespace WebApi.Controllers
         {
             try
             {
+
+                if (jPost["OPTIONS"] == "True")
+                    return null;
+
                 string orderItemID = jPost["OrderItemID"];
                 string origin = jPost["Origin"];
                 string manufacturer = jPost["Manufacturer"];
@@ -1155,6 +1224,9 @@ namespace WebApi.Controllers
         {
             try
             {
+                if (jPost["OPTIONS"] == "True")
+                    return null;
+
                 string orderItemID = jPost["OrderItemID"];
                 string adminID = jPost["adminID"];
                 string productmodel = jPost["ProductModel"];
@@ -1187,6 +1259,9 @@ namespace WebApi.Controllers
         {
             try
             {
+                if (jPost["OPTIONS"] == "True")
+                    return null;
+
                 string origin = jPost["OriginValue"];
                 string orderItemID = jPost["OrderItemID"];
                 string AdminID = jPost["AdminID"];
@@ -1218,6 +1293,9 @@ namespace WebApi.Controllers
         {
             try
             {
+                if (jPost["OPTIONS"] == "True")
+                    return null;
+
                 string orderItemID = jPost["OrderItemID"];
                 string AdminID = jPost["AdminID"];
                 string manufacturer = jPost["Manufacturer"];
@@ -1250,6 +1328,9 @@ namespace WebApi.Controllers
         {
             try
             {
+                if (jPost["OPTIONS"] == "True")
+                    return null;
+
                 string orderItemID = jPost["OrderItemID"];
                 string AdminID = jPost["AdminID"];
                 string batch = jPost["Batch"];
@@ -1280,6 +1361,9 @@ namespace WebApi.Controllers
         /// <param name="orderID"></param>
         private void Post2Client(string orderID)
         {
+            if (string.IsNullOrEmpty(orderID))
+                return;
+
             string tinyOrderID = orderID;
             var OriginOrder = new Needs.Ccs.Services.Views.OrdersView().Where(t => t.ID == tinyOrderID).FirstOrDefault();
             MatchPost2AgentWarehouse post = new MatchPost2AgentWarehouse(OriginOrder.MainOrderID, OriginOrder);
@@ -1296,6 +1380,9 @@ namespace WebApi.Controllers
         {
             try
             {
+                if (requestModel == null)
+                    return null;
+
                 foreach (var item in requestModel)
                 {
                     item.ID = ChainsGuid.NewGuidUp();
@@ -1325,6 +1412,9 @@ namespace WebApi.Controllers
         /// <returns></returns>
         public ActionResult UnExceptedList(string orderID)
         {
+            if (string.IsNullOrEmpty(orderID))
+                return null;
+
             using (var query = new Needs.Ccs.Services.Views.UnExceptedItemsView())
             {
                 var view = query;
@@ -1344,6 +1434,9 @@ namespace WebApi.Controllers
         {
             try
             {
+                if (string.IsNullOrEmpty(ID))
+                    return null;
+
                 using (Layer.Data.Sqls.ScCustomsReponsitory reponsitory = new Layer.Data.Sqls.ScCustomsReponsitory())
                 {
                     reponsitory.Update<Layer.Data.Sqls.ScCustoms.UnExpectedOrderItem>(new
@@ -1409,6 +1502,9 @@ namespace WebApi.Controllers
         /// <returns></returns>
         public ActionResult WeightAlert(JPost jPost)
         {
+            if (jPost["OPTIONS"] == "True")
+                return null;
+
             decimal percentage = 0.5m;
             decimal estimateWeight = Convert.ToDecimal(jPost["EstimateWeight"]);
             decimal totalWeight = Convert.ToDecimal(jPost["TotalWeight"]);
@@ -1434,6 +1530,8 @@ namespace WebApi.Controllers
 
         private decimal EstimateWeight(List<WeightAlterItem> items)
         {
+            if (items == null)
+                return 0M;
             decimal totalEstimateWeight = 0m;
             List<string> models = new List<string>();
             foreach (var item in items)
@@ -1470,6 +1568,9 @@ namespace WebApi.Controllers
         {
             try
             {
+                if (string.IsNullOrEmpty(orderID))
+                    return null;
+
                 StockingContext stockingContext = new StockingContext(orderID);
                 int days = stockingContext.calculate();
                 return Json(new { success = true, message = "计算成功", data = days }, JsonRequestBehavior.AllowGet);
@@ -1502,6 +1603,9 @@ namespace WebApi.Controllers
         /// <returns></returns>
         public ActionResult ManifestVoyageList(JPost jPost)
         {
+            if (jPost["OPTIONS"] == "True")
+                return null;
+
             string voyageNo = jPost["LotNumber"];
             string carrier = jPost["Carrier"];
             string cutStatus = jPost["Status"];
@@ -1561,6 +1665,9 @@ namespace WebApi.Controllers
         /// <returns></returns>
         public ActionResult VoyageInfo(string voyageNo)
         {
+            if (string.IsNullOrEmpty(voyageNo))
+                return null;
+
             var VoyageInfo = new VoyagesView().Where(t => t.ID == voyageNo).FirstOrDefault();
 
             VoyageInfoViewModel voyage = new VoyageInfoViewModel();
@@ -1609,6 +1716,9 @@ namespace WebApi.Controllers
         /// <returns></returns>
         public ActionResult VoyageDetail(JPost jPost)
         {
+            if (jPost["OPTIONS"] == "True")
+                return null;
+
             string voyageNo = jPost["voyageNo"];
             string clientType = jPost["clientType"];
             int page = jPost["PageIndex"];
@@ -1647,6 +1757,9 @@ namespace WebApi.Controllers
         /// <returns></returns>
         public ActionResult UpdateHKSealNo(JPost jPost)
         {
+            if (jPost["OPTIONS"] == "True")
+                return null;
+
             string voyageNo = jPost["voyageNo"];
             string sealNo = jPost["sealNo"];
             try
@@ -1674,6 +1787,9 @@ namespace WebApi.Controllers
 
             try
             {
+                if (jPost["OPTIONS"] == "True")
+                    return null;
+
                 string voyageNo = jPost["voyageNo"];
                 int packNo = Convert.ToInt16(jPost["packNo"]);
                 int voyagePackNo = 0;
@@ -1816,6 +1932,9 @@ namespace WebApi.Controllers
         {
             try
             {
+                if (jPost["OPTIONS"] == "True")
+                    return null;
+
                 string voyageNo = jPost["voyageNo"];
                 string fileType = jPost["fileType"];
                 int totalPackNo = jPost["totalPackNo"];

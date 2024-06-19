@@ -902,5 +902,46 @@ namespace Layers.Data.Properties {
                 return ((string)(this["PvWsOrderConnectionString10"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=.;Initial Catalog=foricScCustoms;User ID=sa;TrustServerCertificate=Tr" +
+            "ue")]
+        public string foricScCustomsConnectionString10 {
+            get {
+                return ((string)(this["foricScCustomsConnectionString10"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=.;Initial Catalog=PvbCrm;User ID=sa;TrustServerCertificate=True")]
+        public string PvbCrmConnectionString3 {
+            get {
+                return ((string)(this["PvbCrmConnectionString3"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=.;Initial Catalog=PvWsOrder;User ID=sa;TrustServerCertificate=True")]
+        public string PvWsOrderConnectionString11 {
+            get {
+                return ((string)(this["PvWsOrderConnectionString11"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=.;Initial Catalog=PvWms;User ID=sa;TrustServerCertificate=True")]
+        public string PvWmsConnectionString7 {
+            get {
+                return ((string)(this["PvWmsConnectionString7"]));
+            }
+        }
     }
 }

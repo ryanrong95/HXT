@@ -105,9 +105,10 @@ namespace Needs.Ccs.Services.Views
                                Company = new Company
                                {
                                    Name = company.Name,
+                                   Address = company.Address,
                                    Contact = new Contact
                                    {
-                                       Tel = contact.Tel,
+                                       Tel = contact.Mobile,
                                    }
                                },
                                ClientType = (Enums.ClientType)client.ClientType,
@@ -118,6 +119,7 @@ namespace Needs.Ccs.Services.Views
                                InvoiceTaxRate = clientAgr.InvoiceTaxRate,
                                AgencyRate = clientAgr.AgencyRate,
                                MinAgencyFee = clientAgr.MinAgencyFee,
+                               PreAgency = clientAgr.PreAgency,
                                AgencyFeeClause = new ClientFeeSettlement
                                {
                                    ExchangeRateType = (Enums.ExchangeRateType)agencyFee.ExchangeRateType,

@@ -209,7 +209,7 @@ namespace WebApp.Order.AgentProxy
                 var agentProxy = Needs.Wl.Admin.Plat.AdminPlat.Current.Order.MainOrderAgentProxies[Orders.FirstOrDefault().ID];
 
                 //保存文件
-                string fileName = DateTime.Now.Ticks + ".pdf";
+                string fileName = "委托书" + DateTime.Now.ToString("MMddHHmmss") + ".pdf";
                 FileDirectory fileDic = new FileDirectory(fileName);
                 fileDic.SetChildFolder(Needs.Ccs.Services.SysConfig.Dowload);
                 fileDic.CreateDataDirectory();

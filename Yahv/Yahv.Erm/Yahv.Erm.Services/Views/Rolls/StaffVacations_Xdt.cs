@@ -33,7 +33,7 @@ namespace Yahv.Erm.Services.Views.Rolls
         protected override IQueryable<StaffVacation_Show> GetIQueryable()
         {
             var staffView = new StaffsOrigin(this.Reponsitory).Where(item => item.Status == StaffStatus.Normal || item.Status == StaffStatus.Period);
-            var labourView = new LaboursOrigin(this.Reponsitory).Where(item => item.EnterpriseID == Common.ErmConfig.LabourEnterpriseID || item.EnterpriseID == Common.ErmConfig.LabourEnterpriseID2);
+            var labourView = new LaboursOrigin(this.Reponsitory).Where(item => item.EnterpriseID == Common.ErmConfig.LabourEnterpriseID);
             var staffs = (from entity in staffView
                           join labour in labourView on entity.ID equals labour.ID
                           select entity).ToArray();

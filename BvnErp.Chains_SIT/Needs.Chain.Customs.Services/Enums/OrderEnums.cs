@@ -223,7 +223,7 @@ namespace Needs.Ccs.Services.Enums
         /// <summary>
         /// 代理费
         /// </summary>
-        [Description("代理费")]
+        [Description("服务费")]
         AgencyFee,
 
         /// <summary>

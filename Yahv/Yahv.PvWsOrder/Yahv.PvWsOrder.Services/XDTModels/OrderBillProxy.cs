@@ -29,6 +29,8 @@ namespace Yahv.PvWsOrder.Services.XDTModels
         /// </summary>
         public WsClient Client { get; set; }
 
+        public ClientAgreement ClientAgreement { get; set; }
+
         /// <summary>
         /// 合同号
         /// </summary>
@@ -428,6 +430,408 @@ namespace Yahv.PvWsOrder.Services.XDTModels
             return pdf;
         }
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="MyXDTOrder"></param>
+        /// <param name="amountFor代垫本金"></param>
+        /// <param name="clientType"></param>
+        /// <returns></returns>
+        public PdfDocument ToPdfNew(XDTOrderView MyXDTOrder, decimal amountFor代垫本金, Yahv.PvWsOrder.Services.Enums.ClientType clientType)
+        {
+            var currencyName = this.Order.Output.Currency.GetDescription();
+            var currencyCode = this.Order.Output.Currency.ToString();
+
+            #region pdf对象声明
+            //创建一个PdfDocument类对象
+            Utils.SpirePdf.PdfDocument pdf = new PdfDocument();
+            pdf.PageSettings.Margins = new PdfMargins(20, 50, 20, 10);
+
+            //添加一页到PDF文档
+            PdfPageBase page = pdf.Pages.Add(PdfPageSize.A4);
+            int pageCount = pdf.Pages.Count;
+
+            //画笔
+            PdfBrush brush = PdfBrushes.Black;
+            //字体
+            PdfTrueTypeFont font1 = new PdfTrueTypeFont(new Font("SimSun", 14f, FontStyle.Bold), true);
+            PdfTrueTypeFont font2 = new PdfTrueTypeFont(new Font("SimSun", 7f, FontStyle.Regular), true);
+            //字体对齐方式
+            PdfStringFormat formatCenter = new PdfStringFormat(PdfTextAlignment.Center);
+            PdfStringFormat formatRight = new PdfStringFormat(PdfTextAlignment.Right);
+            PdfStringFormat formatLeft = new PdfStringFormat(PdfTextAlignment.Left);
+
+            var tbHeight = 12f;
+            #endregion
+
+            #region 头
+            float x = 0, y = 5f;
+
+            float width = page.Canvas.ClientSize.Width;
+            string message = "委托进口货物对账单";
+            page.Canvas.DrawString(message, font1, brush, width / 2, y, formatCenter);
+            y += font1.MeasureString(message, formatCenter).Height + 8;
+
+            message = "Statement of Entrusted Import Goods";
+            page.Canvas.DrawString(message.ToUpper(), new PdfTrueTypeFont(new Font("SimSun", 10f, FontStyle.Bold), true), brush, width / 2, y, formatCenter);
+            y += font1.MeasureString(message, formatCenter).Height + 8;
+
+            //创建一个PdfGrid对象
+            PdfGrid grid = new PdfGrid();
+            grid.Style.Font = font2;
+
+            //设置列宽
+            grid.Columns.Add(2);
+            grid.Columns[0].Width = width / 2;
+            grid.Columns[1].Width = width / 2;
+
+            //表头信息
+            PdfGridRow row = grid.Rows.Add();
+            row.Cells[0].Value = "委托方: " + this.Client.Name;
+            row.Cells[1].Value = "代理方: " + purchaser.CompanyName;
+            row = grid.Rows.Add();
+            row.Cells[0].Value = "委托方地址：" + this.Client.RegAddress;
+            row.Cells[1].Value = "代理方地址：" + purchaser.Address;
+            row = grid.Rows.Add();
+            row.Cells[0].Value = "委托方电话：" + this.ClientContact?.Tel;
+            row.Cells[1].Value = "代理方电话：" + purchaser.Tel;
+
+            //设置无边框
+            SetCellNoBorder(grid);
+
+            PdfLayoutResult result = grid.Draw(page, new PointF(x, y));
+            y += result.Bounds.Height + 5;
+
+
+            /////////////////////////////////////////////////////
+            grid = new PdfGrid();
+            grid.Style.Font = font2;
+
+            //设置列宽
+            grid.Columns.Add(2);
+            grid.Columns[0].Width = width / 2;
+            grid.Columns[1].Width = width / 2;
+
+            //表头信息
+            var preAgency = (this.ClientAgreement.PreAgency.HasValue && this.ClientAgreement.PreAgency > 0) ? (this.ClientAgreement.PreAgency.Value.ToString("0.##") + "元 + ") : "";
+            var PEIsTen = this.ClientAgreement.IsTen == XDTClientView.PEIsTen.Ten ? "（进口当天中国银行10:00之后第一个外汇卖出价）" : "（进口当天中国银行09:30之后第一个外汇卖出价）";
+
+            //税费汇率
+            var TaxExchangeRateName = "";
+            if (this.ClientAgreement.clientFeeSettlements.FirstOrDefault(t => t.FeeType == 2).ExchangeRateType == PvWsOrder.Services.XDTClientView.ExchangeRateType.Custom)
+            {
+                TaxExchangeRateName = "（进口当月海关汇率）";
+            }
+            else if (this.ClientAgreement.clientFeeSettlements.FirstOrDefault(t => t.FeeType == 2).ExchangeRateType == PvWsOrder.Services.XDTClientView.ExchangeRateType.RealTime)
+            {
+                TaxExchangeRateName = "（进口当天中国银行10:00之后第一个外汇卖出价）";
+            }
+            else
+            {
+                TaxExchangeRateName = "（双方约定汇率）";
+            }
+
+            //服务费汇率
+            var AgencyExchangeRateName = "";
+            if (this.ClientAgreement.clientFeeSettlements.FirstOrDefault(t => t.FeeType == 3).ExchangeRateType == PvWsOrder.Services.XDTClientView.ExchangeRateType.Custom)
+            {
+                AgencyExchangeRateName = "（进口当月海关汇率）";
+            }
+            else if (this.ClientAgreement.clientFeeSettlements.FirstOrDefault(t => t.FeeType == 3).ExchangeRateType == PvWsOrder.Services.XDTClientView.ExchangeRateType.RealTime)
+            {
+                AgencyExchangeRateName = "（进口当天中国银行10:00之后第一个外汇卖出价）";
+            }
+            else
+            {
+                AgencyExchangeRateName = "（双方约定汇率）";
+            }
+
+            row = grid.Rows.Add();
+            row.Cells[0].Value = "订单编号: " + this.Order.ID;
+            row.Cells[0].Style.Font = new PdfTrueTypeFont(new Font("SimSun", 8f, FontStyle.Bold), true);
+            row.Cells[1].Value = "实时汇率: " + this.orderitems[0].RealExchangeRate.ToString("0.######") + AgencyExchangeRateName;
+
+            row = grid.Rows.Add();
+            row.Cells[0].Value = "服务费收费标准: " + "服务费率：" + preAgency + (this.ClientAgreement.AgencyRate * 100).ToString("0.##") + "% ，最低消费" + this.ClientAgreement.MinAgencyFee.ToString("0.##") + "元/单";
+            row.Cells[1].Value = "税款汇率: " + this.orderitems[0].CustomsExchangeRate.ToString("0.######") + TaxExchangeRateName;
+
+
+            //设置无边框
+            SetCellNoBorder(grid);
+
+            result = grid.Draw(page, new PointF(x, y));
+            y += result.Bounds.Height + 5;
+            #endregion
+
+
+            #region 报关商品明细
+            var tinyorderids = this.orderitems.Select(item => item.TinyOrderID).Distinct().OrderBy(item => item);
+
+            decimal subtotalQty = 0;
+            decimal subtotalPrice = 0, subtotalCNYPrice = 0;
+            decimal subtotalAgencyFee = 0, subtotalIncidentalFee = 0;
+            decimal subtotalTraiff = 0, subtotalExciseTax = 0, subtotalAddedValueTax = 0;
+            decimal subtotalTaxFee = 0, subtotalAmount = 0;
+
+            foreach (var id in tinyorderids)
+            {
+                var items = this.orderitems.Where(item => item.TinyOrderID == id);
+                //获取合同号
+                using (ScCustomReponsitory res = new ScCustomReponsitory())
+                {
+                    this.ContrNo = res.ReadTable<Layers.Data.Sqls.ScCustoms.DecHeads>().SingleOrDefault(item => item.OrderID == id && item.IsSuccess == true)?.ContrNo;
+                }
+
+                //创建一个PdfGrid对象
+                grid = new PdfGrid();
+                grid.Style.Font = font2;
+
+                //设置列宽
+                grid.Columns.Add(15);
+                grid.Columns[0].Width = width * 3f / 100;
+                grid.Columns[1].Width = width * 12f / 100;
+                grid.Columns[2].Width = width * 13f / 100;
+                grid.Columns[3].Width = width * 5f / 100;
+                grid.Columns[4].Width = width * 6f / 100;
+                grid.Columns[5].Width = width * 8f / 100;
+                grid.Columns[6].Width = width * 8f / 100;
+                grid.Columns[7].Width = width * 5f / 100;
+                grid.Columns[8].Width = width * 6f / 100;
+                grid.Columns[9].Width = width * 6f / 100;
+                grid.Columns[10].Width = width * 6f / 100;
+                grid.Columns[11].Width = width * 6f / 100;
+                grid.Columns[12].Width = width * 8f / 100;
+                grid.Columns[13].Width = width * 8f / 100;
+
+                //产品信息
+                row = grid.Rows.Add();
+                row.Height = tbHeight;
+                row.Cells[0].Value = "序号";
+                row.Cells[1].Value = "报关品名";
+                row.Cells[2].Value = "规格型号";
+                row.Cells[3].Value = "数量";
+                row.Cells[4].Value = "单价" + "" + currencyCode + "";
+                row.Cells[5].Value = "原货值" + "" + currencyCode + "";
+                row.Cells[6].Value = "货值RMB";
+                row.Cells[7].Value = "关税率";
+                row.Cells[8].Value = "关税";
+                row.Cells[9].Value = "增值税";
+                row.Cells[10].Value = "服务费";
+                row.Cells[11].Value = "杂费";
+                row.Cells[12].Value = "税费合计";
+                row.Cells[13].Value = "含税总金额";
+
+                int sn = 0;
+
+                foreach (var item in items)
+                {
+                    sn++;
+                    row = grid.Rows.Add();
+                    row.Height = tbHeight;
+                    row.Cells[0].Value = sn.ToString();
+                    row.Cells[1].Value = item.ClassfiedName;
+                    row.Cells[2].Value = item.Product.PartNumber;
+                    row.Cells[3].Value = item.Quantity.ToString("0.####");
+                    row.Cells[4].Value = item.UnitPrice.ToString("0.####");
+                    row.Cells[5].Value = item.TotalPrice.ToString("0.00");
+                    row.Cells[6].Value = item.DeclareTotalPrice.ToString("0.00");
+                    row.Cells[7].Value = item.TraiffRate.ToString("0.##");
+                    row.Cells[8].Value = item.Traiff.ToString("0.##");
+                    row.Cells[9].Value = item.AddTax.ToString("0.00");
+                    row.Cells[10].Value = item.AgencyFee.ToString("0.##");
+                    row.Cells[11].Value = item.InspectionFee.ToString("0.##");
+                    row.Cells[12].Value = "¥" + (item.Traiff + item.ExcisePrice + item.AddTax + item.AgencyFee + item.InspectionFee).ToString("0.00");
+                    row.Cells[13].Value = "¥" + (item.DeclareTotalPrice + item.Traiff + item.ExcisePrice + item.AddTax + item.AgencyFee + item.InspectionFee).ToString("0.00");
+                }
+
+                decimal totalQty = items.Sum(item => item.Quantity);
+                decimal totalPrice = items.Sum(item => item.TotalPrice), totalCNYPrice = items.Sum(item => item.DeclareTotalPrice);
+                decimal totalAgencyFee = items.Sum(item => item.AgencyFee).Round(), totalIncidentalFee = items.Sum(item => item.InspectionFee).Round();
+                decimal totalTraiff = items.Sum(item => item.Traiff), totalExcise = items.Sum(item => item.ExcisePrice), totalAddedValueTax = items.Sum(item => item.AddTax);
+
+                if (totalTraiff < 50)
+                {
+                    totalTraiff = 0;
+                    foreach (var item in items)
+                    {
+                        item.Traiff = 0;
+                    }
+                }
+                if (totalExcise < 50)
+                {
+                    totalExcise = 0;
+                    foreach (var item in items)
+                    {
+                        item.ExcisePrice = 0;
+                    }
+                }
+                if (totalAddedValueTax < 50)
+                {
+                    totalAddedValueTax = 0;
+                    foreach (var item in items)
+                    {
+                        item.AddTax = 0;
+                    }
+                }
+
+                decimal totalTaxFee = totalTraiff + totalExcise + totalAddedValueTax + totalAgencyFee + totalIncidentalFee;
+                decimal totalAmount = totalCNYPrice + totalExcise + totalTraiff + totalAddedValueTax + totalAgencyFee + totalIncidentalFee;
+
+
+                subtotalQty += totalQty;
+                subtotalPrice += totalPrice;
+                subtotalCNYPrice += totalCNYPrice;
+                subtotalTraiff += totalTraiff;
+                subtotalAddedValueTax += totalAddedValueTax;
+                subtotalAgencyFee += totalAgencyFee;
+                subtotalIncidentalFee += totalIncidentalFee;
+                subtotalTaxFee += totalTaxFee;
+                subtotalAmount += totalAmount;
+
+            }
+
+            //合计行
+            row = grid.Rows.Add();
+            row.Height = tbHeight;
+            row.Cells[0].ColumnSpan = 3;
+            row.Cells[0].Value = "合计:";
+            row.Cells[3].Value = subtotalQty.ToString("0.####");
+            row.Cells[5].Value = subtotalPrice.ToString("0.##");
+            row.Cells[6].Value = subtotalCNYPrice.ToString("0.00");
+            row.Cells[8].Value = subtotalTraiff.ToString("0.##");
+            row.Cells[9].Value = subtotalAddedValueTax.ToString("0.##");
+            row.Cells[10].Value = subtotalAgencyFee.ToString("0.##");
+            row.Cells[11].Value = subtotalIncidentalFee.ToString("0.##");
+            row.Cells[12].Value = "¥" + subtotalTaxFee.ToString("0.00");
+            row.Cells[13].Value = "¥" + subtotalAmount.ToString("0.00");
+
+            foreach (var pgr in grid.Rows)
+            {
+                for (int i = 0; i < pgr.Cells.Count; i++)
+                {
+                    if (i == 1 || i == 2)
+                    {
+                        pgr.Cells[i].StringFormat = new PdfStringFormat(PdfTextAlignment.Left, PdfVerticalAlignment.Middle);
+                        continue;
+                    }
+                    pgr.Cells[i].StringFormat = new PdfStringFormat(PdfTextAlignment.Center, PdfVerticalAlignment.Middle);
+                }
+            }
+
+            //小计行部分
+
+            decimal TotalPrice = this.orderitems.Sum(item => item.TotalPrice), TotalCNYPrice = orderitems.Sum(item => item.DeclareTotalPrice);
+            decimal TotalTraiff = this.orderitems.Sum(item => item.Traiff), TotalExcise = this.orderitems.Sum(item => item.ExcisePrice), TotalAddedValueTax = orderitems.Sum(item => item.AddTax);
+            decimal TotalAgencyFee = this.orderitems.Sum(item => item.AgencyFee), TotalIncidentalFee = this.orderitems.Sum(item => item.InspectionFee);
+            decimal TotalTax = TotalTraiff + TotalExcise + TotalAddedValueTax + TotalAgencyFee + TotalIncidentalFee;
+            decimal TotalAmount = TotalCNYPrice + TotalTax;
+
+            row = grid.Rows.Add();
+            row.Height = 18f;
+            row.Cells[0].ColumnSpan = 4;
+            row.Cells[0].Value = "备注:";
+            row.Cells[0].StringFormat = new PdfStringFormat(PdfTextAlignment.Left, PdfVerticalAlignment.Middle);
+
+            row.Cells[4].ColumnSpan = 4;
+            row.Cells[4].Value = "货值小计：" + currencyCode + " " + TotalPrice.ToString("0.00") + "   ¥" + TotalCNYPrice.ToString("0.00");
+            row.Cells[4].StringFormat = new PdfStringFormat(PdfTextAlignment.Center, PdfVerticalAlignment.Middle);
+
+            row.Cells[8].ColumnSpan = 3;
+            row.Cells[8].Value = "税代费小计：" + "¥" + TotalTax.ToString("0.00");
+            row.Cells[8].StringFormat = new PdfStringFormat(PdfTextAlignment.Center, PdfVerticalAlignment.Middle);
+
+            row.Cells[11].ColumnSpan = 3;
+            row.Cells[11].Value = "发票总金额：" + "¥" + TotalAmount.ToString("0.00");
+            row.Cells[11].StringFormat = new PdfStringFormat(PdfTextAlignment.Center, PdfVerticalAlignment.Middle);
+
+            row = grid.Rows.Add();
+            row.Height = 18f;
+            row.Cells[0].ColumnSpan = 11;
+            row.Cells[0].Value = "特别提示: 请在协议约定账期内付款，超出按照日 0.0005 支付逾期利息";
+            row.Cells[0].StringFormat = new PdfStringFormat(PdfTextAlignment.Left, PdfVerticalAlignment.Middle);
+            row.Cells[0].Style.Font = new PdfTrueTypeFont(new Font("SimSun", 9f, FontStyle.Bold), true);
+
+            row.Cells[11].ColumnSpan = 3;
+            row.Cells[11].Value = "应收总金额：" + "¥" + TotalTax.ToString("0.00");
+            row.Cells[11].StringFormat = new PdfStringFormat(PdfTextAlignment.Center, PdfVerticalAlignment.Middle);
+
+
+            //设置边框
+            SetCellBorder(grid);
+
+            //表格换页的时候，留下页脚的空间
+            if (y > 760)
+            {
+                y += 10;
+            }
+
+            result = grid.Draw(page, new PointF(x, y));
+            if (pdf.Pages.Count > pageCount)
+                UpdateIfNewPageCreated(pdf, out pageCount, out page, out x, out y);
+            y += result.Bounds.Height + 15;
+
+
+            #endregion
+
+
+
+            #region 尾
+
+            //创建一个PdfGrid对象
+            grid = new PdfGrid();
+            grid.Style.Font = font2;
+
+            //设置列宽
+            grid.Columns.Add(2);
+            grid.Columns[0].Width = width / 2;
+            grid.Columns[1].Width = width / 2;
+
+
+            row = grid.Rows.Add();
+            row.Cells[0].ColumnSpan = 2;
+            row.Cells[0].Value = "特别约定:\r\n" +
+                                "1.受托方收款账户: " + purchaser.CompanyName + " 开户行：" + purchaser.BankName + " 账号：" + purchaser.AccountId + "\r\n" +
+                                "2.委托方需在进口后90天内完成付汇，付汇汇率为《供应链服务协议》约定的付汇汇率。\r\n" +
+                                "3.委托方需在收到此帐单后确认内容并盖章确认回传。\r\n" +
+                                "4.委托方不得使用个人账户向受托方收款账户打款。\r\n" +
+                                "5.委托方承诺打款账户不涉及地下钱庄、非法集资、诈骗、洗钱等违法交易行为，因违反上述规定产生的一切责任均由委托方承担，并赔偿受托方一切算损失。";
+            row = grid.Rows.Add();
+            row.Height = 50f;
+            row.Cells[0].Value = "";
+            row.Cells[0].StringFormat = new PdfStringFormat(PdfTextAlignment.Left, PdfVerticalAlignment.Middle);
+            row.Cells[1].Value = "委托方确认签字或盖章：";
+            row.Cells[1].StringFormat = new PdfStringFormat(PdfTextAlignment.Left, PdfVerticalAlignment.Middle);
+
+            //设置边框
+            SetCellNoBorder(grid);
+
+            result = grid.Draw(page, new PointF(x, y));
+            if (pdf.Pages.Count > pageCount)
+                UpdateIfNewPageCreated(pdf, out pageCount, out page, out x, out y);
+            y += result.Bounds.Height + 5;
+
+
+            #endregion
+
+            #region 公共组件
+
+            //页眉、页脚、二维码、水印
+            pdf.PdfMargins = new PdfMargins(20, 20);
+            PdfDocumentHandle pdfDocumentHandle = new PdfDocumentHandle(pdf);
+            string imageUrl = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, PurchaserContext.Current.HeaderImg);
+
+            pdfDocumentHandle.HeaderFooter.GenerateHeader(imageUrl, PurchaserContext.Current.OfficalWebsite);
+            //pdfDocumentHandle.HeaderFooter.GenerateFooter(PurchaserContext.Current.CompanyName);
+            //pdfDocumentHandle.Barcode.GenerateQRCode(Order.ID, imageUrl);
+            //pdfDocumentHandle.Watermark.DrawWatermark(PurchaserContext.Current.CompanyName);
+
+            #endregion
+
+            return pdf;
+        }
+
+
         /// <summary>
         /// 更新页数、页面、偏移量
         /// </summary>
@@ -452,7 +856,7 @@ namespace Yahv.PvWsOrder.Services.XDTModels
         public void SaveAs(string filePath, XDTOrderView MyXDTOrder, decimal amountFor代垫本金, Yahv.PvWsOrder.Services.Enums.ClientType clientType)
         {
             int pagecount = 0;
-            var pdf = this.ToPdf(MyXDTOrder, amountFor代垫本金, clientType);
+            var pdf = this.ToPdfNew(MyXDTOrder, amountFor代垫本金, clientType);
             pagecount = pdf.Pages.Count;
             pdf.SaveToFile(filePath);
             pdf.Close();
@@ -473,6 +877,21 @@ namespace Yahv.PvWsOrder.Services.XDTModels
                 foreach (PdfGridCell pgc in pgr.Cells)
                 {
                     pgc.Style.Borders.All = new PdfPen(Color.Black, 0.01f);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 设置pdfgrid单元格边框样式
+        /// </summary>
+        /// <param name="grid"></param>
+        private void SetCellNoBorder(PdfGrid grid)
+        {
+            foreach (PdfGridRow pgr in grid.Rows)
+            {
+                foreach (PdfGridCell pgc in pgr.Cells)
+                {
+                    pgc.Style.Borders.All = new PdfPen(Color.White, 0f);
                 }
             }
         }

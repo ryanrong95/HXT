@@ -20,30 +20,30 @@ namespace Needs.Settings.Models
         public ErpSrcContext()
         {
             this.Easyui = @"
-<link href=""http://fixed2.szhxt.net/My/Content/main.css"" rel=""stylesheet"" />
-<link href=""http://fixed2.szhxt.net/Content/themes/icon.css"" rel=""stylesheet"" />
-<link href=""http://fixed2.szhxt.net/Content/themes/default/easyui.css"" rel=""stylesheet"" />
-<link href=""http://fixed2.szhxt.net/Yahv/jquery-easyui-1.7.6/themes/icon-yg-cool.css""rel=""stylesheet"" />
-<script src=""http://fixed2.szhxt.net/Scripts/jquery-1.11.3.min.js""></script>
-<script src=""http://fixed2.szhxt.net/My/Scripts/extends.js""></script>
-<script src=""http://fixed2.szhxt.net/Scripts/jquery.easyui-1.4.5.min.js""></script>
-<script src=""http://fixed2.szhxt.net/Scripts/locale/easyui-lang-zh_CN.js""></script>
-<script src=""http://fixed2.szhxt.net/My/Scripts/datagrid.js""></script>
-<script src=""http://fixed2.szhxt.net/My/Scripts/easyui.myWindow.js""></script>
-<script src=""http://fixed2.szhxt.net/Yahv/customs-easyui/Scripts/easyui.myDialog.js""></script>
+<link href=""http://fix.szhxd.net/My/Content/main.css"" rel=""stylesheet"" />
+<link href=""http://fix.szhxd.net/Content/themes/icon.css"" rel=""stylesheet"" />
+<link href=""http://fix.szhxd.net/Content/themes/default/easyui.css"" rel=""stylesheet"" />
+<link href=""http://fix.szhxd.net/frontframe/jquery-easyui-1.7.6/themes/icon-yg-cool.css""rel=""stylesheet"" />
+<script src=""http://fix.szhxd.net/Scripts/jquery-1.11.3.min.js""></script>
+<script src=""http://fix.szhxd.net/My/Scripts/extends.js""></script>
+<script src=""http://fix.szhxd.net/Scripts/jquery.easyui-1.4.5.min.js""></script>
+<script src=""http://fix.szhxd.net/Scripts/locale/easyui-lang-zh_CN.js""></script>
+<script src=""http://fix.szhxd.net/My/Scripts/datagrid.js""></script>
+<script src=""http://fix.szhxd.net/My/Scripts/easyui.myWindow.js""></script>
+<script src=""http://fix.szhxd.net/frontframe/customs-easyui/Scripts/easyui.myDialog.js""></script>
             ";
 
             this.Easyui162 = @"
-<link href=""http://fixed2.szhxt.net/My/Content/main.css"" rel=""stylesheet"" />
-<link href=""http://fixed2.szhxt.net/Official/jquery-easyui-1.6.2/themes/icon.css"" rel=""stylesheet"" />
-<link href=""http://fixed2.szhxt.net/Official/jquery-easyui-1.6.2/themes/default/easyui.css"" rel=""stylesheet"" />
-<link href=""http://fixed2.szhxt.net/Yahv/jquery-easyui-1.7.6/themes/icon-yg-cool.css""rel=""stylesheet"" /><script src=""http://fixed2.szhxt.net/Official/jquery-easyui-1.6.2/jquery.min.js""></script>
-<script src=""http://fixed2.szhxt.net/Official/jquery-easyui-1.6.2/jquery.easyui.min.js""></script>
-<script src=""http://fixed2.szhxt.net/Official/jquery-easyui-1.6.2/locale/easyui-lang-zh_CN.js""></script>
-<script src=""http://fixed2.szhxt.net/My/Scripts/extends.js""></script>
-<script src=""http://fixed2.szhxt.net/My/Scripts/datagrid.js""></script>
-<script src=""http://fixed2.szhxt.net/My/Scripts/easyui.myWindow.js""></script>
-<script src=""http://fixed2.szhxt.net/Yahv/customs-easyui/Scripts/easyui.myDialog.js""></script>
+<link href=""http://fix.szhxd.net/My/Content/main.css"" rel=""stylesheet"" />
+<link href=""http://fix.szhxd.net/Official/jquery-easyui-1.6.2/themes/icon.css"" rel=""stylesheet"" />
+<link href=""http://fix.szhxd.net/Official/jquery-easyui-1.6.2/themes/default/easyui.css"" rel=""stylesheet"" />
+<link href=""http://fix.szhxd.net/frontframe/jquery-easyui-1.7.6/themes/icon-yg-cool.css""rel=""stylesheet"" /><script src=""http://fix.szhxd.net/Official/jquery-easyui-1.6.2/jquery.min.js""></script>
+<script src=""http://fix.szhxd.net/Official/jquery-easyui-1.6.2/jquery.easyui.min.js""></script>
+<script src=""http://fix.szhxd.net/Official/jquery-easyui-1.6.2/locale/easyui-lang-zh_CN.js""></script>
+<script src=""http://fix.szhxd.net/My/Scripts/extends.js""></script>
+<script src=""http://fix.szhxd.net/My/Scripts/datagrid.js""></script>
+<script src=""http://fix.szhxd.net/My/Scripts/easyui.myWindow.js""></script>
+<script src=""http://fix.szhxd.net/frontframe/customs-easyui/Scripts/easyui.myDialog.js""></script>
 ";
 
         }

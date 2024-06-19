@@ -52,38 +52,38 @@ namespace WinApp
 
 
             ///复数 上传
-            List<PhotoMap> list = new List<PhotoMap>();
-            list.Add(new PhotoMap
-            {
-                AdminID = "1234",
-                SessionID = "asdfasdf",
-                Data = new PhotoMap.MyData
-                {
-                    InputID = "001",
-                    NoticeID = "N001",
-                    WaybillID = "W001",
-                    WsOrderID = "Order001",
-                    //LsOrderID = "Ls0001"
-                }
-            });
-            list.Add(new PhotoMap
-            {
-                AdminID = "1234",
-                SessionID = "asdfasdf",
-                Data = new PhotoMap.MyData
-                {
-                    InputID = "002",
-                    NoticeID = "N002",
-                    WaybillID = "W002",
-                    WsOrderID = "Order002",
-                    //LsOrderID = "Ls0001"
-                }
-            });
+            //List<PhotoMap> list = new List<PhotoMap>();
+            //list.Add(new PhotoMap
+            //{
+            //    AdminID = "1234",
+            //    SessionID = "asdfasdf",
+            //    Data = new PhotoMap.MyData
+            //    {
+            //        InputID = "001",
+            //        NoticeID = "N001",
+            //        WaybillID = "W001",
+            //        WsOrderID = "Order001",
+            //        //LsOrderID = "Ls0001"
+            //    }
+            //});
+            //list.Add(new PhotoMap
+            //{
+            //    AdminID = "1234",
+            //    SessionID = "asdfasdf",
+            //    Data = new PhotoMap.MyData
+            //    {
+            //        InputID = "002",
+            //        NoticeID = "N002",
+            //        WaybillID = "W002",
+            //        WsOrderID = "Order002",
+            //        //LsOrderID = "Ls0001"
+            //    }
+            //});
 
-            GeckoHelper.FormPhotos(new PhotoMaps
-            {
-                PhotoMapes = list.ToArray()
-            });
+            //GeckoHelper.FormPhotos(new PhotoMaps
+            //{
+            //    PhotoMapes = list.ToArray()
+            //});
 
             Services.Controls.PhotoPages.Current.Show();
         }
@@ -122,38 +122,38 @@ namespace WinApp
             //});
 
             ///复数 上传
-            List<PhotoMap> list = new List<PhotoMap>();
-            list.Add(new PhotoMap
-            {
-                AdminID = "1234",
-                SessionID = "asdfasdf",
-                Data = new PhotoMap.MyData
-                {
-                    InputID = "001",
-                    NoticeID = "N001",
-                    WaybillID = "W001",
-                    WsOrderID = "Order001",
-                    //LsOrderID = "Ls0001"
-                }
-            });
-            list.Add(new PhotoMap
-            {
-                AdminID = "1234",
-                SessionID = "asdfasdf",
-                Data = new PhotoMap.MyData
-                {
-                    InputID = "002",
-                    NoticeID = "N002",
-                    WaybillID = "W002",
-                    WsOrderID = "Order002",
-                    //LsOrderID = "Ls0001"
-                }
-            });
+            //List<PhotoMap> list = new List<PhotoMap>();
+            //list.Add(new PhotoMap
+            //{
+            //    AdminID = "1234",
+            //    SessionID = "asdfasdf",
+            //    Data = new PhotoMap.MyData
+            //    {
+            //        InputID = "001",
+            //        NoticeID = "N001",
+            //        WaybillID = "W001",
+            //        WsOrderID = "Order001",
+            //        //LsOrderID = "Ls0001"
+            //    }
+            //});
+            //list.Add(new PhotoMap
+            //{
+            //    AdminID = "1234",
+            //    SessionID = "asdfasdf",
+            //    Data = new PhotoMap.MyData
+            //    {
+            //        InputID = "002",
+            //        NoticeID = "N002",
+            //        WaybillID = "W002",
+            //        WsOrderID = "Order002",
+            //        //LsOrderID = "Ls0001"
+            //    }
+            //});
 
-            GeckoHelper.SeletUploadFiles(new PhotoMaps
-            {
-                PhotoMapes = list.ToArray()
-            });
+            //GeckoHelper.SeletUploadFiles(new PhotoMaps
+            //{
+            //    PhotoMapes = list.ToArray()
+            //});
         }
 
         /// <summary>

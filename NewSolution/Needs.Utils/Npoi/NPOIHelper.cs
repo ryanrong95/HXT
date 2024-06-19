@@ -17,6 +17,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.UI.WebControls.WebParts;
 
 namespace Needs.Utils.Npoi
 {
@@ -861,12 +862,19 @@ namespace Needs.Utils.Npoi
                 {
                     ReplaceKey(para, replaceText);
                 }
+
+                //遍历表格
+                foreach (var tab in doc.Tables)
+                {
+                    ReplaceTableKey(tab, replaceText);
+                }
+
                 return doc;
             }
         }
 
         /// <summary>
-        /// 
+        /// 段落关键字替换
         /// </summary>
         /// <param name="para"></param>
         /// <param name="findText"></param>
@@ -887,6 +895,28 @@ namespace Needs.Utils.Npoi
                     if (run.ToString().Contains(dic.Key))
                     {
                         run.SetText(run.ToString().Replace(dic.Key, dic.Value), 0);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// 表格关键字替换
+        /// </summary>
+        /// <param name="para"></param>
+        /// <param name="findText"></param>
+        /// <param name="replaceText"></param>
+        private void ReplaceTableKey(NPOI.XWPF.UserModel.XWPFTable tab, Dictionary<string, string> replaceText)
+        {
+            for (int row = 0; row < tab.Rows.Count; row++)
+            {
+                for (int col = 0; col < tab.Rows[row].GetTableCells().Count; col++)
+                {
+                    NPOI.XWPF.UserModel.XWPFTableCell cell = tab.Rows[row].GetTableCells()[col];
+
+                    foreach (var para in cell.Paragraphs)
+                    {
+                        ReplaceKey(para, replaceText);
                     }
                 }
             }
@@ -958,6 +988,10 @@ namespace Needs.Utils.Npoi
                             run.AddCarriageReturn();
                         }
                         if (dic.Key == "{NewValue5}" && dic.Value != "")
+                        {
+                            run.AddCarriageReturn();
+                        }
+                        if (dic.Key == "{NewValue6}" && dic.Value != "")
                         {
                             run.AddCarriageReturn();
                         }

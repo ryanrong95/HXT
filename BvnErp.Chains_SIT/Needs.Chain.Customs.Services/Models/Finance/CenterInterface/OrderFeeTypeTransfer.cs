@@ -52,7 +52,7 @@ namespace Needs.Ccs.Services.Models
                     feeTypeName = "增值税";
                     break;
 
-                case "代理费":
+                case "服务费":
                     feeTypeName = "报关服务费";
                     break;
 

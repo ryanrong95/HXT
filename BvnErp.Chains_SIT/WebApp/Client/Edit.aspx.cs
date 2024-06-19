@@ -27,7 +27,7 @@ namespace WebApp.Client
         private string URL = System.Configuration.ConfigurationManager.AppSettings["CrmUrl"];
         string FileServerUrl = System.Configuration.ConfigurationManager.AppSettings["PvDataFileUrl"];
         //ryan 20210519 张经理要求入仓号使用WL开头，系统自动默认，不允许修改
-        private readonly string numberPre = "WL";
+        private readonly string numberPre = "HXT";
         protected void Page_Load(object sender, EventArgs e)
         {
             LoadComboBoxData();
@@ -545,7 +545,7 @@ namespace WebApp.Client
         protected string AutoClientNo()
         {
             var result = 0;
-            var codes = Needs.Wl.Admin.Plat.AdminPlat.Clients.Select(t => new { t.ClientCode }).Where(x => x.ClientCode != null && x.ClientCode.Contains("WL") && x.ClientCode.Length == 5).OrderBy(x => x.ClientCode).ToArray();
+            var codes = Needs.Wl.Admin.Plat.AdminPlat.Clients.Select(t => new { t.ClientCode }).Where(x => x.ClientCode != null && x.ClientCode.Contains(numberPre) && x.ClientCode.Length == 6).OrderBy(x => x.ClientCode).ToArray();
             foreach (var code in codes)
             {
                 if (int.TryParse(code.ClientCode.Replace(numberPre, ""), out int number))

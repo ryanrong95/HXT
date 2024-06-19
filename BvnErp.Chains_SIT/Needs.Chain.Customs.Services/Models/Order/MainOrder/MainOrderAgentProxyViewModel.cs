@@ -2,6 +2,7 @@
 using Needs.Linq;
 using Needs.Utils.SpirePdf;
 using Needs.Wl.Models;
+using NPOI.Util;
 using Spire.Pdf;
 using Spire.Pdf.Graphics;
 using Spire.Pdf.Grid;
@@ -428,6 +429,310 @@ namespace Needs.Ccs.Services.Models
         }
 
         /// <summary>
+        /// 导出代理报关委托书PDF -- xin
+        /// </summary>
+        /// <returns></returns>
+        public PdfDocument ToPdfNew()
+        {
+            #region pdf对象声明
+            //创建一个PdfDocument类对象
+            PdfDocument pdf = new PdfDocument();
+            pdf.PageSettings.Margins = new PdfMargins(40, 60, 40, 20);
+
+            //添加一页到PDF文档
+            PdfPageBase page = pdf.Pages.Add(PdfPageSize.A4);
+            int pageCount = pdf.Pages.Count;
+
+            //画笔
+            PdfBrush brush = PdfBrushes.Black;
+            //字体
+            PdfTrueTypeFont font1 = new PdfTrueTypeFont(new Font("SimSun", 14f, FontStyle.Bold), true);
+            PdfTrueTypeFont font2 = new PdfTrueTypeFont(new Font("SimSun", 7f, FontStyle.Regular), true);
+            //字体对齐方式
+            PdfStringFormat formatCenter = new PdfStringFormat(PdfTextAlignment.Center);
+            PdfStringFormat formatRight = new PdfStringFormat(PdfTextAlignment.Right);
+            PdfStringFormat formatLeft = new PdfStringFormat(PdfTextAlignment.Left);
+            #endregion
+
+            #region 头
+            float x = 0, y = 5f;
+
+            float width = page.Canvas.ClientSize.Width;
+            string message = $"委托进口货物确认单";
+            page.Canvas.DrawString(message, font1, brush, width / 2, y, formatCenter);
+            y += font1.MeasureString(message, formatCenter).Height + 8;
+
+            page.Canvas.DrawString("GOODS IMPORT CONFIRM FORM", font1, brush, width / 2, y, formatCenter);
+            y += font1.MeasureString(message, formatCenter).Height + 8;
+
+            //20190909 合同编号改为订单编号
+            //message = "订单编号: ";
+            //page.Canvas.DrawString(message + this.ID, font2, brush, width, y, formatRight);
+            //y += font2.MeasureString(message + this.ID, formatRight).Height + 5;
+
+
+            //创建一个PdfGrid对象
+            PdfGrid grid = new PdfGrid();
+            grid.Style.Font = font2;
+            PdfBorders borders = new PdfBorders();
+            borders.All = new PdfPen(PdfBrushes.White, 0);
+
+            //设置列宽
+            grid.Columns.Add(2);
+            grid.Columns[0].Width = width / 2;
+            grid.Columns[1].Width = width / 2;
+
+            PdfGridRow row = grid.Rows.Add();
+            row.Cells[0].Value = "编号:  " + this.ID;
+            row.Cells[0].StringFormat = new PdfStringFormat(PdfTextAlignment.Left, PdfVerticalAlignment.Middle);
+            row.Cells[0].Style.Borders = borders;
+            row.Cells[1].Value = "委托日期:  " + DateTime.Now.ToString("yyyy-MM-dd");
+            row.Cells[1].StringFormat = new PdfStringFormat(PdfTextAlignment.Left, PdfVerticalAlignment.Middle);
+            row.Cells[1].Style.Borders = borders;
+
+            row = grid.Rows.Add();
+            row.Cells[0].Value = "委托方:  " + this.Client.Company.Name;
+            row.Cells[0].StringFormat = new PdfStringFormat(PdfTextAlignment.Left, PdfVerticalAlignment.Middle);
+            row.Cells[0].Style.Borders = borders;
+            row.Cells[1].Value = "代理方:  " + purchaser.CompanyName;
+            row.Cells[1].StringFormat = new PdfStringFormat(PdfTextAlignment.Left, PdfVerticalAlignment.Middle);
+            row.Cells[1].Style.Borders = borders;
+
+            row = grid.Rows.Add();
+            row.Cells[0].Value = "委托方地址:  " + this.Client.Company.Address;
+            row.Cells[0].StringFormat = new PdfStringFormat(PdfTextAlignment.Left, PdfVerticalAlignment.Middle);
+            row.Cells[0].Style.Borders = borders;
+            row.Cells[1].Value = "代理方收货公司:  " + vendor.CompanyName;
+            row.Cells[1].StringFormat = new PdfStringFormat(PdfTextAlignment.Left, PdfVerticalAlignment.Middle);
+            row.Cells[1].Style.Borders = borders;
+
+            row = grid.Rows.Add();
+            row.Cells[0].Value = "委托方联系人:  " + this.Client.Company.Contact?.Name + "  " + this.Client.Company.Contact?.Mobile;
+            row.Cells[0].StringFormat = new PdfStringFormat(PdfTextAlignment.Left, PdfVerticalAlignment.Middle);
+            row.Cells[0].Style.Borders = borders;
+            row.Cells[1].Value = "代理方收货人:  " + vendor.Contact + "  " + vendor.Tel;
+            row.Cells[1].StringFormat = new PdfStringFormat(PdfTextAlignment.Left, PdfVerticalAlignment.Middle);
+            row.Cells[1].Style.Borders = borders;
+
+            PdfLayoutResult result = grid.Draw(page, new PointF(x, y));
+            if (pdf.Pages.Count > pageCount)
+                UpdateIfNewPageCreated(pdf, out pageCount, out page, out x, out y);
+
+            y += result.Bounds.Height + 5;
+
+            #endregion
+
+            #region 表格
+
+            //创建一个PdfGrid对象
+            grid = new PdfGrid();
+            grid.Style.Font = font2;
+
+            //设置列宽
+            grid.Columns.Add(10);
+            grid.Columns[0].Width = width * 3 / 100;
+            grid.Columns[1].Width = width * 17 / 100;
+            grid.Columns[2].Width = width * 17 / 100;
+            grid.Columns[3].Width = width * 22 / 100;
+            grid.Columns[4].Width = width * 6 / 100;
+            grid.Columns[5].Width = width * 6 / 100;
+            grid.Columns[6].Width = width * 6 / 100;
+            grid.Columns[7].Width = width * 8 / 100;
+            grid.Columns[8].Width = width * 8 / 100;
+            grid.Columns[9].Width = width * 6 / 100;
+
+            //委托方、代理方信息
+            //row = grid.Rows.Add();
+            //row.Cells[0].ColumnSpan = 11;
+            //row.Cells[0].Value = "委托方名称: " + this.Client.Name;
+
+            //row = grid.Rows.Add();
+            //row.Cells[0].ColumnSpan = 11;
+            //row.Cells[0].Value = "委托方收货信息: " + this.Client.Name + "/地址: " + this.Client.RegAddress +
+            //                    "联系人: " + this.ClientContact?.Name + "/电话: " + this.ClientContact?.Mobile;
+
+            //row = grid.Rows.Add();
+            //row.Cells[0].ColumnSpan = 11;
+            //row.Cells[0].Value = "代理方名称: " + purchaser.CompanyName;
+
+            //row = grid.Rows.Add();
+            //row.Cells[0].ColumnSpan = 11;
+            //row.Cells[0].Value = "代理方收货信息: " + vendor.CompanyName + "/地址: " + vendor.Address +
+            //                    "/联系人: " + vendor.Contact + "/电话: " + vendor.Tel;
+
+            //产品信息
+            row = grid.Rows.Add();
+            row.Cells[0].Value = "序号";
+            //row.Cells[1].Value = "批号";
+            row.Cells[1].Value = "品名";
+            row.Cells[2].Value = "品牌";
+            row.Cells[3].Value = "型号";
+            row.Cells[4].Value = "产地";
+            row.Cells[5].Value = "数量";
+            row.Cells[6].Value = "单位";
+            row.Cells[7].Value = "报关单价" + "(" + this.Currency.ToString() + ")";
+            row.Cells[8].Value = "报关总价" + "(" + this.Currency.ToString() + ")";
+            row.Cells[9].Value = "关税率";
+            for (int i = 0; i < row.Cells.Count; i++)
+            {
+                if (i == 2 || i == 4)
+                {
+                    row.Cells[i].StringFormat = new PdfStringFormat(PdfTextAlignment.Center, PdfVerticalAlignment.Middle);
+                }
+                else
+                {
+                    row.Cells[i].StringFormat = new PdfStringFormat(PdfTextAlignment.Center, PdfVerticalAlignment.Middle);
+                }
+            }
+
+            int sn = 0;
+            var units = new Views.BaseUnitsView().ToList();
+            foreach (var item in this.Items)
+            {
+                sn++;
+                row = grid.Rows.Add();
+                row.Cells[0].Value = sn.ToString();
+                row.Cells[0].StringFormat = new PdfStringFormat(PdfTextAlignment.Center, PdfVerticalAlignment.Middle);
+                //row.Cells[1].Value = item.DateCode;
+                //row.Cells[1].StringFormat = new PdfStringFormat(PdfTextAlignment.Center, PdfVerticalAlignment.Middle);
+                row.Cells[1].Value = item.Category?.Name ?? item.Name;
+                row.Cells[1].StringFormat = new PdfStringFormat(PdfTextAlignment.Center, PdfVerticalAlignment.Middle);
+                row.Cells[2].Value = item.Manufacturer;
+                row.Cells[2].StringFormat = new PdfStringFormat(PdfTextAlignment.Center, PdfVerticalAlignment.Middle);
+                row.Cells[3].Value = item.Model;
+                row.Cells[3].StringFormat = new PdfStringFormat(PdfTextAlignment.Center, PdfVerticalAlignment.Middle);
+                row.Cells[4].Value = item.Origin; 
+                row.Cells[4].StringFormat = new PdfStringFormat(PdfTextAlignment.Center, PdfVerticalAlignment.Middle);
+                row.Cells[5].Value = item.Quantity.ToString("0.####");
+                row.Cells[5].StringFormat = new PdfStringFormat(PdfTextAlignment.Center, PdfVerticalAlignment.Middle);
+                row.Cells[6].Value = units.Where(u => u.Code == item.Unit).FirstOrDefault()?.Name ?? item.Unit;
+                row.Cells[6].StringFormat = new PdfStringFormat(PdfTextAlignment.Center, PdfVerticalAlignment.Middle);
+                row.Cells[7].Value = item.UnitPrice.ToString("0.0000");
+                row.Cells[7].StringFormat = new PdfStringFormat(PdfTextAlignment.Center, PdfVerticalAlignment.Middle);
+                row.Cells[8].Value = item.TotalPrice.ToString("0.00");
+                row.Cells[8].StringFormat = new PdfStringFormat(PdfTextAlignment.Center, PdfVerticalAlignment.Middle);
+                row.Cells[9].Value = item.ImportTax?.Rate.ToString("0.0000");
+                row.Cells[9].StringFormat = new PdfStringFormat(PdfTextAlignment.Center, PdfVerticalAlignment.Middle);
+            }
+
+            //合计行
+            row = grid.Rows.Add();
+            row.Cells[0].ColumnSpan = 5;
+            row.Cells[0].Value = "合计Total:";
+            row.Cells[0].StringFormat = new PdfStringFormat(PdfTextAlignment.Left, PdfVerticalAlignment.Middle);
+            row.Cells[5].Value = this.Items.Select(item => item.Quantity).Sum().ToString("0.####");
+            row.Cells[5].StringFormat = new PdfStringFormat(PdfTextAlignment.Center, PdfVerticalAlignment.Middle);
+            row.Cells[8].Value = this.Items.Select(item => item.TotalPrice).Sum().ToString("0.00");
+            row.Cells[8].StringFormat = new PdfStringFormat(PdfTextAlignment.Center, PdfVerticalAlignment.Middle);
+
+            //设置边框
+            foreach (PdfGridRow pgr in grid.Rows)
+            {
+                foreach (PdfGridCell pgc in pgr.Cells)
+                {
+                    pgc.Style.Borders.All = new PdfPen(Color.Black, 0.01f);
+                }
+            }
+
+            result = grid.Draw(page, new PointF(x, y));
+
+            //是否换页
+            if (pdf.Pages.Count > pageCount)
+                UpdateIfNewPageCreated(pdf, out pageCount, out page, out x, out y);
+
+            y += result.Bounds.Height + 5;
+
+
+            var types = new Views.BasePackTypesView().ToList();
+            var wrapType = types.Where(t => t.Code == this.WarpType).FirstOrDefault()?.Name;
+            var totalGwt = this.Items.Where(item => item.GrossWeight != null).Select(item => item.GrossWeight).Sum().Value.ToRound(2);
+            message = "包装类型: " + wrapType;
+            if (this.PackNo != null)
+            {
+                message += " 总件数: " + this.PackNo;
+            }
+            if (totalGwt > 0M)
+            {
+                message += " 总毛重: " + totalGwt.ToString("0.##") + " KG";
+            }
+            page.Canvas.DrawString(message, font2, brush, x, y, formatLeft);
+            y += font1.MeasureString(message + this.ID, formatLeft).Height + 5;
+
+
+
+            #endregion
+
+            if (pdf.Pages.Count > pageCount)
+                UpdateIfNewPageCreated(pdf, out pageCount, out page, out x, out y);
+
+
+            #region 尾
+
+            //创建一个PdfGrid对象
+            grid = new PdfGrid();
+            grid.Style.Font = font2;
+
+            //设置列宽
+            grid.Columns.Add(2);
+            grid.Columns[0].Width = width / 2;
+            grid.Columns[1].Width = width / 2;
+
+            row = grid.Rows.Add();
+            row.Cells[0].ColumnSpan = 2;
+            row.Cells[0].Value = "说明:\r\n" +
+                                "委托方需提供完整的进口货物单证和资料，并保证其真实、准确；\r\n" +
+                                "因委托方系统虚假信息被扣关、罚款等后果由委托方自行承担；\r\n" +
+                                "委托方需及时将购买货物所需的全部货款、代理费付至乙方帐户。\r\n";
+            row.Cells[0].Style.Borders = borders;
+            row = grid.Rows.Add();
+            row.Height = 30f;
+            row.Cells[0].Value = " ";
+            row.Cells[0].StringFormat = new PdfStringFormat(PdfTextAlignment.Left, PdfVerticalAlignment.Middle);
+            row.Cells[0].Style.Borders = borders;
+            row.Cells[1].Value = "委托方签字并盖章确认:";
+            row.Cells[1].StringFormat = new PdfStringFormat(PdfTextAlignment.Left, PdfVerticalAlignment.Middle);
+            row.Cells[1].Style.Borders = borders;
+
+
+
+            result = grid.Draw(page, new PointF(x, y));
+            if (pdf.Pages.Count > pageCount)
+                UpdateIfNewPageCreated(pdf, out pageCount, out page, out x, out y);
+            y += result.Bounds.Height + 5;
+
+
+            //y += font2.MeasureString(message, formatLeft).Height + 20;
+
+            //大赢家加上委托方章
+            //if (clientType == Enums.ClientType.Internal)
+            //{
+            //    PdfImage imageInternal = PdfImage.FromFile(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Content\\images\\", this.Client.Name + ".png"));
+            //    page.Canvas.DrawImage(imageInternal, 410, y - 50);
+            //}
+
+            //PdfImage image = PdfImage.FromFile(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, purchaser.SealUrl));
+            //page.Canvas.DrawImage(image, 100, y - 50);
+
+            #endregion
+
+            #region 公共组件
+
+            //页眉、页脚、二维码、水印
+            pdf.PdfMargins = new PdfMargins(20, 20);
+            PdfDocumentHandle pdfDocumentHandle = new PdfDocumentHandle(pdf);
+            string imageUrl = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, PurchaserContext.Current.HeaderImg);
+
+            pdfDocumentHandle.HeaderFooter.GenerateHeader(imageUrl, PurchaserContext.Current.OfficalWebsite);
+            //pdfDocumentHandle.HeaderFooter.GenerateFooter(PurchaserContext.Current.CompanyName);
+            //pdfDocumentHandle.Barcode.GenerateQRCode(this.ID, imageUrl);
+            //pdfDocumentHandle.Watermark.DrawWatermark(PurchaserContext.Current.CompanyName);
+
+            #endregion
+
+            return pdf;
+        }
+
+        /// <summary>
         /// 更新页数、页面、偏移量
         /// </summary>
         /// <param name="pdf">PDF文档</param>
@@ -453,7 +758,7 @@ namespace Needs.Ccs.Services.Models
             this.vendor = new VendorContext(VendorContextInitParam.Instrument, Orders.FirstOrDefault().ID, "CaiWu").Current1;
 
             int pagecount = 0;
-            var pdf = this.ToPdf();
+            var pdf = this.ToPdfNew();
             pagecount = pdf.Pages.Count;
             pdf.SaveToFile(filePath);
             pdf.Close();

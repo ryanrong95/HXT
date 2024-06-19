@@ -534,6 +534,20 @@ namespace Needs.Ccs.Services
         Logs = 2900,
 
         /// <summary>
+        /// 进口协议编号
+        /// </summary>
+        [Repository(typeof(ScCustomsReponsitory))]
+        [PKey("HXTI", PKeySigner.Mode.Time, 2)]
+        AgreementImportCode = 4005,
+
+        /// <summary>
+        /// 出口协议编号
+        /// </summary>
+        [Repository(typeof(ScCustomsReponsitory))]
+        [PKey("HXTE", PKeySigner.Mode.Time, 2)]
+        AgreementExportCode = 4010,
+
+        /// <summary>
         /// 协议变更申请
         /// </summary>
         [Repository(typeof(ScCustomsReponsitory))]

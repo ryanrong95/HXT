@@ -23,8 +23,7 @@ namespace Yahv.Systematic
             get
             {
                 return new Yahv.Erm.Services.Views.StaffAlls()
-                    .Where(item => item.Labour.EnterpriseID == Yahv.Erm.Services.Common.ErmConfig.LabourEnterpriseID
-                    || item.Labour.EnterpriseID == Yahv.Erm.Services.Common.ErmConfig.LabourEnterpriseID2);
+                    .Where(item => item.Labour.EnterpriseID == Yahv.Erm.Services.Common.ErmConfig.LabourEnterpriseID);
             }
         }
 

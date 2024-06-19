@@ -58,7 +58,7 @@ namespace Needs.Ccs.Services.Models
                     str += "<th style='width: 7%;'>报关货值(CNY)</th>";
                     str += "<th style='width: 6%;'>关税(CNY)</th>";
                     str += "<th style='width: 7%;'>增值税(CNY)</th>";
-                    str += "<th style='width: 7%;'>代理费(CNY)</th>";
+                    str += "<th style='width: 7%;'>服务费(CNY)</th>";
                     str += "<th style='width: 6%;'>杂费(CNY)</th>";
                     str += "<th style='width: 7%;'>税费合计(CNY)</th>";
                     str += "<th style='width: 8%;'>报关总金额(CNY)</th>";

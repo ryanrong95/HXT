@@ -16,7 +16,7 @@ namespace Yahv.Services.Models
             {
                 if (string.IsNullOrWhiteSpace(this.id))
                 {
-                    this.id = string.Concat(this.PartNumber, this.Manufacturer, this.PackageCase, this.Packaging).MD5();
+                    this.id = string.Concat(this.PartNumber, this.Manufacturer).MD5();
                 }
                 return this.id;
             }

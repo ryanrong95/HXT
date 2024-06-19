@@ -27,7 +27,7 @@
                 $("#trPass").css("display", "none");
             }
             else {
-                $("#Password").textbox("setValue", "XDT123");
+                $("#Password").textbox("setValue", "HXT123");
                 $("#trPass").css("display", "table-row");
                 $("#Mobile").textbox("setValue", Tel);
             }

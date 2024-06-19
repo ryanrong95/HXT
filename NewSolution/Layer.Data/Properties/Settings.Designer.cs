@@ -91,39 +91,6 @@ namespace Layer.Data.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=172.30.10.199,5311;Initial Catalog=BvOveralls;User ID=udata;Password=" +
-            "Turing2019")]
-        public string BvOverallsConnectionString1 {
-            get {
-                return ((string)(this["BvOverallsConnectionString1"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=172.30.10.199,5311;Initial Catalog=BvnErp;User ID=udata;Password=Turi" +
-            "ng2019")]
-        public string BvnErpConnectionString1 {
-            get {
-                return ((string)(this["BvnErpConnectionString1"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=172.30.10.199,5311;Initial Catalog=BvOveralls;Persist Security Info=T" +
-            "rue;User ID=udata")]
-        public string BvOverallsConnectionString2 {
-            get {
-                return ((string)(this["BvOverallsConnectionString2"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
         [global::System.Configuration.DefaultSettingValueAttribute("Data Source=192.168.80.25;Initial Catalog=BvOrders;User ID=udata")]
         public string BvOrdersConnectionString {
             get {
@@ -201,38 +168,6 @@ namespace Layer.Data.Properties {
         public string BvnVrsConnectionString {
             get {
                 return ((string)(this["BvnVrsConnectionString"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=172.30.10.197;Initial Catalog=Bv3Crm;Persist Security Info=True;User " +
-            "ID=udata;Password=udata123")]
-        public string Bv3CrmConnectionString1 {
-            get {
-                return ((string)(this["Bv3CrmConnectionString1"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=192.168.80.25;Initial Catalog=CvOss;User ID=udata")]
-        public string CvOssConnectionString {
-            get {
-                return ((string)(this["CvOssConnectionString"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=172.30.10.51,6522;Initial Catalog=Bv3Crm;Persist Security Info=True;U" +
-            "ser ID=u_bv;Password=G9RCzkV9hC4Gu6VF5QuZp6dxw8a9XErNTDR66Uwxww24hNBJtF")]
-        public string Bv3CrmConnectionString2 {
-            get {
-                return ((string)(this["Bv3CrmConnectionString2"]));
             }
         }
         
@@ -326,6 +261,147 @@ namespace Layer.Data.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=172.30.10.197;Initial Catalog=BvnWss;Persist Security Info=True;User " +
+            "ID=udata;Password=udata123")]
+        public string BvnWssConnectionString {
+            get {
+                return ((string)(this["BvnWssConnectionString"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=192.168.80.25;Initial Catalog=CvOss;User ID=udata")]
+        public string CvOssConnectionString {
+            get {
+                return ((string)(this["CvOssConnectionString"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=172.30.10.197;Initial Catalog=CvSso;Persist Security Info=True;User I" +
+            "D=udata;Password=udata123")]
+        public string CvSsoConnectionString {
+            get {
+                return ((string)(this["CvSsoConnectionString"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=192.168.80.25;Initial Catalog=IC360.CvOss;User ID=udata")]
+        public string IC360_CvOssConnectionString {
+            get {
+                return ((string)(this["IC360_CvOssConnectionString"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=192.168.80.25;Initial Catalog=IC360.CvSSO;Persist Security Info=True;" +
+            "User ID=udata;Password=udata123")]
+        public string IC360_CvSSOConnectionString {
+            get {
+                return ((string)(this["IC360_CvSSOConnectionString"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=172.30.10.197;Initial Catalog=IC360.BvSso;Persist Security Info=True;" +
+            "User ID=udata;Password=udata123")]
+        public string IC360_BvSsoConnectionString {
+            get {
+                return ((string)(this["IC360_BvSsoConnectionString"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=172.30.10.197;Initial Catalog=IC360.BvOrders;Persist Security Info=Tr" +
+            "ue;User ID=udata;Password=udata123")]
+        public string IC360_BvOrdersConnectionString {
+            get {
+                return ((string)(this["IC360_BvOrdersConnectionString"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=192.168.80.25;Initial Catalog=IC360.VAOIP;Persist Security Info=True;" +
+            "User ID=udata;Password=udata123")]
+        public string IC360_VAOIPConnectionString {
+            get {
+                return ((string)(this["IC360_VAOIPConnectionString"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=172.30.10.199,5311;Initial Catalog=BvOveralls;User ID=udata;Password=" +
+            "Turing2019")]
+        public string BvOverallsConnectionString1 {
+            get {
+                return ((string)(this["BvOverallsConnectionString1"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=172.30.10.199,5311;Initial Catalog=BvnErp;User ID=udata;Password=Turi" +
+            "ng2019")]
+        public string BvnErpConnectionString1 {
+            get {
+                return ((string)(this["BvnErpConnectionString1"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=172.30.10.199,5311;Initial Catalog=BvOveralls;Persist Security Info=T" +
+            "rue;User ID=udata")]
+        public string BvOverallsConnectionString2 {
+            get {
+                return ((string)(this["BvOverallsConnectionString2"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=172.30.10.197;Initial Catalog=Bv3Crm;Persist Security Info=True;User " +
+            "ID=udata;Password=udata123")]
+        public string Bv3CrmConnectionString1 {
+            get {
+                return ((string)(this["Bv3CrmConnectionString1"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=172.30.10.51,6522;Initial Catalog=Bv3Crm;Persist Security Info=True;U" +
+            "ser ID=u_bv;Password=G9RCzkV9hC4Gu6VF5QuZp6dxw8a9XErNTDR66Uwxww24hNBJtF")]
+        public string Bv3CrmConnectionString2 {
+            get {
+                return ((string)(this["Bv3CrmConnectionString2"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
         [global::System.Configuration.DefaultSettingValueAttribute("Data Source=172.30.10.197;Initial Catalog=ScPurchases;Persist Security Info=True;" +
             "User ID=udata;Password=udata123")]
         public string ScPurchasesConnectionString1 {
@@ -342,17 +418,6 @@ namespace Layer.Data.Properties {
         public string ScSalesConnectionString1 {
             get {
                 return ((string)(this["ScSalesConnectionString1"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=172.30.10.197;Initial Catalog=BvnWss;Persist Security Info=True;User " +
-            "ID=udata;Password=udata123")]
-        public string BvnWssConnectionString {
-            get {
-                return ((string)(this["BvnWssConnectionString"]));
             }
         }
         
@@ -488,65 +553,11 @@ namespace Layer.Data.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=172.30.10.197;Initial Catalog=CvSso;Persist Security Info=True;User I" +
-            "D=udata;Password=udata123")]
-        public string CvSsoConnectionString {
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=172.30.10.199,5311;Initial Catalog=BvnErp;Persist Security Info=True;" +
+            "User ID=udata;Password=Turing2019")]
+        public string BvnErpConnectionString3 {
             get {
-                return ((string)(this["CvSsoConnectionString"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=192.168.80.25;Initial Catalog=IC360.CvOss;User ID=udata")]
-        public string IC360_CvOssConnectionString {
-            get {
-                return ((string)(this["IC360_CvOssConnectionString"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=192.168.80.25;Initial Catalog=IC360.CvSSO;Persist Security Info=True;" +
-            "User ID=udata;Password=udata123")]
-        public string IC360_CvSSOConnectionString {
-            get {
-                return ((string)(this["IC360_CvSSOConnectionString"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=172.30.10.197;Initial Catalog=IC360.BvSso;Persist Security Info=True;" +
-            "User ID=udata;Password=udata123")]
-        public string IC360_BvSsoConnectionString {
-            get {
-                return ((string)(this["IC360_BvSsoConnectionString"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=172.30.10.197;Initial Catalog=IC360.BvOrders;Persist Security Info=Tr" +
-            "ue;User ID=udata;Password=udata123")]
-        public string IC360_BvOrdersConnectionString {
-            get {
-                return ((string)(this["IC360_BvOrdersConnectionString"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=192.168.80.25;Initial Catalog=IC360.VAOIP;Persist Security Info=True;" +
-            "User ID=udata;Password=udata123")]
-        public string IC360_VAOIPConnectionString {
-            get {
-                return ((string)(this["IC360_VAOIPConnectionString"]));
+                return ((string)(this["BvnErpConnectionString3"]));
             }
         }
         
@@ -738,8 +749,8 @@ namespace Layer.Data.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=172.30.10.197;Initial Catalog=PvbErm;Persist Security Info=True;User " +
-            "ID=udata;Password=udata123")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=127.0.0.1,1434;Initial Catalog=PvbErm;Persist Security Info=True;User" +
+            " ID=sa;Password=qwerasdf12")]
         public string PvbErmConnectionString {
             get {
                 return ((string)(this["PvbErmConnectionString"]));
@@ -814,11 +825,11 @@ namespace Layer.Data.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=172.30.10.199,5311;Initial Catalog=BvnErp;Persist Security Info=True;" +
-            "User ID=udata;Password=Turing2019")]
-        public string BvnErpConnectionString3 {
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=172.30.10.199,5311;Initial Catalog=PvWms;Persist Security Info=True;U" +
+            "ser ID=udata")]
+        public string ScCustomsConnectionString18 {
             get {
-                return ((string)(this["BvnErpConnectionString3"]));
+                return ((string)(this["ScCustomsConnectionString18"]));
             }
         }
         
@@ -836,22 +847,21 @@ namespace Layer.Data.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=172.30.10.199,5311;Initial Catalog=PvWms;Persist Security Info=True;U" +
-            "ser ID=udata")]
-        public string ScCustomsConnectionString18 {
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=172.30.10.199,5311;Initial Catalog=ScCustoms;User ID=udata;Password=T" +
+            "uring2019")]
+        public string ScCustomsConnectionString19 {
             get {
-                return ((string)(this["ScCustomsConnectionString18"]));
+                return ((string)(this["ScCustomsConnectionString19"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=172.30.10.199,5311;Initial Catalog=ScCustoms;User ID=udata;Password=T" +
-            "uring2019")]
-        public string ScCustomsConnectionString19 {
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=172.30.10.199,5311;Initial Catalog=foricScCustoms;User ID=udata")]
+        public string foricScCustomsConnectionString1 {
             get {
-                return ((string)(this["ScCustomsConnectionString19"]));
+                return ((string)(this["foricScCustomsConnectionString1"]));
             }
         }
         
@@ -1074,16 +1084,6 @@ namespace Layer.Data.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=172.30.10.199,5311;Initial Catalog=foricScCustoms;User ID=udata")]
-        public string foricScCustomsConnectionString1 {
-            get {
-                return ((string)(this["foricScCustomsConnectionString1"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
         [global::System.Configuration.DefaultSettingValueAttribute("Data Source=172.30.10.51,6522;Initial Catalog=bv3crm;Persist Security Info=True;U" +
             "ser ID=u_v0")]
         public string bv3crmConnectionString5 {
@@ -1154,6 +1154,17 @@ namespace Layer.Data.Properties {
         public string foricScCustomsConnectionString18 {
             get {
                 return ((string)(this["foricScCustomsConnectionString18"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=.;Initial Catalog=foricScCustoms;Persist Security Info=True;User ID=s" +
+            "a;Encrypt=True;TrustServerCertificate=True")]
+        public string foricScCustomsConnectionString19 {
+            get {
+                return ((string)(this["foricScCustomsConnectionString19"]));
             }
         }
     }

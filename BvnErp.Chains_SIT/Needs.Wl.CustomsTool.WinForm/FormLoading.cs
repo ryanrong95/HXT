@@ -27,7 +27,7 @@ namespace Needs.Wl.CustomsTool.WinForm
             progressBar1.Maximum = 10;//Maximum最大值为10
             progressBar1.MarqueeAnimationSpeed = 50;//设定进度快在进度栏中移动的时间段
             CheckFolders();//文件夹配置检查
-            autorun();  //开机自启检查
+            //autorun();  //开机自启检查
             LoadingSuccess();//配置成功
         }
 

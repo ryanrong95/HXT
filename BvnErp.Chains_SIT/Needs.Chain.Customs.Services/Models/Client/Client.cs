@@ -516,7 +516,7 @@ namespace Needs.Ccs.Services.Models
                             Email = contact.Email,
                             Mobile = contact.Mobile,
                             Name = company.Name,
-                            Password = Needs.Utils.Converters.StringExtend.StrToMD5("XDT123"),
+                            Password = Needs.Utils.Converters.StringExtend.StrToMD5("HXT123"),
                             IsMain = true,
                             Status = (int)this.Status,
                             CreateDate = this.CreateDate,

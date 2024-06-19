@@ -65,9 +65,15 @@ namespace WebApp.Order.Classified
                 //代理费率、最低代理费
                 decimal agencyRate = order.AgencyFeeExchangeRate * order.ClientAgreement.AgencyRate;
                 decimal minAgencyFee = order.ClientAgreement.MinAgencyFee;
-                bool isAverage = order.DeclarePrice * agencyRate < minAgencyFee ? true : false;
+                
+                var preAgency = (order.ClientAgreement.PreAgency.HasValue && order.ClientAgreement.PreAgency > 0M) ? order.ClientAgreement.PreAgency.Value : 0M;
+
+                bool isAverage = (order.DeclarePrice * agencyRate + preAgency) < minAgencyFee ? true : false;
                 //平摊代理费
                 var aveAgencyFee = (order.AgencyFee * taxpoint / order.Items.Count()).ToRound(4);
+
+                //基础收费平摊金额
+                var avePreAgency = preAgency / order.Items.Count();
 
                 Func<Needs.Ccs.Services.Models.OrderItem, object> convert = item => new
                 {
@@ -85,7 +91,7 @@ namespace WebApp.Order.Classified
                     AddTax = item.AddedValueTax.Value,
                     ExciseTaxRate = item.ExciseTax?.Rate ?? 0M,
                     ExciseTax = item.ExciseTax?.Value ?? 0M,
-                    AgencyFee = isAverage ? aveAgencyFee : item.TotalPrice * agencyRate * taxpoint,
+                    AgencyFee = isAverage ? aveAgencyFee : ((item.TotalPrice * agencyRate + avePreAgency) * taxpoint ).ToRound(2),
                     InspectionFee = (item.InspectionFee.GetValueOrDefault() * taxpoint),
                 };
 

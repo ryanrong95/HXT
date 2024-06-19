@@ -19,12 +19,12 @@ namespace WebApp
 
                     this.Model.StaffID = string.Empty;
                     this.Model.IsBind = false;
-                    this.Title = Yahv.Erp.Current.RealName + "-" + "远大协同管理系统";
+                    this.Title = Yahv.Erp.Current.RealName + "-" + "华芯通管理系统";
 
                     //荣检要求增加
                     if (Yahv.Erp.Current.Plat.MyMenus.IsXdt)
                     {
-                        this.Title = Yahv.Erp.Current.RealName + "-" + "芯达通协同系统";
+                        this.Title = Yahv.Erp.Current.RealName + "-" + "华芯通管理系统";
                     }
 
                     //Yahv.Erp.Current.Role.Name

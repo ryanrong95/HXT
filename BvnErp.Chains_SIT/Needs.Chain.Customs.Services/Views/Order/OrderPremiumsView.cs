@@ -54,5 +54,32 @@ namespace Needs.Ccs.Services.Views
                        OrderReceiveds = orderReceiveds.OrderByDescending(item=>item.CreateDate)
                    };
         }
+
+        public IQueryable<OrderPremium> GetOrderPremiums() 
+        {
+            return from orderPremium in this.Reponsitory.ReadTable<Layer.Data.Sqls.ScCustoms.OrderPremiums>()
+                   select new Models.OrderPremium
+                   {
+                       ID = orderPremium.ID,
+                       OrderID = orderPremium.OrderID,
+                       OrderItemID = orderPremium.OrderItemID,
+                       //Admin = admin,
+                       Type = (Enums.OrderPremiumType)orderPremium.Type,
+                       Name = orderPremium.Name,
+                       Count = orderPremium.Count,
+                       UnitPrice = orderPremium.UnitPrice,
+                       Currency = orderPremium.Currency,
+                       Rate = orderPremium.Rate,
+                       StandardID = orderPremium.StandardID,
+                       StandardPrice = orderPremium.StandardPrice,
+                       StandardRemark = orderPremium.StandardRemark,
+                       Status = (Enums.Status)orderPremium.Status,
+                       CreateDate = orderPremium.CreateDate,
+                       UpdateDate = orderPremium.UpdateDate,
+                       Summary = orderPremium.Summary,
+                       //杂费(非商检费)实收
+                       //OrderReceiveds = orderReceiveds.OrderByDescending(item => item.CreateDate)
+                   };
+        }
     }
 }

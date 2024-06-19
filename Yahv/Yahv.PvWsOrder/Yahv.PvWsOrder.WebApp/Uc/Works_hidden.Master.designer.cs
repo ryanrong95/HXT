@@ -7,12 +7,13 @@
 // </自动生成>
 //------------------------------------------------------------------------------
 
-namespace Yahv.PvWsOrder.WebApp.Uc {
-    
-    
-    public partial class Works_hidden
+namespace Yahv.PvWsOrder.WebApp.Uc
+{
+
+
+    public partial class Works
     {
-        
+
         /// <summary>
         /// cphHead 控件。
         /// </summary>
@@ -21,7 +22,7 @@ namespace Yahv.PvWsOrder.WebApp.Uc {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.ContentPlaceHolder cphHead;
-        
+
         /// <summary>
         /// form1 控件。
         /// </summary>
@@ -30,7 +31,7 @@ namespace Yahv.PvWsOrder.WebApp.Uc {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
-        
+
         /// <summary>
         /// cphForm 控件。
         /// </summary>

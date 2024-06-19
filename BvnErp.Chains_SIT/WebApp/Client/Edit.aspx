@@ -7,8 +7,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title></title>
     <uc:EasyUI runat="server" />
-    <script src="http://gerpfixed.for-ic.net/My/Scripts/area.data.js"></script>
-    <script src="http://gerpfixed.for-ic.net/My/Scripts/areacombo.js"></script>
+    <script src="http://fix.szhxd.net/My/Scripts/area.data.js"></script>
+    <script src="http://fix.szhxd.net/My/Scripts/areacombo.js"></script>
     <link href="../Content/Ccs.css" rel="stylesheet" />
     <script src="../Scripts/Ccs.js"></script>
     <script src="../Scripts/chainsupload.js"></script>
@@ -307,7 +307,7 @@
                 if (ClientInfoData == null) {
 
                     var clientNo = $('#ClientCode').textbox('getValue');
-                    if (!(/^[W][L][0-9]{3}$/.test(clientNo) || /^[X][L][0-9]{3}$/.test(clientNo))) {
+                    if (!(/^[H][X][T][0-9]{3}$/.test(clientNo) || /^[H][X][T][0-9]{3}$/.test(clientNo))) {
                         $.messager.alert("消息", "请输入正确的客户编号");
                         return;
                     }
@@ -359,7 +359,7 @@
             $('#chaeckClientNo').on('click', function () {
                 var clientNo = $('#ClientCode').textbox('getValue');
                 var id = getQueryString("ID");
-                if (!(/^[W][L][0-9]{3}$/.test(clientNo) || /^[X][L][0-9]{3}$/.test(clientNo))) {
+                if (!(/^[H][X][T][0-9]{3}$/.test(clientNo) || /^[H][X][T][0-9]{3}$/.test(clientNo))) {
                     $.messager.alert("消息", "请输入正确的客户编号");
                     return;
                 }

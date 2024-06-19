@@ -55,15 +55,16 @@ namespace Yahv.PvWsClient.WebAppNew.Controllers
             }
 
             //经理
-            ViewBag.ManagerName = "赖翠红";
+            ViewBag.ManagerName = "张三";
             ViewBag.ManagerPhone = "13590372947";
-            ViewBag.ManagerEmail = "laicuihong@for-ic.net";
+            ViewBag.ManagerEmail = "";
 
             var client = current?.MyClients;
 
             //服务类型
             bool isCustoms = false;
             bool isWarehouse = false;
+            bool hasExport = false;
             if (client != null)
             {
                 isCustoms = (client.ServiceType & ServiceType.Customs) == ServiceType.Customs;
@@ -71,9 +72,12 @@ namespace Yahv.PvWsClient.WebAppNew.Controllers
 
                 isCustoms = isCustoms && client.IsDeclaretion;
                 isWarehouse = isWarehouse && client.IsStorageService;
+                hasExport = client.HasExport.Value;
             }
             ViewBag.IsCustoms = isCustoms;
             ViewBag.IsWarehouse = isWarehouse;
+            ViewBag.HasExport = hasExport;
+
         }
 
         protected override void OnResultExecuted(ResultExecutedContext filterContext)

@@ -124,7 +124,7 @@ namespace Needs.Ccs.Services.Models
             this.UpdateDate = this.CreateDate = DateTime.Now;
 
             this.EnterSuccess += FinanceReceipt_EnterSuccess;
-            this.DyjFinanceReceipt += FinanceReceipt_PostToDyj;
+            //this.DyjFinanceReceipt += FinanceReceipt_PostToDyj;
             this.Updated += FinanceReceipt_Updated;
             this.AbandonSuccess += FinanceReceipt_AbandonSuccess;
             this.CenterFinanceReceipt += FinanceReceipt_PostToCenter;
@@ -154,7 +154,7 @@ namespace Needs.Ccs.Services.Models
             this.AccountProperty = AccountProperty.Public;
 
             this.EnterSuccess += FinanceReceipt_EnterSuccess;
-            this.DyjFinanceReceipt += FinanceReceipt_PostToDyj;
+            //this.DyjFinanceReceipt += FinanceReceipt_PostToDyj;
             this.Updated += FinanceReceipt_Updated;
             this.AbandonSuccess += FinanceReceipt_AbandonSuccess;
             this.CenterFinanceReceipt += FinanceReceipt_PostToCenter;

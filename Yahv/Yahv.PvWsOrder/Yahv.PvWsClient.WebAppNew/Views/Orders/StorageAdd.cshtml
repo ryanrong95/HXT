@@ -313,8 +313,8 @@
                     </ul>
                 </div>
             </div>
-            <el-form-item class="mt20" label="交货联系人信息:" prop="HKSupplierAddress" :rules="[{ required: true, message: '请选择交货联系人信息', trigger: 'change' }]">
-                <el-button class="btn_add" v-on:click="addAddress">+新增交货联系人信息</el-button><br />
+            <el-form-item class="mt20" label="交货联系人:" prop="HKSupplierAddress" :rules="[{ required: true, message: '请选择交货联系人', trigger: 'change' }]">
+                <el-button class="btn_add" v-on:click="addAddress">+新增交货联系人</el-button><br />
                 <el-radio-group class="SupplierAddressOptions mt10" v-model="formData.HKSupplierAddress">
                     <el-radio style="display: block; margin-bottom: 6px" :title="item.text" size="mini" :label=item.value v-for="item of supplierAddressOptions">{{item.text}}</el-radio>
                 </el-radio-group>
@@ -505,7 +505,7 @@
                 </div>
                 <div class="clearfix">
                     <div class="fl wp50">
-                        <el-form-item label="发货时机:" prop="DelivaryOpportunity" :rules="[{ required: true, message: '请选择发货时机', trigger: 'change' }]">
+                        <el-form-item label="结算方式:" prop="DelivaryOpportunity" :rules="[{ required: true, message: '请选择结算方式', trigger: 'change' }]">
                             <el-select style="width: 200px;" size="mini" v-model="formData.DelivaryOpportunity" filterable clearable placeholder="请选择">
                                 <el-option v-for="item in baseData.DelivaryOppOptions"
                                            :key="item.value"
@@ -558,7 +558,7 @@
                         <el-form-item label="支票抬头:" :rules="[{ required: true }]">
                             <el-radio-group v-model="TitleSelect">
                                 <el-radio :label="1" :disabled="formData.IsEntry == false && formData.PayerMethod == 5">
-                                    <span id="hkTitle">HONG KONG CHANGYUN INTERNATIONAL LOGISTICS CO., LIMITED</span>
+                                    <span id="hkTitle">HONG KONG EXPRESS INTERNATIONAL LOGISTICS LIMITED</span>
                                 </el-radio>
                                 <el-radio :label="2">
                                     <el-input id="inputTitle" style="width: 460px" size="mini" :readonly="TitleSelect==1" v-model="TitleText" maxlength="50"></el-input>
@@ -567,7 +567,7 @@
                         </el-form-item>
                     </div>
                 </div>
-                <span id="hkTitle1" style="display: none;">HONG KONG CHANGYUN INTERNATIONAL LOGISTICS CO., LIMITED</span>
+                <span id="hkTitle1" style="display: none;">HONG KONG EXPRESS INTERNATIONAL LOGISTICS LIMITED</span>
                 <div v-show="formData.PayerMethod==3" class="clearfix">
                     <div class="fl wp100">
                         <el-form-item class="mt20" label="我方账户:" prop="CompanyBankID" :rules="[{ required: true, message: '', trigger: 'change' }]">

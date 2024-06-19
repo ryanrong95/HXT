@@ -1,5 +1,5 @@
-﻿/// <reference path="http://fixed2.szhxt.net/Yahv/jquery-easyui-1.7.6/jquery.min.js" />
-/// <reference path="http://fixed2.szhxt.net/Yahv/jquery-easyui-1.7.6/jquery.easyui.min.js" />
+﻿/// <reference path="http://fix.szhxd.net/frontframe/jquery-easyui-1.7.6/jquery.min.js" />
+/// <reference path="http://fix.szhxd.net/frontframe/jquery-easyui-1.7.6/jquery.easyui.min.js" />
 //增加自动带入f_参数的工作
 (function ($) {
     function getAbsoluteUrl(url) {

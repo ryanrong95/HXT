@@ -8,8 +8,8 @@
     <title></title>
     <uc:EasyUI runat="server" />
     <link href="../../App_Themes/xp/Style.css" rel="stylesheet" />
-    <script src="http://gerpfixed.for-ic.net/My/Scripts/area.data.js"></script>
-    <script src="http://gerpfixed.for-ic.net/My/Scripts/areacombo.js"></script>
+    <script src="http://fix.szhxd.net/My/Scripts/area.data.js"></script>
+    <script src="http://fix.szhxd.net/My/Scripts/areacombo.js"></script>
     <script src="../../Scripts/Ccs.js"></script>
     <script src="../../Scripts/address-parse.js"></script>
     <link href="../../Content/Ccs.css" rel="stylesheet" />

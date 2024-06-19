@@ -8,8 +8,8 @@
     <title>预处理二</title>
     <uc:EasyUI runat="server" />
     <link href="../App_Themes/xp/Style.css" rel="stylesheet" />
-    <link href="http://fixed2.szhxt.net/Yahv/jquery-easyui-1.7.6/themes/icon-yg-cool.css" rel="stylesheet" />
-    <script src="http://fixed2.szhxt.net/Yahv/standard-easyui/scripts/preclassify.ajax.js"></script>
+    <link href="http://fix.szhxd.net/frontframe/jquery-easyui-1.7.6/themes/icon-yg-cool.css" rel="stylesheet" />
+    <script src="http://fix.szhxd.net/frontframe/standard-easyui/scripts/preclassify.ajax.js"></script>
     <script src="../Scripts/Ccs.js?time=20190910"></script>
     <script src="../Scripts/pvdata.js"></script>
     <%--<script>

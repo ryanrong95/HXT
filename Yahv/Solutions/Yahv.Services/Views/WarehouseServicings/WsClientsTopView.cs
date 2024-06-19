@@ -46,7 +46,8 @@ namespace Yahv.Services.Views
                        ServiceType = (ServiceType)entity.ServiceType,
                        IsDeclaretion = entity.IsDeclaretion,
                        IsStorageService = entity.IsStorageService,
-                       StorageType = (WsIdentity)entity.StorageType
+                       StorageType = (WsIdentity)entity.StorageType,
+                       HasExport = entity.HasExport
                    };
         }
 

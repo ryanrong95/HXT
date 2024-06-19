@@ -23,11 +23,19 @@ namespace WebApi.Models
         public JPost()
         {
             var request = HttpContext.Current.Request;
-            var bytes = new byte[request.InputStream.Length];
-            request.InputStream.Position = 0;
-            request.InputStream.Read(bytes, 0, bytes.Length);
-            string context = Encoding.UTF8.GetString(bytes);
-            this.JObject = JObject.Parse(context);
+
+            if (request.HttpMethod == "OPTIONS")
+            {
+                this.JObject = JObject.Parse("{\"OPTIONS\":\"True\"}");
+            }
+            else
+            {
+                var bytes = new byte[request.InputStream.Length];
+                request.InputStream.Position = 0;
+                request.InputStream.Read(bytes, 0, bytes.Length);
+                string context = Encoding.UTF8.GetString(bytes);
+                this.JObject = JObject.Parse(context);
+            }
         }
 
 

@@ -478,7 +478,7 @@ namespace Yahv.PvWsClient.WebAppNew.Controllers
                 //获取报关委托书数据
                 var orderAgentProxy = current.MyOrder.GetOrderAgentProxy(id);
                 //创建文件目录
-                FileDirectory file = new FileDirectory(DateTime.Now.Ticks + ".pdf");
+                FileDirectory file = new FileDirectory("委托书" + DateTime.Now.ToString("MMddHHmmss") + ".pdf");
                 file.SetChildFolder(SysConfig.Dowload);
                 file.CreateDateDirectory();
 
@@ -534,7 +534,7 @@ namespace Yahv.PvWsClient.WebAppNew.Controllers
                 decimal amountFor代垫本金 = new AdvanceRecordsView().GetAmountForDeclareTotalPrice(id);
 
                 //创建文件目录
-                FileDirectory file = new FileDirectory(DateTime.Now.Ticks + ".pdf");
+                FileDirectory file = new FileDirectory("对账单" + DateTime.Now.ToString("MMddHHmmss") + ".pdf");
                 file.SetChildFolder(SysConfig.Dowload);
                 file.CreateDateDirectory();
                 orderbillProxy.DueDate = current.MyAgreement.GetDueDateNew(id);  //current.MyAgreement.GetDueDate();

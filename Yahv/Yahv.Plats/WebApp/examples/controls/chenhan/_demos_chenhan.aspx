@@ -7,37 +7,37 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>新空间测试地址-建议使用测试数据库连接串</title>
 
-    <link href="http://fixed2.szhxt.net/Yahv/jquery-easyui-1.7.6/themes/gray/easyui.css" rel="stylesheet" />
+    <link href="http://fix.szhxd.net/frontframe/jquery-easyui-1.7.6/themes/gray/easyui.css" rel="stylesheet" />
 
-    <link href="http://fixed2.szhxt.net/Yahv/jquery-easyui-1.7.6/themes/icon.css" rel="stylesheet" />
-    <link href="http://fixed2.szhxt.net/Yahv/jquery-easyui-1.7.6/themes/icon-yg-cool.css" rel="stylesheet" />
+    <link href="http://fix.szhxd.net/frontframe/jquery-easyui-1.7.6/themes/icon.css" rel="stylesheet" />
+    <link href="http://fix.szhxd.net/frontframe/jquery-easyui-1.7.6/themes/icon-yg-cool.css" rel="stylesheet" />
 
 
-    <link href="http://fixed2.szhxt.net/Yahv/standard-easyui/styles/plugin.css" rel="stylesheet" />
-    <link href="http://fixed2.szhxt.net/Yahv/customs-easyui/Styles/main.css" rel="stylesheet" />
-    <link href="http://fixed2.szhxt.net/Yahv/customs-easyui/Styles/reset.css" rel="stylesheet" />
+    <link href="http://fix.szhxd.net/frontframe/standard-easyui/styles/plugin.css" rel="stylesheet" />
+    <link href="http://fix.szhxd.net/frontframe/customs-easyui/Styles/main.css" rel="stylesheet" />
+    <link href="http://fix.szhxd.net/frontframe/customs-easyui/Styles/reset.css" rel="stylesheet" />
 
-    <link href="http://fixed2.szhxt.net/Yahv/customs-easyui/fonts/iconfont.css" rel="stylesheet" />
+    <link href="http://fix.szhxd.net/frontframe/customs-easyui/fonts/iconfont.css" rel="stylesheet" />
 
-    <script src="http://fixed2.szhxt.net/Yahv/jquery-easyui-1.7.6/jquery.min.js"></script>
-    <script src="http://fixed2.szhxt.net/Yahv/jquery-easyui-1.7.6/jquery.easyui.min.js"></script>
-    <script src="http://fixed2.szhxt.net/Yahv/jquery-easyui-1.7.6/locale/easyui-lang-zh_CN.js"></script>
+    <script src="http://fix.szhxd.net/frontframe/jquery-easyui-1.7.6/jquery.min.js"></script>
+    <script src="http://fix.szhxd.net/frontframe/jquery-easyui-1.7.6/jquery.easyui.min.js"></script>
+    <script src="http://fix.szhxd.net/frontframe/jquery-easyui-1.7.6/locale/easyui-lang-zh_CN.js"></script>
 
-    <script src="http://fixed2.szhxt.net/Yahv/customs-easyui/Scripts/main.js"></script>
-    <script src="http://fixed2.szhxt.net/Yahv/ajaxPrexUrl.js"></script>
+    <script src="http://fix.szhxd.net/frontframe/customs-easyui/Scripts/main.js"></script>
+    <script src="http://fix.szhxd.net/frontframe/ajaxPrexUrl.js"></script>
 
 
 
 
 
     <%--新写的控件Start，可以直接修改文件命名，先把原有的文件做.chenhan.bak.js后把_chenhan去除--%>
-    <%--<script src="http://fixed2.szhxt.net/Yahv/standard-easyui/scripts/currency.js"></script>
-    <script src="http://fixed2.szhxt.net/Yahv/standard-easyui/scripts/supplier.js"></script>
-    <script src="http://fixed2.szhxt.net/Yahv/standard-easyui/scripts/supplierPayee.js"></script>
-    <script src="http://fixed2.szhxt.net/Yahv/standard-easyui/scripts/client.js"></script>
-    <script src="http://fixed2.szhxt.net/Yahv/standard-easyui/scripts/standardPartNumber.js"></script>--%>
+    <%--<script src="http://fix.szhxd.net/frontframe/standard-easyui/scripts/currency.js"></script>
+    <script src="http://fix.szhxd.net/frontframe/standard-easyui/scripts/supplier.js"></script>
+    <script src="http://fix.szhxd.net/frontframe/standard-easyui/scripts/supplierPayee.js"></script>
+    <script src="http://fix.szhxd.net/frontframe/standard-easyui/scripts/client.js"></script>
+    <script src="http://fix.szhxd.net/frontframe/standard-easyui/scripts/standardPartNumber.js"></script>--%>
 
-    <script src="http://fixed2.szhxt.net/Yahv/standard-easyui/scripts/easyui.jl.js"></script>
+    <script src="http://fix.szhxd.net/frontframe/standard-easyui/scripts/easyui.jl.js"></script>
     <%--新写的控件End--%>
 
     <%-- 部署时候需要部署 standard-easyui/styles/plugin.css--%>

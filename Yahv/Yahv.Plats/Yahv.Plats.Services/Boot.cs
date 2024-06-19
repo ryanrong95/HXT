@@ -274,7 +274,7 @@ namespace Yahv.Plats.Services
         void LeftBusiness()
         {
             menuEnters = new List<string>();
-            var url = $"{Yahv.Underly.DomainConfig.Fixed}/Yahv/leftbusiness/";
+            var url = $"{Yahv.Underly.DomainConfig.Fixed}/frontframe/leftbusiness/";
             //string[] lefts = { "erm.json", "rfq.json", "crm.json", "srm.json", "pfwms.json", "pvdata.json", "cxhy.json", "xdt.json", "xdterm.json", "xdtchains.json", "pvfinance.json", "logistics.json", "szpswms.json", "crmplus.json", "tradesales.json", "standard.json", "ims.json", "pvfcrm.json" };
             string[] lefts = { "xdt-client.json", "xdt-business.json", "xdt-customs.json", "xdt-finance.json", "pvfinance.json", "xdt-risk.json", "xdt-general.json", "xdterm.json", "erm.json" };
 

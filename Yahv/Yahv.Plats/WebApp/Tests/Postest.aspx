@@ -6,21 +6,21 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>datalist</title>
-    <link href="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/jquery-easyui-1.7.6/themes/metro/easyui.css" rel="stylesheet" />
-    <link href="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/jquery-easyui-1.7.6/themes/metro/jl-cool.css" rel="stylesheet" />
+    <link href="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/frontframe/jquery-easyui-1.7.6/themes/metro/easyui.css" rel="stylesheet" />
+    <link href="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/frontframe/jquery-easyui-1.7.6/themes/metro/jl-cool.css" rel="stylesheet" />
 
-    <link href="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/jquery-easyui-1.7.6/themes/icon.css" rel="stylesheet" />
-    <link href="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/jquery-easyui-1.7.6/themes/icon-jl-cool.css" rel="stylesheet" />
-
-
-
-    <script src="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/jquery-easyui-1.7.6/jquery.min.js"></script>
-    <script src="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/jquery-easyui-1.7.6/jquery.easyui.min.js"></script>
-    <script src="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/jquery-easyui-1.7.6/locale/easyui-lang-zh_CN.js"></script>
+    <link href="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/frontframe/jquery-easyui-1.7.6/themes/icon.css" rel="stylesheet" />
+    <link href="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/frontframe/jquery-easyui-1.7.6/themes/icon-jl-cool.css" rel="stylesheet" />
 
 
-    <script src="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/customs-easyui/Scripts/easyui.myWindow.js"></script>
-    <script src="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/customs-easyui/Scripts/easyui.myDialog.js"></script>
+
+    <script src="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/frontframe/jquery-easyui-1.7.6/jquery.min.js"></script>
+    <script src="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/frontframe/jquery-easyui-1.7.6/jquery.easyui.min.js"></script>
+    <script src="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/frontframe/jquery-easyui-1.7.6/locale/easyui-lang-zh_CN.js"></script>
+
+
+    <script src="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/frontframe/customs-easyui/Scripts/easyui.myWindow.js"></script>
+    <script src="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/frontframe/customs-easyui/Scripts/easyui.myDialog.js"></script>
 
 </head>
 <body>

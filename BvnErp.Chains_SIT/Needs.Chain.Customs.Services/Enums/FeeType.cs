@@ -27,7 +27,7 @@ namespace Needs.Ccs.Services.Enums
         /// <summary>
         /// 代理费
         /// </summary>
-        [Description("代理费")]
+        [Description("服务费")]
         AgencyFee = 3,
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace Needs.Ccs.Services.Enums
         /// <summary>
         /// 代理费率
         /// </summary>
-        [Description("代理费率")]
+        [Description("服务费率")]
         AgencyFee = 1,
 
         /// <summary>

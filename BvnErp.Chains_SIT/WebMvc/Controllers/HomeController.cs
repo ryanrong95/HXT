@@ -381,7 +381,7 @@ namespace WebMvc.Controllers
             {
                 model.Mobile = Regex.Replace(user.Mobile, "(\\d{3})\\d{4}(\\d{4})", "$1****$2");
             }
-            model.IsOriginPassWord = user.Password == "XDT123".StrToMD5();
+            model.IsOriginPassWord = user.Password == "HXT123".StrToMD5();
             return View(model);
         }
 

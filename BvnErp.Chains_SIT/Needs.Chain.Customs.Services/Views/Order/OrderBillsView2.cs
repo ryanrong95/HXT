@@ -110,6 +110,7 @@ namespace Needs.Ccs.Services.Views
                            Agreement = new ClientAgreement
                            {
                                InvoiceTaxRate = clientAgr.InvoiceTaxRate,
+                               PreAgency = clientAgr.PreAgency,
                                AgencyRate = clientAgr.AgencyRate,
                                MinAgencyFee = clientAgr.MinAgencyFee,
                                AgencyFeeClause = new ClientFeeSettlement

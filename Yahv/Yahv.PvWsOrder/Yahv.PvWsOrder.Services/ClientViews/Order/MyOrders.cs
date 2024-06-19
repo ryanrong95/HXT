@@ -8,6 +8,7 @@ using Yahv.PvWsOrder.Services.ClientModels;
 using Yahv.PvWsOrder.Services.Enums;
 using Yahv.PvWsOrder.Services.Models;
 using Yahv.PvWsOrder.Services.Views.Origins;
+using Yahv.PvWsOrder.Services.XDTClientView;
 using Yahv.Services.Models;
 using Yahv.Services.Views;
 using Yahv.Underly;
@@ -229,6 +230,7 @@ namespace Yahv.PvWsOrder.Services.ClientViews
             }
             var client = new WsClientsTopView<PvWsOrderReponsitory>(this.Reponsitory)[order.ClientID];
             var contact = new ContactsTopView<PvWsOrderReponsitory>(this.Reponsitory).FirstOrDefault(item => item.EnterpriseID == order.ClientID);
+            var agreement = new ClientAgreementView<ScCustomReponsitory>(this.User).FirstOrDefault();
 
             OrderItemAlls orderItemAlls = new OrderItemAlls(this.Reponsitory);
             var orderitems = orderItemAlls.GetItemBillByOrderID(order.ID);
@@ -249,6 +251,7 @@ namespace Yahv.PvWsOrder.Services.ClientViews
                 ContrNo = "",
                 Order = order,
                 Client = client,
+                ClientAgreement = agreement,
                 ClientContact = contact,
                 orderitems = orderitems.ToArray(),
             };

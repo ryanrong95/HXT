@@ -27,13 +27,19 @@ namespace Needs.Ccs.Services.Enums
         /// <summary>
         /// 代理费率
         /// </summary>
-        [Description("代理费率")]
+        [Description("服务费率")]
         AgencyRate = 3,
+
+        /// <summary>
+        /// 基础服务费
+        /// </summary>
+        [Description("基础服务费")]
+        PreAgency = 9,
 
         /// <summary>
         /// 最低代理费
         /// </summary>
-        [Description("最低代理费")]
+        [Description("最低服务费")]
         MinAgencyFee = 4,
 
         /// <summary>
@@ -99,37 +105,37 @@ namespace Needs.Ccs.Services.Enums
         /// <summary>
         /// 代理费结算方式
         /// </summary>
-        [Description("代理费结算方式")]
+        [Description("服务费结算方式")]
         AgencyPeriodType = 201,
 
         /// <summary>
         /// 代理费约定期限
         /// </summary>
-        [Description("代理费约定期限")]
+        [Description("服务费约定期限")]
         AgencyDaysLimit = 202,
 
         /// <summary>
         /// 代理费月结日期
         /// </summary>
-        [Description("代理费月结日期")]
+        [Description("服务费月结日期")]
         AgencyMonthlyDay = 203,
 
         /// <summary>
         /// 代理费垫款上限
         /// </summary>
-        [Description("代理费垫款上限")]
+        [Description("服务费垫款上限")]
         AgencyUpperLimit = 204,
 
         /// <summary>
         /// 代理费汇率类型
         /// </summary>
-        [Description("代理费汇率类型")]
+        [Description("服务费汇率类型")]
         AgencyExchangeRateType = 205,
 
         /// <summary>
         /// 代理费约定汇率值
         /// </summary>
-        [Description("代理费约定汇率值")]
+        [Description("服务费约定汇率值")]
         AgencyExchangeRateValue = 206,
 
         /// <summary>

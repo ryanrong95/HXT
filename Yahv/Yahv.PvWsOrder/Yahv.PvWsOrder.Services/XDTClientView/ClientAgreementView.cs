@@ -14,13 +14,19 @@ namespace Yahv.PvWsOrder.Services.XDTClientView
     /// <summary>
     /// 
     /// </summary>
-    public class ClientAgreementView : UniqueView<ClientAgreement, ScCustomReponsitory>
+    public class ClientAgreementView<TReponsitory> : UniqueView<ClientAgreement, TReponsitory>
+           where TReponsitory : class, Layers.Linq.IReponsitory, IDisposable, new()
     {
         private IUser User;
 
         public ClientAgreementView(IUser user)
         {
             this.User = user;
+        }
+
+        public ClientAgreementView(TReponsitory reponsitory) : base(reponsitory)
+        {
+
         }
 
         protected override IQueryable<ClientAgreement> GetIQueryable()
@@ -33,8 +39,10 @@ namespace Yahv.PvWsOrder.Services.XDTClientView
                        {
                            ID = entity.ID,
                            ClientID = entity.ClientID,
+                           AgreementCode = entity.AgreementCode,
                            StartDate = entity.StartDate,
                            EndDate = entity.EndDate,
+                           PreAgency = entity.PreAgency,
                            AgencyRate = entity.AgencyRate,
                            MinAgencyFee = entity.MinAgencyFee,
                            IsPrePayExchange = entity.IsPrePayExchange,
@@ -58,6 +66,53 @@ namespace Yahv.PvWsOrder.Services.XDTClientView
                                Summary = item.Summary
                            }).ToArray(),
                            AdminID = entity.AdminID,
+                           IsTen = (PEIsTen)entity.IsTen,
+                           Status = entity.Status,
+                           CreateDate = entity.CreateDate,
+                           UpdateDate = entity.UpdateDate,
+                           Summary = entity.Summary
+                       };
+
+            return linq;
+        }
+
+        public IQueryable<ClientAgreement> GetIQueryableNoUser()
+        {
+            var linq = from entity in this.Reponsitory.ReadTable<Layers.Data.Sqls.ScCustoms.ClientAgreements>().Where(item => item.Status == (int)GeneralStatus.Normal)
+                       join feeSettlement in this.Reponsitory.ReadTable<Layers.Data.Sqls.ScCustoms.ClientFeeSettlements>().Where(item => item.Status == (int)GeneralStatus.Normal)
+                       on entity.ID equals feeSettlement.AgreementID into feeSettlements
+                       select new ClientAgreement
+                       {
+                           ID = entity.ID,
+                           ClientID = entity.ClientID,
+                           AgreementCode = entity.AgreementCode,
+                           StartDate = entity.StartDate,
+                           EndDate = entity.EndDate,
+                           PreAgency = entity.PreAgency,
+                           AgencyRate = entity.AgencyRate,
+                           MinAgencyFee = entity.MinAgencyFee,
+                           IsPrePayExchange = entity.IsPrePayExchange,
+                           IsLimitNinetyDays = entity.IsLimitNinetyDays,
+                           InvoiceType = (Invoice)entity.InvoiceType,
+                           InvoiceTaxRate = entity.InvoiceTaxRate,
+                           clientFeeSettlements = feeSettlements.Select(item => new ClientFeeSettlement
+                           {
+                               ID = item.ID,
+                               AgreementID = item.AgreementID,
+                               FeeType = item.FeeType,
+                               PeriodType = (PeriodType)item.PeriodType,
+                               ExchangeRateType = (ExchangeRateType)item.ExchangeRateType,
+                               ExchangeRateValue = item.ExchangeRateValue,
+                               DaysLimit = item.DaysLimit,
+                               MonthlyDay = item.MonthlyDay,
+                               UpperLimit = item.UpperLimit,
+                               Status = item.Status,
+                               CreateDate = item.CreateDate,
+                               UpdateDate = item.UpdateDate,
+                               Summary = item.Summary
+                           }).ToArray(),
+                           AdminID = entity.AdminID,
+                           IsTen = (PEIsTen)entity.IsTen,
                            Status = entity.Status,
                            CreateDate = entity.CreateDate,
                            UpdateDate = entity.UpdateDate,
@@ -411,6 +466,10 @@ namespace Yahv.PvWsOrder.Services.XDTClientView
 
         public string ClientID { get; set; }
 
+        public string AgreementCode { get; set; }
+
+        public decimal? PreAgency { get; set; }
+
         public decimal AgencyRate { get; set; }
 
         public decimal MinAgencyFee { get; set; }
@@ -428,6 +487,8 @@ namespace Yahv.PvWsOrder.Services.XDTClientView
         public decimal InvoiceTaxRate { get; set; }
 
         public string AdminID { get; set; }
+
+        public PEIsTen IsTen { get; set; }
 
         public int Status { get; set; }
 
@@ -539,5 +600,23 @@ namespace Yahv.PvWsOrder.Services.XDTClientView
         /// </summary>
         [Description("服务费发票")]
         Service = 1,
+    }
+
+    /// <summary>
+    /// 付汇汇率类型
+    /// </summary>
+    public enum PEIsTen
+    {
+        /// <summary>
+        /// 九点半
+        /// </summary>
+        [Description("9:30")]
+        Nine = 0,
+
+        /// <summary>
+        /// 十点
+        /// </summary>
+        [Description("10:00")]
+        Ten = 1,
     }
 }

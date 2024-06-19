@@ -35,6 +35,11 @@ namespace Needs.Ccs.Services.Models
         public string ClientID { get; set; }
 
         /// <summary>
+        /// 协议编号
+        /// </summary>
+        public string AgreementCode { get; set; }
+
+        /// <summary>
         /// 合同协议开始时间
         /// </summary>
         public DateTime StartDate { get; set; }
@@ -43,6 +48,11 @@ namespace Needs.Ccs.Services.Models
         /// 合同协议结束日期
         /// </summary>
         public DateTime EndDate { get; set; }
+
+        /// <summary>
+        /// 基础收费
+        /// </summary>
+        public decimal? PreAgency {  get; set; }
 
         /// <summary>
         /// 代理费率
@@ -67,7 +77,7 @@ namespace Needs.Ccs.Services.Models
         /// <summary>
         /// 是否使用十点汇率 否则 用九点半
         /// </summary>
-        public bool? IsTen { get; set; }
+        public PEIsTen IsTen { get; set; }
 
         /// <summary>
         /// 开票类型
@@ -274,7 +284,7 @@ namespace Needs.Ccs.Services.Models
             replaceText.Add("{GoodsPayExchangePre}", this.IsPrePayExchange ? "☑" : "□");
 
             //换汇汇率
-            replaceText.Add("{IsTen}", this.IsTen.Value ? "10:00" : "09:30" );
+            replaceText.Add("{IsTen}", this.IsTen  == PEIsTen.Ten ? "10:00" : "09:30" );
 
             #region 货款
 
@@ -561,6 +571,181 @@ namespace Needs.Ccs.Services.Models
         }
 
 
+
+        /// <summary>
+        /// 进口服务协议--新
+        /// </summary>
+        /// <returns></returns>
+        public XWPFDocument ToWordImport(string agreementCode)
+        {
+            var tempPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Content\\templates\\华芯通供应链进口服务协议.docx");
+            var npoi = new NPOIHelper(tempPath);
+            var replaceText = new Dictionary<string, string>();
+
+            var client = new Views.ClientsView()[this.ClientID];
+
+            #region 组装内容
+
+            //基础信息
+            replaceText.Add("{CreateTime}", this.StartDate.ToString("yyyy年MM月dd日"));
+            replaceText.Add("{AgreementCode}", agreementCode);
+            replaceText.Add("{CompanyName}", client.Company.Name);
+            replaceText.Add("{RegisteredAddress}", client.Company.Address);
+            replaceText.Add("{LegalPerson}", client.Company.Corporate);
+
+            replaceText.Add("{AgreementStartDate}", this.StartDate.ToString("yyyy年MM月dd日"));
+            replaceText.Add("{AgreementEndDate}", this.EndDate.ToString("yyyy年MM月dd日"));
+
+            //换汇汇率
+            replaceText.Add("{IsTen}", this.IsTen == PEIsTen.Ten ? "10:00" : "09:30");
+            // 进口当月海关汇率
+            replaceText.Add("{TaxRateType}", this.TaxFeeClause.ExchangeRateType == ExchangeRateType.Custom ? "进口当月海关汇率" : (this.TaxFeeClause.ExchangeRateType == ExchangeRateType.RealTime ? "付款当天中国银行10:00之后第一个外汇卖出价" : "双方约定汇率"));
+
+            //代理费率
+            var preAgency = (this.PreAgency.HasValue && this.PreAgency.Value > 0) ? (this.PreAgency.Value.ToRound(2).ToString() + "元 + ") : "";
+            replaceText.Add("{AgencyRate}", preAgency + (this.AgencyRate * 100M).ToRound(2).ToString() + "%");
+            replaceText.Add("{MinimumAgent}", this.MinAgencyFee.ToRound(2).ToString());
+            //代理费汇率 
+            replaceText.Add("{AgencyRateType}", this.AgencyFeeClause.ExchangeRateType == ExchangeRateType.Custom ? "进口当月海关汇率" : (this.AgencyFeeClause.ExchangeRateType == ExchangeRateType.RealTime ? "付款当天中国银行10:00之后第一个外汇卖出价" : "双方约定汇率"));
+
+
+            //开票点位
+            replaceText.Add("{InvoicePoint}", (this.InvoiceTaxRate + 1).ToRound(2).ToString());
+            //开票类别
+            replaceText.Add("{InvoiceTypeDescription}", this.InvoiceType == InvoiceType.Full ? "签署内贸合同，受托方以进口货物价款、关税、增值税、消费税、服务费向委托方开具税率为13%的增值税专用发票" : "受托方向委托方提供海关进口关税专用缴款书、海关进口增值税专用缴款书和报关单，受托方以所收服务费开具税率为6%的增值税专用发票");
+
+
+            //税款
+            if (this.ProductFeeClause.PeriodType == PeriodType.PrePaid)
+            {
+                //replaceText.Add("{GoodsPaymentPre}", "☑无信用额度");
+                replaceText.Add("{GoodsPaymentPeriod}", "无信用额度");
+            }
+            else if (this.ProductFeeClause.PeriodType == PeriodType.AgreedPeriod)
+            {
+                //replaceText.Add("{GoodsPaymentPre}", "□无信用额度");
+                replaceText.Add("{GoodsPaymentPeriod}", "信用额度：约定期限，进口" + this.ProductFeeClause.DaysLimit.Value.ToString() + "天；额度：" + this.ProductFeeClause.UpperLimit.Value.ToRound(2).ToString() + "元");
+            }
+            else
+            {
+                //replaceText.Add("{GoodsPaymentPre}", "□无信用额度");
+                replaceText.Add("{GoodsPaymentPeriod}", "信用额度：月结，次月" + this.ProductFeeClause.MonthlyDay.Value.ToString() + "日；额度：" + this.ProductFeeClause.UpperLimit.Value.ToRound(2).ToString() + "元");
+            }
+
+            //税款
+            if (this.TaxFeeClause.PeriodType == PeriodType.PrePaid)
+            {
+                //replaceText.Add("{TaxPaymentPre}", "☑无信用额度");
+                replaceText.Add("{TaxPaymentPeriod}", "无信用额度");
+            }
+            else if (this.TaxFeeClause.PeriodType == PeriodType.AgreedPeriod)
+            {
+                //replaceText.Add("{TaxPaymentPre}", "□无信用额度");
+                replaceText.Add("{TaxPaymentPeriod}", "信用额度：约定期限，进口" + this.TaxFeeClause.DaysLimit.Value.ToString() + "天；额度：" + this.TaxFeeClause.UpperLimit.Value.ToRound(2).ToString() + "元");
+            }
+            else
+            {
+                //replaceText.Add("{TaxPaymentPre}", "□无信用额度");
+                replaceText.Add("{TaxPaymentPeriod}", "信用额度：月结，次月" + this.TaxFeeClause.MonthlyDay.Value.ToString() + "日；额度：" + this.TaxFeeClause.UpperLimit.Value.ToRound(2).ToString() + "元");
+            }
+
+            //服务费
+            if (this.AgencyFeeClause.PeriodType == PeriodType.PrePaid)
+            {
+                //replaceText.Add("{AgentPaymentPre}", "☑无信用额度");
+                replaceText.Add("{AgentPaymentPeriod}", "无信用额度");
+            }
+            else if (this.AgencyFeeClause.PeriodType == PeriodType.AgreedPeriod)
+            {
+                //replaceText.Add("{AgentPaymentPre}", "□无信用额度");
+                replaceText.Add("{AgentPaymentPeriod}", "信用额度：约定期限，进口" + this.AgencyFeeClause.DaysLimit.Value.ToString() + "天；额度：" + this.AgencyFeeClause.UpperLimit.Value.ToRound(2).ToString() + "元");
+            }
+            else
+            {
+                //replaceText.Add("{AgentPaymentPre}", "□无信用额度");
+                replaceText.Add("{AgentPaymentPeriod}", "信用额度：月结，次月" + this.AgencyFeeClause.MonthlyDay.Value.ToString() + "日；额度：" + this.AgencyFeeClause.UpperLimit.Value.ToRound(2).ToString() + "元");
+            }
+
+            //杂费
+            if (this.IncidentalFeeClause.PeriodType == PeriodType.PrePaid)
+            {
+                //replaceText.Add("{OtherPaymentPre}", "☑无信用额度");
+                replaceText.Add("{OtherPaymentPeriod}", "无信用额度");
+            }
+            else if (this.IncidentalFeeClause.PeriodType == PeriodType.AgreedPeriod)
+            {
+                //replaceText.Add("{OtherPaymentPre}", "□无信用额度");
+                replaceText.Add("{OtherPaymentPeriod}", "信用额度：约定期限，进口" + this.IncidentalFeeClause.DaysLimit.Value.ToString() + "天；额度：" + this.IncidentalFeeClause.UpperLimit.Value.ToRound(2).ToString() + "元");
+            }
+            else
+            {
+                //replaceText.Add("{OtherPaymentPre}", "□无信用额度");
+                replaceText.Add("{OtherPaymentPeriod}", "信用额度：月结，次月" + this.IncidentalFeeClause.MonthlyDay.Value.ToString() + "日；额度：" + this.IncidentalFeeClause.UpperLimit.Value.ToRound(2).ToString() + "元");
+            }
+
+
+            #region 计算年份
+
+            var years = this.EndDate.Year - this.StartDate.Year;
+            var y = "";
+            //1=壹，2=贰，3=叁，4=肆，5=伍，6=陆，7=柒，8=捌，9=玖，10=拾。
+            switch (years)
+            {
+                case 1:
+                    y = "壹";
+                    break;
+                case 2:
+                    y = "贰";
+                    break;
+                case 3:
+                    y = "叁";
+                    break;
+                case 4:
+                    y = "肆";
+                    break;
+                case 5:
+                    y = "伍";
+                    break;
+                case 6:
+                    y = "陆";
+                    break;
+                case 7:
+                    y = "柒";
+                    break;
+                case 8:
+                    y = "捌";
+                    break;
+                case 9:
+                    y = "玖";
+                    break;
+                case 10:
+                    y = "拾";
+                    break;
+                default: break;
+            }
+            replaceText.Add("{Years}", y);
+
+            #endregion
+
+            #endregion
+
+            return npoi.GenerateWordByTemplete(replaceText);
+        }
+
+
+        /// <summary>
+        /// 保存文件-新
+        /// </summary>
+        /// <param name="filePath"></param>
+        public void SaveAsImport(string filePath)
+        {
+            XWPFDocument doc = this.ToWordImport(this.AgreementCode);
+            FileStream file = new FileStream(filePath, FileMode.Create);
+            doc.Write(file);
+            file.Close();
+        }
+
+
         #endregion
 
         #region 芯达通垫款保证协议模板导出
@@ -601,7 +786,7 @@ namespace Needs.Ccs.Services.Models
         #region 协议变更模板导出
         public XWPFDocument ToChangeWord(string applyId)
         {
-            var tempPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Content\\templates\\补充协议模板.docx");
+            var tempPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Content\\templates\\华芯通进口补充协议.docx");
             var npoi = new NPOIHelper(tempPath);
             var replaceText = new Dictionary<string, string>();
 
@@ -656,38 +841,59 @@ namespace Needs.Ccs.Services.Models
                     replaceText.Add("{NewValue}", "");
                 }
                 //代理费
-                var AgencyFee = AgreementApplyItem.Where(t => t.AgreementChangeType == AgreementChangeType.AgencyRate || t.AgreementChangeType == Needs.Ccs.Services.Enums.AgreementChangeType.MinAgencyFee).ToList();
+                var AgencyFee = AgreementApplyItem.Where(t => t.AgreementChangeType == AgreementChangeType.AgencyRate 
+                || t.AgreementChangeType == AgreementChangeType.MinAgencyFee
+                || t.AgreementChangeType == AgreementChangeType.PreAgency).ToList();
                 foreach (var item in AgencyFee)
                 {
                     if (item.AgreementChangeType == AgreementChangeType.AgencyRate)
                     {
-                        ChangeType = "代理费";
-                        OldValue = "代理费率：" + Convert.ToDouble(item.OldValue).ToString();
-                        NewValue = "代理费率：" + Convert.ToDouble(item.NewValue).ToString();
+                        ChangeType = "服务费";
+                        OldValue = OldValue + "服务费率：" + Convert.ToDouble(item.OldValue).ToString() + "; ";
+                        NewValue = NewValue + "服务费率：" + Convert.ToDouble(item.NewValue).ToString() + "; ";
                     }
-                    if (item.AgreementChangeType == AgreementChangeType.MinAgencyFee)
+                    if (item.AgreementChangeType == AgreementChangeType.PreAgency)
                     {
-                        if (ChangeType == "代理费")
+                        if (ChangeType == "服务费")
                         {
                             if (!string.IsNullOrEmpty(item.OldValue))
                             {
-                                OldValue = OldValue + "; 最低代理费：" + Convert.ToDouble(item.OldValue).ToString();
+                                OldValue = OldValue + "基础服务费：" + Convert.ToDouble(item.OldValue).ToString() + "; ";
                             }
                             if (!string.IsNullOrEmpty(item.NewValue))
                             {
-                                NewValue = NewValue + "; 最低代理费：" + Convert.ToDouble(item.NewValue).ToString();
+                                NewValue = NewValue + "基础服务费：" + Convert.ToDouble(item.NewValue).ToString() + "; ";
                             }
                         }
                         else
                         {
-                            ChangeType = "代理费";
-                            OldValue = "最低代理费：" + Convert.ToDouble(item.OldValue).ToString();
-                            NewValue = "最低代理费：" + Convert.ToDouble(item.NewValue).ToString();
+                            ChangeType = "服务费";
+                            OldValue = OldValue + "基础服务费：" + Convert.ToDouble(item.OldValue).ToString() + "; ";
+                            NewValue = NewValue + "基础服务费：" + Convert.ToDouble(item.NewValue).ToString() + "; ";
                         }
-
+                    }
+                    if (item.AgreementChangeType == AgreementChangeType.MinAgencyFee)
+                    {
+                        if (ChangeType == "服务费")
+                        {
+                            if (!string.IsNullOrEmpty(item.OldValue))
+                            {
+                                OldValue = OldValue + "最低服务费：" + Convert.ToDouble(item.OldValue).ToString() + "; ";
+                            }
+                            if (!string.IsNullOrEmpty(item.NewValue))
+                            {
+                                NewValue = NewValue + "最低服务费：" + Convert.ToDouble(item.NewValue).ToString() + "; ";
+                            }
+                        }
+                        else
+                        {
+                            ChangeType = "服务费";
+                            OldValue = OldValue + "最低服务费：" + Convert.ToDouble(item.OldValue).ToString() + "; ";
+                            NewValue = NewValue + "最低服务费：" + Convert.ToDouble(item.NewValue).ToString() + "; ";
+                        }
                     }
                 }
-                if (ChangeType == "代理费")
+                if (ChangeType == "服务费")
                 {
                     //string str = Getstring(ChangeType, OldValue, NewValue);
                     //replaceText.Add("{ChangeType1}", str);
@@ -741,7 +947,7 @@ namespace Needs.Ccs.Services.Models
                 var IsTenType = AgreementApplyItem.Where(t => t.AgreementChangeType == AgreementChangeType.IsTenType).ToList();
                 foreach (var item in IsTenType)
                 {
-                        if (item.OldValue == "True")
+                        if (item.OldValue == "1")
                         {
                             ChangeType = "换汇汇率";
                             OldValue = "中国银行上午10:00";
@@ -938,7 +1144,7 @@ namespace Needs.Ccs.Services.Models
                 NewValue = "";
                 foreach (var item in Agency)
                 {
-                    ChangeType = "代理费条款";
+                    ChangeType = "服务费条款";
                     if (item.AgreementChangeType == AgreementChangeType.AgencyPeriodType)
                     {
 
@@ -1072,7 +1278,7 @@ namespace Needs.Ccs.Services.Models
                         }
                     }
                 }
-                if (ChangeType == "代理费条款")
+                if (ChangeType == "服务费条款")
                 {
                     //string str = Getstring(ChangeType, OldValue, NewValue);
                     //replaceText.Add("{ChangeType4}", str);

@@ -102,7 +102,7 @@ namespace Yahv.Erm.WebApp.Erm_KQ.Staffs
             try
             {
                 var staffs = new Services.Views.StaffAlls()
-                    .Where(item => item.Labour.EnterpriseID == ErmConfig.LabourEnterpriseID || item.Labour.EnterpriseID == ErmConfig.LabourEnterpriseID2)
+                    .Where(item => item.Labour.EnterpriseID == ErmConfig.LabourEnterpriseID)
                     .Where(item => item.Status == StaffStatus.Normal || item.Status == StaffStatus.Period).ToArray();
                 foreach (var staff in staffs)
                 {

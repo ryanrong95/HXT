@@ -7,9 +7,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>未绑定微信</title>
     <meta charset="utf-8" />
-    <link href="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/customs-easyui/fonts/iconfont.css" rel="stylesheet" />
-    <link href="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/customs-easyui/Styles/reset.css" rel="stylesheet" />
-    <link href="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/Yahv/customs-easyui/Styles/main.css" rel="stylesheet" />
+    <link href="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/frontframe/customs-easyui/fonts/iconfont.css" rel="stylesheet" />
+    <link href="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/frontframe/customs-easyui/Styles/reset.css" rel="stylesheet" />
+    <link href="<%=$"{Yahv.Underly.DomainConfig.Fixed}"%>/frontframe/customs-easyui/Styles/main.css" rel="stylesheet" />
     <style> 
         .roles {
             width: 700px;
