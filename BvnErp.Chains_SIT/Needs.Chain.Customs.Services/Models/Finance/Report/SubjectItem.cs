@@ -197,21 +197,21 @@ namespace Needs.Ccs.Services.Models
         }
 
         /// <summary>
-        /// (13)	应付-芯达通外币：（运保杂外币） = 报关金额外币 - 委托金额外币
+        /// (13)	应付-华芯通外币：（运保杂外币） = 报关金额外币 - 委托金额外币
         /// 报关金额包含1.002
         /// </summary>
         public decimal DueXDTFC
         {
             get
             {
-                //鲁亚慧：科目明细表Q列（应付芯达通外币）应该等于E列（运保杂外币）； 2022-08-08 QQ反馈
+                //鲁亚慧：科目明细表Q列（应付华芯通外币）应该等于E列（运保杂外币）； 2022-08-08 QQ反馈
                 //return this.DueCustomerFC * 0.002M;
                 return DecYunBaoZaTotal;
             }
         }
 
         /// <summary>
-        /// (14)	应付-芯达通RMB：Round(应付-芯达通外币 * 报关当天实时汇率，2)
+        /// (14)	应付-华芯通RMB：Round(应付-华芯通外币 * 报关当天实时汇率，2)
         /// </summary>
         public decimal DueXDTRMB
         {
@@ -253,7 +253,7 @@ namespace Needs.Ccs.Services.Models
         }
 
         /// <summary>
-        /// (9)	汇兑-芯达通： = 应付芯达通RMB  -  销售费用运保杂
+        /// (9)	汇兑-华芯通： = 应付华芯通RMB  -  销售费用运保杂
         /// </summary>
         public decimal ExchangeXDT
         {

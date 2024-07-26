@@ -135,7 +135,7 @@
           placement="bottom-end"
           placeholder="选择开始与结束时间"
           separator="  至  "
-          style="200px"
+          style="width: 200px;"
           @on-change="changedata"
         ></DatePicker>
       </div>
@@ -566,7 +566,7 @@ export default {
       var configs = GetPrinterDictionary();
       var getsetting = configs["出库通知打印"];
       var href = window.location.protocol + "//" + window.location.host;
-      var newurl = "http://hv.warehouse.b1b.com" + getsetting.Url;
+      var newurl = "http://wh.szhxd.net" + getsetting.Url;
       getsetting.Url = newurl;
       var data = {
         setting: getsetting,

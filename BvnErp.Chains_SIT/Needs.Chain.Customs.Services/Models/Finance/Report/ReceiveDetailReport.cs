@@ -82,19 +82,19 @@ namespace Needs.Ccs.Services.Models
                 //2、K3账户名词修改
                 switch (m.AccountName)
                 {
-                    case ("芯达通-星展银行账户"):
+                    case ("华芯通-星展银行账户"):
                         m.AccountName = "星展银行（中国）有限公司深圳分行";
                         break;
-                    case ("芯达通-中国银行深圳罗岗支行"):
+                    case ("华芯通-中国银行深圳罗岗支行"):
                         m.AccountName = "中国银行深圳罗岗支行";
                         break;
-                    case ("芯达通-农业银行人民币账户"):
+                    case ("华芯通-农业银行人民币账户"):
                         m.AccountName = "中国农业银行股份有限公司深圳免税大厦支行";
                         break;
-                    case ("芯达通-宁波银行人民币户"):
+                    case ("华芯通-宁波银行人民币户"):
                         m.AccountName = "宁波银行深圳分行";
                         break;
-                    case ("芯达通-兴业银行"):
+                    case ("华芯通-兴业银行"):
                         m.AccountName = "兴业银行股份有限公司深圳罗湖支行";
                         break;
                     default:
@@ -240,19 +240,19 @@ namespace Needs.Ccs.Services.Models
                 //2、K3账户名词修改
                 switch (m.AccountName)
                 {
-                    case ("芯达通-星展银行账户"):
+                    case ("华芯通-星展银行账户"):
                         m.AccountName = "星展银行（中国）有限公司深圳分行";
                         break;
-                    case ("芯达通-中国银行深圳罗岗支行"):
+                    case ("华芯通-中国银行深圳罗岗支行"):
                         m.AccountName = "中国银行深圳罗岗支行";
                         break;
-                    case ("芯达通-农业银行人民币账户"):
+                    case ("华芯通-农业银行人民币账户"):
                         m.AccountName = "中国农业银行股份有限公司深圳免税大厦支行";
                         break;
-                    case ("芯达通-宁波银行人民币户"):
+                    case ("华芯通-宁波银行人民币户"):
                         m.AccountName = "宁波银行深圳分行";
                         break;
-                    case ("芯达通-兴业银行"):
+                    case ("华芯通-兴业银行"):
                         m.AccountName = "兴业银行股份有限公司深圳罗湖支行";
                         break;
                     default:
@@ -392,19 +392,19 @@ namespace Needs.Ccs.Services.Models
                 //2、K3账户名词修改
                 switch (m.AccountName)
                 {
-                    case ("芯达通-星展银行账户"):
+                    case ("华芯通-星展银行账户"):
                         m.AccountName = "星展银行（中国）有限公司深圳分行";
                         break;
-                    case ("芯达通-中国银行深圳罗岗支行"):
+                    case ("华芯通-中国银行深圳罗岗支行"):
                         m.AccountName = "中国银行深圳罗岗支行";
                         break;
-                    case ("芯达通-农业银行人民币账户"):
+                    case ("华芯通-农业银行人民币账户"):
                         m.AccountName = "中国农业银行股份有限公司深圳免税大厦支行";
                         break;
-                    case ("芯达通-宁波银行人民币户"):
+                    case ("华芯通-宁波银行人民币户"):
                         m.AccountName = "宁波银行深圳分行";
                         break;
-                    case ("芯达通-兴业银行"):
+                    case ("华芯通-兴业银行"):
                         m.AccountName = "兴业银行股份有限公司深圳罗湖支行";
                         break;
                     default:

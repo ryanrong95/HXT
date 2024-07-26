@@ -162,13 +162,13 @@
                     return;
                 }
             }
-            if (BoxIndex.split("-").length - 1 > 1 || BoxIndex.substring(0, 1) == '-' || BoxIndex.split("-")[0].substring(0, 2) != 'WL' || (BoxIndex.split("-").length > 1 && BoxIndex.split("-")[1].substring(0, 2) != 'WL')) {
+            if (BoxIndex.split("-").length - 1 > 1 || BoxIndex.substring(0, 1) == '-' || BoxIndex.split("-")[0].substring(0, 3) != 'HXT' || (BoxIndex.split("-").length > 1 && BoxIndex.split("-")[1].substring(0, 3) != 'HXT')) {
                 $("#BoxIndex").focus();
                 $.messager.alert("消息", "请输入正确的装箱箱号");
                 return;
             }
             var arry = BoxIndex.split('-');
-            if (Number(arry[0].replace("WL", "")) < 1 || (BoxIndex.split("-").length > 1 && Number(arry[1].replace("WL", "")) < 1) || (BoxIndex.split("-").length > 1 && Number(arry[0].replace("WL", "")) >= Number(arry[1].replace("WL", "")))) {
+            if (Number(arry[0].replace("HXT", "")) < 1 || (BoxIndex.split("-").length > 1 && Number(arry[1].replace("HXT", "")) < 1) || (BoxIndex.split("-").length > 1 && Number(arry[0].replace("HXT", "")) >= Number(arry[1].replace("HXT", "")))) {
                 $("#BoxIndex").focus();
                 $.messager.alert("消息", "请输入正确的装箱箱号");
                 return;

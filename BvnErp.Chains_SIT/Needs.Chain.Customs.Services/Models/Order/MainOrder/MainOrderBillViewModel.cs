@@ -983,7 +983,7 @@ namespace Needs.Ccs.Services.Models
             PdfPageBase pageBase = null;
 
             //获取分割后的印章图片
-            //芯达通或者创新恒远图片
+            //华芯通或者创新恒远图片
             GetImage(doc.Pages.Count, System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, this.SealUrl), this.AgentName);
 
             //内单需要盖章

@@ -85,7 +85,7 @@
             this.IsMdiContainer = true;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "FormMain";
-            this.Text = "芯达通报文操作工具-单一窗口";
+            this.Text = "华芯通报文操作工具-单一窗口";
             this.SizeChanged += new System.EventHandler(this.FormMain_SizeChanged);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();

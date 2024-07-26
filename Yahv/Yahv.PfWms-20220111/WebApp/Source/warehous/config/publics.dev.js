@@ -5,5 +5,6 @@ module.exports = {
     // 作用很明显，就是导出一个对象，NODE_ENV是一个环境变量，指定production环境
     urltest: "/",
     mjurl:"/",
-    pfwms:"http://hv.warehouse.b1b.com",
+    pfwms:"http://wh.szhxd.net",
+    //pfwms:"http://warehouse0.szhxt.net",
 }

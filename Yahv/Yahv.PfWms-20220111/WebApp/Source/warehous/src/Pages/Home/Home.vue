@@ -85,7 +85,6 @@
 import { mapActions, mapGetters } from "vuex";
 import { getpfwms } from "../../api"; //引入api 的接口FilePrint
 import { TemplatePrint, GetPrinterDictionary } from "@/js/browser.js";
-// import { DeclarationJSON } from "http://hv.warehouse.b1b.com/Print/Declaration.json";
 import {
   PFWMS_API
 } from "@/main" //调用整体的url
@@ -205,7 +204,6 @@ export default {
     // this.getbasemj()
 	// this.getpfwms()
 	
-	// var appData = require('http://hv.warehouse.b1b.com/Print/Declaration.json');
 	// console.log(appData)
 		// Declarationjson().then(res=>{
 		// 	console.log(res)

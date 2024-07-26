@@ -11,7 +11,7 @@ namespace Needs.Ccs.Services.Models.ApiModels.Files
     /// 文件类型
     /// </summary>
     /// <remarks>
-    /// 如果芯达通已经存在使用芯达通的数值
+    /// 如果华芯通已经存在使用华芯通的数值
     /// 再增加的时候 从这里9000开始
     /// </remarks>
     public enum FileType : int
@@ -19,7 +19,7 @@ namespace Needs.Ccs.Services.Models.ApiModels.Files
         [Description("")]
         None = 0,
 
-        #region 与芯达通文件类型值保持一致，勿改
+        #region 与华芯通文件类型值保持一致，勿改
         /// <summary>
         /// 营业执照
         /// </summary>
@@ -107,13 +107,13 @@ namespace Needs.Ccs.Services.Models.ApiModels.Files
         EnterpriseLogo = 41,
 
         /// <summary>
-        /// 芯达通境内销售合同（增值税开票时，税务要求）
+        /// 华芯通境内销售合同（增值税开票时，税务要求）
         /// </summary>
         [Description("销售合同")]
         SalesContract = 50,
 
 
-        //如果芯达通已经存在使用芯达通的数值
+        //如果华芯通已经存在使用华芯通的数值
         //再增加的时候 从这里 9000 开始
 
         [Description("测试文件")]
@@ -129,9 +129,9 @@ namespace Needs.Ccs.Services.Models.ApiModels.Files
         ChangeServiceAgreement = 222,
 
         /// <summary>
-        /// 芯达通垫款保证协议
+        /// 华芯通垫款保证协议
         /// </summary>
-        [Description("芯达通垫款保证协议")]
+        [Description("华芯通垫款保证协议")]
         AdvanceMoneyApplyAgreement = 223,
 
         /// <summary>

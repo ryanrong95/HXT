@@ -689,12 +689,12 @@
         </div>
 
         <div id="divModel" style="float: left; width: 780px; height: 80px; margin-top: 10px">
-            <div class="easyui-panel" title="芯达通垫款保证协议模板" style="width: 100%;">
+            <div class="easyui-panel" title="华芯通垫款保证协议模板" style="width: 100%;">
                 <div class="divContent" style="border: 0">
                     <table class="oprationTable" style="margin: 10px; width: 90%">
                         <tr>
-                            <td><a id="btnExport" href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-yg-excelExport'">导出芯达通垫款保证协议模板</a></td>
-                            <td style="width: 300px"><a id="btnExportDraft" href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-yg-excelExport'" style="display: none;">导出芯达通垫款保证协议草书</a></td>
+                            <td><a id="btnExport" href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-yg-excelExport'">导出华芯通垫款保证协议模板</a></td>
+                            <td style="width: 300px"><a id="btnExportDraft" href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-yg-excelExport'" style="display: none;">导出华芯通垫款保证协议草书</a></td>
                             <td colspan="2" id="tdLook">
 
                                 <label id="ServiceAgreement"></label>

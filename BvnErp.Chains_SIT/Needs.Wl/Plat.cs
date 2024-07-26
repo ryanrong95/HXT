@@ -7,7 +7,7 @@ using System.Linq;
 namespace Needs.Wl.Admin.Plat
 {
     /// <summary>
-    /// 芯达通物流管理端入口
+    /// 华芯通物流管理端入口
     /// </summary>
     public sealed partial class AdminPlat : Erp.Generic.Startor<Models.IAdminLocale>
     {

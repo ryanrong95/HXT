@@ -49,7 +49,7 @@ namespace Needs.Ccs.Services.Models
                                     }
 
                                     if (item.状态 == "付款完成") {
-                                        //付款完成，处理芯达通付款通知
+                                        //付款完成，处理华芯通付款通知
 
                                         #region 处理付款通知
 

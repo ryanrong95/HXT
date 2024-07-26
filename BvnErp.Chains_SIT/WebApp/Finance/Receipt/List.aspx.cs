@@ -9,6 +9,7 @@ using Needs.Utils.Descriptions;
 using Needs.Utils.Serializers;
 using Needs.Ccs.Services.Enums;
 using Needs.Wl;
+using Layer.Data.Sqls.ScCustoms;
 
 namespace WebApp.Finance.Receipt
 {
@@ -94,6 +95,11 @@ namespace WebApp.Finance.Receipt
             {
                 var account = Account.Trim();
                 receipts = receipts.Where(t => t.Account.ID == account);
+            }
+            var hk_caiwu = System.Configuration.ConfigurationManager.AppSettings["HK_Caiwu"];
+            if (!string.IsNullOrEmpty(hk_caiwu) && Needs.Wl.Admin.Plat.AdminPlat.Current.ID == hk_caiwu)
+            {
+                receipts = receipts.Where(t => t.Vault.Name.Contains("香港"));
             }
 
             Func<Needs.Ccs.Services.Models.FinanceReceipt, object> convert = receipt => new

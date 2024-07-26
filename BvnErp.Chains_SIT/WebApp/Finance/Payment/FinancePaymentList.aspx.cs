@@ -114,6 +114,12 @@ namespace WebApp.Finance.Payment
                     view = view.SearchByTo(to);
                 }
 
+                var hk_caiwu = System.Configuration.ConfigurationManager.AppSettings["HK_Caiwu"];
+                if (!string.IsNullOrEmpty(hk_caiwu) && Needs.Wl.Admin.Plat.AdminPlat.Current.ID == hk_caiwu)
+                {
+                    view = view.SearchByHKCW();
+                }
+
                 Response.Write(view.ToMyPage(page, rows).Json());
             }
         }

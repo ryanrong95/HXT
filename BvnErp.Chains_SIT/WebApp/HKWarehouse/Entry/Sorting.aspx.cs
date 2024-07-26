@@ -291,14 +291,14 @@ namespace WebApp.HKWarehouse.Entry
 
                 //判断箱号是否已经用过
                 var packingView = Needs.Wl.Admin.Plat.AdminPlat.Current.Warehouse.Packing;
-                var packings = packingView.Where(item => item.PackingDate == PackingDate && item.BoxIndex.StartsWith("WL"));
+                var packings = packingView.Where(item => item.PackingDate == PackingDate && item.BoxIndex.StartsWith("HXT"));
                 int[] arr1 = this.GetCaseNumbers(BoxIndex);
-                //  int[] arr2 = this.GetCaseNumbers(packings.Where(t => t.BoxIndex.Contains("WL")));//外单箱号
+                //  int[] arr2 = this.GetCaseNumbers(packings.Where(t => t.BoxIndex.Contains("HXT")));//外单箱号
                 int[] arr2 = this.GetCaseNumbers(packings);
                 var diffArr = arr1.Where(c => arr2.Contains(c)).ToArray();
                 if (diffArr.Count() > 0)
                 {
-                    string caseNumber = "WL" + diffArr.First().ToString().PadLeft(2, '0');
+                    string caseNumber = "HXT" + diffArr.First().ToString().PadLeft(3, '0');
                     Response.Write((new { success = false, message = "箱号" + caseNumber + "已使用过：请选择其它箱号。" }).Json());
                     return;
                 }
@@ -311,8 +311,8 @@ namespace WebApp.HKWarehouse.Entry
 
                 //if (!BoxIndex.Contains("-"))
                 //{
-                //int number = int.Parse(BoxIndex.Replace("WL", ""));
-                //BoxIndex = "WL" + number.ToString().PadLeft(3, '0');
+                //int number = int.Parse(BoxIndex.Replace("HXT", ""));
+                //BoxIndex = "HXT" + number.ToString().PadLeft(3, '0');
                 var hkSorting = Needs.Wl.Admin.Plat.AdminPlat.Current.Warehouse.HKSortingContext;
                 hkSorting.ToShelve(ShelveNumber, BoxIndex);
                 hkSorting.SetWaybill(WaybillCode);
@@ -337,8 +337,8 @@ namespace WebApp.HKWarehouse.Entry
                 //{
                 //    string input = Request.Form["Data"].Replace("&quot;", "'");
                 //    string[] arr = BoxIndex.Split('-');
-                //    int number1 = int.Parse(arr[0].Replace("WL", ""));
-                //    int number2 = int.Parse(arr[1].Replace("WL", ""));
+                //    int number1 = int.Parse(arr[0].Replace("HXT", ""));
+                //    int number2 = int.Parse(arr[1].Replace("HXT", ""));
                 //    int count = number2 - number1 + 1;
 
                 //    var hkSorting = Needs.Wl.Admin.Plat.AdminPlat.Current.Warehouse.HKSortingContext;
@@ -350,7 +350,7 @@ namespace WebApp.HKWarehouse.Entry
                 //        PackingModel packing = new PackingModel();
                 //        packing.AdminID = Needs.Wl.Admin.Plat.AdminPlat.Current.ID;
                 //        packing.OrderID = OrderID;
-                //        packing.BoxIndex = "WL" + i.ToString().PadLeft(3, '0');
+                //        packing.BoxIndex = "HXT" + i.ToString().PadLeft(3, '0');
                 //        packing.Weight = Weight / count;
                 //        packing.WrapType = PackingType;
                 //        packing.PackingDate = Convert.ToDateTime(PackingDate);
@@ -461,8 +461,8 @@ namespace WebApp.HKWarehouse.Entry
             if (CaseNumber.Contains("-"))
             {
                 string[] str = CaseNumber.Split('-');
-                int box1 = int.Parse(str[0].Remove(0, 2));
-                int box2 = int.Parse(str[1].Remove(0, 2));
+                int box1 = int.Parse(str[0].Remove(0, 3));
+                int box2 = int.Parse(str[1].Remove(0, 3));
                 for (int i = box1; i < box2 + 1; i++)
                 {
                     list.Add(i);
@@ -470,7 +470,7 @@ namespace WebApp.HKWarehouse.Entry
             }
             else
             {
-                list.Add(int.Parse(CaseNumber.Remove(0, 2)));
+                list.Add(int.Parse(CaseNumber.Remove(0, 3)));
             }
             return list.ToArray();
         }

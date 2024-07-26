@@ -33,7 +33,7 @@ namespace WebApi.Controllers
                 {
                     code = 100,
                     success = false,
-                    data = "没有匹配到芯达通员工"
+                    data = "没有匹配到华芯通员工"
                 };
                 return ApiResultModel.OutputResult(errorjson);
             }
@@ -150,7 +150,7 @@ namespace WebApi.Controllers
                 {
                     code = 100,
                     success = false,
-                    data = "没有匹配到芯达通员工"
+                    data = "没有匹配到华芯通员工"
                 };
                 return ApiResultModel.OutputResult(errorjson);
             }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Needs.Ccs.Services.Models
 {
     /// <summary>
-    /// 芯达通管理员的角色
+    /// 华芯通管理员的角色
     /// </summary>
     public class AdminRoles : IUnique, IPersist
     {

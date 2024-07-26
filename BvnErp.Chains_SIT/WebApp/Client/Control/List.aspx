@@ -60,7 +60,6 @@
 
             }
             else {
-                //if ((row.DepartmentCode == '业务二部' && RealName == '张令金') || (row.DepartmentCode == '业务一部' && RealName == '张庆永') || RealName == '风控') {
                 buttons = '<a id="btnAssign" href="javascript:void(0);" class="easyui-linkbutton l-btn l-btn-small" style="margin:3px" onclick="Edit(\'' + row.ID + '\')" group >' +
                     '<span class =\'l-btn-left l-btn-icon-left\'>' +
                     '<span class="l-btn-text">审核</span>' +
@@ -73,8 +72,6 @@
                     '<span class="l-btn-icon icon-man">&nbsp;</span>' +
                     '</span>' +
                     '</a>';
-                //}
-
             };
 
             return buttons;

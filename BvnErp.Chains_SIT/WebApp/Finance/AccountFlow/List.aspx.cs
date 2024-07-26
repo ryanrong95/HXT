@@ -19,6 +19,8 @@ using Needs.Ccs.Services.ApiSettings;
 using Newtonsoft.Json;
 using System.Net.Http;
 using Needs.Ccs.Services.Models.HttpUtility;
+using Layer.Data.Sqls.ScCustoms;
+using Logs = Needs.Ccs.Services.Models.Logs;
 
 namespace WebApp.Finance.AccountFlow
 {
@@ -193,6 +195,11 @@ namespace WebApp.Finance.AccountFlow
                 if (!string.IsNullOrEmpty(Account))
                 {
                     view = view.SearchByAccount(Account.Trim());
+                }
+                var hk_caiwu = System.Configuration.ConfigurationManager.AppSettings["HK_Caiwu"];
+                if (!string.IsNullOrEmpty(hk_caiwu) && Needs.Wl.Admin.Plat.AdminPlat.Current.ID == hk_caiwu)
+                {
+                    view = view.SearchByHKCW();
                 }
                 Response.Write(view.ToMyPage(page, rows).Json());
             }

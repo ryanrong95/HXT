@@ -12,7 +12,7 @@ namespace Needs.Ccs.Services.Models
     public class MainOrderBillStander
     {
         /// <summary>
-        /// 恒远或者芯达通相关固定信息
+        /// 恒远或者华芯通相关固定信息
         /// </summary>
         public Purchaser PurchaserContext { get; set; }
 

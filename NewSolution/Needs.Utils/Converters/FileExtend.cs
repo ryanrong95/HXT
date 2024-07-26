@@ -8,7 +8,7 @@ namespace Needs.Utils.Converters
 {
     /// <summary>
     /// 文件扩展类
-    /// 备注芯达通专用
+    /// 备注华芯通专用
     /// </summary>
     public static class FileExtend
     {

@@ -728,7 +728,7 @@ namespace WebApi.Controllers
                 string caseNumber = "";
                 foreach (var item in diffArr)
                 {
-                    caseNumber += "WL" + item.ToString().PadLeft(2, '0') + "、";
+                    caseNumber += "HXT" + item.ToString().PadLeft(3, '0') + "、";
                 }
                 return Json(new { success = false, message = "箱号" + caseNumber + "已使用过，请选择其它箱号。" }, JsonRequestBehavior.AllowGet);
             }
@@ -737,7 +737,7 @@ namespace WebApi.Controllers
                 string caseNumber = "";
                 foreach (var item in diffArr2)
                 {
-                    caseNumber += "WL" + item.ToString().PadLeft(2, '0') + "、";
+                    caseNumber += "HXT" + item.ToString().PadLeft(3, '0') + "、";
                 }
                 return Json(new { success = false, message = "箱号" + caseNumber + "已使用过，请选择其它箱号。" }, JsonRequestBehavior.AllowGet);
             }
@@ -753,11 +753,11 @@ namespace WebApi.Controllers
             //外单多个订单一个箱子到货，使用特殊箱号 2022-02-21 ryan
             //处理特殊箱号：WL06-1   WL06-01
             List<int> list = new List<int>();
-            if (CaseNumber.ToUpper().Contains("-WL"))
+            if (CaseNumber.ToUpper().Contains("-HXT"))
             {
                 string[] str = CaseNumber.Split('-');
-                int box1 = int.Parse(str[0].Remove(0, 2));
-                int box2 = int.Parse(str[1].Remove(0, 2));
+                int box1 = int.Parse(str[0].Remove(0, 3));
+                int box2 = int.Parse(str[1].Remove(0, 3));
                 for (int i = box1; i < box2 + 1; i++)
                 {
                     list.Add(i);
@@ -771,7 +771,7 @@ namespace WebApi.Controllers
             }
             else
             {
-                list.Add(int.Parse(CaseNumber.Remove(0, 2)));
+                list.Add(int.Parse(CaseNumber.Remove(0, 3)));
             }
             return list.ToArray();
         }
@@ -784,7 +784,7 @@ namespace WebApi.Controllers
             List<int> list = new List<int>();
             foreach (var packing in packings)
             {
-                if (packing.BoxIndex.ToUpper().Contains("WL"))
+                if (packing.BoxIndex.ToUpper().Contains("HXT"))
                 {
                     int[] array = this.GetCaseNumbers(packing.BoxIndex);
                     list.AddRange(array);

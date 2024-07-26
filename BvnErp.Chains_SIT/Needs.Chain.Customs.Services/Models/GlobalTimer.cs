@@ -50,7 +50,7 @@ namespace Needs.Ccs.Services.Models
                 #endregion
 
 
-                #region 推送芯达通进价
+                #region 推送华芯通进价
 
                 PurPrice pushPrice = new PurPrice();
                 pushPrice.PushPurPrice();

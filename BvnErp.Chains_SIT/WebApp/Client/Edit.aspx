@@ -177,7 +177,7 @@
             //文件上传控件初始化
             $('#BusinessLicense').chainsupload({
                 multiple: false,
-                validType: ['fileSize[10,"MB"]'],
+                validType: ['fileSize[1,"MB"]'],
                 buttonText: '选择',
                 buttonAlign: 'right',
                 prompt: '请选择图片或PDF类型的文件',
@@ -185,7 +185,7 @@
             });
             $('#certificate').chainsupload({
                 multiple: false,
-                validType: ['fileSize[10,"MB"]'],
+                validType: ['fileSize[1,"MB"]'],
                 buttonText: '选择',
                 buttonAlign: 'right',
                 prompt: '请选择图片或PDF类型的文件',
@@ -459,6 +459,9 @@
                     if ($("#urlBL_BusinessLicense").html() == undefined || $("#urlBL_BusinessLicense").html() == "") {
                         return message = "请上传营业执照";
                     }
+                }
+                if ($("#spanBL_BusinessLicense input[name='BusinessLicense']")[0].files[0].size > 1024000) {
+                    return message = "文件大小必须小于1M";
                 }
             }
             else if ($("#ServiceType").combobox('getValue') == <%=Needs.Ccs.Services.Enums.ServiceType.Warehouse.GetHashCode()%>) {

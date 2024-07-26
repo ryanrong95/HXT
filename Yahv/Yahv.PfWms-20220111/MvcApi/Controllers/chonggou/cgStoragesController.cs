@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Yahv;
 using Yahv.Services.Models;
 using Yahv.Services.Views;
 using Yahv.Web.Mvc;
@@ -103,6 +104,57 @@ namespace MvcApi.Controllers.chonggou
                             Quantity = quantity,
                         }, item => item.ID == storage.SortingID);
                         }
+                    }
+                }
+                var result = Json(new
+                {
+                    Success = true,
+                    Data = "修改成功！",
+                });
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+
+                var result = Json(new
+                {
+                    Success = false,
+                    Data = ex.Message,
+                });
+                return result;
+            }
+
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="jpost"></param>
+        /// <returns></returns>
+        public ActionResult UpdateDeliveredLocate(JPost jpost)
+        {
+            try
+            {
+                var storageId = jpost["storageId"].Value<string>();
+                var locate = jpost["locate"].Value<string>();
+                if (string.IsNullOrEmpty(locate))
+                {
+                    throw new NotImplementedException("库位不能为空！");
+                }
+                using (var repository = new PvWmsRepository())
+                {
+                    var storage = repository.ReadTable<Layers.Data.Sqls.PvWms.Storages>().FirstOrDefault(item => item.ID == storageId);
+                    if (storage == null)
+                    {
+                        throw new NotImplementedException("库存ID不存在！");
+                    }
+                    else
+                    {
+                        repository.Update<Layers.Data.Sqls.PvWms.Storages>(new
+                        {
+                            ShelveID = locate,
+                        }, item => item.ID == storageId);
                     }
                 }
                 var result = Json(new

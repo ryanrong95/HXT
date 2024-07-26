@@ -178,7 +178,7 @@ namespace Needs.Ccs.Services.Models
     }
 
     /// <summary>
-    /// 归类数据补偿，仅用于线上代仓储出现归类数据丢失，需要人工从芯达通同步数据的情况
+    /// 归类数据补偿，仅用于线上代仓储出现归类数据丢失，需要人工从华芯通同步数据的情况
     /// </summary>
     public class Classify_Compensation : SyncHandlerBase
     {

@@ -40,13 +40,13 @@ namespace WebApp.Client
                     switch (client.StorageType)
                     {
                         case Needs.Ccs.Services.Enums.StorageType.Domestic:
-                            this.Model.WsAgreement = new { PartA = client.Company.Name, PartB = "深圳市芯达通供应链管理有限公司" }.Json();
+                            this.Model.WsAgreement = new { PartA = client.Company.Name, PartB = "深圳市华芯通供应链管理有限公司" }.Json();
                             break;
                         case Needs.Ccs.Services.Enums.StorageType.HKCompany:
-                            this.Model.WsAgreement = new { PartA = client.Company.Name, PartB = "香港畅运国际物流有限公司" }.Json();
+                            this.Model.WsAgreement = new { PartA = client.Company.Name, PartB = "香港速逹國際物流有限公司" }.Json();
                             break;
                         case Needs.Ccs.Services.Enums.StorageType.Person:
-                            this.Model.WsAgreement = new { PartA = client.Company.Name, PartB = "深圳市芯达通供应链管理有限公司" }.Json();
+                            this.Model.WsAgreement = new { PartA = client.Company.Name, PartB = "深圳市华芯通供应链管理有限公司" }.Json();
                             break;
                         default:
                             this.Model.WsAgreement = null;

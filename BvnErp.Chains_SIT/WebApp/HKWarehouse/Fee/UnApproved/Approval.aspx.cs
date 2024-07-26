@@ -56,7 +56,7 @@ namespace WebApp.HKWarehouse.Fee.UnApproved
 
             List<object> allFiles = new List<object>();
 
-            //芯达通库中的文件
+            //华芯通库中的文件
             var files = Needs.Wl.Admin.Plat.AdminPlat.Current.Warehouse.OrderWhesPremiumFile.Where(t => t.OrderWhesPremiumID == FeeID);
 
             Func<OrderWhesPremiumFile, object> convert = item => new

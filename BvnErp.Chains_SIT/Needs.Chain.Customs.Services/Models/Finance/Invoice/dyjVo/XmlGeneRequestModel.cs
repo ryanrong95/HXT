@@ -40,11 +40,11 @@ namespace Needs.Ccs.Services.Models
             this.寄件人 = client.ServiceManager.RealName;
             this.寄件电话 = client.ServiceManager.Mobile;
 
-            this.开票公司 = "深圳市芯达通供应链管理有限公司";
+            this.开票公司 = "深圳市华芯通供应链管理有限公司";
             this.寄件省份 = "广东省";
             this.寄件城市 = "深圳市";
             this.寄件区县 = "龙岗区";
-            this.寄件地址 = "深圳市龙岗区吉华路393号英达丰科技园1号楼";
+            this.寄件地址 = "深圳市龙华区龙华街道富康社区天汇大厦C栋212";
             this.客户公司 = notice.Client.Company.Name;
             this.收件人 = notice.MailName;
             this.收件电话 = notice.MailMobile;

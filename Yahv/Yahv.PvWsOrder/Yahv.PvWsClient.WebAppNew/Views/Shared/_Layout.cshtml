@@ -190,51 +190,6 @@
     </div>
     <script src="~/Scripts/simple.queue.js"></script>
     <script>
-
-        //$(".sidebar").hide();
-        //$(".sidebar-small").show();
-
-        //function showSidebar() {
-        //    $(".sidebar").show();
-        //    $(".sidebar-small").hide();
-        //}
-
-        //function hideSidebar() {
-        //    $(".sidebar").hide();
-        //    $(".sidebar-small").show();
-        //}
-
-        //function getSidebarDivPosition() {
-        //    var sidebarDiv = $(".sidebar > div");
-
-        //    var sidebarDiv_OuterWidth = sidebarDiv.outerWidth();
-        //    //console.log("宽度 = " + sidebarDiv_OuterWidth);
-        //    var sidebarDiv_Height = sidebarDiv.height();
-        //    //console.log("高度 = " + sidebarDiv_Height);
-
-        //    var sidebarDiv_Top_Y = sidebarDiv.offset().top;
-        //    //console.log("上_Y = " + sidebarDiv_Top_Y);
-        //    var sidebarDiv_Buttom_Y = sidebarDiv_Top_Y + sidebarDiv_Height;
-        //    //console.log("下_Y = " + sidebarDiv_Buttom_Y);
-
-        //    var sidebarDiv_Left_X = sidebarDiv.offset().left;
-        //    //console.log("左_X = " + sidebarDiv_Left_X);
-        //    var sidebarDiv_Right_X = sidebarDiv_Left_X + sidebarDiv_OuterWidth;
-        //    //console.log("右_X = " + sidebarDiv_Right_X);
-
-        //    return {
-        //        top_y: sidebarDiv_Top_Y,
-        //        buttom_y: sidebarDiv_Buttom_Y,
-        //        left_x: sidebarDiv_Left_X,
-        //        right_x: sidebarDiv_Right_X,
-        //    };
-        //}
-
-        //function checkInSidebarDiv(top_y, buttom_y, left_x, right_x, mouse_y, mouse_x) {
-        //    // console.log(top_y, buttom_y, left_x, right_x, mouse_y, mouse_x);
-        //    return top_y <= mouse_y && mouse_y <= buttom_y && left_x <= mouse_x && mouse_x <= right_x;
-        //}
-
         function getCurrentInDivStatus() {
             if (inDivQueue.size() <= 0) {
                 return null;
@@ -250,105 +205,16 @@
             return first;
         }
 
-        //function initSetSidebar() {
-        //    var divPos = getSidebarDivPosition();
-        //    var inDiv = checkInSidebarDiv(divPos.top_y, divPos.buttom_y, divPos.left_x, divPos.right_x, e.pageY, e.pageX);
-        //    if (inDiv) {
-        //        showSidebar();
-        //    } else {
-        //        hideSidebar();
-        //    }
-        //}
-
 
         var inDivQueue = new Queue();
         var INDIV_QUEUE_LEN = 4;
         var COMFORTABLE_WIDTH = 1380;
-
-        // 记录鼠标位置是否在div区域
-        //$(document).mousemove(function (e) {
-        //    var divPos = getSidebarDivPosition();
-        //    var inDiv = checkInSidebarDiv(divPos.top_y, divPos.buttom_y, divPos.left_x, divPos.right_x, e.pageY, e.pageX);
-        //    // console.log(inDiv);
-        //    inDivQueue.enqueue(inDiv);
-        //    if (inDivQueue.size() > INDIV_QUEUE_LEN) {
-        //        inDivQueue.dequeue();
-        //    }
-        //});
-
-
-        // 每一段时间查看一次，是否有移出div区域的动作
-        //var currentInDivStatus = null, lastInDivStatus = null;
-        //setInterval(function () {
-        //    // inDivQueue.print();
-
-        //    currentInDivStatus = getCurrentInDivStatus();
-
-        //    if (currentInDivStatus != null && lastInDivStatus != null && currentInDivStatus != lastInDivStatus) {
-        //        if (currentInDivStatus == false) {
-        //            //console.log("鼠标移出Div区域  " + new Date());
-
-        //            if (window.innerWidth < COMFORTABLE_WIDTH) {
-        //                hideSidebar();
-        //            }
-
-
-        //        }
-        //    }
-
-        //    lastInDivStatus = currentInDivStatus;
-        //}, 100);
-
-        //// 直接hover查看鼠标是否移入sidebar-small
-        //$(".sidebar-small > div").mouseover(function () {
-        //    showSidebar();
-        //}).mouseout(function () {
-
-        //});
-
-        //// 初始直接决定一次是否显示sidebar
-        //window.addEventListener('load', function () {
-        //    if (window.innerWidth < COMFORTABLE_WIDTH) {
-        //        hideSidebar();
-        //    } else {
-        //        showSidebar();
-        //    }
-        //    window.addEventListener('resize', function () {
-        //        if (window.innerWidth < COMFORTABLE_WIDTH) {
-        //            hideSidebar();
-        //        } else {
-        //            showSidebar();
-        //        }
-        //    });
-        //});
-
-
-        //$(".sidebar > div").mouseover(function () {
-        //    console.log(this);
-        //    console.log(11111);
-        //}).mouseout(function () {
-        //    //if (window.innerWidth < 1380) {
-        //    //    $(".sidebar > div").hide();
-        //    //    $(".sidebar-small").show();
-        //    //}
-        //    console.log(this);
-        //    console.log(22222);
-        //});
-
-
-
-
 
     </script>
     <div>
         <div class="head">
             <div class="w1200 head_inner clearfix">
                 <a class="fl logo" href="@System.Configuration.ConfigurationManager.AppSettings["DomainForIC"]"></a>
-                @*<div class="fl rate">
-                        <marquee scrollamount="4" onmouseover=this.stop() onmouseout=this.start()>
-                            <span class="mr6">@Html.Raw(ViewBag.DateTimeStr)</span><span>实时汇率：美元 @Html.Raw(ViewBag.USARate);</span><span>港币 @Html.Raw(ViewBag.HKDRate)</span>
-                        </marquee>
-                    </div>*@
                 <div class="fr back">
                     <a href="/Home/LoginOut"><i></i>退出</a>
                 </div>
@@ -408,30 +274,10 @@
                                             url: '/Declare/DeclareAdd',
                                             navID: 'DeclareAdd'
                                         }, {
-                                        //text: '待提交订单',
-                                        //    url: '/Declare/DeclareListSimple',
-                                        //    navID: 'DeclareListSimple'
-                                        //},
-                                        //{
-                                        //text: '待确认订单',
-                                        //    url: '/Declare/UnConfirmedDecList',
-                                        //    count: 0
-                                        //}, {
-                                        //    text: '收货确认',  /*'待收货订单'*/
-                                        //    url: '/Declare/UnReceiptedList'
-                                        //}, {
                                         text: '进口订单',
                                             url: '/Declare/DeclareList',
                                             navID: 'DeclareList'
-                                        //}, {
-                                        //text: '产品预归类',
-                                        //    url: '/Products/MyPreProducts'
                                         },
-
-                                        //{
-                                        //    text: '我的产品',
-                                        //    url: '/Products/MyProducts'
-                                        //},
                                     ]
                                 },
                                 </text>
@@ -451,9 +297,6 @@
                                         }, {
                                             text: '香港发货',
                                             url: '/Orders/DeliveryAdd'
-                                        //}, {
-                                        //    text: '新增租仓订单',
-                                        //    url: '/LsOrders/Add'
                                         }, {
                                             text: '订单列表',
                                             url: '/Orders/ReceivedList'
@@ -501,26 +344,16 @@
                                                 text: '我的付汇',
                                                 url: '/PayExchange/MyApplies'
                                             },
-                                            //{
-                                            //    text: '我的付汇',
-                                            //    url: '/PayExchange/UnPayExchange'
-                                            //},
                                         </text>
                                     }
 
                                     @if ((ViewBag.IsCustoms == false && ViewBag.IsWarehouse == false) || ViewBag.IsWarehouse)
                                     {
                                         <text>
-                                            //{
-                                            //    text: '代付货款',
-                                            //    url: '/Orders/PrePayApplyList'
                                             {
                                                 text: '代付款',
                                                 url: '/Orders/ReceivedApplyList'
                                             }, {
-                                            //    text: '代收货款',
-                                            //    url: '/Orders/ReceivableList'
-                                            //},
                                                 text: '代收款',
                                                 url: '/Orders/DeliveryApplyList'
                                             },
@@ -597,9 +430,6 @@
                                     }, {
                                         text: '服务协议',
                                         url: '/Account/Agreement'
-                                    //}, {
-                                    //    text: '发票信息管理',
-                                    //    url: '/Account/InvoiceInfo'
                                     }, {
                                         text: '收货地址',
                                         url: '/Account/MyConsignees'
@@ -632,7 +462,6 @@
                                     break;
                                 }
                                 for(jactive = 0; jactive < this.lists[iaa].options.length; jactive++) {
-                                    //console.log(this.lists[iaa].options[jactive].url);
                                     if(this.lasturl == this.lists[iaa].options[jactive].url) {
                                         this.active = jactive;
                                         this.aa = iaa;
@@ -648,7 +477,6 @@
                                 break;
                             }
                             for(jactive = 0; jactive < this.lists[iaa].options.length; jactive++) {
-                                //console.log(this.lists[iaa].options[jactive].url);
                                 if(this.currenturl == this.lists[iaa].options[jactive].url) {
                                     this.active = jactive;
                                     this.aa = iaa;
@@ -686,16 +514,7 @@
                             <span>{{subTitle}}</span>
                         </el-breadcrumb-item>
                     </el-breadcrumb>
-                    @*<div>
-                            <span style="color: red; cursor:pointer; font-size: 15px;" v-on:click="movenotice">关于芯达通香港仓--畅运搬迁通知</span>
-                        </div>*@
 
-                    @*<el-dialog title="" :lock-scroll="false" width="60%"
-                                   :visible.sync="dialogMoveNoticeVisible" :close-on-click-modal="false">
-                            <div>
-                                <iframe style="height: 420px;" src="/Home/MoveNotice"></iframe>
-                            </div>
-                        </el-dialog>*@
                 </div>
                 <script>
                 var break_nav = new Vue({
@@ -707,13 +526,9 @@
                             subIndex: list.active,
                             title: '@ViewBag.title',
                             subTitle: '@ViewBag.subTitle',
-                            //dialogMoveNoticeVisible: false,
                         }
                     },
                     methods: {
-                        //movenotice: function () {
-                        //    this.dialogMoveNoticeVisible = true;
-                        //},
                     },
                     mounted: function() {
                     }
@@ -728,85 +543,13 @@
         </div>
         <!--底部-->
         <footer id="footer">
-            <!--<div class="footer_top">
-                <div class="clearfix wrapper">
-                    <div class="clearfix left classify">
-                        <dl>
-                            <dt>服务项目</dt>
-                            <dd>
-                                <a target="_blank" href="@System.Configuration.ConfigurationManager.AppSettings["DomainForIC"]/importCustoms.html">进口报关服务</a>
-                            </dd>
-                            <dd>
-                                <a target="_blank" href="@System.Configuration.ConfigurationManager.AppSettings["DomainForIC"]/expressCommission.html">香港代收发服务</a>
-                            </dd>
-                            <dd>
-                                <a target="_blank" href="@System.Configuration.ConfigurationManager.AppSettings["DomainForIC"]/storage.html">香港仓储服务</a>
-                            </dd>
-                        </dl>
-                        <dl>
-                            <dt>芯达通助手</dt>
-                            <dd>
-                                <a target="_blank" href="@System.Configuration.ConfigurationManager.AppSettings["DomainForIC"]/InfoQuery.html">归类信息查询</a>
-                            </dd>
-                            <dd>
-                                <a target="_blank" href="@System.Configuration.ConfigurationManager.AppSettings["DomainForIC"]/rateQuery.html">实时汇率查询</a>
-                            </dd>
-                            <dd>
-                                <a target="_blank" href="@System.Configuration.ConfigurationManager.AppSettings["DomainForIC"]/feeCount.html">费用计算</a>
-                            </dd>
-                            <dd>
-                                <a target="_blank" href="@System.Configuration.ConfigurationManager.AppSettings["DomainForIC"]/downloadCenter.html">下载中心</a>
-                            </dd>
-                        </dl>
-                        <dl>
-                            <dt>关于芯达通</dt>
-                            <dd>
-                                <a target="_blank" href="@System.Configuration.ConfigurationManager.AppSettings["DomainForIC"]/aboutUs.html">企业简介</a>
-                            </dd>
-                            <dd>
-                                <a target="_blank" href="@System.Configuration.ConfigurationManager.AppSettings["DomainForIC"]/companyCulture.html">企业文化</a>
-                            </dd>
-                            <dd>
-                                <a target="_blank" href="@System.Configuration.ConfigurationManager.AppSettings["DomainForIC"]/Partners.html">合作伙伴</a>
-                            </dd>
-                        </dl>
-                        <dl>
-                            <dt>加入我们</dt>
-                            <dd>
-                                <a target="_blank" href="@System.Configuration.ConfigurationManager.AppSettings["DomainForIC"]/joinUs.html#n_recruit">人才招聘</a>
-                            </dd>
-                            <dd>
-                                <a target="_blank" href="@System.Configuration.ConfigurationManager.AppSettings["DomainForIC"]/joinUs.html#n_walfare">员工福利</a>
-                            </dd>
-                            <dd>
-                                <a target="_blank" href="@System.Configuration.ConfigurationManager.AppSettings["DomainForIC"]/joinUs.html#n_contact">联系方式</a>
-                            </dd>
-                        </dl>-->
-            @*<dl>
-                    <dt>友情链接</dt>
-                    <dd>
-                        <a target="_blank" href="https://www.ic.net.cn/">IC交易网</a>
-                    </dd>
-                    <dd>
-                        <a target="_blank" href="http://www.iclab-cn.com/">创芯在线检测中心</a>
-                    </dd>
-                    <dd>
-                        <a target="_blank" href="http://www.52solution.com/">我爱方案网</a>
-                    </dd>
-                </dl>*@
-            <!--</div>
-                    <div class="right erweima">
-                        <img src="../Content/img/qrcode_for_gh.jpg" alt="" width="126" height="126">
-                        <p>关注微信公众号<br>掌握订单实时状态</p>
-                    </div>
-                </div>
-            </div>-->
+          
             <div class="footer_bottom">
                 <span>©️2024深圳市华芯通供应链管理有限公司 版权所有 - 隐私权政策 - 使用条款</span>
                 <div style="align-items: center; margin: 0 auto; ">
                     <a href="https://beian.miit.gov.cn/#/Integrated/index" target="_blank" style="color: #fff;">粤ICP备2024260250号</a>
                     <img src="/Content/img/gonganlogo.png" style="margin-top: -3px;" />
-                    <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=" target="_blank" style="color: #fff;">粤公网安备  号</a>
+                    <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44030002004130" target="_blank" style="color: #fff;">粤公网安备44030002004130号</a>
                 </div>
             </div>
         </footer>

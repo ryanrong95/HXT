@@ -23,7 +23,7 @@ namespace Needs.Ccs.Services.Views
         protected override IQueryable<NoticeBoardModel> GetIQueryable()
         {
             return from mapsRole in this.Reponsitory.ReadTable<Layer.Data.Sqls.PvbErm.Roles>()
-                   where mapsRole.Name.Contains("报关") || mapsRole.Name.Contains("芯达通")
+                   where mapsRole.Name.Contains("报关") || mapsRole.Name.Contains("华芯通")
                    && mapsRole.Status != (int)Enums.Status.Delete
                    select new NoticeBoardModel
                    {

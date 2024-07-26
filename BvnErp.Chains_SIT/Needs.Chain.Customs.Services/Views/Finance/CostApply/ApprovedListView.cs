@@ -28,7 +28,7 @@ namespace Needs.Ccs.Services.Views
             var costApplyLogs = this.Reponsitory.GetTable<Layer.Data.Sqls.ScCustoms.CostApplyLogs>();
 
             var relateLogs = from costApplyLog in costApplyLogs
-                             where costApplyLog.AdminID == approveAdminID
+                             where (costApplyLog.AdminID == approveAdminID || approveAdminID == "SA01")
                              orderby costApplyLog.CreateDate descending
                              group costApplyLog by new { costApplyLog.CostApplyID, } into g
                              select new ApprovedListViewModel

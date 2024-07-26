@@ -127,7 +127,7 @@ namespace WebApp.AdvanceMoney
                 {
                     var agreement = Needs.Wl.Admin.Plat.AdminPlat.Current.Clients.ClientAgreements[clientAgreement.ID];
                     //创建文件夹
-                    var fileName = DateTime.Now.Ticks + "芯达通垫款保证协议.docx";
+                    var fileName = DateTime.Now.Ticks + "华芯通垫款保证协议.docx";
                     FileDirectory file = new FileDirectory(fileName);
                     file.SetChildFolder(Needs.Ccs.Services.SysConfig.Dowload);
                     file.CreateDataDirectory();

@@ -151,7 +151,7 @@ namespace Wl.IcgooMQ
                 //Console.WriteLine("转换对象结束");
                 #endregion
 
-                //报关公司是 深圳市芯达通供应链管理有限公司 才生成订单
+                //报关公司是 深圳市华芯通供应链管理有限公司 才生成订单
                 string declareCompany = System.Configuration.ConfigurationManager.AppSettings["DeclareCompany"];
                 if (models[0].DeclareCompany != declareCompany)
                 {
@@ -1107,7 +1107,7 @@ namespace Wl.IcgooMQ
             head.NetWt = sorting.Select(p => p.NetWeight).Sum().ToRound(2) < 1 ? 1 : sorting.Select(p => p.NetWeight).Sum().ToRound(2);
             head.TradeAreaCode = "HKG";
             head.EntyPortCode = "470501";
-            head.GoodsPlace = "深圳市龙华区龙华街道富康社区东环二路110号中执时代广场B栋16H";
+            head.GoodsPlace = "深圳市龙华区龙华街道富康社区天汇大厦C栋212";
             head.EntryType = "M";
 
             head.DespPortCode = "HKG000";

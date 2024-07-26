@@ -12,7 +12,7 @@ namespace Needs.Wl.Admin.Plat
     public sealed partial class AdminPlat
     {
         /// <summary>
-        /// 芯达通平台客户
+        /// 华芯通平台客户
         /// </summary>
         public static Needs.Ccs.Services.Views.ClientsView Clients
         {

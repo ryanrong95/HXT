@@ -817,8 +817,8 @@
                 }
             }
             for (var i = 0; i < arr.length; i++) {
-                if (arr[i].indexOf("-") != -1 && arr[i].indexOf("WL") != -1) {
-                    total += Number(arr[i].split("-")[1].replace("WL", "")) - Number(arr[i].split("-")[0].replace("WL", "")) + 1;
+                if (arr[i].indexOf("-") != -1 && arr[i].indexOf("HXT") != -1) {
+                    total += Number(arr[i].split("-")[1].replace("HXT", "")) - Number(arr[i].split("-")[0].replace("HXT", "")) + 1;
                 } else {
                     total += 1;
                 }

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Yahv.Services.Models;
 
 namespace Needs.Ccs.Services.Views.Finance.AccountFlow
 {
@@ -201,6 +202,16 @@ namespace Needs.Ccs.Services.Views.Finance.AccountFlow
         {
             var linq = from query in this.IQueryable
                        where query.FinanceAccount.ID == Account
+                       select query;
+
+            var view = new FinanceAccountFlowsView(this.Reponsitory, linq);
+            return view;
+        }
+
+        public FinanceAccountFlowsView SearchByHKCW()
+        {
+            var linq = from query in this.IQueryable
+                       where query.FinanceVault.Name.Contains("香港")
                        select query;
 
             var view = new FinanceAccountFlowsView(this.Reponsitory, linq);

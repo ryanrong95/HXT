@@ -73,7 +73,7 @@ namespace WebApp.Finance.Receipt.Order
                     return;
                 }
 
-                //芯达通 本地收款 Begin
+                //华芯通 本地收款 Begin
 
                 //foreach (var received in listReceived)
                 //{
@@ -88,7 +88,7 @@ namespace WebApp.Finance.Receipt.Order
                 Needs.Ccs.Services.Models.OrderReceivedBatch orderReceivedBatch = new Needs.Ccs.Services.Models.OrderReceivedBatch(listReceived);
                 orderReceivedBatch.Insert();
 
-                //芯达通 本地收款 End
+                //华芯通 本地收款 End
 
                 //货款收完后进行美金权益相关的处理 Begin
 

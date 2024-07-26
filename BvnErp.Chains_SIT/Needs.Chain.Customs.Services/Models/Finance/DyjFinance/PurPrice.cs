@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace Needs.Ccs.Services.Models
 {
     /// <summary>
-    /// 外部公司(Icgoo和外单)进价推送芯达通出入库系统
+    /// 外部公司(Icgoo和外单)进价推送华芯通出入库系统
     /// </summary>
     public class PurPrice
     {
@@ -110,7 +110,7 @@ namespace Needs.Ccs.Services.Models
                             Items.Add(product);
                         }
 
-                        //处理最后一项的芯达通进价，使用减法。
+                        //处理最后一项的华芯通进价，使用减法。
                         var DecHeadPrice = list.Sum(t => t.DeclTotal);
                         //差额 = 整单的进价 - 项合计进价
                         //整单的进价

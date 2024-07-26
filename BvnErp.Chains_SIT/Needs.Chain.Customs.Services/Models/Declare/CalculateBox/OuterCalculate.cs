@@ -23,7 +23,7 @@ namespace Needs.Ccs.Services.Models
                 foreach (var code in this.PackNos)
                 {
                     //正确连续信号：WL01-WL03
-                    if (Regex.Split(code, "-WL").Length > 1)
+                    if (Regex.Split(code, "-HXT").Length > 1)
                     {
                         packs.Add(code);
                         continue;

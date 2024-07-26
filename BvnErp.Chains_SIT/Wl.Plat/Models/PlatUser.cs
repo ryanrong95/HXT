@@ -7,7 +7,7 @@ using System.Web;
 namespace Needs.Wl.User.Plat.Models
 {
     /// <summary>
-    /// Wl.net.cn 芯达通平台会员(PC端)
+    /// Wl.net.cn 华芯通平台会员(PC端)
     /// </summary>
     public partial class PlatUser : IPlatUser, ILocalUser
     {

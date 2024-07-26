@@ -14,6 +14,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -104,7 +106,7 @@ namespace WebApp.Client
         /// <summary>
         /// 保存会员基本信息
         /// </summary>
-        protected void SaveClientInfo()
+        protected async void SaveClientInfo()
         {
             var file = Request.Files["BusinessLicense"];
             var ClientID = Request.Form["ClientID"];
@@ -170,13 +172,7 @@ namespace WebApp.Client
             client.Company.Contact.Fax = Fax;
             client.Company.Contact.Email = Email;
 
-            //领导的奇怪要求 显示张庆永操作
-            var adminid = Needs.Wl.Admin.Plat.AdminPlat.Current.ID;
-            if (Needs.Wl.Admin.Plat.AdminPlat.Current.RealName == "张令金")
-            {
-                adminid = "Admin0000000282";
-            }
-            client.Admin = Needs.Underly.FkoFactory<Admin>.Create(adminid); //Needs.Wl.Admin.Plat.AdminPlat.Current.ID;
+            client.Admin = Needs.Underly.FkoFactory<Admin>.Create(Needs.Wl.Admin.Plat.AdminPlat.Current.ID);
 
             client.ClientType = Needs.Ccs.Services.Enums.ClientType.External;
             client.ClientRank = (Needs.Ccs.Services.Enums.ClientRank)Rank;
@@ -296,7 +292,6 @@ namespace WebApp.Client
 
                 try
                 {
-
                     client.Enter();
                     var centerURL = string.Empty;
                     var hkURL = string.Empty;
@@ -404,6 +399,7 @@ namespace WebApp.Client
                         Response.Write((new { success = false, message = "请求会员接口失败：" }).Json());
                         return;
                     }
+
                     // Response.Write((new { success = true, message = "操作成功" }).Json());
                 }
                 catch (Exception ex)

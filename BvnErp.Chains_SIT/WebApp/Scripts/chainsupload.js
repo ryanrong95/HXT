@@ -29,7 +29,7 @@
             this.defaults = {
                 required: true,
                 multiple: false,
-                validType: ['fileSize[10,"MB"]'],
+                validType: ['fileSize[1,"MB"]'],
                 buttonText: '选择',
                 buttonAlign: 'right',
                 prompt: '请选择图片或PDF类型的文件',

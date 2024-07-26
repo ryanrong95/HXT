@@ -59,7 +59,7 @@ namespace WebApp.App_Utils
                     SFOrder order = new SFOrder
                     {
                         language = "zh-CN",
-                        monthlyCard = "7550205279",
+                        monthlyCard = "7550921123",
                         orderId = orderID,
                         expressTypeId = expType,
                         payMethod = 1,//暂时固定为1：寄付 exPayType,
@@ -454,7 +454,7 @@ namespace WebApp.App_Utils
             dto.expressType = order.expressTypeId;
             //dto.insureValue = "501";//如果真实存在是在order.serviceList 中取到
 
-            dto.monthAccount = "7550205279"; //月结卡号
+            dto.monthAccount = "7550921123"; //月结卡号
             dto.orderNo = order.orderId;
             dto.payMethod = order.payMethod; // 1、寄付月结：显示寄付月结，不显示运费 2、寄付转第三方：显示寄付转第三方，不显示运费 3、寄付现结：按实际运费显示 4、到付：按实际需收取费用显示总计费用（含到付增值服务费，但不含COD费用)
 

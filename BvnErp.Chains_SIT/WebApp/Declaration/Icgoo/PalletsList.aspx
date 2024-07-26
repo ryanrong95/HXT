@@ -11,7 +11,7 @@
     <%-- <script>       
         gvSettings.fatherMenu = '物流管理';
         gvSettings.menu = '承运商';
-        gvSettings.summary = '仅限芯达通业务库房的物流使用的车辆管理'
+        gvSettings.summary = '仅限华芯通业务库房的物流使用的车辆管理'
     </script>--%>
     <script type="text/javascript">
         //数据初始化

@@ -795,7 +795,7 @@ namespace Needs.Ccs.Services.Views
                                            //ExchangeCustomer = grop.Sum(t => t.ExchangeCustomer),//委托金额-汇兑 -> 汇兑客户
 
                                            ClientName = grop.Key.ClientName,//公司 -> 客户名称
-                                           //ExchangeXDT = grop.Sum(t => t.ExchangeXDT),//运保杂-汇兑 -> 汇兑-芯达通
+                                           //ExchangeXDT = grop.Sum(t => t.ExchangeXDT),//运保杂-汇兑 -> 汇兑-华芯通
                                            Currency = grop.Key.Currency,
                                            RealExchangeRate = grop.Key.RealExchangeRate.Value,//实时汇率
                                            DecAgentTotal = grop.Sum(t => t.DecAgentTotal),//委托金额

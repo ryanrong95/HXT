@@ -16,11 +16,11 @@ using System.Timers;
 namespace Needs.Wl.PlanningService
 {
     /// <summary>
-    /// 芯达通接口计划任务服务
+    /// 华芯通接口计划任务服务
     /// </summary>
     public partial class PlanningService : ServiceBase
     {
-        //站点配置：芯达通/创新恒远
+        //站点配置：华芯通/创新恒远
         private static string site;
         public PlanningService()
         {
@@ -359,7 +359,7 @@ namespace Needs.Wl.PlanningService
                     }
                 }
             }
-            else if (site.ToLower().Equals("wl"))
+            else if (site.ToLower().Equals("HXT"))
             {
                 while (true)
                 {
@@ -397,8 +397,8 @@ namespace Needs.Wl.PlanningService
 
         private void SendMail(string startOrStop)
         {
-            string SendTitle = "芯达通计划任务程序" + startOrStop;
-            if (site.ToLower() == "wl")
+            string SendTitle = "华芯通计划任务程序" + startOrStop;
+            if (site.ToLower() == "HXT")
             {
                 SendTitle = "创新恒远计划任务程序" + startOrStop;
             }
@@ -408,7 +408,7 @@ namespace Needs.Wl.PlanningService
             }
             else if (site.ToLower() == "icgooinxdt")
             {
-                SendTitle = "Icgoo在芯达通计划任务程序" + startOrStop;
+                SendTitle = "Icgoo在华芯通计划任务程序" + startOrStop;
             }
             //邮件发送
             string receivers = System.Configuration.ConfigurationManager.AppSettings["Receivers"].ToString();

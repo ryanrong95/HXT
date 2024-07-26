@@ -838,7 +838,7 @@ namespace Needs.Ccs.Services.Models
                 if (mainRelatedOrder != null)
                 {
                     string[] orderIDs = mainRelatedOrder.ID.Split('-');
-                    orderID = mainOrderID + "-" + Convert.ToString(Convert.ToInt16(orderIDs[1]) + 1).PadLeft(2, '0');
+                    orderID = mainOrderID + "-" + Convert.ToString(Convert.ToInt16(orderIDs[1]) + 1).PadLeft(3, '0');
                 }
                 else
                 {

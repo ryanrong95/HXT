@@ -173,7 +173,7 @@ namespace Yahv.Services
             {
                 ID = "TH01",
                 Name = "中执广场",
-                Address = "深圳市龙华区龙华街道富康社区东环二路110号中执时代广场B栋16H",
+                Address = "深圳市龙华区龙华街道富康社区天汇大厦C栋212",
                 Enterprise = new WhEnterprise
                 {
                     ID = "TH01",

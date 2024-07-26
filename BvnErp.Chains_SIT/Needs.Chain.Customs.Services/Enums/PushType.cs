@@ -31,7 +31,7 @@ namespace Needs.Ccs.Services.Enums
         TariffDiff =3,
 
         /// <summary>
-        /// 外部公司(Icgoo和外单)进价推送芯达通出入库系统
+        /// 外部公司(Icgoo和外单)进价推送华芯通出入库系统
         /// </summary>
         [Description("进价")]
         PurchasePrice = 4,

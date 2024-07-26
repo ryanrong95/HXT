@@ -182,12 +182,12 @@
                 <th data-options="field:'ActualExciseTax',align:'left'" style="width: 6%">实缴消费税</th>
                 <th data-options="field:'ActualAddedValueTax',align:'left'" style="width: 6%">实缴增值税</th>
                 <th data-options="field:'ExchangeCustomer',align:'left'" style="width: 6%">汇兑-客户</th>
-                <th data-options="field:'ExchangeXDT',align:'left'" style="width: 6%">汇兑-芯达通</th>
+                <th data-options="field:'ExchangeXDT',align:'left'" style="width: 6%">汇兑-华芯通</th>
                 <th data-options="field:'RealExchangeRate',align:'left'" style="width: 6%">实时汇率</th>
                 <th data-options="field:'DueCustomerFC',align:'center'" style="width: 6%">应付-客户外币</th>
                 <th data-options="field:'DueCustomerRMB',align:'center'" style="width: 6%">应付-客户RMB</th>
-                <th data-options="field:'DueXDTFC',align:'left'" style="width: 6%">应付-芯达通外币</th>
-                <th data-options="field:'DueXDTRMB',align:'center'" style="width: 6%">应付-芯达通RMB</th>
+                <th data-options="field:'DueXDTFC',align:'left'" style="width: 6%">应付-华芯通外币</th>
+                <th data-options="field:'DueXDTRMB',align:'center'" style="width: 6%">应付-华芯通RMB</th>
                 <th data-options="field:'ActualTariff',align:'center'" style="width: 6%">实交关税</th>
                 <th data-options="field:'DutiablePrice',align:'left'" style="width: 6%">完税价格</th>
 <%--                <th data-options="field:'InvoiceNo',align:'left'" style="width: 6%">发票号</th>

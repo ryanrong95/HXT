@@ -29,7 +29,7 @@ namespace Needs.Ccs.Services.Views
         public string PayerID { get; set; }
 
         /// <summary>
-        /// 收款公司ID, 内部来自内部公司 默认：芯达通
+        /// 收款公司ID, 内部来自内部公司 默认：华芯通
         /// </summary>
         public string PayeeID { get; set; }
 

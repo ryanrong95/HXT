@@ -11,7 +11,7 @@ namespace Yahv.PvWsOrder.WebApp.Uc
 {
 
 
-    public partial class Works
+    public partial class Works_hidden
     {
 
         /// <summary>

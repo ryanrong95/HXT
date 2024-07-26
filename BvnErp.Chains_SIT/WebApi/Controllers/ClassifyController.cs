@@ -497,7 +497,7 @@ namespace WebApi.Controllers
 
                         HSCode = next.Category?.HSCode,
                         TariffName = next.Category?.Name,
-                        ImportPreferentialTaxRate = next.ImportTax?.Rate.ToString("0.0000"),//芯达通没有区分优惠税率和加征税率, 将进口关税赋给优惠税率
+                        ImportPreferentialTaxRate = next.ImportTax?.Rate.ToString("0.0000"),//华芯通没有区分优惠税率和加征税率, 将进口关税赋给优惠税率
                         VATRate = next.AddedValueTax?.Rate.ToString("0.0000"),
                         ExciseTaxRate = next.ExciseTax?.Rate.ToString("0.0000"),
                         TaxCode = next.Category?.TaxCode,
@@ -507,7 +507,7 @@ namespace WebApi.Controllers
                         CIQCode = next.Category?.CIQCode,
                         Elements = next.Category?.Elements,
 
-                        OriginATRate = 0,//芯达通没有区分优惠税率和加征税率, 进口关税已经赋给优惠税率, 加征税率为0
+                        OriginATRate = 0,//华芯通没有区分优惠税率和加征税率, 进口关税已经赋给优惠税率, 加征税率为0
                         CIQ = (next.Category?.Type & ItemCategoryType.Inspection) > 0,
                         CIQprice = next.InspectionFee.GetValueOrDefault(),
                         Ccc = (next.Category?.Type & ItemCategoryType.CCC) > 0,

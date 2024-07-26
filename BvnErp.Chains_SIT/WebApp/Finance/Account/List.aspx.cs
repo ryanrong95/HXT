@@ -51,6 +51,11 @@ namespace WebApp.Finance.Account
                 AccountSource = AccountSource.Trim();
                 financeAccounts = financeAccounts.Where(t => t.AccountSource== (Needs.Ccs.Services.Enums.AccountSource)Convert.ToInt32(AccountSource));
             }
+            var hk_caiwu = System.Configuration.ConfigurationManager.AppSettings["HK_Caiwu"];
+            if (!string.IsNullOrEmpty(hk_caiwu) && Needs.Wl.Admin.Plat.AdminPlat.Current.ID == hk_caiwu) 
+            {
+                financeAccounts = financeAccounts.Where(t => t.FinanceVaultName.Contains("香港"));
+            }
 
             Func<Needs.Ccs.Services.Models.FinanceAccount, object> convert = item => new
             {

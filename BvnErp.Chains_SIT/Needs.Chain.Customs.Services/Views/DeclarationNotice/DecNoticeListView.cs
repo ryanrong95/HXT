@@ -458,9 +458,9 @@ namespace Needs.Ccs.Services.Views
                     var arry = a.Split('-');
                     //型号A 装了WL01；型号B装了 WL01-WL05；这种件数是5件;
                     //WL08 和WL05-WL10 同时存在  
-                    int startCase = int.Parse(arry[0].Replace("WL", ""));
-                    int endCase = int.Parse(arry[1].Replace("WL", ""));
-                    var repeat = alonePack.Where(c => !c.Contains("-")).Where(c => int.Parse(c.ToUpper().Replace("WL", "")) >= startCase && int.Parse(c.ToUpper().Replace("WL", "")) <= endCase).Count();
+                    int startCase = int.Parse(arry[0].Replace("HXT", ""));
+                    int endCase = int.Parse(arry[1].Replace("HXT", ""));
+                    var repeat = alonePack.Where(c => !c.Contains("-")).Where(c => int.Parse(c.ToUpper().Replace("HXT", "")) >= startCase && int.Parse(c.ToUpper().Replace("HXT", "")) <= endCase).Count();
                     sumRepeat += repeat;
                     sumPacks += endCase - startCase + 1;
                 }

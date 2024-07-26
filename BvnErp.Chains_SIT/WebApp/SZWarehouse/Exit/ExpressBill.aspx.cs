@@ -132,7 +132,7 @@ namespace WebApp.SZWareHouse.Exit
                     result = result.Replace("电子元器件X1", "电子元器件X" + exitNotice.ExitDeliver.PackNo);
                 }
                 //隐藏月结卡号
-                result = result.Replace("月结卡号:075517225569", "月结卡号:" + "075*******69");
+                result = result.Replace("月结卡号:7550921123", "月结卡号:" + "075*******23");
 
                 //获取返回结果
                 var ResponseResult = result.JsonTo<KDDResultModel>();

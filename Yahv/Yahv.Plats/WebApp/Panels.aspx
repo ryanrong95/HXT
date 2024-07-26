@@ -39,15 +39,15 @@
                     </div>
                 </div>
                 <!--隐藏侧边栏-->
-                <div class="toggleSide open" onclick="toggleFun()">
+              <%--  <div class="toggleSide open" onclick="toggleFun()">
                     <i class="iconfont open">&#xe716;</i>
                     <i class="iconfont close">&#xe624;</i>
                     <span class="msg-light"></span>
                     <!--<span style="display:none;">隐藏侧边栏</span>-->
-                </div>
+                </div>--%>
                 <!--头部右侧-->
                 <div class="header-right clearfix">
-                    <div class="header-right-msg fl" onclick="openReadList()">
+                    <%--<div class="header-right-msg fl" onclick="openReadList()">
                         <i class="iconfont">&#xe678;</i>
                         <span>(<b>0</b>)</span>
                     </div>
@@ -57,18 +57,18 @@
                     <div class="header-right-fullscreen fl">
                         <div class="header-right-fullscreen-open">
                             <i class="iconfont">&#xe62b;</i>
-                            <%-- <span>开启全屏</span>--%>
+                             <span>开启全屏</span>
                         </div>
                         <div class="header-right-fullscreen-close">
                             <i class="iconfont">&#xe608;</i>
-                            <%-- <span>退出全屏</span>--%>
+                            <span>退出全屏</span>
                         </div>
                     </div>
                     <div class="header-right-line fl"></div>
                     <div class="header-right-componey fl">
                         <!--<i></i>-->
                         <span onclick="selectCom()" class="selectCom"></span>
-                    </div>
+                    </div>--%>
                     <div class="header-right-person fl">
                         <i class="iconfont">&#xe647;</i>
                         <span class="blue" runat="server" id="spanUsername"></span>
@@ -76,11 +76,11 @@
                             <ul>
                                 <li>
                                     <i class="iconfont">&#xe60f;</i>
-                                    <span id="userIphone" runat="server">18282828218</span>
+                                    <span id="userIphone" runat="server"></span>
                                 </li>
                                 <li>
                                     <i class="iconfont">&#xe616;</i>
-                                    <span id="userEmail" runat="server">1402029394@sina.com</span>
+                                    <span id="userEmail" runat="server"></span>
                                 </li>
                             </ul>
                         </div>
@@ -88,9 +88,9 @@
                     <div class="header-right-changePsd fl">
                         <span onclick="openChangePsd()">修改密码</span>
                     </div>
-                    <div class="header-right-changePsd fl">
+            <%--        <div class="header-right-changePsd fl">
                         <a href="#" onclick="bindWx()">绑定微信</a>
-                    </div>
+                    </div>--%>
                     <div class="header-right-line fl"></div>
                     <div class="header-right-exit fl" onclick="exitLogin()">
                         <span><i class="iconfont">&#xe682;</i><%--<span>退出</span>--%></span>

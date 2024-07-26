@@ -1255,7 +1255,7 @@ namespace Yahv.PvWsClient.WebAppNew.Controllers
                 new DownloadCenterReturnModel
                 {
                     FileName = "深圳收款对公账户信息",
-                    FileUrl = "/Files/芯达通对公账户.doc",
+                    FileUrl = "/Files/华芯通对公账户.doc",
                 },
                 new DownloadCenterReturnModel
                 {

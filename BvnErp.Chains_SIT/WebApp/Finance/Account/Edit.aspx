@@ -190,8 +190,8 @@
                     <td class="lbl">所属公司：</td>
                     <td>
                         <select class="easyui-combobox" id="Company" name="Company" style="width:250px;height:28px">
-                            <option value="深圳市芯达通供应链管理有限公司" selected="selected">深圳市芯达通供应链管理有限公司</option>
-                            <option value="香港万路通国际贸易有限公司">香港万路通国际贸易有限公司</option>
+                            <option value="深圳市华芯通供应链管理有限公司" selected="selected">深圳市华芯通供应链管理有限公司</option>
+                            <option value="香港速逹國際物流有限公司">香港速逹國際物流有限公司</option>
                         </select>
                     </td>
                     <td class="lbl">账号类型：</td>

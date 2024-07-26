@@ -308,7 +308,7 @@ namespace Needs.Wl.PlanningService
                 var icgooOrderID = reponsitory.ReadTable<Layer.Data.Sqls.ScCustoms.IcgooOrderMap>().Where(t => t.OrderID == decHead.OrderID).FirstOrDefault();
 
 
-                //处理最后一项的芯达通进价，使用减法。
+                //处理最后一项的华芯通进价，使用减法。
                 var DecHeadPrice = calcedItems.Sum(t => t.DeclTotal);
                 //var traffTotal = tariffTaxFlow == null ? 0 : tariffTaxFlow.Amount;
                 //差额 = 整单的进价 - 项合计进价
@@ -324,7 +324,7 @@ namespace Needs.Wl.PlanningService
                     单据号 = item.ProductUniqueCode == "" ? "" : Encryption.Encrypt(item.ProductUniqueCode),
                     完税价格 = item.DutiablePrice,
                     海关进价 = item.CusInputPrice,
-                    芯达通进价 = item.InPrice,
+                    华芯通进价 = item.InPrice,
                     库存ID = item.DecListID,
                     合同号 = decHead.ContrNo.Trim(),
                     型号信息分类 = item.TaxName,

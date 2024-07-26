@@ -15,7 +15,7 @@
             var btn = '<span class="easyui-formatted" style="display:inline-block;">'
                             + '<a class="easyui-linkbutton" data-options="iconCls:\'icon-yg-edit\'" onclick="edit(\'' + row.ID + '\')">编辑</a>'
                             + '<a class="easyui-linkbutton" data-options="iconCls:\'icon-yg-delete\'" onclick="deleteTariff(\'' + row.ID + '\')">删除</a>'
-                            + '<a class="easyui-linkbutton" data-options="iconCls:\'icon-yg-edit\'" onclick="setDefault(\'' + row.HSCode + '\')">设置默认值</a>'
+                            + '<a class="easyui-linkbutton" data-options="iconCls:\'icon-yg-edit\'" onclick="setDefault(\'' + row.HSCode + '\')">默认值</a>'
                             + '</span>';
 
             buttons.push(btn);

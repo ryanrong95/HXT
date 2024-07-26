@@ -100,9 +100,9 @@ namespace WebApp.Control.Delivery
                 try
                 {
                     var arry = a.Split('-');
-                    int startCase = int.Parse(arry[0].Replace("WL", ""));
-                    int endCase = int.Parse(arry[1].Replace("WL", ""));
-                    var repeat = alonePack.Where(c => !c.Contains("-")).Where(c => int.Parse(c.ToUpper().Replace("WL", "")) >= startCase && int.Parse(c.ToUpper().Replace("WL", "")) <= endCase).Count();
+                    int startCase = int.Parse(arry[0].Replace("HXT", ""));
+                    int endCase = int.Parse(arry[1].Replace("HXT", ""));
+                    var repeat = alonePack.Where(c => !c.Contains("-")).Where(c => int.Parse(c.ToUpper().Replace("HXT", "")) >= startCase && int.Parse(c.ToUpper().Replace("HXT", "")) <= endCase).Count();
                     sumRepeat += repeat;
                     sumPacks += endCase - startCase + 1;
                 }

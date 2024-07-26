@@ -70,7 +70,7 @@ namespace Needs.Ccs.Services.ApiSettings
 
         public static string token = "0A381764-73FD-4B53-99FB-DCEBE8ABE0DE";
 
-        public static string 归属账套 = "深圳市芯达通供应链管理有限公司";
+        public static string 归属账套 = "深圳市华芯通供应链管理有限公司";
 
         //一、报关进口-全额发票类型
         //二、报关进口-服务费发票类型

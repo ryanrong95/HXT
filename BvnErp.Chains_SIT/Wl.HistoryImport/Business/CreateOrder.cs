@@ -650,7 +650,7 @@ namespace Wl.HistoryImport
             head.NetWt = sorting.Select(p => p.NetWeight).Sum().ToRound(2) < 1 ? 1 : sorting.Select(p => p.NetWeight).Sum().ToRound(2);
             head.TradeAreaCode = "HKG";
             head.EntyPortCode = "470501";
-            head.GoodsPlace = "深圳市龙华区龙华街道富康社区东环二路110号中执时代广场B栋16H";
+            head.GoodsPlace = "深圳市龙华区龙华街道富康社区天汇大厦C栋212";
             head.EntryType = "M";
 
             head.DespPortCode = "HKG000";

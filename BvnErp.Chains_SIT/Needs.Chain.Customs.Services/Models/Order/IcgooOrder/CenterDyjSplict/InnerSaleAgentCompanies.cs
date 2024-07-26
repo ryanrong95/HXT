@@ -19,8 +19,8 @@ namespace Needs.Ccs.Services.Models
         public const string kexunSeries = "北京北方科讯电子技术有限公司";
 
         /// <summary>
-        /// 芯达通
+        /// 华芯通
         /// </summary>
-        public const string xdtSeries = "深圳市芯达通供应链管理有限公司";
+        public const string xdtSeries = "深圳市华芯通供应链管理有限公司";
     }
 }

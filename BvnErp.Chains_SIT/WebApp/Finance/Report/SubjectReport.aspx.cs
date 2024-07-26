@@ -231,12 +231,12 @@ namespace WebApp.Finance.Report
                 excelconfig.ColumnEntity.Add(new ColumnEntity() { Column = "ActualExciseTax", ExcelColumn = "实缴消费税", Alignment = "center" });
                 excelconfig.ColumnEntity.Add(new ColumnEntity() { Column = "ActualAddedValueTax", ExcelColumn = "实缴增值税", Alignment = "center" });
                 excelconfig.ColumnEntity.Add(new ColumnEntity() { Column = "ExchangeCustomer", ExcelColumn = "汇兑-客户", Alignment = "center" });
-                excelconfig.ColumnEntity.Add(new ColumnEntity() { Column = "ExchangeXDT", ExcelColumn = "汇兑-芯达通", Alignment = "center" });
+                excelconfig.ColumnEntity.Add(new ColumnEntity() { Column = "ExchangeXDT", ExcelColumn = "汇兑-华芯通", Alignment = "center" });
                 excelconfig.ColumnEntity.Add(new ColumnEntity() { Column = "RealExchangeRate", ExcelColumn = "实时汇率", Alignment = "center" });
                 excelconfig.ColumnEntity.Add(new ColumnEntity() { Column = "DueCustomerFC", ExcelColumn = "应付-客户外币", Alignment = "center" });
                 excelconfig.ColumnEntity.Add(new ColumnEntity() { Column = "DueCustomerRMB", ExcelColumn = "应付-客户RMB", Alignment = "center" });
-                excelconfig.ColumnEntity.Add(new ColumnEntity() { Column = "DueXDTFC", ExcelColumn = "应付-芯达通外币", Alignment = "center" });
-                excelconfig.ColumnEntity.Add(new ColumnEntity() { Column = "DueXDTRMB", ExcelColumn = "应付-芯达通RMB", Alignment = "center" });
+                excelconfig.ColumnEntity.Add(new ColumnEntity() { Column = "DueXDTFC", ExcelColumn = "应付-华芯通外币", Alignment = "center" });
+                excelconfig.ColumnEntity.Add(new ColumnEntity() { Column = "DueXDTRMB", ExcelColumn = "应付-华芯通RMB", Alignment = "center" });
                 excelconfig.ColumnEntity.Add(new ColumnEntity() { Column = "ActualTariff", ExcelColumn = "实交关税", Alignment = "center" });
                 excelconfig.ColumnEntity.Add(new ColumnEntity() { Column = "DutiablePrice", ExcelColumn = "完税价格", Alignment = "center" });
                 //excelconfig.ColumnEntity.Add(new ColumnEntity() { Column = "InvoiceNo", ExcelColumn = "发票号", Alignment = "center" });

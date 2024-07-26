@@ -35,6 +35,8 @@ namespace WebApp.Finance.CenterCostApply
             //资金类型
             this.Model.AccountCatalogs = new Needs.Ccs.Services.Views.Origins.AccountCatalogsOrigin().Select(t => new { id = t.ID, text = t.Name }).ToArray().Json();
 
+            this.Model.Currency = Needs.Wl.Admin.Plat.AdminPlat.Currencies.Where(t=>t.Code == "CNY" || t.Code == "HKD" || t.Code =="USD")
+                .Select(item => new { Value = item.Code, Text = item.Code + " " + item.Name }).Json();
 
             this.Model.AccountCatalogsJson = AccountCatalogsAlls.Current.JsonOut(AccountCatalogType.Output.GetDescription()).Replace("\"name\":", "\"text\":");
 
@@ -176,6 +178,7 @@ namespace WebApp.Finance.CenterCostApply
                 string Files = Request.Form["Files"].Replace("&quot;", "'");
                 string MoneyType = Request.Form["MoneyType"];
                 string strIsCash = Request.Form["IsCash"];
+                string Currency = Request.Form["Currency"];
                 bool isCash = false;
 
                 if (!string.IsNullOrEmpty(strIsCash))
@@ -191,7 +194,7 @@ namespace WebApp.Finance.CenterCostApply
                 costApply.PayeeName = PayeeName;
                 costApply.PayeeAccount = PayeeAccount;
                 costApply.PayeeBank = PayeeBank;
-                costApply.Currency = "CNY";
+                costApply.Currency = Currency;//"CNY";
                 costApply.CostStatus = Needs.Ccs.Services.Enums.CostStatusEnum.FinanceStaffUnApprove;
                 costApply.AdminID = admin.ID;
                 costApply.Status = Status.Normal;

@@ -265,7 +265,7 @@ namespace Needs.Ccs.Services.Models
             this.Manifest.LoadingDate = DateTime.Now;
             this.Manifest.LoadingLocationCode = decHead.IEPort;//使用报关单中的 实际进境关别
             this.Manifest.ArrivalDate = DateTime.Now;
-            this.Manifest.CustomMaster = PurchaserContext.Current.CustomMaster;//使用芯达通配置的 备案关别？？？
+            this.Manifest.CustomMaster = PurchaserContext.Current.CustomMaster;//使用华芯通配置的 备案关别？？？
             this.Manifest.UnitCode = decHead.ConsigneeScc;
             this.Manifest.MsgRepName = decHead.ConsigneeName;
             //manifest.AdditionalInformation = this.AdditionalInformation;

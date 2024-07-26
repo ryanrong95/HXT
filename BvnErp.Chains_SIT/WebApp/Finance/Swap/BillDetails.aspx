@@ -158,7 +158,7 @@
                             <th data-options="field:'TransPremiumInsuranceAmount',align:'center'" style="width: 80px;">运保杂</th>
                             <th data-options="field:'TransPremiumInsuranceAmountRMB',align:'center'" style="width: 100px;">运保杂RMB</th>
                             <th data-options="field:'AcceptanceCustomer',align:'center'" style="width: 120px;">汇兑-客户(借)</th>
-                            <th data-options="field:'AcceptanceXDT',align:'center'" style="width: 120px;">汇兑-芯达通(借)</th>
+                            <th data-options="field:'AcceptanceXDT',align:'center'" style="width: 120px;">汇兑-华芯通(借)</th>
                         </tr>
                     </thead>
                 </table>

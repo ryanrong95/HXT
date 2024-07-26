@@ -73,9 +73,9 @@
                 },
             });
             $('#PurpOrgCode').combobox({
-                data: OrgCodes,
+                data: CustomMaster,
                 onChange: function (record) {
-                    $.post('?action=getDropdownlist', { value: record }, function (data) {
+                    $.post('?action=getCustomMasterlist', { value: record }, function (data) {
                         $("#PurpOrgCode").combobox('loadData', data);
                     });
                 },

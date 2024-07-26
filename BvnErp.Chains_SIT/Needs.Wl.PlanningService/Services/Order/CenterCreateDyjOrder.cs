@@ -102,7 +102,7 @@ namespace Needs.Wl.PlanningService.Services.Order
 
         /// <summary>
         /// 先按委托公司拆分，委托公司为北京远大创新科技有限公司，北京北方科讯电子技术有限公司的，这些记录按委托公司拆分
-        /// 委托公司为 芯达通的，按下单公司拆分
+        /// 委托公司为 华芯通的，按下单公司拆分
         /// </summary>
         /// <param name="ID"></param>
         public void CreateNew(string ID)
@@ -292,7 +292,7 @@ namespace Needs.Wl.PlanningService.Services.Order
                     //整理原始数据
                     foreach (DataRow row in dt.Rows)
                     {
-                        ///防止一个产品，委托公司是远大创新，但是下单公司是 芯达通系的产品 会重复
+                        ///防止一个产品，委托公司是远大创新，但是下单公司是 华芯通系的产品 会重复
                         if (!OrderedItems.Contains(row["报关号"].ToString()))
                         {
                             OrderedItems.Add(row["报关号"].ToString());
@@ -1747,7 +1747,7 @@ namespace Needs.Wl.PlanningService.Services.Order
         }
 
         /// <summary>
-        /// 芯达通内销之前的版本
+        /// 华芯通内销之前的版本
         /// </summary>
         /// <param name="model"></param>
         /// <param name="msg"></param>

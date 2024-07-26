@@ -22,7 +22,7 @@ namespace WeChat.Api
         /// <returns></returns>
         public static void ClientInfo(string Json)
         {
-            //调用芯达通接口，传递订单数据
+            //调用华芯通接口，传递订单数据
             var apisetting = new PvCrmApiSetting();
             var apiurl = apisetting.ApiUrl + apisetting.ClientInfo;
             Task<string> task = new Task<string>(() =>

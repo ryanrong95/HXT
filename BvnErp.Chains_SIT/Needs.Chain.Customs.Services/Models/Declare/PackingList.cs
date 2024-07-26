@@ -385,7 +385,7 @@ namespace Needs.Ccs.Services.Models
 
                 string totalQty = this.TotalProductQutity.ToString("0.####");
                 decimal totalNwt = this.TotalNetWeight.ToRound(2) < 1M ? this.NetWet : this.TotalNetWeight.ToRound(2);
-                decimal totalGwt = Math.Ceiling(this.TotalGrossWeight < 2M ? this.GrossWet : this.TotalGrossWeight);
+                decimal totalGwt = this.TotalGrossWeight < 2M ? this.GrossWet : this.TotalGrossWeight;
 
                 if (!string.IsNullOrEmpty(vendor.PdfStyle) && vendor.PdfStyle == "style1")
                 {
@@ -400,7 +400,7 @@ namespace Needs.Ccs.Services.Models
                         总件数: this.TotalPacks + " 纸箱",
                         总数量: totalQty,
                         总净重: totalNwt.ToRound(2).ToString(),
-                        总毛重: Math.Ceiling(this.GrossWet).ToString(),
+                        总毛重: this.GrossWet.ToRound(2).ToString(),
                         items: this.PackItems,
                         vendor: vendor,
                         fileName: fileDic.FilePath);
@@ -419,7 +419,7 @@ namespace Needs.Ccs.Services.Models
                         总件数: this.TotalPacks + " 纸箱",
                         总数量: totalQty,
                         总净重: totalNwt.ToRound(2).ToString(),
-                        总毛重: Math.Ceiling(this.GrossWet).ToString(),
+                        总毛重: this.GrossWet.ToRound(2).ToString(),
                         items: this.PackItems,
                         vendor: vendor,
                         fileName: fileDic.FilePath);
@@ -439,7 +439,7 @@ namespace Needs.Ccs.Services.Models
                         总件数: this.TotalPacks + " 纸箱",
                         总数量: totalQty,
                         总净重: totalNwt.ToRound(2).ToString(),
-                        总毛重: Math.Ceiling(this.GrossWet).ToString(),//totalGwt.ToString(),
+                        总毛重: this.GrossWet.ToRound(2).ToString(),//totalGwt.ToString(),
 
                         items: this.PackItems);
                     pdf.Save(fileDic.FilePath, vendor);

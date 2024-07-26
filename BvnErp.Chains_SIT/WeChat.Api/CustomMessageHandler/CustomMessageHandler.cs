@@ -36,7 +36,7 @@ namespace WeChat.Api.CustomMessageHandler
             if (requestMessage.EventKey == "CONTACT_US")
             {
                 var responseMessage = requestMessage.CreateResponseMessage<ResponseMessageText>();
-                responseMessage.Content = "您好，欢迎关注芯达通一站式报关服务平台。\r\n报关热线：0755-83765188\r\n地址：深圳市龙岗区坂田区吉华路393号英达丰科技园";
+                responseMessage.Content = "您好，欢迎关注华芯通一站式报关服务平台。\r\n报关热线：0755-83765188\r\n地址：深圳市龙岗区坂田区吉华路393号英达丰科技园";
                 return responseMessage;
             }
 
@@ -46,7 +46,7 @@ namespace WeChat.Api.CustomMessageHandler
         public override IResponseMessageBase DefaultResponseMessage(IRequestMessageBase requestMessage)
         {
             var responseMessage = requestMessage.CreateResponseMessage<ResponseMessageText>();
-            responseMessage.Content = "您好，欢迎关注芯达通一站式报关服务平台。\r\n报关热线：0755-83765188\r\n地址：深圳市龙岗区坂田区吉华路393号英达丰科技园";
+            responseMessage.Content = "您好，欢迎关注华芯通一站式报关服务平台。\r\n报关热线：0755-83765188\r\n地址：深圳市龙岗区坂田区吉华路393号英达丰科技园";
             return responseMessage;
         }
     }

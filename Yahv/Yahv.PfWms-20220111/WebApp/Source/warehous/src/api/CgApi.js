@@ -495,6 +495,15 @@ export function CgUpdateDeliveredQty(data) {
     return Promise.resolve(res.data)
   })
 }
+
+// 库位的修改
+// http://hv.warehouse.b1b.com/wmsapi/cgStorages/UpdateDeliveredQty 
+export function CgUpdateDeliveredLocate(data) {
+  return axios.post(PFWMS_API + "/wmsapi/cgstorages/UpdateDeliveredLocate",data ).then((res) => {
+    return Promise.resolve(res.data)
+  })
+}
+
 // 深圳入库
 // 1 搜获与获取 http://hv.warehouse.b1b.com/wmsapi/cgszsortings/show/
 export function cgszsortingslist(data) {

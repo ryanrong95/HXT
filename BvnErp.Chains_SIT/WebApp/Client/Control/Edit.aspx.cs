@@ -183,18 +183,8 @@ namespace WebApp.Client.Control
 
                 //领导的奇怪要求 显示风控操作
                 var adminid = Needs.Wl.Admin.Plat.AdminPlat.Current.ID;
-                //var RealName = Needs.Wl.Admin.Plat.AdminPlat.Current.RealName;
 
-                //var RiskName = System.Configuration.ConfigurationManager.AppSettings["RiskManagementName"];
-                //var RiskID = System.Configuration.ConfigurationManager.AppSettings["RiskManagementID"];
-
-                //if (RealName == "张令金" || RealName == "张庆永")
-                //{
-                //    adminid = RiskID;//风控的ID
-                //    RealName = RiskName;
-                //}
-
-                var admin = new Needs.Ccs.Services.Views.AdminsTopView2().FirstOrDefault(t => t.ID == adminid);
+                var admin = new Needs.Ccs.Services.Views.AdminsTopView2().FirstOrDefault(t => t.OriginID == adminid);
 
                 var RiskName = string.IsNullOrEmpty(admin.ByName) ? admin.RealName : admin.ByName;
 

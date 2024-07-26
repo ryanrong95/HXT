@@ -72,7 +72,7 @@ namespace Needs.Ccs.Services.Models
             }
         }
         /// <summary>
-        /// 汇兑-芯达通（借）
+        /// 汇兑-华芯通（借）
         /// </summary>
         public decimal? AcceptanceXDT
         {

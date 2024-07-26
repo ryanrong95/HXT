@@ -10,8 +10,8 @@ using Needs.Wl.Models;
 namespace Needs.Wl.Views
 {
     /// <summary>
-    /// 芯达通平台管理员
-    /// 授权进入芯达通系统的管理员
+    /// 华芯通平台管理员
+    /// 授权进入华芯通系统的管理员
     /// </summary>
     public class Admins : UniqueView<Needs.Wl.Admin.Plat.Models.Admin, ScCustomsReponsitory>
     {

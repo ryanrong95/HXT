@@ -868,6 +868,10 @@ namespace Yahv.PvWsClient.WebAppNew.Controllers
             model.PackingFiles = new FileModel[0];
             model.TakingFiles = new FileModel[0];
             model.Origin = (Origin.HKG).ToString(); //默认中国香港
+            model.PayerMethodName = (Methord.Transfer).ToString();
+            model.PayerCurrencyName = (Currency.USD).ToString();
+            //model.PayPayerMethod = (Methord.Transfer).ToString();
+            //model.PayPayerCurrency = (Currency.USD).ToString();
             model.HKWaybillType = ((int)WaybillType.PickUp).ToString(); //默认自提
             model.WaybillType = ((int)WaybillType.PickUp).ToString(); //默认自提
 

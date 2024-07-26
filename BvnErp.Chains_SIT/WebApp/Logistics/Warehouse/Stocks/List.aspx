@@ -11,7 +11,7 @@
     <%--<script>
         gvSettings.fatherMenu = '库位管理';
         gvSettings.menu = '库房库位';
-        gvSettings.summary = '仅限芯达通业务库房的库位管理';
+        gvSettings.summary = '仅限华芯通业务库房的库位管理';
     </script>--%>
 </head>
 <body>

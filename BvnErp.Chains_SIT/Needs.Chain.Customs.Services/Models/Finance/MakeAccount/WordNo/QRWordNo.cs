@@ -13,7 +13,7 @@ namespace Needs.Ccs.Services.Models
         {
             var query = new Needs.Ccs.Services.Views.FundTransferAppliesView()
                 .Where(item => item.Status == Needs.Ccs.Services.Enums.Status.Normal && item.FundTranCreSta == true).
-                Where(item => item.OutAccount.AccountName == "芯达通-兴业银行快捷支付平台").
+                Where(item => item.OutAccount.AccountName == "华芯通-兴业银行快捷支付平台").
                 OrderByDescending(t => t.CreateDate).AsQueryable();
             List<string> SwapIDs = query.Where(t => t.FundTranWrod == null || t.FundTranWrod == "").Select(t => t.ID).ToList();
 

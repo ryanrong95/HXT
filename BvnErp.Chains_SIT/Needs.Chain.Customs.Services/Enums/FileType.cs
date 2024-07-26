@@ -186,7 +186,7 @@ namespace Needs.Ccs.Services.Enums
         Avatar = 42,
 
         /// <summary>
-        /// 芯达通境内销售合同（增值税开票时，税务要求）
+        /// 华芯通境内销售合同（增值税开票时，税务要求）
         /// </summary>
         [Description("销售合同")]
         SalesContract = 50,
@@ -234,9 +234,9 @@ namespace Needs.Ccs.Services.Enums
         ChangeServiceAgreement = 222,
 
         /// <summary>
-        /// 芯达通垫款保证协议
+        /// 华芯通垫款保证协议
         /// </summary>
-        [Description("芯达通垫款保证协议")]
+        [Description("华芯通垫款保证协议")]
         AdvanceMoneyApplyAgreement = 223,
 
         /// <summary>

@@ -80,7 +80,7 @@ namespace WebApi.Controllers
                     string returnmsg = "";
 
                     bool isSuccess = false;
-                    if (VirtualHost.ToLower().Equals("wl"))
+                    if (VirtualHost.ToLower().Equals("HXT"))
                     {
                         isSuccess = mqMethod.ProduceIcgoo(mq.ID, ref returnmsg);
                     }

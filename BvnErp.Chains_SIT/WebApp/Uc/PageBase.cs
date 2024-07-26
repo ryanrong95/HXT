@@ -16,8 +16,8 @@ namespace WebApp.Uc
 
         private void PageBase_Init(object sender, EventArgs e)
         {
-            //授权进入芯达通系统的管理员
-            //登录系统后，验证是否存在芯达通系统的管理员，否则添加
+            //授权进入华芯通系统的管理员
+            //登录系统后，验证是否存在华芯通系统的管理员，否则添加
             //string id = Needs.Wl.Admin.Plat.AdminPlat.Current.ID;
             //var adminWl = Needs.Wl.Admin.Plat.AdminPlat.Admins[id];
             //if (adminWl == null)

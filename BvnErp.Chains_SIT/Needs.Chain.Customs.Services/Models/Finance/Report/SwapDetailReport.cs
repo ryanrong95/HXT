@@ -164,7 +164,7 @@ namespace Needs.Ccs.Services.Models
                 换汇汇率 = d.SwapRate,
                 报关当天汇率 = d.DDateRate,
                 客户委托金额汇差 = d.DeclExchangeSpread,
-                芯达通运保杂汇差 = d.OtherExchangeSpread,
+                华芯通运保杂汇差 = d.OtherExchangeSpread,
                 对应比例的委托金额RMB报关 = d.DDateRateScalePrice,
                 对应比例的运保杂金额RMB报关 = d.DDateRateScaleOtherPrice
             });
@@ -195,7 +195,7 @@ namespace Needs.Ccs.Services.Models
                 换汇汇率 = d.SwapRate,
                 报关当天汇率 = d.DDateRate,
                 客户委托金额汇差 = d.DeclExchangeSpread,
-                芯达通运保杂汇差 = d.OtherExchangeSpread
+                华芯通运保杂汇差 = d.OtherExchangeSpread
             });
             #endregion
 

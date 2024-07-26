@@ -26,7 +26,7 @@ namespace WebApi.Controllers
 {
 
     /// <summary>
-    /// 芯达通客户信息相关接口
+    /// 华芯通客户信息相关接口
     /// </summary>
     [System.Web.Http.Cors.EnableCors(origins: "*", headers: "*", methods: "*")]
     public class ClientsController : ApiController

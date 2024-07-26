@@ -43,7 +43,7 @@ namespace Needs.Wl.PlanningService
         {
             try
             {
-                string MessageContent = "【芯达通】" + SendContent;
+                string MessageContent = "【华芯通】" + SendContent;
                 string MessageAddressUrl = this.MessageAddressUrl;
                 string MessageUrl = string.Format(MessageAddressUrl, Phone, MessageContent);
                 string result = HttpGet(MessageUrl);               

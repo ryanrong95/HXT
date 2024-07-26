@@ -492,7 +492,7 @@
                     <el-button class="btn_add ml8 fl" style="margin-top: 5px;" v-on:click="PayerVisible2">+新增</el-button>@*dialogPayerVisible=true*@
                 </div>
                 <div class="clearfix">
-                    <div class="fl wp50">
+                    @*<div class="fl wp50">
                         <el-form-item label="付款方式:">
                             <el-input size="mini" v-model="PayerMethodName" style="width: 200px;" readonly auto-complete="off"></el-input>
                         </el-form-item>
@@ -501,7 +501,33 @@
                         <el-form-item label="付款币种:">
                             <el-input size="mini" v-model="PayerCurrencyName" style="width: 200px;" readonly auto-complete="off"></el-input>
                         </el-form-item>
+                    </div>*@
+
+                    <div class="fl wp50">
+                        <el-form-item label="付款方式" prop="PayPayerMethod" :rules="[{ required: true, message: '请选择付款方式', trigger: 'change' }]">
+                            <el-select size="mini" style="width: 200px" v-model="PayerMethodName" filterable clearable placeholder="请选择">
+                                <el-option v-for="item in baseData.PayerMethordOptions"
+                                           :key="item.value"
+                                           :label="item.text"
+                                           :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
                     </div>
+                    <div class="fl">
+                        <el-form-item label="付款币种" prop="PayPayerCurrency" :rules="[{ required: true, message: '请选择付款人币种', trigger: 'change' }]">
+                            <el-select size="mini" style="width: 200px" v-model="PayerCurrencyName" filterable clearable placeholder="请选择">
+                                <el-option v-for="item in baseData.PayerCurrencyOptions"
+                                           :key="item.value"
+                                           :label="item.text"
+                                           :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </div>
+
+
+
                 </div>
                 <div class="clearfix">
                     <div class="fl wp50">

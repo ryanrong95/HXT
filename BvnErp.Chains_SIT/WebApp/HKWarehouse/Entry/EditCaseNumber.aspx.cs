@@ -37,7 +37,7 @@ namespace WebApp.HKWarehouse.Entry
                 DateTime NewPackingDate = Convert.ToDateTime(Request.Form["NewPackingDate"]);
 
                 var packingView = Needs.Wl.Admin.Plat.AdminPlat.Current.Warehouse.Packing;
-                var packings = packingView.Where(item => item.PackingDate == NewPackingDate && item.BoxIndex.StartsWith("WL"));
+                var packings = packingView.Where(item => item.PackingDate == NewPackingDate && item.BoxIndex.StartsWith("HXT"));
                 var packingBill = Needs.Wl.Admin.Plat.AdminPlat.Current.Order.SortingPackings.GetSortingPacking().Where(x => x.Packing.ID == PackingID);
                 if (packingBill.Count() > 1 && NewCaseNumber.IndexOf("-") != -1)
                 {
@@ -51,7 +51,7 @@ namespace WebApp.HKWarehouse.Entry
                 var diffArr = arr1.Where(c => arr2.Contains(c)).ToArray();
                 if (diffArr.Count() > 0)
                 {
-                    string caseNumber = "WL" + diffArr.First().ToString().PadLeft(2, '0');
+                    string caseNumber = "HXT" + diffArr.First().ToString().PadLeft(3, '0');
                     Response.Write((new { success = false, message = "箱号" + caseNumber + "已使用过：请选择其它箱号。" }).Json());
                     return;
                 }
@@ -79,8 +79,8 @@ namespace WebApp.HKWarehouse.Entry
             if (CaseNumber.Contains("-"))
             {
                 string[] str = CaseNumber.Split('-');
-                int box1 = int.Parse(str[0].Remove(0, 2));
-                int box2 = int.Parse(str[1].Remove(0, 2));
+                int box1 = int.Parse(str[0].Remove(0, 3));
+                int box2 = int.Parse(str[1].Remove(0, 3));
                 for (int i = box1; i < box2 + 1; i++)
                 {
                     list.Add(i);
@@ -88,7 +88,7 @@ namespace WebApp.HKWarehouse.Entry
             }
             else
             {
-                list.Add(int.Parse(CaseNumber.Remove(0, 2)));
+                list.Add(int.Parse(CaseNumber.Remove(0, 3)));
             }
             return list.ToArray();
         }

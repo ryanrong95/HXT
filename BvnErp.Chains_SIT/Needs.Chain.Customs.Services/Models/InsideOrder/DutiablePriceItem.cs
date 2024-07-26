@@ -12,12 +12,12 @@ namespace Needs.Ccs.Services.Models
         public string ID { get; set; }
 
         /// <summary>
-        /// 申报项ID，作为芯达通财务入库库存ID
+        /// 申报项ID，作为华芯通财务入库库存ID
         /// </summary>
         public string DecListID { get; set; }
 
         /// <summary>
-        /// 芯达通进价，不含运保杂，最后一个型号用减法计算
+        /// 华芯通进价，不含运保杂，最后一个型号用减法计算
         /// </summary>
         public decimal InPrice { get; set; }
 

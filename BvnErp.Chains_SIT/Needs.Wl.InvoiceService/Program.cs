@@ -29,7 +29,7 @@ namespace Needs.Wl.InvoiceService
                 //x.Disabled(); //禁用
 
                 //常规信息
-                x.SetDescription("芯达通查验发票信息服务"); //MyService 服务的描述信息
+                x.SetDescription("华芯通查验发票信息服务"); //MyService 服务的描述信息
                 x.SetDisplayName("Needs.Wl.InvoiceService"); //MyService 服务的显示名称
                 x.SetServiceName("Needs.Wl.InvoiceService"); //MyService 服务名称
             });

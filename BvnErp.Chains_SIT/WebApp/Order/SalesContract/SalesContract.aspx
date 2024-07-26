@@ -415,7 +415,7 @@
                     }
                 </style>
 
-                <h3 id="purchaser" style="text-align: left; font-size: 18px; font-weight: bold; margin-bottom: 10px">芯达通-销售合同</h3>
+                <h3 id="purchaser" style="text-align: left; font-size: 18px; font-weight: bold; margin-bottom: 10px">华芯通-销售合同</h3>
                 <div style="background-color: whitesmoke; padding: 5px; border: solid 1px lightgray; margin-bottom: 5px">
                     <a href="javascript:void(0);" class="easyui-linkbutton" id="approve" data-options="iconCls:'icon-man'" onclick="Approve()">审核通过</a>
                     <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-back'" onclick="Return()">返回</a>

@@ -422,7 +422,7 @@ namespace WebApp.Finance.Swap
             excelconfig.ColumnEntity.Add(new ColumnEntity() { Column = "TransPremiumInsuranceAmount", ExcelColumn = "运保杂", Alignment = "center" });
             excelconfig.ColumnEntity.Add(new ColumnEntity() { Column = "TransPremiumInsuranceAmountRMB", ExcelColumn = "运保杂RMB", Alignment = "center" });
             excelconfig.ColumnEntity.Add(new ColumnEntity() { Column = "AcceptanceCustomer", ExcelColumn = "汇兑-客户(借)", Alignment = "center" });
-            excelconfig.ColumnEntity.Add(new ColumnEntity() { Column = "AcceptanceXDT", ExcelColumn = "汇兑-芯达通(借)", Alignment = "center" });
+            excelconfig.ColumnEntity.Add(new ColumnEntity() { Column = "AcceptanceXDT", ExcelColumn = "汇兑-华芯通(借)", Alignment = "center" });
             #endregion
 
             //调用导出方法

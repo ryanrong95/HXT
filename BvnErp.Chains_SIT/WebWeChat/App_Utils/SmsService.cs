@@ -11,17 +11,17 @@ namespace WebWeChat.App_Utils
         /// <summary>
         /// 注册时发送的短信模板
         /// </summary>
-        public const string Register = "您好，您注册芯达通账号的校验码为{0},请不要把校验码泄露给其他人！该校验码3分钟内有效，非本人操作，请忽略本条消息。【芯达通】";
+        public const string Register = "您好，您注册华芯通账号的校验码为{0},请不要把校验码泄露给其他人！该校验码3分钟内有效，非本人操作，请忽略本条消息。【华芯通】";
 
         /// <summary>
         /// 修改手机绑定的短信模板
         /// </summary>
-        public const string ChangeMobile = "您好，您正在申请变更您的手机号码，请确保该操作是您本人进行，您的校验码是{0},该校验码3分钟内有效，非本人操作，请忽略本条消息。【芯达通】";
+        public const string ChangeMobile = "您好，您正在申请变更您的手机号码，请确保该操作是您本人进行，您的校验码是{0},该校验码3分钟内有效，非本人操作，请忽略本条消息。【华芯通】";
 
         /// <summary>
         /// 变更初始化密码
         /// </summary>
-        public const string ChangePassword = "您好，您正在申请变更您的登陆密码，请确保该操作是您本人进行，您的校验码是{0},该校验码3分钟内有效，非本人操作，请忽略本条消息。【芯达通】";
+        public const string ChangePassword = "您好，您正在申请变更您的登陆密码，请确保该操作是您本人进行，您的校验码是{0},该校验码3分钟内有效，非本人操作，请忽略本条消息。【华芯通】";
     }
 
     /// <summary>

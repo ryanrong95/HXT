@@ -73,7 +73,7 @@ namespace DBSApis.Services
                 client.Credentials = new System.Net.NetworkCredential(SmtpContext.MailUserName, SmtpContext.MailPassword);
                 client.DeliveryMethod = SmtpDeliveryMethod.Network;
                 MailMessage mail = new MailMessage();
-                mail.From = new MailAddress(SmtpContext.MailUserName, "芯达通服务");//发件人
+                mail.From = new MailAddress(SmtpContext.MailUserName, "华芯通服务");//发件人
                 mail.Subject = subject;
                 mail.BodyEncoding = System.Text.Encoding.Default;
                 mail.Body = message;

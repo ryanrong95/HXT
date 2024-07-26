@@ -111,7 +111,7 @@ namespace Needs.Ccs.Services.Models.Finance.DyjFinance
         {
             this.key = DyjCwConfig.Key;
 
-            //芯达通所有员工
+            //华芯通所有员工
             var AdminStaff = new Views.AdminStaffsTopView().ToList();
             //基础信息返回值
             var BaseInfo = DyjBaseInfo.GetBaseInfo();
@@ -183,7 +183,7 @@ namespace Needs.Ccs.Services.Models.Finance.DyjFinance
             payex.UserName = user.RealName;
             payex.Amount = (totalAmount * apply.ExchangeRate).ToRound(2);
             payex.FAmount = totalAmount;
-            payex.HL = apply.ExchangeRate;//目前使用的是芯达通实际的付汇汇率
+            payex.HL = apply.ExchangeRate;//目前使用的是华芯通实际的付汇汇率
             payex.State = "";// 状态（默认为等待审批）可以为空（后台有赋值） 状态：新增、等待审批、等待付款
             payex.CheckID = 3793;
             payex.CheckName = "尹荣荣";
@@ -269,7 +269,7 @@ namespace Needs.Ccs.Services.Models.Finance.DyjFinance
 
         public DyjFeeApply(CostApply costApply)
         {
-            //芯达通所有员工
+            //华芯通所有员工
             var AdminStaff = new Views.XDTAdminStaffsTopView().ToList();
             //基础信息返回值
             var BaseInfo = DyjBaseInfo.GetBaseInfo();
@@ -1470,7 +1470,7 @@ namespace Needs.Ccs.Services.Models.Finance.DyjFinance
         public string ProviderBankAddress { get; set; }
 
         /// <summary>
-        /// 芯达通付汇申请ID
+        /// 华芯通付汇申请ID
         /// </summary>
         public string XDTID { get; set; }
     }

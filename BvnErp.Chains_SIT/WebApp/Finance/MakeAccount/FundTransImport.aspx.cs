@@ -37,7 +37,7 @@ namespace WebApp.Finance.MakeAccount
 
             var financeAccounts = Needs.Wl.Admin.Plat.AdminPlat.Current.Finance.FundTransferApplies
                 .Where(item => item.Status == Needs.Ccs.Services.Enums.Status.Normal && item.FundTranCreSta == false).
-                 Where(item => item.OutAccount.AccountName != "芯达通-兴业银行快捷支付平台").
+                 Where(item => item.OutAccount.AccountName != "华芯通-兴业银行快捷支付平台").
                  Where(item=>item.FromSeqNo=="").
                  Where(item => item.ApplyStatus == Needs.Ccs.Services.Enums.FundTransferApplyStatus.Done).
                 OrderByDescending(t => t.CreateDate).AsQueryable();
@@ -125,7 +125,7 @@ namespace WebApp.Finance.MakeAccount
 
             var financeAccounts = Needs.Wl.Admin.Plat.AdminPlat.Current.Finance.FundTransferApplies
               .Where(item => item.Status == Needs.Ccs.Services.Enums.Status.Normal && item.FundTranCreSta == false).
-               Where(item => item.OutAccount.AccountName != "芯达通-兴业银行快捷支付平台").
+               Where(item => item.OutAccount.AccountName != "华芯通-兴业银行快捷支付平台").
                Where(item => item.FromSeqNo == "").
                Where(item => item.ApplyStatus == Needs.Ccs.Services.Enums.FundTransferApplyStatus.Done).
               OrderByDescending(t => t.CreateDate).AsQueryable();

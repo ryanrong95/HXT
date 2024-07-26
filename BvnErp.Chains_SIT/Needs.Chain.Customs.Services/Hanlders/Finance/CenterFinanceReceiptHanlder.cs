@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 namespace Needs.Ccs.Services.Hanlders
 {
     /// <summary>
-    /// 芯达通收款调用大赢家接口事件
+    /// 华芯通收款调用大赢家接口事件
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
     public delegate void CenterFinanceReceiptEnterHanlder(object sender, CenterFinanceReceiptEnterEventArgs e);
 
     /// <summary>
-    /// 芯达通收款调用大赢家接口事件
+    /// 华芯通收款调用大赢家接口事件
     /// </summary>
     public class CenterFinanceReceiptEnterEventArgs : EventArgs
     {

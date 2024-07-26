@@ -21,7 +21,7 @@ namespace WebApp.Order.IcgooOrder
             try
             {
                 string DeclarationID = Request.Form["ID"];
-                CenterCreateDyjOrderWeb centerCreateDyjOrderWeb = new CenterCreateDyjOrderWeb("深圳市芯达通供应链管理有限公司", "杭州比一比电子科技有限公司");
+                CenterCreateDyjOrderWeb centerCreateDyjOrderWeb = new CenterCreateDyjOrderWeb("深圳市华芯通供应链管理有限公司", "杭州比一比电子科技有限公司");
                 centerCreateDyjOrderWeb.CreateNew(DeclarationID);
 
                 Response.Write(new { result = true, info = "保存成功" }.Json());

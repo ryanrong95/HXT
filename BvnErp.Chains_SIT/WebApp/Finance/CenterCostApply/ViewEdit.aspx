@@ -16,6 +16,7 @@
         var AccountCatalogs = eval('(<%=this.Model.AccountCatalogs%>)');
         var AccountCatalogsJson = eval('(<%=this.Model.AccountCatalogsJson%>)');
         var XDTAdmins = eval('(<%=this.Model.Admins%>)');
+        var Currency = eval('(<%=this.Model.Currency%>)');
 
         var firstLoad = true;
 
@@ -49,6 +50,12 @@
             }
 
             $('#flow-iframe').attr("src", "../CostApply/FlowChart.aspx?CostApplyID=" + costApplyDetail["CostApplyID"]);
+
+
+            
+            $('#Currency').combobox({
+                data: Currency
+             });
 
             //控制提交、取消按钮显示
             if (From == 'Add') {
@@ -94,7 +101,6 @@
             $("#PayeeBank").textbox('setValue', costApplyDetail.PayeeBank);
             $("#PayeeAccountID").val(costApplyDetail.PayeeAccountID);
 
-            // $("#Currency").textbox('setValue', costApplyDetail.Currency);
             $("#ApplicantName").html(costApplyDetail.ApplicantName);
             //$("#Summary").textbox('setValue', costApplyDetail.Summary);
             //$("#FeeDesc").textbox('setValue', costApplyDetail.FeeDesc);
@@ -427,6 +433,12 @@
                 return;
             }
 
+            var currency = $('#Currency').combobox("getValue");
+            if (currency == '' || currency == null) {
+                top.$.timeouts.alert({ position: "TC", msg: "请选择费用币种!", type: "error" });
+                return false;
+            }
+
             var PayeeAccountID = $("#PayeeAccountID").val();
             var PayeeName = $("#PayeeName").textbox("getValue").trim(); //收款方名称
             var PayeeAccount = $("#PayeeAccount").textbox("getValue").trim(); //收款方账号
@@ -480,6 +492,7 @@
                             Files: JSON.stringify(files),
                             MoneyType: MoneyType,
                             IsCash: IsCash,
+                            Currency: currency
                         }, function (res) {
                             MaskUtil.unmask();
                             var result = JSON.parse(res);
@@ -526,6 +539,12 @@
             var require1 = Valid('form1');
             if (!require1) {
                 return;
+            }
+
+            var currency = $('#Currency').combobox("getValue");
+            if (currency == '' || currency == null) {
+                top.$.timeouts.alert({ position: "TC", msg: "请选择费用币种!", type: "error" });
+                return false;
             }
 
             var PayeeAccountID = $("#PayeeAccountID").val();
@@ -577,6 +596,7 @@
                             Files: JSON.stringify(files),
                             MoneyType: MoneyType,
                             IsCash: IsCash,
+                            Currency: currency
                         }, function (res) {
                             MaskUtil.unmask();
                             var resJson = JSON.parse(res);
@@ -869,6 +889,8 @@
         <div id="topper" style="padding: 5px">
             <%--<a id="btnAdd" class="easyui-linkbutton" iconcls="icon-yg-add">新增</a>--%>
             <a href="javascript:void(0);" class="easyui-linkbutton" onclick="addNewRow()" data-options="iconCls:'icon-yg-add'">新增</a>
+            <span style="margin-left: 50px;">费用币种:</span>
+            <input class="easyui-combobox" id="Currency" data-options="valueField:'Value',textField:'Text',editable:false,required:true" missingMessage:'币种不能为空' />
         </div>
         <!-- 按钮 -->
         <div id="btn-area" class="view-location" style="margin-left: 2%; margin-top: 15px; width: 650px; height: 30px; float: left;">

@@ -246,7 +246,7 @@ namespace WebMvc.Controllers
                 sb.Append("<div style='MARGIN-TOP: 40px; COLOR: #ccc; FONT: bold 16px/26px arial'>如果您看不到上方的按钮<br>可点击下面的链接以完成验证或复制下面的链接到浏览器地址栏中完成验证：<br><a ");
                 sb.AppendFormat("style='WORD-BREAK: break-all; FONT-WEIGHT: normal; COLOR: #3399ff' href={0}' target='_blank'>{0}</a> </div></div></div>", url);
 
-                SmtpContext.Current.Send(model.Email, "芯达通找回密码服务", sb.ToString());  //发送邮件
+                SmtpContext.Current.Send(model.Email, "华芯通找回密码服务", sb.ToString());  //发送邮件
                 return base.JsonResult(VueMsgType.success, "");
             }
             else

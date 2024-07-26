@@ -33,7 +33,7 @@ namespace Needs.Ccs.Services.Views
 
 
             //写个专有的已发送出库通知
-            //需要在芯达通数据中增加库房的视图后， 重新拖动Layer.Data.Sqls.ScCustoms 下 Comm.dbml
+            //需要在华芯通数据中增加库房的视图后， 重新拖动Layer.Data.Sqls.ScCustoms 下 Comm.dbml
             //var qtyView = from c in storagesTopView
             //              where c.WareHouseID == szWarehouseName && (c.Total - c.Quantity) > 0
             //              group c by c.OrderID into g

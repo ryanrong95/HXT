@@ -748,10 +748,10 @@ namespace Needs.Ccs.Services.Models
 
         #endregion
 
-        #region 芯达通垫款保证协议模板导出
+        #region 华芯通垫款保证协议模板导出
         public XWPFDocument ToXDTWord()
         {
-            var tempPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Content\\templates\\芯达通垫款保证协议模板.docx");
+            var tempPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Content\\templates\\华芯通垫款保证协议模板.docx");
             var npoi = new NPOIHelper(tempPath);
             var replaceText = new Dictionary<string, string>();
 
@@ -771,7 +771,7 @@ namespace Needs.Ccs.Services.Models
             return npoi.GenerateWordByTemplete(replaceText);
         }
         /// <summary>
-        /// 保存芯达通垫款保证协议模板
+        /// 保存华芯通垫款保证协议模板
         /// </summary>
         /// <param name="filePath">文件路径</param>
         public void XDTSaveAs(string filePath)

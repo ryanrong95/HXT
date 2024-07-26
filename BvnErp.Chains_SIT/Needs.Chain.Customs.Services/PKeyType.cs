@@ -611,7 +611,7 @@ namespace Needs.Ccs.Services
         XDTSwap = 20500,
 
         /// <summary>
-        /// XDTBetBanks 银行往来-芯达通银行互转
+        /// XDTBetBanks 银行往来-华芯通银行互转
         /// </summary>
         [Repository(typeof(ScCustomsReponsitory))]
         [PKey("XDTBetBanks", PKeySigner.Mode.Time, 10)]

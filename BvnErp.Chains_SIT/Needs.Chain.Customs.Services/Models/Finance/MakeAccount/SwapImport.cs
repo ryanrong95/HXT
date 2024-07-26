@@ -115,7 +115,7 @@ namespace Needs.Ccs.Services.Models
                         m.SwapBankMiddle = "宁波银行深圳分行美金账户";
                         break;
                     case ("华夏银行"):
-                        m.BankName = "芯达通-华夏银行人民币账户";
+                        m.BankName = "华芯通-华夏银行人民币账户";
                         break;
                     default:
                         break;
@@ -167,7 +167,7 @@ namespace Needs.Ccs.Services.Models
                     item.对应比例的运保杂 = d.ScaleOtherPrice;
                     item.报关当天汇率 = d.DDateRate;
                     item.客户委托金额汇差 = d.DeclExchangeSpread;
-                    item.芯达通运保杂汇差 = d.OtherExchangeSpread;
+                    item.华芯通运保杂汇差 = d.OtherExchangeSpread;
                     item.对应比例的委托金额RMB报关 = d.DDateRateScalePrice;
                     item.对应比例的运保杂金额RMB报关 = d.DDateRateScaleOtherPrice;
 
@@ -275,7 +275,7 @@ namespace Needs.Ccs.Services.Models
         public decimal 对应比例的运保杂 { get; set; }
         public decimal 报关当天汇率 { get; set; }
         public decimal 客户委托金额汇差 { get; set; }
-        public decimal 芯达通运保杂汇差 { get; set; }
+        public decimal 华芯通运保杂汇差 { get; set; }
         /// <summary>
         /// 本位币
         /// </summary>

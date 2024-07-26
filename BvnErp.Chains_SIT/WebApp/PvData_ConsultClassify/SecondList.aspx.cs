@@ -312,7 +312,7 @@ namespace WebApp.PvData_ConsultClassify
 
                 HSCode = item.HSCode,
                 TariffName = item.ProductName,
-                ImportPreferentialTaxRate = item.TariffRate?.ToString("0.0000"),//芯达通没有区分优惠税率和加征税率, 将进口关税赋给优惠税率
+                ImportPreferentialTaxRate = item.TariffRate?.ToString("0.0000"),//华芯通没有区分优惠税率和加征税率, 将进口关税赋给优惠税率
                 VATRate = item.AddedValueRate?.ToString("0.0000"),
                 ExciseTaxRate = item.ExciseTaxRate?.ToString("0.0000") ?? "0.0000",
                 TaxCode = item.TaxCode,
@@ -322,7 +322,7 @@ namespace WebApp.PvData_ConsultClassify
                 CIQCode = item.CIQCode,
                 Elements = item.Elements,
 
-                OriginATRate = 0,//芯达通没有区分优惠税率和加征税率, 进口关税已经赋给优惠税率, 加征税率为0
+                OriginATRate = 0,//华芯通没有区分优惠税率和加征税率, 进口关税已经赋给优惠税率, 加征税率为0
                 CIQ = (item.Type & ItemCategoryType.Inspection) > 0,
                 CIQprice = item.InspectionFee.GetValueOrDefault(),
                 Ccc = (item.Type & ItemCategoryType.CCC) > 0,

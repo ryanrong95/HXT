@@ -254,7 +254,7 @@ namespace WebForicHis.Controllers
                     },
                     Seller = new Needs.Ccs.Services.Models.InvoiceBaseInfo
                     {
-                        Title = "深圳市芯达通供应链管理有限公司",
+                        Title = "深圳市华芯通供应链管理有限公司",
                         Address = "深圳市龙岗区吉华路393号英达丰科技园1号楼",
                         BankName = "中国银行股份有限公司深圳罗岗支行",
                         BankAccount = "764071904447",

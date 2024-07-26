@@ -107,7 +107,7 @@
             $("#CostType").html(costApplyDetail.CostTypeStr);
 
             $("#Amount").html(costApplyDetail.Amount);
-            $("#Currency").html(costApplyDetail.Currency);
+            $("#Currency").html(" " + costApplyDetail.Currency);
             $("#ApplicantName").html(costApplyDetail.ApplicantName);
             $("#Summary").html(costApplyDetail.Summary);
 
@@ -532,7 +532,7 @@
             </div>
         </div>
         <!-- 附件列 -->
-        <div style="float: left;padding-top: 10px;height: 370px;" >
+        <div style="float: left;padding-top: 10px;height: 300px;" >
             <div class="easyui-panel" title="附件信息">
                 <div class="sub-container">
                     <div id="unUpload" style="margin-left: 5px">
@@ -567,7 +567,7 @@
                     <thead>
                         <tr>
                             <th data-options="field:'FeeName',align:'left'" style="width: 50%;">费用类型</th>
-                            <th data-options="field:'Price',align:'left'" style="width: 15%;">金额</th>
+                            <th data-options="field:'Price',align:'left'" style="width: 15%;">金额<span id="Currency"></span></th>
                             <th data-options="field:'FeeDesc',align:'left'" style="width: 35%;">描述</th>                           
                         </tr>
                     </thead>

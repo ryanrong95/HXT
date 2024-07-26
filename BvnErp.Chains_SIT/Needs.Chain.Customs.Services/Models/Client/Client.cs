@@ -1258,13 +1258,13 @@ namespace Needs.Ccs.Services.Models
             {
 
                 case Needs.Ccs.Services.Enums.StorageType.Domestic:
-                    partB = "深圳市芯达通供应链管理有限公司";
+                    partB = "深圳市华芯通供应链管理有限公司";
                     break;
                 case Needs.Ccs.Services.Enums.StorageType.HKCompany:
-                    partB = "香港畅运国际物流有限公司";
+                    partB = "香港速逹國際物流有限公司";
                     break;
                 case Needs.Ccs.Services.Enums.StorageType.Person:
-                    partB = "深圳市芯达通供应链管理有限公司";
+                    partB = "深圳市华芯通供应链管理有限公司";
                     break;
                 default:
                     break;

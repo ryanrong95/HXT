@@ -36,7 +36,7 @@ namespace Needs.Ccs.Services.Views
 
 
     /// <summary>
-    /// 芯达通员工
+    /// 华芯通员工
     /// </summary>
     public class XDTAdminStaffsTopView : UniqueView<XDTAdminStaff, ScCustomsReponsitory>
     {

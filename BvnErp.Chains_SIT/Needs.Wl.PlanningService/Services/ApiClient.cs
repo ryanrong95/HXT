@@ -24,8 +24,8 @@ namespace Needs.Wl.PlanningService
 
         public string MQName { get; set; }
         /// <summary>
-        /// 推送给Icgoo时用的区分恒远和芯达通
-        /// 93：芯达通
+        /// 推送给Icgoo时用的区分恒远和华芯通
+        /// 93：华芯通
         /// 94：恒远
         /// </summary>
         public string IcgooPartnerNo { get; set; }

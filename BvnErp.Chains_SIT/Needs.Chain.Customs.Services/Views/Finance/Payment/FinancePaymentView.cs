@@ -208,6 +208,16 @@ namespace Needs.Ccs.Services.Views
             return view;
         }
 
+        public FinancePaymentViewRJ SearchByHKCW()
+        {
+            var linq = from query in this.IQueryable
+                       where query.FinanceVaultName.Contains("香港")
+                       select query;
+
+            var view = new FinancePaymentViewRJ(this.Reponsitory, linq);
+            return view;
+        }
+
         public FinancePaymentViewRJ SearchByPayeeName(string payeeName)
         {
             var linq = from query in this.IQueryable

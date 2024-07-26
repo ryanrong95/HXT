@@ -285,8 +285,8 @@ namespace Needs.Ccs.Services.Models
                 tb6.LockedWidth = true;
                 tb6.SetWidths(new float[] { 574 });
 
-                tb6.AddCell(new PdfPCell(new Phrase("深圳市芯达通供应链管理有限公司 深圳市龙岗区吉华路393号英达丰科技园1号楼 电话：0755-83988698 传真：0755-83995933", FontContent)) { BorderWidth = tbLineWidth });
-                tb6.AddCell(new PdfPCell(new Phrase("开户行:中国银行深圳罗岗支行 开户名：深圳市芯达通供应链管理有限公司 账户：764071904447", FontContent)) { BorderWidth = tbLineWidth });
+                tb6.AddCell(new PdfPCell(new Phrase("深圳市华芯通供应链管理有限公司 深圳市龙华区龙华街道富康社区天汇大厦C栋212 电话：0755-28014789 传真：0755-28014789", FontContent)) { BorderWidth = tbLineWidth });
+                tb6.AddCell(new PdfPCell(new Phrase("开户行:中国银行深圳罗岗支行 开户名：深圳市华芯通供应链管理有限公司 账户：86021110000213646", FontContent)) { BorderWidth = tbLineWidth });
 
                 document.Add(tb6);
 
@@ -463,7 +463,7 @@ namespace Needs.Ccs.Services.Models
                 #region 骑缝章
 
                 //获取分割后的印章图片
-                //芯达通或者创新恒远图片
+                //华芯通或者创新恒远图片
                 GetImage(total - 1, System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, billview.SealUrl), billview.AgentName);
                 //大赢家图片
                 GetImage(total - 1, System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Content\\images\\", billview.ClientName + ".png"), billview.ClientName);

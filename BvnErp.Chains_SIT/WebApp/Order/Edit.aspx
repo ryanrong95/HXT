@@ -389,7 +389,7 @@
                                 data: unitData, valueField: "UnitValue", textField: "UnitText", required: true, hasDownArrow: false,
                                 onSelect: function (value) {
                                     if (value.UnitValue != '007') {
-                                        $.messager.alert('提示', '请仔细核对产品单位，如果产品单位选择错误，造成无法报关，芯达通将不承担任何责任');
+                                        $.messager.alert('提示', '请仔细核对产品单位，如果产品单位选择错误，造成无法报关，华芯通将不承担任何责任');
                                     }
                                 }
                             }

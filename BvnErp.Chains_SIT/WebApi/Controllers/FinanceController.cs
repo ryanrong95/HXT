@@ -483,7 +483,7 @@ namespace WebApi.Controllers
                 }
                 else
                 {
-                    if (centerAccount.CompanyName.Equals("深圳市芯达通供应链管理有限公司") || centerAccount.CompanyName.Equals("香港万路通国际物流有限公司") || centerAccount.CompanyName.Equals("香港畅运国际物流有限公司"))
+                    if (centerAccount.CompanyName.Equals("深圳市华芯通供应链管理有限公司") || centerAccount.CompanyName.Equals("香港万路通国际物流有限公司") || centerAccount.CompanyName.Equals("香港畅运国际物流有限公司"))
                     {
                         var vault = new Needs.Ccs.Services.Views.FinanceVaultsView().Where(t => t.Name == centerAccount.VaultName).FirstOrDefault()?.ID;
                         if (vault == null)
@@ -568,7 +568,7 @@ namespace WebApi.Controllers
                     }
                     else
                     {
-                        var accountjson = new JMessage() { code = 400, success = false, data = "只同步芯达通、万路通、畅运账户信息" };
+                        var accountjson = new JMessage() { code = 400, success = false, data = "只同步华芯通、万路通、畅运账户信息" };
                         return Json(accountjson, JsonRequestBehavior.AllowGet);
                     }
                 }

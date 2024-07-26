@@ -1,7 +1,7 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/Uc/Works.Master" AutoEventWireup="true" CodeBehind="List.aspx.cs" Inherits="Yahv.PvData.WebApp.SysConfig.ClassifyHistoryCopy.List" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="cphHead" runat="server">
-    <script src="http://fixed2.b1b.com/Yahv/standard-easyui/scripts/classifyHistory.ajax.js"></script>
+    <script src="http://fix.szhxd.net/Yahv/standard-easyui/scripts/classifyHistory.ajax.js"></script>
     <script>
         var setWindow = 'SecondList_' + Math.floor(Math.random() * 10000);
         $.myWindow.setMyWindow(setWindow, window);

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Needs.Ccs.Services.Models
 {
     /// <summary>
-    /// 芯达通系统角色
+    /// 华芯通系统角色
     /// </summary>
     public class Role : IUnique, IPersist
     {

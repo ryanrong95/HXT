@@ -35,7 +35,7 @@ namespace WebApp.Finance.MakeAccount
 
             var financeAccounts = Needs.Wl.Admin.Plat.AdminPlat.Current.Finance.FundTransferApplies
                 .Where(item => item.Status == Needs.Ccs.Services.Enums.Status.Normal && item.FundTranCreSta == true && item.ApplyStatus == Needs.Ccs.Services.Enums.FundTransferApplyStatus.Done).
-                Where(item => item.OutAccount.AccountName == "芯达通-兴业银行快捷支付平台").
+                Where(item => item.OutAccount.AccountName == "华芯通-兴业银行快捷支付平台").
                 OrderByDescending(t => t.CreateDate).AsQueryable();
 
             if (!string.IsNullOrEmpty(FundTransferApplyStatus))

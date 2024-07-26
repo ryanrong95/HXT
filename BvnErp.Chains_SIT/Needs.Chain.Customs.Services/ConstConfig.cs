@@ -406,7 +406,7 @@ namespace Needs.Ccs.Services
 
     public class ClassifyConfig
     {
-        public const string juniorDeclarant = "芯达通_初级报关员";
+        public const string juniorDeclarant = "华芯通_初级报关员";
     }
 
     /// <summary>
@@ -418,7 +418,7 @@ namespace Needs.Ccs.Services
         public const string HK_WLT = "HK01";
         //香港畅运库房
         public const string HK_CY = "HK01";
-        //深圳芯达通库房
+        //深圳华芯通库房
         public const string SZ_XDT = "SZ01";
         //深圳创新恒远库房
         public const string SZ_CXHY = "SZ02";
@@ -433,7 +433,7 @@ namespace Needs.Ccs.Services
     {
         public const string Key = "8c2b75ad115b467a8e976123033319f2";
 
-        //芯达通出纳 郝红梅
+        //华芯通出纳 郝红梅
         public const string uid = "632";
 
         #region  收款接口地址

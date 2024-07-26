@@ -78,7 +78,7 @@ namespace Needs.Wl.Web.Mvc.Utils
 
                 MailMessage mail = new MailMessage
                 {
-                    From = new MailAddress(SmtpContext.MailUserName, "芯达通服务"),//发件人
+                    From = new MailAddress(SmtpContext.MailUserName, "华芯通服务"),//发件人
                     Subject = subject,
                     BodyEncoding = System.Text.Encoding.Default,
                     Body = message,
