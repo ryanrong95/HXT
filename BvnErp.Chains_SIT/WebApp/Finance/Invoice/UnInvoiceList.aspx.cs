@@ -243,7 +243,7 @@ namespace WebApp.Finance
                         dr["Remark"] = data[i].Summary;
 
                         dr["NO"] = 1;
-                        dr["Name"] = "*物流辅助服务*服务费";
+                        dr["Name"] = "*经纪代理服务*经纪代理";
                         dr["UnitPriceTax"] = Convert.ToDouble(data[i].InvoiceItems[0].UnitPrice);
                         dr["TaxOffAmount"] = Convert.ToDouble(data[i].InvoiceItems[0].SalesTotalPrice);
                         dr["TotalTaxOffAmount"] = (data[i].Amount / (1 + data[i].InvoiceTaxRate)).ToRound(4);
@@ -255,7 +255,7 @@ namespace WebApp.Finance
                         dr["TotalDifference"] = data[i].InvoiceItems[0].Difference;
                         dr["InvoiceNo"] = data[i].InvoiceItems[0].InvoiceNo;
                         dr["ModelInfoClassificationValue"] = "3040407040000000000";
-                        dr["ModelInfoClassification"] = "*物流辅助服务*服务费";
+                        dr["ModelInfoClassification"] = "*经纪代理服务*经纪代理";
                         dr["rowscount"] = detailcount;
                         if (data[i].DeliveryType == InvoiceDeliveryType.SendByPost)
                         {

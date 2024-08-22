@@ -215,7 +215,7 @@ namespace WebApp.Finance
                 TimeNow = DateTime.Now.ToString("yyyy/MM/dd"),
                 //ID = item.ID,
                 item.OrderID,
-                ProductName = item.OrderItem == null ? "*物流辅助服务*服务费" : item.OrderItem.Category.TaxName,  //产品名称
+                ProductName = item.OrderItem == null ? "*经纪代理服务*经纪代理" : item.OrderItem.Category.TaxName,  //产品名称
                 ProductModel = item.OrderItem?.Model == null ? "" : item.OrderItem?.Model,//型号
                 //Unit = item.OrderItem?.Unit == null ? "" : item.OrderItem?.Unit,//计量单位
                 Unit = item.UnitName,//单位
@@ -289,7 +289,7 @@ namespace WebApp.Finance
                 TimeNow = DateTime.Now.ToString("yyyy/MM/dd"),
                 //ID = item.ID,
                 item.OrderID,
-                ProductName = item.OrderItem == null ? "*物流辅助服务*服务费" : item.OrderItem.Category.TaxName,  //产品名称
+                ProductName = item.OrderItem == null ? "*经纪代理服务*经纪代理" : item.OrderItem.Category.TaxName,  //产品名称
                 ProductModel = item.OrderItem?.Model == null ? "" : item.OrderItem?.Model,//型号
                 //Unit = item.OrderItem?.Unit == null ? "" : item.OrderItem?.Unit,//计量单位
                 Unit = item.UnitName,//单位

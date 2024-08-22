@@ -120,6 +120,12 @@ namespace WebApp.Finance.Payment
                     view = view.SearchByHKCW();
                 }
 
+                var sz_caiwu = System.Configuration.ConfigurationManager.AppSettings["SZ_Caiwu"];
+                if (!string.IsNullOrEmpty(sz_caiwu) && Needs.Wl.Admin.Plat.AdminPlat.Current.ID == sz_caiwu)
+                {
+                    view = view.SearchBySZCW();
+                }
+
                 Response.Write(view.ToMyPage(page, rows).Json());
             }
         }

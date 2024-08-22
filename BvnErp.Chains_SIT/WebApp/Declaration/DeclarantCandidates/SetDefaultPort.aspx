@@ -219,10 +219,10 @@
                 <th data-options="field:'Code',align:'left',formatter:FrmtCode" style="width: 10%">申报地海关</th>
                 <th data-options="field:'IEPortCode',align:'left',formatter:FrmtIEPortCode" style="width: 10%">进境关别</th>
                 <th data-options="field:'EntyPortCode',align:'left',formatter:FrmtEntyPortCode" style="width: 10%">入境口岸</th>
-                <th data-options="field:'OrgCode',align:'left',formatter:FrmtOrgCode" style="width: 12%">检验检疫受理机关</th>
+<%--                <th data-options="field:'OrgCode',align:'left',formatter:FrmtOrgCode" style="width: 12%">检验检疫受理机关</th>
                 <th data-options="field:'VsaOrgCode',align:'left',formatter:FrmtVsaOrgCode" style="width: 12%">领证机关</th>
-                <th data-options="field:'InspOrgCode',align:'left',formatter:FrmtInspOrgCode" style="width: 12%">口岸检验检疫机关</th>
-                <th data-options="field:'PurpOrgCode',align:'left',formatter:FrmtPurpOrgCode" style="width: 12%">目的地检验检疫机关</th>
+                <th data-options="field:'InspOrgCode',align:'left',formatter:FrmtInspOrgCode" style="width: 12%">口岸检验检疫机关</th>--%>
+                <th data-options="field:'PurpOrgCode',align:'left',formatter:FrmtPurpOrgCode" style="width: 12%">目的地海关</th>
                 <th data-options="field:'IsDefault',align:'center',formatter:FrmtIsDefault" style="width: 6%">是否默认</th>
                 <th data-options="field:'Btn',align:'center',formatter:Operation" style="width: 10%">操作</th>
             </tr>
@@ -235,9 +235,7 @@
                     <table class="oprationTable" style="margin: 10px; width: 98%">
                         <tr>
                             <th style="width: 15%"></th>
-                            <th style="width: 20%"></th>
-                            <th style="width: 15%"></th>
-                            <th style="width: 30%"></th>
+                            <th style="width: 70%"></th>
                         </tr>
                         <tr>
                             <td class="lbl">申报地海关：</td>
@@ -260,7 +258,7 @@
                                     data-options="valueField:'Value',textField:'Text',limitToList:true,required:true,editable:true,tipPosition:'bottom',missingMessage:'请输入编码,下拉框一次显示十条'," style="width: 200px" />
                             </td>
                         </tr>
-                        <tr>
+                       <%-- <tr>
                             <td class="lbl">检验检疫受理机关：</td>
                             <td>
                                 <input class="easyui-combobox" id="OrgCode"
@@ -271,14 +269,14 @@
                                 <input class="easyui-combobox" id="VsaOrgCode"
                                     data-options="valueField:'Value',textField:'Text',limitToList:true,required:true,tipPosition:'bottom',missingMessage:'请输入编码,下拉框一次显示十条'," style="width: 200px" />
                             </td>
-                        </tr>
+                        </tr>--%>
                         <tr>
-                            <td class="lbl">口岸检验检疫机关：</td>
+                            <%--<td class="lbl">口岸检验检疫机关：</td>
                             <td>
                                 <input class="easyui-combobox" id="InspOrgCode"
                                     data-options="valueField:'Value',textField:'Text',limitToList:true,required:true,tipPosition:'bottom',missingMessage:'请输入编码,下拉框一次显示十条'," style="width: 200px" />
-                            </td>
-                            <td class="lbl">目的地检验检疫机关：</td>
+                            </td>--%>
+                            <td class="lbl">目的地海关：</td>
                             <td>
                                 <input class="easyui-combobox" id="PurpOrgCode"
                                     data-options="valueField:'Value',textField:'Text',limitToList:true,required:true,tipPosition:'bottom',missingMessage:'请输入编码,下拉框一次显示十条'," style="width: 200px" />

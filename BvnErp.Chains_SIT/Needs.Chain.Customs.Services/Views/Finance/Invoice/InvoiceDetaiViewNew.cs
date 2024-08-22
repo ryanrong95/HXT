@@ -120,7 +120,7 @@ namespace Needs.Ccs.Services.Views
                                   InvoiceNoticeItemCreateDate = invoiceNoticeItem.InvoiceNoticeItemCreateDate,
                                   InvoiceTaxRate = invoiceNoticeItem.InvoiceTaxRate,
 
-                                  ProductName = orderItem != null ? orderItem.ProductName : "*物流辅助服务*服务费",
+                                  ProductName = orderItem != null ? orderItem.ProductName : "*经纪代理服务*经纪代理",
                                   ProductModel = orderItem != null ? orderItem.ProductModel : "",
                                   Quantity = orderItem != null ? orderItem.Quantity : 1,
                                   InvoiceNo = invoiceNoticeItem.InvoiceNo,
@@ -155,7 +155,7 @@ namespace Needs.Ccs.Services.Views
             {
                 ID = item.InvoiceNoticeItemID,
                 item.OrderID,
-                ProductName = item.ProductName,  //item.OrderItem == null ? "*物流辅助服务*服务费" : item.OrderItem?.Category.TaxName,  //报关品名
+                ProductName = item.ProductName,  //item.OrderItem == null ? "*经纪代理服务*经纪代理" : item.OrderItem?.Category.TaxName,  //报关品名
                 ProductModel = item.ProductModel,//型号
                 Unit = item.UnitName,//单位
                 Quantity = item.Quantity,//数量
@@ -461,7 +461,7 @@ namespace Needs.Ccs.Services.Views
                                   InvoiceNoticeItemCreateDate = invoiceNoticeItem.InvoiceNoticeItemCreateDate,
                                   InvoiceTaxRate = invoiceNoticeItem.InvoiceTaxRate,
 
-                                  ProductName = orderItem != null ? orderItem.ProductName : "*物流辅助服务*服务费",
+                                  ProductName = orderItem != null ? orderItem.ProductName : "*经纪代理服务*经纪代理",
                                   ProductModel = orderItem != null ? orderItem.ProductModel : "",
                                   Quantity = invoiceNoticeItem.Quantity,
                                   InvoiceNo = invoiceNoticeItem.InvoiceNo,
@@ -490,7 +490,7 @@ namespace Needs.Ccs.Services.Views
             {
                 ID = item.InvoiceNoticeItemID,
                 item.OrderID,
-                ProductName = item.ProductName,  //item.OrderItem == null ? "*物流辅助服务*服务费" : item.OrderItem?.Category.TaxName,  //报关品名
+                ProductName = item.ProductName,  //item.OrderItem == null ? "*经纪代理服务*经纪代理" : item.OrderItem?.Category.TaxName,  //报关品名
                 ProductModel = item.ProductModel,//型号
                 Unit = item.UnitName,//单位
                 Quantity = item.Quantity,//数量

@@ -1,0 +1,2 @@
+webpackJsonp([80],{"+kI8":function(f,e,t){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n={render:function(){var f=this.$createElement;return(this._self._c||f)("div",[this._v("fdsjkfffffffffffffffffffffff")])},staticRenderFns:[]},l=t("VU/8")({name:"waybill"},n,!1,null,null,null);e.default=l.exports}});
+//# sourceMappingURL=80.4507fc4250a96940f193.js.map

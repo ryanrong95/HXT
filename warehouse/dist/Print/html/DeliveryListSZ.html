@@ -1,0 +1,584 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>送货单打印</title>
+    <script type="text/javascript" src="/Print/js/jquery-1.3.2.min.js"></script>
+    <script type="text/javascript" src="/Print/js/vue.js"></script>
+    <script type="text/javascript" src="/Print/js/vue-barcode.js"></script>
+    <script type="text/javascript" src="/Print/js/moment.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body,
+        html {
+            background: #ffffff;
+            width: 100%;
+            height: 100%;
+            font-family: '微软雅黑' !important;
+        }
+
+        #app {
+            width: 210mm;
+            height: auto;
+            margin: 0 auto;
+        }
+
+        .product {
+            width: 210mm;
+            margin: 0 auto;
+        }
+
+        .fl {
+            float: left;
+        }
+
+        .fr {
+            float: right;
+        }
+
+        .clearfix {
+            zoom: 1;
+        }
+
+            .clearfix:after {
+                content: '.';
+                display: block;
+                height: 0;
+                clear: both;
+                visibility: hidden;
+            }
+
+        ul,
+        li {
+            list-style: none;
+        }
+
+        .product {
+            width: 210mm;
+            padding: 4mm;
+        }
+        /*table {
+                width: 100%;
+                margin-bottom: 10px;
+                page-break-after: always ;
+            }
+
+            tr {
+                page-break-inside: avoid;
+                page-break-after: always ;
+            }*/
+
+        table {
+            width: 100%;
+            margin-bottom: 3px;
+            page-break-inside: auto;
+        }
+
+        tr {
+            page-break-inside: auto;
+            page-break-after: auto;
+        }
+
+        thead {
+            display: table-header-group;
+        }
+
+        tfoot {
+            display: table-footer-group;
+        }
+
+        tr th {
+            font-size: 12px;
+            height: 20px;
+        }
+
+        tr td {
+            padding: 0px 2px;
+            font-size: 11px;
+            text-align: left;
+            height: 14px;
+        }
+
+        tr th,
+        tr td {
+            border: 1px solid #000;
+        }
+        /*标题*/
+
+        .tl {
+            width: 100%;
+            height: 52px;
+            text-align: center;
+        }
+
+            .tl span {
+                font-size: 14px;
+                height: 46px;
+                line-height: 46px;
+            }
+
+            .tl .barcode {
+                height: 46px;
+                float: right;
+            }
+
+        .msg1 {
+            margin-bottom: 5px;
+        }
+
+            .msg1 > div {
+                float: left;
+                font-size: 12px;
+                margin-right: 20px;
+            }
+
+                .msg1 > div.fr {
+                    float: right;
+                    margin-right: 0;
+                }
+
+        table.table_data {
+            table-layout: fixed;
+        }
+
+            table.table_data tr td {
+                text-align: center;
+                word-wrap: break-word;
+                padding: 0;
+            }
+        /*签字区域*/
+
+        .print-row {
+            float: right;
+            font-size: 14px;
+            /*line-height: 20px;*/
+            /*margin-top: 15px;*/
+            margin-right: 120px;
+            margin-bottom: 10px;
+        }
+
+        .mlr5 {
+            margin: 0 5px;
+        }
+
+        #tab {
+            line-height: 12px !important;
+            /*margin-top: 5px;*/
+            font-family: simsun !important;
+        }
+
+            #tab tr {
+                text-align: center;
+            }
+
+            #tab th {
+                padding: 2px;
+                height: 14px;
+                font-size: 11px;
+                text-align: center;
+            }
+
+            #tab td {
+                height: 11px;
+                font-size: 11px;
+                text-align: center;
+            }
+
+        #table_info {
+            margin-top: 5px;
+            line-height: 20px;
+            font-family: simsun !important;
+        }
+
+        p,
+        p label,
+        p span {
+            font-size: 10px;
+            line-height: 20px;
+            font-family: simsun !important;
+        }
+
+        .active {
+            padding-top: 150px;
+        }
+    </style>
+    <script type="text/javascript">
+			Date.prototype.format = function(fmt) {
+				var o = {
+					"M+": this.getMonth() + 1, //月份
+					"d+": this.getDate(), //日
+					"h+": this.getHours(), //小时
+					"m+": this.getMinutes(), //分
+					"s+": this.getSeconds(), //秒
+					"q+": Math.floor((this.getMonth() + 3) / 3), //季度
+					"S": this.getMilliseconds() //毫秒
+				};
+
+				if(/(y+)/.test(fmt)) {
+					fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+				}
+
+				for(var k in o) {
+					if(new RegExp("(" + k + ")").test(fmt)) {
+						fmt = fmt.replace(
+							RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+					}
+				}
+
+				return fmt;
+			}
+			var now = new Date();
+			var nowStr = now.format("yyyy-MM-dd hh:mm:ss");
+			var getDate=new Date().format("yyyy-MM-dd hh:mm:ss");
+    </script>
+</head>
+
+<body>
+    <div id="app">
+        <div class="product">
+            <div class="compute_content">
+                <div class="compute_content_1">
+                    <div class="tl clearfix">
+                        <span>{{msg.ConsignorCompany}}送货单</span>
+                        <barcode v-bind:value="msg.DeliveryOrderID" v-bind:options="barcode_option" tag="svg"
+                                 class="barcode"></barcode>
+                    </div>
+                    <div class="msg1 clearfix">
+                        <div><span>客户编号：</span><span>{{msg.EnterCode}}</span></div>
+                        <div v-if="msg.ordertype!=1"><span>送货日期：</span><span v-if="msg.AppointTime!=null">{{msg.AppointTime|showDate}}</span></div>
+                        <div v-else><span>提货日期：</span><span v-if="msg.AppointTime!=null">{{msg.AppointTime|showDate}}</span></div>
+                        <div>运输批次号:{{msg.LotNumber}}</div>
+                        <div class="fr"><span>总件数：</span><span>{{msg.TotalPieces}}</span></div>
+                    </div>
+                    <table border="1" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td>
+                                <div>收货人：</div>
+                                <div>{{msg.ConsigneeCompany}}</div>
+                            </td>
+                            <td v-if="msg.ordertype!=1">
+                                <div>收货地址：</div>
+                                <div>{{msg.ConsigneeAddress}}</div>
+                            </td>
+                            <td v-if="msg.ordertype!=1">
+                                <div>联系人：<span>{{msg.ConsigneeContact}}</span></div>
+                                <div>电话号码：<span>{{msg.ConsigneePhone}}</span></div>
+                            </td>
+                        </tr>
+                        <tr v-if="msg.ordertype==2">
+                            <td colspan="3">
+                                <div>送货人：<span>{{msg.ConsignorContact}}</span></div>
+                                <div>
+                                    电话：<span style="margin-right:30px;">{{msg.ConsignorPhone}}</span>车牌号：<span>{{msg.ConsignorCarNumber}}</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr v-if="msg.ordertype==3||msg.ordertype==4">
+                            <td colspan="3">
+                                <div>快递公司：<span>{{msg.CarrierName}}</span></div>
+                                <div>
+                                    快递方式：<span style="margin-right:30px;">{{msg.Extype}}</span>付费方式：<span>{{msg.ExPayType}}</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr v-if="msg.ordertype==1">
+                            <td colspan="3">
+                                <div>提货人：<span>{{msg.coeContact}}</span></div>
+                                <div>
+                                    证件类型：<span style="margin-right:30px;">{{msg.IDTypeName}}</span>
+                                    证件号码：<span style="margin-right:30px;">{{msg.IDNumber}}</span>
+                                    电话：<span>{{msg.coePhone}}</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <table id="tab" border="1" cellspacing="0" cellpadding="0">
+                    <colgroup>
+                        <col width="5%">
+                        <col width="8%">
+                        <col width="8%">
+                        <col width="25%">
+                        <col width="22%">
+                        <col width="7%">
+                        <col width="5%">
+                        <col width="10%">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>库位号</th>
+                            <th>箱号</th>
+                            <th>品名</th>
+                            <th>型号</th>
+                            <th>品牌</th>
+                            <th>数量</th>
+                            <th>装箱日期</th>
+                        </tr>
+                    </thead>
+                </table>
+
+                <div class="compute_content_2">
+                    <table border="1" cellspacing="0" cellpadding="0">
+                        <tbody>
+                            <tr>
+                                <td style="width: 120px">对本次服务评价：</td>
+                                <td>
+                                    <span>口</span>&nbsp;优秀&nbsp;&nbsp;&nbsp;
+                                    <span>口</span>&nbsp;一般&nbsp;&nbsp;&nbsp;
+                                    <span>口</span>&nbsp;差
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 120px">客户意见或建议：</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">本公司已如数收到上述货物和发票，无货物数量损失，无货物损坏。</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!--<div class="clearfix">
+                        <div class="print-row">
+                            <ul v-if="msg.ordertype==1">
+                                <li style="margin-bottom:10px;">提货人签字/签章:</li>
+                                <li>提货日期: _____年 ____月 ____ 日</li>
+                            </ul>
+                            <ul v-else>
+                                <li style="margin-bottom:10px;">收货人签字/签章:</li>
+                                <li>收货日期: _____年 ____月 ____ 日</li>
+                            </ul>
+                        </div>
+                    </div>-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        //存储合并单元格的数组
+        //function saveArr(data) {
+        //    var StockCode_arr = [0],
+        //        BoxCode_arr = [0],
+        //        StockCode_first = data[0].StockCode,
+        //        BoxCode_first = data[0].BoxCode;
+        //    for (var i = 1; i < data.length; i++) {
+        //        if (StockCode_first != data[i].StockCode) {
+        //            StockCode_first = data[i].StockCode;
+        //            StockCode_arr.push(i);
+        //        }
+        //        if (BoxCode_first != data[i].BoxCode) {
+        //            BoxCode_first = data[i].BoxCode;
+        //            BoxCode_arr.push(i);
+        //        }
+        //    }
+        //    return {
+        //        StockCode_arr: StockCode_arr,
+        //        BoxCode_arr: BoxCode_arr
+        //    }
+        //}
+        function setshowDate(val) {
+            return moment(val).format('YYYY-MM-DD');
+        }
+
+        function showData(data) {
+            var str = "";//定义用于拼接的字符串
+            for (var index = 0; index < data.length; index++) {
+                var row = data[index];
+                var count = index + 1;
+                var boxingdata = setshowDate(row.CreateDate)
+                //拼接表格的行和列
+                str = "<tr><td>" + count + "</td><td>" + row.ShelveID + "</td><td>" + setboxsplit(row.BoxCode) + "</td><td>" + row.CustomsName + "</td>" +
+                    "<td>" + row.PartNumber + "<td>" + row.Manufacturer + "</td><td>" + row.Quantity + "</td><td>" + boxingdata + "</td></tr>";
+                //追加到table中
+                $("#tab").append(str);
+            }
+            UniteTable("tab", 7);
+        }
+
+        //合并单元格
+        function UniteTable(tableId, colLength) {//表格ID，表格列数
+            var tb = document.getElementById(tableId);
+            tb.style.display = '';
+            var i = 0;
+            var j = 0;
+            var rowCount = tb.rows.length; //   行数
+            var colCount = tb.rows[0].cells.length - 4; //   列数
+            var obj1 = null;
+            var obj2 = null;
+            //为每个单元格命名
+            for (i = 0; i < rowCount; i++) {
+                for (j = 0; j < colCount; j++) {
+                    tb.rows[i].cells[j].id = "tb__" + i.toString() + "_" + j.toString();
+                }
+            }
+            //合并行
+            for (i = 0; i < colCount; i++) {
+                if (i == colLength) break;
+                obj1 = document.getElementById("tb__0_" + i.toString())
+                for (j = 1; j < rowCount; j++) {
+                    obj2 = document.getElementById("tb__" + j.toString() + "_" + i.toString());
+                    if (obj1.innerText == obj2.innerText && ((obj2.innerText != "" || obj1.innerText != "") && (obj1.innerText != "-" || obj2.innerText != "-"))) {
+                        obj1.rowSpan++;
+                        obj2.parentNode.removeChild(obj2);
+                    } else {
+                        obj1 = document.getElementById("tb__" + j.toString() + "_" + i.toString());
+                    }
+                }
+            }
+            //合并列
+            for (i = 0; i < rowCount; i++) {
+                colCount = tb.rows[i].cells.length - 4;
+                obj1 = document.getElementById(tb.rows[i].cells[0].id);
+                for (j = 1; j < colCount; j++) {
+                    if (j >= colLength) break;
+                    if (obj1.colSpan >= colLength) break;
+                    obj2 = document.getElementById(tb.rows[i].cells[j].id);
+                    if (obj1.innerText == obj2.innerText && ((obj2.innerText != "" || obj1.innerText != "") && (obj1.innerText != "-" || obj2.innerText != "-"))) {
+                        //obj1.colspan++;
+                        //obj2.parentNode.removeChild(obj2);
+                        //j = j - 1;
+                    }
+                    else {
+                        obj1 = obj2;
+                        j = j + obj1.rowspan;
+                    }
+                }
+            }
+        }
+        function setboxsplit(val) {
+            //去除前后空格
+            if (val != "" && val != null) {
+                if (val.indexOf("]") == -1) {
+                    return val
+                } else {
+                    if (val || "") {
+                        var b = val.split("]")[1];
+                        return b;
+                    }
+                }
+            }
+        }
+    </script>
+    <script>
+        $(function () {
+            var obj = null,
+                listdata = null;
+            if (window['model']) {
+                obj = model.waybillinfo;
+                listdata = model.listdata;
+            } else {
+                listdata = null;
+                msg = null;
+            }
+
+            var Vue = window.Vue;
+            var VueBarcode = window.VueBarcode;
+            Vue.component('barcode', VueBarcode);
+
+            new Vue({
+                el: '#app',
+                data: {
+                    barcode_option: {
+                        displayValue: true, //是否默认显示条形码数据
+                        //textPosition  :'top', //条形码数据显示的位置
+                        background: "#fff", //条形码背景颜色
+                        valid: function (valid) { },
+                        width: "1.7px", //单个条形码的宽度
+                        height: "40px",
+                        fontSize: "16px", //字体大小
+                        fontFamily: "微软雅黑",
+                        format: "CODE128", //选择要使用的条形码类型
+                        margin: 2
+                    },
+                    msg: {
+                        EnterCode: null,//客户编号
+                        ConsignorCompany: null,//送货公司
+                        DeliveryOrderID: null,
+                        AppointTime: null,//送货日期
+                        OrderID: null,//订单编号
+                        TotalPieces: null,//总件数
+
+                        ConsigneeCompany: null,//收货人
+                        ConsigneeAddress: null,//收货地址
+                        ConsigneeContact: null,//联系人
+                        ConsigneePhone: null,//电话号码
+
+                        ConsignorContact: null,//送货人
+                        ConsignorPhone: null,//电话
+                        ConsignorCarNumber: null,//车牌号
+
+                        ordertype: null,//送货方式
+                        //快递
+                        CarrierName: null,//快递公司
+                        Extype: null,//快递方式
+                        ExPayType: null,//付费方式
+                        //自提
+                        coeContact: null,//提货人
+                        IDTypeName: null,//证件类型
+                        IDNumber: null,//证件号码
+                        coePhone: null,//提货人电话
+                        LotNumber:null,//运输批次号
+                    },
+                    print_data: {//保存打印数据
+                        BoxCode_arr: [],
+                        list: []
+                    }
+                },
+                created() {
+                    this.msg.EnterCode = obj.EnterCode
+                    this.msg.ConsignorCompany = obj.Sender.Company;
+
+                    this.msg.DeliveryOrderID = listdata.TinyOrderID;
+                    this.msg.AppointTime = obj.AppointTime;
+
+                    this.msg.OrderID = obj.OrderID;
+
+                    this.msg.TotalPieces = listdata.TinyOrderTotalPart;
+
+                    this.msg.ConsigneeCompany = obj.coeCompany;
+                    this.msg.ConsigneeAddress = obj.CoeAddress;
+                    this.msg.ConsigneeContact = obj.coeContact;
+                    this.msg.ConsigneePhone = obj.coePhone;
+
+                    this.msg.ConsignorContact = obj.Driver;
+                    this.msg.ConsignorPhone = obj.wldTakingPhone;
+                    this.msg.ConsignorCarNumber = obj.CarNumberID;
+
+                    this.msg.ordertype = obj.Type //送货方式
+                    //快递
+                    this.msg.CarrierName = obj.CarrierName,//快递公司
+                    this.msg.Extype = obj.Extype,//快递方式
+                    this.msg.ExPayType = obj.ExPayType,//付费方式
+                    //自提
+                    this.msg.coeContact = obj.coeContact,//提货人
+                    this.msg.IDTypeName = obj.IDTypeName,//证件类型
+                    this.msg.IDNumber = obj.IDNumber,//证件号码
+                    this.msg.coePhone = obj.coePhone,//提货人电话
+                    this.msg.LotNumber = obj.LotNumber //运输批次号
+
+                    this.print_data.list = listdata.notices;
+                    showData(listdata.notices)
+                    //this.print_data.list = listdata;
+                    //if (listdata[0].BoxCode) {
+                    //    var result = saveArr(this.print_data.list);
+                    //    this.print_data.BoxCode_arr = result.BoxCode_arr;
+                    //}
+                },
+                mounted() { },
+                filters: {
+                    showDate: function (val) {
+                        return moment(val).format('YYYY-MM-DD');
+                    }
+                },
+            });
+        })
+    </script>
+</body>
+
+</html>

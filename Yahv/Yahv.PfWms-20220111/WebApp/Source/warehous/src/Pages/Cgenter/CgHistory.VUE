@@ -605,7 +605,7 @@ export default {
     },
     handleCreate1(val) {
       //箱号添加
-      if (!val==false&&val!='WL') {
+      if (!val==false&&val!='HXT') {
         if (this.oldBoxCode2 != null) {
           var data = {
             boxCode: this.oldBoxCode2

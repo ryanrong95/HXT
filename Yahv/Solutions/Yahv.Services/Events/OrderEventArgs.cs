@@ -26,5 +26,11 @@ namespace Yahv.Services.Events
         {
             this.OrderID = orderId;
         }
+
+        public OrderEventArgs(string orderId,Currency currency)
+        {
+            this.OrderID = orderId;
+            this.Currency = currency;
+        }
     }
 }

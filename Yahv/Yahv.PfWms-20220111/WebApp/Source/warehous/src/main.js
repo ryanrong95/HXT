@@ -29,8 +29,8 @@ Vue.component('chart', ECharts)
 Vue.config.productionTip = false
 Vue.use(iView);
 const PFWMS_API=process.env.PFWMS_API //引入不同的地址版本，根据不同的环境，引入不同的接口地址
-//const PFWMS_API = 'http://warehouse0.ic360.cn'
-const XDT_API = 'http://api.szhxt.net'
+//const PFWMS_API = 'http://warehouse0.szhxt.net'
+const XDT_API = 'http://api.szhxd.net'
 //const XDT_API = 'http://hkwmsapi.for-ic.net:60077'//正式版地址
 export {  //将接口地址惊醒暴露，方便在页面里进行引用
   PFWMS_API,//库房接口

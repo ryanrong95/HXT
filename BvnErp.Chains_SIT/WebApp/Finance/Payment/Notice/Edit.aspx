@@ -251,6 +251,12 @@
 
                 $('#FinanceVault').combobox({
                     data: FinanceVaultData,
+                    onLoadSuccess: function () {
+                        var opts = $(this).combobox('getData');
+                        if (opts.length > 0) {
+                            $(this).combobox('select', opts[0].Value); 
+                        }
+                    },
                     onSelect: function (record) {
                         $.post('?action=getAccounts', { VaultID: record.Value, Currency: Notice.Currency }, function (data) {
                             var accounts = JSON.parse(data);
@@ -523,7 +529,7 @@
                     });
                 });
             }
-             if (Notice.RefundApplyID != "") {
+            if (Notice.RefundApplyID != "") {
                 $.post(location.pathname + '?action=RefundApplyLogs', {
                     RefundApplyID: Notice.RefundApplyID,
                 }, function (res) {
@@ -597,7 +603,7 @@
                     <div id="divActualPay">
                         <span>实际付款日期：</span>
                         <input class="easyui-datebox" id="ActualPayDate" style="height: 26px; width: 200px" />
-                    </div>                    
+                    </div>
                     <a id="btnSave" href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="Save()">确认付款</a>
                     <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-back'" onclick="Back()">返回</a>
                     <a id="btnSavePoundage" href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="SavePoundage()">保存手续费</a>

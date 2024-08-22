@@ -2377,12 +2377,12 @@
       IsRecordWarehouseFee(OrderID) {
         IsRecordWarehouseFee(OrderID).then(res => {
           console.log(res)
-          if (res.data == "True") {
-            //this.showStoragecharge = false //已收取
-          } else {
-            //this.showStoragecharge = true //未收取
-            this.isdisabled = true;
-          }
+          // if (res.data == "True") {
+          //   //this.showStoragecharge = false //已收取
+          // } else {
+          //   //this.showStoragecharge = true //未收取
+          //   this.isdisabled = true;
+          // }
         })
       },
       Parentfun() {

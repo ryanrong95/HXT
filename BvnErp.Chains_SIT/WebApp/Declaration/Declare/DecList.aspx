@@ -271,7 +271,7 @@
                     <th data-options="field:'GoodsAttr',align:'center'" style="width: 100px;">货物属性</th>
                     <th data-options="field:'Purpose',align:'center'" style="width: 100px;">用途</th>
                     <th data-options="field:'GoodsBatch',align:'center'" style="width: 100px;">批次号</th>
-                    <th data-options="field:'CiqName',align:'center'" style="width: 200px;">检验检疫名称</th>
+                    <th data-options="field:'CiqName',align:'center'" style="width: 200px;">监管类别名称</th>
                 </tr>
             </thead>
 

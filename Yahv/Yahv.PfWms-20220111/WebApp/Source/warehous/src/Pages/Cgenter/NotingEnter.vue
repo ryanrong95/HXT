@@ -840,7 +840,7 @@ export default {
       // this.delarrbox()
     },
      handleCreate1(val) {  //箱号添加
-      if(!val==false&&val!='WL'){
+      if(!val==false&&val!='HXT'){
              var newdata={
                     enterCode:this.EnterCode, // 统一使用当前运单的entercode
                     code:val, // 箱号

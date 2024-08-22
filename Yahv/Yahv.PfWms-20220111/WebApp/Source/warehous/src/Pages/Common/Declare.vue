@@ -550,7 +550,7 @@ export default {
       applyfrom: {
         WarehouseID: sessionStorage.getItem("UserWareHouse"), //库房id
         Summary: "", //备注
-        CodePrefix: "WL", //前缀
+        CodePrefix: "HXT", //前缀
         DateStr: "" //时间
       },
       detail_ID: "",
@@ -1289,7 +1289,7 @@ export default {
         this.applyfrom = {
           WarehouseID: sessionStorage.getItem("UserWareHouse"), //库房id
           Summary: "", //备注
-          CodePrefix: "WL", //前缀
+          CodePrefix: "HXT", //前缀
           DateStr: "" //时间
         };
       }

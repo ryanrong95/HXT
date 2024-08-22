@@ -1,0 +1,106 @@
+﻿@{
+    ViewData["Title"] = "联系我们";
+}
+
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=2NzC0UZIUp86IhVGSr7PUIHJT58IeXyb"></script>
+<div class="ircontactus">
+    <div class="container irbusiness">
+        <div class="title">
+            <p>联系我们</p>
+        </div>
+        <em class="line"></em>
+        <div class="">
+
+            <!--百度地图容器-->
+            <div style="width:670px;height:450px;border:#ccc solid 1px;font-size:12px;float: left;" id="map"></div>
+
+            <div class="rightcon">
+                <div style="">
+                    <div>
+                        <h3 style="padding: 0 10px;">&nbsp;&nbsp;深圳市华芯通供应链管理有限公司</h3>
+                    </div>
+                    <em class="linesmall"></em>
+                    <div style="padding-top: 80px;">
+                        @*<h5>大陆</h5>*@
+                        <p><img src="~/Content/hxt_img/icon-company.png" />深圳市华芯通供应链管理有限公司</p>
+                        <p><img src="~/Content/hxt_img/icon-phone.png" />联系电话：0755-28014789</p>
+                        <p><img src="~/Content/hxt_img/icon-time.png" />工作时间：周一到周五 9：00 - 18：00</p>
+                        <p><img src="~/Content/hxt_img/icon-address.png" />公司地址：深圳市龙华区龙华街道富康社区天汇大厦C栋212</p>
+                    </div>
+                    @*<em class="linesmall"></em>
+                    <div style="padding-top: 40px;">
+                        <h5>香港</h5>
+                        <p><img src="~/Content/hxt_img/icon-company.png" />香港速逹國際物流有限公司</p>
+                        <p style="font-size: 11px;margin: -6px 0;padding-left: 40px;">HONG KONG EXPRESS INTERNATIONAL LOGISTICS LIMITED</p>
+                        <p style="margin-top: 12px;"><img src="~/Content/hxt_img/icon-phone.png" />联系电话：00852-23688398</p>
+                        <p><img src="~/Content/hxt_img/icon-time.png" />工作时间：周一到周五 9：00 - 18：00</p>
+                        <p><img src="~/Content/hxt_img/icon-address.png" />公司地址：香港九龙观塘成业街27号日昇中心1204室</p>
+                        <p><img src="~/Content/hxt_img/icon-address.png" />英文地址：FLAT/RM 1204 12/F SUNBEAM CENTRE NO.27 SHIN G YIP STREET KL</p>
+                    </div>*@
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    //创建和初始化地图函数：
+    function initMap() {
+        createMap();//创建地图
+        setMapEvent();//设置地图事件
+        addMapControl();//向地图添加控件
+        addMapOverlay();//向地图添加覆盖物
+    }
+    function createMap() {
+        map = new BMap.Map("map");
+        map.centerAndZoom(new BMap.Point(114.053037, 22.64903), 19);
+    }
+    function setMapEvent() {
+        map.enableScrollWheelZoom();
+        map.enableKeyboard();
+        map.enableDragging();
+        map.enableDoubleClickZoom()
+    }
+    function addClickHandler(target, window) {
+        target.addEventListener("click", function () {
+            target.openInfoWindow(window);
+        });
+    }
+    function addMapOverlay() {
+        var markers = [
+            { content: "", title: "深圳市华芯通供应链管理有限公司", imageOffset: { width: 0, height: 3 }, position: { lat: 22.649456, lng: 114.053315 } }
+        ];
+        for (var index = 0; index < markers.length; index++) {
+            var point = new BMap.Point(markers[index].position.lng, markers[index].position.lat);
+            var marker = new BMap.Marker(point, {
+                icon: new BMap.Icon("http://api.map.baidu.com/lbsapi/createmap/images/icon.png", new BMap.Size(20, 25), {
+                    imageOffset: new BMap.Size(markers[index].imageOffset.width, markers[index].imageOffset.height)
+                })
+            });
+            var label = new BMap.Label(markers[index].title, { offset: new BMap.Size(25, 5) });
+            var opts = {
+                width: 200,
+                title: markers[index].title,
+                enableMessage: false
+            };
+            var infoWindow = new BMap.InfoWindow(markers[index].content, opts);
+            marker.setLabel(label);
+            addClickHandler(marker, infoWindow);
+            map.addOverlay(marker);
+        };
+    }
+    //向地图添加控件
+    function addMapControl() {
+        var scaleControl = new BMap.ScaleControl({ anchor: BMAP_ANCHOR_BOTTOM_LEFT });
+        scaleControl.setUnit(BMAP_UNIT_IMPERIAL);
+        map.addControl(scaleControl);
+        var navControl = new BMap.NavigationControl({ anchor: BMAP_ANCHOR_TOP_LEFT, type: BMAP_NAVIGATION_CONTROL_LARGE });
+        map.addControl(navControl);
+        var overviewControl = new BMap.OverviewMapControl({ anchor: BMAP_ANCHOR_BOTTOM_RIGHT, isOpen: true });
+        map.addControl(overviewControl);
+    }
+    var map;
+    initMap();
+</script>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Layer.Data.Sqls.ScCustoms;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -38,6 +39,19 @@ namespace WebApp.Finance.Vault
                 Leader = Leader.Trim();
                 vaultlist = vaultlist.Where(t => t.Leader.Contains(Leader));
             }
+
+            var hk_caiwu = System.Configuration.ConfigurationManager.AppSettings["HK_Caiwu"];
+            if (!string.IsNullOrEmpty(hk_caiwu) && Needs.Wl.Admin.Plat.AdminPlat.Current.ID == hk_caiwu)
+            {
+                vaultlist = vaultlist.Where(t => t.Name.Contains("香港"));
+            }
+
+            var sz_caiwu = System.Configuration.ConfigurationManager.AppSettings["SZ_Caiwu"];
+            if (!string.IsNullOrEmpty(sz_caiwu) && Needs.Wl.Admin.Plat.AdminPlat.Current.ID == sz_caiwu)
+            {
+                vaultlist = vaultlist.Where(t => t.Name.Contains("深圳"));
+            }
+
             Func<Needs.Ccs.Services.Models.FinanceVault, object> convert = item => new
             {
                 ID = item.ID,

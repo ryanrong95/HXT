@@ -1,0 +1,1193 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>送货单打印</title>
+    <script type="text/javascript" src="/Print/js/jquery-1.3.2.min.js"></script>
+    <script type="text/javascript" src="/Print/js/vue.js"></script>
+    <script type="text/javascript" src="/Print/js/vue-barcode.js"></script>
+    <script type="text/javascript" src="/Print/js/moment.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body,
+        html,
+        #app {
+            background: #ffffff;
+        }
+
+        .fl {
+            float: left;
+        }
+
+        .fr {
+            float: right;
+        }
+
+        .clearfix {
+            zoom: 1;
+        }
+
+            .clearfix:after {
+                content: '.';
+                display: block;
+                height: 0;
+                clear: both;
+                visibility: hidden;
+            }
+
+        ul,
+        li {
+            list-style: none;
+        }
+
+        .product {
+            width: 210mm;
+        }
+
+        table {
+            border: 1px solid #000;
+            border-collapse: collapse;
+            border-spacing: 0;
+            width: 100%;
+            margin-bottom: 10px;
+            page-break-inside: auto;
+        }
+
+        tr {
+            page-break-inside: avoid;
+            page-break-after: auto;
+        }
+        tr th {
+            font-size: 14px;
+            height: 30px;
+        }
+
+        tr td {
+            padding: 2px 5px;
+            font-size: 12px;
+            text-align: left;
+            height: 30px;
+        }
+
+
+        /*标题*/
+        .tl {
+            width: 100%;
+            height: 66px;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+            .tl span {
+                font-size: 14px;
+                height: 46px;
+                line-height: 46px;
+            }
+
+            .tl .barcode {
+                height: 46px;
+                float: right;
+            }
+
+        text {
+            font-family: '微软雅黑' !important;
+        }
+
+        .msg1 {
+            margin-bottom: 10px;
+        }
+
+            .msg1 > div {
+                float: left;
+                font-size: 12px;
+                margin-right: 20px;
+            }
+
+                .msg1 > div.fr {
+                    float: right;
+                    margin-right: 0;
+                }
+
+        .table_data {
+            table-layout: fixed;
+        }
+
+            .table_data tr td {
+                text-align: center;
+                word-wrap: break-word;
+            }
+
+        /*签字区域*/
+        .print-row {
+            float: right;
+            font-size: 14px;
+            line-height: 20px;
+            margin-top: 15px;
+            margin-right: 120px;
+            margin-bottom: 20px;
+        }
+
+        .mlr5 {
+            margin: 0 5px;
+        }
+
+        .ph {
+            position: relative;
+            width: 210mm;
+            padding: 0 5mm;
+            height: 287mm;
+            overflow: hidden;
+            page-break-inside: avoid;
+            page-break-after: auto;
+        }
+
+            .ph .seal2 {
+                position: absolute;
+                z-index: 1000;
+                width: 40mm;
+                height: 40mm;
+                left: 50px;
+                bottom: 0;
+            }
+
+                .ph .seal2 img {
+                    width: 40mm;
+                    height: 40mm;
+                }
+            /*压缝章*/
+            .ph .seal {
+                position: absolute;
+                z-index: 1000;
+                width: 10mm;
+                height: 40mm;
+                overflow: hidden;
+                right: 0;
+                top: 128.5mm;
+            }
+
+                .ph .seal img {
+                    position: absolute;
+                    width: 40mm;
+                    height: 40mm;
+                    clip: rect(0 20mm 40mm 10mm);
+                    left: -10mm;
+                }
+
+        .page {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            font-size: 12px;
+            padding-top: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div class="product">
+            <div class="compute_content">
+                <div class="compute_content_1">
+                    <div class="tl clearfix">
+                        <span>{{ExitNotice.Company}}送货单</span>
+                        <barcode v-bind:value="ExitNotice.DeliveryOrderID" v-bind:options="barcode_option" tag="svg"
+                                 class="barcode"></barcode>
+                    </div>
+                    <div class="msg1 clearfix">
+                        <div><span>订单编号：</span><span>{{ExitNotice.OrderID}}</span></div>
+                        <div><span>送货日期：</span><span>{{ExitNotice.DeliveryTime}}</span></div>
+                        <div><span>装箱日期：</span><span>{{ExitNotice.SZPackingDate}}</span></div>
+                        <div class="fr"><span>总件数：</span><span>{{ExitNotice.PackNo}}</span></div>
+                    </div>
+                    <table border="1" id="table_msg">
+                        <tr>
+                            <td>
+                                <div>收货人：</div>
+                                <div>{{ExitNotice.ClientName}}</div>
+                            </td>
+                            <td>
+                                <div>收货地址：</div>
+                                <div>{{ExitNotice.Address}}</div>
+                            </td>
+                            <td>
+                                <div>联系人：<span>{{ExitNotice.Contactor}}</span></div>
+                                <div>电话号码：<span>{{ExitNotice.ContactTel}}</span></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <div>送货人：<span>{{ExitNotice.DriverName}}</span></div>
+                                <div>
+                                    电话：<span style="margin-right:30px;">{{ExitNotice.DriverTel}}</span>车牌号：<span>{{ExitNotice.License}}</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <table border="1" class="table_data thstyle">
+                    <colgroup>
+                        <col width="7%">
+                        <col width="12%">
+                        <col width="8%">
+                        <col width="22%">
+                        <col width="20%">
+                        <col width="20%">
+                        <col width="11%">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>库位号</th>
+                            <th>箱号</th>
+                            <th>品名</th>
+                            <th>型号</th>
+                            <th>品牌</th>
+                            <th>数量</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(item,index) in print_data.list" v-if="print_data.list.length>0">
+                            <td>{{index+1}}</td>
+                            <td v-if="print_data.StockCode_arr.indexOf(index)!=-1&&print_data.StockCode_arr.length==1"
+                                v-bind:rowspan="print_data.list.length">
+                                {{item.StockCode}}
+                            </td>
+                            <td v-if="print_data.StockCode_arr.indexOf(index)!=-1&&print_data.StockCode_arr.length!=1"
+                                v-bind:rowspan="print_data.StockCode_arr[print_data.StockCode_arr.indexOf(index)+1]-(print_data.StockCode_arr[print_data.StockCode_arr.indexOf(index)])">
+                                {{item.StockCode}}
+                            </td>
+                            <td v-if="print_data.CaseNumber_arr.indexOf(index)!=-1&&print_data.CaseNumber_arr.length==1"
+                                v-bind:rowspan="print_data.list.length">
+                                {{item.CaseNumber}}
+                            </td>
+                            <td v-if="print_data.CaseNumber_arr.indexOf(index)!=-1&&print_data.CaseNumber_arr.length!=1"
+                                v-bind:rowspan="((print_data.CaseNumber_arr.indexOf(index)+1)!=print_data.CaseNumber_arr.length)?(print_data.CaseNumber_arr[print_data.CaseNumber_arr.indexOf(index)+1]-(print_data.CaseNumber_arr[print_data.CaseNumber_arr.indexOf(index)])):(print_data.list.length-(print_data.CaseNumber_arr[print_data.CaseNumber_arr.indexOf(index)]))">
+                                {{item.CaseNumber}}
+                            </td>
+                            <td>{{item.ProductName}}</td>
+                            <td>{{item.Model}}</td>
+                            <td>{{item.Manufacturer}}</td>
+                            <td>{{item.Qty}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="compute_content_2">
+                    <table id="table_info" border="1">
+                        <tbody>
+                            <tr>
+                                <td style="width: 120px">对本次服务评价：</td>
+                                <td>
+                                    <span>口</span>&nbsp;优秀&nbsp;&nbsp;&nbsp;
+                                    <span>口</span>&nbsp;一般&nbsp;&nbsp;&nbsp;
+                                    <span>口</span>&nbsp;差
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 120px">客户意见或建议：</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">本公司已如数收到上述货物和发票，无货物数量损失，无货物损坏。</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="clearfix">
+                        <div class="print-row">
+                            <ul>
+                                <li style="margin-bottom:10px;">提货人签字/签章:</li>
+                                <li>提货日期: _____年 ____月 ____ 日</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="page compute_content_3">
+                    第<span class="mlr5">1</span>页&nbsp;&nbsp;共<span class="mlr5">1</span>页
+                </div>
+            </div>
+
+            <!--只有一页-->
+            <div class="ph" v-if="totalPage==1&&dataPage==1">
+
+                <div class="tl clearfix">
+                    <span>{{ExitNotice.Company}}送货单</span>
+                    <barcode v-bind:value="ExitNotice.DeliveryOrderID" v-bind:options="barcode_option" tag="svg"
+                             class="barcode"></barcode>
+                </div>
+
+                <div class="msg1 clearfix">
+                    <div><span>订单编号：</span><span>{{ExitNotice.OrderID}}</span></div>
+                    <div><span>送货日期：</span><span>{{ExitNotice.DeliveryTime}}</span></div>
+                    <div><span>装箱日期：</span><span>{{ExitNotice.SZPackingDate}}</span></div>
+                    <div class="fr"><span>总件数：</span><span>{{ExitNotice.PackNo}}</span></div>
+                </div>
+
+                <table border="1" id="table_msg">
+                    <tr>
+                        <td>
+                            <div>收货人：</div>
+                            <div>{{ExitNotice.ClientName}}</div>
+                        </td>
+                        <td>
+                            <div>收货地址：</div>
+                            <div>{{ExitNotice.Address}}</div>
+                        </td>
+                        <td>
+                            <div>联系人：<span>{{ExitNotice.Contactor}}</span></div>
+                            <div>电话号码：<span>{{ExitNotice.ContactTel}}</span></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <div>送货人：<span>{{ExitNotice.DriverName}}</span></div>
+                            <div>
+                                电话：<span style="margin-right:30px;">{{ExitNotice.DriverTel}}</span>车牌号：<span>{{ExitNotice.License}}</span>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+
+                <table border="1" class="table_data">
+                    <colgroup>
+                        <col width="7%">
+                        <col width="12%">
+                        <col width="8%">
+                        <col width="22%">
+                        <col width="20%">
+                        <col width="20%">
+                        <col width="11%">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>库位号</th>
+                            <th>箱号</th>
+                            <th>品名</th>
+                            <th>型号</th>
+                            <th>品牌</th>
+                            <th>数量</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(item,index) in print_data.list" v-if="print_data.list.length>0">
+                            <td>{{index+1}}</td>
+                            <td v-if="print_data.StockCode_arr.indexOf(index)!=-1&&print_data.StockCode_arr.length==1"
+                                v-bind:rowspan="print_data.list.length">
+                                {{item.StockCode}}
+                            </td>
+                            <td v-if="print_data.StockCode_arr.indexOf(index)!=-1&&print_data.StockCode_arr.length!=1"
+                                v-bind:rowspan="print_data.StockCode_arr[print_data.StockCode_arr.indexOf(index)+1]-(print_data.StockCode_arr[print_data.StockCode_arr.indexOf(index)])">
+                                {{item.StockCode}}
+                            </td>
+                            <td v-if="print_data.CaseNumber_arr.indexOf(index)!=-1&&print_data.CaseNumber_arr.length==1"
+                                v-bind:rowspan="print_data.list.length">
+                                {{item.CaseNumber}}
+                            </td>
+                            <td v-if="print_data.CaseNumber_arr.indexOf(index)!=-1&&print_data.CaseNumber_arr.length!=1"
+                                v-bind:rowspan="((print_data.CaseNumber_arr.indexOf(index)+1)!=print_data.CaseNumber_arr.length)?(print_data.CaseNumber_arr[print_data.CaseNumber_arr.indexOf(index)+1]-(print_data.CaseNumber_arr[print_data.CaseNumber_arr.indexOf(index)])):(print_data.list.length-(print_data.CaseNumber_arr[print_data.CaseNumber_arr.indexOf(index)]))">
+                                {{item.CaseNumber}}
+                            </td>
+                            <td>{{item.ProductName}}</td>
+                            <td>{{item.Model}}</td>
+                            <td>{{item.Manufacturer}}</td>
+                            <td>{{item.Qty}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table id="table_info" border="1">
+                    <tbody>
+                        <tr>
+                            <td style="width: 120px">对本次服务评价：</td>
+                            <td>
+                                <span>口</span>&nbsp;优秀&nbsp;&nbsp;&nbsp;
+                                <span>口</span>&nbsp;一般&nbsp;&nbsp;&nbsp;
+                                <span>口</span>&nbsp;差
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 120px">客户意见或建议：</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">本公司已如数收到上述货物和发票，无货物数量损失，无货物损坏。</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="clearfix">
+                    <div class="print-row">
+                        <ul>
+                            <li style="margin-bottom:10px;">提货人签字/签章:</li>
+                            <li>提货日期: _____年 ____月 ____ 日</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="page">
+                    第<span class="mlr5">1</span>页&nbsp;&nbsp;共<span class="mlr5">1</span>页
+                </div>
+                <div class="seal2"><img v-bind:src="ExitNotice.SealImgUrl"></div>
+            </div>
+
+            <!-- 有两页 -->
+            <!-- 表格数据占1页 -->
+            <div v-if="totalPage==2&&dataPage==1">
+                <div class="ph">
+                    <div class="tl clearfix">
+                        <span>{{ExitNotice.Company}}送货单</span>
+                        <barcode v-bind:value="ExitNotice.DeliveryOrderID" v-bind:options="barcode_option" tag="svg"
+                                 class="barcode"></barcode>
+                    </div>
+
+                    <div class="msg1 clearfix">
+                        <div><span>订单编号：</span><span>{{ExitNotice.OrderID}}</span></div>
+                        <div><span>送货日期：</span><span>{{ExitNotice.DeliveryTime}}</span></div>
+                        <div><span>装箱日期：</span><span>{{ExitNotice.SZPackingDate}}</span></div>
+                        <div class="fr"><span>总件数：</span><span>{{ExitNotice.PackNo}}</span></div>
+                    </div>
+
+                    <table border="1" id="table_msg">
+                        <tr>
+                            <td>
+                                <div>收货人：</div>
+                                <div>{{ExitNotice.ClientName}}</div>
+                            </td>
+                            <td>
+                                <div>收货地址：</div>
+                                <div>{{ExitNotice.Address}}</div>
+                            </td>
+                            <td>
+                                <div>联系人：<span>{{ExitNotice.Contactor}}</span></div>
+                                <div>电话号码：<span>{{ExitNotice.ContactTel}}</span></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <div>送货人：<span>{{ExitNotice.DriverName}}</span></div>
+                                <div>
+                                    电话：<span style="margin-right:30px;">{{ExitNotice.DriverTel}}</span>车牌号：<span>{{ExitNotice.License}}</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <table border="1" class="table_data">
+                        <colgroup>
+                            <col width="7%">
+                            <col width="12%">
+                            <col width="8%">
+                            <col width="22%">
+                            <col width="20%">
+                            <col width="20%">
+                            <col width="11%">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>库位号</th>
+                                <th>箱号</th>
+                                <th>品名</th>
+                                <th>型号</th>
+                                <th>品牌</th>
+                                <th>数量</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(item,index) in print_data.list" v-if="print_data.list.length>0">
+                                <td>{{index+1}}</td>
+                                <td v-if="print_data.StockCode_arr.indexOf(index)!=-1&&print_data.StockCode_arr.length==1"
+                                    v-bind:rowspan="print_data.list.length">
+                                    {{item.StockCode}}
+                                </td>
+                                <td v-if="print_data.StockCode_arr.indexOf(index)!=-1&&print_data.StockCode_arr.length!=1"
+                                    v-bind:rowspan="print_data.StockCode_arr[print_data.StockCode_arr.indexOf(index)+1]-(print_data.StockCode_arr[print_data.StockCode_arr.indexOf(index)])">
+                                    {{item.StockCode}}
+                                </td>
+                                <td v-if="print_data.CaseNumber_arr.indexOf(index)!=-1&&print_data.CaseNumber_arr.length==1"
+                                    v-bind:rowspan="print_data.list.length">
+                                    {{item.CaseNumber}}
+                                </td>
+                                <td v-if="print_data.CaseNumber_arr.indexOf(index)!=-1&&print_data.CaseNumber_arr.length!=1"
+                                    v-bind:rowspan="((print_data.CaseNumber_arr.indexOf(index)+1)!=print_data.CaseNumber_arr.length)?(print_data.CaseNumber_arr[print_data.CaseNumber_arr.indexOf(index)+1]-(print_data.CaseNumber_arr[print_data.CaseNumber_arr.indexOf(index)])):(print_data.list.length-(print_data.CaseNumber_arr[print_data.CaseNumber_arr.indexOf(index)]))">
+                                    {{item.CaseNumber}}
+                                </td>
+                                <td>{{item.ProductName}}</td>
+                                <td>{{item.Model}}</td>
+                                <td>{{item.Manufacturer}}</td>
+                                <td>{{item.Qty}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="page">
+                        第<span class="mlr5">1</span>页&nbsp;&nbsp;共<span class="mlr5">{{totalPage}}</span>页
+                    </div>
+                </div>
+                <div class="ph">
+                    <table id="table_info" border="1">
+                        <tbody>
+                            <tr>
+                                <td style="width: 120px">对本次服务评价：</td>
+                                <td>
+                                    <span>口</span>&nbsp;优秀&nbsp;&nbsp;&nbsp;
+                                    <span>口</span>&nbsp;一般&nbsp;&nbsp;&nbsp;
+                                    <span>口</span>&nbsp;差
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 120px">客户意见或建议：</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">本公司已如数收到上述货物和发票，无货物数量损失，无货物损坏。</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="clearfix">
+                        <div class="print-row">
+                            <ul>
+                                <li style="margin-bottom:10px;">提货人签字/签章:</li>
+                                <li>提货日期: _____年 ____月 ____ 日</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="page">
+                        第<span class="mlr5">2</span>页&nbsp;&nbsp;共<span class="mlr5">{{totalPage}}</span>页
+                    </div>
+                </div>
+            </div>
+
+            <!-- 两页以上 -->
+            <div v-if="totalPage>=2&&dataPage>=2">
+                <div class="ph">
+                    <div class="tl clearfix">
+                        <span>{{ExitNotice.Company}}送货单</span>
+                        <barcode v-bind:value="ExitNotice.DeliveryOrderID" v-bind:options="barcode_option" tag="svg"
+                                 class="barcode"></barcode>
+                    </div>
+
+                    <div class="msg1 clearfix">
+                        <div><span>订单编号：</span><span>{{ExitNotice.OrderID}}</span></div>
+                        <div><span>送货日期：</span><span>{{ExitNotice.DeliveryTime}}</span></div>
+                        <div><span>装箱日期：</span><span>{{ExitNotice.SZPackingDate}}</span></div>
+                        <div class="fr"><span>总件数：</span><span>{{ExitNotice.PackNo}}</span></div>
+                    </div>
+
+                    <table border="1" id="table_msg">
+                        <tr>
+                            <td>
+                                <div>收货人：</div>
+                                <div>{{ExitNotice.ClientName}}</div>
+                            </td>
+                            <td>
+                                <div>收货地址：</div>
+                                <div>{{ExitNotice.Address}}</div>
+                            </td>
+                            <td>
+                                <div>联系人：<span>{{ExitNotice.Contactor}}</span></div>
+                                <div>电话号码：<span>{{ExitNotice.ContactTel}}</span></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <div>送货人：<span>{{ExitNotice.DriverName}}</span></div>
+                                <div>
+                                    电话：<span style="margin-right:30px;">{{ExitNotice.DriverTel}}</span>车牌号：<span>{{ExitNotice.License}}</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <table border="1" class="table_data">
+                        <colgroup>
+                            <col width="7%">
+                            <col width="12%">
+                            <col width="8%">
+                            <col width="22%">
+                            <col width="20%">
+                            <col width="20%">
+                            <col width="11%">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>库位号</th>
+                                <th>箱号</th>
+                                <th>品名</th>
+                                <th>型号</th>
+                                <th>品牌</th>
+                                <th>数量</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(item,index) in firstPage_data.list" v-if="firstPage_data.list.length>0">
+                                <td>{{index+1}}</td>
+                                <td v-if="firstPage_data.StockCode_arr.indexOf(index)!=-1&&firstPage_data.StockCode_arr.length==1"
+                                    v-bind:rowspan="firstPage_data.list.length">
+                                    {{item.StockCode}}
+                                </td>
+                                <td v-if="firstPage_data.StockCode_arr.indexOf(index)!=-1&&firstPage_data.StockCode_arr.length!=1"
+                                    v-bind:rowspan="firstPage_data.StockCode_arr[firstPage_data.StockCode_arr.indexOf(index)+1]-(firstPage_data.StockCode_arr[firstPage_data.StockCode_arr.indexOf(index)])">
+                                    {{item.StockCode}}
+                                </td>
+                                <td v-if="firstPage_data.CaseNumber_arr.indexOf(index)!=-1&&firstPage_data.CaseNumber_arr.length==1"
+                                    v-bind:rowspan="firstPage_data.list.length">
+                                    {{item.CaseNumber}}
+                                </td>
+                                <td v-if="firstPage_data.CaseNumber_arr.indexOf(index)!=-1&&firstPage_data.CaseNumber_arr.length!=1"
+                                    v-bind:rowspan="((firstPage_data.CaseNumber_arr.indexOf(index)+1)!=firstPage_data.CaseNumber_arr.length)?(firstPage_data.CaseNumber_arr[firstPage_data.CaseNumber_arr.indexOf(index)+1]-(firstPage_data.CaseNumber_arr[firstPage_data.CaseNumber_arr.indexOf(index)])):(firstPage_data.list.length-(firstPage_data.CaseNumber_arr[firstPage_data.CaseNumber_arr.indexOf(index)]))">
+                                    {{item.CaseNumber}}
+                                </td>
+                                <td>{{item.ProductName}}</td>
+                                <td>{{item.Model}}</td>
+                                <td>{{item.Manufacturer}}</td>
+                                <td>{{item.Qty}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="page">
+                        第<span class="mlr5">1</span>页&nbsp;&nbsp;共<span class="mlr5">{{totalPage}}</span>页
+                    </div>
+                </div>
+
+                <div v-if="middle_data.length>0">
+                    <div class="ph" v-for="(middle,i) in middle_data">
+                        <table border="1" class="table_data">
+                            <colgroup>
+                                <col width="7%">
+                                <col width="12%">
+                                <col width="8%">
+                                <col width="22%">
+                                <col width="20%">
+                                <col width="20%">
+                                <col width="11%">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th>序号</th>
+                                    <th>库位号</th>
+                                    <th>箱号</th>
+                                    <th>品名</th>
+                                    <th>型号</th>
+                                    <th>品牌</th>
+                                    <th>数量</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(item,index) in middle.list" v-if="middle.list.length>0">
+                                    <td>{{index+1+middle.infrontLines}}</td>
+                                    <td v-if="middle.StockCode_arr.indexOf(index)!=-1&&middle.StockCode_arr.length==1"
+                                        v-bind:rowspan="middle.list.length">
+                                        {{item.StockCode}}
+                                    </td>
+                                    <td v-if="middle.StockCode_arr.indexOf(index)!=-1&&middle.StockCode_arr.length!=1"
+                                        v-bind:rowspan="middle.StockCode_arr[middle.StockCode_arr.indexOf(index)+1]-(middle.StockCode_arr[middle.StockCode_arr.indexOf(index)])">
+                                        {{item.StockCode}}
+                                    </td>
+                                    <td v-if="middle.CaseNumber_arr.indexOf(index)!=-1&&middle.CaseNumber_arr.length==1"
+                                        v-bind:rowspan="middle.list.length">
+                                        {{item.CaseNumber}}
+                                    </td>
+                                    <td v-if="middle.CaseNumber_arr.indexOf(index)!=-1&&middle.CaseNumber_arr.length!=1"
+                                        v-bind:rowspan="((middle.CaseNumber_arr.indexOf(index)+1)!=middle.CaseNumber_arr.length)?(middle.CaseNumber_arr[middle.CaseNumber_arr.indexOf(index)+1]-(middle.CaseNumber_arr[middle.CaseNumber_arr.indexOf(index)])):(middle.list.length-(middle.CaseNumber_arr[middle.CaseNumber_arr.indexOf(index)]))">
+                                        {{item.CaseNumber}}
+                                    </td>
+                                    <td>{{item.ProductName}}</td>
+                                    <td>{{item.Model}}</td>
+                                    <td>{{item.Manufacturer}}</td>
+                                    <td>{{item.Qty}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div v-if="!showEnd&&i==middle_data.length-1">
+                            <table id="table_info" border="1">
+                                <tbody>
+                                    <tr>
+                                        <td style="width: 120px">对本次服务评价：</td>
+                                        <td>
+                                            <span>口</span>&nbsp;优秀&nbsp;&nbsp;&nbsp;
+                                            <span>口</span>&nbsp;一般&nbsp;&nbsp;&nbsp;
+                                            <span>口</span>&nbsp;差
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 120px">客户意见或建议：</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">本公司已如数收到上述货物和发票，无货物数量损失，无货物损坏。</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div class="clearfix">
+                                <div class="print-row">
+                                    <ul>
+                                        <li style="margin-bottom:10px;">提货人签字/签章:</li>
+                                        <li>提货日期: _____年 ____月 ____ 日</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="page">
+                            第<span class="mlr5">{{i+2}}</span>页&nbsp;&nbsp;共<span class="mlr5">{{totalPage}}</span>页
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ph" v-if="showEnd||(!showEnd&&!middle_data.length)">
+                    <table id="table_info" border="1">
+                        <tbody>
+                            <tr>
+                                <td style="width: 120px">对本次服务评价：</td>
+                                <td>
+                                    <span>口</span>&nbsp;优秀&nbsp;&nbsp;&nbsp;
+                                    <span>口</span>&nbsp;一般&nbsp;&nbsp;&nbsp;
+                                    <span>口</span>&nbsp;差
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 120px">客户意见或建议：</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">本公司已如数收到上述货物和发票，无货物数量损失，无货物损坏。</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="clearfix">
+                        <div class="print-row">
+                            <ul>
+                                <li style="margin-bottom:10px;">提货人签字/签章:</li>
+                                <li>提货日期: _____年 ____月 ____ 日</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="page">
+                        第<span class="mlr5">{{totalPage}}</span>页&nbsp;&nbsp;共<span class="mlr5">{{totalPage}}</span>页
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        //存储合并单元格的数组
+        function saveArr(data) {
+            var StockCode_arr = [0],
+                CaseNumber_arr = [0],
+                StockCode_first = data[0].StockCode,
+                CaseNumber_first = data[0].CaseNumber;
+            for (var i = 1; i < data.length; i++) {
+                if (StockCode_first != data[i].StockCode) {
+                    StockCode_first = data[i].StockCode;
+                    StockCode_arr.push(i);
+                }
+                if (CaseNumber_first != data[i].CaseNumber) {
+                    CaseNumber_first = data[i].CaseNumber;
+                    CaseNumber_arr.push(i);
+                }
+            }
+            return {
+                StockCode_arr: StockCode_arr,
+                CaseNumber_arr: CaseNumber_arr
+            }
+        }
+
+        // 获取每毫米的像素值
+        function getOneMmsPx() {
+            // 创建一个1mm宽的元素插入到页面，然后坐等出结果
+            let div = document.createElement("div");
+            div.id = "mm";
+            div.style.width = "1mm";
+            document.querySelector("body").appendChild(div);
+            // 原生方法获取浏览器对元素的计算值
+            let mm1 = document.getElementById("mm").getBoundingClientRect();
+            return mm1.width;
+        }
+        //添加压缝章
+        function addSeal(page, SealImgUrl) {
+            var clipw = 40 / page;
+            for (var i = 0; i < page; i++) {
+                var seal = $('<div class="seal"></div>')
+                //var seal_img = $('<img src="http://pic38.nipic.com/20140306/2504371_115250357116_2.jpg"/>');
+                var seal_img = $('<img src="' + SealImgUrl + '"/>');
+                seal.css('width', clipw + 'mm');
+                seal.css('top', 287 * 0 + (287 / 2 - 20) + 'mm');
+                seal_img.css({
+                    clip: 'rect(0 ' + clipw * (i + 1) + 'mm 40mm ' + clipw * i + 'mm)',
+                    left: '-' + clipw * i + 'mm'
+                })
+                seal.append(seal_img);
+                $('.ph').eq(i).append(seal);
+            }
+        }
+
+        //保存行数
+        function findI(first_line, saveListArr, vh, h3, n, cb) {
+            var first_line = first_line;
+            for (var m2 = first_line; m2 < saveListArr.length; m2++) {
+                var val2 = saveListArr[m2].totalH + saveListArr[0].totalH - saveListArr[first_line].totalH;
+                if (val2 >= (vh - h3)) {
+                    if (val2 == (vh - h3)) {
+                        cb(first_line, m2 + 1);
+                        if (n > 0) {
+                            first_line = m2 + 1;
+                            findI(first_line, saveListArr, vh, h3, n, cb);
+                        }
+                    } else {
+                        cb(first_line, m2);
+                        n--;
+                        if (n > 0) {
+                            first_line = m2;
+                            findI(first_line, saveListArr, vh, h3, n, cb);
+                        }
+                    }
+                    break;
+                } else if ((val2 < (vh - h3)) && m2 == saveListArr.length - 1) {
+                    cb(first_line, m2 + 1);
+                    first_line = m2;
+                    n--;
+                    break;
+                }
+            }
+        }
+    </script>
+    <script>
+        var w = getOneMmsPx(),
+            model = {
+                "obj": {
+                    "ExitNotice": {
+                        "Company": "深圳市芯达通供应链管理有限公司",//送货单
+                        "DeliveryOrderID": "N2019031006",
+
+                        "OrderID": "NL02020191031005",//订单编号
+                        "DeliveryTime": "2019-11-01",//送货日期
+                        "SZPackingDate": "2019-10-31",//装箱日期
+                        "PackNo": "1",//总件数
+
+                        "ClientName": "杭州比一比科技有限公司",//收货人
+                        "Address": "浙江 杭州 余杭区 1栋2层303",//收货地址
+
+                        "Contactor": "张先生",//联系人
+                        "ContactTel": "13232234564",//电话号码
+
+                        "DriverName": "李天一",//送货人
+                        "DriverTel": "15112560202",//电话
+                        "License": "粤B8P1K1",//车牌号
+
+                        "SealImgUrl": "http://foricerp0.ic360.cn/wladmin/Content/images/XDTBillStamp.png"
+                    },
+                    "listdata": [{
+                        "ID": "EXNItem201908020000000409",
+                        "SortingID": "Sorting201908020000000359",
+                        "CaseNumber": "13",
+                        "StockCode": "InsideStock",
+                        "PackingDate": "2019-08-02",
+                        "NetWeight": 0.9600,
+                        "GrossWeight": 1.0500,
+                        "ProductName": "继电器",
+                        "Model": "TX2SA-5V",
+                        "Qty": 200.0000,
+                        "WrapType": null,
+                        "Manufacturer": "PANASONIC",
+                        "UpdateDate": "2019-08-02T00:10:45.803"
+                    }, {
+                        "ID": "EXNItem201908020000000410",
+                        "SortingID": "Sorting201908020000000360",
+                        "CaseNumber": "13",
+                        "StockCode": "InsideStock",
+                        "PackingDate": "2019-08-02",
+                        "NetWeight": 0.0100,
+                        "GrossWeight": 0.0200,
+                        "ProductName": "集成电路集成电路集成电路集成电路集成电路enixPhoenixPhoenix",
+                        "Model": "ADG1219BRJZ-REEL",
+                        "Qty": 192.0000,
+                        "WrapType": null,
+                        "Manufacturer": "ADI",
+                        "UpdateDate": "2019-08-02T00:10:45.803"
+                    }, {
+                        "ID": "EXNItem201908020000000411",
+                        "SortingID": "Sorting201908020000000361",
+                        "CaseNumber": "13",
+                        "StockCode": "InsideStock",
+                        "PackingDate": "2019-08-02",
+                        "NetWeight": 0.0500,
+                        "GrossWeight": 0.0500,
+                        "ProductName": "接插件接插件接插件接插件接插件接插件接插件接插件",
+                        "Model": "1787030",
+                        "Qty": 16.0000,
+                        "WrapType": null,
+                        "Manufacturer": "PhoenixPhoenixPhoenixPhoenixPhoenixPhoenixPhoenixPhoenixPhoenixPhoenixPhoenixPhoenixPhoenixPhoenixPhoenixPhoenixPhoenixPhoenixPhoenixPhoenixPhoenixPhoenixPhoenixPhoenixPhoenixPhoenixPhoenixPhoenixPhoenixPhoenixPhoenixPhoenixPhoenixPhoenixPhoenixPhoenixPhoenixPhoenixPhoenixPhoenixPhoenixPhoenixPhoenixPhoenixPhoenixPhoenix",
+                        "UpdateDate": "2019-08-02T00:10:45.803"
+                    }, {
+                        "ID": "EXNItem201908020000000412",
+                        "SortingID": "Sorting201908020000000362",
+                        "CaseNumber": "13",
+                        "StockCode": "InsideStock",
+                        "PackingDate": "2019-08-02",
+                        "NetWeight": 0.0100,
+                        "GrossWeight": 0.0200,
+                        "ProductName": "集成电路集成电路集成电路集成电路集成电路enixPhoenixPhoenix",
+                        "Model": "LT3014ES5#TRPBF",
+                        "Qty": 25.0000,
+                        "WrapType": null,
+                        "Manufacturer": "ADI",
+                        "UpdateDate": "2019-08-02T00:10:45.803"
+                    }, {
+                        "ID": "EXNItem201908020000000413",
+                        "SortingID": "Sorting201908020000000363",
+                        "CaseNumber": "13",
+                        "StockCode": "InsideStock",
+                        "PackingDate": "2019-08-02",
+                        "NetWeight": 0.0200,
+                        "GrossWeight": 0.0200,
+                        "ProductName": "集成电路集成电路集成电路集成电路集成电路enixPhoenixPhoenix",
+                        "Model": "TPS79650DRBR",
+                        "Qty": 10.0000,
+                        "WrapType": null,
+                        "Manufacturer": "ti",
+                        "UpdateDate": "2019-08-02T00:10:45.803"
+                    }, {
+                        "ID": "EXNItem201908020000000414",
+                        "SortingID": "Sorting201908020000000364",
+                        "CaseNumber": "13",
+                        "StockCode": "InsideStock",
+                        "PackingDate": "2019-08-02",
+                        "NetWeight": 0.0100,
+                        "GrossWeight": 0.0200,
+                        "ProductName": "集成电路集成电路集成电路集成电路集成电路enixPhoenixPhoenix",
+                        "Model": "LP3985IM5X-3.3/NOPB",
+                        "Qty": 8.0000,
+                        "WrapType": null,
+                        "Manufacturer": "ti",
+                        "UpdateDate": "2019-08-02T00:10:45.803"
+                    }, {
+                        "ID": "EXNItem201908020000000415",
+                        "SortingID": "Sorting201908020000000365",
+                        "CaseNumber": "13",
+                        "StockCode": "InsideStock",
+                        "PackingDate": "2019-08-02",
+                        "NetWeight": 0.0100,
+                        "GrossWeight": 0.0200,
+                        "ProductName": "集成电路集成电路集成电路集成电路集成电路enixPhoenixPhoenix",
+                        "Model": "LP3985IM5X-5.0/NOPB",
+                        "Qty": 16.0000,
+                        "WrapType": null,
+                        "Manufacturer": "ti",
+                        "UpdateDate": "2019-08-02T00:10:45.803"
+                    }, {
+                        "ID": "EXNItem201908020000000416",
+                        "SortingID": "Sorting201908020000000366",
+                        "CaseNumber": "13",
+                        "StockCode": "InsideStock",
+                        "PackingDate": "2019-08-02",
+                        "NetWeight": 0.0100,
+                        "GrossWeight": 0.0200,
+                        "ProductName": "集成电路集成电路集成电路集成电路集成电路enixPhoenixPhoenix",
+                        "Model": "TPS73133DBVR",
+                        "Qty": 4.0000,
+                        "WrapType": null,
+                        "Manufacturer": "ti",
+                        "UpdateDate": "2019-08-02T00:10:45.803"
+                    }]
+                }
+            };
+    </script>
+    <script>
+        $(function () {
+            var ExitNotice = null,
+                listdata = null;
+            if (window['model']) {
+                ExitNotice = model.obj.ExitNotice;
+                listdata = model.obj.listdata;
+            } else {
+                listdata = null;
+                ExitNotice = null;
+            }
+
+            var Vue = window.Vue;
+            var VueBarcode = window.VueBarcode;
+            Vue.component('barcode', VueBarcode);
+
+            new Vue({
+                el: '#app',
+                data: {
+                    ExitNotice: ExitNotice,
+                    barcode_option: {
+                        displayValue: true, //是否默认显示条形码数据
+                        //textPosition  :'top', //条形码数据显示的位置
+                        background: "#fff", //条形码背景颜色
+                        valid: function (valid) { },
+                        width: "1.7px", //单个条形码的宽度
+                        height: "40px",
+                        fontSize: "16px", //字体大小
+                        fontFamily: "微软雅黑",
+                        format: "CODE128", //选择要使用的条形码类型
+                        margin: 2
+                    },
+                    print_data: {
+                        StockCode_arr: [],
+                        CaseNumber_arr: [],
+                        list: []
+                    },//保存打印数据
+                    saveListArr: [],//保存打印数据的index,它的高度,保存到某行以前加起来的高度（包含了table表头）
+                    firstPage_data: {//首页的列表数据
+                        StockCode_arr: [],//存储库位号
+                        CaseNumber_arr: [],//存储箱号
+                        list: []//列表数据
+                    },
+                    first_line: 0,//首页的行数
+                    save_middle_i: [],
+                    middle_data: [],//中间的列表数据
+                    showEnd: true,//最后一页单独展示评价签字
+                    totalPage: 1,//总的页码
+                    dataPage: 1//列表数据有几页
+                },
+                created() {
+                    this.print_data.list = listdata;
+                    console.log(listdata);
+                    var result = saveArr(this.print_data.list);
+                    this.print_data.StockCode_arr = result.StockCode_arr;
+                    this.print_data.CaseNumber_arr = result.CaseNumber_arr;
+                },
+                mounted() {
+                    var that = this,
+                        vh = 287 * w,
+                        h = 0,
+                        h1 = $('.compute_content_1').height() + 10,
+                        h2 = $('.compute_content_2').height(),
+                        h3 = $('.compute_content_3').height(),
+                        h4 = $('.thstyle').height();
+                    $('.thstyle').find('tr').each(function (i, v) {
+                        h += $(v).height();
+                        that.saveListArr.push({
+                            index: i,
+                            height: $(v).height(),
+                            totalH: h
+                        })
+                    })
+                    var dataAllH = that.saveListArr[that.saveListArr.length - 1].totalH;
+                    var th_h = that.saveListArr[0].height;
+
+                    var p1 = vh - h1 - h2 - h3;
+                    var p2 = vh - h1 - h3;
+                    var p3 = h1 + h2 + h3
+                    var pageMin = Math.floor((dataAllH + p3) / vh);
+                    var pageMax = Math.ceil((dataAllH + p3) / vh);
+                    that.totalPage = pageMax;
+                    if (that.totalPage >= 2) {
+                        pageMax = Math.ceil((dataAllH + p3 + (that.totalPage - 1) * (h3 + th_h)) / vh);
+                        pageMin = Math.floor((dataAllH + p3 + (that.totalPage - 1) * (h3 + th_h)) / vh);
+                    }
+                    that.totalPage = pageMax;
+                    if (pageMax == 1) {
+                        that.dataPage = pageMax;
+                    } else if (pageMax >= 2) {
+                        if (dataAllH + p2 + (pageMax - 1) * h3 - vh * (pageMax - 1) > (h2 + h3)) {
+                            that.dataPage = pageMax;
+                        } else {
+                            that.dataPage = pageMin;
+                        }
+                    }
+                    console.log(that.totalPage)
+                    console.log(that.dataPage)
+                    $('.compute_content').hide();
+
+                    if (that.totalPage >= 2 && that.dataPage >= 2) {
+                        var h5 = vh - h1 - h3 - 24;
+                        var savei = 0;//存储首页有几行的列表数据
+                        var save_middle_i = [];//存储中间页每页最后一行的行号+1
+                        for (var m = 0; m < that.saveListArr.length; m++) {
+                            var val = that.saveListArr[m].totalH;
+                            if (val >= h5) {
+                                if (val == h5) {
+                                    savei = m;
+                                } else {
+                                    savei = m - 1;
+                                }
+                                break;
+                            }
+                        }
+                        if (savei == 0) {
+                            savei = that.saveListArr.length - 1;
+                        }
+                        that.first_line = savei;
+
+                        that.firstPage_data.list = listdata.slice(0, that.first_line + 1);
+                        var result1 = saveArr(this.firstPage_data.list);
+                        that.firstPage_data.StockCode_arr = result1.StockCode_arr;
+                        that.firstPage_data.CaseNumber_arr = result1.CaseNumber_arr;
+
+                        if (that.totalPage >= 2 && that.dataPage >= 2) {
+                            var n = that.dataPage - 1;
+                            var json = {
+                                StockCode_arr: [],
+                                CaseNumber_arr: [],
+                                list: [],
+                                infrontLines: 0
+                            }
+
+                            findI(that.first_line + 1, that.saveListArr, vh - h3, h3, n, function (first_line, m2) {
+                                that.save_middle_i.push(m2 - 1);
+                                var list = listdata.slice(first_line, m2);
+                                if (list.length) {
+                                    json = {
+                                        list: list,
+                                        StockCode_arr: saveArr(list).StockCode_arr,
+                                        CaseNumber_arr: saveArr(list).CaseNumber_arr,
+                                        infrontLines: first_line
+                                    }
+                                    that.middle_data.push(json);
+                                }
+                            })
+                            console.log(that.middle_data);
+
+                            var last_data_length = 0;
+
+                            if (that.middle_data.length) {
+                                last_data_length = that.middle_data[that.middle_data.length - 1].list.length;
+                            }
+
+                            var last_data_h = that.saveListArr[that.saveListArr.length - 1].totalH - that.saveListArr[listdata.length - last_data_length].totalH;
+                            if (last_data_h + h2 < vh) {
+                                that.showEnd = false;
+                            } else {
+                                that.showEnd = true;
+
+                            }
+                        }
+                    }
+                    this.$nextTick(function () {
+                        // 在这里面去获取DOM
+                        if (that.totalPage>1) {
+                            addSeal(that.totalPage, that.ExitNotice.SealImgUrl);
+                        }
+                    })
+                },
+                filters: {
+                    showDate: function (val) {
+                        return moment(val).format('YYYY-MM-DD');
+                    }
+                },
+            });
+        })
+    </script>
+</body>
+
+</html>

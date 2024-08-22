@@ -159,14 +159,14 @@ namespace WebApp.Finance.Invoice
 
                 List<object> list = new List<object>() {
                     new {
-                        ProductName = "*物流辅助服务*服务费",
+                        ProductName = "*经纪代理服务*经纪代理",
                         Quantity = 1,
                         InvoiceTaxRate = agreement.InvoiceTaxRate,
                         Price = totalPrice.ToRound(4),
                         TotalPrice = totalPrice.ToRound(2),
                         UnitPrice = totalPriceWithTax.ToRound(4),
                         Amount = totalPriceWithTax.ToRound(2),
-                        TaxName="*物流辅助服务*服务费",//税务名称
+                        TaxName="*经纪代理服务*经纪代理",//税务名称
                         TaxCode="3040407040000000000"
                     }
                 };
@@ -279,14 +279,14 @@ namespace WebApp.Finance.Invoice
 
         //        List<object> list = new List<object>() {
         //            new {
-        //                ProductName = "*物流辅助服务*服务费",
+        //                ProductName = "*经纪代理服务*经纪代理",
         //                Quantity = 1,
         //                InvoiceTaxRate = agreement.InvoiceTaxRate,
         //                Price = totalPrice.ToRound(4),
         //                TotalPrice = totalPrice.ToRound(2),
         //                UnitPrice = totalPriceWithTax.ToRound(4),
         //                Amount = totalPriceWithTax.ToRound(2),
-        //                TaxName="*物流辅助服务*服务费",//税务名称
+        //                TaxName="*经纪代理服务*经纪代理",//税务名称
         //                TaxCode="3040407040000000000"
         //            }
         //        };

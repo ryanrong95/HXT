@@ -279,7 +279,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="lbl">检验检疫名称：</td>
+                        <td class="lbl">监管类别名称：</td>
                         <td colspan="3">
                             <input class="easyui-textbox" id="CiqName" name="CiqName" style="width: 410px" />
                         </td>

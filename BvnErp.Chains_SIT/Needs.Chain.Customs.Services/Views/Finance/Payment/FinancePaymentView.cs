@@ -218,6 +218,16 @@ namespace Needs.Ccs.Services.Views
             return view;
         }
 
+        public FinancePaymentViewRJ SearchBySZCW()
+        {
+            var linq = from query in this.IQueryable
+                       where query.FinanceVaultName.Contains("深圳")
+                       select query;
+
+            var view = new FinancePaymentViewRJ(this.Reponsitory, linq);
+            return view;
+        }
+
         public FinancePaymentViewRJ SearchByPayeeName(string payeeName)
         {
             var linq = from query in this.IQueryable

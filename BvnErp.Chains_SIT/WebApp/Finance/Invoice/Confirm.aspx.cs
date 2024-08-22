@@ -92,7 +92,7 @@ namespace WebApp.Finance.Invoice
             {
                 ID = item.ID,
                 item.OrderID,
-                ProductName = item.OrderItem == null ? "*物流辅助服务*服务费" : item.OrderItem?.Category.Name,  //产品名称
+                ProductName = item.OrderItem == null ? "*经纪代理服务*经纪代理" : item.OrderItem?.Category.Name,  //产品名称
                 //ProductModel = item.OrderItem?.Product.Model,//型号
                 ProductModel = item.OrderItem?.Model,
                 item.OrderItem?.Unit,//单位
@@ -104,7 +104,7 @@ namespace WebApp.Finance.Invoice
                 Amount = item.Amount.ToRound(2),//含税总额
                 //为了与开票软件一致，这里先算出不含税金额，再算出含税金额
                 //Amount = (((item.Amount + item.Difference) / (1 + item.InvoiceTaxRate)).ToRound(2)* (1 + item.InvoiceTaxRate)).ToRound(2),
-                TaxName = item.OrderItem == null ? "*物流辅助服务*服务费" : item.TaxName,//税务名称
+                TaxName = item.OrderItem == null ? "*经纪代理服务*经纪代理" : item.TaxName,//税务名称
                 TaxCode = item.OrderItem == null ? "3040407040000000000" : item.TaxCode,
                 item.Difference,
                 item.InvoiceCode,

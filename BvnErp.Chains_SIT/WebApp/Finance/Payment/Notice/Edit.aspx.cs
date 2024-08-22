@@ -25,7 +25,21 @@ namespace WebApp.Finance.Payment.Notice
         protected void Load_Data()
         {
             this.Model.PaymentType = Needs.Utils.Descriptions.EnumUtils.ToDictionary<Needs.Ccs.Services.Enums.PaymentType>().Select(item => new { Value = item.Key, Text = item.Value }).Json();
+
             this.Model.FinanceVaultData = Needs.Wl.Admin.Plat.AdminPlat.Current.Finance.FinanceVault.Where(item => item.Status == Needs.Ccs.Services.Enums.Status.Normal).Select(item => new { Value = item.ID, Text = item.Name }).Json();
+
+            //财务出纳1看深圳，财务出纳2看香港
+            var hk_caiwu = System.Configuration.ConfigurationManager.AppSettings["HK_Caiwu"];
+            if (!string.IsNullOrEmpty(hk_caiwu) && Needs.Wl.Admin.Plat.AdminPlat.Current.ID == hk_caiwu)
+            {
+                this.Model.FinanceVaultData = Needs.Wl.Admin.Plat.AdminPlat.Current.Finance.FinanceVault.Where(item => item.Status == Needs.Ccs.Services.Enums.Status.Normal && item.Name.Contains("香港")).Select(item => new { Value = item.ID, Text = item.Name }).Json();
+            }
+
+            var sz_caiwu = System.Configuration.ConfigurationManager.AppSettings["SZ_Caiwu"];
+            if (!string.IsNullOrEmpty(sz_caiwu) && Needs.Wl.Admin.Plat.AdminPlat.Current.ID == sz_caiwu)
+            {
+                this.Model.FinanceVaultData = Needs.Wl.Admin.Plat.AdminPlat.Current.Finance.FinanceVault.Where(item => item.Status == Needs.Ccs.Services.Enums.Status.Normal && item.Name.Contains("深圳")).Select(item => new { Value = item.ID, Text = item.Name }).Json();
+            }
 
             this.Model.FinanceAccountData = "".Json();
             this.Model.Notice = "".Json();

@@ -97,7 +97,7 @@
       <div class="itembox">
         <p class="detailtitle">代报关基础信息</p>
         <div style="width:100%;min-height:200px;background:#f5f7f9;margin:15px 0">
-          <Row v-if="">
+          <Row>
             <Col style="width: 20%;float: left;">
             <ul class="detail_li detail1">
               <li class="itemli">
@@ -180,7 +180,7 @@
                   </Option>
                 </Select>
                 <!-- <a href="javascript:void(0)" @click="showhistory">历史到货</a> -->
-                </Badge>
+          
               </li>
               <li class="itemli" v-if="waybillinfo.Type==1">
                 <span class="detail_title2">自提时间：</span>
@@ -569,7 +569,6 @@
                placeholder="请输入箱号"
                style="width:80%"
                @on-blur='handleCreate1(newboxcode)' />
-      </p>
       </p>
       <p style="padding-top:10px;" v-if="issharevalue==true">
         <label> <em class="Mustfill">*</em>重量(Kg)： </label>
@@ -1512,7 +1511,7 @@ export default {
     },
      handleCreate1(val) {  //箱号添加
     //  console.log(val)
-     if(!val==false&&val!='WL'){
+     if(!val==false&&val!='HXT'){
         if(this.oldboxcode!=null&&this.oldboxcode!=''){
           var data={
             boxCode:this.oldboxcode,

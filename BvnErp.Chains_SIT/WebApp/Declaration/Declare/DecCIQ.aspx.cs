@@ -26,7 +26,7 @@ namespace WebApp.Declaration.Declare
             this.Model.OrgCodes = Needs.Wl.Admin.Plat.AdminPlat.BaseOrgCodes.OrderBy(item => item.Code).Take(10).Select(item => new { Value = item.Code, Text = item.Code + "-" + item.Name }).Json();
             this.Model.CorrelationReason = Needs.Wl.Admin.Plat.AdminPlat.BaseCorrelationReason.OrderBy(item => item.Code).Select(item => new { Value = item.Code, Text = item.Code + "-" + item.Name }).Json();
             this.Model.OrigBoxFlag = "[{\"Value\":\"\" ,\"Text\":\" \"},{\"Value\":1,\"Text\":\"是\"},{\"Value\":0,\"Text\":\"否\"}]";
-            
+            this.Model.CustomMaster = Needs.Wl.Admin.Plat.AdminPlat.BaseCustomMaster.OrderBy(item => item.Code).Select(item => new { Value = item.Code, Text = item.Code + "-" + item.Name }).Json();
 
             string ID = Request.QueryString["ID"];
             this.Model.ID = ID;
@@ -104,9 +104,9 @@ namespace WebApp.Declaration.Declare
             dynamic model = Model.JsonTo<dynamic>();
 
             var head = Needs.Wl.Admin.Plat.AdminPlat.Current.Customs.DecHeads[(string)model.ID];
-            head.OrgCode = model.OrgCodeID;
-            head.VsaOrgCode = model.VsaOrgCodeID;
-            head.InspOrgCode = model.InspOrgCodeID;
+            //head.OrgCode = model.OrgCodeID;
+            //head.VsaOrgCode = model.VsaOrgCodeID;
+            //head.InspOrgCode = model.InspOrgCodeID;
             head.PurpOrgCode = model.PurpOrgCodeID;
             head.DespDate = ((string)model.DespDate).Replace("-", "");
             head.BLNo = model.BLNo;
@@ -155,6 +155,12 @@ namespace WebApp.Declaration.Declare
         private void DecHead_EnterSuccess(object sender, Needs.Linq.SuccessEventArgs e)
         {
             Response.Write((new { success = true, message = "保存成功", ID = e.Object }).Json());
+        }
+
+        protected object getCustomMasterlist()
+        {
+            string value = Request.Form["value"];
+            return Needs.Wl.Admin.Plat.AdminPlat.BaseCustomMaster.OrderBy(item => item.Code).Where(item => item.Code.Contains(value)).Take(20).Select(item => new { Value = item.Code, Text = item.Code + "-" + item.Name });
         }
     }
 }

@@ -50,6 +50,19 @@ namespace WebApp.Finance.AccountFlow
             this.Model.FinanceAccountData = Needs.Wl.Admin.Plat.AdminPlat.Current.Finance.FinanceAccounts
                  .Where(item => item.Status == Needs.Ccs.Services.Enums.Status.Normal && item.AccountSource == AccountSource.standard)
                 .Select(item => new { Value = item.ID, Text = item.AccountName }).Json();
+
+            //财务出纳1看深圳，财务出纳2看香港
+            var hk_caiwu = System.Configuration.ConfigurationManager.AppSettings["HK_Caiwu"];
+            if (!string.IsNullOrEmpty(hk_caiwu) && Needs.Wl.Admin.Plat.AdminPlat.Current.ID == hk_caiwu)
+            {
+                this.Model.VaultData = Needs.Wl.Admin.Plat.AdminPlat.Current.Finance.FinanceVault.Where(item => item.Status == Needs.Ccs.Services.Enums.Status.Normal && item.Name.Contains("香港")).Select(item => new { Value = item.ID, Text = item.Name }).Json();
+            }
+
+            var sz_caiwu = System.Configuration.ConfigurationManager.AppSettings["SZ_Caiwu"];
+            if (!string.IsNullOrEmpty(sz_caiwu) && Needs.Wl.Admin.Plat.AdminPlat.Current.ID == sz_caiwu)
+            {
+                this.Model.VaultData = Needs.Wl.Admin.Plat.AdminPlat.Current.Finance.FinanceVault.Where(item => item.Status == Needs.Ccs.Services.Enums.Status.Normal && item.Name.Contains("深圳")).Select(item => new { Value = item.ID, Text = item.Name }).Json();
+            }
         }
 
         /// <summary>
@@ -201,6 +214,13 @@ namespace WebApp.Finance.AccountFlow
                 {
                     view = view.SearchByHKCW();
                 }
+
+                var sz_caiwu = System.Configuration.ConfigurationManager.AppSettings["SZ_Caiwu"];
+                if (!string.IsNullOrEmpty(sz_caiwu) && Needs.Wl.Admin.Plat.AdminPlat.Current.ID == sz_caiwu)
+                {
+                    view = view.SearchBySZCW();
+                }
+
                 Response.Write(view.ToMyPage(page, rows).Json());
             }
         }

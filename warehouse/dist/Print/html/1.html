@@ -1,0 +1,1122 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>送货单打印</title>
+    <script type="text/javascript" src="/Print/js/jquery-1.3.2.min.js"></script>
+    <script type="text/javascript" src="/Print/js/vue.js"></script>
+    <script type="text/javascript" src="/Print/js/vue-barcode.js"></script>
+    <script type="text/javascript" src="/Print/js/moment.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body,
+        html {
+            background: #ffffff;
+            width: 21cm;
+            margin: 0 auto;
+            /*height: 100%;*/
+        }
+
+        body {
+            position: relative;
+        }
+
+        #app {
+            width: 20cm;
+            /*height: 29.7cm;*/
+            margin: 0 auto;
+        }
+
+        .fl {
+            float: left;
+        }
+
+        .fr {
+            float: right;
+        }
+
+        .clearfix {
+            zoom: 1;
+        }
+
+        .clearfix:after {
+            content: '.';
+            display: block;
+            height: 0;
+            clear: both;
+            visibility: hidden;
+        }
+
+        ul, li {
+            list-style:none;
+        }
+        .product {
+            width: 20cm;
+            /*height: 29.7cm;*/
+            margin: 0 auto;
+        }
+
+        table {
+            border: 1px solid #000;
+            border-collapse: collapse;
+            border-spacing: 0;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        tr th{
+            font-size:14px;
+        }
+        tr td {
+            padding: 2px 5px;
+            font-size:12px;
+            text-align:left;
+        }
+        /*压缝章*/
+        .seal {
+            position: absolute;
+            width: 10mm;
+            height: 40mm;
+            overflow: hidden;
+            right: 0;
+            top: 128.5mm;
+        }
+
+        .seal img {
+            position: absolute;
+            width: 40mm;
+            height: 40mm;
+            clip: rect(0 20mm 40mm 10mm);
+            left: -10mm;
+        }
+
+        /*标题*/
+        .tl {
+            width: 100%;
+            height: 66px;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        .tl span {
+            font-size: 14px;
+            height: 46px;
+            line-height: 46px;
+        }
+
+        .tl .barcode {
+            height: 46px;
+            float: right;
+        }
+        text {
+            font-family:'微软雅黑'!important;
+        
+        }
+        .msg1 {
+            margin-bottom: 10px;
+        }
+
+        .msg1 > div {
+            float: left;
+            font-size: 12px;
+            margin-right: 20px;
+        }
+
+        .msg1 > div.fr {
+            float: right;
+            margin-right: 0;
+        }
+        .table_data tr td {
+            text-align:center;
+        }
+        /*签字区域*/
+        .print-row {
+            float: right; 
+            font-size: 14px; 
+            line-height: 20px; 
+            margin-top: 15px;
+            margin-right: 120px; 
+            margin-bottom:20px;
+        }
+        .page {
+            text-align:center;
+        }
+        .mlr5{
+            margin:0 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div class="product">
+            <div class="tl clearfix">
+                <span>{{ExitNotice.Company}}送货单</span>
+                <barcode v-bind:value="ExitNotice.DeliveryOrderID" v-bind:options="barcode_option" tag="svg" class="barcode"></barcode>
+            </div>
+            <div class="msg1 clearfix">
+                <div><span>订单编号：</span><span>{{ExitNotice.OrderID}}</span></div>
+                <div><span>送货日期：</span><span>{{ExitNotice.DeliveryTime}}</span></div>
+                <div><span>装箱日期：</span><span>{{ExitNotice.SZPackingDate}}</span></div>
+                <div class="fr"><span>总件数：</span><span>{{ExitNotice.PackNo}}</span></div>
+            </div>
+            <table border="1" id="table_msg">
+                <tr>
+                    <td>
+                        <div>收货人：</div>
+                        <div>{{ExitNotice.ClientName}}</div>
+                    </td>
+                    <td>
+                        <div>收货地址：</div>
+                        <div>{{ExitNotice.Address}}</div>
+                    </td>
+                    <td>
+                        <div>联系人：<span>{{ExitNotice.Contactor}}</span></div>
+                        <div>电话号码：<span>{{ExitNotice.ContactTel}}</span></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <div>送货人：<span>{{ExitNotice.DriverName}}</span></div>
+                        <div>电话：<span style="margin-right:30px;">{{ExitNotice.DriverTel}}</span>车牌号：<span>{{ExitNotice.License}}</span></div>
+                    </td>
+                </tr>
+            </table>
+            <table border="1" class="table_data">
+                <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>库位号</th>
+                        <th>箱号</th>
+                        <th>品名</th>
+                        <th>型号</th>
+                        <th>品牌</th>
+                        <th>数量</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(item,index) in print_data">
+                        <td width="5%">{{index+1}}</td>
+                        <td width="8%" v-if="StockCode_arr.indexOf(index)!=-1&&StockCode_arr.length==1" v-bind:rowspan="print_data.length">{{item.StockCode}}</td>
+                        <td width="8%" v-if="StockCode_arr.indexOf(index)!=-1&&StockCode_arr.length!=1" v-bind:rowspan="StockCode_arr[StockCode_arr.indexOf(index)+1]-(StockCode_arr[StockCode_arr.indexOf(index)])">{{item.StockCode}}</td>
+                        <td width="8%" v-if="CaseNumber_arr.indexOf(index)!=-1&&CaseNumber_arr.length==1" v-bind:rowspan="print_data.length">{{item.CaseNumber}}</td>
+                        <td width="8%" v-if="CaseNumber_arr.indexOf(index)!=-1&&CaseNumber_arr.length!=1"  v-bind:rowspan="CaseNumber_arr[CaseNumber_arr.indexOf(index)+1]-(CaseNumber_arr[CaseNumber_arr.indexOf(index)])">{{item.CaseNumber}}</td>
+                        <td width="11%">{{item.ProductName}}</td>
+                        <td width="8%">{{item.Model}}</td>
+                        <td width="8%">{{item.Manufacturer}}</td>
+                        <td width="8%">{{item.Qty}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table id="table_info" border="1">
+                <tbody>
+                    <tr>
+                        <td style="width: 120px">对本次服务评价：</td>
+                        <td>
+                            <span>口</span>&nbsp;优秀&nbsp;&nbsp;&nbsp;
+                            <span>口</span>&nbsp;一般&nbsp;&nbsp;&nbsp;
+                            <span>口</span>&nbsp;差
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 120px">客户意见或建议：</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">本公司已如数收到上述货物和发票，无货物数量损失，无货物损坏。</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="clearfix">
+                <div class="print-row">
+                    <ul>
+                        <li style="margin-bottom:10px;">提货人签字/签章:</li>
+                        <li>提货日期:  _____年 ____月 ____ 日</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="page">
+                第<span class="mlr5">2</span>页&nbsp;&nbsp;共<span class="mlr5">2</span>页
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+<script type="text/javascript">
+    var model = {
+        "obj": {
+            "ExitNotice":{
+                "Company": "深圳市芯达通供应链管理有限公司",//送货单
+                "DeliveryOrderID": "N2019031006",
+
+                "OrderID": "NL02020191031005",//订单编号
+                "DeliveryTime": "2019-11-01",//送货日期
+                "SZPackingDate": "2019-10-31",//装箱日期
+                "PackNo": "1",//总件数
+
+                "ClientName": "杭州比一比科技有限公司",//收货人
+                "Address": "浙江 杭州 余杭区 1栋2层303",//收货地址
+
+                "Contactor": "张先生",//联系人
+                "ContactTel": "13232234564",//电话号码
+
+                "DriverName": "李天一",//送货人
+                "DriverTel": "15112560202",//电话
+                "License": "粤B8P1K1",//车牌号
+
+                "SealImgUrl": "http://foricerp0.ic360.cn/wladmin/Content/images/XDTBillStamp.png"
+            },
+            "listdata": [{
+                "ID": "EXNItem201908020000000309",
+                "SortingID": "Sorting201908020000000259",
+                "CaseNumber": "1",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 16.0000,
+                "GrossWeight": 17.6000,
+                "ProductName": "集成电路",
+                "Model": "LM2576T-ADJ/NOPB",
+                "Qty": 4995.0000,
+                "WrapType": null,
+                "Manufacturer": "TI",
+                "UpdateDate": "2019-08-02T00:08:11.74"
+            }, {
+                "ID": "EXNItem201908020000000310",
+                "SortingID": "Sorting201908020000000260",
+                "CaseNumber": "10",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 1.8900,
+                "GrossWeight": 2.0800,
+                "ProductName": "集成电路",
+                "Model": "AP2191SG-13",
+                "Qty": 2500.0000,
+                "WrapType": null,
+                "Manufacturer": "Diodes",
+                "UpdateDate": "2019-08-02T00:08:11.74"
+            }, {
+                "ID": "EXNItem201908020000000311",
+                "SortingID": "Sorting201908020000000261",
+                "CaseNumber": "11",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 5.1000,
+                "GrossWeight": 5.6100,
+                "ProductName": "集成电路",
+                "Model": "AT90CAN128-16AU",
+                "Qty": 2250.0000,
+                "WrapType": null,
+                "Manufacturer": "ATMEL",
+                "UpdateDate": "2019-08-02T00:08:11.74"
+            }, {
+                "ID": "EXNItem201908020000000312",
+                "SortingID": "Sorting201908020000000262",
+                "CaseNumber": "12",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 5.1000,
+                "GrossWeight": 5.6100,
+                "ProductName": "集成电路",
+                "Model": "AT90CAN128-16AU",
+                "Qty": 2250.0000,
+                "WrapType": null,
+                "Manufacturer": "ATMEL",
+                "UpdateDate": "2019-08-02T00:08:11.74"
+            }, {
+                "ID": "EXNItem201908020000000313",
+                "SortingID": "Sorting201908020000000263",
+                "CaseNumber": "14",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 6.2400,
+                "GrossWeight": 6.8600,
+                "ProductName": "集成电路",
+                "Model": "TL084IDT",
+                "Qty": 17500.0000,
+                "WrapType": null,
+                "Manufacturer": "ST",
+                "UpdateDate": "2019-08-02T00:08:11.74"
+            }, {
+                "ID": "EXNItem201908020000000314",
+                "SortingID": "Sorting201908020000000264",
+                "CaseNumber": "16",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 7.8000,
+                "GrossWeight": 8.5800,
+                "ProductName": "带接头电导体",
+                "Model": "OPB990T55Z",
+                "Qty": 1000.0000,
+                "WrapType": null,
+                "Manufacturer": "OPTEK",
+                "UpdateDate": "2019-08-02T00:08:11.74"
+            }, {
+                "ID": "EXNItem201908020000000315",
+                "SortingID": "Sorting201908020000000265",
+                "CaseNumber": "16",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 3.9000,
+                "GrossWeight": 4.2900,
+                "ProductName": "带接头电导体",
+                "Model": "OPB990T55Z",
+                "Qty": 500.0000,
+                "WrapType": null,
+                "Manufacturer": "OPTEK",
+                "UpdateDate": "2019-08-02T00:08:11.74"
+            }, {
+                "ID": "EXNItem201908020000000316",
+                "SortingID": "Sorting201908020000000266",
+                "CaseNumber": "17",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 2.2600,
+                "GrossWeight": 2.4900,
+                "ProductName": "光电耦合器",
+                "Model": "SI8622EC-B-IS",
+                "Qty": 7500.0000,
+                "WrapType": null,
+                "Manufacturer": "Silicon",
+                "UpdateDate": "2019-08-02T00:08:11.74"
+            }, {
+                "ID": "EXNItem201908020000000317",
+                "SortingID": "Sorting201908020000000267",
+                "CaseNumber": "18",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 0.0100,
+                "GrossWeight": 0.0200,
+                "ProductName": "集成电路",
+                "Model": "DP83848KSQ/NOPB",
+                "Qty": 50.0000,
+                "WrapType": null,
+                "Manufacturer": "TI",
+                "UpdateDate": "2019-08-02T00:08:11.74"
+            }, {
+                "ID": "EXNItem201908020000000318",
+                "SortingID": "Sorting201908020000000268",
+                "CaseNumber": "18",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 0.3900,
+                "GrossWeight": 0.4200,
+                "ProductName": "集成电路",
+                "Model": "STM32F103CBT6",
+                "Qty": 200.0000,
+                "WrapType": null,
+                "Manufacturer": "ST",
+                "UpdateDate": "2019-08-02T00:08:11.743"
+            }, {
+                "ID": "EXNItem201908020000000319",
+                "SortingID": "Sorting201908020000000269",
+                "CaseNumber": "18",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 0.4200,
+                "GrossWeight": 0.4600,
+                "ProductName": "集成电路",
+                "Model": "MAX3232CSE+T",
+                "Qty": 2000.0000,
+                "WrapType": null,
+                "Manufacturer": "Maxim",
+                "UpdateDate": "2019-08-02T00:08:11.743"
+            }, {
+                "ID": "EXNItem201908020000000320",
+                "SortingID": "Sorting201908020000000270",
+                "CaseNumber": "18",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 8.5600,
+                "GrossWeight": 9.4200,
+                "ProductName": "晶体管",
+                "Model": "MGD623S",
+                "Qty": 1020.0000,
+                "WrapType": null,
+                "Manufacturer": "SANKEN",
+                "UpdateDate": "2019-08-02T00:08:11.743"
+            }, {
+                "ID": "EXNItem201908020000000321",
+                "SortingID": "Sorting201908020000000271",
+                "CaseNumber": "18",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 0.0700,
+                "GrossWeight": 0.0800,
+                "ProductName": "集成电路",
+                "Model": "TL082IDR",
+                "Qty": 600.0000,
+                "WrapType": null,
+                "Manufacturer": "TI",
+                "UpdateDate": "2019-08-02T00:08:11.743"
+            }, {
+                "ID": "EXNItem201908020000000322",
+                "SortingID": "Sorting201908020000000272",
+                "CaseNumber": "18",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 4.9100,
+                "GrossWeight": 5.4000,
+                "ProductName": "集成电路",
+                "Model": "STR-A6061HD-7L",
+                "Qty": 5000.0000,
+                "WrapType": null,
+                "Manufacturer": "SANKEN",
+                "UpdateDate": "2019-08-02T00:08:11.743"
+            }, {
+                "ID": "EXNItem201908020000000323",
+                "SortingID": "Sorting201908020000000273",
+                "CaseNumber": "18",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 4.9300,
+                "GrossWeight": 5.4200,
+                "ProductName": "集成电路",
+                "Model": "STR-A6061HD",
+                "Qty": 5000.0000,
+                "WrapType": null,
+                "Manufacturer": "SANKEN",
+                "UpdateDate": "2019-08-02T00:08:11.743"
+            }, {
+                "ID": "EXNItem201908020000000324",
+                "SortingID": "Sorting201908020000000274",
+                "CaseNumber": "2",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 0.3300,
+                "GrossWeight": 0.3600,
+                "ProductName": "二极管",
+                "Model": "SMF6.0A",
+                "Qty": 9000.0000,
+                "WrapType": null,
+                "Manufacturer": "LITTELFUSE",
+                "UpdateDate": "2019-08-02T00:08:11.743"
+            }, {
+                "ID": "EXNItem201908020000000325",
+                "SortingID": "Sorting201908020000000275",
+                "CaseNumber": "2",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 0.2200,
+                "GrossWeight": 0.2400,
+                "ProductName": "二极管",
+                "Model": "SML4740A-E3/61",
+                "Qty": 1800.0000,
+                "WrapType": null,
+                "Manufacturer": "Vishay",
+                "UpdateDate": "2019-08-02T00:08:11.743"
+            }, {
+                "ID": "EXNItem201908020000000326",
+                "SortingID": "Sorting201908020000000276",
+                "CaseNumber": "2",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 1.5000,
+                "GrossWeight": 1.6500,
+                "ProductName": "接插件",
+                "Model": "1759547-1",
+                "Qty": 450.0000,
+                "WrapType": null,
+                "Manufacturer": "TE",
+                "UpdateDate": "2019-08-02T00:08:11.743"
+            }, {
+                "ID": "EXNItem201908020000000327",
+                "SortingID": "Sorting201908020000000277",
+                "CaseNumber": "2",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 0.4000,
+                "GrossWeight": 0.4400,
+                "ProductName": "晶体管",
+                "Model": "MGSF1N03LT1G",
+                "Qty": 12000.0000,
+                "WrapType": null,
+                "Manufacturer": "ON",
+                "UpdateDate": "2019-08-02T00:08:11.743"
+            }, {
+                "ID": "EXNItem201908020000000328",
+                "SortingID": "Sorting201908020000000278",
+                "CaseNumber": "2",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 0.1900,
+                "GrossWeight": 0.2100,
+                "ProductName": "片式多层铝电容器",
+                "Model": "UWT1H101MNL1GS",
+                "Qty": 152.0000,
+                "WrapType": null,
+                "Manufacturer": "NICHICON",
+                "UpdateDate": "2019-08-02T00:08:11.743"
+            }, {
+                "ID": "EXNItem201908020000000329",
+                "SortingID": "Sorting201908020000000279",
+                "CaseNumber": "2",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 0.7700,
+                "GrossWeight": 0.8500,
+                "ProductName": "片式多层铝电容器",
+                "Model": "UWT1H101MNL1GS",
+                "Qty": 500.0000,
+                "WrapType": null,
+                "Manufacturer": "NICHICON",
+                "UpdateDate": "2019-08-02T00:08:11.743"
+            }, {
+                "ID": "EXNItem201908020000000330",
+                "SortingID": "Sorting201908020000000280",
+                "CaseNumber": "2",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 0.4700,
+                "GrossWeight": 0.5200,
+                "ProductName": "集成电路",
+                "Model": "MKL17Z256VLH4",
+                "Qty": 30.0000,
+                "WrapType": null,
+                "Manufacturer": "NXP",
+                "UpdateDate": "2019-08-02T00:08:11.743"
+            }, {
+                "ID": "EXNItem201908020000000331",
+                "SortingID": "Sorting201908020000000281",
+                "CaseNumber": "2",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 2.2300,
+                "GrossWeight": 2.4500,
+                "ProductName": "二极管",
+                "Model": "1SMA5923BT3G",
+                "Qty": 15000.0000,
+                "WrapType": null,
+                "Manufacturer": "ON",
+                "UpdateDate": "2019-08-02T00:08:11.743"
+            }, {
+                "ID": "EXNItem201908020000000332",
+                "SortingID": "Sorting201908020000000282",
+                "CaseNumber": "2",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 0.0100,
+                "GrossWeight": 0.0200,
+                "ProductName": "集成电路",
+                "Model": "R1524S033B-KE",
+                "Qty": 25.0000,
+                "WrapType": null,
+                "Manufacturer": "RICOH",
+                "UpdateDate": "2019-08-02T00:08:11.743"
+            }, {
+                "ID": "EXNItem201908020000000333",
+                "SortingID": "Sorting201908020000000283",
+                "CaseNumber": "2",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 2.1400,
+                "GrossWeight": 2.3500,
+                "ProductName": "二极管",
+                "Model": "BAV21-TR",
+                "Qty": 10000.0000,
+                "WrapType": null,
+                "Manufacturer": "VISHAY",
+                "UpdateDate": "2019-08-02T00:08:11.743"
+            }, {
+                "ID": "EXNItem201908020000000334",
+                "SortingID": "Sorting201908020000000284",
+                "CaseNumber": "2",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 0.1300,
+                "GrossWeight": 0.1400,
+                "ProductName": "晶体管",
+                "Model": "FDS4435BZ",
+                "Qty": 1000.0000,
+                "WrapType": null,
+                "Manufacturer": "FAIRCHILD",
+                "UpdateDate": "2019-08-02T00:08:11.743"
+            }, {
+                "ID": "EXNItem201908020000000335",
+                "SortingID": "Sorting201908020000000285",
+                "CaseNumber": "2",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 0.2100,
+                "GrossWeight": 0.2400,
+                "ProductName": "二极管",
+                "Model": "BAS70-04,215",
+                "Qty": 6000.0000,
+                "WrapType": null,
+                "Manufacturer": "NEXPERIA",
+                "UpdateDate": "2019-08-02T00:08:11.743"
+            }, {
+                "ID": "EXNItem201908020000000336",
+                "SortingID": "Sorting201908020000000286",
+                "CaseNumber": "2",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 0.1900,
+                "GrossWeight": 0.2100,
+                "ProductName": "二极管",
+                "Model": "BAT54SLT1G",
+                "Qty": 6000.0000,
+                "WrapType": null,
+                "Manufacturer": "ON",
+                "UpdateDate": "2019-08-02T00:08:11.743"
+            }, {
+                "ID": "EXNItem201908020000000337",
+                "SortingID": "Sorting201908020000000287",
+                "CaseNumber": "2",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 0.0300,
+                "GrossWeight": 0.0400,
+                "ProductName": "集成电路",
+                "Model": "AT24CM02-SSHM-B",
+                "Qty": 100.0000,
+                "WrapType": null,
+                "Manufacturer": "MICROCHIP",
+                "UpdateDate": "2019-08-02T00:08:11.743"
+            }, {
+                "ID": "EXNItem201908020000000338",
+                "SortingID": "Sorting201908020000000288",
+                "CaseNumber": "2",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 0.0500,
+                "GrossWeight": 0.0500,
+                "ProductName": "晶体振荡器",
+                "Model": "ATS08ASM-1E",
+                "Qty": 50.0000,
+                "WrapType": null,
+                "Manufacturer": "CTS",
+                "UpdateDate": "2019-08-02T00:08:11.743"
+            }, {
+                "ID": "EXNItem201908020000000339",
+                "SortingID": "Sorting201908020000000289",
+                "CaseNumber": "2",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 0.2100,
+                "GrossWeight": 0.2300,
+                "ProductName": "光电耦合器",
+                "Model": "IL420",
+                "Qty": 210.0000,
+                "WrapType": null,
+                "Manufacturer": "VISHAY",
+                "UpdateDate": "2019-08-02T00:08:11.747"
+            }, {
+                "ID": "EXNItem201908020000000340",
+                "SortingID": "Sorting201908020000000290",
+                "CaseNumber": "2",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 0.9800,
+                "GrossWeight": 1.0800,
+                "ProductName": "接插件",
+                "Model": "HFJ11-1G01E-L11RL",
+                "Qty": 100.0000,
+                "WrapType": null,
+                "Manufacturer": "HALO",
+                "UpdateDate": "2019-08-02T00:08:11.747"
+            }, {
+                "ID": "EXNItem201908020000000341",
+                "SortingID": "Sorting201908020000000291",
+                "CaseNumber": "2",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 0.1500,
+                "GrossWeight": 0.1600,
+                "ProductName": "LED指示灯",
+                "Model": "553-0133-200F",
+                "Qty": 200.0000,
+                "WrapType": null,
+                "Manufacturer": "DIALIGHT",
+                "UpdateDate": "2019-08-02T00:08:11.747"
+            }, {
+                "ID": "EXNItem201908020000000342",
+                "SortingID": "Sorting201908020000000292",
+                "CaseNumber": "2",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 0.0700,
+                "GrossWeight": 0.0700,
+                "ProductName": "二极管",
+                "Model": "SS36",
+                "Qty": 186.0000,
+                "WrapType": null,
+                "Manufacturer": "FAIRCHILD",
+                "UpdateDate": "2019-08-02T00:08:11.747"
+            }, {
+                "ID": "EXNItem201908020000000343",
+                "SortingID": "Sorting201908020000000293",
+                "CaseNumber": "2",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 0.9800,
+                "GrossWeight": 1.0700,
+                "ProductName": "桥式整流器",
+                "Model": "KBU8M-E4/51",
+                "Qty": 100.0000,
+                "WrapType": null,
+                "Manufacturer": "Vishay",
+                "UpdateDate": "2019-08-02T00:08:11.747"
+            }, {
+                "ID": "EXNItem201908020000000344",
+                "SortingID": "Sorting201908020000000294",
+                "CaseNumber": "2",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 0.4500,
+                "GrossWeight": 0.5000,
+                "ProductName": "片式多层瓷介电容器",
+                "Model": "CL31A226MOCLNNC",
+                "Qty": 8000.0000,
+                "WrapType": null,
+                "Manufacturer": "SAMSUNG",
+                "UpdateDate": "2019-08-02T00:08:11.747"
+            }, {
+                "ID": "EXNItem201908020000000345",
+                "SortingID": "Sorting201908020000000295",
+                "CaseNumber": "2",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 1.4300,
+                "GrossWeight": 1.5700,
+                "ProductName": "晶体管",
+                "Model": "FQD7P20TM",
+                "Qty": 2500.0000,
+                "WrapType": null,
+                "Manufacturer": "ON",
+                "UpdateDate": "2019-08-02T00:08:11.747"
+            }, {
+                "ID": "EXNItem201908020000000346",
+                "SortingID": "Sorting201908020000000296",
+                "CaseNumber": "2",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 0.0400,
+                "GrossWeight": 0.0500,
+                "ProductName": "集成电路",
+                "Model": "TC4426EPA",
+                "Qty": 25.0000,
+                "WrapType": null,
+                "Manufacturer": "MICROCHIP",
+                "UpdateDate": "2019-08-02T00:08:11.747"
+            }, {
+                "ID": "EXNItem201908020000000347",
+                "SortingID": "Sorting201908020000000297",
+                "CaseNumber": "2",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 0.1200,
+                "GrossWeight": 0.1300,
+                "ProductName": "二极管",
+                "Model": "MBR0540T1G",
+                "Qty": 3000.0000,
+                "WrapType": null,
+                "Manufacturer": "ON",
+                "UpdateDate": "2019-08-02T00:08:11.747"
+            }, {
+                "ID": "EXNItem201908020000000348",
+                "SortingID": "Sorting201908020000000298",
+                "CaseNumber": "2",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 0.0100,
+                "GrossWeight": 0.0200,
+                "ProductName": "电感器",
+                "Model": "LQW18CNR16J00D",
+                "Qty": 50.0000,
+                "WrapType": null,
+                "Manufacturer": "MURATA",
+                "UpdateDate": "2019-08-02T00:08:11.747"
+            }, {
+                "ID": "EXNItem201908020000000349",
+                "SortingID": "Sorting201908020000000299",
+                "CaseNumber": "2",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 0.0900,
+                "GrossWeight": 0.1000,
+                "ProductName": "多元件集成电路",
+                "Model": "LIS331DLHTR",
+                "Qty": 11.0000,
+                "WrapType": null,
+                "Manufacturer": "ST",
+                "UpdateDate": "2019-08-02T00:08:11.747"
+            }, {
+                "ID": "EXNItem201908020000000350",
+                "SortingID": "Sorting201908020000000300",
+                "CaseNumber": "2",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 0.5300,
+                "GrossWeight": 0.5800,
+                "ProductName": "集成电路",
+                "Model": "S25FL128SAGMFI010",
+                "Qty": 164.0000,
+                "WrapType": null,
+                "Manufacturer": "Cypress",
+                "UpdateDate": "2019-08-02T00:08:11.747"
+            }, {
+                "ID": "EXNItem201908020000000351",
+                "SortingID": "Sorting201908020000000301",
+                "CaseNumber": "2",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 1.2700,
+                "GrossWeight": 1.3900,
+                "ProductName": "非片式多层瓷介电容器",
+                "Model": "DECB33J102KC4B",
+                "Qty": 500.0000,
+                "WrapType": null,
+                "Manufacturer": "Murata",
+                "UpdateDate": "2019-08-02T00:08:11.747"
+            }, {
+                "ID": "EXNItem201908020000000352",
+                "SortingID": "Sorting201908020000000302",
+                "CaseNumber": "3",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 1.2600,
+                "GrossWeight": 1.3900,
+                "ProductName": "晶体管",
+                "Model": "MMBT2907ALT1G",
+                "Qty": 30000.0000,
+                "WrapType": null,
+                "Manufacturer": "ON",
+                "UpdateDate": "2019-08-02T00:08:11.747"
+            }, {
+                "ID": "EXNItem201908020000000353",
+                "SortingID": "Sorting201908020000000303",
+                "CaseNumber": "4",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 5.7300,
+                "GrossWeight": 6.3000,
+                "ProductName": "晶体管",
+                "Model": "MMBT2907ALT1G",
+                "Qty": 150000.0000,
+                "WrapType": null,
+                "Manufacturer": "ON",
+                "UpdateDate": "2019-08-02T00:08:11.747"
+            }, {
+                "ID": "EXNItem201908020000000354",
+                "SortingID": "Sorting201908020000000304",
+                "CaseNumber": "5",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 3.4000,
+                "GrossWeight": 3.7400,
+                "ProductName": "集成电路",
+                "Model": "MC33PF3000A7ES",
+                "Qty": 2600.0000,
+                "WrapType": null,
+                "Manufacturer": "NXP",
+                "UpdateDate": "2019-08-02T00:08:11.747"
+            }, {
+                "ID": "EXNItem201908020000000355",
+                "SortingID": "Sorting201908020000000305",
+                "CaseNumber": "6",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 2.1200,
+                "GrossWeight": 2.3300,
+                "ProductName": "集成电路",
+                "Model": "MC33PF3000A7ESR2",
+                "Qty": 4000.0000,
+                "WrapType": null,
+                "Manufacturer": "NXP",
+                "UpdateDate": "2019-08-02T00:08:11.747"
+            }, {
+                "ID": "EXNItem201908020000000356",
+                "SortingID": "Sorting201908020000000306",
+                "CaseNumber": "7",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 0.3300,
+                "GrossWeight": 0.3600,
+                "ProductName": "二极管",
+                "Model": "GG0402052R542P",
+                "Qty": 10000.0000,
+                "WrapType": null,
+                "Manufacturer": "AVX",
+                "UpdateDate": "2019-08-02T00:08:11.747"
+            }, {
+                "ID": "EXNItem201908020000000357",
+                "SortingID": "Sorting201908020000000307",
+                "CaseNumber": "8",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 8.2500,
+                "GrossWeight": 9.0800,
+                "ProductName": "接插件",
+                "Model": "172253-3123",
+                "Qty": 15000.0000,
+                "WrapType": null,
+                "Manufacturer": "Molex",
+                "UpdateDate": "2019-08-02T00:08:11.747"
+            }, {
+                "ID": "EXNItem201908020000000358",
+                "SortingID": "Sorting201908020000000308",
+                "CaseNumber": "9",
+                "StockCode": "InsideStock",
+                "PackingDate": "2019-08-02",
+                "NetWeight": 2.1200,
+                "GrossWeight": 2.3300,
+                "ProductName": "集成电路",
+                "Model": "N25Q128A13EF840F",
+                "Qty": 4000.0000,
+                "WrapType": null,
+                "Manufacturer": "MICRON",
+                "UpdateDate": "2019-08-02T00:08:11.747"
+            }]
+        }
+    };
+
+    //存储合并单元格的数组
+    function saveArr(data) {
+        var StockCode_arr = [0],
+            CaseNumber_arr = [0],
+            StockCode_first = data[0].StockCode,
+            CaseNumber_first = data[0].CaseNumber;
+        for (var i = 1; i < data.length; i++) {
+            if (StockCode_first != data[i].StockCode) {
+                StockCode_first = data[i].StockCode;
+                StockCode_arr.push(i);
+            }
+            if (CaseNumber_first != data[i].CaseNumber) {
+                CaseNumber_first = data[i].CaseNumber;
+                CaseNumber_arr.push(i);
+            }
+        }
+        return {
+            StockCode_arr: StockCode_arr,
+            CaseNumber_arr: CaseNumber_arr
+        }
+    }
+
+    // 获取每毫米的像素值
+    function getOneMmsPx() {
+        // 创建一个1mm宽的元素插入到页面，然后坐等出结果
+        let div = document.createElement("div");
+        div.id = "mm";
+        div.style.width = "1mm";
+        document.querySelector("body").appendChild(div);
+        // 原生方法获取浏览器对元素的计算值
+        let mm1 = document.getElementById("mm").getBoundingClientRect();
+        return mm1.width;
+    }
+    var w = getOneMmsPx(),
+        a4H = (w * 297);
+    
+    $(function () {
+        var listdata = null;
+        var ExitNotice = null;
+        if (window['model']) {
+            ExitNotice = model.obj.ExitNotice;
+            listdata = model.obj.listdata
+        } else {
+            listdata = null;
+            ExitNotice = null;
+        }
+
+        var Vue = window.Vue;
+        var VueBarcode = window.VueBarcode;
+        Vue.component('barcode', VueBarcode);
+
+        new Vue({
+            el: '#app',
+            data: {
+                abc: "房间都是分开核算的开发和思考",
+                ExitNotice: ExitNotice,
+                print_data:listdata,
+                //otherlist: [],
+                //showelse: false,
+                barcode_option: {
+                    displayValue: true, //是否默认显示条形码数据
+                    //textPosition  :'top', //条形码数据显示的位置
+                    background: "#fff", //条形码背景颜色
+                    valid: function (valid) { },
+                    width: "1.7px", //单个条形码的宽度
+                    height: "40px",
+                    fontSize: "16px", //字体大小
+                    fontFamily: "微软雅黑",
+                    format: "CODE128", //选择要使用的条形码类型
+                    margin: 2
+                },
+                StockCode_arr: [],
+                CaseNumber_arr: []
+            },
+            created() {
+                var that = this;
+                var result = saveArr(that.print_data);
+                console.log(result);
+                that.StockCode_arr = result.StockCode_arr;
+                that.CaseNumber_arr = result.CaseNumber_arr;
+                //this.print_data = listdata;
+                //console.log(this.print_data.slice(27))
+                //if(this.print_data.length > 25) {
+                //	var listdata = this.print_data.slice(26)
+                //	this.otherlist = this.group(listdata, 30);
+                //	console.log(this.otherlist)
+                //	this.showelse = true;
+                //} else {
+                //	this.showelse = false;
+                //}
+
+            },
+            mounted() {
+                var that = this;
+                //添加压缝章
+                var bh = $('body').height();
+                var Page = Math.ceil(bh / a4H);
+                var clipw = 40 / Page;
+                for (var i = 0; i < Page; i++) {
+                    var seal = $('<div class="seal"></div>')
+                    //var seal_img = $('<img src="../image/XDTBillStamp.png"/>');
+                    var seal_img = $('<img src="' + that.ExitNotice.SealImgUrl + '"/>');
+                    seal.css('width', clipw + 'mm');
+                    seal.css('top', 297 * i + (297 / 2 - 20) + 'mm');
+                    seal_img.css({
+                        clip: 'rect(0 ' + clipw * (i + 1) + 'mm 40mm ' + clipw * i + 'mm)',
+                        left: '-' + clipw * i + 'mm'
+                    })
+                    seal.append(seal_img);
+                    $('body').append(seal);
+                }
+                setTimeout(function () {
+                    var h1 = $('.tl').height(),
+                        h2 = $('#table_msg').height(),
+                        h3 = $('.table_data').height(),
+                        h4 = $('#table_info').height(),
+                        h5 = $('.print-row').height();
+                    console.log(h1);
+                    console.log(h2);
+                    console.log(h3);
+                    console.log((h1 + h2 + h3) / w -297)
+                    console.log(h4);
+                    console.log(h5);
+                    console.log((h1 + h2 + h3 + h4 + h5) / w/297);
+                }, 20)
+            },
+            methods: {
+                //group(array, subGroupLength) {
+                //    let index = 0;
+                //    let newArray = [];
+                //    while (index < array.length) {
+                //        newArray.push(array.slice(index, index += subGroupLength));
+                //    }
+                //    return newArray;
+                //}
+            },
+            filters: {
+                showDate: function (val) {
+                    return moment(val).format('YYYY-MM-DD');
+                }
+            },
+        });
+    })
+</script>

@@ -115,20 +115,8 @@ namespace Yahv.Services
             var door1 = new WhDoor
             {
                 ID = "HK01",
-                Name = "香港万路通库房",
-                Address = "九龙观塘成业街16号 怡生工业大厦11/F B2单元",
-                Enterprise = new WhEnterprise
-                {
-                    ID = "10528B3C5358D2A78B32DD90F911C13B",
-                    Name = "香港万路通国际物流有限公司"
-                }
-            };
-
-            var door2 = new WhDoor
-            {
-                ID = "HK02",
                 Name = "香港速逹國際物流",
-                Address = "香港九龙观塘成业街27号日昇中心1204室", //"香港九龍觀塘成業街27號日昇中心3樓318室",
+                Address = "香港九龙观塘成业街27号日昇中心1204室",
                 Enterprise = new WhEnterprise
                 {
                     ID = "8C7BF4F7F1DE9F69E1D96C96DAF6768E",
@@ -136,48 +124,60 @@ namespace Yahv.Services
                 }
             };
 
+            var door2 = new WhDoor
+            {
+                ID = "HK02",
+                Name = "香港速逹國際物流1",
+                Address = "香港九龙观塘成业街27号日昇中心1204室", //"香港九龍觀塘成業街27號日昇中心3樓318室",
+                Enterprise = new WhEnterprise
+                {
+                    ID = "8C7BF4F7F1DE9F69E1D96C96DAF6768E2",
+                    Name = "香港速逹國際物流有限公司"
+                }
+            };
+
             var door3 = new WhDoor
             {
                 ID = "SZ01",
-                Name = "深圳芯达通库房",
-                Address = "深圳市龙岗区吉华路393号英达丰科技园1号楼",
+                Name = "深圳华芯通库房",
+                Address = "深圳市龙华区龙华街道富康社区天汇大厦C栋212",
                 Enterprise = new WhEnterprise
                 {
                     ID = "DBAEAB43B47EB4299DD1D62F764E6B6A",
-                    Name = "深圳市芯达通供应链管理有限公司"
+                    Name = "深圳市华芯通供应链管理有限公司"
                 }
             };
             var door4 = new WhDoor
             {
                 ID = "SZ02",
-                Name = "深圳创新恒远库房",
-                Address = "深圳市龙岗区吉华路393号英达丰科技园1号楼",
+                Name = "深圳华芯通库房2",
+                Address = "深圳市龙华区龙华街道富康社区天汇大厦C栋212",
                 Enterprise = new WhEnterprise
                 {
-                    ID = "BC59F2835C939F293039017E5071F733",
-                    Name = "深圳市创新恒远供应链管理有限公司"
+                    ID = "DBAEAB43B47EB4299DD1D62F764E6B6A2",
+                    Name = "深圳市华芯通供应链管理有限公司"
                 }
             };
             var door5 = new WhDoor
             {
                 ID = "SZ03",
-                Name = "深圳科睿鑫汇库房",
-                Address = "深圳市龙岗区吉华街道水径社区吉华路393号英达丰工业区A栋厂房402",
+                Name = "深圳华芯通库房3",
+                Address = "深圳市龙华区龙华街道富康社区天汇大厦C栋212",
                 Enterprise = new WhEnterprise
                 {
-                    ID = "F77B5736ED5DEDAD03CDB8D764C62DD0",
-                    Name = "深圳市科睿鑫汇供应链管理有限公司"
+                    ID = "DBAEAB43B47EB4299DD1D62F764E6B6A3",
+                    Name = "深圳市华芯通供应链管理有限公司"
                 }
             };
             var door6 = new WhDoor
             {
-                ID = "TH01",
-                Name = "中执广场",
+                ID = "SZ04",
+                Name = "深圳华芯通库房4",
                 Address = "深圳市龙华区龙华街道富康社区天汇大厦C栋212",
                 Enterprise = new WhEnterprise
                 {
-                    ID = "TH01",
-                    Name = "中执广场"
+                    ID = "DBAEAB43B47EB4299DD1D62F764E6B6A4",
+                    Name = "深圳市华芯通供应链管理有限公司"
                 }
             };
 
@@ -231,7 +231,7 @@ namespace Yahv.Services
         {
             get
             {
-                return this.Doors.SingleOrDefault(item => item.ID == (index) || item.Name == index || item.Enterprise.Name == index);
+                return this.Doors.FirstOrDefault(item => item.ID == (index) || item.Name == index || item.Enterprise.Name == index);
             }
         }
         public WhDoor[] Doors { get; internal set; }
@@ -258,13 +258,13 @@ namespace Yahv.Services
             var indata = this.indata = new Dictionary<string, WhEnterprise>();
             foreach (var item in WhSettings.SZ.Doors)
             {
-                indata.Add(item.Enterprise.ID, WhSettings.HK["香港万路通库房"].Enterprise);
+                indata.Add(item.Enterprise.ID, WhSettings.HK["香港速逹國際物流"].Enterprise);
             }
 
             var outdata = this.outdata = new Dictionary<string, WhEnterprise>();
             foreach (var item in WhSettings.SZ.Doors)
             {
-                outdata.Add(item.Enterprise.ID, WhSettings.HK["香港畅运库房"].Enterprise);
+                outdata.Add(item.Enterprise.ID, WhSettings.HK["香港速逹國際物流1"].Enterprise);
             }
         }
 

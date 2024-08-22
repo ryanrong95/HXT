@@ -87,9 +87,9 @@ namespace Needs.Ccs.Services.Models
                 DeclareName = entity.DeclareName,
                 TypistNo = entity.TypistNo,
                 InputerID = entity.Inputer.ID,
-                OrgCode = entity.OrgCode,
-                VsaOrgCode = entity.VsaOrgCode,
-                InspOrgCode = entity.InspOrgCode,
+                //OrgCode = entity.OrgCode,
+                //VsaOrgCode = entity.VsaOrgCode,
+                //InspOrgCode = entity.InspOrgCode,
                 PurpOrgCode = entity.PurpOrgCode,
                 DespDate = entity.DespDate,
 

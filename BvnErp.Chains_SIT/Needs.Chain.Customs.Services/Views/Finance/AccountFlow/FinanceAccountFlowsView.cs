@@ -217,5 +217,15 @@ namespace Needs.Ccs.Services.Views.Finance.AccountFlow
             var view = new FinanceAccountFlowsView(this.Reponsitory, linq);
             return view;
         }
+
+        public FinanceAccountFlowsView SearchBySZCW()
+        {
+            var linq = from query in this.IQueryable
+                       where query.FinanceVault.Name.Contains("深圳")
+                       select query;
+
+            var view = new FinanceAccountFlowsView(this.Reponsitory, linq);
+            return view;
+        }
     }
 }

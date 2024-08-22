@@ -24,7 +24,7 @@ using WebApi.Models;
 
 namespace WebApi.Controllers
 {
-    [System.Web.Http.Cors.EnableCors(origins: "*", headers: "*", methods: "*")]
+    //[System.Web.Http.Cors.EnableCors(origins: "*", headers: "*", methods: "*")]
     public class ClassifyController : ApiController
     {
         /// <summary>

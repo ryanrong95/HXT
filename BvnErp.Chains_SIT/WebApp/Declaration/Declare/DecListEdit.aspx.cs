@@ -123,7 +123,7 @@ namespace WebApp.Declaration.Declare
                 }
                 if (DecList.CiqName != model.CiqName.Value)
                 {
-                    changeMessage += "报关员:" + byName + "把商品项" + ID + "[" + DecList.GoodsModel + "]检验检疫名称:" + DecList.CiqName + "变更为:" + model.CiqName + ";";
+                    changeMessage += "报关员:" + byName + "把商品项" + ID + "[" + DecList.GoodsModel + "]监管类别名称:" + DecList.CiqName + "变更为:" + model.CiqName + ";";
                 }
                 if (DecList.GoodsBatch != model.GoodsBatch.Value)
                 {

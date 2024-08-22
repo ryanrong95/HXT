@@ -70,7 +70,7 @@ namespace Yahv.Payments
             using (var reponsitory = new PvbCrmReponsitory(false))
             using (var statistics = new VouchersStatisticsView(reponsitory))
             {
-                var orderEventArg = new OrderEventArgs(orderID);
+                var orderEventArg = new OrderEventArgs(orderID,currency);
                 this.Fire(this, orderEventArg);
 
                 //有订单ID，币种是未知的时候 提示错误信息

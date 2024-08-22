@@ -114,15 +114,16 @@ namespace WebApp.Finance.CostApply
                         IsCurrent = true,
                         Color = "#bbffee",
                     });
-                    futureSteps.Add(new
-                    {
-                        Title = "财务负责人：" + CostApplyFinanceStaffName,
-                        Operation = "",
-                        Time = "",
-                        Summary = "",
-                        IsCurrent = false,
-                        Color = "#e4e3e3",
-                    });
+                    //20240821去掉财务负责人审批节点
+                    //futureSteps.Add(new
+                    //{
+                    //    Title = "财务负责人：" + CostApplyFinanceStaffName,
+                    //    Operation = "",
+                    //    Time = "",
+                    //    Summary = "",
+                    //    IsCurrent = false,
+                    //    Color = "#e4e3e3",
+                    //});
                     futureSteps.Add(new
                     {
                         Title = "总经理：" + CostApplyManagerName,

@@ -22,6 +22,7 @@
         var editIndex = undefined;
         var ID = '<%=this.Model.ID%>';
         var OrgCodes = eval('(<%=this.Model.OrgCodes%>)');
+        var CustomMaster = eval('(<%=this.Model.CustomMaster%>)');
         var CorrelationReason = eval('(<%=this.Model.CorrelationReason%>)');
         var OrigBoxFlag = eval('(<%=this.Model.OrigBoxFlag%>)');
         if (ID != '') {
@@ -30,34 +31,34 @@
         var check = false;
         $(function () {
             InitClientPage();
-            $('#OrgCode').combobox({
-                data: OrgCodes,
-                onChange:function (record) {
-                    $.post('?action=getDropdownlist', { value: record }, function (data) {
-                        $("#OrgCode").combobox('loadData', data);
-                    });
-                },
-            });
-            $('#VsaOrgCode').combobox({
-                data: OrgCodes,
-                onChange:function (record) {
-                    $.post('?action=getDropdownlist', { value: record }, function (data) {
-                        $("#VsaOrgCode").combobox('loadData', data);
-                    });
-                },
-            });
-            $('#InspOrgCode').combobox({
-                data: OrgCodes,
-                onChange:function (record) {
-                    $.post('?action=getDropdownlist', { value: record }, function (data) {
-                        $("#InspOrgCode").combobox('loadData', data);
-                    });
-                },
-            });
+            //$('#OrgCode').combobox({
+            //    data: OrgCodes,
+            //    onChange:function (record) {
+            //        $.post('?action=getDropdownlist', { value: record }, function (data) {
+            //            $("#OrgCode").combobox('loadData', data);
+            //        });
+            //    },
+            //});
+            //$('#VsaOrgCode').combobox({
+            //    data: OrgCodes,
+            //    onChange:function (record) {
+            //        $.post('?action=getDropdownlist', { value: record }, function (data) {
+            //            $("#VsaOrgCode").combobox('loadData', data);
+            //        });
+            //    },
+            //});
+            //$('#InspOrgCode').combobox({
+            //    data: OrgCodes,
+            //    onChange:function (record) {
+            //        $.post('?action=getDropdownlist', { value: record }, function (data) {
+            //            $("#InspOrgCode").combobox('loadData', data);
+            //        });
+            //    },
+            //});
             $('#PurpOrgCode').combobox({
-                data: OrgCodes,
+                data: CustomMaster,
                 onChange:function (record) {
-                    $.post('?action=getDropdownlist', { value: record }, function (data) {
+                    $.post('?action=getCustomMasterlist', { value: record }, function (data) {
                         $("#PurpOrgCode").combobox('loadData', data);
                     });
                 },
@@ -150,9 +151,9 @@
 
                 if (DecHead.IsInspection || DecHead.IsQuarantine) {
                     //是商检/检疫
-                    $('#OrgCode').combobox('setValue', DecHead.OrgCode);
-                    $('#VsaOrgCode').combobox('setValue', DecHead.VsaOrgCode);
-                    $('#InspOrgCode').combobox('setValue', DecHead.InspOrgCode);
+                    //$('#OrgCode').combobox('setValue', DecHead.OrgCode);
+                    //$('#VsaOrgCode').combobox('setValue', DecHead.VsaOrgCode);
+                    //$('#InspOrgCode').combobox('setValue', DecHead.InspOrgCode);
                     $('#PurpOrgCode').combobox('setValue', DecHead.PurpOrgCode);
                     //特种业务标识
                     if (DecHead.SpecDeclFlag != null && DecHead.SpecDeclFlag.indexOf('1') >= 0) {
@@ -252,7 +253,7 @@
                             <th style="width: 30%"></th>
                         </tr>
 
-                        <tr>
+                     <%--   <tr>
                             <td class="lbl">检验检疫受理机关：</td>
                             <td>
                                 <input class="easyui-combobox" id="OrgCode"
@@ -263,14 +264,14 @@
                                 <input class="easyui-combobox" id="VsaOrgCode"
                                     data-options="valueField:'Value',textField:'Text',limitToList:true,required:true,tipPosition:'bottom',missingMessage:'请输入编码,下拉框一次显示十条'," style="width: 200px" />
                             </td>
-                        </tr>
+                        </tr>--%>
                         <tr>
-                            <td class="lbl">口岸检验检疫机关：</td>
+                           <%-- <td class="lbl">口岸检验检疫机关：</td>
                             <td>
                                 <input class="easyui-combobox" id="InspOrgCode"
                                     data-options="valueField:'Value',textField:'Text',limitToList:true,required:true,tipPosition:'bottom',missingMessage:'请输入编码,下拉框一次显示十条'," style="width: 200px" />
-                            </td>
-                            <td class="lbl">目的地检验检疫机关：</td>
+                            </td>--%>
+                            <td class="lbl">目的地海关：</td>
                             <td>
                                 <input class="easyui-combobox" id="PurpOrgCode"
                                     data-options="valueField:'Value',textField:'Text',limitToList:true,required:true,tipPosition:'bottom',missingMessage:'请输入编码,下拉框一次显示十条'," style="width: 200px" />

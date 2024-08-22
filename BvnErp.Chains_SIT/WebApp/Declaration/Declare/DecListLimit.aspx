@@ -176,7 +176,7 @@
                     <td>
                         <label id="lbGName"></label>
                     </td>
-                    <td class="lbl">检验检疫名称：</td>
+                    <td class="lbl">监管类别名称：</td>
                     <td>
                         <label id="lbCiqName"></label>
                     </td>

@@ -812,7 +812,7 @@ export default {
     },
      handleCreate1(val) {  //箱号添加
       if(!val==false){
-          if(val.slice(0,2)!='WL'){
+          if(val.slice(0,3)!='HXT'){
               this.$Message.error("请输入正确的箱号");
               this.newboxcode = null; 
               return;

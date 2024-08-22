@@ -195,7 +195,9 @@ namespace WebApp.Finance.CenterCostApply
                 costApply.PayeeAccount = PayeeAccount;
                 costApply.PayeeBank = PayeeBank;
                 costApply.Currency = Currency;//"CNY";
-                costApply.CostStatus = Needs.Ccs.Services.Enums.CostStatusEnum.FinanceStaffUnApprove;
+                //20240821去掉财务负责人审批节点，直接到经理审批
+                //costApply.CostStatus = Needs.Ccs.Services.Enums.CostStatusEnum.FinanceStaffUnApprove;
+                costApply.CostStatus = Needs.Ccs.Services.Enums.CostStatusEnum.ManagerUnApprove;
                 costApply.AdminID = admin.ID;
                 costApply.Status = Status.Normal;
                 costApply.CreateDate = DateTime.Now;
@@ -266,7 +268,9 @@ namespace WebApp.Finance.CenterCostApply
                     CostApplyID = CostApplyID,
                     AdminID = admin.ID,
                     CurrentCostStatus = CostStatusEnum.UnSubmit,
-                    NextCostStatus = CostStatusEnum.FinanceStaffUnApprove,
+                    //20240821去掉财务负责人审批节点，直接到经理审批
+                    //NextCostStatus = CostStatusEnum.FinanceStaffUnApprove,
+                    NextCostStatus = CostStatusEnum.ManagerUnApprove,
                     CreateDate = DateTime.Now,
                     Summary = costApplyLogSummary,
                 };

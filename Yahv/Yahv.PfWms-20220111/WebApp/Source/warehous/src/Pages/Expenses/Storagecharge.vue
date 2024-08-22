@@ -211,7 +211,7 @@ export default {
       },
       getSubjectarr() {
         Storagechargejson().then(res => {
-          this.Subjectarr = res
+          this.Subjectarr = res;
         })
       },
       changenumber(val) {
