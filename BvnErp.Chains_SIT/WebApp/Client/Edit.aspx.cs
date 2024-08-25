@@ -14,8 +14,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -106,7 +104,7 @@ namespace WebApp.Client
         /// <summary>
         /// 保存会员基本信息
         /// </summary>
-        protected async void SaveClientInfo()
+        protected void SaveClientInfo()
         {
             var file = Request.Files["BusinessLicense"];
             var ClientID = Request.Form["ClientID"];

@@ -1812,7 +1812,7 @@ namespace Yahv.PvWsClient.WebAppNew.Controllers
             }
             if (Alls.Current.AllUsers.UserPhoneIsExist(user.ID, phone))
             {
-                return JsonResult(VueMsgType.error, "手机号[" + phone + "]已经绑定了芯达通账户");
+                return JsonResult(VueMsgType.error, "手机号[" + phone + "]已经绑定了华芯通账户");
             }
             return JsonResult(VueMsgType.success, "");
         }
@@ -1875,7 +1875,7 @@ namespace Yahv.PvWsClient.WebAppNew.Controllers
             }
             if (Alls.Current.AllUsers.UserEmailIsExist(user.ID, email))
             {
-                return JsonResult(VueMsgType.error, "邮箱账号[" + email + "]已经绑定了芯达通账户");
+                return JsonResult(VueMsgType.error, "邮箱账号[" + email + "]已经绑定了华芯通账户");
             }
             return JsonResult(VueMsgType.success, "");
         }
@@ -1905,7 +1905,7 @@ namespace Yahv.PvWsClient.WebAppNew.Controllers
             sb.AppendFormat("	<div style='Color:red;HEIGHT: 50px; WIDTH: 170px; TEXT-ALIGN: center; FONT: bold 18px/36px arial; MARGIN: 25px 0px 0px 140px'>验证码：{0}</div>", messageCode);
             sb.AppendFormat("</div></div>");
 
-            SmtpContext.Current.Send(email, "芯达通绑定邮箱服务", sb.ToString());  //发送邮件
+            SmtpContext.Current.Send(email, "华芯通绑定邮箱服务", sb.ToString());  //发送邮件
             return JsonResult(VueMsgType.success, "");
         }
 
