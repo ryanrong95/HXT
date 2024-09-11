@@ -185,8 +185,10 @@
                 }
 
                 if (Notice.FeeTypeInt < 10000 && Notice.FeeTypeInt == "<%=Needs.Ccs.Services.Enums.FinanceFeeType.Product.GetHashCode()%>") {
-                    $("#proxyFile").text(Notice.PayExchangeApplyFile.FileName);
-                    $('#proxyFile').attr('href', Notice.PayExchangeApplyFile.Url);
+                    if (Notice.PayExchangeApplyFile != null) {
+                        $("#proxyFile").text(Notice.PayExchangeApplyFile.FileName);
+                        $('#proxyFile').attr('href', Notice.PayExchangeApplyFile.Url);
+                    }
                 }
 
                 $('#Payer').textbox('setValue', Notice.Payer.RealName);

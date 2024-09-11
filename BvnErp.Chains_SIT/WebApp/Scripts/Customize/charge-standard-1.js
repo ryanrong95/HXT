@@ -14,7 +14,7 @@
             }
 
             var getStdData = function (callback) {
-                $.post('/foricadmin/order/fee/DecChargeStandard/List.aspx?action=DecChargeStandardOneObj', {}, function (res) {
+                $.post('/hxtadmin/order/fee/DecChargeStandard/List.aspx?action=DecChargeStandardOneObj', {}, function (res) {
                     var result = JSON.parse(res);
                     return callback(result.obj);
                 });

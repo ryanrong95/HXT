@@ -78,7 +78,8 @@
                 if (costApplyDetail.MoneyTypeInt == <%=Needs.Ccs.Services.Enums.MoneyTypeEnum.IndividualApply.GetHashCode()%>) {
                     $("#payer-area").show();
                 } else if (costApplyDetail.MoneyTypeInt == <%=Needs.Ccs.Services.Enums.MoneyTypeEnum.BankAutoApply.GetHashCode()%>) {
-                    $("#payer-area").hide();
+                    //$("#payer-area").hide();
+                    $("#payer-area").show();
                 }
 
                 switch (costApplyDetail.CostStatusInt) {
@@ -235,7 +236,8 @@
                 if (costApplyDetail.MoneyTypeInt == <%=Needs.Ccs.Services.Enums.MoneyTypeEnum.IndividualApply.GetHashCode()%>) {
                     $('#Payers').combobox('textbox').validatebox('options').required = true;
                 } else if (costApplyDetail.MoneyTypeInt == <%=Needs.Ccs.Services.Enums.MoneyTypeEnum.BankAutoApply.GetHashCode()%>) {
-                    $('#Payers').combobox('textbox').validatebox('options').required = false;
+                    //$('#Payers').combobox('textbox').validatebox('options').required = false;
+                    $('#Payers').combobox('textbox').validatebox('options').required = true;
                 }
             } else {
                 $('#Payers').combobox('textbox').validatebox('options').required = false;

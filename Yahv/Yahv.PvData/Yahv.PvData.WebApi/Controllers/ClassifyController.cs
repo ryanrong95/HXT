@@ -51,7 +51,7 @@ namespace Yahv.PvData.WebApi.Controllers
                 manufacturer = manufacturer.FixSpecialChars();
 
                 //根据型号、品牌/制造商获取产品最近一年的归类信息
-                var cpn = new YaHv.PvData.Services.Views.Alls.ClassifiedPartNumbersAll()[partNumber, manufacturer, -12];
+                var cpn = new YaHv.PvData.Services.Views.Alls.ClassifiedPartNumbersAll()[partNumber, manufacturer, -60];
                 bool hasClassified = true;
                 if (cpn == null)
                     hasClassified = false;

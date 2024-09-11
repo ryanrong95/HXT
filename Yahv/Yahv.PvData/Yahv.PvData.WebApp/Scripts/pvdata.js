@@ -63,6 +63,40 @@ function postDataFun(url, data, ProcessFun, error) {
     });
 }
 
+//通用的调用接口提交数据的方法
+function postDataFunwww(url, data, ProcessFun, error) {
+    $.ajax({
+        url: url,
+        type: 'post',
+        data: data,
+        dataType: 'json',
+        contentType: 'application/x-www-form-urlencoded',
+        crossDomain: true,
+        success: function (data) {
+            if (data.code == "100") {
+                if (ProcessFun.noDataFun) {
+                    ProcessFun.noDataFun(data);
+                }
+            } else if (data.code == "200") {
+                if (ProcessFun.success) {
+                    ProcessFun.success(data);
+                }
+            } else if (data.code == "300") {
+                if (ProcessFun.exceptionFun) {
+                    ProcessFun.exceptionFun(data);
+                }
+                console.log("接口异常");
+            }
+        },
+        error: function (errorMsg) {
+            console.log(errorMsg);
+            if (error) {
+                error(errorMsg);
+            }
+        }
+    });
+}
+
 //取表单键值对
 function FormValues(id) {
     var values = {};

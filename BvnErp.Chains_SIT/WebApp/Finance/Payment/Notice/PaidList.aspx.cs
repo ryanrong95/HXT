@@ -79,7 +79,7 @@ namespace WebApp.Finance.Payment.Notice
             string EndDate = Request.QueryString["EndDate"];
 
             List<LambdaExpression> lamdas = new List<LambdaExpression>();
-            lamdas.Add((Expression<Func<Needs.Ccs.Services.Views.PaidListViewModel, bool>>)(t => t.PayerID == Needs.Wl.Admin.Plat.AdminPlat.Current.ID));
+            lamdas.Add((Expression<Func<Needs.Ccs.Services.Views.PaidListViewModel, bool>>)(t => t.PayerID == Needs.Wl.Admin.Plat.AdminPlat.Current.ID || Needs.Wl.Admin.Plat.AdminPlat.Current.IsSa));
 
             if (!string.IsNullOrEmpty(FeeType))
             {
