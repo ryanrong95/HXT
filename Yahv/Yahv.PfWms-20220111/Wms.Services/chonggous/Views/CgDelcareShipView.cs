@@ -3019,7 +3019,7 @@ Select [ID],[StorageID],[NoticeID],[OutputID],[BoxCode],[Quantity],[AdminID],[Cr
                 trans.Commit();
             }
             //基于运输批次入库，乔霞这已经提供基于运输批次入库的功能
-            //库存的库位可以为空，用目前乔霞的深圳入库页面进行操作。这是芯达通特殊的要求。
+            //库存的库位可以为空，用目前乔霞的深圳入库页面进行操作。这是华芯通特殊的要求。
             //基于以上的讨论可以确定生成深圳的自动入库的通知的参数。根据运输批次号可以获取唯一的香港出库的Waybill,并根据这个Waybill生成深圳的入库通知
 
         }
@@ -3189,7 +3189,7 @@ Select [ID],[StorageID],[NoticeID],[OutputID],[BoxCode],[Quantity],[AdminID],[Cr
                 trans.Commit();
             }
             //基于运输批次入库，乔霞这已经提供基于运输批次入库的功能
-            //库存的库位可以为空，用目前乔霞的深圳入库页面进行操作。这是芯达通特殊的要求。
+            //库存的库位可以为空，用目前乔霞的深圳入库页面进行操作。这是华芯通特殊的要求。
             //基于以上的讨论可以确定生成深圳的自动入库的通知的参数。根据运输批次号可以获取唯一的香港出库的Waybill,并根据这个Waybill生成深圳的入库通知
 
         }
@@ -3441,11 +3441,11 @@ Select [ID],[StorageID],[NoticeID],[OutputID],[BoxCode],[Quantity],[AdminID],[Cr
                     }
 
                     var result = Yahv.Utils.Http.ApiHelper.Current.JPost(url, data);
-                    Yahv.Payments.Oplogs.Oplog(FixedRole.Npc.ToString(), url, "Wms", nameof(Wms.Services.chonggous.Views.CgDelcareShipView.AutoVouchers), $"芯达通推送财务数据完成|{lotNumber}|{result}", data.Json());
+                    Yahv.Payments.Oplogs.Oplog(FixedRole.Npc.ToString(), url, "Wms", nameof(Wms.Services.chonggous.Views.CgDelcareShipView.AutoVouchers), $"华芯通推送财务数据完成|{lotNumber}|{result}", data.Json());
                 }
                 catch (Exception ex)
                 {
-                    Yahv.Payments.Oplogs.Oplog(FixedRole.Npc.ToString(), url, "Wms", nameof(Wms.Services.chonggous.Views.CgDelcareShipView.AutoVouchers), $"芯达通推送财务数据失败!|{lotNumber}|{data.Json()}", ex.ToString());
+                    Yahv.Payments.Oplogs.Oplog(FixedRole.Npc.ToString(), url, "Wms", nameof(Wms.Services.chonggous.Views.CgDelcareShipView.AutoVouchers), $"华芯通推送财务数据失败!|{lotNumber}|{data.Json()}", ex.ToString());
                 }
             }
         }
@@ -3457,7 +3457,7 @@ Select [ID],[StorageID],[NoticeID],[OutputID],[BoxCode],[Quantity],[AdminID],[Cr
         /// <param name="shelveID">库位</param>
         public void SzPlace(string shelveID, string Boxcode)
         {
-            //深圳上架有特殊的芯达通要求的流程，把指定的箱号或是产品(单条申报)直接分配库位
+            //深圳上架有特殊的华芯通要求的流程，把指定的箱号或是产品(单条申报)直接分配库位
             //具体可以参加乔霞的页面
             using (var repository = new PvWmsRepository())
             {

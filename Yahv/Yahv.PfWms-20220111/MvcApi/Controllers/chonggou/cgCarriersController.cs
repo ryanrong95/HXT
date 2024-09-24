@@ -140,7 +140,7 @@ namespace MvcApi.Controllers
         }
 
         /// <summary>
-        /// 特殊获取芯达通物流部
+        /// 特殊获取华芯通物流部
         /// </summary>
         /// <returns></returns>
         public ActionResult Xdt()

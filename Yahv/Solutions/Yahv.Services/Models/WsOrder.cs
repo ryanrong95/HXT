@@ -111,7 +111,7 @@ namespace Yahv.Services.Models
     }
 
     /// <summary>
-    /// 芯达通回传到货信息时使用
+    /// 华芯通回传到货信息时使用
     /// </summary>
     public class OrderChanges
     {

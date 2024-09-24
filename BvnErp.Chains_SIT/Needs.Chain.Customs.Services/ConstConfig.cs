@@ -388,11 +388,11 @@ namespace Needs.Ccs.Services
         //版本号
         public const string Version = "2.0";
         //复核人
-        public const string Fhr = "鲁亚慧";
+        public const string Fhr = "李文忠";
         //收款人
-        public const string Skr = "郝红梅";
+        public const string Skr = "成金霖";
         //开票人
-        public const string Kpr = "殷菲";
+        public const string Kpr = "成金霖";
         //商品编码版本号(20 字节)（商品版本号是你开票机的版本号）
         public const string Spbmbbh = "33.0";
         //含税标志 0：不含税税率，1：含税税率，2：差额税;中外合作油气田（原海洋石油）5%税率、1.5%税率为 1，差额税为 2，其他为 0；

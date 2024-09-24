@@ -54,7 +54,7 @@ namespace Yahv.Services.Models
         /// </summary>
         public string RoleName { get; set; }
         /// <summary>
-        /// 芯达通AdminID
+        /// 华芯通AdminID
         /// </summary>
         public string OriginID { get; set; }
     }

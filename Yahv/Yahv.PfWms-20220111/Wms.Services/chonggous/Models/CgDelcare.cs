@@ -9,7 +9,7 @@ using Yahv.Underly;
 namespace Wms.Services.chonggous.Models
 {
     /// <summary>
-    /// 库房申请报关后，将数据通到芯达通
+    /// 库房申请报关后，将数据通到华芯通
     /// </summary>
     public class CgDeclareApply
     {
@@ -37,7 +37,7 @@ namespace Wms.Services.chonggous.Models
     }
 
     /// <summary>
-    /// 芯达通申报成功后
+    /// 华芯通申报成功后
     /// 将数据通到库房
     /// </summary>
     public class CgDelcare
@@ -48,7 +48,7 @@ namespace Wms.Services.chonggous.Models
     }
 
     /// <summary>
-    /// 芯达通截单后 将数据通到库房
+    /// 华芯通截单后 将数据通到库房
     /// </summary>
     public class CgDelcareCutting
     {

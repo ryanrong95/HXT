@@ -558,7 +558,7 @@ namespace Wms.Services.Models
                 //            ID = Guid.NewGuid().ToString(),
                 //            Type = (int)Yahv.Services.Enums.LogType.WsOrder,
                 //            MainID = this.OrderID,
-                //            Operation = "库房到货信息告知芯达通！",
+                //            Operation = "库房到货信息告知华芯通！",
                 //            Creator = "NPC",
                 //            CreateDate = DateTime.Now,
                 //            Summary = result
@@ -577,7 +577,7 @@ namespace Wms.Services.Models
                 //            ID = Guid.NewGuid().ToString(),
                 //            Type = (int)Yahv.Services.Enums.LogType.WsOrder,
                 //            MainID = this.OrderID,
-                //            Operation = "库房到货信息告知芯达通",
+                //            Operation = "库房到货信息告知华芯通",
                 //            Creator = "NPC",
                 //            CreateDate = DateTime.Now,
                 //            Summary = ex.Message,

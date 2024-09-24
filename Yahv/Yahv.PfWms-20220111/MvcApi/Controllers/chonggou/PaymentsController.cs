@@ -145,7 +145,7 @@ namespace MvcApi.Controllers
                 Yahv.Erp.Current.WareHourse.FeeEnter(model);
 
                 // 深圳库房费用的收入，支出依然要通过后台任务来处理
-                InsertTaskPool(model.OrderID);      //新增的费用也需要同步给芯达通
+                InsertTaskPool(model.OrderID);      //新增的费用也需要同步给华芯通
                 
                 return Json(new JMessage { success = true, code = 200, data = "保存成功!" }, JsonRequestBehavior.AllowGet);
             }
@@ -1014,7 +1014,7 @@ namespace MvcApi.Controllers
                 reponsitory.Insert(new Layers.Data.Sqls.PvCenter.TasksPool()
                 {
                     ID = PKeySigner.Pick(PkeyType.TasksPool),
-                    Name = TaskSettgins.PvCenter.芯达通费用同步,
+                    Name = TaskSettgins.PvCenter.华芯通费用同步,
                     MainID = orderId,
                     CreateDate = DateTime.Now
                 });
@@ -1038,7 +1038,7 @@ namespace MvcApi.Controllers
 
             //    if (query != null && query.Any(item => item.OrderID == orderId))
             //    {
-            //        ConsoleApp.vTaskers.Services.LitTools.Current.Record(orderId, name: TaskSettgins.PvCenter.芯达通费用同步);
+            //        ConsoleApp.vTaskers.Services.LitTools.Current.Record(orderId, name: TaskSettgins.PvCenter.华芯通费用同步);
             //    }
             //}
         }

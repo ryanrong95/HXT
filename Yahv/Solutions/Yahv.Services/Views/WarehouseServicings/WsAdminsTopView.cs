@@ -10,7 +10,7 @@ using Yahv.Utils.Converters.Contents;
 namespace Yahv.Services.Views
 {
     /// <summary>
-    /// 代仓储客户(芯达通客户)业务员或跟单员
+    /// 代仓储客户(华芯通客户)业务员或跟单员
     /// </summary>
     /// <typeparam name="TReponsitory"></typeparam>
     public class WsAdminsTopView<TReponsitory> : AdminsAll<TReponsitory> // PvbErmReponsitory
@@ -23,7 +23,7 @@ namespace Yahv.Services.Views
         /// </summary>
         /// <param name="clientid">客户ID</param>
         /// <param name="type">MapsType.ServiceManager业务员; MapsType.Merchandiser跟单员</param>
-        /// <param name="companyid">内部公司ID:深圳市芯达通供应链管理有限公司</param>
+        /// <param name="companyid">内部公司ID:深圳市华芯通供应链管理有限公司</param>
         public WsAdminsTopView(string clientid, MapsType type, string companyid = "DBAEAB43B47EB4299DD1D62F764E6B6A")
         {
             this.RealID = string.Join("", companyid, clientid).MD5();

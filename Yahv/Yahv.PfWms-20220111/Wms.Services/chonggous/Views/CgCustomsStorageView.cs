@@ -931,7 +931,7 @@ namespace Wms.Services.chonggous.Views
             List<string> abnormalList = new List<string>();
             List<string> normalList = new List<string>(arry);
 
-            // 申报项视图与芯达通订单项视图对比检查
+            // 申报项视图与华芯通订单项视图对比检查
             bool isAbnormal = false;
             foreach (var tinyOrderID in arry)
             {
@@ -995,7 +995,7 @@ namespace Wms.Services.chonggous.Views
             {
                 var abnormalArry = abnormalList.ToArray();
                 var noticeContent = string.Join(",", abnormalArry);
-                throw new Exception($"小订单{noticeContent}的待申报项与芯达通订单项视图检测中，型号，品牌，产地，数量有不一致的内容，需要等跟单先处理到货异常");
+                throw new Exception($"小订单{noticeContent}的待申报项与华芯通订单项视图检测中，型号，品牌，产地，数量有不一致的内容，需要等跟单先处理到货异常");
             }
             #endregion
         }

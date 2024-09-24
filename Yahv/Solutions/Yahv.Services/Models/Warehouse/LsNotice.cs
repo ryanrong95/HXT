@@ -62,7 +62,7 @@ namespace Yahv.Services.Models
         public string ClientID { get; set; }
 
         /// <summary>
-        /// 收款人ID，这里指平台所属公司：芯达通等（内部公司）
+        /// 收款人ID，这里指平台所属公司：华芯通等（内部公司）
         /// </summary>
         public string PayeeID { get; set; }
 

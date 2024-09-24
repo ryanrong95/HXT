@@ -109,7 +109,7 @@ namespace StorageFee
     //                                    if (!logs.Contains(logstr))
     //                                    {
     //                                        //仓储费 记录
-    //                                        rbId = PaymentManager.Npc[inputClientID, "深圳市芯达通供应链管理有限公司"]["代仓储"]
+    //                                        rbId = PaymentManager.Npc[inputClientID, "深圳市华芯通供应链管理有限公司"]["代仓储"]
     //                                             .Receivable["杂费", "仓储费"].RecordStorage(Currency.CNY, 20);
     //                                        logs.Add(logstr);
     //                                        File.WriteAllText(logfile, logs.Json());

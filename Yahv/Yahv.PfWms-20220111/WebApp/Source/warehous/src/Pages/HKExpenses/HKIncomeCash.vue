@@ -190,7 +190,7 @@ export default {
       TrackingNumberarr:[], //所对应的运单号数组
       Subjectarr:[],//收入科目数组
       getselectedData:null,//将选中的科目转换为对象
-      Premiums:[], //提交给芯达通的费用
+      Premiums:[], //提交给华芯通的费用
       // Files:[],
     };
   },
@@ -501,7 +501,7 @@ export default {
       }
       InsertHKWarehouseFee(submit_data).then((res) => {
               if (res.success == true) {
-                //this.$Message.success("芯达通保存成功");  
+                //this.$Message.success("华芯通保存成功");  
                 this.Premiums = [];         
               } else {
                 this.$Message.error(res.data);

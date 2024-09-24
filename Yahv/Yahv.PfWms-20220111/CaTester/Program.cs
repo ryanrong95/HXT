@@ -174,7 +174,7 @@ WL8007
 
 
 
-            var jjj1 = WhSettings.SZ["深圳市芯达通供应链管理有限公司"].ID;
+            var jjj1 = WhSettings.SZ["深圳市华芯通供应链管理有限公司"].ID;
 
 
             Console.WriteLine(jjj1);

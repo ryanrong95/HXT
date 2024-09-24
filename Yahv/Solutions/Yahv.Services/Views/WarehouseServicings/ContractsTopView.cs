@@ -38,7 +38,7 @@ namespace Yahv.Services.Views
                            InvoiceTaxRate = entity.InvoiceTaxRate,
                            Summary = entity.Summary,
                            Status = (GeneralStatus)entity.Status,
-                           CompanyID = maps.EnterpriseID  //内部公司ID，合同的乙方：芯达通等
+                           CompanyID = maps.EnterpriseID  //内部公司ID，合同的乙方：华芯通等
                        };
             return linq;
         }

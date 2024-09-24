@@ -23,7 +23,7 @@ namespace Wms.Services.chonggous.Views
     /// 申报视图
     /// </summary>
     /// <remarks>
-    /// 芯达通申报视图：CgDelcaresTopView
+    /// 华芯通申报视图：CgDelcaresTopView
     /// </remarks>
     public class CgDelcaresView : QueryView<object, PvWmsRepository>
     {

@@ -28,10 +28,10 @@ namespace Needs.Ccs.Services.Views
                    join master in masterView on entity.Code equals master.Code
                    join ieport in masterView on entity.IEPortCode equals ieport.Code
                    join entryPort in entryPortView on entity.EntyPortCode equals entryPort.Code
-                   join orgCode in orgView on entity.OrgCode equals orgCode.Code
-                   join vsaOrgCode in orgView on entity.VsaOrgCode equals vsaOrgCode.Code
-                   join inspOrgCode in orgView on entity.InspOrgCode equals inspOrgCode.Code
-                   join purpOrgCode in orgView on entity.PurpOrgCode equals purpOrgCode.Code
+                   //join orgCode in orgView on entity.OrgCode equals orgCode.Code
+                   //join vsaOrgCode in orgView on entity.VsaOrgCode equals vsaOrgCode.Code
+                   //join inspOrgCode in orgView on entity.InspOrgCode equals inspOrgCode.Code
+                   join purpOrgCode in masterView on entity.PurpOrgCode equals purpOrgCode.Code
                    select new Models.BaseCustomMasterDefault
                    {
                        ID = entity.ID,
@@ -41,12 +41,12 @@ namespace Needs.Ccs.Services.Views
                        IEPortCodeName = ieport.Name,
                        EntyPortCode = entity.EntyPortCode,
                        EntyPortCodeName = entryPort.Name,
-                       OrgCode = entity.OrgCode,
-                       OrgCodeName = orgCode.Name,
-                       VsaOrgCode = entity.VsaOrgCode,
-                       VsaOrgCodeName = vsaOrgCode.Name,
-                       InspOrgCode = entity.InspOrgCode,
-                       InspOrgCodeName = inspOrgCode.Name,
+                       //OrgCode = entity.OrgCode,
+                       //OrgCodeName = orgCode.Name,
+                       //VsaOrgCode = entity.VsaOrgCode,
+                       //VsaOrgCodeName = vsaOrgCode.Name,
+                       //InspOrgCode = entity.InspOrgCode,
+                       //InspOrgCodeName = inspOrgCode.Name,
                        PurpOrgCode = entity.PurpOrgCode,
                        PurpOrgCodeName = purpOrgCode.Name,
                        IsDefault = entity.IsDefault

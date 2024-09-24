@@ -71,7 +71,7 @@ namespace Yahv.Services.Models
     public class PvOrderItems
     {
         /// <summary>
-        /// 芯达通订单项ID（pickKey生成）
+        /// 华芯通订单项ID（pickKey生成）
         /// </summary>
         public string ID { get; set; }
 

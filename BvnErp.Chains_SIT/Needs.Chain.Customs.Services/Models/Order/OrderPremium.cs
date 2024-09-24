@@ -25,7 +25,7 @@ namespace Needs.Ccs.Services.Models
         /// 添加人
         /// </summary>
         public Admin Admin { get; set; }
-        public string  AdminID { get; set; }
+        public string AdminID { get; set; }
 
         /// <summary>
         /// 费用类型
@@ -123,7 +123,15 @@ namespace Needs.Ccs.Services.Models
         {
             get
             {
-                return this.OrderReceiveds.Sum(item => item.Amount * item.Rate);
+                if (this.OrderReceiveds != null)
+                {
+                    return this.OrderReceiveds.Sum(item => item.Amount * item.Rate);
+                }
+                else
+                {
+                    return 0;
+                }
+
             }
         }
 
@@ -134,7 +142,14 @@ namespace Needs.Ccs.Services.Models
         {
             get
             {
-                return this.OrderReceiveds.FirstOrDefault()?.CreateDate;
+                if (this.OrderReceiveds != null)
+                {
+                    return this.OrderReceiveds.FirstOrDefault()?.CreateDate;
+                }
+                else
+                {
+                    return null;
+                }
             }
         }
 
@@ -204,8 +219,8 @@ namespace Needs.Ccs.Services.Models
 
             //记录日志
             var feeName = premium.Type == Enums.OrderPremiumType.OtherFee ? premium.Name : premium.Type.GetDescription();
-            order.Log(premium.Admin, "跟单员【" + premium.Admin.RealName + "】新增了订单杂费【" + feeName +"】：数量【"+ premium.Count +"】，" +
-                                     "单价【" + premium.UnitPrice +"】，币种【" + premium.Currency + "】，汇率【" + premium.Rate + "】");
+            order.Log(premium.Admin, "跟单员【" + premium.Admin.RealName + "】新增了订单杂费【" + feeName + "】：数量【" + premium.Count + "】，" +
+                                     "单价【" + premium.UnitPrice + "】，币种【" + premium.Currency + "】，汇率【" + premium.Rate + "】");
 
             //保存费用附件
             foreach (var file in premium.Files)

@@ -846,7 +846,7 @@ namespace Wms.Services.chonggous.Views
             }
 
 
-            // 深圳库房出库成功后调用芯达通的接口,判断一下如果是深圳出库 就调用
+            // 深圳库房出库成功后调用华芯通的接口,判断一下如果是深圳出库 就调用
 
             var result = Yahv.Utils.Http.ApiHelper.Current.JPost(FromType.XdtSZShiped.GetDescription(), new SZToXDT
             {

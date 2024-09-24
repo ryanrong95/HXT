@@ -1767,7 +1767,7 @@ namespace Wms.Services.chonggous.Views
                     }, sorting => sortingsId.Contains(sorting.ID));
                 }
 
-                #region 报关订单每次分拣点击按钮都要去通知芯达通
+                #region 报关订单每次分拣点击按钮都要去通知华芯通
 
                 //理论上应该从分拣的结果中获取小订单
                 //转报关如何处理？
@@ -1777,7 +1777,7 @@ namespace Wms.Services.chonggous.Views
                     // 发生异常的情况下, 即产品型号不一致, 到货数量大于通知数量, 或者无通知到货情况下要通知
                     if (updateOrder == true)
                     {
-                        // 调用芯达通服务，通知芯达通
+                        // 调用华芯通服务，通知华芯通
                         string url = Wms.Services.FromType.ArrivalInfoToXDT.GetDescription();
                         Yahv.Utils.Http.ApiHelper.Current.JPost(url, new { VastOrderID = waybillorderid });
                         //var result = Yahv.Utils.Http.ApiHelper.Current.JPost(url, new { VastOrderID = waybillorderid });
@@ -1808,7 +1808,7 @@ namespace Wms.Services.chonggous.Views
                         var message = result.JsonTo<JMessage>();
                         if (message.code != 200)
                         {
-                            throw new Exception("通知芯达通产品变更通知失败:" + message.data);
+                            throw new Exception("通知华芯通产品变更通知失败:" + message.data);
                         }
                     }
                     //#endif
@@ -1839,7 +1839,7 @@ namespace Wms.Services.chonggous.Views
                     var message = result.JsonTo<JMessage>();
                     if (message.code != 200)
                     {
-                        throw new Exception("通知芯达通拆项变更通知失败:" + message.data);
+                        throw new Exception("通知华芯通拆项变更通知失败:" + message.data);
                     }
                 }
                 //#endif
@@ -2437,7 +2437,7 @@ namespace Wms.Services.chonggous.Views
             List<string> abnormalList = new List<string>();
             List<string> normalList = new List<string>(arry);
 
-            // 申报项视图与芯达通订单项视图对比检查
+            // 申报项视图与华芯通订单项视图对比检查
             bool isAbnormal = false;
             foreach (var tinyOrderID in arry)
             {
@@ -2507,7 +2507,7 @@ namespace Wms.Services.chonggous.Views
             {
                 //var abnormalArry = abnormalList.ToArray();
                 //var noticeContent = string.Join(",", abnormalArry);
-                //throw new Exception($"小订单{noticeContent}的待申报项与芯达通订单项视图检测中，型号，品牌，产地，数量有不一致的内容，需要等跟单先处理到货异常");
+                //throw new Exception($"小订单{noticeContent}的待申报项与华芯通订单项视图检测中，型号，品牌，产地，数量有不一致的内容，需要等跟单先处理到货异常");
                 throw new Exception($"检查到货与订单信息时发现:{deliveryWithWsOrderAbnormalSB.ToString()},请处理后再进行封箱操作!");
             }
             #endregion
@@ -2977,7 +2977,7 @@ namespace Wms.Services.chonggous.Views
                     var message = result.JsonTo<JMessage>();
                     if (message.code != 200)
                     {
-                        throw new Exception("通知芯达通产品变更通知失败:" + message.data);
+                        throw new Exception("通知华芯通产品变更通知失败:" + message.data);
                     }
                 }
                 //#endif

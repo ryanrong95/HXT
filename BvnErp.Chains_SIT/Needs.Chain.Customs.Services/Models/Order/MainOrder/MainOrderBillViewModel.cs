@@ -602,7 +602,8 @@ namespace Needs.Ccs.Services.Models
             row = grid.Rows.Add();
             row.Cells[0].Value = "订单编号: " + this.MainOrderID;
             row.Cells[0].Style.Font = new PdfTrueTypeFont(new Font("SimSun", 8f, FontStyle.Bold), true);
-            row.Cells[1].Value = "实时汇率: " + Bills[0].RealExchangeRate.ToString("0.######") + AgencyExchangeRateName;
+            //row.Cells[1].Value = "实时汇率: " + Bills[0].RealExchangeRate.ToString("0.######") + AgencyExchangeRateName;
+            row.Cells[1].Value = "实时汇率: " + Bills[0].RealExchangeRate.ToString("0.######") + PEIsTen;
 
             row = grid.Rows.Add();
             row.Cells[0].Value = "服务费收费标准: " + "服务费率：" + preAgency + (this.Agreement.AgencyRate * 100).ToString("0.##") + "% ，最低消费" + this.Agreement.MinAgencyFee.ToString("0.##") + "元/单";

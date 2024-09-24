@@ -105,7 +105,7 @@
                 <ul style="padding-left: 50px; list-style: none">
                     <li style="padding-top: 10px;">出票公司(盖章)
                     </li>
-                    <li style="padding-top: 10px;">经办人(签字)：鲁亚慧
+                    <li style="padding-top: 10px;">经办人(签字)：成金霖
                     </li>
                     <li style="padding-top: 10px;">日期:<label id="datetime"></label>
                     </li>

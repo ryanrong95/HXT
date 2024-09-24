@@ -219,15 +219,15 @@ namespace ConsoleApp.vTaskers.Services
         }
 
         /// <summary>
-        /// 芯达通费用同步, 香港库房报关重构后仅供深圳出库时深圳库房费用同步
+        /// 华芯通费用同步, 香港库房报关重构后仅供深圳出库时深圳库房费用同步
         /// </summary>
-        /// <remarks>香港出库后，再添加的费用需要同步到芯达通</remarks>
+        /// <remarks>香港出库后，再添加的费用需要同步到华芯通</remarks>
         public void AfterHKExitAutoVouchers()
         {
             using (var pvcenter = new PvCenterReponsitory())
             {
                 var taskspoll = pvcenter.ReadTable<Layers.Data.Sqls.PvCenter.TasksPool>()
-                    .Where(item => item.Name == TaskSettgins.PvCenter.芯达通费用同步)
+                    .Where(item => item.Name == TaskSettgins.PvCenter.华芯通费用同步)
                     .Take(3).ToArray();
                 var ids = taskspoll.Select(item => item.ID).ToArray();
                 //删除任务
@@ -237,20 +237,20 @@ namespace ConsoleApp.vTaskers.Services
                 {
                     foreach (var tast in taskspoll)
                     {
-                        if (tast.Name == TaskSettgins.PvCenter.芯达通费用同步)
+                        if (tast.Name == TaskSettgins.PvCenter.华芯通费用同步)
                         {
                             try
                             {
-                                Console.WriteLine($"正在处理{TaskSettgins.PvCenter.芯达通费用同步}-执行财务同步：AfterHKExitAutoVouchers({tast.MainID}),{DateTime.Now}");
+                                Console.WriteLine($"正在处理{TaskSettgins.PvCenter.华芯通费用同步}-执行财务同步：AfterHKExitAutoVouchers({tast.MainID}),{DateTime.Now}");
                                 service.AutoVouchers(service.GetLotNumberByOrderID(tast.MainID), tast.MainID);
-                                Console.WriteLine($"处理结束{TaskSettgins.PvCenter.芯达通费用同步}-执行财务同步：AfterHKExitAutoVouchers({tast.MainID}),{DateTime.Now}");
+                                Console.WriteLine($"处理结束{TaskSettgins.PvCenter.华芯通费用同步}-执行财务同步：AfterHKExitAutoVouchers({tast.MainID}),{DateTime.Now}");
                             }
                             catch (Exception ex)
                             {
-                                Console.WriteLine($"{TaskSettgins.PvCenter.芯达通费用同步}-执行财务同步-异常：AfterHKExitAutoVouchers({tast.MainID}),{DateTime.Now})");
+                                Console.WriteLine($"{TaskSettgins.PvCenter.华芯通费用同步}-执行财务同步-异常：AfterHKExitAutoVouchers({tast.MainID}),{DateTime.Now})");
                                 Console.WriteLine(ex.Message);
                                 Console.WriteLine(ex.StackTrace);
-                                LitTools.Current.Log($"{TaskSettgins.PvCenter.芯达通费用同步}-执行财务同步-异常：AfterHKExitAutoVouchers({tast.MainID}),{DateTime.Now}",
+                                LitTools.Current.Log($"{TaskSettgins.PvCenter.华芯通费用同步}-执行财务同步-异常：AfterHKExitAutoVouchers({tast.MainID}),{DateTime.Now}",
                                     ex.Message,
                                     ex.StackTrace);
                             }

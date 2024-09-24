@@ -11,7 +11,7 @@ using Yahv.Underly;
 namespace Yahv.Services.Views
 {
     /// <summary>
-    /// 芯达通网站用户视图
+    /// 华芯通网站用户视图
     /// </summary>
     /// <typeparam name="TReponsitory"></typeparam>
     public class SiteUsersXdtTopView<TReponsitory> : UniqueView<SiteUser, TReponsitory>

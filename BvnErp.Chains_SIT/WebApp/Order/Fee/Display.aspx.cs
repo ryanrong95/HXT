@@ -61,7 +61,7 @@ namespace WebApp.Order.Fee
                                 Rate = fee.Rate.ToString("0.0000"),
                                 PremiumStatus = fee.GetPremiumStatus(taxPoint),
                                 IsPaid = fee.GetPremiumStatus(taxPoint).GetDescription(),
-                                PaymentDate = fee.PaymentDate?.ToShortDateString(),
+                                PaymentDate = fee.PaymentDate == null ? "":fee.PaymentDate.Value.ToShortDateString(),
                             };
 
             Response.Write(new

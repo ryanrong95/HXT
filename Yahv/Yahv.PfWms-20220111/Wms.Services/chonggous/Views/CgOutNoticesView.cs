@@ -322,11 +322,11 @@ namespace Wms.Services.chonggous.Views
             var car = new Wms.Services.Views.TransportTopView().FirstOrDefault(item => item.CarNumber1 == carNumner);
             if (driver == null)
             {
-                throw new NotImplementedException("司机信息未和芯达通同步");
+                throw new NotImplementedException("司机信息未和华芯通同步");
             }
             if (car == null)
             {
-                throw new NotImplementedException("运输信息未和芯达通同步");
+                throw new NotImplementedException("运输信息未和华芯通同步");
             }
 
             if (!reponsitory.ReadTable<Layers.Data.Sqls.PvCenter.WayLoadings>().Any(item => item.ID == WaybillID))
@@ -806,11 +806,11 @@ namespace Wms.Services.chonggous.Views
             var car = new Wms.Services.Views.TransportTopView().FirstOrDefault(item => item.CarNumber1 == carNumner);
             if (driver == null)
             {
-                throw new NotImplementedException("司机信息未和芯达通同步");
+                throw new NotImplementedException("司机信息未和华芯通同步");
             }
             if (car == null)
             {
-                throw new NotImplementedException("运输信息未和芯达通同步");
+                throw new NotImplementedException("运输信息未和华芯通同步");
             }
 
             if (!reponsitory.ReadTable<Layers.Data.Sqls.PvCenter.WayLoadings>().Any(item => item.ID == WaybillID))

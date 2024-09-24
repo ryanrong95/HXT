@@ -24,9 +24,9 @@ namespace Yahv.Underly
         [Description("b1b")]
         B1b = 2,
         /// <summary>
-        /// 芯达通
+        /// 华芯通
         /// </summary>
-        [Description("芯达通")]
+        [Description("华芯通")]
         Xdt = 3,
     }
 

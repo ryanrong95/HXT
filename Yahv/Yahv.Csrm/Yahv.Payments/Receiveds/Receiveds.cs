@@ -1092,12 +1092,12 @@ namespace Yahv.Payments
         #endregion
         #endregion
 
-        #region 芯达通
+        #region 华芯通
 
-        #region 芯达通财务收款确认[非货款]
+        #region 华芯通财务收款确认[非货款]
 
         /// <summary>
-        /// 芯达通财务收款确认
+        /// 华芯通财务收款确认
         /// </summary>
         /// <param name="input"></param>
         public void Confirm_XinDaTong(VoucherInput input, XdtFee[] array)
@@ -1170,7 +1170,7 @@ namespace Yahv.Payments
                     }
                     #endregion
 
-                    Oplogs.Oplog(this.inputer.ID, typeof(Receiveds).FullName, "Pays", $"芯达通财务收款确认[非货款]", $"Confirm_XinDaTong(OrderID:{string.Join(",", orderIDs)},TinyID:{string.Join(",", tinyIDs)},array:{array?.Length})", "");
+                    Oplogs.Oplog(this.inputer.ID, typeof(Receiveds).FullName, "Pays", $"华芯通财务收款确认[非货款]", $"Confirm_XinDaTong(OrderID:{string.Join(",", orderIDs)},TinyID:{string.Join(",", tinyIDs)},array:{array?.Length})", "");
                 }
             }
             catch (Exception ex)
@@ -1181,7 +1181,7 @@ namespace Yahv.Payments
         }
 
         /// <summary>
-        /// 芯达通财务收款确认
+        /// 华芯通财务收款确认
         /// </summary>
         /// <param name="input"></param>
         //public void _bak_Confirm_XinDaTong(VoucherInput input)
@@ -1312,7 +1312,7 @@ namespace Yahv.Payments
         //}
         #endregion
 
-        #region 芯达通付汇财务收款确认[货款]
+        #region 华芯通付汇财务收款确认[货款]
         public void Confirm_Remit_XinDaTong(VoucherInput input, XdtFee[] array)
         {
             IEnumerable<string> tinyIDs = null;
@@ -1394,7 +1394,7 @@ namespace Yahv.Payments
                     }
                     #endregion
 
-                    Oplogs.Oplog(this.inputer.ID, typeof(Receiveds).FullName, "Pays", $"芯达通付汇财务收款确认[货款]", $"Confirm_XinDaTong(OrderID:{string.Join(",", orderIDs)},TinyID:{string.Join(",", tinyIDs)},array:{array?.Length})", "");
+                    Oplogs.Oplog(this.inputer.ID, typeof(Receiveds).FullName, "Pays", $"华芯通付汇财务收款确认[货款]", $"Confirm_XinDaTong(OrderID:{string.Join(",", orderIDs)},TinyID:{string.Join(",", tinyIDs)},array:{array?.Length})", "");
                 }
             }
             catch (Exception ex)
@@ -1439,7 +1439,7 @@ namespace Yahv.Payments
 
                     reponsitory.Submit();
 
-                    Oplogs.Oplog(this.inputer.ID, typeof(Receiveds).FullName, "Pays", $"芯达通取消实收", $"Abandon(formCode:{formCode}", "");
+                    Oplogs.Oplog(this.inputer.ID, typeof(Receiveds).FullName, "Pays", $"华芯通取消实收", $"Abandon(formCode:{formCode}", "");
                 }
             }
             catch (Exception ex)
@@ -1498,7 +1498,7 @@ namespace Yahv.Payments
                     reponsitory.Delete<Layers.Data.Sqls.PvbCrm.Receiveds>(item => ids.Select(i => i.ReceivedID).Contains(item.ID));
                     reponsitory.Submit();
 
-                    Oplogs.Oplog(this.inputer.ID, typeof(Receiveds).FullName, "Pays", $"芯达通取消实收", $"Abandon(tinyID:{tinyID},catalog:{catalog},subject:{subject},currency:{currency})", "");
+                    Oplogs.Oplog(this.inputer.ID, typeof(Receiveds).FullName, "Pays", $"华芯通取消实收", $"Abandon(tinyID:{tinyID},catalog:{catalog},subject:{subject},currency:{currency})", "");
                 }
             }
             catch (Exception ex)

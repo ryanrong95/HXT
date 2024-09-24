@@ -35,8 +35,7 @@ namespace WebApp.Finance.FundTransferApplies
             //金库
             //this.Model.FinanceVaultData = Needs.Wl.Admin.Plat.AdminPlat.Current.Finance.FinanceVault.Where(item => item.Status == Needs.Ccs.Services.Enums.Status.Normal).Select(item => new { Value = item.ID, Text = item.Name }).Json();
             var accountData = Needs.Wl.Admin.Plat.AdminPlat.Current.Finance.FinanceAccounts;
-            this.Model.FinanceVaultData = accountData.Where(a => a.Currency == "CNY")
-                   .Select(item => new { Value = item.FinanceVaultID, Text = item.FinanceVaultName }).Distinct().Json();
+            this.Model.FinanceVaultData = accountData.Select(item => new { Value = item.FinanceVaultID, Text = item.FinanceVaultName }).Distinct().Json();
             this.Model.FundTransferType = EnumUtils.ToDictionary<Needs.Ccs.Services.Enums.FundTransferType>().Select(item => new { Value = item.Key, Text = item.Value }).Json();
         }
 

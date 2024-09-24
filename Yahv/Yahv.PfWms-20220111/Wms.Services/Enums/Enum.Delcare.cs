@@ -8,7 +8,7 @@ using Yahv.Underly.Attributes;
 namespace Wms.Services.Enums
 {
     /// <summary>
-    /// 芯达通截单状态
+    /// 华芯通截单状态
     /// </summary>
     public enum CutStatus
     {

@@ -34,7 +34,7 @@ const XDT_API = 'http://api.szhxd.net'
 //const XDT_API = 'http://hkwmsapi.for-ic.net:60077'//正式版地址
 export {  //将接口地址惊醒暴露，方便在页面里进行引用
   PFWMS_API,//库房接口
-  XDT_API,//芯达通接口
+  XDT_API,//华芯通接口
 }
 
 

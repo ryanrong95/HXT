@@ -16,7 +16,7 @@ namespace Yahv.Payments
         public PayInfo PayInfo { get; internal set; }
 
         /// <summary>
-        /// 深圳市芯达通供应链管理有限公司
+        /// 深圳市华芯通供应链管理有限公司
         /// </summary>
         /// <summary>
         /// 深圳市万路通电子有限公司
@@ -44,7 +44,7 @@ namespace Yahv.Payments
         abstract public string Record(Currency currency, decimal? price, string orderID = null, string waybillID = null, string id = null, string tinyID = null, decimal? rightPrice = null, string itemID = null, string applicationID = null, string AgentID = null, int? quantity = null, string source = "", string trackingNum = "", string data = "", decimal? originPrice = null);
 
         /// <summary>
-        /// 芯达通记账
+        /// 华芯通记账
         /// </summary>
         /// <remarks>添加或者修改</remarks>
         /// <param name="currency">币种</param>
@@ -68,8 +68,8 @@ namespace Yahv.Payments
 
         /// <summary>
         /// 内部公司账
-        /// 芯达通应付万路通
-        /// 万路通应收芯达通
+        /// 华芯通应付万路通
+        /// 万路通应收华芯通
         /// </summary>
         //protected void InsideFee(Currency currency, decimal? price, string orderID, string waybillID = null)
         //{

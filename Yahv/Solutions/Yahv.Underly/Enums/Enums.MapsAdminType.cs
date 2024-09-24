@@ -66,7 +66,7 @@ namespace Yahv.Underly
         /// <summary>
         /// 业务员
         /// </summary>
-        [Description("芯达通业务员")]
+        [Description("华芯通业务员")]
         ServiceManager = 75,
         /// <summary>
         /// 跟单员

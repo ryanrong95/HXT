@@ -408,11 +408,11 @@ namespace Yahv.Payments
         }
         #endregion
 
-        #region 芯达通
+        #region 华芯通
         #region 记账
 
         /// <summary>
-        /// 芯达通方法
+        /// 华芯通方法
         /// </summary>
         /// <param name="vastOrderID">大订单ID</param>
         /// <param name="tinyOrderID">小订单ID</param>
@@ -655,7 +655,7 @@ namespace Yahv.Payments
                         reponsitory.SqlBulkCopyByDatatable(nameof(Receivables), ToDataTable(result));
                         //reponsitory.Insert<Layers.Data.Sqls.PvbCrm.Receivables>(result);
                     }
-                    Oplogs.Oplog(this.payInfo.Inputer.ID, typeof(Receivables).FullName, "Pays", $"芯达通记账", $"XdtRecord(vastOrderID:{vastOrderID},tinyOrderID:{tinyOrderID},rate:{rate},itemID:{itemID},applicationID:{applicationID},array:{array.Length},result:{result.Count})", "");
+                    Oplogs.Oplog(this.payInfo.Inputer.ID, typeof(Receivables).FullName, "Pays", $"华芯通记账", $"XdtRecord(vastOrderID:{vastOrderID},tinyOrderID:{tinyOrderID},rate:{rate},itemID:{itemID},applicationID:{applicationID},array:{array.Length},result:{result.Count})", "");
                 }
             }
             catch (Exception ex)
@@ -670,7 +670,7 @@ namespace Yahv.Payments
         #region 记账
 
         /// <summary>
-        /// 芯达通方法
+        /// 华芯通方法
         /// </summary>
         /// <param name="vastOrderID">大订单ID</param>
         /// <param name="tinyOrderID">小订单ID</param>

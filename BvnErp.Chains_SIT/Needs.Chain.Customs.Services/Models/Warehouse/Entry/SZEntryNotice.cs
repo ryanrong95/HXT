@@ -229,10 +229,10 @@ namespace Needs.Ccs.Services.Models
             PdfLayoutResult result = grid.Draw(page, new PointF(0, y));
             y += result.Bounds.Height + 1;
             font2 = new PdfTrueTypeFont(new Font("SimSun", 11f, FontStyle.Regular), true);
-            page.Canvas.DrawString("  主管：鲁亚慧", font2, brush, 10, y, formatLeft);
-            page.Canvas.DrawString("  会计：鲁亚慧", font2, brush, 130, y, formatLeft);
-            page.Canvas.DrawString("  报管员：商庆房", font2, brush, 250, y, formatLeft);
-            page.Canvas.DrawString("  经手人：杨端峰", font2, brush, 370, y, formatLeft);
+            page.Canvas.DrawString("  主管：成金霖", font2, brush, 10, y, formatLeft);
+            page.Canvas.DrawString("  会计：成金霖", font2, brush, 130, y, formatLeft);
+            page.Canvas.DrawString("  报管员：成金霖", font2, brush, 250, y, formatLeft);
+            page.Canvas.DrawString("  经手人：成金霖", font2, brush, 370, y, formatLeft);
             #endregion
             return pdf;
         }

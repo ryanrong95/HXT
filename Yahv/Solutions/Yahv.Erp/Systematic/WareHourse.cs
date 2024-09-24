@@ -328,7 +328,7 @@ namespace Yahv.Systematic
             {
                 try
                 {
-                    //深圳库房出库成功后调用芯达通的接口
+                    //深圳库房出库成功后调用华芯通的接口
                     var result = Yahv.Utils.Http.ApiHelper.Current.JPost(Wms.Services.FromType.SZOutOfStockToXDT.GetDescription(), new SZToXDT { AdminID = this.admin.ID, WaybillID = waybill.WaybillID });
 
                 }

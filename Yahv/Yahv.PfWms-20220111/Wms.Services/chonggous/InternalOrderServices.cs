@@ -24,14 +24,14 @@ namespace Wms.Services.chonggous
         }
 
         /// <summary>
-        /// 芯达通内单（香港入库数据）
+        /// 华芯通内单（香港入库数据）
         /// </summary>
         /// <remarks>需要修改</remarks>
         public void Enter(PvWsOrderInsApiModel model)
         {
             using (var reponsitory = new PvWmsRepository())
             {
-                //连接芯达通
+                //连接华芯通
                 var order = reponsitory.ReadTable<Layers.Data.Sqls.PvWms.OrdersTopView>()
                    .Where(item => item.ID == model.VastOrderID).FirstOrDefault();
 
@@ -271,7 +271,7 @@ namespace Wms.Services.chonggous
                     var message = result.JsonTo<JMessage>();
                     if (message.code != 200)
                     {
-                        throw new Exception("通知芯达通申请报关失败：" + message.data);
+                        throw new Exception("通知华芯通申请报关失败：" + message.data);
                     }
                     #endregion
 
@@ -328,7 +328,7 @@ namespace Wms.Services.chonggous
         }
 
         /// <summary>
-        /// 芯达通数据贯通接口
+        /// 华芯通数据贯通接口
         /// </summary>
         public void XDTOrderEnter()
         {
@@ -578,7 +578,7 @@ namespace Wms.Services.chonggous
                                          ItemID = input.ItemID,
                                          ClientID = input.ClientID,
                                          PayeeID = order.PayeeID,
-                                         ThirdID = Yahv.Services.WhSettings.SZ["SZ01"].Enterprise.ID,//（芯达通）
+                                         ThirdID = Yahv.Services.WhSettings.SZ["SZ01"].Enterprise.ID,//（华芯通）
                                          ProductID = input.ProductID,
                                          UnitPrice = output.Price,//TODO:需要更新
                                          Currency = (int)Currency.CNY,
@@ -608,7 +608,7 @@ namespace Wms.Services.chonggous
                                           NetWeight = item.NetWeight,
                                           Type = (int)CgNoticeType.Enter,
                                           OutputID = null,
-                                          WareHouseID = Yahv.Services.WhSettings.SZ["SZ01"].ID,//芯达通
+                                          WareHouseID = Yahv.Services.WhSettings.SZ["SZ01"].ID,//华芯通
                                           WaybillID = SZ_In_Waybill?.wbID ?? "",
                                           Supplier = HK_In_Waybill.wbSupplier,
                                           Conditions = new NoticeCondition().Json(),

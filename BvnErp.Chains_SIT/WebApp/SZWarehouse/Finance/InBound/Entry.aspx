@@ -144,13 +144,13 @@
                     <table style="width: 100%">
                         <tr>
                             <td></td>
-                            <td>主管：鲁亚慧</td>
+                            <td>主管：成金霖</td>
                             <td></td>
-                            <td>会计：鲁亚慧</td>
+                            <td>会计：成金霖</td>
                             <td></td>
-                            <td>报管员：商庆房</td>
+                            <td>报管员：成金霖</td>
                             <td></td>
-                            <td>经手人：杨端峰</td>
+                            <td>经手人：成金霖</td>
                             <td></td>
                         </tr>
                     </table>

@@ -164,7 +164,7 @@ namespace Yahv.Services.Models
         #endregion
 
         /// <summary>
-        /// 芯达通物流部
+        /// 华芯通物流部
         /// </summary>
         static public Carrier XdtPCL;
 
@@ -184,13 +184,13 @@ namespace Yahv.Services.Models
         /// 静态构造器
         /// </summary>
         /// <remarks>
-        /// 添加了初始化芯达通物流部承运商的逻辑
+        /// 添加了初始化华芯通物流部承运商的逻辑
         /// </remarks>
         static Carrier()
         {
             lock (locker)
             {
-                Init(ref XdtPCL, nameof(XdtPCL), "芯达通物流部");
+                Init(ref XdtPCL, nameof(XdtPCL), "华芯通物流部");
                 Init(ref HyPCL, nameof(HyPCL), "恒远物流部");
                 Init(ref Personal, nameof(Personal), "个人承运商");
             }

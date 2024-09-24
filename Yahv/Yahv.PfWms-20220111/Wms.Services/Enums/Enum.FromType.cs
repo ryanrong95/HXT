@@ -19,7 +19,7 @@ namespace Wms.Services
         CustomApply = 5,
 
         /// <summary>
-        /// 芯达通 深圳出库接口
+        /// 华芯通 深圳出库接口
         /// </summary>
         /// <remarks>
         /// 荣检

@@ -143,8 +143,8 @@ namespace Yahv.Payments
         /// <remarks>
         /// 如果未来开发对账单重新放到财务模块（王辉）这里出具，就确实需要把海关汇率进行手动维护
         /// (报关的对账单是没有从财务这块走，因此海关对账单暂时可以不同步)
-        /// 第一步可以先把芯达通的时时汇率同步更新到PvData.dbo.ExchangeRates
-        /// 第二部把手动维护海关汇率的维护页面，也放给新框架下进行维护。并通讯给芯达通
+        /// 第一步可以先把华芯通的时时汇率同步更新到PvData.dbo.ExchangeRates
+        /// 第二部把手动维护海关汇率的维护页面，也放给新框架下进行维护。并通讯给华芯通
         /// </remarks>
         static public RaterFiler Customs
         {
@@ -215,7 +215,7 @@ namespace Yahv.Payments
         /// 第一步先做到把以上要求在抓取中做个TenAmChineseBank类型的特殊处理
         /// 同时需要增加最后更新时间Modify,如果10点后抓取的汇率首先判断是TenAmChineseBank类型的更新时间是否为今日？（今日，神速）
         /// 如果是今日就不做什么工作了，如果不是今日就更新
-        /// 第二步再做到荣检芯达通项目统一使用这个时时汇率
+        /// 第二步再做到荣检华芯通项目统一使用这个时时汇率
         /// 第三部再做到公司同意管控的这个公司固定汇率（Fixed）
         /// </remarks>
         static public RaterFiler TenAmChineseBank

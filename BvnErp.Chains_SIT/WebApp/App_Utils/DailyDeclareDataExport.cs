@@ -438,7 +438,7 @@ namespace WebApp.Ccs.Utils
                 dataRow.CreateCell(5).SetCellValue(row["OwnerName"].ToString());                
                 dataRow.CreateCell(6).SetCellValue(Math.Round(Convert.ToDouble(row["PackNo"]),0,MidpointRounding.AwayFromZero));                
                 dataRow.CreateCell(7).SetCellValue(Math.Round(Convert.ToDouble(row["NetWt"]),2,MidpointRounding.AwayFromZero));                
-                dataRow.CreateCell(8).SetCellValue(Math.Round(Convert.ToDouble(row["GrossWt"]),0,MidpointRounding.AwayFromZero));               
+                dataRow.CreateCell(8).SetCellValue(Math.Round(Convert.ToDouble(row["GrossWt"]),2,MidpointRounding.AwayFromZero));               
 
                 if (!row["ContrNo"].ToString().ToLower().Contains("sj"))
                 {

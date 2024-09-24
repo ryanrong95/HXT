@@ -157,7 +157,7 @@ namespace Yahv.Utils.Converters.Contents
 
         /// <summary>
         /// 一期MD5加密，为了一期的账号密码迁移到二期可以使用
-        /// 芯达通MD5加密方法，为了账号密码通用使用
+        /// 华芯通MD5加密方法，为了账号密码通用使用
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>

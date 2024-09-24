@@ -28,7 +28,7 @@ namespace Yahv.Underly
         string EnterpriseID { get; }
 
         /// <summary>
-        /// 芯达通客户ID
+        /// 华芯通客户ID
         /// </summary>
         string XDTClientID { get; }
 

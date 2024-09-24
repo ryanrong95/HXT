@@ -4,7 +4,7 @@ using Yahv.Underly.Attributes;
 namespace Yahv.Underly
 {
     /// <summary>
-    /// 芯达通服务类型
+    /// 华芯通服务类型
     /// </summary>
     [Flags]
     public enum ServiceType

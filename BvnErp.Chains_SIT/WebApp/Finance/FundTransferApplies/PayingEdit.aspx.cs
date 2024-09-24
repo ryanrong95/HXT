@@ -15,6 +15,7 @@ using WebApp.App_Utils;
 using System.Net;
 using Needs.Ccs.Services.Hanlders;
 using Needs.Ccs.Services.Enums;
+using System.Security.Principal;
 
 namespace WebApp.Finance.FundTransferApplies
 {
@@ -49,7 +50,7 @@ namespace WebApp.Finance.FundTransferApplies
 
             var result = Needs.Wl.Admin.Plat.AdminPlat.Current.Finance.FinanceAccounts
                 .Where(item => item.Status == Needs.Ccs.Services.Enums.Status.Normal)
-                .Where(t => t.FinanceVaultID == VaultID&&t.Currency== Currency);
+                .Where(t => t.FinanceVaultID == VaultID);
 
             //if (!string.IsNullOrEmpty(IsCash) && IsCash == "true")
             //{
@@ -207,6 +208,10 @@ namespace WebApp.Finance.FundTransferApplies
             Needs.Ccs.Services.Models.FundTransferApplies apply = e.FinanceTransferApply;
             try
             {
+                //
+                var accounts = Needs.Wl.Admin.Plat.AdminPlat.Current.Finance.FinanceAccounts
+                    .Where(item => item.Status == Needs.Ccs.Services.Enums.Status.Normal).ToList();
+
                 DateTime payDate = apply.PaymentDate == null ? DateTime.Now : apply.PaymentDate.Value;
                 if (apply.QRCodeFee != null)
                 {
@@ -223,7 +228,7 @@ namespace WebApp.Finance.FundTransferApplies
                     payOut.FinanceVault = new FinanceVault { ID = apply.OutAccount.FinanceVaultID };
                     payOut.FinanceAccount = apply.OutAccount;
                     payOut.Amount = apply.OutAmount - apply.QRCodeFee.Value;
-                    payOut.Currency = "CNY";
+                    payOut.Currency = apply.OutCurrency; // "CNY";"CNY";
                     payOut.ExchangeRate = 1.0M;
                     payOut.PayType = apply.PaymentType;
                     payOut.PayDate = payDate;
@@ -241,7 +246,7 @@ namespace WebApp.Finance.FundTransferApplies
                     apply.OutAccount.Balance = apply.OutAccount.Balance - apply.OutAmount + apply.QRCodeFee.Value;
                     payOut2.FinanceAccount = apply.OutAccount;
                     payOut2.Amount = apply.QRCodeFee.Value;
-                    payOut2.Currency = "CNY";
+                    payOut2.Currency = apply.OutCurrency;// "CNY";
                     payOut2.ExchangeRate = 1.0M;
                     payOut2.PayType = apply.PaymentType;
                     payOut2.PayDate = payDate;
@@ -260,7 +265,7 @@ namespace WebApp.Finance.FundTransferApplies
                     payOut.FinanceVault = new FinanceVault { ID = apply.OutAccount.FinanceVaultID };
                     payOut.FinanceAccount = apply.OutAccount;
                     payOut.Amount = apply.OutAmount;
-                    payOut.Currency = "CNY";
+                    payOut.Currency = apply.OutCurrency;// "CNY";
                     payOut.ExchangeRate = 1.0M;
                     payOut.PayType = apply.PaymentType;
                     payOut.PayDate = payDate;
@@ -279,7 +284,7 @@ namespace WebApp.Finance.FundTransferApplies
                     payOut.FinanceVault = new FinanceVault { ID = apply.OutAccount.FinanceVaultID };
                     payOut.FinanceAccount = apply.OutAccount;
                     payOut.Amount = apply.OutAmount-apply.DiscountInterest.Value;
-                    payOut.Currency = "CNY";
+                    payOut.Currency = apply.OutCurrency;// "CNY";
                     payOut.ExchangeRate = 1.0M;
                     payOut.PayType = apply.PaymentType;
                     payOut.PayDate = payDate;
@@ -296,7 +301,7 @@ namespace WebApp.Finance.FundTransferApplies
                     apply.OutAccount.Balance = apply.OutAccount.Balance - apply.OutAmount + apply.DiscountInterest.Value;
                     payOut2.FinanceAccount = apply.OutAccount;
                     payOut2.Amount = apply.DiscountInterest.Value;
-                    payOut2.Currency = "CNY";
+                    payOut2.Currency = apply.OutCurrency;// "CNY";
                     payOut2.ExchangeRate = 1.0M;
                     payOut2.PayType = apply.PaymentType;
                     payOut2.PayDate = payDate;
@@ -318,7 +323,7 @@ namespace WebApp.Finance.FundTransferApplies
                     Poundage.BankName = apply.OutAccount.BankName;
                     Poundage.BankAccount = apply.OutAccount.BankAccount;
                     Poundage.Amount = apply.Poundage.Value;
-                    Poundage.Currency = "CNY";
+                    Poundage.Currency = apply.OutCurrency; //"CNY";
                     Poundage.ExchangeRate = 1.0M;
                     Poundage.PayType = apply.PaymentType;
                     Poundage.PayDate = payDate;
@@ -332,7 +337,7 @@ namespace WebApp.Finance.FundTransferApplies
                 recIn.FeeType = FinanceFeeType.FundTransfer;
                 recIn.ReceiptType = apply.PaymentType;
                 recIn.ReceiptDate = DateTime.Now;
-                recIn.Currency = "CNY";
+                recIn.Currency = apply.InCurrency; // "CNY";
                 recIn.Rate = 1.0M;
                 recIn.Amount = apply.InAmount;
                 recIn.Vault = new FinanceVault { ID = apply.InAccount.FinanceVaultID };

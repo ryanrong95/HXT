@@ -104,17 +104,17 @@ namespace Yahv.Underly
         Signaturer,
 
         /// <summary>
-        /// 芯达通香港库房
+        /// 华芯通香港库房
         /// </summary>
         [Fixed("FRole014")]
-        [Description("芯达通香港库房")]
+        [Description("华芯通香港库房")]
         HkWarehouse,
 
         /// <summary>
-        /// 芯达通深圳库房
+        /// 华芯通深圳库房
         /// </summary>
         [Fixed("FRole015")]
-        [Description("芯达通深圳库房")]
+        [Description("华芯通深圳库房")]
         SzWarehouse,
 
         /// <summary>

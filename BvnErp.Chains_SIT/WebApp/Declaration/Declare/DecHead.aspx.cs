@@ -170,7 +170,7 @@ namespace WebApp.Declaration.Declare
 
             //默认申报地海关
             var CustomMasterDefault = new Needs.Ccs.Services.Views.BaseCustomMasterDefaultView().FirstOrDefault(t => t.IsDefault);
-            this.Model.CustomMasterValue = CustomMasterDefault == null ? "5303" : CustomMasterDefault.Code;
+            this.Model.CustomMasterValue = CustomMasterDefault == null ? "5354" : CustomMasterDefault.Code;
         }
         private void NewLoad(string ClientID, string OrderID)
         {

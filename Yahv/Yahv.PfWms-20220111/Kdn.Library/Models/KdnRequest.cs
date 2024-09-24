@@ -35,7 +35,7 @@ namespace Kdn.Library.Models
                         this.CustomerPwd = "rong3222518";
                         //this.MonthCode = "7550205279";
                         //this.MonthCode = "7550123478";//2020.10.12 顺丰月结账号的更改
-                        this.MonthCode = "7550205279";//2020.12.04 顺丰月结账号的更改（荣检重新确定：芯达通使用子账号）
+                        this.MonthCode = "7550205279";//2020.12.04 顺丰月结账号的更改（荣检重新确定：华芯通使用子账号）
                         //this.ReqURL = "https://api.kdniao.com/api/Eorderservice";
 
                         //this.ReqURL = "http://testapi.kdniao.com:8081/api/EOrderService";

@@ -23,7 +23,7 @@ namespace Yahv.Services.Views
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="companyid">内部公司ID:深圳市芯达通供应链管理有限公司</param>
+        /// <param name="companyid">内部公司ID:深圳市华芯通供应链管理有限公司</param>
         public TrackerWsClients(IErpAdmin admin, string companyid = "DBAEAB43B47EB4299DD1D62F764E6B6A")
         {
             this.Admin = admin;

@@ -256,7 +256,7 @@ namespace ConsoleApp.vTaskers.Services
                             //控制台输出错误
                             Console.WriteLine((ex.InnerException ?? ex).Message);
                             //然后记录日志并进行下次操作
-                            Logs.Log($"请求芯达通：{ Wms.Services.FromType.XdtSZSZReceiptConfirm.GetDescription()}地址： AdminID = {adminID} and WaybillID == {waybill.WaybillID}", ex.InnerException ?? ex);
+                            Logs.Log($"请求华芯通：{ Wms.Services.FromType.XdtSZSZReceiptConfirm.GetDescription()}地址： AdminID = {adminID} and WaybillID == {waybill.WaybillID}", ex.InnerException ?? ex);
                         }
 
 
@@ -359,7 +359,7 @@ namespace ConsoleApp.vTaskers.Services
                                 //控制台输出错误
                                 Console.WriteLine((ex.InnerException ?? ex).Message);
                                 //然后记录日志并进行下次操作
-                                Logs.Log($"请求芯达通：{ Wms.Services.FromType.XdtSZSZReceiptConfirm.GetDescription()}地址： AdminID = {adminID ?? Npc.Robot.Obtain()} and WaybillID == {waybill.WaybillID}", ex.InnerException ?? ex);
+                                Logs.Log($"请求华芯通：{ Wms.Services.FromType.XdtSZSZReceiptConfirm.GetDescription()}地址： AdminID = {adminID ?? Npc.Robot.Obtain()} and WaybillID == {waybill.WaybillID}", ex.InnerException ?? ex);
                             }
                         }
 

@@ -287,7 +287,7 @@ namespace Needs.Ccs.Services.Models.Finance.DyjFinance
             //转换大赢家人员ID
             var user = AdminStaff.FirstOrDefault(t => t.OriginID == costApply.AdminID);
             this.data.UserID = user == null ? 3422 : int.Parse(user.DyjCode);
-            this.data.UserName = user == null ? "鲁亚慧" : user.RealName;
+            this.data.UserName = user == null ? "成金霖" : user.RealName;
 
 
             this.data.Amount = (costApply.Currency == "CNY" ? costApply.Amount : costApply.Amount * USDRate).ToRound(2);

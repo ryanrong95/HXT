@@ -57,7 +57,7 @@ GO
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'规格（暂时不用）' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Logs_Declare', @level2type=N'COLUMN',@level2name=N'Specs'
 GO
 
-EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'运输批次，芯达通回填。你这里不用处理' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Logs_Declare', @level2type=N'COLUMN',@level2name=N'LotNumber'
+EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'运输批次，华芯通回填。你这里不用处理' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Logs_Declare', @level2type=N'COLUMN',@level2name=N'LotNumber'
 GO
 
 EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'创建时间' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'Logs_Declare', @level2type=N'COLUMN',@level2name=N'CreateDate'

@@ -75,7 +75,7 @@ namespace Yahv.Services.Models
         public GeneralStatus Status { get; set; }
 
         /// <summary>
-        /// 优惠券的授予人ID，这里指我们的内部公司(创新恒远、芯达通、科睿等)
+        /// 优惠券的授予人ID，这里指我们的内部公司(创新恒远、华芯通、科睿等)
         /// </summary>
         public string Payer { get; set; }
 

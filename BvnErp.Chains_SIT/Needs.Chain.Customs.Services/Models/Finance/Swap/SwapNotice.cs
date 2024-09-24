@@ -182,8 +182,8 @@ namespace Needs.Ccs.Services.Models
                       });
 
                     //设置日期
-                    this.ContrDate = DateTime.ParseExact(list.First(), "yyyyMMdd", new System.Globalization.CultureInfo("zh-CN"), System.Globalization.DateTimeStyles.AllowWhiteSpaces).AddDays(-2).ToString("yyyy-MM-dd");
-                    this.InvoiceDate = DateTime.ParseExact(list.Last(), "yyyyMMdd", new System.Globalization.CultureInfo("zh-CN"), System.Globalization.DateTimeStyles.AllowWhiteSpaces).AddDays(2).ToString("yyyy-MM-dd");
+                    this.ContrDate = DateTime.ParseExact(list.First(), "yyyyMMdd", new System.Globalization.CultureInfo("zh-CN"), System.Globalization.DateTimeStyles.AllowWhiteSpaces).AddDays(-1).ToString("yyyy-MM-dd");
+                    this.InvoiceDate = DateTime.ParseExact(list.Last(), "yyyyMMdd", new System.Globalization.CultureInfo("zh-CN"), System.Globalization.DateTimeStyles.AllowWhiteSpaces).AddDays(1).ToString("yyyy-MM-dd");
 
                     if (list.Count > 1)
                     {
@@ -1125,6 +1125,10 @@ namespace Needs.Ccs.Services.Models
             //印章图片
             PdfImage HTimage = PdfImage.FromFile(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, vendor.SignSealUrl));
             page.Canvas.DrawImage(HTimage, 100, y - 25);
+
+            //建设银行要求额外盖一个章
+            PdfImage image = PdfImage.FromFile(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, purchaser.ContactStamp));
+            page.Canvas.DrawImage(image, 330, y - 70);
 
             #endregion
 

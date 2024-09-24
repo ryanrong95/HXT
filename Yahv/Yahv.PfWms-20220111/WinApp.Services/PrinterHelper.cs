@@ -938,7 +938,7 @@ namespace WinApp.Services
 #endif
                 model.EcommerceUserId = Guid.NewGuid().ToString();//电商客户标识必填 写死？
                                                                   //model.SenderType = 1;//协议客户 写死？
-                model.SenderNo = "1100099411297";//深圳市芯达通供应链管理有限公司(1100099411297)EMS月结账号 这地方写死
+                model.SenderNo = "1100099411297";//深圳市华芯通供应链管理有限公司(1100099411297)EMS月结账号 这地方写死
                 //model.InnerChannel = string.Empty;
                 model.LogisticsOrderNo = orderID;//订单编号 必填
                 //model.BatchNo = string.Empty;

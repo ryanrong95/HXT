@@ -223,7 +223,7 @@ namespace ConsoleApp.vTaskers.Services
                                         lsNotice.EndDate
                                     };
 
-                //以客户ID和收款人ID为分组获取每个客户和 对应的收款人PayeeID 有效租赁的库位数量（eg:一个客户有两个payeeID，分别对应芯达通和恒远,以客户ID和收款人ID为分组可以获得该客户在芯达通和恒远分别对应的租赁的 库位数和 结束日期）
+                //以客户ID和收款人ID为分组获取每个客户和 对应的收款人PayeeID 有效租赁的库位数量（eg:一个客户有两个payeeID，分别对应华芯通和恒远,以客户ID和收款人ID为分组可以获得该客户在华芯通和恒远分别对应的租赁的 库位数和 结束日期）
                 var igroup_lsNotice = (from item in linq_lsNotice
                                        where item.EndDate >= DateTime.Now//租赁的结束时间必须大于当前时间才能证明是有效库位
                                        group item by new
@@ -239,7 +239,7 @@ namespace ConsoleApp.vTaskers.Services
                                            EndDate = groups.Select(g => g.EndDate).FirstOrDefault()
                                        }).ToArray();
 
-                //如果一个客户有两个收款人ID，证明他在两个地方（如恒远和芯达通）都存着货物，需要分别算出来两地租赁的库位的费用
+                //如果一个客户有两个收款人ID，证明他在两个地方（如恒远和华芯通）都存着货物，需要分别算出来两地租赁的库位的费用
                 foreach (var group in igroup_storages)
                 {
                     //做一下订单循环分别给 若干  收款人进行记录

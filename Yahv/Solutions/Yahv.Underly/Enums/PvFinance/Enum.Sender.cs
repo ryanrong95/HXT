@@ -15,9 +15,9 @@ namespace Yahv.Underly.Enums.PvFinance
         Center,
 
         /// <summary>
-        /// 芯达通
+        /// 华芯通
         /// </summary>
-        [Description("芯达通")]
+        [Description("华芯通")]
         [Fixed("FSender001")]
         Xindatong,
     }

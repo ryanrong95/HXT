@@ -31,7 +31,7 @@ namespace ConsoleApp.vTaskers.Services
 
             public const string 单一窗口申报后深圳出库 = nameof(单一窗口申报后深圳出库);
 
-            public const string 芯达通费用同步 = nameof(芯达通费用同步);
+            public const string 华芯通费用同步 = nameof(华芯通费用同步);
 
             /// <summary>
             /// 私有构造器

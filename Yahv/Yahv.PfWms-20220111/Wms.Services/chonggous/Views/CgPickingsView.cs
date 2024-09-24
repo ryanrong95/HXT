@@ -1445,7 +1445,7 @@ namespace Wms.Services.chonggous.Views
             //}
 
 
-            // 深圳库房出库成功后调用芯达通的接口,判断一下如果是深圳出库 就调用
+            // 深圳库房出库成功后调用华芯通的接口,判断一下如果是深圳出库 就调用
             if (Waybill["WarehouseID"].Value<string>().Contains("SZ"))
             {
                 string[] orderids = null;
@@ -1467,7 +1467,7 @@ namespace Wms.Services.chonggous.Views
                 var resultJson = result.JsonTo<JMessage>();
                 if (!resultJson.success)
                 {
-                    throw new Exception("调用芯达通 深圳出库接口失败," + resultJson.data);
+                    throw new Exception("调用华芯通 深圳出库接口失败," + resultJson.data);
                 }
             }
         }

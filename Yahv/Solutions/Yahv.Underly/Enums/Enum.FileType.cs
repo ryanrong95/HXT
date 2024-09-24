@@ -11,12 +11,12 @@ namespace Yahv.Underly
     /// 文件类型
     /// </summary>
     /// <remarks>
-    /// 如果芯达通已经存在使用芯达通的数值
+    /// 如果华芯通已经存在使用华芯通的数值
     /// 再增加的时候 从这里9000开始
     /// </remarks>
     public enum FileType : int
     {
-        #region 与芯达通文件类型值保持一致，勿改
+        #region 与华芯通文件类型值保持一致，勿改
         [Description("对账单")]
         OrderBill = 1,
 
@@ -101,7 +101,7 @@ namespace Yahv.Underly
         Avatar = 42,
 
         /// <summary>
-        /// 芯达通境内销售合同（增值税开票时，税务要求）ryan 20200918
+        /// 华芯通境内销售合同（增值税开票时，税务要求）ryan 20200918
         /// </summary>
         [Description("销售合同")]
         SalesContract = 50,
@@ -303,7 +303,7 @@ namespace Yahv.Underly
         [Description("送货确认文件")]
         SendGoods = 8020,
 
-        //如果芯达通已经存在使用芯达通的数值
+        //如果华芯通已经存在使用华芯通的数值
         //再增加的时候 从这里 9000 开始
 
         [Description("测试文件")]

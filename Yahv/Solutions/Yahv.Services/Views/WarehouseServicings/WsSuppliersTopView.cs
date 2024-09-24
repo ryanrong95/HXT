@@ -56,7 +56,7 @@ namespace Yahv.Services.Views
                    select new WsSupplier
                    {
                        ID = entity.ID,
-                       ClientID = map.EnterpriseID,//芯达通客户,关系表中获取
+                       ClientID = map.EnterpriseID,//华芯通客户,关系表中获取
                        Name = entity.Name,
                        ChineseName = entity.ChineseName,
                        EnglishName = entity.EnglishName,

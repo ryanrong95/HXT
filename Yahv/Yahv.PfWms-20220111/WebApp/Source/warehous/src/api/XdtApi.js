@@ -258,7 +258,7 @@ export function GetCarrierType() {
   })
 }
 
-//库房费用 插入芯达通
+//库房费用 插入华芯通
 export function InsertHKWarehouseFee(data) {
   return axios.post(XDT_API + '/Finance/InsertHKWarehouseFeeNew',data).then((res) => {
     return Promise.resolve(res.data)

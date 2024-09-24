@@ -58,7 +58,7 @@ namespace Wms.Services.chonggous.Views
         /// 静态构造器
         /// </summary>
         /// <remarks>
-        /// 添加了初始化芯达通物流部承运商的逻辑
+        /// 添加了初始化华芯通物流部承运商的逻辑
         /// </remarks>
         static Carrier()
         {
@@ -68,7 +68,7 @@ namespace Wms.Services.chonggous.Views
                 {
                     if (XdtPCL == null)
                     {
-                        string name = "芯达通物流部";
+                        string name = "华芯通物流部";
                         using (var reponsitory = new PvbCrmReponsitory())
                         {
                             try

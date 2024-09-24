@@ -202,7 +202,7 @@ export default {
       TrackingNumber:'', //运单号
       TrackingNumberarr:[], //所对应的运单号数组
       // Files:[],
-      Premiums:[], //提交给芯达通的费用
+      Premiums:[], //提交给华芯通的费用
       WaybillInfo:[],//快递信息
     };
   },
@@ -464,7 +464,7 @@ export default {
       }
       InsertHKWarehouseFee(submit_data).then((res) => {
               if (res.success == true) {
-                //this.$Message.success("芯达通保存成功"); 
+                //this.$Message.success("华芯通保存成功"); 
                 this.Premiums = [];          
               } else {
                 this.$Message.error(res.data);

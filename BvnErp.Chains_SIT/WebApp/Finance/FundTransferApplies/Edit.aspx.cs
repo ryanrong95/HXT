@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using System.Net.Http;
 using WebApp.App_Utils;
 using System.Net;
+using Needs.Ccs.Services;
 
 namespace WebApp.Finance.FundTransferApplies
 {
@@ -33,8 +34,10 @@ namespace WebApp.Finance.FundTransferApplies
         protected void LoadComboBoxData()
         {
             var accountData = Needs.Wl.Admin.Plat.AdminPlat.Current.Finance.FinanceAccounts;
-            this.Model.FinanceVaultData = accountData.Where(a => a.Currency == "CNY")
-                   .Select(item => new { Value = item.FinanceVaultID, Text = item.FinanceVaultName }).Distinct().Json();
+            //this.Model.FinanceVaultData = accountData.Where(a => a.Currency == "CNY")
+            //       .Select(item => new { Value = item.FinanceVaultID, Text = item.FinanceVaultName }).Distinct().Json();
+            this.Model.FinanceVaultData = accountData.Select(item => new { Value = item.FinanceVaultID, Text = item.FinanceVaultName }).Distinct().Json();
+
             //金库
             //this.Model.FinanceVaultData = Needs.Wl.Admin.Plat.AdminPlat.Current.Finance.FinanceVault.Where(item => item.Status == Needs.Ccs.Services.Enums.Status.Normal).Select(item => new { Value = item.ID, Text = item.Name }).Json();
             this.Model.FundTransferType = EnumUtils.ToDictionary<Needs.Ccs.Services.Enums.FundTransferType>().Select(item => new { Value = item.Key, Text = item.Value }).Json();
@@ -48,7 +51,8 @@ namespace WebApp.Finance.FundTransferApplies
 
             var result = Needs.Wl.Admin.Plat.AdminPlat.Current.Finance.FinanceAccounts
                 .Where(item => item.Status == Needs.Ccs.Services.Enums.Status.Normal)
-                .Where(t => t.FinanceVaultID == VaultID&&t.Currency== Currency);
+                //.Where(t => t.FinanceVaultID == VaultID && t.Currency == Currency);
+                .Where(t => t.FinanceVaultID == VaultID);
 
             //if (!string.IsNullOrEmpty(IsCash) && IsCash == "true")
             //{
@@ -120,15 +124,19 @@ namespace WebApp.Finance.FundTransferApplies
             }
 
             Needs.Ccs.Services.Models.FundTransferApplies apply = new Needs.Ccs.Services.Models.FundTransferApplies();
-            
+
+            //
+            var accounts = Needs.Wl.Admin.Plat.AdminPlat.Current.Finance.FinanceAccounts
+                .Where(item => item.Status == Needs.Ccs.Services.Enums.Status.Normal).ToList();
+
             apply.OutAccount = new FinanceAccount { ID = OutAccount };
             apply.OutAmount = Convert.ToDecimal(OutMoney);
-            apply.OutCurrency = "CNY";
+            apply.OutCurrency = accounts.FirstOrDefault(t => t.ID == OutAccount)?.Currency; // "CNY";
             apply.FromSeqNo = FromSeqNo;
             apply.InAccount = new FinanceAccount { ID = InAccount };
             apply.InAmount = Convert.ToDecimal(InMoney);
-            apply.InCurrency = "CNY";
-            apply.Rate = 1;
+            apply.InCurrency = accounts.FirstOrDefault(t => t.ID == InAccount)?.Currency; //"CNY";
+            apply.Rate = apply.OutCurrency == apply.InCurrency ? 1 : (apply.OutAmount / apply.InAmount).ToRound(4);
             apply.Admin = Needs.Underly.FkoFactory<Admin>.Create(Needs.Wl.Admin.Plat.AdminPlat.Current.ID);
             apply.Summary = Summary;
             apply.FeeType = (Needs.Ccs.Services.Enums.FundTransferType)Convert.ToInt16(FundTransferType);

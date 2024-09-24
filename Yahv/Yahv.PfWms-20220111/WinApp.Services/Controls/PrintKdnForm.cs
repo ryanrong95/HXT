@@ -74,7 +74,7 @@ namespace WinApp.Services.Controls
             string html = content;
             
             //html = html.Replace("月结卡号:075517225569", "月结卡号:075*******69");
-            html = html.Replace("月结卡号:075568610585", "月结卡号:075*******85");//原创新恒远跨越月结卡号：075517225569停用，更新为深圳市芯达通供应链管理有限公司跨越月结账号：075568610585，2021.4.1日启用
+            html = html.Replace("月结卡号:075568610585", "月结卡号:075*******85");//原创新恒远跨越月结卡号：075517225569停用，更新为深圳市华芯通供应链管理有限公司跨越月结账号：075568610585，2021.4.1日启用
 
             //int SW1 = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width;
 
