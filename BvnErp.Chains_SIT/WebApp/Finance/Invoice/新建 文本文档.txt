@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Confirm.aspx.cs" Inherits="WebApp.Finance.Invoice.Confirm" %>
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Confirm.aspx.cs" Inherits="WebApp.Finance.Invoice.Confirm" %>
 
 <!DOCTYPE html>
 
@@ -72,6 +72,13 @@
                     alert("ajax连接异常：" + msg);
                 }
             });
+
+            //显示发票扫码页面二维码
+            var imgSrc = '?action=GetWxInvoicePageQrCode&&InvoiceNoticeID=' + getQueryString("ID");
+            $("#invoicePageQrCode").append('<img height="120" width="120" src="' + imgSrc + '" alt="发票录入页面二维码" />');
+
+            // 连续加载发票信息
+            continueLoadInvoiceData();
         });
 
         function Init() {
@@ -108,27 +115,27 @@
                 return;
             }
             //验证 发票代码、发票号码
-            if (!VerifyOneInfo('InvoiceCode')) {
-                $.messager.alert('提示', "发票代码不能为空");
-                return;
-            }
-            if (!VerifyInvoiceCodeFormat()) {
-                return;
-            }
-            if (!VerifyOneInfo('InvoiceNo')) {
-                $.messager.alert('提示', "发票号码不能为空");
-                return;
-            }
-            if (!VerifyInvoiceNoFormat()) {
-                return;
-            }
-            if (!VerifyOneInfo('InvoiceDate')) {
-                $.messager.alert('提示', "开票日期不能为空");
-                return;
-            }
-            if (!VerifyInvoiceDateFormat()) {
-                return;
-            }
+            //if (!VerifyOneInfo('InvoiceCode')) {
+            //    $.messager.alert('提示', "发票代码不能为空");
+            //    return;
+            //}
+            //if (!VerifyInvoiceCodeFormat()) {
+            //    return;
+            //}
+            //if (!VerifyOneInfo('InvoiceNo')) {
+            //    $.messager.alert('提示', "发票号码不能为空");
+            //    return;
+            //}
+            //if (!VerifyInvoiceNoFormat()) {
+            //    return;
+            //}
+            //if (!VerifyOneInfo('InvoiceDate')) {
+            //    $.messager.alert('提示', "开票日期不能为空");
+            //    return;
+            //}
+            //if (!VerifyInvoiceDateFormat()) {
+            //    return;
+            //}
 
             //提交表单
             var data = new FormData($('#form1')[0]);
@@ -140,7 +147,7 @@
 
             var InvoiceNoticeID = getQueryString("ID");
 
-            CalcInvoiceNumber(InvoiceNoticeID, realProducts, function () {
+            ShowInvoice(InvoiceNoticeID, function () {
                 data.append('Data', JSON.stringify(realProducts));
                 data.append('InvoiceNoticeID', InvoiceNoticeID);
                 //data.append("InvoiceTypeValue",InvoiceData.InvoiceTypeValue)
@@ -172,6 +179,69 @@
                     //    $.messager.alert('提示', res.message);
                     //}
                 });
+            });
+        }
+
+        function ShowInvoice(InvoiceNoticeID, callback) {
+            $.post('?action=InvoiceData', {
+                ID: InvoiceNoticeID,
+            }, function (res) {
+                var resJson = JSON.parse(res);
+                if (resJson.success) {
+                    $("#com2-dialog-content tbody").html('');
+                    var info = "";
+                    if (resJson.data.length > 0) {
+                        for (var i = 0; i < resJson.data.length; i++) {
+                            info += '<tr>';
+                            info += '<td>' + resJson.data[i].InvoiceCode + '</td>';
+                            info += '<td>' + resJson.data[i].InvoiceNo + '</td>';
+                            info += '<td>' + resJson.data[i].InvoiceDate + '</td>';
+                            info += '<td>' + resJson.data[i].Amount + '</td>';
+                            info += '<td>' + resJson.data[i].InvoiceTypeName + '</td>';
+                            info += '</tr>';
+                        }
+                    } else {
+                        info += '<tr><td colspan="10" style="text-align: center;">暂无数据</td></tr>';
+                    }
+
+                    $("#com2-dialog-content tbody").html(info);
+
+                    var btnArray = [];
+                    if (resJson.data.length > 0) {
+                        btnArray.push({
+                            id: 'btn-submit-comfirm-ok',
+                            text: '确定',
+                            width: 70,
+                            handler: function () {
+                                $('#com2-dialog').dialog('close');
+                                if (callback != null) {
+                                    callback();
+                                }
+                            }
+                        });
+                    }
+
+                    btnArray.push({
+                        id: 'btn-submit-comfirm-cancel',
+                        text: '取消',
+                        width: 70,
+                        handler: function () {
+                            $('#com2-dialog').dialog('close');
+                        }
+                    });
+
+                    $('#com2-dialog').dialog({
+                        title: '提示',
+                        width: 550,
+                        height: 350,
+                        closed: false,
+                        modal: true,
+                        buttons: btnArray,
+                    });
+                    $('#com2-dialog').window('center');
+                } else {
+                    $.messager.alert('提示', res.message);
+                }
             });
         }
 
@@ -236,41 +306,57 @@
             //结束表单编辑状态
             endEditing()
             //验证 发票代码、发票号码
-            if (!VerifyOneInfo('InvoiceCode')) {
-                $.messager.alert('提示', "发票代码不能为空");
-                return;
-            }
-            if (!VerifyInvoiceCodeFormat()) {
-                return;
-            }
-            if (!VerifyOneInfo('InvoiceNo')) {
-                $.messager.alert('提示', "发票号码不能为空");
-                return;
-            }
-            if (!VerifyInvoiceNoFormat()) {
-                return;
-            }
-            if (!VerifyOneInfo('InvoiceDate')) {
-                $.messager.alert('提示', "开票日期不能为空");
-                return;
-            }
-            if (!VerifyInvoiceDateFormat()) {
-                return;
-            }
+            //if (!VerifyOneInfo('InvoiceCode')) {
+            //    $.messager.alert('提示', "发票代码不能为空");
+            //    return;
+            //}
+            //if (!VerifyInvoiceCodeFormat()) {
+            //    return;
+            //}
+            //if (!VerifyOneInfo('InvoiceNo')) {
+            //    $.messager.alert('提示', "发票号码不能为空");
+            //    return;
+            //}
+            //if (!VerifyInvoiceNoFormat()) {
+            //    return;
+            //}
+            //if (!VerifyOneInfo('InvoiceDate')) {
+            //    $.messager.alert('提示', "开票日期不能为空");
+            //    return;
+            //}
+            //if (!VerifyInvoiceDateFormat()) {
+            //    return;
+            //}
 
             var InvoiceNoticeID = getQueryString("ID");
-            var url = location.pathname.replace(/Confirm.aspx/ig, 'PrintInvoice.aspx?IDs=' + InvoiceNoticeID);
-            top.$.myWindow({
-                iconCls: "",
-                url: url,
-                noheader: false,
-                title: '打印发票运单',
-                width: '750px',
-                height: '550px',
-                onClose: function () {
-                    //刷新页面
-                    location.reload();
+
+            $.post('?action=InvoiceData', {
+                ID: InvoiceNoticeID,
+            }, function (res) {
+                var resJson = JSON.parse(res);
+                if (!resJson.success) {
+                    $.messager.alert('提示', "请求发票信息错误");
+                    return;
                 }
+
+                if (resJson.data.length <= 0) {
+                    $.messager.alert('提示', "请录入发票信息");
+                    return;
+                }
+
+                var url = location.pathname.replace(/Confirm.aspx/ig, 'PrintInvoice.aspx?IDs=' + InvoiceNoticeID);
+                top.$.myWindow({
+                    iconCls: "",
+                    url: url,
+                    noheader: false,
+                    title: '打印发票运单',
+                    width: '750px',
+                    height: '550px',
+                    onClose: function () {
+                        //刷新页面
+                        location.reload();
+                    }
+                });
             });
         }
 
@@ -279,40 +365,56 @@
             //结束表单编辑状态
             endEditing()
             //验证 发票代码、发票号码
-            if (!VerifyOneInfo('InvoiceCode')) {
-                $.messager.alert('提示', "发票代码不能为空");
-                return;
-            }
-            if (!VerifyInvoiceCodeFormat()) {
-                return;
-            }
-            if (!VerifyOneInfo('InvoiceNo')) {
-                $.messager.alert('提示', "发票号码不能为空");
-                return;
-            }
-            if (!VerifyInvoiceNoFormat()) {
-                return;
-            }
-            if (!VerifyOneInfo('InvoiceDate')) {
-                $.messager.alert('提示', "开票日期不能为空");
-                return;
-            }
-            if (!VerifyInvoiceDateFormat()) {
-                return;
-            }
+            //if (!VerifyOneInfo('InvoiceCode')) {
+            //    $.messager.alert('提示', "发票代码不能为空");
+            //    return;
+            //}
+            //if (!VerifyInvoiceCodeFormat()) {
+            //    return;
+            //}
+            //if (!VerifyOneInfo('InvoiceNo')) {
+            //    $.messager.alert('提示', "发票号码不能为空");
+            //    return;
+            //}
+            //if (!VerifyInvoiceNoFormat()) {
+            //    return;
+            //}
+            //if (!VerifyOneInfo('InvoiceDate')) {
+            //    $.messager.alert('提示', "开票日期不能为空");
+            //    return;
+            //}
+            //if (!VerifyInvoiceDateFormat()) {
+            //    return;
+            //}
 
             var InvoiceNoticeID = getQueryString("ID");
-            var url = location.pathname.replace(/Confirm.aspx/ig, 'PrintInvoiceConfirm.aspx?ID=' + InvoiceNoticeID);
-            top.$.myWindow({
-                iconCls: "",
-                url: url,
-                noheader: false,
-                title: '打印确认单',
-                width: '750px',
-                height: '550px',
-                onClose: function () {
-                    location.reload();
+
+            $.post('?action=InvoiceData', {
+                ID: InvoiceNoticeID,
+            }, function (res) {
+                var resJson = JSON.parse(res);
+                if (!resJson.success) {
+                    $.messager.alert('提示', "请求发票信息错误");
+                    return;
                 }
+
+                if (resJson.data.length <= 0) {
+                    $.messager.alert('提示', "请录入发票信息");
+                    return;
+                }
+
+                var url = location.pathname.replace(/Confirm.aspx/ig, 'PrintInvoiceConfirm.aspx?ID=' + InvoiceNoticeID);
+                top.$.myWindow({
+                    iconCls: "",
+                    url: url,
+                    noheader: false,
+                    title: '打印确认单',
+                    width: '750px',
+                    height: '550px',
+                    onClose: function () {
+                        location.reload();
+                    }
+                });
             });
         }
 
@@ -331,6 +433,36 @@
                 }
                 //追加到table中
                 $("#LogContent").append(str);
+            });
+        }
+
+        // 连续加载发票信息
+        function continueLoadInvoiceData() {
+            $.post('?action=InvoiceData', {
+                ID: getQueryString("ID"),
+            }, function (res) {
+                var resJson = JSON.parse(res);
+                if (resJson.success) {
+                    $("#invoiceDataTable tbody").html('');
+                    var info = "";
+                    if (resJson.data.length > 0) {
+                        for (var i = 0; i < resJson.data.length; i++) {
+                            info += '<tr>';
+                            info += '<td>' + resJson.data[i].InvoiceCode + '</td>';
+                            info += '<td>' + resJson.data[i].InvoiceNo + '</td>';
+                            info += '<td>' + resJson.data[i].InvoiceDate + '</td>';
+                            info += '<td>' + resJson.data[i].Amount + '</td>';
+                            info += '<td>' + resJson.data[i].InvoiceTypeName + '</td>';
+                            info += '</tr>';
+                        }
+                    } else {
+                        info += '<tr><td colspan="10" style="text-align: center;">暂无数据</td></tr>';
+                    }
+
+                    $("#invoiceDataTable tbody").html(info);
+
+                    setTimeout(continueLoadInvoiceData, 2000);
+                }
             });
         }
 
@@ -619,6 +751,17 @@
         #productGrid-container .datagrid-header-rownumber, #productGrid-container .datagrid-cell-rownumber {
             width: 50px;
         }
+
+        #invoiceDataTable, #com2-dialog-content table {
+            border-collapse: collapse;
+            margin: 5px 0;
+        }
+
+            #invoiceDataTable, #invoiceDataTable td, #invoiceDataTable th,
+            #com2-dialog-content table, #com2-dialog-content table td, #com2-dialog-content table th {
+                border: 1px solid black;
+                padding: 2px;
+            }
     </style>
 </head>
 <body class="easyui-layout" style="overflow-y: scroll;">
@@ -730,9 +873,9 @@
                     </div>
                 </div>
             </div>
-            <div data-options="region:'center',border: false," style="width: 100%; float: left; margin-top: 5px;">
+            <div data-options="region:'center',border: false," style="width: 48%; float: left; margin-top: 5px;">
                 <div class="sec-container">
-                    <div id="panel3" class="easyui-panel" title="其它信息">
+                    <div id="panel3" class="easyui-panel" title="其它信息" style="height: 247px;">
                         <div class="sub-container">
                             <table class="row-info" style="width: 100%;" cellspacing="0" cellpadding="0">
                                 <tr>
@@ -754,6 +897,36 @@
                                     </td>
                                 </tr>
                             </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div data-options="region:'center',border: false," style="width: 51%; float: left; margin-top: 5px;">
+                <div data-options="region:'center',border: false,">
+                    <div class="sec-container">
+                        <div id="panel4" class="easyui-panel" title="发票信息">
+                            <div style="float: left; width: 150px; margin-left: 5px; position: absolute;">
+                                <div>
+                                    <h4>录入发票</h4>
+                                    <h4>请用<span style="color: limegreen;">微信</span>扫描二维码</h4>
+                                </div>
+                                <div id="invoicePageQrCode" style="margin-top: 5px;"></div>
+                            </div>
+                            <div id="invoiceDataDiv" style="float: left; height: 220px; width: 800px; padding-left: 180px;">
+                                <table id="invoiceDataTable" class="invoice-table">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 150px;">发票代码</th>
+                                            <th style="width: 150px;">发票号码</th>
+                                            <th style="width: 120px;">开票日期</th>
+                                            <th style="width: 150px;">金额(不含税)</th>
+                                            <th style="width: 180px;">发票类型</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -786,9 +959,9 @@
                                     <tr>
                                         <th data-options="field:'Amount',width: 100,align:'center'">含税金额</th>
                                         <th data-options="field:'Difference',width: 80,align:'center'">开票差额</th>
-                                        <th data-options="field:'InvoiceCode', width: 160,align:'left',editor:{type:'textbox',options: {validType: 'length[1,50]'}}">发票代码</th>
+                                        <%--<th data-options="field:'InvoiceCode', width: 160,align:'left',editor:{type:'textbox',options: {validType: 'length[1,50]'}}">发票代码</th>
                                         <th data-options="field:'InvoiceNo', width: 160,align:'left',editor:{type:'textbox',options: {validType: 'length[1,100]'}}">发票号码</th>
-                                        <th data-options="field:'InvoiceDate', width: 120,align:'left',editor:{type:'datebox',options: {}}">开票日期</th>
+                                        <th data-options="field:'InvoiceDate', width: 120,align:'left',editor:{type:'datebox',options: {}}">开票日期</th>--%>
                                         <th data-options="field:'ProductName',width: 170,align:'left'">产品名称</th>
                                         <th data-options="field:'ProductModel',width: 180,align:'left'">规格型号</th>
                                     </tr>
@@ -811,8 +984,26 @@
         </div>
     </div>
 
-    <div id="comfirm-dialog" class="easyui-dialog" data-options="resizable:false, modal:true, closed: true, closable: false,">
+    <!--<div id="comfirm-dialog" class="easyui-dialog" data-options="resizable:false, modal:true, closed: true, closable: false,">
         <div id="comfirm-dialog-content" style="margin: 15px 15px 15px 15px;"></div>
+    </div>-->
+
+    <div id="com2-dialog" class="easyui-dialog" data-options="resizable:false, modal:true, closed: true, closable: false,">
+        <div id="com2-dialog-content" style="margin: 15px 15px 15px 15px;">
+            <table class="invoice-table">
+                <thead>
+                    <tr>
+                        <th style="width: 150px;">发票代码</th>
+                        <th style="width: 150px;">发票号码</th>
+                        <th style="width: 120px;">开票日期</th>
+                        <th style="width: 150px;">金额(不含税)</th>
+                        <th style="width: 180px;">发票类型</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
     </div>
 </body>
 </html>

@@ -1197,8 +1197,8 @@ namespace Wms.Services.chonggous.Views
             string driverName = Waybill["Driver"]?.Value<string>();
             string carNumber = Waybill["CarNumber1"].Value<string>();
             string carrierID = Waybill["CarrierID"].Value<string>();
-            string driverPhone = this.Reponsitory.ReadTable<Layers.Data.Sqls.PvWms.DriversTopView>().SingleOrDefault(item => item.EnterpriseID == carrierID && item.Name == driver)?.Mobile;
-            string carrierName = this.Reponsitory.ReadTable<Layers.Data.Sqls.PvWms.CarriersTopView>().SingleOrDefault(item => item.ID == carrierID)?.Name;
+            string driverPhone = this.Reponsitory.ReadTable<Layers.Data.Sqls.PvWms.DriversTopView>().FirstOrDefault(item => item.EnterpriseID == carrierID && item.Name == driver)?.Mobile;
+            string carrierName = this.Reponsitory.ReadTable<Layers.Data.Sqls.PvWms.CarriersTopView>().FirstOrDefault(item => item.ID == carrierID)?.Name;
             string code = Waybill["Code"]?.Value<string>();
             string codeValue = Waybill["Code"]?.Value<string>();
             List<CgLogs_Operator> logsOperatorList = new List<CgLogs_Operator>();
@@ -1376,32 +1376,32 @@ namespace Wms.Services.chonggous.Views
                     foreach (var id in orderids)
                     {
                         UpdateOrderStatus(source, (CgNoticeType)waybilltop.NoticeType, id, adminid);
-                        if (warehouseID.StartsWith("SZ") && waybillType.Value != (int)WaybillType.PickUp )
-                        {
-                            //代报关出库向客户发送深圳仓库已出货消息
-                            PushMsg pushMsg = new PushMsg(1, (int)SpotName.DSZSend, id, codeValue, driverName, driverPhone);
-                            pushMsg.push();
-                        }
+                        //if (warehouseID.StartsWith("SZ") && waybillType.Value != (int)WaybillType.PickUp )
+                        //{
+                        //    //代报关出库向客户发送深圳仓库已出货消息
+                        //    PushMsg pushMsg = new PushMsg(1, (int)SpotName.DSZSend, id, codeValue, driverName, driverPhone);
+                        //    pushMsg.push();
+                        //}
                     }
                 }
                 else
                 {
                     UpdateOrderStatus(source, (CgNoticeType)waybilltop.NoticeType, waybilltop.OrderID, adminid);
 
-                    if (warehouseID.StartsWith("SZ") && waybillType.Value != (int)WaybillType.PickUp )
-                    {
-                        //代报关深圳出库向客户发送深圳仓库已出货消息
-                        PushMsg pushMsg = new PushMsg(1, (int)SpotName.DSZSend, waybilltop.OrderID, codeValue, driverName, driverPhone);
-                        pushMsg.push();
-                    }
+                    //if (warehouseID.StartsWith("SZ") && waybillType.Value != (int)WaybillType.PickUp )
+                    //{
+                    //    //代报关深圳出库向客户发送深圳仓库已出货消息
+                    //    PushMsg pushMsg = new PushMsg(1, (int)SpotName.DSZSend, waybilltop.OrderID, codeValue, driverName, driverPhone);
+                    //    pushMsg.push();
+                    //}
                 }
 
-                if (warehouseID.StartsWith("HK") && waybillType.Value != (int)WaybillType.PickUp && (waybilltop.Source == (int)CgNoticeSource.AgentSend || waybilltop.Source == (int)CgNoticeSource.Transfer))
-                {
-                    //代仓储出库向客户发送已出货消息
-                    PushMsg pushMsg = new PushMsg(2, (int)SpotName.HKSend, waybilltop.OrderID, codeValue, driverName, driverPhone);
-                    pushMsg.push();                    
-                }
+                //if (warehouseID.StartsWith("HK") && waybillType.Value != (int)WaybillType.PickUp && (waybilltop.Source == (int)CgNoticeSource.AgentSend || waybilltop.Source == (int)CgNoticeSource.Transfer))
+                //{
+                //    //代仓储出库向客户发送已出货消息
+                //    PushMsg pushMsg = new PushMsg(2, (int)SpotName.HKSend, waybilltop.OrderID, codeValue, driverName, driverPhone);
+                //    pushMsg.push();                    
+                //}
 
                 // 香港出库中的代发货, 代转运, 以及深圳出库时, 当点击完成分拣时把对应的 ConfirmReceiptStatus 修改为100
                 if (warehouseID.StartsWith("SZ") || waybilltop.Source == (int)CgNoticeSource.AgentSend || waybilltop.Source == (int)CgNoticeSource.Transfer)

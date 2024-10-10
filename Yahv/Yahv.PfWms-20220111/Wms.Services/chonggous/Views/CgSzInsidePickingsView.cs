@@ -699,11 +699,11 @@ namespace Wms.Services.chonggous.Views
 
                 var tinyOrderIDs = newNotices.Notices.Select(item => item.TinyOrderID).Distinct().ToArray();
 
-                foreach (var tinyOrderID in tinyOrderIDs)
-                { 
-                    PushMsg pushMsg = new PushMsg(1, (int)SpotName.DSZSend, tinyOrderID, "", waybill.wldDriver, waybill.wldTakingPhone);
-                    pushMsg.push();
-                }
+                //foreach (var tinyOrderID in tinyOrderIDs)
+                //{ 
+                //    PushMsg pushMsg = new PushMsg(1, (int)SpotName.DSZSend, tinyOrderID, "", waybill.wldDriver, waybill.wldTakingPhone);
+                //    pushMsg.push();
+                //}
             }
         }
 

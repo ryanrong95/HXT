@@ -32,7 +32,7 @@ namespace WebApp.Finance.Vault
         /// </summary>
         void PageInit()
         {
-            var ServiceIDs = Needs.Wl.Admin.Plat.AdminPlat.Current.Permissions.AdminRoles.Where(manager => manager.Role.Name == "创新恒远财务" || manager.Role.Name == "出纳员").Select(item => item.Admin.ID).ToArray();
+            var ServiceIDs = Needs.Wl.Admin.Plat.AdminPlat.Current.Permissions.AdminRoles.Where(manager => manager.Role.Name == "华芯通财务" || manager.Role.Name.Contains("出纳")).Select(item => item.Admin.ID).ToArray();
             this.Model.AllAdmin = Needs.Wl.Admin.Plat.AdminPlat.Admins.Where(item => ServiceIDs.Contains(item.ID)).Select(item => new { Key = item.ID, Value = item.ByName }).ToArray().Json();
 
             string id = Request.QueryString["ID"];

@@ -19,6 +19,7 @@
         //console.log(currData);
         var vaultData = eval('(<%=this.Model.FinanceVaultData%>)');
         var accountData = eval('(<%=this.Model.AccountData%>)');
+        var ClientIno = eval('(<%=this.Model.ClientIno%>)');
 
         function bindFinanceValue(data) {
 
@@ -31,6 +32,10 @@
         }
 
         $(function () {
+
+            $('#Payer').combobox({
+                data: ClientIno,
+            })
 
             $('#PaymentType').combobox({
                 data: CenterPaymentType,
@@ -314,7 +319,8 @@
                     <tr>
                         <td style="width: 100px;">付款人:</td>
                         <td style="width: 200px;">
-                            <input class="easyui-textbox" id="Payer" name="Payer" data-options="required:true,width:200,validType:'length[1,50]',missingMessage:'付款人不能为空'" /></td>
+<%--                            <input class="easyui-textbox" id="Payer" name="Payer" data-options="required:true,width:200,validType:'length[1,50]',missingMessage:'付款人不能为空'" /></td>--%>
+                            <input class="easyui-combobox" id="Payer" name="Payer"  data-options="valueField:'Value',textField:'Text',required:true, width:200",missingMessage:'付款人不能为空' />
                         <td style="width: 100px;">账户性质:</td>
                         <td>
                             <input class="easyui-combobox" id="AccountProperty" name="AccountProperty" data-options="valueField:'Value',textField:'Text',required:true, width:200",missingMessage:'账户性质不能为空' />

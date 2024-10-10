@@ -37,7 +37,7 @@ namespace WebApp.Finance.Account
             //币种
             this.Model.CurrData = Needs.Wl.Admin.Plat.AdminPlat.Currencies.Select(item => new { Value = item.Code, Text = item.Code + " " + item.Name }).Json();
             //管理人
-            var ServiceIDs = Needs.Wl.Admin.Plat.AdminPlat.Current.Permissions.AdminRoles.Where(manager => manager.Role.Name == "创新恒远财务" || manager.Role.Name == "出纳员").Select(item => item.Admin.ID).ToArray();
+            var ServiceIDs = Needs.Wl.Admin.Plat.AdminPlat.Current.Permissions.AdminRoles.Where(manager => manager.Role.Name == "华芯通财务" || manager.Role.Name == "出纳员").Select(item => item.Admin.ID).ToArray();
             this.Model.AllAdmin = Needs.Wl.Admin.Plat.AdminPlat.Admins.Where(item => ServiceIDs.Contains(item.ID)).Select(item => new { Value = item.ID, Text = item.ByName }).ToArray().Json();
             //账户基本类型
             this.Model.AccountType = EnumUtils.ToDictionary<Needs.Ccs.Services.Enums.AccountType>().Select(item => new { Value = item.Key, Text = item.Value }).Json();

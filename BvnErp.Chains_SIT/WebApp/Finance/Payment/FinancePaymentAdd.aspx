@@ -86,11 +86,11 @@
                     //    $("#AccountCatalog").combotree('setValue', financeReceiptData.FeeType);
                     //}
                     //付款固定只能付 货款
-                    $("#AccountCatalog").combotree('setValue', "AccCatType0077");
+                    //$("#AccountCatalog").combotree('setValue', "AccCatType0077");
                 },
             });
             //付款固定只能付 货款
-            $("#AccountCatalog").combotree('disable');
+            //$("#AccountCatalog").combotree('disable');
 
               $.post('?action=GetAccountByVault', function (res) {
                             $("#Account").combogrid("grid").datagrid("loadData", res.data);
@@ -100,8 +100,8 @@
             $('#Account').combogrid({
                 idField: 'ID',
                 textField: 'BankAccount',
-                panelWidth: 300,
-                panelHeight: 150,
+                panelWidth: 550,
+                panelHeight: 250,
                 fitColumns: true,
                 required: true,
                 mode: "local",

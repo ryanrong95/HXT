@@ -216,7 +216,7 @@ namespace Needs.Ccs.Services.Models
                                       }).ToArray();
 
                     var linq_dechead = from item in reponsitory.ReadTable<Layer.Data.Sqls.ScCustoms.DecHeads>()
-                                       where ordersID.Contains(item.OrderID)
+                                       where ordersID.Contains(item.OrderID) && item.CusDecStatus != "04"
                                        select new MyContractHelp
                                        {
                                            OrderID = item.OrderID,

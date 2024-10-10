@@ -1,11 +1,15 @@
-﻿using Needs.Ccs.Services;
+using Needs.Ccs.Services;
 using Needs.Ccs.Services.Enums;
 using Needs.Ccs.Services.Models;
 using Needs.Ccs.Services.Views;
 using Needs.Utils.Descriptions;
 using Needs.Utils.Serializers;
+using QRCoder;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -88,7 +92,7 @@ namespace WebApp.Finance.Invoice
             {
                 ID = item.ID,
                 item.OrderID,
-                ProductName = item.OrderItem == null ? "*物流辅助服务*服务费" : item.OrderItem?.Category.Name,  //产品名称
+                ProductName = item.OrderItem == null ? "*经纪代理服务*经纪代理" : item.OrderItem?.Category.Name,  //产品名称
                 //ProductModel = item.OrderItem?.Product.Model,//型号
                 ProductModel = item.OrderItem?.Model,
                 item.OrderItem?.Unit,//单位
@@ -100,7 +104,7 @@ namespace WebApp.Finance.Invoice
                 Amount = item.Amount.ToRound(2),//含税总额
                 //为了与开票软件一致，这里先算出不含税金额，再算出含税金额
                 //Amount = (((item.Amount + item.Difference) / (1 + item.InvoiceTaxRate)).ToRound(2)* (1 + item.InvoiceTaxRate)).ToRound(2),
-                TaxName = item.OrderItem == null ? "*物流辅助服务*服务费" : item.TaxName,//税务名称
+                TaxName = item.OrderItem == null ? "*经纪代理服务*经纪代理" : item.TaxName,//税务名称
                 TaxCode = item.OrderItem == null ? "3040407040000000000" : item.TaxCode,
                 item.Difference,
                 item.InvoiceCode,
@@ -166,24 +170,24 @@ namespace WebApp.Finance.Invoice
                 string id = Request.Form["InvoiceNoticeID"];
                 var changeProductData = Request.Form["Data"].Replace("&quot;", "'");
                 var InvoiceModelList = changeProductData.JsonTo<List<InvoiceSubmitModel>>();
-                var count = InvoiceModelList.Where(x => x.InvoiceNo == null || x.InvoiceNo == "").Count();
-                if (count > 0)
-                {
-                    Response.Write((new { success = false, message = "发票号码不允许为空！" }).Json());
-                    return;
-                }
-                var count2 = InvoiceModelList.Where(x => x.InvoiceCode == null || x.InvoiceCode == "").Count();
-                if (count2 > 0)
-                {
-                    Response.Write((new { success = false, message = "发票代码不允许为空！" }).Json());
-                    return;
-                }
-                var count3 = InvoiceModelList.Where(x => x.InvoiceDate == null || x.InvoiceDate == "").Count();
-                if (count3 > 0)
-                {
-                    Response.Write((new { success = false, message = "开票日期不允许为空！" }).Json());
-                    return;
-                }
+                //var count = InvoiceModelList.Where(x => x.InvoiceNo == null || x.InvoiceNo == "").Count();
+                //if (count > 0)
+                //{
+                //    Response.Write((new { success = false, message = "发票号码不允许为空！" }).Json());
+                //    return;
+                //}
+                //var count2 = InvoiceModelList.Where(x => x.InvoiceCode == null || x.InvoiceCode == "").Count();
+                //if (count2 > 0)
+                //{
+                //    Response.Write((new { success = false, message = "发票代码不允许为空！" }).Json());
+                //    return;
+                //}
+                //var count3 = InvoiceModelList.Where(x => x.InvoiceDate == null || x.InvoiceDate == "").Count();
+                //if (count3 > 0)
+                //{
+                //    Response.Write((new { success = false, message = "开票日期不允许为空！" }).Json());
+                //    return;
+                //}
 
                 var InvoiceContext = new InvoiceContext();
                 InvoiceContext.InvoiceModelList = InvoiceModelList;
@@ -307,6 +311,55 @@ namespace WebApp.Finance.Invoice
                 CreateDate = item.CreateDate.ToString("yyyy-MM-dd HH:mm:ss")
             };
             Response.Write(new { rows = noticeLog.Select(convert).ToArray(), }.Json());
+        }
+
+        /// <summary>
+        /// 获取微信发票页面二维码
+        /// </summary>
+        protected void GetWxInvoicePageQrCode()
+        {
+            string InvoiceNoticeID = Request.QueryString["InvoiceNoticeID"];
+            string AdminID = Needs.Wl.Admin.Plat.AdminPlat.Current.ID;
+
+            // 生成二维码的内容
+            string strCode = "http://wx.for-ic.net/FinanceManage/InvoiceScan?InvoiceNoticeID=" + InvoiceNoticeID + "&AdminID=" + AdminID;
+            QRCodeGenerator qrGenerator = new QRCoder.QRCodeGenerator();
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode(strCode, QRCodeGenerator.ECCLevel.Q);
+            QRCode qrcode = new QRCode(qrCodeData);
+
+            // qrcode.GetGraphic 方法可参考最下发“补充说明”
+            Bitmap qrCodeImage = qrcode.GetGraphic(10, Color.Black, Color.White, null, 15, 6, false);
+            MemoryStream ms = new MemoryStream();
+            qrCodeImage.Save(ms, ImageFormat.Jpeg);
+
+            // 如果想保存图片 可使用  qrCodeImage.Save(filePath);
+
+            // 响应类型
+            Response.ContentType = "image/Jpeg";
+            //输出字符流
+            Response.BinaryWrite(ms.ToArray());
+        }
+
+        /// <summary>
+        /// 发票信息
+        /// </summary>
+        protected void InvoiceData()
+        {
+            try
+            {
+                string InvoiceNoticeID = Request["ID"];
+
+                using (var query = new Needs.Ccs.Services.Views.TaxManageForNoticeView(InvoiceNoticeID))
+                {
+                    var view = query;
+
+                    Response.Write(new { success = true, data = view.ToMyPage() }.Json());
+                }
+            }
+            catch (Exception ex)
+            {
+                Response.Write(new { success = false, err = ex.Message, }.Json());
+            }
         }
     }
 }

@@ -140,7 +140,7 @@ namespace WebApp.PvData_Classify
                             item.MainOrderID,
                             OrderedDate = item.OrderedDate.ToString("yyyy-MM-dd HH:mm:ss"),
                             ClientCode = item.Client.ClientCode,
-                            ClientName = item.Client.Company.Name,
+                            ClientName = Needs.Wl.Admin.Plat.AdminPlat.Current.ID == "Admin00002" ? "" : item.Client.Company.Name,
 
                             PartNumber = item.Model,
                             Manufacturer = item.Manufacturer,

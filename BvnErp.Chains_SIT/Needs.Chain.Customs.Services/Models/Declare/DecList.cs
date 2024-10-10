@@ -187,7 +187,7 @@ namespace Needs.Ccs.Services.Models
         {
             get
             {
-                return "440307";//龙岗区
+                return "440309";//龙岗区
             }
         }
 

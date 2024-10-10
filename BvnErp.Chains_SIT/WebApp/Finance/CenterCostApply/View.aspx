@@ -182,11 +182,102 @@
                         });
                     });
 
-                    $("#unUpload").next().find(".datagrid-wrap").height(250);
-                    $("#unUpload").next().find(".datagrid-wrap").find(".datagrid-view").height(250);
-                    $("#unUpload").next().find(".datagrid-wrap").find(".datagrid-view").find(".datagrid-view2").height(250);
-                    $("#unUpload").next().find(".datagrid-wrap").find(".datagrid-view").find(".datagrid-view2").height(250);
-                    $("#unUpload").next().find(".datagrid-wrap").find(".datagrid-view").find(".datagrid-view2").find(".datagrid-body").height(250);
+                    //$("#unUpload").next().find(".datagrid-wrap").height(250);
+                    //$("#unUpload").next().find(".datagrid-wrap").find(".datagrid-view").height(250);
+                    //$("#unUpload").next().find(".datagrid-wrap").find(".datagrid-view").find(".datagrid-view2").height(250);
+                    //$("#unUpload").next().find(".datagrid-wrap").find(".datagrid-view").find(".datagrid-view2").height(250);
+                    //$("#unUpload").next().find(".datagrid-wrap").find(".datagrid-view").find(".datagrid-view2").find(".datagrid-body").height(250);
+
+                    var heightValue = $("#datagrid_file").prev().find(".datagrid-body").find(".datagrid-btable").height() + 30;
+                    $("#datagrid_file").prev().find(".datagrid-body").height(heightValue);
+                    $("#datagrid_file").prev().height(heightValue);
+                    $("#datagrid_file").prev().parent().height(heightValue);
+                    $("#datagrid_file").prev().parent().parent().height(heightValue);
+
+                    $("#datagrid_file").prev().parent().parent().height(heightValue + 35);
+
+                }
+            });
+
+
+            //注册上传原始单据filebox的onChange事件
+            $('#uploadFile').filebox({
+                multiple: true,
+                //validType: ['fileSize[500,"KB"]'],
+                buttonText: '选择文件',
+                buttonAlign: 'right',
+                prompt: '请选择图片或PDF类型的文件',
+                accept: ['image/jpg', 'image/bmp', 'image/jpeg', 'image/gif', 'image/png', 'application/pdf'],
+                onClickButton: function () {
+                    $('#uploadFile').filebox('setValue', '');
+                },
+                onChange: function (e) {
+                    if ($('#uploadFile').filebox('getValue') == '') {
+                        return;
+                    }
+
+                    var formData = new FormData();
+                    var files = $("input[name='uploadFile']").get(0).files;
+                    formData.append('CostApplyID', costApplyDetail["CostApplyID"]);
+                    for (var i = 0; i < files.length; i++) {
+                        //文件信息
+                        var file = files[i];
+                        var fileType = file.type;
+                        var fileSize = file.size / 1024;
+                        var imgArr = ["image/jpg", "image/bmp", "image/jpeg", "image/gif", "image/png"];
+
+                        if (imgArr.indexOf(fileType) > -1 && fileSize > 500) { //大于500kb的图片压缩
+                            photoCompress(file, { quality: 1 }, function (base64Codes, fileName) {
+                                var bl = convertBase64UrlToBlob(base64Codes);
+                                formData.append('uploadFile', bl, fileName); // 文件对象
+                                $.ajax({
+                                    url: '?action=UploadFile',
+                                    type: 'POST',
+                                    data: formData,
+                                    dataType: 'JSON',
+                                    cache: false,
+                                    processData: false,
+                                    contentType: false,
+                                    success: function (res) {
+                                        if (res.success) {
+                                            InsertFile(res.data);
+                                        } else {
+                                            $.messager.alert('提示', res.message);
+                                        }
+                                    }
+                                }).done(function (res) {
+
+                                });
+                            });
+                        } else if (imgArr.indexOf(file.type) <= -1 && fileSize > 3072) { //非图片文件限制3M
+                            $.messager.alert('提示', '上传的pdf文件大小不能超过3M!');
+                            continue;
+                        } else {
+                            formData.append('uploadFile', file);
+                            $.ajax({
+                                url: '?action=UploadFile',
+                                type: 'POST',
+                                data: formData,
+                                dataType: 'JSON',
+                                cache: false,
+                                processData: false,
+                                contentType: false,
+                                success: function (res) {
+                                    if (res.success) {
+                                        InsertFile(res.data);
+                                    } else {
+                                        $.messager.alert('提示', res.message);
+                                    }
+                                }
+                            }).done(function (res) {
+
+                            });
+                        }
+                    }
+
+                    $("#datagrid_file").parent().parent().height(600);
+                    $("#datagrid_file").parent().parent().find(".datagrid-view").height(600);
+                    $("#datagrid_file").parent().parent().find(".datagrid-view").find(".datagrid-view2").height(600);
                 }
             });
 
@@ -195,10 +286,39 @@
         function FileOperation(val, row, index) {
             var buttons = row.FileName + '<br/>';
             buttons += '<a href="#"><span style="color: cornflowerblue;" onclick="View(\'' + row.WebUrl + '\')">预览</span></a>';
+            //buttons += '<a href="javascript:void(0);" style="margin-left: 12px; color: cornflowerblue;" onclick="Delete(' + index + ')">删除</a>';
             return buttons;
         }
         function ShowImg(val, row, index) {
             return "<img src='../../App_Themes/xp/images/wenjian.png' />";
+        }
+
+        function InsertFile(data) {
+            var row = $('#datagrid_file').datagrid('getRows');
+            for (var i = 0; i < data.length; i++) {
+                $('#datagrid_file').datagrid('insertRow', {
+                    index: row.length + i,
+                    row: {
+                        FileName: data[i].FileName,
+                        FileType: data[i].FileType,
+                        FileFormat: data[i].FileFormat,
+                        VirtualPath: data[i].VirtualPath,
+                        WebUrl: data[i].Url,
+                    }
+                });
+            }
+        }
+
+        //删除文件
+        var isRemoveFileRow = false;
+        function Delete(index) {
+            isRemoveFileRow = true;
+        }
+        function onClickFileRow(index) {
+            if (isRemoveFileRow) {
+                $('#datagrid_file').datagrid('deleteRow', index);
+                isRemoveFileRow = false;
+            }
         }
 
         //预览文件
@@ -223,6 +343,38 @@
                 $('#viewFileDialog').window('open').window('center');
             }
         }
+
+        //function FileOperation(val, row, index) {
+        //    var buttons = row.FileName + '<br/>';
+        //    buttons += '<a href="#"><span style="color: cornflowerblue;" onclick="View(\'' + row.WebUrl + '\')">预览</span></a>';
+        //    return buttons;
+        //}
+        //function ShowImg(val, row, index) {
+        //    return "<img src='../../App_Themes/xp/images/wenjian.png' />";
+        //}
+
+        ////预览文件
+        //function View(url) {
+        //    $('#viewfileImg').css('display', 'none');
+        //    $('#viewfilePdf').css('display', 'none');
+        //    if (url.toLowerCase().indexOf('pdf') > 0) {
+        //        $('#viewfilePdf').attr('src', url);
+        //        $('#viewfilePdf').css("display", "block");
+        //        $('#viewFileDialog').window('open').window('center');
+        //    }
+        //    else if (url.toLowerCase().indexOf('doc') > 0 || url.toLowerCase().indexOf('docx') > 0) {
+        //        let a = document.createElement('a');
+        //        document.body.appendChild(a);
+        //        a.href = url;
+        //        a.download = "";
+        //        a.click();
+        //    }
+        //    else {
+        //        $('#viewfileImg').attr('src', url);
+        //        $('#viewfileImg').css("display", "block");
+        //        $('#viewFileDialog').window('open').window('center');
+        //    }
+        //}
 
         function GetQueryString(name) {
             var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
@@ -536,7 +688,7 @@
         <!-- 附件列 -->
         <div style="float: left;padding-top: 10px;height: 300px;" >
             <div class="easyui-panel" title="附件信息">
-                <div class="sub-container">
+              <%--  <div class="sub-container">
                     <div id="unUpload" style="margin-left: 5px">
                         <p>未上传</p>
                     </div>
@@ -550,10 +702,32 @@
                             </thead>
                         </table>
                     </div>
-                    <div class="text-container" style="margin-top: 10px;">
-                        <p>仅限图片、pdf格式的文件，且pdf文件不超过3M。</p>
-                    </div>
                 </div>
+                <h1>hhhhhhhhhhhhhhhhh</h1>--%>
+
+                 <div class="sub-container">
+                     <div id="unUpload" style="margin-left: 5px">
+                         <p>未上传</p>
+                     </div>
+                     <div>
+                         <input id="uploadFile" name="uploadFile" class="easyui-filebox" style="width: 57px; height: 24px" />
+                         <div style="margin-top: 5px;">
+                             <label>仅限图片、pdf格式的文件，且pdf文件不超过3M。</label>
+                         </div>
+                     </div>
+                     <div>
+                         <table id="datagrid_file" data-options="nowrap:false,">
+                             <thead>
+                                 <tr>
+                                     <th data-options="field:'img',formatter:ShowImg">图片</th>
+                                     <th style="width: 250px;" data-options="field:'Btn',align:'left',formatter:FileOperation">操作</th>
+                                 </tr>
+                             </thead>
+                         </table>
+                     </div>
+                 </div>
+
+
             </div>
         </div>
 

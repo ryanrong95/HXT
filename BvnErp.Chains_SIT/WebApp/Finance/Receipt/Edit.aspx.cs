@@ -51,6 +51,8 @@ namespace WebApp.Finance.Receipt
 
             this.Model.AccountProperty = EnumUtils.ToDictionary<Needs.Ccs.Services.Enums.AccountProperty>().Select(item => new { Value = item.Key, Text = item.Value }).Json(); ;
 
+            this.Model.ClientIno = Needs.Wl.Admin.Plat.AdminPlat.Clients.Select(item => new { Value = item.Company.Name, Text = item.Company.Name }).Json();
+
             this.Model.CenterDepositReceived = FeeTypeTransfer.Current.L2CInTransfer(Needs.Ccs.Services.Enums.FinanceFeeType.DepositReceived);
             //编辑收款
             string ID = Request.QueryString["ID"];

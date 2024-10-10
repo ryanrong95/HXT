@@ -1250,7 +1250,7 @@ namespace Needs.Ccs.Services.Models
 
         public XWPFDocument ToStorageWord()
         {
-            var tempPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Content\\templates\\香港本地交货协议.docx");
+            var tempPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Content\\templates\\速达本港仓储协议1.docx");
             var npoi = new NPOIHelper(tempPath);
             var replaceText = new Dictionary<string, string>();
             string partB = "";
@@ -1261,7 +1261,7 @@ namespace Needs.Ccs.Services.Models
                     partB = "深圳市华芯通供应链管理有限公司";
                     break;
                 case Needs.Ccs.Services.Enums.StorageType.HKCompany:
-                    partB = "香港速逹國際物流有限公司";
+                    partB = "HONG KONG EXPRESS INTERNATIONAL LOGISTICS LIMITED";
                     break;
                 case Needs.Ccs.Services.Enums.StorageType.Person:
                     partB = "深圳市华芯通供应链管理有限公司";

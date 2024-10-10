@@ -393,6 +393,10 @@
 
             return warehouse;
         }
+
+        function ClientName(val, row, index) {
+            return "***";
+        }
     </script>
 
     <script>
@@ -516,7 +520,7 @@
                     <th data-options="field:'BillNo',align:'left'" style="width: 8%">提(运)单号</th>
                     <th data-options="field:'OrderID',align:'left'" style="width: 10%">订单编号</th>
                     <th data-options="field:'ClientCode',align:'left'" style="width: 4%">客户编号</th>
-                    <th data-options="field:'ClientName',align:'left'" style="width: 12%">客户名称</th>
+                    <th data-options="field:'ClientName',align:'left',formatter:ClientName" style="width: 12%">客户名称</th>
                     <th data-options="field:'InspQuarName',align:'center',formatter:InspQuarNameShow" style="width: 8%">报关单特殊类型</th>
                     <th data-options="field:'VoyageID',align:'left'" style="width: 6%">运输批次号</th>
                     <th data-options="field:'VoyageType',align:'left'" style="width: 4%">运输类型</th>

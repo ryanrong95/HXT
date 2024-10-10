@@ -161,11 +161,11 @@
     <div id="topBar">
         <div id="search">
             <table style="line-height: 26px">
-                <%--<tr>
+                <tr>
                     <td colspan="2">
                         <a id="btnLook" href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="Add()">新增付款</a>
                     </td>
-                </tr>--%>
+                </tr>
                 <tr>
                     <td class="lbl">付款类型：</td>
                     <td>

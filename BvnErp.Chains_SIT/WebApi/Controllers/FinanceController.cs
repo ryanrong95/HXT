@@ -483,7 +483,7 @@ namespace WebApi.Controllers
                 }
                 else
                 {
-                    if (centerAccount.CompanyName.Equals("深圳市华芯通供应链管理有限公司") || centerAccount.CompanyName.Equals("香港万路通国际物流有限公司") || centerAccount.CompanyName.Equals("香港畅运国际物流有限公司"))
+                    if (centerAccount.CompanyName.Equals("深圳市华芯通供应链管理有限公司") || centerAccount.CompanyName.Equals("香港速达国际物流有限公司"))
                     {
                         var vault = new Needs.Ccs.Services.Views.FinanceVaultsView().Where(t => t.Name == centerAccount.VaultName).FirstOrDefault()?.ID;
                         if (vault == null)
@@ -568,7 +568,7 @@ namespace WebApi.Controllers
                     }
                     else
                     {
-                        var accountjson = new JMessage() { code = 400, success = false, data = "只同步华芯通、万路通、畅运账户信息" };
+                        var accountjson = new JMessage() { code = 400, success = false, data = "只同步华芯通、速达账户信息" };
                         return Json(accountjson, JsonRequestBehavior.AllowGet);
                     }
                 }
@@ -930,7 +930,7 @@ namespace WebApi.Controllers
             costApplyLog2.CurrentCostStatus = CostStatusEnum.FinanceStaffUnApprove;
             costApplyLog2.NextCostStatus = CostStatusEnum.ManagerUnApprove;
             costApplyLog2.CreateDate = DateTime.Now;
-            costApplyLog2.Summary = "施思静通过了费用申请";
+            costApplyLog2.Summary = "财务1通过了费用申请";
             costApplyLog2.Enter();
 
             CostApplyLog costApplyLog3 = new CostApplyLog();
@@ -952,7 +952,7 @@ namespace WebApi.Controllers
             costApplyLog4.CurrentCostStatus = CostStatusEnum.UnPay;
             costApplyLog4.NextCostStatus = CostStatusEnum.PaySuccess;
             costApplyLog4.CreateDate = DateTime.Now;
-            costApplyLog4.Summary = "财务[郝红梅]完成付款..";
+            costApplyLog4.Summary = "财务[财务1]完成付款..";
             costApplyLog4.Enter();
         }
 
@@ -1188,7 +1188,7 @@ namespace WebApi.Controllers
             fee.OutSeqNo = "Out2021-02-25-001";
             fee.MidInSeqNo = "MidIn2021-02-25-001";
             fee.MidOutSeqNo = "MidOut2021-02-25-001";
-            fee.Poundage = 10;
+            fee.Poucndage = 10;
             fee.PoundageSeqNo = "P2021-02-25-001";
             fee.PaymentType = paymentType;
             fee.PaymentDate = DateTime.Now;

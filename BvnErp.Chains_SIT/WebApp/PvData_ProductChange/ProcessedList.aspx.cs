@@ -92,7 +92,7 @@ namespace WebApp.PvData_ProductChange
                         OrderID = item.OrderID,
                         OrderItemID = item.OrderItemID,
                         ClientCode = item.ClientCode,
-                        CompanyName = item.CompanyName,
+                        CompanyName = Needs.Wl.Admin.Plat.AdminPlat.Current.ID == "Admin00002" ? "" : item.CompanyName,
                         ProductName = item.ProductName,
                         ProductModel = item.ProductModel,
                         Type = item.Type.GetDescription(),

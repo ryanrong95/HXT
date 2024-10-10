@@ -6,6 +6,7 @@ using Needs.Utils.Descriptions;
 using Needs.Utils.Serializers;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -226,6 +227,89 @@ namespace WebApp.Finance.CenterCostApply
                 total = view.Count(),
             }.Json());
 
+        }
+
+        protected void UploadFile()
+        {
+            try
+            {
+                List<dynamic> fileList = new List<dynamic>();
+                IList<HttpPostedFile> files = System.Web.HttpContext.Current.Request.Files.GetMultiple("uploadFile");
+                var csotApplyID = System.Web.HttpContext.Current.Request.Form["CostApplyID"];
+                var admin = Needs.Underly.FkoFactory<Needs.Ccs.Services.Models.Admin>.Create(Needs.Wl.Admin.Plat.AdminPlat.Current.ID);
+                if (files.Count > 0)
+                {
+                    var validTypes = new List<string>() { ".jpg", ".bmp", ".jpeg", ".gif", ".png", ".pdf" };
+                    for (int i = 0; i < files.Count; i++)
+                    {
+                        string ext = Path.GetExtension(files[i].FileName);
+                        if (!validTypes.Contains(ext.ToLower()))
+                        {
+                            Response.Write((new { success = false, message = "上传的单据只能是图片(jpg、bmp、jpeg、gif、png)或pdf格式！" }).Json());
+                            return;
+                        }
+
+                        //处理附件
+                        HttpPostedFile file = files[i];
+                        if (file.ContentLength != 0)
+                        {
+                            //文件保存
+                            string fileName = files[i].FileName.ReName();
+
+                            //创建文件目录
+                            FileDirectory fileDic = new FileDirectory(fileName);
+                            fileDic.SetChildFolder(Needs.Ccs.Services.SysConfig.Cost);
+                            fileDic.CreateDataDirectory();
+                            file.SaveAs(fileDic.FilePath);
+
+                            fileList.Add(new
+                            {
+                                FileName = file.FileName,
+                                FileType = FileType.OriginalInvoice.GetDescription(),
+                                FileFormat = file.ContentType,
+                                VirtualPath = fileDic.VirtualPath,
+                                Url = fileDic.FileUrl,
+                            });
+                        }
+                    }
+
+                    //插入费用附件表
+                    List<Needs.Ccs.Services.Models.CostApplyFile> costApplyFiles = new List<Needs.Ccs.Services.Models.CostApplyFile>();
+                    foreach (var item in fileList)
+                    {
+                        costApplyFiles.Add(new Needs.Ccs.Services.Models.CostApplyFile
+                        {
+                            ID = Guid.NewGuid().ToString("N"),
+                            CostApplyID = csotApplyID,
+                            AdminID = admin.ID,
+                            Name = item.FileName,
+                            FileType = CostApplyFileTypeEnum.Inovice,
+                            FileFormat = item.FileFormat,
+                            URL = Convert.ToString(item.VirtualPath).Replace(@"/", @"\"),
+                            Status = Status.Normal,
+                            CreateDate = DateTime.Now,
+                        });
+                    }
+
+                    foreach (var costApplyFile in costApplyFiles)
+                    {
+                        costApplyFile.Enter();
+                    }
+                }
+
+                if (fileList.Count() == 0)
+                {
+                    Response.Write((new { success = false, data = new { } }).Json());
+                }
+                else
+                {
+                    Response.Write((new { success = true, data = fileList }).Json());
+                }
+            }
+            catch (Exception ex)
+            {
+                Response.Write((new { success = false, message = "上传失败：" + ex.Message }).Json());
+            }
         }
     }
 }

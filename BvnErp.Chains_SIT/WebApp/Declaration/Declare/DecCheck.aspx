@@ -376,7 +376,7 @@
                     htmlcontext += "<br/>";
                     htmlcontext += "<label>合同号:" + CheckDocument.ContrNo + "</label>";
                     htmlcontext += "&nbsp;&nbsp;&nbsp;&nbsp;";
-                    htmlcontext += "<label>客户:" + CheckDocument.OwnerName + "</label>";
+                    htmlcontext += "<label>客户:" + CheckDocument.OwnerName + "</label>";                    
                     if (CheckDocument.LicenseDocus.length > 0 && CheckDocument.LicenseDocus[0].DocuCode == '0') {
                         //DocuCode
                         //htmlcontext += "<br/>";

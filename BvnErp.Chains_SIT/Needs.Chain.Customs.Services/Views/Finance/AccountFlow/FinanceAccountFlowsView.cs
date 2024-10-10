@@ -68,7 +68,7 @@ namespace Needs.Ccs.Services.Views.Finance.AccountFlow
         /// <returns></returns>
         public object ToMyPage(int? pageIndex = null, int? pageSize = null)
         {
-            IQueryable<Models.FinanceAccountFlow> iquery = this.IQueryable.Cast<Models.FinanceAccountFlow>().OrderByDescending(item => item.CreateDate);
+            IQueryable<Models.FinanceAccountFlow> iquery = this.IQueryable.Cast<Models.FinanceAccountFlow>().OrderByDescending(item => item.UpdateDate);
             int total = iquery.Count();
 
             if (pageIndex.HasValue && pageSize.HasValue) //如果是无值就表示：忽略本逻辑
@@ -129,7 +129,7 @@ namespace Needs.Ccs.Services.Views.Finance.AccountFlow
                 total = total,
                 Size = pageSize ?? 20,
                 Index = pageIndex ?? 1,
-                rows = results.OrderByDescending(item => item.CreateDate).Select(convert).ToArray(),
+                rows = results.OrderByDescending(item => item.UpdateDate).Select(convert).ToArray(),
             };
         }
 

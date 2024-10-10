@@ -787,11 +787,11 @@ namespace Wms.Services.chonggous.Views
                 }
 
                 //向客户发送收到货物消息
-                if (excuteStatus == CgSortingExcuteStatus.Completed)
-                {
-                    PushMsg pushMsg = new PushMsg(2,(int)SpotName.GoodsArrived, waybill["OrderID"]?.Value<string>());
-                    pushMsg.push();
-                }
+                //if (excuteStatus == CgSortingExcuteStatus.Completed)
+                //{
+                //    PushMsg pushMsg = new PushMsg(2,(int)SpotName.GoodsArrived, waybill["OrderID"]?.Value<string>());
+                //    pushMsg.push();
+                //}
 
                 /* 根据董建要求,入库出库不修改运单中的收发货人
                 //更新ConsignorPlace value 

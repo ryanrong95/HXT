@@ -137,7 +137,7 @@ namespace WebApp.Client
                 string id = Request.Form["ID"];
                 var client = Needs.Wl.Admin.Plat.AdminPlat.Current.Clients.ClientsView[id];
                 //创建文件夹
-                var fileName = DateTime.Now.Ticks + "香港本地交货协议.docx";
+                var fileName = DateTime.Now.Ticks + "速达本港仓储协议.docx";
                 FileDirectory file = new FileDirectory(fileName);
                 file.SetChildFolder(Needs.Ccs.Services.SysConfig.Dowload);
                 file.CreateDataDirectory();
