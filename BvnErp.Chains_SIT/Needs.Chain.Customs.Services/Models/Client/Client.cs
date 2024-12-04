@@ -912,7 +912,7 @@ namespace Needs.Ccs.Services.Models
                         file.SetChildFolder(Needs.Ccs.Services.SysConfig.Dowload);
                         file.CreateDataDirectory();
                         //保存文件
-                        entity.SaveAs(file.FilePath);
+                        entity.SaveAsImport(file.FilePath);
                         //上传中心
                         var centerType = Needs.Ccs.Services.Models.ApiModels.Files.FileType.ServiceAgreement;
                         var ErmAdminID = admin;
@@ -1011,7 +1011,7 @@ namespace Needs.Ccs.Services.Models
                         file.SetChildFolder(Needs.Ccs.Services.SysConfig.Dowload);
                         file.CreateDataDirectory();
                         //保存文件
-                        entity.SaveAs(file.FilePath);
+                        entity.SaveAsImport(file.FilePath);
                         //上传中心
                         var centerType = Needs.Ccs.Services.Models.ApiModels.Files.FileType.ServiceAgreement;
                         var ErmAdminID = admin;

@@ -1107,7 +1107,7 @@ namespace Wl.IcgooMQ
             head.NetWt = sorting.Select(p => p.NetWeight).Sum().ToRound(2) < 1 ? 1 : sorting.Select(p => p.NetWeight).Sum().ToRound(2);
             head.TradeAreaCode = "HKG";
             head.EntyPortCode = "470501";
-            head.GoodsPlace = "深圳市龙华区龙华街道富康社区天汇大厦C栋212";
+            head.GoodsPlace = "深圳市龙华区龙华街道富康社区富康商业广场7号富康科技大厦12层1201-1202";
             head.EntryType = "M";
 
             head.DespPortCode = "HKG000";

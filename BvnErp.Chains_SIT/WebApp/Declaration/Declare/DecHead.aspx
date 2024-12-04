@@ -175,7 +175,7 @@
                 $("#TradeAreaCode").combobox("setValue", "HKG");
                 $("#TransMode").combobox("setValue", "1");
                 $("#WrapType").combobox("setValue", "22");
-                $("#GoodsPlace").textbox("setValue", "深圳市龙华区龙华街道富康社区天汇大厦 C 栋212");
+                $("#GoodsPlace").textbox("setValue", "深圳市龙华区龙华街道富康科技大厦12层1201-1202");
                 //$("#GoodsPlace").textbox("setValue", "蛇口码头SCT");
                 $("#DistinatePort").combobox("setValue", "HKG000");
                 $("#DespPortCode").combobox("setValue", "HKG000");

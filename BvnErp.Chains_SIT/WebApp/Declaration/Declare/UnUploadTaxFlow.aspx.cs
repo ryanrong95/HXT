@@ -218,7 +218,7 @@ namespace WebApp.Declaration.Declare
                         flow.DecheadID = DecTax.ID;
                         flow.TaxNumber = dt.Rows[i][3].ToString();
                         flow.OrderID = DecTax.OrderID;
-                        flow.Amount = decimal.Parse(dt.Rows[i][9].ToString());
+                        flow.Amount = decimal.Parse(dt.Rows[i][9].ToString()); 
                         flow.EntryID = EntryId;
                         //关税类型
                         if (flow.TaxNumber.Contains("A"))

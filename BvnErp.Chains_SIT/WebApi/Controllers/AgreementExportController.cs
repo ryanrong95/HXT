@@ -34,7 +34,7 @@ namespace WebApi.Controllers
                 file.SetChildFolder(Needs.Ccs.Services.SysConfig.Dowload);
                 file.CreateDataDirectory();
 
-                agreement.SaveAs(file.FilePath);
+                agreement.SaveAsImport(file.FilePath);
 
                 var returnUrl = System.Configuration.ConfigurationManager.AppSettings["APIFileServerUrl"] + "/" + file.VirtualPath.Replace(@"\", "/");
 

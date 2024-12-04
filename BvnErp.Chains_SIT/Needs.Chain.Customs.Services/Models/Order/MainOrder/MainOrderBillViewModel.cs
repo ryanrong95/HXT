@@ -801,7 +801,7 @@ namespace Needs.Ccs.Services.Models
             row.Cells[0].Style.Font = new PdfTrueTypeFont(new Font("SimSun", 9f, FontStyle.Bold), true);
 
             row.Cells[11].ColumnSpan = 3;
-            row.Cells[11].Value = "应收总金额：" + "¥" + TotalTax.ToString("0.00");
+            row.Cells[11].Value = ""; //"应收总金额：" + "¥" + TotalTax.ToString("0.00");
             row.Cells[11].StringFormat = new PdfStringFormat(PdfTextAlignment.Center, PdfVerticalAlignment.Middle);
 
             //设置边框

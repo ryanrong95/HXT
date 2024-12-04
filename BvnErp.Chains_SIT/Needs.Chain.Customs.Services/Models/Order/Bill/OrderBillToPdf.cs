@@ -285,7 +285,7 @@ namespace Needs.Ccs.Services.Models
                 tb6.LockedWidth = true;
                 tb6.SetWidths(new float[] { 574 });
 
-                tb6.AddCell(new PdfPCell(new Phrase("深圳市华芯通供应链管理有限公司 深圳市龙华区龙华街道富康社区天汇大厦C栋212 电话：0755-28014789 传真：0755-28014789", FontContent)) { BorderWidth = tbLineWidth });
+                tb6.AddCell(new PdfPCell(new Phrase("深圳市华芯通供应链管理有限公司 深圳市龙华区龙华街道富康社区富康商业广场7号富康科技大厦12层1201-1202 电话：0755-28014789 传真：0755-28014789", FontContent)) { BorderWidth = tbLineWidth });
                 tb6.AddCell(new PdfPCell(new Phrase("开户行:中国银行深圳罗岗支行 开户名：深圳市华芯通供应链管理有限公司 账户：86021110000213646", FontContent)) { BorderWidth = tbLineWidth });
 
                 document.Add(tb6);

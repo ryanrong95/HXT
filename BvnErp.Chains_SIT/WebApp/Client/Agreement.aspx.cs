@@ -153,7 +153,7 @@ namespace WebApp.Client
                 file.SetChildFolder(Needs.Ccs.Services.SysConfig.Dowload);
                 file.CreateDataDirectory();
                 //保存文件
-                agreement.SaveAs(file.FilePath);
+                agreement.SaveAsImport(file.FilePath);
 
                 Response.Write((new { success = true, message = "导出成功", url = file.FileUrl }).Json());
 

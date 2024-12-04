@@ -93,6 +93,8 @@ namespace WebApp.Declaration.Declare
             //        break;
             //}
 
+            var isshowclient = Needs.Wl.Admin.Plat.AdminPlat.Current.ID != "Admin00002";
+
             string jsonResult = new
             {
                 //InPort = InPort,
@@ -114,9 +116,9 @@ namespace WebApp.Declaration.Declare
                 CiqCode = PurchaserContext.Current.CiqCode,//消费单位 检验检疫代码
                 CompanyName = PurchaserContext.Current.CompanyName,//消费使用单位-客户名称
 
-                OwnerName = DecHead.OwnerName,//消费使用单位-客户名称
-                OwnerCusCode = DecHead.OwnerCusCode,//消费使用单位代码-10位
-                OwnerScc = DecHead.OwnerScc,//消费单位 同意社会信用代码               
+                OwnerName = isshowclient ? DecHead.OwnerName : "",//消费使用单位-客户名称
+                OwnerCusCode = isshowclient ? DecHead.OwnerCusCode : "",//消费使用单位代码-10位
+                OwnerScc = isshowclient ? DecHead.OwnerScc : "",//消费单位 同意社会信用代码               
 
                 VendorCompanyName = vendor.CompanyName,
 

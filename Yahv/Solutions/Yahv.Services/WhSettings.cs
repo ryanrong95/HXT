@@ -140,7 +140,7 @@ namespace Yahv.Services
             {
                 ID = "SZ01",
                 Name = "深圳华芯通库房",
-                Address = "深圳市龙华区龙华街道富康社区天汇大厦C栋212",
+                Address = "深圳市龙华区龙华街道富康社区富康商业广场7号富康科技大厦12层1201-1202",
                 Enterprise = new WhEnterprise
                 {
                     ID = "DBAEAB43B47EB4299DD1D62F764E6B6A",
@@ -151,7 +151,7 @@ namespace Yahv.Services
             {
                 ID = "SZ02",
                 Name = "深圳华芯通库房2",
-                Address = "深圳市龙华区龙华街道富康社区天汇大厦C栋212",
+                Address = "深圳市龙华区龙华街道富康社区富康商业广场7号富康科技大厦12层1201-1202",
                 Enterprise = new WhEnterprise
                 {
                     ID = "DBAEAB43B47EB4299DD1D62F764E6B6A2",
@@ -162,7 +162,7 @@ namespace Yahv.Services
             {
                 ID = "SZ03",
                 Name = "深圳华芯通库房3",
-                Address = "深圳市龙华区龙华街道富康社区天汇大厦C栋212",
+                Address = "深圳市龙华区龙华街道富康社区富康商业广场7号富康科技大厦12层1201-1202",
                 Enterprise = new WhEnterprise
                 {
                     ID = "DBAEAB43B47EB4299DD1D62F764E6B6A3",
@@ -173,7 +173,7 @@ namespace Yahv.Services
             {
                 ID = "SZ04",
                 Name = "深圳华芯通库房4",
-                Address = "深圳市龙华区龙华街道富康社区天汇大厦C栋212",
+                Address = "深圳市龙华区龙华街道富康社区富康商业广场7号富康科技大厦12层1201-1202",
                 Enterprise = new WhEnterprise
                 {
                     ID = "DBAEAB43B47EB4299DD1D62F764E6B6A4",

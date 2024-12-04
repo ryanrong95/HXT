@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 using ConsoleApp.vTaskers.Services;
 
 namespace HKExitTask
@@ -11,8 +12,9 @@ namespace HKExitTask
     {
         static void Main(string[] args)
         {
-            HKExitTaskers.Current.Start();
+            HKExitTaskers.Current.Start()
         }
+
 
         private static void Current_SqlError(object sender, EventArgs e)
         {

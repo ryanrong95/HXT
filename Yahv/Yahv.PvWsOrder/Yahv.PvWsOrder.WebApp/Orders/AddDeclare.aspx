@@ -1269,8 +1269,7 @@
                     <td class="lbl">提货地址</td>
                     <td>
                         <select id="s_pickUpAddress" class="easyui-combobox" style="width: 220px;" data-options="required:true,editable:false">
-                            <option>英达丰(深圳市龙岗区吉华路393号英达丰科技园A栋101)</option>
-                            <option>华强北(深圳市福田区中航路7-1号鼎诚大厦一楼)</option>
+                            <option>天汇大厦(深圳市龙华区龙华街道富康社区富康商业广场7号富康科技大厦12层1201-1202)</option>                           
                         </select>
                     </td>
                 </tr>

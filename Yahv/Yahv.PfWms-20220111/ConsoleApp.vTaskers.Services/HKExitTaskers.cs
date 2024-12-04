@@ -55,6 +55,7 @@ namespace ConsoleApp.vTaskers.Services
             //调试深圳报关内单出库时使用
             //using (CgSzInsidePickingsView service = new CgSzInsidePickingsView())
             //    service.SZCustomInsExit("Waybill202008040149");
+
         }
 
         static HKExitTaskers current;

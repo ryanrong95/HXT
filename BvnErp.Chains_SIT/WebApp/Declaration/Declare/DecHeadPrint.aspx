@@ -206,7 +206,7 @@
                     htmlcontext += "<td style=\"border-bottom:0.5px solid black;border-right:0.5px solid black;font-size: 8px !important;\">" + CheckDocument.InPort + "</td>";
                     htmlcontext += "<td style=\"border-bottom:0.5px solid black;border-right:0.5px solid black;font-size: 8px !important;\">" + CheckDocument.CusPortName + "</td>";
                     htmlcontext += "<td style=\"border-bottom:0.5px solid black;border-right:0.5px solid black;font-size: 8px !important;\">货物存放地点</td>";
-                    htmlcontext += "<td colspan=\"5\" style=\"border-bottom:0.5px solid black;border-right:0.5px solid black;font-size: 8px !important;\">深圳市龙华区龙华街道富康社区天汇大厦C栋212</td>";
+                    htmlcontext += "<td colspan=\"5\" style=\"border-bottom:0.5px solid black;border-right:0.5px solid black;font-size: 8px !important;\">深圳市龙华区龙华街道富康社区富康商业广场7号富康科技大厦12层1201-1202</td>";
                     htmlcontext += "</tr>";
 
                     htmlcontext += "<tr>";
