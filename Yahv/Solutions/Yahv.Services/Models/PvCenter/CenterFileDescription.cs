@@ -77,7 +77,7 @@ namespace Yahv.Services.Models
                     //if (tests.Contains(host))
                     if (tests.Any(item => host.Contains(item)))
                     {
-                        //return "http://uuws.b1b.com/";
+                        //return "http://uu.szhxd.net/";
                         return "http://221.122.108.49:8198/";
                     }
 
@@ -85,29 +85,29 @@ namespace Yahv.Services.Models
                     if (official.Any(item => host.Contains(item)))
                     {
                         //return "http://uuws.ic360.cn/";
-                        return "http://uuws.for-ic.net/";
+                        return "http://uu.szhxd.net/";
                     }
                 }
 
 
 #if DEBUG
-                //return "http://uuws.b1b.com/";
+                //return "http://uu.szhxd.net/";
                 return "http://221.122.108.49:8198/";
 #elif TEST
-                //return "http://uuws.b1b.com/";
+                //return "http://uu.szhxd.net/";
                 return "http://221.122.108.49:8198/";
 #else
                 //return "http://uuws.ic360.cn/";
-                return "http://uuws.for-ic.net/";
+                return "http://uu.szhxd.net/";
 #endif
 
             }
         }
 
         //#if DEBUG
-        //        public const string Web = "http://uuws.b1b.com/";
+        //        public const string Web = "http://uu.szhxd.net/";
         //#elif TEST
-        //        public const string Web = "http://uuws.b1b.com/";
+        //        public const string Web = "http://uu.szhxd.net/";
         //#else
         //        public const string Web = "http://uuws.ic360.cn/";
         //#endif

@@ -177,7 +177,7 @@ namespace Yahv.Services.Views
             //// 返回的内容
             //byte[] responseBytes;
 
-            //bool uploaded = cb.UploadData("http://uuws.b1b.com/api/Upload", bytes, out responseBytes);
+            //bool uploaded = cb.UploadData("http://uu.szhxd.net/api/Upload", bytes, out responseBytes);
         }
 
         static byte[] ReadBytes(string fileName)
@@ -218,7 +218,7 @@ namespace Yahv.Services.Views
             // 返回的内容
             byte[] responseBytes;
 
-            bool uploaded = cb.UploadData("http://uuws.b1b.com/api/Upload", bytes, out responseBytes);
+            bool uploaded = cb.UploadData("http://uu.szhxd.net/api/Upload", bytes, out responseBytes);
 
             if (uploaded)
             {

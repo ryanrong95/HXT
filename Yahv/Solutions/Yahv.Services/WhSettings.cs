@@ -131,7 +131,7 @@ namespace Yahv.Services
                 Address = "香港九龙观塘成业街27号日昇中心1204室", //"香港九龍觀塘成業街27號日昇中心3樓318室",
                 Enterprise = new WhEnterprise
                 {
-                    ID = "8C7BF4F7F1DE9F69E1D96C96DAF6768E2",
+                    ID = "8C7BF4F7F1DE9F69E1D96C96DAF6768E",
                     Name = "香港速逹國際物流有限公司"
                 }
             };

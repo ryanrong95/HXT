@@ -266,7 +266,7 @@ namespace Yahv.Services.Views
         static public void test()
         {
 #pragma warning disable
-            CenterFilesTopView.Upload(@"D:\uuws.b1b.com\2019\11\1F15726086428668107.jpg", new
+            CenterFilesTopView.Upload(@"D:\uu.szhxd.net\2019\11\1F15726086428668107.jpg", new
             {
                 WaybillID = "",
                 NoticeID = "",
@@ -281,7 +281,7 @@ namespace Yahv.Services.Views
 
 
 
-            CenterFilesTopView.Upload(@"D:\uuws.b1b.com\2019\11\1F15726086428668107.jpg", Underly.FileType.FollowGoods, new
+            CenterFilesTopView.Upload(@"D:\uu.szhxd.net\2019\11\1F15726086428668107.jpg", Underly.FileType.FollowGoods, new
             {
                 WaybillID = "",
                 NoticeID = "",

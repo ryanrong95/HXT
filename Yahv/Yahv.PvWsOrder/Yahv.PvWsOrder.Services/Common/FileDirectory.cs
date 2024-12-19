@@ -14,15 +14,15 @@ namespace Yahv.PvWsOrder.Services.Common
         //默认本地上传路径
         public readonly string UpLoadRoot = AppDomain.CurrentDomain.BaseDirectory + @"Files\UpLoad\";
         ////默认服务器路径
-        //public static string ServiceRoot = @"http://uuws.b1b.com/";
+        //public static string ServiceRoot = @"http://uu.szhxd.net/";
 #if DEBUG
         //默认服务器路径
-        public static string ServiceRoot = @"http://uuws.b1b.com/";
+        public static string ServiceRoot = @"http://uu.szhxd.net/";
 #elif TEST
         //默认服务器路径
-        public static string ServiceRoot = @"http://uuws.b1b.com/";
+        public static string ServiceRoot = @"http://uu.szhxd.net/";
 #else
-        public static string ServiceRoot = @"http://uuws.for-ic.net/";
+        public static string ServiceRoot = @"http://uu.szhxd.net/";
 #endif
 
         //文件名称（带后缀）

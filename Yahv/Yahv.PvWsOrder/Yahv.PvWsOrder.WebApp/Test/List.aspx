@@ -63,7 +63,7 @@
             document.getElementById("down").click();
         }
         function download2() {
-            $('#down').attr('href', 'http://uuws.b1b.com/Local/LsOrder201912040011.xml');
+            $('#down').attr('href', 'http://uu.szhxd.net/Local/LsOrder201912040011.xml');
             $('#down').attr('download', '');
             document.getElementById("down").click();
         }

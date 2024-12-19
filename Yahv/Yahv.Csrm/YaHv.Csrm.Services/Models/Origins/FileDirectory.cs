@@ -19,10 +19,10 @@
 //        readonly string PathRoot = string.Empty;
 //#if DEBUG
 //        //默认服务器路径
-//        public static string ServiceRoot = @"http://uuws.b1b.com/";
+//        public static string ServiceRoot = @"http://uu.szhxd.net/";
 //#elif TEST
 //        //默认服务器路径
-//        public static string ServiceRoot = @"http://uuws.b1b.com/";
+//        public static string ServiceRoot = @"http://uu.szhxd.net/";
 //#else
 //        public static string ServiceRoot = @"http://uuws.ic360.cn/";
 //#endif
